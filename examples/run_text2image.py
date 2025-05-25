@@ -17,6 +17,15 @@ async def main() -> None:
     image = await node.process(context)
     print("Generated image URL:", image.uri)
 
+    # Download the generated image so it can be uploaded as a workflow artifact
+    import urllib.request
+
+    with urllib.request.urlopen(image.uri) as response, open(
+        "generated_image.png", "wb"
+    ) as out_file:
+        out_file.write(response.read())
+    print("Image saved to generated_image.png")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
