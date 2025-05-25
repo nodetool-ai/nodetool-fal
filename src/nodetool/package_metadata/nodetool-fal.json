@@ -442,6 +442,50 @@
       "is_dynamic": false
     },
     {
+      "title": "Clarity Upscaler",
+      "description": "Upscale images to improve resolution and sharpness.\n\n    clarity, upscale, enhancement\n\n    Use cases:\n    - Increase image resolution for printing\n    - Improve clarity of low-quality images\n    - Enhance textures and graphics",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.ClarityUpscaler",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Input image to upscale"
+        },
+        {
+          "name": "scale",
+          "type": {
+            "type": "int"
+          },
+          "default": 2,
+          "title": "Scale",
+          "description": "Upscaling factor",
+          "min": 1.0,
+          "max": 4.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "scale"
+      ],
+      "is_dynamic": false
+    },
+    {
       "title": "Flux Dev Redux",
       "description": "FLUX.1 [dev] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.\n    image, transformation, style-transfer, development, flux\n\n    Use cases:\n    - Transform images with advanced controls\n    - Create customized image variations\n    - Apply precise style modifications",
       "namespace": "fal.image_to_image",
@@ -1433,6 +1477,271 @@
         "prompt",
         "image",
         "strength"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "FAL",
+      "description": "FAL Node for interacting with FAL AI services.\n    Provides methods to submit and handle API requests to FAL endpoints.",
+      "namespace": "fal.fal_node",
+      "node_type": "fal.fal_node.FAL",
+      "layout": "default",
+      "properties": [],
+      "outputs": [
+        {
+          "type": {
+            "type": "any"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [],
+      "is_dynamic": false
+    },
+    {
+      "title": "Whisper",
+      "description": "Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.\n    speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text\n\n    Use cases:\n    - Transcribe spoken content to text\n    - Translate speech to English\n    - Generate subtitles and captions\n    - Create text records of audio content\n    - Analyze multilingual audio content",
+      "namespace": "fal.speech_to_text",
+      "node_type": "fal.speech_to_text.Whisper",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "The audio file to transcribe"
+        },
+        {
+          "name": "task",
+          "type": {
+            "type": "enum",
+            "values": [
+              "transcribe",
+              "translate"
+            ],
+            "type_name": "nodetool.nodes.fal.speech_to_text.TaskEnum"
+          },
+          "default": "transcribe",
+          "title": "Task",
+          "description": "Task to perform on the audio file"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "af",
+              "am",
+              "ar",
+              "as",
+              "az",
+              "ba",
+              "be",
+              "bg",
+              "bn",
+              "bo",
+              "br",
+              "bs",
+              "ca",
+              "cs",
+              "cy",
+              "da",
+              "de",
+              "el",
+              "en",
+              "es",
+              "et",
+              "eu",
+              "fa",
+              "fi",
+              "fo",
+              "fr",
+              "gl",
+              "gu",
+              "ha",
+              "haw",
+              "he",
+              "hi",
+              "hr",
+              "ht",
+              "hu",
+              "hy",
+              "id",
+              "is",
+              "it",
+              "ja",
+              "jw",
+              "ka",
+              "kk",
+              "km",
+              "kn",
+              "ko",
+              "la",
+              "lb",
+              "ln",
+              "lo",
+              "lt",
+              "lv",
+              "mg",
+              "mi",
+              "mk",
+              "ml",
+              "mn",
+              "mr",
+              "ms",
+              "mt",
+              "my",
+              "ne",
+              "nl",
+              "nn",
+              "no",
+              "oc",
+              "pa",
+              "pl",
+              "ps",
+              "pt",
+              "ro",
+              "ru",
+              "sa",
+              "sd",
+              "si",
+              "sk",
+              "sl",
+              "sn",
+              "so",
+              "sq",
+              "sr",
+              "su",
+              "sv",
+              "sw",
+              "ta",
+              "te",
+              "tg",
+              "th",
+              "tk",
+              "tl",
+              "tr",
+              "tt",
+              "uk",
+              "ur",
+              "uz",
+              "vi",
+              "yi",
+              "yo",
+              "yue",
+              "zh"
+            ],
+            "type_name": "nodetool.nodes.fal.speech_to_text.LanguageEnum"
+          },
+          "default": "en",
+          "title": "Language",
+          "description": "Language of the audio file. If not set, will be auto-detected"
+        },
+        {
+          "name": "diarize",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Diarize",
+          "description": "Whether to perform speaker diarization"
+        },
+        {
+          "name": "chunk_level",
+          "type": {
+            "type": "enum",
+            "values": [
+              "segment",
+              "word"
+            ],
+            "type_name": "nodetool.nodes.fal.speech_to_text.ChunkLevelEnum"
+          },
+          "default": "segment",
+          "title": "Chunk Level",
+          "description": "Level of detail for timestamp chunks"
+        },
+        {
+          "name": "num_speakers",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Speakers",
+          "description": "Number of speakers in the audio. If not set, will be auto-detected",
+          "min": 1.0,
+          "max": 10.0
+        },
+        {
+          "name": "batch_size",
+          "type": {
+            "type": "int"
+          },
+          "default": 64,
+          "title": "Batch Size",
+          "description": "Batch size for processing"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt to guide the transcription"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "text"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "dict"
+              }
+            ]
+          },
+          "name": "chunks"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "name": "inferred_languages"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "dict"
+              }
+            ]
+          },
+          "name": "diarization_segments"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "audio",
+        "task",
+        "diarize"
       ],
       "is_dynamic": false
     },
@@ -5646,26 +5955,6 @@
       "is_dynamic": false
     },
     {
-      "title": "FAL",
-      "description": "FAL Node for interacting with FAL AI services.\n    Provides methods to submit and handle API requests to FAL endpoints.",
-      "namespace": "fal.fal_node",
-      "node_type": "fal.fal_node.FAL",
-      "layout": "default",
-      "properties": [],
-      "outputs": [
-        {
-          "type": {
-            "type": "any"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [],
-      "is_dynamic": false
-    },
-    {
       "title": "Any LLM",
       "description": "Use any large language model from a selected catalogue (powered by OpenRouter).\n    Supports various models including Claude 3, Gemini, Llama, and GPT-4.\n    llm, text, generation, ai, language\n\n    Use cases:\n    - Generate natural language responses\n    - Create conversational AI interactions\n    - Process and analyze text content\n    - Generate creative writing\n    - Assist with problem-solving tasks",
       "namespace": "fal.llm",
@@ -5733,325 +6022,10 @@
       "is_dynamic": false
     },
     {
-      "title": "Whisper",
-      "description": "Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.\n    speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text\n\n    Use cases:\n    - Transcribe spoken content to text\n    - Translate speech to English\n    - Generate subtitles and captions\n    - Create text records of audio content\n    - Analyze multilingual audio content",
-      "namespace": "fal.speech_to_text",
-      "node_type": "fal.speech_to_text.Whisper",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "audio",
-          "type": {
-            "type": "audio"
-          },
-          "default": {},
-          "title": "Audio",
-          "description": "The audio file to transcribe"
-        },
-        {
-          "name": "task",
-          "type": {
-            "type": "enum",
-            "values": [
-              "transcribe",
-              "translate"
-            ],
-            "type_name": "nodetool.nodes.fal.speech_to_text.TaskEnum"
-          },
-          "default": "transcribe",
-          "title": "Task",
-          "description": "Task to perform on the audio file"
-        },
-        {
-          "name": "language",
-          "type": {
-            "type": "enum",
-            "values": [
-              "af",
-              "am",
-              "ar",
-              "as",
-              "az",
-              "ba",
-              "be",
-              "bg",
-              "bn",
-              "bo",
-              "br",
-              "bs",
-              "ca",
-              "cs",
-              "cy",
-              "da",
-              "de",
-              "el",
-              "en",
-              "es",
-              "et",
-              "eu",
-              "fa",
-              "fi",
-              "fo",
-              "fr",
-              "gl",
-              "gu",
-              "ha",
-              "haw",
-              "he",
-              "hi",
-              "hr",
-              "ht",
-              "hu",
-              "hy",
-              "id",
-              "is",
-              "it",
-              "ja",
-              "jw",
-              "ka",
-              "kk",
-              "km",
-              "kn",
-              "ko",
-              "la",
-              "lb",
-              "ln",
-              "lo",
-              "lt",
-              "lv",
-              "mg",
-              "mi",
-              "mk",
-              "ml",
-              "mn",
-              "mr",
-              "ms",
-              "mt",
-              "my",
-              "ne",
-              "nl",
-              "nn",
-              "no",
-              "oc",
-              "pa",
-              "pl",
-              "ps",
-              "pt",
-              "ro",
-              "ru",
-              "sa",
-              "sd",
-              "si",
-              "sk",
-              "sl",
-              "sn",
-              "so",
-              "sq",
-              "sr",
-              "su",
-              "sv",
-              "sw",
-              "ta",
-              "te",
-              "tg",
-              "th",
-              "tk",
-              "tl",
-              "tr",
-              "tt",
-              "uk",
-              "ur",
-              "uz",
-              "vi",
-              "yi",
-              "yo",
-              "yue",
-              "zh"
-            ],
-            "type_name": "nodetool.nodes.fal.speech_to_text.LanguageEnum"
-          },
-          "default": "en",
-          "title": "Language",
-          "description": "Language of the audio file. If not set, will be auto-detected"
-        },
-        {
-          "name": "diarize",
-          "type": {
-            "type": "bool"
-          },
-          "default": false,
-          "title": "Diarize",
-          "description": "Whether to perform speaker diarization"
-        },
-        {
-          "name": "chunk_level",
-          "type": {
-            "type": "enum",
-            "values": [
-              "segment",
-              "word"
-            ],
-            "type_name": "nodetool.nodes.fal.speech_to_text.ChunkLevelEnum"
-          },
-          "default": "segment",
-          "title": "Chunk Level",
-          "description": "Level of detail for timestamp chunks"
-        },
-        {
-          "name": "num_speakers",
-          "type": {
-            "type": "int"
-          },
-          "default": 1,
-          "title": "Num Speakers",
-          "description": "Number of speakers in the audio. If not set, will be auto-detected",
-          "min": 1.0,
-          "max": 10.0
-        },
-        {
-          "name": "batch_size",
-          "type": {
-            "type": "int"
-          },
-          "default": 64,
-          "title": "Batch Size",
-          "description": "Batch size for processing"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "Optional prompt to guide the transcription"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "str"
-          },
-          "name": "text"
-        },
-        {
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "dict"
-              }
-            ]
-          },
-          "name": "chunks"
-        },
-        {
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "str"
-              }
-            ]
-          },
-          "name": "inferred_languages"
-        },
-        {
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "dict"
-              }
-            ]
-          },
-          "name": "diarization_segments"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "audio",
-        "task",
-        "diarize"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "F5 TTS",
-      "description": "F5 TTS (Text-to-Speech) model for generating natural-sounding speech from text with voice cloning capabilities.\n    audio, tts, voice-cloning, speech, synthesis, text-to-speech, tts, text-to-audio\n\n    Use cases:\n    - Generate natural speech from text\n    - Clone and replicate voices\n    - Create custom voiceovers\n    - Produce multilingual speech content\n    - Generate personalized audio content",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.F5TTS",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "gen_text",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Gen Text",
-          "description": "The text to be converted to speech"
-        },
-        {
-          "name": "ref_audio_url",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Ref Audio Url",
-          "description": "URL of the reference audio file to clone the voice from"
-        },
-        {
-          "name": "ref_text",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Ref Text",
-          "description": "Optional reference text. If not provided, ASR will be used"
-        },
-        {
-          "name": "model_type",
-          "type": {
-            "type": "str"
-          },
-          "default": "F5-TTS",
-          "title": "Model Type",
-          "description": "Model type to use (F5-TTS or E2-TTS)"
-        },
-        {
-          "name": "remove_silence",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Remove Silence",
-          "description": "Whether to remove silence from the generated audio"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "audio"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "gen_text",
-        "ref_audio_url",
-        "model_type"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "MMAudio V2",
-      "description": "MMAudio V2 generates synchronized audio given text inputs. It can generate sounds described by a prompt.\n    audio, generation, synthesis, text-to-audio, synchronization\n\n    Use cases:\n    - Generate synchronized audio from text descriptions\n    - Create custom sound effects\n    - Produce ambient soundscapes\n    - Generate audio for multimedia content\n    - Create sound design elements",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.MMAudioV2",
+      "title": "Wan Flf 2 V",
+      "description": "Generate video loops from text prompts using WAN-FLF2V.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Generate looping videos from descriptions\n    - Produce motion graphics from prompts\n    - Create abstract video ideas\n    - Develop creative transitions\n    - Experiment with AI-generated motion",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanFlf2V",
       "layout": "default",
       "properties": [
         {
@@ -6061,54 +6035,7 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "The prompt to generate the audio for"
-        },
-        {
-          "name": "negative_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Negative Prompt",
-          "description": "The negative prompt to avoid certain elements in the generated audio"
-        },
-        {
-          "name": "num_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 25,
-          "title": "Num Steps",
-          "description": "The number of steps to generate the audio for",
-          "min": 1.0
-        },
-        {
-          "name": "duration",
-          "type": {
-            "type": "float"
-          },
-          "default": 8.0,
-          "title": "Duration",
-          "description": "The duration of the audio to generate in seconds",
-          "min": 1.0
-        },
-        {
-          "name": "cfg_strength",
-          "type": {
-            "type": "float"
-          },
-          "default": 4.5,
-          "title": "Cfg Strength",
-          "description": "The strength of Classifier Free Guidance"
-        },
-        {
-          "name": "mask_away_clip",
-          "type": {
-            "type": "bool"
-          },
-          "default": false,
-          "title": "Mask Away Clip",
-          "description": "Whether to mask away the clip"
+          "description": "The prompt describing the desired video"
         },
         {
           "name": "seed",
@@ -6117,13 +6044,13 @@
           },
           "default": -1,
           "title": "Seed",
-          "description": "The same seed will output the same audio every time"
+          "description": "Randomization seed for reproducible results"
         }
       ],
       "outputs": [
         {
           "type": {
-            "type": "audio"
+            "type": "video"
           },
           "name": "output"
         }
@@ -6131,17 +6058,66 @@
       "the_model_info": {},
       "recommended_models": [],
       "basic_fields": [
-        "prompt",
-        "duration",
-        "num_steps"
+        "prompt"
       ],
       "is_dynamic": false
     },
     {
-      "title": "Stable Audio",
-      "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.StableAudio",
+      "title": "Wan Pro Image To Video",
+      "description": "Convert an image into a short video clip using Wan Pro.\n    video, generation, wan, professional, image-to-video\n\n    Use cases:\n    - Create dynamic videos from product photos\n    - Generate animations from static artwork\n    - Produce short promotional clips\n    - Transform images into motion graphics\n    - Experiment with visual storytelling",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanProImageToVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to animate"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt describing the desired motion"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Wan Pro Text To Video",
+      "description": "Generate a short video clip from a text prompt using Wan Pro.\n    video, generation, wan, professional, text-to-video\n\n    Use cases:\n    - Create animated scenes from descriptions\n    - Generate short creative videos\n    - Produce promotional content\n    - Visualize storyboards\n    - Experiment with narrative ideas",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanProTextToVideo",
       "layout": "default",
       "properties": [
         {
@@ -6151,40 +6127,22 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "The prompt to generate the audio from"
+          "description": "The prompt describing the desired video"
         },
         {
-          "name": "seconds_start",
+          "name": "seed",
           "type": {
             "type": "int"
           },
-          "default": 0,
-          "title": "Seconds Start",
-          "description": "The start point of the audio clip to generate"
-        },
-        {
-          "name": "seconds_total",
-          "type": {
-            "type": "int"
-          },
-          "default": 30,
-          "title": "Seconds Total",
-          "description": "The duration of the audio clip to generate in seconds"
-        },
-        {
-          "name": "steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 100,
-          "title": "Steps",
-          "description": "The number of steps to denoise the audio for"
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
         }
       ],
       "outputs": [
         {
           "type": {
-            "type": "audio"
+            "type": "video"
           },
           "name": "output"
         }
@@ -6192,9 +6150,89 @@
       "the_model_info": {},
       "recommended_models": [],
       "basic_fields": [
-        "prompt",
-        "seconds_total",
-        "steps"
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Wan T 2 V",
+      "description": "Generate videos from text using the WAN-T2V model.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Produce creative videos from prompts\n    - Experiment with motion concepts\n    - Generate quick animated drafts\n    - Visualize ideas for stories\n    - Create short social media clips",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanT2V",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the desired video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Wan V 2 1 13 BText To Video",
+      "description": "Create videos from text using WAN v2.1 1.3B, an open-source text-to-video model.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Produce short clips from prompts\n    - Generate concept videos\n    - Create quick visualizations\n    - Iterate on storytelling ideas\n    - Experiment with AI video synthesis",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanV2_1_13BTextToVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the desired video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt"
       ],
       "is_dynamic": false
     },
@@ -7095,6 +7133,227 @@
         "image",
         "motion_bucket_id",
         "fps"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "F5 TTS",
+      "description": "F5 TTS (Text-to-Speech) model for generating natural-sounding speech from text with voice cloning capabilities.\n    audio, tts, voice-cloning, speech, synthesis, text-to-speech, tts, text-to-audio\n\n    Use cases:\n    - Generate natural speech from text\n    - Clone and replicate voices\n    - Create custom voiceovers\n    - Produce multilingual speech content\n    - Generate personalized audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.F5TTS",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "gen_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Gen Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "ref_audio_url",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Ref Audio Url",
+          "description": "URL of the reference audio file to clone the voice from"
+        },
+        {
+          "name": "ref_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Ref Text",
+          "description": "Optional reference text. If not provided, ASR will be used"
+        },
+        {
+          "name": "model_type",
+          "type": {
+            "type": "str"
+          },
+          "default": "F5-TTS",
+          "title": "Model Type",
+          "description": "Model type to use (F5-TTS or E2-TTS)"
+        },
+        {
+          "name": "remove_silence",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Remove Silence",
+          "description": "Whether to remove silence from the generated audio"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "gen_text",
+        "ref_audio_url",
+        "model_type"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "MMAudio V2",
+      "description": "MMAudio V2 generates synchronized audio given text inputs. It can generate sounds described by a prompt.\n    audio, generation, synthesis, text-to-audio, synchronization\n\n    Use cases:\n    - Generate synchronized audio from text descriptions\n    - Create custom sound effects\n    - Produce ambient soundscapes\n    - Generate audio for multimedia content\n    - Create sound design elements",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.MMAudioV2",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the audio for"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to avoid certain elements in the generated audio"
+        },
+        {
+          "name": "num_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 25,
+          "title": "Num Steps",
+          "description": "The number of steps to generate the audio for",
+          "min": 1.0
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "float"
+          },
+          "default": 8.0,
+          "title": "Duration",
+          "description": "The duration of the audio to generate in seconds",
+          "min": 1.0
+        },
+        {
+          "name": "cfg_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 4.5,
+          "title": "Cfg Strength",
+          "description": "The strength of Classifier Free Guidance"
+        },
+        {
+          "name": "mask_away_clip",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Mask Away Clip",
+          "description": "Whether to mask away the clip"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same audio every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "duration",
+        "num_steps"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Stable Audio",
+      "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.StableAudio",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the audio from"
+        },
+        {
+          "name": "seconds_start",
+          "type": {
+            "type": "int"
+          },
+          "default": 0,
+          "title": "Seconds Start",
+          "description": "The start point of the audio clip to generate"
+        },
+        {
+          "name": "seconds_total",
+          "type": {
+            "type": "int"
+          },
+          "default": 30,
+          "title": "Seconds Total",
+          "description": "The duration of the audio clip to generate in seconds"
+        },
+        {
+          "name": "steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 100,
+          "title": "Steps",
+          "description": "The number of steps to denoise the audio for"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "seconds_total",
+        "steps"
       ],
       "is_dynamic": false
     }
