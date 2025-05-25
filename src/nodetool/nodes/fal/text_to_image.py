@@ -298,7 +298,7 @@ class RecraftV3(FALNode):
         default=StylePreset.REALISTIC_IMAGE,
         description="The style of the generated images. Vector images cost 2X as much.",
     )
-    colors: List[ColorRef] = Field(
+    colors: list[ColorRef] = Field(
         default=[], description="An array of preferable colors"
     )
     style_id: str = Field(
@@ -541,7 +541,7 @@ class FluxLora(FALNode):
         default=3.5,
         description="The CFG scale to determine how closely the model follows the prompt",
     )
-    loras: List[LoraWeight] = Field(
+    loras: list[LoraWeight] = Field(
         default=[],
         description="List of LoRA weights to use for image generation",
     )
@@ -608,7 +608,7 @@ class FluxLoraInpainting(FALNode):
         le=1.0,
         description="The strength to use for inpainting. 1.0 completely remakes the image while 0.0 preserves the original",
     )
-    loras: List[LoraWeight] = Field(
+    loras: list[LoraWeight] = Field(
         default=[],
         description="List of LoRA weights to use for image generation",
     )
@@ -1055,7 +1055,7 @@ class Recraft20B(FALNode):
         default=StylePreset.REALISTIC_IMAGE,
         description="The style of the generated images. Vector images cost 2X as much.",
     )
-    colors: List[ColorRef] = Field(
+    colors: list[ColorRef] = Field(
         default=[], description="An array of preferable colors"
     )
     style_id: str = Field(
@@ -1496,7 +1496,7 @@ class FastSDXL(FALNode):
         default=False,
         description="If true, the prompt will be expanded with additional prompts",
     )
-    loras: List[LoraWeight] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use"
     )
 
@@ -1564,7 +1564,7 @@ class FluxLoraTTI(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="How closely the model should stick to your prompt"
     )
-    loras: List[LoraWeight] = Field(
+    loras: list[LoraWeight] = Field(
         default=[],
         description="List of LoRA weights to use for image generation",
     )
@@ -2173,7 +2173,7 @@ class Fooocus(FALNode):
         default="",
         description="Use it to address details that you don't want in the image",
     )
-    styles: List[str] = Field(
+    styles: list[str] = Field(
         default=["Fooocus Enhance", "Fooocus V2", "Fooocus Sharp"],
         description="The styles to apply to the generated image",
     )
@@ -2191,7 +2191,7 @@ class Fooocus(FALNode):
         default="1024x1024",
         description="The size of the generated image (must be multiples of 8)",
     )
-    loras: List[LoraWeight] = Field(
+    loras: list[LoraWeight] = Field(
         default=[],
         description="Up to 5 LoRAs that will be merged for generation",
     )
