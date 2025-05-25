@@ -160,6 +160,55 @@
       ]
     },
     {
+      "title": "PlayAI Dialog TTS",
+      "description": "PlayAI Dialog TTS generates speech for multi speaker dialogs.\n    audio, tts, dialog, speech, synthesis\n\n    Use cases:\n    - Generate interactive conversations\n    - Create voice overs with multiple characters\n    - Produce spoken dialogs for games\n    - Synthesize narration with distinct voices\n    - Prototype conversational audio",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.PlayAITTSDialog",
+      "properties": [
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "Text to convert into speech"
+        },
+        {
+          "name": "voice",
+          "type": {
+            "type": "str"
+          },
+          "default": "nova",
+          "title": "Voice",
+          "description": "Voice preset to use for the spoken dialog"
+        },
+        {
+          "name": "speed",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Speed",
+          "description": "Playback speed of the generated audio",
+          "min": 0.5,
+          "max": 2.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "text",
+        "voice"
+      ]
+    },
+    {
       "title": "Stable Audio",
       "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
       "namespace": "fal.text_to_audio",

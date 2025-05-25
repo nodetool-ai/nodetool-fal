@@ -83,6 +83,33 @@ class MMAudioV2(GraphNode):
         return "fal.text_to_audio.MMAudioV2"
 
 
+class PlayAITTSDialog(GraphNode):
+    """PlayAI Dialog TTS generates speech for multi speaker dialogs.
+    audio, tts, dialog, speech, synthesis
+
+    Use cases:
+    - Generate interactive conversations
+    - Create voice overs with multiple characters
+    - Produce spoken dialogs for games
+    - Synthesize narration with distinct voices
+    - Prototype conversational audio
+    """
+
+    text: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="Text to convert into speech"
+    )
+    voice: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="nova", description="Voice preset to use for the spoken dialog"
+    )
+    speed: float | GraphNode | tuple[GraphNode, str] = Field(
+        default=1.0, description="Playback speed of the generated audio"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.text_to_audio.PlayAITTSDialog"
+
+
 class StableAudio(GraphNode):
     """
     Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.

@@ -175,3 +175,51 @@ class F5TTS(FALNode):
     @classmethod
     def get_title(cls):
         return "F5 TTS"
+
+
+class PlayAITTSDialog(FALNode):
+    """PlayAI Dialog TTS generates speech for multi speaker dialogs.
+    audio, tts, dialog, speech, synthesis
+
+    Use cases:
+    - Generate interactive conversations
+    - Create voice overs with multiple characters
+    - Produce spoken dialogs for games
+    - Synthesize narration with distinct voices
+    - Prototype conversational audio
+    """
+
+    text: str = Field(default="", description="Text to convert into speech")
+    voice: str = Field(
+        default="nova",
+        description="Voice preset to use for the spoken dialog",
+    )
+    speed: float = Field(
+        default=1.0,
+        ge=0.5,
+        le=2.0,
+        description="Playback speed of the generated audio",
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+            "voice": self.voice,
+            "speed": self.speed,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/playai/tts/dialog/api",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "voice"]
+
+    @classmethod
+    def get_title(cls):
+        return "PlayAI Dialog TTS"
