@@ -3,7 +3,7 @@ from pydantic import Field
 from nodetool.metadata.types import ColorRef, ImageRef, LoraWeight
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
-from typing import List, Optional
+from typing import Optional
 
 
 class ImageSizePreset(str, Enum):
@@ -2469,3 +2469,71 @@ class DiffusionEdge(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image"]
+
+
+class Imagen4Preview(FALNode):
+    """
+    Imagen 4 is an advanced text-to-image model providing high quality and
+    detailed visuals with strong prompt understanding.
+    image, generation, diffusion, text-to-image, txt2img
+
+    Use cases:
+    - Create marketing and product visuals
+    - Generate concept art and illustrations
+    - Produce photorealistic images from descriptions
+    - Experiment with advanced diffusion capabilities
+    - Rapidly prototype visual ideas
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="",
+        description="Use it to address details that you don't want in the image",
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.LANDSCAPE_4_3,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=50, ge=1, description="The number of inference steps to perform"
+    )
+    guidance_scale: float = Field(
+        default=5.0, description="How closely the model should stick to your prompt"
+    )
+    num_images: int = Field(
+        default=1, ge=1, description="The number of images to generate"
+    )
+    seed: int = Field(
+        default=-1,
+        description="The same seed and prompt will output the same image every time",
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "negative_prompt": self.negative_prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": "png",
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imagen4/preview",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale"]
