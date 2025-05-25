@@ -1,4 +1,3 @@
-from typing import Literal
 from pydantic import Field
 
 from nodetool.metadata.types import AudioRef, ImageRef, VideoRef
