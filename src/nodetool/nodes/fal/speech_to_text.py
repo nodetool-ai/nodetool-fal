@@ -1,4 +1,6 @@
 from enum import Enum
+from typing import List
+
 import fal_client
 from pydantic import Field
 
@@ -15,7 +17,7 @@ class TaskEnum(str, Enum):
 class ChunkLevelEnum(str, Enum):
     SEGMENT = "segment"
     WORD = "word"
-    
+
 
 class LanguageEnum(str, Enum):
     AF = "af"
@@ -120,7 +122,6 @@ class LanguageEnum(str, Enum):
     ZH = "zh"
 
 
-
 class Whisper(FALNode):
     """
     Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.
@@ -135,60 +136,53 @@ class Whisper(FALNode):
     """
 
     audio: AudioRef = Field(
-        default=AudioRef(),
-        description="The audio file to transcribe"
+        default=AudioRef(), description="The audio file to transcribe"
     )
     task: TaskEnum = Field(
-        default=TaskEnum.TRANSCRIBE,
-        description="Task to perform on the audio file"
+        default=TaskEnum.TRANSCRIBE, description="Task to perform on the audio file"
     )
     language: LanguageEnum = Field(
         default=LanguageEnum.EN,
-        description="Language of the audio file. If not set, will be auto-detected"
+        description="Language of the audio file. If not set, will be auto-detected",
     )
     diarize: bool = Field(
-        default=False,
-        description="Whether to perform speaker diarization"
+        default=False, description="Whether to perform speaker diarization"
     )
     chunk_level: ChunkLevelEnum = Field(
         default=ChunkLevelEnum.SEGMENT,
-        description="Level of detail for timestamp chunks"
+        description="Level of detail for timestamp chunks",
     )
     num_speakers: int = Field(
         default=1,
         ge=1,
         le=10,
-        description="Number of speakers in the audio. If not set, will be auto-detected"
+        description="Number of speakers in the audio. If not set, will be auto-detected",
     )
-    batch_size: int = Field(
-        default=64,
-        description="Batch size for processing"
-    )
+    batch_size: int = Field(default=64, description="Batch size for processing")
     prompt: str = Field(
-        default="",
-        description="Optional prompt to guide the transcription"
+        default="", description="Optional prompt to guide the transcription"
     )
-    
+
     @classmethod
     def return_type(cls):
         return {
             "text": str,
             "chunks": list[dict],
             "inferred_languages": list[str],
-            "diarization_segments": list[dict]
+            "diarization_segments": list[dict],
         }
 
     async def process(self, context: ProcessingContext) -> dict:
         """
         Process the audio file using Whisper model.
-        
+
         Returns:
             dict: Contains transcription text, chunks, and optionally diarization segments
         """
         client: fal_client.AsyncClient = self.get_client(context)
         audio_bytes = await context.asset_to_bytes(self.audio)
         audio_url = await client.upload(audio_bytes, "audio/mp3")
-        
+
         arguments = {
             "audio_url": audio_url,
             "task": self.task.value,
@@ -214,7 +208,7 @@ class Whisper(FALNode):
             "text": result["text"],
             "chunks": result["chunks"],
             "inferred_languages": result["inferred_languages"],
-            "diarization_segments": result.get("diarization_segments", [])
+            "diarization_segments": result.get("diarization_segments", []),
         }
 
     @classmethod
