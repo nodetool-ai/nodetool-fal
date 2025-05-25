@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import List
 
 import fal_client
 from pydantic import Field
