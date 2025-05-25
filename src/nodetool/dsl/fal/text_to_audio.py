@@ -1,8 +1,5 @@
-from pydantic import BaseModel, Field
-import typing
-from typing import Any
-import nodetool.metadata.types
-import nodetool.metadata.types as types
+# ruff: noqa: E402,F401
+from pydantic import Field
 from nodetool.dsl.graph import GraphNode
 
 

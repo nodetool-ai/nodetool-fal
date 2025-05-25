@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
+# ruff: noqa: E402,F401
+from pydantic import Field
 import typing
-from typing import Any
 import nodetool.metadata.types
 import nodetool.metadata.types as types
 from nodetool.dsl.graph import GraphNode
@@ -490,3 +490,89 @@ class StableVideo(GraphNode):
     @classmethod
     def get_node_type(cls):
         return "fal.image_to_video.StableVideo"
+
+
+import nodetool.nodes.fal.image_to_video
+import nodetool.nodes.fal.image_to_video
+
+
+class Veo2(GraphNode):
+    """
+    Generate videos from text prompts using Veo 2. Creates short clips with
+    optional control over duration and aspect ratio.
+    video, text-to-video, generation, prompt, veo2
+
+    Use cases:
+    - Produce cinematic video clips from descriptions
+    - Generate marketing or social media footage
+    - Create animated scenes from storyboards
+    - Experiment with visual concepts rapidly
+    """
+
+    VideoDuration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.VideoDuration
+    )
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="The prompt to generate a video from"
+    )
+    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(
+        default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.Veo2"
+
+
+import nodetool.nodes.fal.image_to_video
+import nodetool.nodes.fal.image_to_video
+
+
+class Veo2ImageToVideo(GraphNode):
+    """
+    Animate a single image into a Veo 2 video clip. Provides control over
+    duration and aspect ratio while following an optional prompt.
+    video, image-to-video, veo2, animation
+
+    Use cases:
+    - Bring still artwork to life
+    - Create dynamic social media posts
+    - Generate quick product showcase videos
+    - Produce animated storyboards
+    """
+
+    VideoDuration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.VideoDuration
+    )
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+    image: types.ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=types.ImageRef(type="image", uri="", asset_id=None, data=None),
+        description="The image to transform into a video",
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="Optional description of the desired motion"
+    )
+    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(
+        default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.Veo2ImageToVideo"
