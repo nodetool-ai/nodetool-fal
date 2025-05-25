@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import List
+
 import fal_client
 from pydantic import Field
 
@@ -211,5 +212,5 @@ class Whisper(FALNode):
         }
 
     @classmethod
-    def get_basic_fields(cls) -> List[str]:
+    def get_basic_fields(cls) -> list[str]:
         return ["audio", "task", "diarize"]
