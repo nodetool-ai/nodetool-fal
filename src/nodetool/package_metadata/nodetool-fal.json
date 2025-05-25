@@ -8,6 +8,1473 @@
   "repo_id": "nodetool-ai/nodetool-fal",
   "nodes": [
     {
+      "title": "Pixverse Effects",
+      "description": "Apply text-driven effects to a video with Pixverse 4.5.\n    video, effects, pixverse, text-guided\n\n    Use cases:\n    - Stylize existing footage\n    - Add visual effects via text\n    - Enhance marketing videos\n    - Create experimental clips\n    - Transform user content",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.PixverseEffects",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "video",
+          "type": {
+            "type": "video"
+          },
+          "default": {},
+          "title": "Video",
+          "description": "The source video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text describing the effect"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Optional seed for deterministic output"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "video",
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Pixverse Image To Video",
+      "description": "Animate an image into a video using Pixverse 4.5.\n    video, generation, pixverse, image-to-video\n\n    Use cases:\n    - Bring photos to life\n    - Create moving artwork\n    - Generate short clips from images\n    - Produce social media animations\n    - Experiment with visual storytelling",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.PixverseImageToVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The source image"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional style or motion prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Optional seed for deterministic output"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Pixverse Text To Video",
+      "description": "Generate videos from text prompts with Pixverse 4.5 API.\n    video, generation, pixverse, text-to-video\n\n    Use cases:\n    - Create animated scenes from text\n    - Generate marketing clips\n    - Produce dynamic social posts\n    - Prototype video ideas\n    - Explore creative storytelling",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.PixverseTextToVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Optional seed for deterministic output"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Pixverse Text To Video Fast",
+      "description": "Generate videos quickly from text prompts with Pixverse 4.5 Fast.\n    video, generation, pixverse, text-to-video, fast\n\n    Use cases:\n    - Rapid video prototyping\n    - Generate quick social posts\n    - Produce short marketing clips\n    - Test creative ideas fast\n    - Create video drafts",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.PixverseTextToVideoFast",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Optional seed for deterministic output"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Pixverse Transition",
+      "description": "Apply Pixverse transitions between images.\n    video, generation, transition, pixverse\n\n    Use cases:\n    - Blend between two images\n    - Create animated transitions\n    - Generate morphing effects\n    - Produce smooth scene changes\n    - Experiment with visual flows",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.PixverseTransition",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "start_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Start Image",
+          "description": "The starting image"
+        },
+        {
+          "name": "end_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "End Image",
+          "description": "The ending image"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Optional seed for deterministic output"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "start_image",
+        "end_image"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "FAL",
+      "description": "FAL Node for interacting with FAL AI services.\n    Provides methods to submit and handle API requests to FAL endpoints.",
+      "namespace": "fal.fal_node",
+      "node_type": "fal.fal_node.FAL",
+      "layout": "default",
+      "properties": [],
+      "outputs": [
+        {
+          "type": {
+            "type": "any"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [],
+      "is_dynamic": false
+    },
+    {
+      "title": "Whisper",
+      "description": "Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.\n    speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text\n\n    Use cases:\n    - Transcribe spoken content to text\n    - Translate speech to English\n    - Generate subtitles and captions\n    - Create text records of audio content\n    - Analyze multilingual audio content",
+      "namespace": "fal.speech_to_text",
+      "node_type": "fal.speech_to_text.Whisper",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "The audio file to transcribe"
+        },
+        {
+          "name": "task",
+          "type": {
+            "type": "enum",
+            "values": [
+              "transcribe",
+              "translate"
+            ],
+            "type_name": "nodetool.nodes.fal.speech_to_text.TaskEnum"
+          },
+          "default": "transcribe",
+          "title": "Task",
+          "description": "Task to perform on the audio file"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "af",
+              "am",
+              "ar",
+              "as",
+              "az",
+              "ba",
+              "be",
+              "bg",
+              "bn",
+              "bo",
+              "br",
+              "bs",
+              "ca",
+              "cs",
+              "cy",
+              "da",
+              "de",
+              "el",
+              "en",
+              "es",
+              "et",
+              "eu",
+              "fa",
+              "fi",
+              "fo",
+              "fr",
+              "gl",
+              "gu",
+              "ha",
+              "haw",
+              "he",
+              "hi",
+              "hr",
+              "ht",
+              "hu",
+              "hy",
+              "id",
+              "is",
+              "it",
+              "ja",
+              "jw",
+              "ka",
+              "kk",
+              "km",
+              "kn",
+              "ko",
+              "la",
+              "lb",
+              "ln",
+              "lo",
+              "lt",
+              "lv",
+              "mg",
+              "mi",
+              "mk",
+              "ml",
+              "mn",
+              "mr",
+              "ms",
+              "mt",
+              "my",
+              "ne",
+              "nl",
+              "nn",
+              "no",
+              "oc",
+              "pa",
+              "pl",
+              "ps",
+              "pt",
+              "ro",
+              "ru",
+              "sa",
+              "sd",
+              "si",
+              "sk",
+              "sl",
+              "sn",
+              "so",
+              "sq",
+              "sr",
+              "su",
+              "sv",
+              "sw",
+              "ta",
+              "te",
+              "tg",
+              "th",
+              "tk",
+              "tl",
+              "tr",
+              "tt",
+              "uk",
+              "ur",
+              "uz",
+              "vi",
+              "yi",
+              "yo",
+              "yue",
+              "zh"
+            ],
+            "type_name": "nodetool.nodes.fal.speech_to_text.LanguageEnum"
+          },
+          "default": "en",
+          "title": "Language",
+          "description": "Language of the audio file. If not set, will be auto-detected"
+        },
+        {
+          "name": "diarize",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Diarize",
+          "description": "Whether to perform speaker diarization"
+        },
+        {
+          "name": "chunk_level",
+          "type": {
+            "type": "enum",
+            "values": [
+              "segment",
+              "word"
+            ],
+            "type_name": "nodetool.nodes.fal.speech_to_text.ChunkLevelEnum"
+          },
+          "default": "segment",
+          "title": "Chunk Level",
+          "description": "Level of detail for timestamp chunks"
+        },
+        {
+          "name": "num_speakers",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Speakers",
+          "description": "Number of speakers in the audio. If not set, will be auto-detected",
+          "min": 1.0,
+          "max": 10.0
+        },
+        {
+          "name": "batch_size",
+          "type": {
+            "type": "int"
+          },
+          "default": 64,
+          "title": "Batch Size",
+          "description": "Batch size for processing"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt to guide the transcription"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "text"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "dict"
+              }
+            ]
+          },
+          "name": "chunks"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "name": "inferred_languages"
+        },
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "dict"
+              }
+            ]
+          },
+          "name": "diarization_segments"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "audio",
+        "task",
+        "diarize"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Any LLM",
+      "description": "Use any large language model from a selected catalogue (powered by OpenRouter).\n    Supports various models including Claude 3, Gemini, Llama, and GPT-4.\n    llm, text, generation, ai, language\n\n    Use cases:\n    - Generate natural language responses\n    - Create conversational AI interactions\n    - Process and analyze text content\n    - Generate creative writing\n    - Assist with problem-solving tasks",
+      "namespace": "fal.llm",
+      "node_type": "fal.llm.AnyLLM",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to send to the language model"
+        },
+        {
+          "name": "system_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "System Prompt",
+          "description": "Optional system prompt to provide context or instructions"
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "anthropic/claude-3.5-sonnet",
+              "anthropic/claude-3-5-haiku",
+              "anthropic/claude-3-haiku",
+              "google/gemini-pro-1.5",
+              "google/gemini-flash-1.5",
+              "google/gemini-flash-1.5-8b",
+              "meta-llama/llama-3.2-1b-instruct",
+              "meta-llama/llama-3.2-3b-instruct",
+              "meta-llama/llama-3.1-8b-instruct",
+              "meta-llama/llama-3.1-70b-instruct",
+              "openai/gpt-4o-mini",
+              "openai/gpt-4o"
+            ],
+            "type_name": "nodetool.nodes.fal.llm.ModelEnum"
+          },
+          "default": "google/gemini-flash-1.5",
+          "title": "Model",
+          "description": "The language model to use for the completion"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "model",
+        "system_prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "AMTInterpolation",
+      "description": "Interpolate between image frames to create smooth video transitions. Supports configurable FPS and recursive interpolation passes for higher quality results.\n    video, interpolation, transitions, frames, smoothing, img2vid, image-to-video\n\n    Use cases:\n    - Create smooth frame transitions\n    - Generate fluid animations\n    - Enhance video frame rates\n    - Produce slow-motion effects\n    - Create seamless video blends",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.AMTInterpolation",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "frames",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [
+            {},
+            {}
+          ],
+          "title": "Frames",
+          "description": "List of frames to interpolate between (minimum 2 frames required)"
+        },
+        {
+          "name": "output_fps",
+          "type": {
+            "type": "int"
+          },
+          "default": 24,
+          "title": "Output Fps",
+          "description": "Output frames per second"
+        },
+        {
+          "name": "recursive_interpolation_passes",
+          "type": {
+            "type": "int"
+          },
+          "default": 4,
+          "title": "Recursive Interpolation Passes",
+          "description": "Number of recursive interpolation passes (higher = smoother)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "frames",
+        "output_fps"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Cog Video X",
+      "description": "Generate videos from images using CogVideoX-5B. Features high-quality motion synthesis with configurable parameters for fine-tuned control over the output.\n    video, generation, motion, synthesis, control, img2vid, image-to-video\n\n    Use cases:\n    - Create controlled video animations\n    - Generate precise motion effects\n    - Produce customized video content\n    - Create fine-tuned animations\n    - Generate motion sequences",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.CogVideoX",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A description of the desired video motion and style"
+        },
+        {
+          "name": "video_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.VideoSize"
+          },
+          "default": "landscape_16_9",
+          "title": "Video Size",
+          "description": "The size/aspect ratio of the generated video"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "Distorted, discontinuous, Ugly, blurry, low resolution, motionless, static, disfigured, disconnected limbs, Ugly faces, incomplete arms",
+          "title": "Negative Prompt",
+          "description": "What to avoid in the generated video"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Num Inference Steps",
+          "description": "Number of denoising steps (higher = better quality but slower)"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 7.0,
+          "title": "Guidance Scale",
+          "description": "How closely to follow the prompt (higher = more faithful but less creative)"
+        },
+        {
+          "name": "use_rife",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Use Rife",
+          "description": "Whether to use RIFE for video interpolation"
+        },
+        {
+          "name": "export_fps",
+          "type": {
+            "type": "int"
+          },
+          "default": 16,
+          "title": "Export Fps",
+          "description": "Target frames per second for the output video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "video_size"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Fast SVD",
+      "description": "Generate short video clips from your images using SVD v1.1 at Lightning Speed. Features high-quality motion synthesis with configurable parameters for rapid video generation.\n    video, generation, fast, motion, synthesis, img2vid, image-to-video\n\n    Use cases:\n    - Create quick video animations\n    - Generate rapid motion content\n    - Produce fast video transitions\n    - Create instant visual effects\n    - Generate quick previews",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.FastSVD",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "motion_bucket_id",
+          "type": {
+            "type": "int"
+          },
+          "default": 127,
+          "title": "Motion Bucket Id",
+          "description": "Controls motion intensity (higher = more motion)"
+        },
+        {
+          "name": "cond_aug",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.02,
+          "title": "Cond Aug",
+          "description": "Amount of noise added to conditioning (higher = more motion)"
+        },
+        {
+          "name": "steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 4,
+          "title": "Steps",
+          "description": "Number of inference steps (higher = better quality but slower)"
+        },
+        {
+          "name": "fps",
+          "type": {
+            "type": "int"
+          },
+          "default": 10,
+          "title": "Fps",
+          "description": "Frames per second of the output video (total length is 25 frames)"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "motion_bucket_id",
+        "fps"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Haiper Image To Video",
+      "description": "Transform images into hyper-realistic videos with Haiper 2.0. Experience industry-leading resolution, fluid motion, and rapid generation for stunning AI videos.\n    video, generation, hyper-realistic, motion, animation, image-to-video, img2vid\n\n    Use cases:\n    - Create cinematic animations\n    - Generate dynamic video content\n    - Transform static images into motion\n    - Produce high-resolution videos\n    - Create visual effects",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.HaiperImageToVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A description of the desired video motion and style"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              4,
+              6
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.VideoDuration"
+          },
+          "default": 4,
+          "title": "Duration",
+          "description": "The duration of the generated video in seconds"
+        },
+        {
+          "name": "prompt_enhancer",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Prompt Enhancer",
+          "description": "Whether to use the model's prompt enhancer"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Kling Video",
+      "description": "Generate video clips from your images using Kling 1.6. Supports multiple durations and aspect ratios.\n    video, generation, animation, duration, aspect-ratio, img2vid, image-to-video\n\n    Use cases:\n    - Create custom video content\n    - Generate video animations\n    - Transform static images\n    - Produce motion graphics\n    - Create visual presentations",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.KlingVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A description of the desired video motion and style"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "5",
+              "10"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingDuration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "The duration of the generated video"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4",
+              "21:9",
+              "9:21",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video frame"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Kling Video Pro",
+      "description": "Generate video clips from your images using Kling 1.6 Pro. The professional version offers enhanced quality and performance compared to the standard version.\n    video, generation, professional, quality, performance, img2vid, image-to-video\n\n    Use cases:\n    - Create professional video content\n    - Generate high-quality animations\n    - Produce commercial video assets\n    - Create advanced motion graphics\n    - Generate premium visual content",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.KlingVideoPro",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A description of the desired video motion and style"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "5",
+              "10"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingDuration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "The duration of the generated video"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4",
+              "21:9",
+              "9:21",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video frame"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "LTXVideo",
+      "description": "Generate videos from images using LTX Video. Best results with 768x512 images and detailed, chronological descriptions of actions and scenes.\n    video, generation, chronological, scenes, actions, img2vid, image-to-video\n\n    Use cases:\n    - Create scene-based animations\n    - Generate sequential video content\n    - Produce narrative videos\n    - Create storyboard animations\n    - Generate action sequences",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.LTXVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video (768x512 recommended)"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A detailed description of the desired video motion and style"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, fused fingers, bad anatomy, weird hand, ugly",
+          "title": "Negative Prompt",
+          "description": "What to avoid in the generated video"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 30,
+          "title": "Num Inference Steps",
+          "description": "Number of inference steps (higher = better quality but slower)"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.0,
+          "title": "Guidance Scale",
+          "description": "How closely to follow the prompt (higher = more faithful)"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Luma Dream Machine",
+      "description": "Generate video clips from your images using Luma Dream Machine v1.5. Supports various aspect ratios and optional end-frame blending.\n    video, generation, animation, blending, aspect-ratio, img2vid, image-to-video\n\n    Use cases:\n    - Create seamless video loops\n    - Generate video transitions\n    - Transform images into animations\n    - Create motion graphics\n    - Produce video content",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.LumaDreamMachine",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A description of the desired video motion and style"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4",
+              "21:9",
+              "9:21",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video"
+        },
+        {
+          "name": "loop",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Loop",
+          "description": "Whether the video should loop (end blends with beginning)"
+        },
+        {
+          "name": "end_image",
+          "type": {
+            "type": "union",
+            "type_args": [
+              {
+                "type": "image"
+              },
+              {
+                "type": "none"
+              }
+            ]
+          },
+          "title": "End Image",
+          "description": "Optional image to blend the end of the video with"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "aspect_ratio"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Mini Max Video",
+      "description": "Generate video clips from your images using MiniMax Video model. Transform static art into dynamic masterpieces with enhanced smoothness and vivid motion.\n    video, generation, art, motion, smoothness, img2vid, image-to-video\n\n    Use cases:\n    - Transform artwork into videos\n    - Create smooth animations\n    - Generate artistic motion content\n    - Produce dynamic visualizations\n    - Create video art pieces",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.MiniMaxVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A description of the desired video motion and style"
+        },
+        {
+          "name": "prompt_optimizer",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Prompt Optimizer",
+          "description": "Whether to use the model's prompt optimizer"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "prompt"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Muse Talk",
+      "description": "Real-time high quality audio-driven lip-syncing model. Animate a face video with custom audio for natural-looking speech animation.\n    video, lip-sync, animation, speech, real-time, wav2vid, audio-to-video\n\n    Use cases:\n    - Create lip-synced videos\n    - Generate speech animations\n    - Produce dubbed content\n    - Create animated presentations\n    - Generate voice-over videos",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.MuseTalk",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "video",
+          "type": {
+            "type": "video"
+          },
+          "default": {},
+          "title": "Video",
+          "description": "URL of the source video to animate"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "URL of the audio file to drive the lip sync"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "video",
+        "audio"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Sad Talker",
+      "description": "Generate talking face animations from a single image and audio file. Features configurable face model resolution and expression controls.\n    video, animation, face, talking, expression, img2vid, image-to-video, audio-to-video, wav2vid\n\n    Use cases:\n    - Create talking head videos\n    - Generate lip-sync animations\n    - Produce character animations\n    - Create video presentations\n    - Generate facial expressions",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.SadTalker",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The source image to animate"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Audio",
+          "description": "URL of the audio file to drive the animation"
+        },
+        {
+          "name": "face_model_resolution",
+          "type": {
+            "type": "enum",
+            "values": [
+              "256",
+              "512"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.FaceModelResolution"
+          },
+          "default": "256",
+          "title": "Face Model Resolution",
+          "description": "Resolution of the face model"
+        },
+        {
+          "name": "expression_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Expression Scale",
+          "description": "Scale of the expression (1.0 = normal)"
+        },
+        {
+          "name": "still_mode",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Still Mode",
+          "description": "Reduce head motion (works with preprocess 'full')"
+        },
+        {
+          "name": "preprocess",
+          "type": {
+            "type": "enum",
+            "values": [
+              "crop",
+              "extcrop",
+              "resize",
+              "full",
+              "extfull"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.PreprocessType"
+          },
+          "default": "crop",
+          "title": "Preprocess",
+          "description": "Type of image preprocessing to apply"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "audio",
+        "face_model_resolution"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Stable Video",
+      "description": "Generate short video clips from your images using Stable Video Diffusion v1.1. Features high-quality motion synthesis with configurable parameters.\n    video, generation, diffusion, motion, synthesis, img2vid, image-to-video\n\n    Use cases:\n    - Create stable video animations\n    - Generate motion content\n    - Transform images into videos\n    - Produce smooth transitions\n    - Create visual effects",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.StableVideo",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "motion_bucket_id",
+          "type": {
+            "type": "int"
+          },
+          "default": 127,
+          "title": "Motion Bucket Id",
+          "description": "Controls motion intensity (higher = more motion)"
+        },
+        {
+          "name": "cond_aug",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.02,
+          "title": "Cond Aug",
+          "description": "Amount of noise added to conditioning (higher = more motion)"
+        },
+        {
+          "name": "fps",
+          "type": {
+            "type": "int"
+          },
+          "default": 25,
+          "title": "Fps",
+          "description": "Frames per second of the output video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "motion_bucket_id",
+        "fps"
+      ],
+      "is_dynamic": false
+    },
+    {
       "title": "Bria Background Remove",
       "description": "Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks. \n    Trained exclusively on licensed data for safe and risk-free commercial use.",
       "namespace": "fal.image_to_image",
@@ -438,6 +1905,50 @@
       "basic_fields": [
         "image",
         "scene_description"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Clarity Upscaler",
+      "description": "Upscale images to improve resolution and sharpness.\n\n    clarity, upscale, enhancement\n\n    Use cases:\n    - Increase image resolution for printing\n    - Improve clarity of low-quality images\n    - Enhance textures and graphics",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.ClarityUpscaler",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Input image to upscale"
+        },
+        {
+          "name": "scale",
+          "type": {
+            "type": "int"
+          },
+          "default": 2,
+          "title": "Scale",
+          "description": "Upscaling factor",
+          "min": 1.0,
+          "max": 4.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "image",
+        "scale"
       ],
       "is_dynamic": false
     },
@@ -1433,6 +2944,227 @@
         "prompt",
         "image",
         "strength"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "F5 TTS",
+      "description": "F5 TTS (Text-to-Speech) model for generating natural-sounding speech from text with voice cloning capabilities.\n    audio, tts, voice-cloning, speech, synthesis, text-to-speech, tts, text-to-audio\n\n    Use cases:\n    - Generate natural speech from text\n    - Clone and replicate voices\n    - Create custom voiceovers\n    - Produce multilingual speech content\n    - Generate personalized audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.F5TTS",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "gen_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Gen Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "ref_audio_url",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Ref Audio Url",
+          "description": "URL of the reference audio file to clone the voice from"
+        },
+        {
+          "name": "ref_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Ref Text",
+          "description": "Optional reference text. If not provided, ASR will be used"
+        },
+        {
+          "name": "model_type",
+          "type": {
+            "type": "str"
+          },
+          "default": "F5-TTS",
+          "title": "Model Type",
+          "description": "Model type to use (F5-TTS or E2-TTS)"
+        },
+        {
+          "name": "remove_silence",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Remove Silence",
+          "description": "Whether to remove silence from the generated audio"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "gen_text",
+        "ref_audio_url",
+        "model_type"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "MMAudio V2",
+      "description": "MMAudio V2 generates synchronized audio given text inputs. It can generate sounds described by a prompt.\n    audio, generation, synthesis, text-to-audio, synchronization\n\n    Use cases:\n    - Generate synchronized audio from text descriptions\n    - Create custom sound effects\n    - Produce ambient soundscapes\n    - Generate audio for multimedia content\n    - Create sound design elements",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.MMAudioV2",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the audio for"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to avoid certain elements in the generated audio"
+        },
+        {
+          "name": "num_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 25,
+          "title": "Num Steps",
+          "description": "The number of steps to generate the audio for",
+          "min": 1.0
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "float"
+          },
+          "default": 8.0,
+          "title": "Duration",
+          "description": "The duration of the audio to generate in seconds",
+          "min": 1.0
+        },
+        {
+          "name": "cfg_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 4.5,
+          "title": "Cfg Strength",
+          "description": "The strength of Classifier Free Guidance"
+        },
+        {
+          "name": "mask_away_clip",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Mask Away Clip",
+          "description": "Whether to mask away the clip"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same audio every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "duration",
+        "num_steps"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Stable Audio",
+      "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.StableAudio",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the audio from"
+        },
+        {
+          "name": "seconds_start",
+          "type": {
+            "type": "int"
+          },
+          "default": 0,
+          "title": "Seconds Start",
+          "description": "The start point of the audio clip to generate"
+        },
+        {
+          "name": "seconds_total",
+          "type": {
+            "type": "int"
+          },
+          "default": 30,
+          "title": "Seconds Total",
+          "description": "The duration of the audio clip to generate in seconds"
+        },
+        {
+          "name": "steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 100,
+          "title": "Steps",
+          "description": "The number of steps to denoise the audio for"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "seconds_total",
+        "steps"
       ],
       "is_dynamic": false
     },
@@ -5642,1459 +7374,6 @@
         "prompt",
         "guidance_scale",
         "negative_prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "FAL",
-      "description": "FAL Node for interacting with FAL AI services.\n    Provides methods to submit and handle API requests to FAL endpoints.",
-      "namespace": "fal.fal_node",
-      "node_type": "fal.fal_node.FAL",
-      "layout": "default",
-      "properties": [],
-      "outputs": [
-        {
-          "type": {
-            "type": "any"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [],
-      "is_dynamic": false
-    },
-    {
-      "title": "Any LLM",
-      "description": "Use any large language model from a selected catalogue (powered by OpenRouter).\n    Supports various models including Claude 3, Gemini, Llama, and GPT-4.\n    llm, text, generation, ai, language\n\n    Use cases:\n    - Generate natural language responses\n    - Create conversational AI interactions\n    - Process and analyze text content\n    - Generate creative writing\n    - Assist with problem-solving tasks",
-      "namespace": "fal.llm",
-      "node_type": "fal.llm.AnyLLM",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to send to the language model"
-        },
-        {
-          "name": "system_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "System Prompt",
-          "description": "Optional system prompt to provide context or instructions"
-        },
-        {
-          "name": "model",
-          "type": {
-            "type": "enum",
-            "values": [
-              "anthropic/claude-3.5-sonnet",
-              "anthropic/claude-3-5-haiku",
-              "anthropic/claude-3-haiku",
-              "google/gemini-pro-1.5",
-              "google/gemini-flash-1.5",
-              "google/gemini-flash-1.5-8b",
-              "meta-llama/llama-3.2-1b-instruct",
-              "meta-llama/llama-3.2-3b-instruct",
-              "meta-llama/llama-3.1-8b-instruct",
-              "meta-llama/llama-3.1-70b-instruct",
-              "openai/gpt-4o-mini",
-              "openai/gpt-4o"
-            ],
-            "type_name": "nodetool.nodes.fal.llm.ModelEnum"
-          },
-          "default": "google/gemini-flash-1.5",
-          "title": "Model",
-          "description": "The language model to use for the completion"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "str"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "prompt",
-        "model",
-        "system_prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Whisper",
-      "description": "Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.\n    speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text\n\n    Use cases:\n    - Transcribe spoken content to text\n    - Translate speech to English\n    - Generate subtitles and captions\n    - Create text records of audio content\n    - Analyze multilingual audio content",
-      "namespace": "fal.speech_to_text",
-      "node_type": "fal.speech_to_text.Whisper",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "audio",
-          "type": {
-            "type": "audio"
-          },
-          "default": {},
-          "title": "Audio",
-          "description": "The audio file to transcribe"
-        },
-        {
-          "name": "task",
-          "type": {
-            "type": "enum",
-            "values": [
-              "transcribe",
-              "translate"
-            ],
-            "type_name": "nodetool.nodes.fal.speech_to_text.TaskEnum"
-          },
-          "default": "transcribe",
-          "title": "Task",
-          "description": "Task to perform on the audio file"
-        },
-        {
-          "name": "language",
-          "type": {
-            "type": "enum",
-            "values": [
-              "af",
-              "am",
-              "ar",
-              "as",
-              "az",
-              "ba",
-              "be",
-              "bg",
-              "bn",
-              "bo",
-              "br",
-              "bs",
-              "ca",
-              "cs",
-              "cy",
-              "da",
-              "de",
-              "el",
-              "en",
-              "es",
-              "et",
-              "eu",
-              "fa",
-              "fi",
-              "fo",
-              "fr",
-              "gl",
-              "gu",
-              "ha",
-              "haw",
-              "he",
-              "hi",
-              "hr",
-              "ht",
-              "hu",
-              "hy",
-              "id",
-              "is",
-              "it",
-              "ja",
-              "jw",
-              "ka",
-              "kk",
-              "km",
-              "kn",
-              "ko",
-              "la",
-              "lb",
-              "ln",
-              "lo",
-              "lt",
-              "lv",
-              "mg",
-              "mi",
-              "mk",
-              "ml",
-              "mn",
-              "mr",
-              "ms",
-              "mt",
-              "my",
-              "ne",
-              "nl",
-              "nn",
-              "no",
-              "oc",
-              "pa",
-              "pl",
-              "ps",
-              "pt",
-              "ro",
-              "ru",
-              "sa",
-              "sd",
-              "si",
-              "sk",
-              "sl",
-              "sn",
-              "so",
-              "sq",
-              "sr",
-              "su",
-              "sv",
-              "sw",
-              "ta",
-              "te",
-              "tg",
-              "th",
-              "tk",
-              "tl",
-              "tr",
-              "tt",
-              "uk",
-              "ur",
-              "uz",
-              "vi",
-              "yi",
-              "yo",
-              "yue",
-              "zh"
-            ],
-            "type_name": "nodetool.nodes.fal.speech_to_text.LanguageEnum"
-          },
-          "default": "en",
-          "title": "Language",
-          "description": "Language of the audio file. If not set, will be auto-detected"
-        },
-        {
-          "name": "diarize",
-          "type": {
-            "type": "bool"
-          },
-          "default": false,
-          "title": "Diarize",
-          "description": "Whether to perform speaker diarization"
-        },
-        {
-          "name": "chunk_level",
-          "type": {
-            "type": "enum",
-            "values": [
-              "segment",
-              "word"
-            ],
-            "type_name": "nodetool.nodes.fal.speech_to_text.ChunkLevelEnum"
-          },
-          "default": "segment",
-          "title": "Chunk Level",
-          "description": "Level of detail for timestamp chunks"
-        },
-        {
-          "name": "num_speakers",
-          "type": {
-            "type": "int"
-          },
-          "default": 1,
-          "title": "Num Speakers",
-          "description": "Number of speakers in the audio. If not set, will be auto-detected",
-          "min": 1.0,
-          "max": 10.0
-        },
-        {
-          "name": "batch_size",
-          "type": {
-            "type": "int"
-          },
-          "default": 64,
-          "title": "Batch Size",
-          "description": "Batch size for processing"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "Optional prompt to guide the transcription"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "str"
-          },
-          "name": "text"
-        },
-        {
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "dict"
-              }
-            ]
-          },
-          "name": "chunks"
-        },
-        {
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "str"
-              }
-            ]
-          },
-          "name": "inferred_languages"
-        },
-        {
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "dict"
-              }
-            ]
-          },
-          "name": "diarization_segments"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "audio",
-        "task",
-        "diarize"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "F5 TTS",
-      "description": "F5 TTS (Text-to-Speech) model for generating natural-sounding speech from text with voice cloning capabilities.\n    audio, tts, voice-cloning, speech, synthesis, text-to-speech, tts, text-to-audio\n\n    Use cases:\n    - Generate natural speech from text\n    - Clone and replicate voices\n    - Create custom voiceovers\n    - Produce multilingual speech content\n    - Generate personalized audio content",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.F5TTS",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "gen_text",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Gen Text",
-          "description": "The text to be converted to speech"
-        },
-        {
-          "name": "ref_audio_url",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Ref Audio Url",
-          "description": "URL of the reference audio file to clone the voice from"
-        },
-        {
-          "name": "ref_text",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Ref Text",
-          "description": "Optional reference text. If not provided, ASR will be used"
-        },
-        {
-          "name": "model_type",
-          "type": {
-            "type": "str"
-          },
-          "default": "F5-TTS",
-          "title": "Model Type",
-          "description": "Model type to use (F5-TTS or E2-TTS)"
-        },
-        {
-          "name": "remove_silence",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Remove Silence",
-          "description": "Whether to remove silence from the generated audio"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "audio"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "gen_text",
-        "ref_audio_url",
-        "model_type"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "MMAudio V2",
-      "description": "MMAudio V2 generates synchronized audio given text inputs. It can generate sounds described by a prompt.\n    audio, generation, synthesis, text-to-audio, synchronization\n\n    Use cases:\n    - Generate synchronized audio from text descriptions\n    - Create custom sound effects\n    - Produce ambient soundscapes\n    - Generate audio for multimedia content\n    - Create sound design elements",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.MMAudioV2",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate the audio for"
-        },
-        {
-          "name": "negative_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Negative Prompt",
-          "description": "The negative prompt to avoid certain elements in the generated audio"
-        },
-        {
-          "name": "num_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 25,
-          "title": "Num Steps",
-          "description": "The number of steps to generate the audio for",
-          "min": 1.0
-        },
-        {
-          "name": "duration",
-          "type": {
-            "type": "float"
-          },
-          "default": 8.0,
-          "title": "Duration",
-          "description": "The duration of the audio to generate in seconds",
-          "min": 1.0
-        },
-        {
-          "name": "cfg_strength",
-          "type": {
-            "type": "float"
-          },
-          "default": 4.5,
-          "title": "Cfg Strength",
-          "description": "The strength of Classifier Free Guidance"
-        },
-        {
-          "name": "mask_away_clip",
-          "type": {
-            "type": "bool"
-          },
-          "default": false,
-          "title": "Mask Away Clip",
-          "description": "Whether to mask away the clip"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same audio every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "audio"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "prompt",
-        "duration",
-        "num_steps"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Stable Audio",
-      "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.StableAudio",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate the audio from"
-        },
-        {
-          "name": "seconds_start",
-          "type": {
-            "type": "int"
-          },
-          "default": 0,
-          "title": "Seconds Start",
-          "description": "The start point of the audio clip to generate"
-        },
-        {
-          "name": "seconds_total",
-          "type": {
-            "type": "int"
-          },
-          "default": 30,
-          "title": "Seconds Total",
-          "description": "The duration of the audio clip to generate in seconds"
-        },
-        {
-          "name": "steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 100,
-          "title": "Steps",
-          "description": "The number of steps to denoise the audio for"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "audio"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "prompt",
-        "seconds_total",
-        "steps"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "AMTInterpolation",
-      "description": "Interpolate between image frames to create smooth video transitions. Supports configurable FPS and recursive interpolation passes for higher quality results.\n    video, interpolation, transitions, frames, smoothing, img2vid, image-to-video\n\n    Use cases:\n    - Create smooth frame transitions\n    - Generate fluid animations\n    - Enhance video frame rates\n    - Produce slow-motion effects\n    - Create seamless video blends",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.AMTInterpolation",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "frames",
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "image"
-              }
-            ]
-          },
-          "default": [
-            {},
-            {}
-          ],
-          "title": "Frames",
-          "description": "List of frames to interpolate between (minimum 2 frames required)"
-        },
-        {
-          "name": "output_fps",
-          "type": {
-            "type": "int"
-          },
-          "default": 24,
-          "title": "Output Fps",
-          "description": "Output frames per second"
-        },
-        {
-          "name": "recursive_interpolation_passes",
-          "type": {
-            "type": "int"
-          },
-          "default": 4,
-          "title": "Recursive Interpolation Passes",
-          "description": "Number of recursive interpolation passes (higher = smoother)"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "frames",
-        "output_fps"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Cog Video X",
-      "description": "Generate videos from images using CogVideoX-5B. Features high-quality motion synthesis with configurable parameters for fine-tuned control over the output.\n    video, generation, motion, synthesis, control, img2vid, image-to-video\n\n    Use cases:\n    - Create controlled video animations\n    - Generate precise motion effects\n    - Produce customized video content\n    - Create fine-tuned animations\n    - Generate motion sequences",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.CogVideoX",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "A description of the desired video motion and style"
-        },
-        {
-          "name": "video_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.VideoSize"
-          },
-          "default": "landscape_16_9",
-          "title": "Video Size",
-          "description": "The size/aspect ratio of the generated video"
-        },
-        {
-          "name": "negative_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "Distorted, discontinuous, Ugly, blurry, low resolution, motionless, static, disfigured, disconnected limbs, Ugly faces, incomplete arms",
-          "title": "Negative Prompt",
-          "description": "What to avoid in the generated video"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 50,
-          "title": "Num Inference Steps",
-          "description": "Number of denoising steps (higher = better quality but slower)"
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 7.0,
-          "title": "Guidance Scale",
-          "description": "How closely to follow the prompt (higher = more faithful but less creative)"
-        },
-        {
-          "name": "use_rife",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Use Rife",
-          "description": "Whether to use RIFE for video interpolation"
-        },
-        {
-          "name": "export_fps",
-          "type": {
-            "type": "int"
-          },
-          "default": 16,
-          "title": "Export Fps",
-          "description": "Target frames per second for the output video"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same video every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt",
-        "video_size"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Fast SVD",
-      "description": "Generate short video clips from your images using SVD v1.1 at Lightning Speed. Features high-quality motion synthesis with configurable parameters for rapid video generation.\n    video, generation, fast, motion, synthesis, img2vid, image-to-video\n\n    Use cases:\n    - Create quick video animations\n    - Generate rapid motion content\n    - Produce fast video transitions\n    - Create instant visual effects\n    - Generate quick previews",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.FastSVD",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "motion_bucket_id",
-          "type": {
-            "type": "int"
-          },
-          "default": 127,
-          "title": "Motion Bucket Id",
-          "description": "Controls motion intensity (higher = more motion)"
-        },
-        {
-          "name": "cond_aug",
-          "type": {
-            "type": "float"
-          },
-          "default": 0.02,
-          "title": "Cond Aug",
-          "description": "Amount of noise added to conditioning (higher = more motion)"
-        },
-        {
-          "name": "steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 4,
-          "title": "Steps",
-          "description": "Number of inference steps (higher = better quality but slower)"
-        },
-        {
-          "name": "fps",
-          "type": {
-            "type": "int"
-          },
-          "default": 10,
-          "title": "Fps",
-          "description": "Frames per second of the output video (total length is 25 frames)"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same video every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "motion_bucket_id",
-        "fps"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Haiper Image To Video",
-      "description": "Transform images into hyper-realistic videos with Haiper 2.0. Experience industry-leading resolution, fluid motion, and rapid generation for stunning AI videos.\n    video, generation, hyper-realistic, motion, animation, image-to-video, img2vid\n\n    Use cases:\n    - Create cinematic animations\n    - Generate dynamic video content\n    - Transform static images into motion\n    - Produce high-resolution videos\n    - Create visual effects",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.HaiperImageToVideo",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "A description of the desired video motion and style"
-        },
-        {
-          "name": "duration",
-          "type": {
-            "type": "enum",
-            "values": [
-              4,
-              6
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.VideoDuration"
-          },
-          "default": 4,
-          "title": "Duration",
-          "description": "The duration of the generated video in seconds"
-        },
-        {
-          "name": "prompt_enhancer",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Prompt Enhancer",
-          "description": "Whether to use the model's prompt enhancer"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same video every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt",
-        "duration"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Kling Video",
-      "description": "Generate video clips from your images using Kling 1.6. Supports multiple durations and aspect ratios.\n    video, generation, animation, duration, aspect-ratio, img2vid, image-to-video\n\n    Use cases:\n    - Create custom video content\n    - Generate video animations\n    - Transform static images\n    - Produce motion graphics\n    - Create visual presentations",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.KlingVideo",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "A description of the desired video motion and style"
-        },
-        {
-          "name": "duration",
-          "type": {
-            "type": "enum",
-            "values": [
-              "5",
-              "10"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.KlingDuration"
-          },
-          "default": "5",
-          "title": "Duration",
-          "description": "The duration of the generated video"
-        },
-        {
-          "name": "aspect_ratio",
-          "type": {
-            "type": "enum",
-            "values": [
-              "16:9",
-              "9:16",
-              "4:3",
-              "3:4",
-              "21:9",
-              "9:21",
-              "1:1"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
-          },
-          "default": "16:9",
-          "title": "Aspect Ratio",
-          "description": "The aspect ratio of the generated video frame"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt",
-        "duration"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Kling Video Pro",
-      "description": "Generate video clips from your images using Kling 1.6 Pro. The professional version offers enhanced quality and performance compared to the standard version.\n    video, generation, professional, quality, performance, img2vid, image-to-video\n\n    Use cases:\n    - Create professional video content\n    - Generate high-quality animations\n    - Produce commercial video assets\n    - Create advanced motion graphics\n    - Generate premium visual content",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.KlingVideoPro",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "A description of the desired video motion and style"
-        },
-        {
-          "name": "duration",
-          "type": {
-            "type": "enum",
-            "values": [
-              "5",
-              "10"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.KlingDuration"
-          },
-          "default": "5",
-          "title": "Duration",
-          "description": "The duration of the generated video"
-        },
-        {
-          "name": "aspect_ratio",
-          "type": {
-            "type": "enum",
-            "values": [
-              "16:9",
-              "9:16",
-              "4:3",
-              "3:4",
-              "21:9",
-              "9:21",
-              "1:1"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
-          },
-          "default": "16:9",
-          "title": "Aspect Ratio",
-          "description": "The aspect ratio of the generated video frame"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt",
-        "duration"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "LTXVideo",
-      "description": "Generate videos from images using LTX Video. Best results with 768x512 images and detailed, chronological descriptions of actions and scenes.\n    video, generation, chronological, scenes, actions, img2vid, image-to-video\n\n    Use cases:\n    - Create scene-based animations\n    - Generate sequential video content\n    - Produce narrative videos\n    - Create storyboard animations\n    - Generate action sequences",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.LTXVideo",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video (768x512 recommended)"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "A detailed description of the desired video motion and style"
-        },
-        {
-          "name": "negative_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, fused fingers, bad anatomy, weird hand, ugly",
-          "title": "Negative Prompt",
-          "description": "What to avoid in the generated video"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 30,
-          "title": "Num Inference Steps",
-          "description": "Number of inference steps (higher = better quality but slower)"
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.0,
-          "title": "Guidance Scale",
-          "description": "How closely to follow the prompt (higher = more faithful)"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same video every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Luma Dream Machine",
-      "description": "Generate video clips from your images using Luma Dream Machine v1.5. Supports various aspect ratios and optional end-frame blending.\n    video, generation, animation, blending, aspect-ratio, img2vid, image-to-video\n\n    Use cases:\n    - Create seamless video loops\n    - Generate video transitions\n    - Transform images into animations\n    - Create motion graphics\n    - Produce video content",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.LumaDreamMachine",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "A description of the desired video motion and style"
-        },
-        {
-          "name": "aspect_ratio",
-          "type": {
-            "type": "enum",
-            "values": [
-              "16:9",
-              "9:16",
-              "4:3",
-              "3:4",
-              "21:9",
-              "9:21",
-              "1:1"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
-          },
-          "default": "16:9",
-          "title": "Aspect Ratio",
-          "description": "The aspect ratio of the generated video"
-        },
-        {
-          "name": "loop",
-          "type": {
-            "type": "bool"
-          },
-          "default": false,
-          "title": "Loop",
-          "description": "Whether the video should loop (end blends with beginning)"
-        },
-        {
-          "name": "end_image",
-          "type": {
-            "type": "union",
-            "type_args": [
-              {
-                "type": "image"
-              },
-              {
-                "type": "none"
-              }
-            ]
-          },
-          "title": "End Image",
-          "description": "Optional image to blend the end of the video with"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt",
-        "aspect_ratio"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Mini Max Video",
-      "description": "Generate video clips from your images using MiniMax Video model. Transform static art into dynamic masterpieces with enhanced smoothness and vivid motion.\n    video, generation, art, motion, smoothness, img2vid, image-to-video\n\n    Use cases:\n    - Transform artwork into videos\n    - Create smooth animations\n    - Generate artistic motion content\n    - Produce dynamic visualizations\n    - Create video art pieces",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.MiniMaxVideo",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "A description of the desired video motion and style"
-        },
-        {
-          "name": "prompt_optimizer",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Prompt Optimizer",
-          "description": "Whether to use the model's prompt optimizer"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Muse Talk",
-      "description": "Real-time high quality audio-driven lip-syncing model. Animate a face video with custom audio for natural-looking speech animation.\n    video, lip-sync, animation, speech, real-time, wav2vid, audio-to-video\n\n    Use cases:\n    - Create lip-synced videos\n    - Generate speech animations\n    - Produce dubbed content\n    - Create animated presentations\n    - Generate voice-over videos",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.MuseTalk",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "video",
-          "type": {
-            "type": "video"
-          },
-          "default": {},
-          "title": "Video",
-          "description": "URL of the source video to animate"
-        },
-        {
-          "name": "audio",
-          "type": {
-            "type": "audio"
-          },
-          "default": {},
-          "title": "Audio",
-          "description": "URL of the audio file to drive the lip sync"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "video",
-        "audio"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Sad Talker",
-      "description": "Generate talking face animations from a single image and audio file. Features configurable face model resolution and expression controls.\n    video, animation, face, talking, expression, img2vid, image-to-video, audio-to-video, wav2vid\n\n    Use cases:\n    - Create talking head videos\n    - Generate lip-sync animations\n    - Produce character animations\n    - Create video presentations\n    - Generate facial expressions",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.SadTalker",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The source image to animate"
-        },
-        {
-          "name": "audio",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Audio",
-          "description": "URL of the audio file to drive the animation"
-        },
-        {
-          "name": "face_model_resolution",
-          "type": {
-            "type": "enum",
-            "values": [
-              "256",
-              "512"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.FaceModelResolution"
-          },
-          "default": "256",
-          "title": "Face Model Resolution",
-          "description": "Resolution of the face model"
-        },
-        {
-          "name": "expression_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 1.0,
-          "title": "Expression Scale",
-          "description": "Scale of the expression (1.0 = normal)"
-        },
-        {
-          "name": "still_mode",
-          "type": {
-            "type": "bool"
-          },
-          "default": false,
-          "title": "Still Mode",
-          "description": "Reduce head motion (works with preprocess 'full')"
-        },
-        {
-          "name": "preprocess",
-          "type": {
-            "type": "enum",
-            "values": [
-              "crop",
-              "extcrop",
-              "resize",
-              "full",
-              "extfull"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.PreprocessType"
-          },
-          "default": "crop",
-          "title": "Preprocess",
-          "description": "Type of image preprocessing to apply"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "audio",
-        "face_model_resolution"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Stable Video",
-      "description": "Generate short video clips from your images using Stable Video Diffusion v1.1. Features high-quality motion synthesis with configurable parameters.\n    video, generation, diffusion, motion, synthesis, img2vid, image-to-video\n\n    Use cases:\n    - Create stable video animations\n    - Generate motion content\n    - Transform images into videos\n    - Produce smooth transitions\n    - Create visual effects",
-      "namespace": "fal.image_to_video",
-      "node_type": "fal.image_to_video.StableVideo",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to transform into a video"
-        },
-        {
-          "name": "motion_bucket_id",
-          "type": {
-            "type": "int"
-          },
-          "default": 127,
-          "title": "Motion Bucket Id",
-          "description": "Controls motion intensity (higher = more motion)"
-        },
-        {
-          "name": "cond_aug",
-          "type": {
-            "type": "float"
-          },
-          "default": 0.02,
-          "title": "Cond Aug",
-          "description": "Amount of noise added to conditioning (higher = more motion)"
-        },
-        {
-          "name": "fps",
-          "type": {
-            "type": "int"
-          },
-          "default": 25,
-          "title": "Fps",
-          "description": "Frames per second of the output video"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same video every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "video"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "motion_bucket_id",
-        "fps"
       ],
       "is_dynamic": false
     }
