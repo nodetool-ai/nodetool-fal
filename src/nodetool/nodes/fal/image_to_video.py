@@ -432,6 +432,68 @@ class LTXVideo(FALNode):
         return ["image", "prompt"]
 
 
+class PixVerse(FALNode):
+    """
+    Generate dynamic videos from images with PixVerse v4.5. Create high-quality motion
+    with detailed prompt control and advanced diffusion parameters.
+    video, generation, pixverse, motion, diffusion, img2vid, image-to-video
+
+    Use cases:
+    - Animate illustrations and photos
+    - Produce engaging social media clips
+    - Generate short cinematic shots
+    - Create motion for product showcases
+    - Experiment with creative video effects
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    negative_prompt: str = Field(
+        default="low quality, worst quality, distorted, blurred",
+        description="What to avoid in the generated video",
+    )
+    num_inference_steps: int = Field(
+        default=50,
+        description="Number of inference steps (higher = better quality but slower)",
+    )
+    guidance_scale: float = Field(
+        default=7.5,
+        description="How closely to follow the prompt (higher = more faithful)",
+    )
+    seed: int = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "negative_prompt": self.negative_prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/v4.5/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "num_inference_steps"]
+
+
 class StableVideo(FALNode):
     """
     Generate short video clips from your images using Stable Video Diffusion v1.1. Features high-quality motion synthesis with configurable parameters.
