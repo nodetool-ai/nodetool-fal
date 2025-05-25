@@ -19,3 +19,8 @@ jobs:
         env:
           FAL_API_KEY: ${{ secrets.FAL_API_KEY }}
         run: python examples/run_text2image.py
+      - name: Upload generated image
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-image
+          path: generated_image.png
