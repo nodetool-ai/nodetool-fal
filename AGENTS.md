@@ -8,8 +8,9 @@ This repository provides additional nodes for the [nodetool](https://github.com/
 * All nodes live under `src/nodetool/nodes/fal` and must inherit from `FALNode`.
 * Node attributes are defined with `pydantic.Field` and async `process` methods should return the appropriate reference type.
 * Each node must contain a short docstring describing the model and several example use cases.
-* Provide a `get_basic_fields` class method listing the most relevant fields.
-* Register new nodes in `src/nodetool/nodes/fal/__init__.py` and update `src/nodetool/package_metadata/nodetool-fal.json` accordingly.
+* Provide a `get_basic_fields` class method listing the most relevant fields
+* Run 'nodetool package scan' to generate metadata
+* Run 'nodetool gencode' to generate the DSL
 
 ## Linting and Tests
 
