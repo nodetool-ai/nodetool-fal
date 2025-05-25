@@ -10,7 +10,7 @@ readme = "README.md"
 authors = ["Matthias Georgi <matti.georgi@gmail.com>"]
 packages = [{ include = "nodetool", from = "src" }]
 package-mode = true
-include = []
+include = ["src/nodetool/package_metadata/nodetool-fal.json"]
 repository = "https://github.com/nodetool-ai/nodetool-fal"
 
 [tool.poetry.dependencies]
