@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
+# ruff: noqa: E402,F401
+from pydantic import Field
 import typing
-from typing import Any
 import nodetool.metadata.types
 import nodetool.metadata.types as types
 from nodetool.dsl.graph import GraphNode
@@ -221,6 +221,30 @@ class BriaProductShot(GraphNode):
     @classmethod
     def get_node_type(cls):
         return "fal.image_to_image.BriaProductShot"
+
+
+class ClarityUpscaler(GraphNode):
+    """Upscale images to improve resolution and sharpness.
+
+    clarity, upscale, enhancement
+
+    Use cases:
+    - Increase image resolution for printing
+    - Improve clarity of low-quality images
+    - Enhance textures and graphics
+    """
+
+    image: types.ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=types.ImageRef(type="image", uri="", asset_id=None, data=None),
+        description="Input image to upscale",
+    )
+    scale: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=2, description="Upscaling factor"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_image.ClarityUpscaler"
 
 
 import nodetool.nodes.fal.text_to_image
