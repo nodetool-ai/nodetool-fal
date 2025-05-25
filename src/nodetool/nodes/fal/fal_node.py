@@ -1,5 +1,5 @@
 import os
-from typing import Dict, Any
+from typing import Any
 from fal_client import AsyncClient
 from nodetool.workflows.base_node import BaseNode
 from nodetool.workflows.processing_context import ProcessingContext

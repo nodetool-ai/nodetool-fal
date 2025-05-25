@@ -1,7 +1,4 @@
-import base64
 from enum import Enum
-from io import BytesIO
-from typing import IO, List, Optional
 import fal_client
 from pydantic import Field
 
@@ -221,5 +218,5 @@ class Whisper(FALNode):
         }
 
     @classmethod
-    def get_basic_fields(cls) -> List[str]:
+    def get_basic_fields(cls) -> list[str]:
         return ["audio", "task", "diarize"]
