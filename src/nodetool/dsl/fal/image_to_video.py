@@ -658,3 +658,35 @@ class Veo2ImageToVideo(GraphNode):
     @classmethod
     def get_node_type(cls):
         return "fal.image_to_video.Veo2ImageToVideo"
+
+
+class WanFlf2v(GraphNode):
+    """
+    Generate short video clips from a single image using the WAN FLF2V model. This model converts a still image into an animated clip guided by a text prompt.
+    video, generation, animation, image-to-video, wan
+
+    Use cases:
+    - Animate still images into short clips
+    - Create dynamic content from artwork
+    - Produce promotional video snippets
+    - Generate visual effects for social posts
+    - Explore creative motion ideas
+    """
+
+    image: types.ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=types.ImageRef(type="image", uri="", asset_id=None, data=None),
+        description="The source image for video generation",
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="Description of the desired motion and style"
+    )
+    num_frames: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=16, description="Number of frames to generate"
+    )
+    seed: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.WanFlf2v"

@@ -6196,6 +6196,64 @@
       ]
     },
     {
+      "title": "Wan Flf 2 v",
+      "description": "Generate short video clips from a single image using the WAN FLF2V model. This model converts a still image into an animated clip guided by a text prompt.\n    video, generation, animation, image-to-video, wan\n\n    Use cases:\n    - Animate still images into short clips\n    - Create dynamic content from artwork\n    - Produce promotional video snippets\n    - Generate visual effects for social posts\n    - Explore creative motion ideas",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.WanFlf2v",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The source image for video generation"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Description of the desired motion and style"
+        },
+        {
+          "name": "num_frames",
+          "type": {
+            "type": "int"
+          },
+          "default": 16,
+          "title": "Num Frames",
+          "description": "Number of frames to generate",
+          "min": 1.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "num_frames"
+      ]
+    },
+    {
       "title": "Bria Background Remove",
       "description": "Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks.\n    Trained exclusively on licensed data for safe and risk-free commercial use.",
       "namespace": "fal.image_to_image",
