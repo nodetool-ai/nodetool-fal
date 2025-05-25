@@ -4309,6 +4309,140 @@
       ]
     },
     {
+      "title": "Kling Text To Video V 2",
+      "description": "Generate videos directly from text prompts using Kling Video V2 Master.\n    video, generation, animation, text-to-video, kling-v2\n\n    Use cases:\n    - Visualize scripts or storyboards\n    - Produce short promotional videos from text\n    - Create animated social media content\n    - Generate concept previews for film ideas\n    - Produce text-driven motion graphics",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.KlingTextToVideoV2",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the desired video"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "5",
+              "10"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingDuration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "The duration of the generated video"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4",
+              "21:9",
+              "9:21",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video frame"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "duration"
+      ]
+    },
+    {
+      "title": "Kling Video V 2",
+      "description": "Generate videos from images using Kling Video V2 Master. Create smooth and realistic animations from a single frame.\n    video, generation, animation, img2vid, kling-v2\n\n    Use cases:\n    - Convert artwork into animated clips\n    - Produce dynamic marketing visuals\n    - Generate motion graphics from static scenes\n    - Create short cinematic sequences\n    - Enhance presentations with video content",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.KlingVideoV2",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "A description of the desired video motion and style"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "5",
+              "10"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingDuration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "The duration of the generated video"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4",
+              "21:9",
+              "9:21",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video frame"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ]
+    },
+    {
       "title": "Pixverse Effects",
       "description": "Apply text-driven effects to a video with Pixverse 4.5.\n    video, effects, pixverse, text-guided\n\n    Use cases:\n    - Stylize existing footage\n    - Add visual effects via text\n    - Enhance marketing videos\n    - Create experimental clips\n    - Transform user content",
       "namespace": "fal.text_to_video",
