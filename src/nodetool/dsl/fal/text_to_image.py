@@ -1,6 +1,5 @@
-from pydantic import BaseModel, Field
+from pydantic import Field
 import typing
-from typing import Any
 import nodetool.metadata.types
 import nodetool.metadata.types as types
 from nodetool.dsl.graph import GraphNode
@@ -1246,6 +1245,59 @@ class IllusionDiffusion(GraphNode):
     @classmethod
     def get_node_type(cls):
         return "fal.text_to_image.IllusionDiffusion"
+
+
+import nodetool.nodes.fal.text_to_image
+
+
+class Imagen4Preview(GraphNode):
+    """
+    Imagen 4 is an advanced text-to-image model providing high quality and
+    detailed visuals with strong prompt understanding.
+    image, generation, diffusion, text-to-image, txt2img
+
+    Use cases:
+    - Create marketing and product visuals
+    - Generate concept art and illustrations
+    - Produce photorealistic images from descriptions
+    - Experiment with advanced diffusion capabilities
+    - Rapidly prototype visual ideas
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="",
+        description="Use it to address details that you don't want in the image",
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=50, description="The number of inference steps to perform"
+    )
+    guidance_scale: float | GraphNode | tuple[GraphNode, str] = Field(
+        default=5.0, description="How closely the model should stick to your prompt"
+    )
+    num_images: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=1, description="The number of images to generate"
+    )
+    seed: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=-1,
+        description="The same seed and prompt will output the same image every time",
+    )
+    enable_safety_checker: bool | GraphNode | tuple[GraphNode, str] = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.text_to_image.Imagen4Preview"
 
 
 import nodetool.nodes.fal.text_to_image
