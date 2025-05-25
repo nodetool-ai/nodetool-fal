@@ -3,7 +3,7 @@ from pydantic import Field
 from nodetool.metadata.types import ColorRef, ImageRef, LoraWeight
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
-from typing import List, Optional
+from typing import Optional
 
 
 class ImageSizePreset(str, Enum):
