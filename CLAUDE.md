@@ -4,11 +4,11 @@ This repository provides additional nodes for the [nodetool](https://github.com/
 
 ## Code Style
 
-* Use **Python 3.10+** syntax.
-* All nodes live under `src/nodetool/nodes/fal` and must inherit from `FALNode`.
-* Node attributes are defined with `pydantic.Field` and async `process` methods should return the appropriate reference type.
-* Each node must contain a short docstring describing the model and several example use cases.
-* Provide a `get_basic_fields` class method listing the most relevant fields
+- Use **Python 3.11+** syntax.
+- All nodes live under `src/nodetool/nodes/fal` and must inherit from `FALNode`.
+- Node attributes are defined with `pydantic.Field` and async `process` methods should return the appropriate reference type.
+- Each node must contain a short docstring describing the model and several example use cases.
+- Provide a `get_basic_fields` class method listing the most relevant fields
 
 ## Commands
 
@@ -30,4 +30,3 @@ pytest -q
 ```
 
 Formatting issues or lint errors should be fixed before committing. Test coverage is expected to be added when applicable.
-
