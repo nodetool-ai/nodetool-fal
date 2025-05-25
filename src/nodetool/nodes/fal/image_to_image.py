@@ -998,3 +998,49 @@ class BriaBackgroundRemove(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image"]
+
+
+class ClarityUpscaler(FALNode):
+    """Upscale images to improve resolution and sharpness.
+
+    clarity, upscale, enhancement
+
+    Use cases:
+    - Increase image resolution for printing
+    - Improve clarity of low-quality images
+    - Enhance textures and graphics
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(),
+        description="Input image to upscale",
+    )
+    scale: int = Field(
+        default=2,
+        ge=1,
+        le=4,
+        description="Upscaling factor",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "scale": self.scale,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/clarity-upscaler",
+            arguments=arguments,
+        )
+        if "image" in res:
+            return ImageRef(uri=res["image"]["url"])
+        assert res.get("images") is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "scale"]
