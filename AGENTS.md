@@ -157,6 +157,57 @@ nodetool package scan
 nodetool codegen
 ```
 
+### DSL Generation Process
+
+When you add a new FAL node, `nodetool codegen` automatically generates corresponding DSL classes in `src/nodetool/dsl/fal/`. Here's how the process works:
+
+1. **Package Scan**: `nodetool package scan` discovers your new node classes and generates metadata
+2. **Code Generation**: `nodetool codegen` creates DSL wrapper classes based on the node metadata
+
+**Example**: If you create a new node `LumaDreamMachine` in `src/nodetool/nodes/fal/image_to_video.py`, the codegen will automatically create a corresponding DSL class in `src/nodetool/dsl/fal/image_to_video.py`:
+
+```python
+class LumaDreamMachine(GraphNode):
+    """
+    Generate video clips from your images using Luma Dream Machine v1.5. Supports various aspect ratios and optional end-frame blending.
+    video, generation, animation, blending, aspect-ratio, img2vid, image-to-video
+
+    Use cases:
+    - Create seamless video loops
+    - Generate video transitions
+    - Transform images into animations
+    - Create motion graphics
+    - Produce video content
+    """
+
+    image: ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    aspect_ratio: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="16:9", description="The aspect ratio of the generated video"
+    )
+    loop: bool | GraphNode | tuple[GraphNode, str] = Field(
+        default=False, description="Whether the video should loop (end blends with beginning)"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.LumaDreamMachine"
+```
+
+**Key DSL Features**:
+- All field types become unions with `GraphNode` and `tuple[GraphNode, str]` for graph connectivity
+- Enum fields are converted to string types in DSL
+- The `get_node_type()` method returns the fully qualified node path
+- Docstrings and field descriptions are preserved
+
+**File Organization**: DSL files mirror the node file structure:
+- `src/nodetool/nodes/fal/image_to_video.py` → `src/nodetool/dsl/fal/image_to_video.py`
+- `src/nodetool/nodes/fal/text_to_image.py` → `src/nodetool/dsl/fal/text_to_image.py`
+
 ## Linting and Tests
 
 Before submitting a pull request, run the following checks:
