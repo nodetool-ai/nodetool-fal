@@ -41,7 +41,7 @@ The package defines nodes grouped by modality. Each node is a subclass of `FALNo
 ### Image to Video
 
 - **HaiperImageToVideo**, **LumaDreamMachine**, **KlingVideo**, **KlingVideoPro** – convert an image into a short video clip with control over duration and style.
-- **CogVideoX**, **MiniMaxVideo**, **LTXVideo**, **StableVideo**, **FastSVD**, **AMTInterpolation**, **SadTalker**, **MuseTalk** – additional models for motion synthesis, interpolation and talking‑face generation.
+- **CogVideoX**, **MiniMaxVideo**, **MiniMaxHailuo02**, **LTXVideo**, **StableVideo**, **FastSVD**, **AMTInterpolation**, **SadTalker**, **MuseTalk** – additional models for motion synthesis, interpolation and talking‑face generation.
 
 ### Text to Audio
 
