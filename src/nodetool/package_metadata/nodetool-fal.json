@@ -8,62 +8,77 @@
   "repo_id": "nodetool-ai/nodetool-fal",
   "nodes": [
     {
-      "title": "Bria Background Remove",
-      "description": "Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks. \n    Trained exclusively on licensed data for safe and risk-free commercial use.",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.BriaBackgroundRemove",
-      "layout": "default",
+      "title": "F5 TTS",
+      "description": "F5 TTS (Text-to-Speech) model for generating natural-sounding speech from text with voice cloning capabilities.\n    audio, tts, voice-cloning, speech, synthesis, text-to-speech, tts, text-to-audio\n\n    Use cases:\n    - Generate natural speech from text\n    - Clone and replicate voices\n    - Create custom voiceovers\n    - Produce multilingual speech content\n    - Generate personalized audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.F5TTS",
       "properties": [
         {
-          "name": "image",
+          "name": "gen_text",
           "type": {
-            "type": "image"
+            "type": "str"
           },
-          "default": {},
-          "title": "Image",
-          "description": "Input image to remove background from"
+          "default": "",
+          "title": "Gen Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "ref_audio_url",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Ref Audio Url",
+          "description": "URL of the reference audio file to clone the voice from"
+        },
+        {
+          "name": "ref_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Ref Text",
+          "description": "Optional reference text. If not provided, ASR will be used"
+        },
+        {
+          "name": "model_type",
+          "type": {
+            "type": "str"
+          },
+          "default": "F5-TTS",
+          "title": "Model Type",
+          "description": "Model type to use (F5-TTS or E2-TTS)"
+        },
+        {
+          "name": "remove_silence",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Remove Silence",
+          "description": "Whether to remove silence from the generated audio"
         }
       ],
       "outputs": [
         {
           "type": {
-            "type": "image"
+            "type": "audio"
           },
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
-        "image"
-      ],
-      "is_dynamic": false
+        "gen_text",
+        "ref_audio_url",
+        "model_type"
+      ]
     },
     {
-      "title": "Bria Background Replace",
-      "description": "Bria Background Replace allows for efficient swapping of backgrounds in images via text prompts or reference image, delivering realistic and polished results. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, background, replacement, swap\n\n    Use cases:\n    - Replace image backgrounds seamlessly\n    - Create professional photo compositions\n    - Generate custom scene settings\n    - Produce commercial-ready images\n    - Create consistent visual environments",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.BriaBackgroundReplace",
-      "layout": "default",
+      "title": "MMAudio V2",
+      "description": "MMAudio V2 generates synchronized audio given text inputs. It can generate sounds described by a prompt.\n    audio, generation, synthesis, text-to-audio, synchronization\n\n    Use cases:\n    - Generate synchronized audio from text descriptions\n    - Create custom sound effects\n    - Produce ambient soundscapes\n    - Generate audio for multimedia content\n    - Create sound design elements",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.MMAudioV2",
       "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "Input image to replace background"
-        },
-        {
-          "name": "ref_image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Ref Image",
-          "description": "Reference image for the new background"
-        },
         {
           "name": "prompt",
           "type": {
@@ -71,7 +86,7 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "Prompt to generate new background"
+          "description": "The prompt to generate the audio for"
         },
         {
           "name": "negative_prompt",
@@ -80,16 +95,45 @@
           },
           "default": "",
           "title": "Negative Prompt",
-          "description": "Negative prompt for background generation"
+          "description": "The negative prompt to avoid certain elements in the generated audio"
         },
         {
-          "name": "refine_prompt",
+          "name": "num_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 25,
+          "title": "Num Steps",
+          "description": "The number of steps to generate the audio for",
+          "min": 1.0
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "float"
+          },
+          "default": 8.0,
+          "title": "Duration",
+          "description": "The duration of the audio to generate in seconds",
+          "min": 1.0
+        },
+        {
+          "name": "cfg_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 4.5,
+          "title": "Cfg Strength",
+          "description": "The strength of Classifier Free Guidance"
+        },
+        {
+          "name": "mask_away_clip",
           "type": {
             "type": "bool"
           },
-          "default": true,
-          "title": "Refine Prompt",
-          "description": "Whether to refine the prompt"
+          "default": false,
+          "title": "Mask Away Clip",
+          "description": "Whether to mask away the clip"
         },
         {
           "name": "seed",
@@ -98,1262 +142,28 @@
           },
           "default": -1,
           "title": "Seed",
-          "description": "The same seed will output the same image every time"
+          "description": "The same seed will output the same audio every time"
         }
       ],
       "outputs": [
         {
           "type": {
-            "type": "image"
+            "type": "audio"
           },
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Bria Eraser",
-      "description": "Bria Eraser enables precise removal of unwanted objects from images while maintaining high-quality outputs. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, removal, cleanup\n\n    Use cases:\n    - Remove unwanted objects from images\n    - Clean up image imperfections\n    - Prepare images for commercial use\n    - Remove distracting elements\n    - Create clean, professional images",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.BriaEraser",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "Input image to erase from"
-        },
-        {
-          "name": "mask",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Mask",
-          "description": "The mask for areas to be cleaned"
-        },
-        {
-          "name": "mask_type",
-          "type": {
-            "type": "str"
-          },
-          "default": "manual",
-          "title": "Mask Type",
-          "description": "Type of mask - 'manual' for user-created or 'automatic' for algorithm-generated"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "mask"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Bria Expand",
-      "description": "Bria Expand expands images beyond their borders in high quality. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, expansion, outpainting\n\n    Use cases:\n    - Extend image boundaries seamlessly\n    - Create wider or taller compositions\n    - Expand images for different aspect ratios\n    - Generate additional scene content",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.BriaExpand",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The input image to expand"
-        },
-        {
-          "name": "canvas_width",
-          "type": {
-            "type": "int"
-          },
-          "default": 1200,
-          "title": "Canvas Width",
-          "description": "The desired width of the final image, after the expansion"
-        },
-        {
-          "name": "canvas_height",
-          "type": {
-            "type": "int"
-          },
-          "default": 674,
-          "title": "Canvas Height",
-          "description": "The desired height of the final image, after the expansion"
-        },
-        {
-          "name": "original_image_width",
-          "type": {
-            "type": "int"
-          },
-          "default": 610,
-          "title": "Original Image Width",
-          "description": "The desired width of the original image, inside the full canvas"
-        },
-        {
-          "name": "original_image_height",
-          "type": {
-            "type": "int"
-          },
-          "default": 855,
-          "title": "Original Image Height",
-          "description": "The desired height of the original image, inside the full canvas"
-        },
-        {
-          "name": "original_image_x",
-          "type": {
-            "type": "int"
-          },
-          "default": 301,
-          "title": "Original Image X",
-          "description": "The desired x-coordinate of the original image, inside the full canvas"
-        },
-        {
-          "name": "original_image_y",
-          "type": {
-            "type": "int"
-          },
-          "default": -66,
-          "title": "Original Image Y",
-          "description": "The desired y-coordinate of the original image, inside the full canvas"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "Text on which you wish to base the image expansion"
-        },
-        {
-          "name": "negative_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Negative Prompt",
-          "description": "The negative prompt to use when generating images"
-        },
-        {
-          "name": "num_images",
-          "type": {
-            "type": "int"
-          },
-          "default": 1,
-          "title": "Num Images",
-          "description": "Number of images to generate"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "canvas_width",
-        "canvas_height",
-        "prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Bria Gen Fill",
-      "description": "Bria GenFill enables high-quality object addition or visual transformation. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, generation, filling, transformation\n\n    Use cases:\n    - Add new objects to existing images\n    - Transform specific image areas\n    - Generate contextual content\n    - Create seamless visual additions\n    - Produce professional image modifications",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.BriaGenFill",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "Input image to erase from"
-        },
-        {
-          "name": "mask",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Mask",
-          "description": "The mask for areas to be cleaned"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate images"
-        },
-        {
-          "name": "negative_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Negative Prompt",
-          "description": "The negative prompt to use when generating images"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "mask",
-        "prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Bria Product Shot",
-      "description": "Place any product in any scenery with just a prompt or reference image while maintaining high integrity of the product. Trained exclusively on licensed data for safe and risk-free commercial use and optimized for eCommerce.\n    image, product, placement, ecommerce\n\n    Use cases:\n    - Create professional product photography\n    - Generate contextual product shots\n    - Place products in custom environments\n    - Create eCommerce product listings\n    - Generate marketing visuals",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.BriaProductShot",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The product image to be placed"
-        },
-        {
-          "name": "scene_description",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Scene Description",
-          "description": "Text description of the new scene/background"
-        },
-        {
-          "name": "ref_image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Ref Image",
-          "description": "Reference image for the new scene/background"
-        },
-        {
-          "name": "optimize_description",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Optimize Description",
-          "description": "Whether to optimize the scene description"
-        },
-        {
-          "name": "placement_type",
-          "type": {
-            "type": "str"
-          },
-          "default": "manual_placement",
-          "title": "Placement Type",
-          "description": "How to position the product (original, automatic, manual_placement, manual_padding)"
-        },
-        {
-          "name": "manual_placement_selection",
-          "type": {
-            "type": "str"
-          },
-          "default": "bottom_center",
-          "title": "Manual Placement Selection",
-          "description": "Specific placement position when using manual_placement"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "scene_description"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Dev Redux",
-      "description": "FLUX.1 [dev] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.\n    image, transformation, style-transfer, development, flux\n\n    Use cases:\n    - Transform images with advanced controls\n    - Create customized image variations\n    - Apply precise style modifications",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxDevRedux",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The input image to transform"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.5,
-          "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "enable_safety_checker",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Enable Safety Checker",
-          "description": "If true, the safety checker will be enabled"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "image_size",
-        "guidance_scale"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Lora Canny",
-      "description": "FLUX LoRA Canny enables precise control over composition and style through edge detection and LoRA-based guidance mechanisms.\n    image, edge, lora, style-transfer, control\n\n    Use cases:\n    - Generate stylized images with structural control\n    - Create edge-guided artistic transformations\n    - Apply custom styles while maintaining composition\n    - Produce consistent style variations",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxLoraCanny",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "control_image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Control Image",
-          "description": "The control image to generate the Canny edge map from"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate an image from"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.5,
-          "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "lora_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 0.6,
-          "title": "Lora Scale",
-          "description": "The strength of the LoRA adaptation"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "control_image",
-        "prompt",
-        "image_size"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Lora Depth",
-      "description": "FLUX LoRA Depth enables precise control over composition and structure through depth map detection and LoRA-based guidance mechanisms.\n    image, depth, lora, structure, control\n\n    Use cases:\n    - Generate depth-aware stylized images\n    - Create 3D-conscious artistic transformations\n    - Maintain spatial relationships with custom styles\n    - Produce depth-consistent variations\n    - Generate images with controlled perspective",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxLoraDepth",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "control_image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Control Image",
-          "description": "The control image to generate the depth map from"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate an image from"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.5,
-          "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "lora_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 0.6,
-          "title": "Lora Scale",
-          "description": "The strength of the LoRA adaptation"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "control_image",
-        "prompt",
-        "image_size"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Pro Canny",
-      "description": "FLUX.1 [pro] Canny enables precise control over composition, style, and structure through advanced edge detection and guidance mechanisms.\n    image, edge, composition, style, control\n\n    Use cases:\n    - Generate images with precise structural control\n    - Create artwork based on edge maps\n    - Transform sketches into detailed images\n    - Maintain specific compositional elements\n    - Generate variations with consistent structure",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxProCanny",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "control_image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Control Image",
-          "description": "The control image to generate the Canny edge map from"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate an image from"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.5,
-          "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "safety_tolerance",
-          "type": {
-            "type": "str"
-          },
-          "default": "2",
-          "title": "Safety Tolerance",
-          "description": "Safety tolerance level (1-6, 1 being most strict)"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "control_image",
-        "prompt",
-        "image_size"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Pro Depth",
-      "description": "FLUX.1 [pro] Depth enables precise control over composition and structure through depth map detection and guidance mechanisms.\n    image, depth-map, composition, structure, control\n\n    Use cases:\n    - Generate images with controlled depth perception\n    - Create 3D-aware image transformations\n    - Maintain spatial relationships in generated images\n    - Produce images with accurate perspective\n    - Generate variations with consistent depth structure",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxProDepth",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "control_image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Control Image",
-          "description": "The control image to generate the depth map from"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate an image from"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.5,
-          "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "safety_tolerance",
-          "type": {
-            "type": "str"
-          },
-          "default": "2",
-          "title": "Safety Tolerance",
-          "description": "Safety tolerance level (1-6, 1 being most strict)"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "control_image",
-        "prompt",
-        "image_size"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Pro Fill",
-      "description": "FLUX.1 [pro] Fill is a high-performance endpoint that enables rapid transformation of existing images with inpainting/outpainting capabilities.\n    image, inpainting, outpainting, transformation, professional\n\n    Use cases:\n    - Fill in missing or masked parts of images\n    - Extend images beyond their original boundaries\n    - Remove and replace unwanted elements\n    - Create seamless image completions\n    - Generate context-aware image content",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxProFill",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The input image to transform"
-        },
-        {
-          "name": "mask",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Mask",
-          "description": "The mask for inpainting"
-        },
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to fill the masked part of the image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "safety_tolerance",
-          "type": {
-            "type": "str"
-          },
-          "default": "2",
-          "title": "Safety Tolerance",
-          "description": "Safety tolerance level (1-6, 1 being most strict)"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "mask",
-        "prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Pro Redux",
-      "description": "FLUX.1 [pro] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.\n    image, transformation, style-transfer, flux\n\n    Use cases:\n    - Create professional image transformations\n    - Generate style transfers",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxProRedux",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The input image to transform"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.5,
-          "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "safety_tolerance",
-          "type": {
-            "type": "str"
-          },
-          "default": "2",
-          "title": "Safety Tolerance",
-          "description": "Safety tolerance level (1-6, 1 being most strict)"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "image_size",
-        "guidance_scale"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Pro Ultra Redux",
-      "description": "FLUX1.1 [pro] ultra Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.\n    image, transformation, style-transfer, ultra, professional\n\n    Use cases:\n    - Apply precise image modifications\n    - Process images with maximum control",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxProUltraRedux",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The input image to transform"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 28,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "guidance_scale",
-          "type": {
-            "type": "float"
-          },
-          "default": 3.5,
-          "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "safety_tolerance",
-          "type": {
-            "type": "str"
-          },
-          "default": "2",
-          "title": "Safety Tolerance",
-          "description": "Safety tolerance level (1-6, 1 being most strict)"
-        },
-        {
-          "name": "image_prompt_strength",
-          "type": {
-            "type": "float"
-          },
-          "default": 0.1,
-          "title": "Image Prompt Strength",
-          "description": "The strength of the image prompt, between 0 and 1"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "image_size",
-        "guidance_scale"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Flux Schnell Redux",
-      "description": "FLUX.1 [schnell] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.\n    image, transformation, style-transfer, fast, flux\n\n    Use cases:\n    - Transform images with style transfers\n    - Apply artistic modifications to photos\n    - Create image variations",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.FluxSchnellRedux",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The input image to transform"
-        },
-        {
-          "name": "image_size",
-          "type": {
-            "type": "enum",
-            "values": [
-              "square_hd",
-              "square",
-              "portrait_4_3",
-              "portrait_16_9",
-              "landscape_4_3",
-              "landscape_16_9"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
-          },
-          "default": "landscape_4_3",
-          "title": "Image Size",
-          "description": "The size of the generated image"
-        },
-        {
-          "name": "num_inference_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 4,
-          "title": "Num Inference Steps",
-          "description": "The number of inference steps to perform",
-          "min": 1.0
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        },
-        {
-          "name": "enable_safety_checker",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Enable Safety Checker",
-          "description": "If true, the safety checker will be enabled"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "image",
-        "image_size",
-        "num_inference_steps"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Ideogram V 2 Edit",
-      "description": "Transform existing images with Ideogram V2's editing capabilities. Modify, adjust, and refine images while maintaining high fidelity and realistic outputs with precise prompt control.\n    image, editing, transformation, fidelity, control\n\n    Use cases:\n    - Edit specific parts of images with precision\n    - Create targeted image modifications\n    - Refine and enhance image details\n    - Generate contextual image edits",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.IdeogramV2Edit",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to fill the masked part of the image"
-        },
-        {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to edit"
-        },
-        {
-          "name": "mask",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Mask",
-          "description": "The mask for editing"
-        },
-        {
-          "name": "style",
-          "type": {
-            "type": "str"
-          },
-          "default": "auto",
-          "title": "Style",
-          "description": "Style of generated image (auto, general, realistic, design, render_3D, anime)"
-        },
-        {
-          "name": "expand_prompt",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Expand Prompt",
-          "description": "Whether to expand the prompt with MagicPrompt functionality"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "image"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
-        "image",
-        "mask"
-      ],
-      "is_dynamic": false
+        "duration",
+        "num_steps"
+      ]
     },
     {
-      "title": "Ideogram V 2 Remix",
-      "description": "Reimagine existing images with Ideogram V2's remix feature. Create variations and adaptations while preserving core elements and adding new creative directions through prompt guidance.\n    image, remix, variation, creativity, adaptation\n\n    Use cases:\n    - Create artistic variations of images\n    - Generate style-transferred versions\n    - Produce creative image adaptations\n    - Transform images while preserving key elements\n    - Generate alternative interpretations",
-      "namespace": "fal.image_to_image",
-      "node_type": "fal.image_to_image.IdeogramV2Remix",
-      "layout": "default",
+      "title": "Stable Audio",
+      "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.StableAudio",
       "properties": [
         {
           "name": "prompt",
@@ -1362,86 +172,69 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "The prompt to remix the image with"
+          "description": "The prompt to generate the audio from"
         },
         {
-          "name": "image",
-          "type": {
-            "type": "image"
-          },
-          "default": {},
-          "title": "Image",
-          "description": "The image to remix"
-        },
-        {
-          "name": "aspect_ratio",
-          "type": {
-            "type": "str"
-          },
-          "default": "1:1",
-          "title": "Aspect Ratio",
-          "description": "The aspect ratio of the generated image"
-        },
-        {
-          "name": "strength",
-          "type": {
-            "type": "float"
-          },
-          "default": 0.8,
-          "title": "Strength",
-          "description": "Strength of the input image in the remix"
-        },
-        {
-          "name": "expand_prompt",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Expand Prompt",
-          "description": "Whether to expand the prompt with MagicPrompt functionality"
-        },
-        {
-          "name": "style",
-          "type": {
-            "type": "str"
-          },
-          "default": "auto",
-          "title": "Style",
-          "description": "Style of generated image (auto, general, realistic, design, render_3D, anime)"
-        },
-        {
-          "name": "seed",
+          "name": "seconds_start",
           "type": {
             "type": "int"
           },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same image every time"
+          "default": 0,
+          "title": "Seconds Start",
+          "description": "The start point of the audio clip to generate"
+        },
+        {
+          "name": "seconds_total",
+          "type": {
+            "type": "int"
+          },
+          "default": 30,
+          "title": "Seconds Total",
+          "description": "The duration of the audio clip to generate in seconds"
+        },
+        {
+          "name": "steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 100,
+          "title": "Steps",
+          "description": "The number of steps to denoise the audio for"
         }
       ],
       "outputs": [
         {
           "type": {
-            "type": "image"
+            "type": "audio"
           },
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
-        "image",
-        "strength"
-      ],
-      "is_dynamic": false
+        "seconds_total",
+        "steps"
+      ]
+    },
+    {
+      "title": "FAL",
+      "description": "FAL Node for interacting with FAL AI services.\n    Provides methods to submit and handle API requests to FAL endpoints.",
+      "namespace": "fal.fal_node",
+      "node_type": "fal.fal_node.FAL",
+      "outputs": [
+        {
+          "type": {
+            "type": "any"
+          },
+          "name": "output"
+        }
+      ]
     },
     {
       "title": "Aura Flow V 03",
       "description": "AuraFlow v0.3 is an open-source flow-based text-to-image generation model that achieves state-of-the-art results on GenEval.\n    image, generation, flow-based, text-to-image, txt2img\n\n    Use cases:\n    - Generate high-quality images\n    - Create artistic visualizations",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.AuraFlowV03",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -1508,21 +301,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "guidance_scale",
         "num_inference_steps"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Bria V 1",
       "description": "Bria's Text-to-Image model, trained exclusively on licensed data for safe and risk-free commercial use.\n    Features exceptional image quality and commercial licensing safety.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.BriaV1",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -1632,21 +421,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "aspect_ratio"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Bria V 1 Fast",
       "description": "Bria's Text-to-Image model with perfect harmony of latency and quality.\n    Trained exclusively on licensed data for safe and risk-free commercial use.\n    Features faster inference times while maintaining high image quality.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.BriaV1Fast",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -1756,21 +541,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "aspect_ratio"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Bria V 1 HD",
       "description": "Bria's Text-to-Image model for HD images. Trained exclusively on licensed data for safe and risk-free commercial use. Features exceptional image quality and commercial licensing safety.\n    image, generation, hd, text-to-image, txt2img\n\n    Use cases:\n    - Create commercial marketing materials\n    - Generate licensed artwork\n    - Produce high-definition visuals\n    - Design professional content\n    - Create legally safe visual assets",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.BriaV1HD",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -1880,21 +661,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "aspect_ratio"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Diffusion Edge",
       "description": "Diffusion Edge is a diffusion-based high-quality edge detection model that generates\n    edge maps from input images.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.DiffusionEdge",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -1914,19 +691,15 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Fast LCMDiffusion",
       "description": "Fast Latent Consistency Models (v1.5/XL) Text to Image runs SDXL at the speed of light,\n    enabling rapid and high-quality image generation.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FastLCMDiffusion",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2075,21 +848,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "model_name",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Fast Lightning SDXL",
       "description": "Stable Diffusion XL Lightning Text to Image runs SDXL at the speed of light, enabling\n    ultra-fast high-quality image generation.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FastLightningSDXL",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2165,21 +934,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "num_inference_steps"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Fast SDXL",
       "description": "Fast SDXL is a high-performance text-to-image model that runs SDXL at exceptional speeds\n    while maintaining high-quality output.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FastSDXL",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2296,21 +1061,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Fast SDXLControl Net Canny",
       "description": "Fast SDXL ControlNet Canny is a model that generates images using ControlNet with SDXL.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FastSDXLControlNetCanny",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2403,21 +1164,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "control_image",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Fast Turbo Diffusion",
       "description": "Fast Turbo Diffusion runs SDXL at exceptional speeds while maintaining high-quality output.\n    Supports both SDXL Turbo and SD Turbo models for ultra-fast image generation.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FastTurboDiffusion",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2524,21 +1281,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "model_name",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux Dev",
       "description": "FLUX.1 [dev] is a 12 billion parameter flow transformer that generates high-quality images from text.\n    It is suitable for personal and commercial use.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxDev",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2623,21 +1376,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux Dev Image To Image",
       "description": "FLUX.1 [dev] Image-to-Image is a high-performance endpoint that enables rapid transformation\n    of existing images, delivering high-quality style transfers and image modifications with\n    the core FLUX capabilities.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxDevImageToImage",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2712,21 +1461,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image",
         "strength"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux General",
       "description": "FLUX.1 [dev] with Controlnets and Loras is a versatile text-to-image model that supports multiple AI extensions including LoRA, ControlNet conditioning, and IP-Adapter integration, enabling comprehensive control over image generation through various guidance methods.\n    image, generation, controlnet, lora, ip-adapter, text-to-image, txt2img\n\n    Use cases:\n    - Create controlled image generations\n    - Apply multiple AI extensions\n    - Generate guided visual content\n    - Produce customized artwork\n    - Design with precise control",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxGeneral",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2868,21 +1613,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux Lora",
       "description": "FLUX.1 [dev] with LoRAs is a text-to-image model that supports LoRA adaptations, enabling rapid and high-quality image generation with pre-trained LoRA weights for personalization, specific styles, brand identities, and product-specific outputs.\n    image, generation, lora, personalization, style-transfer, text-to-image, txt2img\n\n    Use cases:\n    - Create brand-specific visuals\n    - Generate custom styled images\n    - Adapt existing styles to new content\n    - Produce personalized artwork\n    - Design consistent visual identities",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxLora",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -2971,21 +1712,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "loras"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux Lora Inpainting",
       "description": "FLUX.1 [dev] Inpainting with LoRAs is a text-to-image model that supports inpainting and LoRA adaptations,\n    enabling rapid and high-quality image inpainting using pre-trained LoRA weights for personalization,\n    specific styles, brand identities, and product-specific outputs.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxLoraInpainting",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3085,22 +1822,18 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image",
         "mask",
         "loras"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux Lora TTI",
       "description": "FLUX.1 with LoRAs is a text-to-image model that supports LoRA adaptations,\n    enabling high-quality image generation with customizable LoRA weights for\n    personalization, specific styles, and brand identities.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxLoraTTI",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3226,21 +1959,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "model_name",
         "loras"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux Schnell",
       "description": "FLUX.1 [schnell] is a 12 billion parameter flow transformer that generates high-quality images\n    from text in 1 to 4 steps, suitable for personal and commercial use.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxSchnell",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3316,21 +2045,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "num_inference_steps"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux Subject",
       "description": "FLUX.1 Subject is a super fast endpoint for the FLUX.1 [schnell] model with subject input capabilities, enabling rapid and high-quality image generation for personalization, specific styles, brand identities, and product-specific outputs.\n    image, generation, subject-driven, personalization, fast, text-to-image, txt2img\n\n    Use cases:\n    - Create variations of existing subjects\n    - Generate personalized product images\n    - Design brand-specific visuals\n    - Produce custom character artwork\n    - Create subject-based illustrations",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxSubject",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3414,21 +2139,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image",
         "image_size"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux V 1 Pro",
       "description": "FLUX1.1 [pro] is an enhanced version of FLUX.1 [pro], improved image generation capabilities, delivering superior composition, detail, and artistic fidelity compared to its predecessor.\n    image, generation, composition, detail, artistic, text-to-image, txt2img\n\n    Use cases:\n    - Generate high-fidelity artwork\n    - Create detailed illustrations\n    - Design complex compositions\n    - Produce artistic renderings\n    - Generate professional visuals",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxV1Pro",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3497,21 +2218,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux V 1 Pro New",
       "description": "FLUX.1 [pro] new is an accelerated version of FLUX.1 [pro], maintaining professional-grade\n    image quality while delivering significantly faster generation speeds.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxV1ProNew",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3600,21 +2317,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Flux V 1 Pro Ultra",
       "description": "FLUX1.1 [ultra] is the latest and most advanced version of FLUX.1 [pro],\n    featuring cutting-edge improvements in image generation, delivering unparalleled\n    composition, detail, and artistic fidelity.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxV1ProUltra",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3683,21 +2396,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Fooocus",
       "description": "Fooocus is a text-to-image model with default parameters and automated optimizations\n    for quality improvements.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.Fooocus",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3885,21 +2594,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "styles"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Hyper SDXL",
       "description": "Hyper SDXL is a hyper-charged version of SDXL that delivers exceptional performance and creativity\n    while maintaining high-quality output and ultra-fast generation speeds.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.HyperSDXL",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -3994,21 +2699,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "num_inference_steps"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Ideogram V 2",
       "description": "Ideogram V2 is a state-of-the-art image generation model optimized for commercial and creative use, featuring exceptional typography handling and realistic outputs.\n    image, generation, ai, typography, realistic, text-to-image, txt2img\n\n    Use cases:\n    - Create commercial artwork and designs\n    - Generate realistic product visualizations\n    - Design marketing materials with text\n    - Produce high-quality illustrations\n    - Create brand assets and logos",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.IdeogramV2",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4098,21 +2799,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "aspect_ratio",
         "style"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Ideogram V 2 Turbo",
       "description": "Accelerated image generation with Ideogram V2 Turbo. Create high-quality visuals, posters,\n    and logos with enhanced speed while maintaining Ideogram's signature quality.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.IdeogramV2Turbo",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4202,21 +2899,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "aspect_ratio",
         "style"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Illusion Diffusion",
       "description": "Illusion Diffusion is a model that creates illusions conditioned on an input image.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.IllusionDiffusion",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4300,21 +2993,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Imagen 4 Preview",
-      "description": "Imagen 4 is an advanced text-to-image model providing high quality and\n    detailed visuals with strong prompt understanding.\n    image, generation, diffusion, text-to-image, txt2img\n\n    Use cases:\n    - Create marketing and product visuals\n    - Generate concept art and illustrations\n    - Produce photorealistic images from descriptions\n    - Experiment with advanced diffusion capabilities\n    - Rapidly prototype visual ideas",
+      "description": "Imagen 4 Preview is the next iteration of Google's Imagen series, offering\n    high quality text-to-image generation with strong prompt adherence and\n    improved realism.\n    image, generation, google, text-to-image, txt2img\n\n    Use cases:\n    - Generate photorealistic artwork and designs\n    - Create marketing and product visuals\n    - Produce concept art or storyboards\n    - Explore creative ideas with high fidelity\n    - Rapid prototyping of imagery",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.Imagen4Preview",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4332,7 +3021,32 @@
           },
           "default": "",
           "title": "Negative Prompt",
-          "description": "Use it to address details that you don't want in the image"
+          "description": "Elements to avoid in the generated image"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "10:16",
+              "16:10",
+              "9:16",
+              "16:9",
+              "4:3",
+              "3:4",
+              "1:1",
+              "1:3",
+              "3:1",
+              "3:2",
+              "2:3",
+              "4:5",
+              "5:4"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.AspectRatio"
+          },
+          "default": "1:1",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated image"
         },
         {
           "name": "image_size",
@@ -4369,7 +3083,7 @@
           },
           "default": 5.0,
           "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
+          "description": "How closely the model should follow the prompt"
         },
         {
           "name": "num_images",
@@ -4408,21 +3122,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
-        "image_size",
+        "aspect_ratio",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "LCMDiffusion",
       "description": "Latent Consistency Models (SDXL & SDv1.5) Text to Image produces high-quality images\n    with minimal inference steps.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.LCMDiffusion",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4520,21 +3230,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "model",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Luma Photon",
       "description": "Luma Photon is a creative and personalizable text-to-image model that brings a step-function\n    change in the cost of high-quality image generation, optimized for creatives.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.LumaPhoton",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4573,20 +3279,16 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "aspect_ratio"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Luma Photon Flash",
       "description": "Luma Photon Flash is the most creative, personalizable, and intelligent visual model for creatives,\n    bringing a step-function change in the cost of high-quality image generation with faster inference times.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.LumaPhotonFlash",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4625,20 +3327,16 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "aspect_ratio"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Omni Gen V 1",
       "description": "OmniGen is a unified image generation model that can generate a wide range of images from multi-modal prompts. It can be used for various tasks such as Image Editing, Personalized Image Generation, Virtual Try-On, Multi Person Generation and more!\n    image, generation, multi-modal, editing, personalization, text-to-image, txt2img\n\n    Use cases:\n    - Edit and modify existing images\n    - Create personalized visual content\n    - Generate virtual try-on images\n    - Create multi-person compositions\n    - Combine multiple images creatively",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.OmniGenV1",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4750,21 +3448,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "input_image_1",
         "image_size"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Playground V 25",
       "description": "Playground v2.5 is a state-of-the-art open-source model that excels in aesthetic quality\n    for text-to-image generation.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.PlaygroundV25",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4839,21 +3533,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Recraft 20 B",
       "description": "Recraft 20B is a new and affordable text-to-image model that delivers state-of-the-art results.\n     image, generation, efficient, text-to-image, txt2img\n\n    Use cases:\n    - Generate cost-effective visuals\n    - Create high-quality images\n    - Produce professional artwork\n    - Design marketing materials\n    - Generate commercial content",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.Recraft20B",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -4952,21 +3642,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "style"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Recraft V 3",
       "description": "Recraft V3 is a text-to-image model with the ability to generate long texts, vector art, images in brand style, and much more.\n    image, text",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.RecraftV3",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -5065,21 +3751,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "style"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Sana V 1",
       "description": "Sana can synthesize high-resolution, high-quality images with strong text-image alignment at a remarkably fast speed, with the ability to generate 4K images in less than a second.\n    image, generation, high-resolution, fast, text-alignment, text-to-image, txt2img\n\n    Use cases:\n    - Generate 4K quality images\n    - Create high-resolution artwork\n    - Produce rapid visual prototypes\n    - Design detailed illustrations\n    - Generate precise text-aligned visuals",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.SanaV1",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -5173,21 +3855,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "image_size",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Stable Cascade",
       "description": "Stable Cascade is a state-of-the-art text-to-image model that generates images on a smaller & cheaper\n    latent space while maintaining high quality output.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.StableCascade",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -5288,21 +3966,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Stable Diffusion V 35 Large",
       "description": "Stable Diffusion 3.5 Large is a Multimodal Diffusion Transformer (MMDiT) text-to-image model that features\n    improved performance in image quality, typography, complex prompt understanding, and resource-efficiency.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.StableDiffusionV35Large",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -5386,21 +4060,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Stable Diffusion V 3 Medium",
       "description": "Stable Diffusion 3 Medium (Text to Image) is a Multimodal Diffusion Transformer (MMDiT) model\n    that improves image quality, typography, prompt understanding, and efficiency.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.StableDiffusionV3Medium",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -5503,21 +4173,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "negative_prompt",
         "guidance_scale"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Switti",
       "description": "Switti is a scale-wise transformer for fast text-to-image generation that outperforms existing T2I AR models and competes with state-of-the-art T2I diffusion models while being faster than distilled diffusion models.\n    image, generation, fast, transformer, efficient, text-to-image, txt2img\n\n    Use cases:\n    - Rapid image prototyping\n    - Real-time image generation\n    - Quick visual concept testing\n    - Fast artistic visualization\n    - Efficient batch image creation",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.Switti",
-      "layout": "default",
       "properties": [
         {
           "name": "prompt",
@@ -5636,108 +4302,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "prompt",
         "guidance_scale",
         "negative_prompt"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "FAL",
-      "description": "FAL Node for interacting with FAL AI services.\n    Provides methods to submit and handle API requests to FAL endpoints.",
-      "namespace": "fal.fal_node",
-      "node_type": "fal.fal_node.FAL",
-      "layout": "default",
-      "properties": [],
-      "outputs": [
-        {
-          "type": {
-            "type": "any"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [],
-      "is_dynamic": false
-    },
-    {
-      "title": "Any LLM",
-      "description": "Use any large language model from a selected catalogue (powered by OpenRouter).\n    Supports various models including Claude 3, Gemini, Llama, and GPT-4.\n    llm, text, generation, ai, language\n\n    Use cases:\n    - Generate natural language responses\n    - Create conversational AI interactions\n    - Process and analyze text content\n    - Generate creative writing\n    - Assist with problem-solving tasks",
-      "namespace": "fal.llm",
-      "node_type": "fal.llm.AnyLLM",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to send to the language model"
-        },
-        {
-          "name": "system_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "System Prompt",
-          "description": "Optional system prompt to provide context or instructions"
-        },
-        {
-          "name": "model",
-          "type": {
-            "type": "enum",
-            "values": [
-              "anthropic/claude-3.5-sonnet",
-              "anthropic/claude-3-5-haiku",
-              "anthropic/claude-3-haiku",
-              "google/gemini-pro-1.5",
-              "google/gemini-flash-1.5",
-              "google/gemini-flash-1.5-8b",
-              "meta-llama/llama-3.2-1b-instruct",
-              "meta-llama/llama-3.2-3b-instruct",
-              "meta-llama/llama-3.1-8b-instruct",
-              "meta-llama/llama-3.1-70b-instruct",
-              "openai/gpt-4o-mini",
-              "openai/gpt-4o"
-            ],
-            "type_name": "nodetool.nodes.fal.llm.ModelEnum"
-          },
-          "default": "google/gemini-flash-1.5",
-          "title": "Model",
-          "description": "The language model to use for the completion"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "str"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "prompt",
-        "model",
-        "system_prompt"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Whisper",
       "description": "Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.\n    speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text\n\n    Use cases:\n    - Transcribe spoken content to text\n    - Translate speech to English\n    - Generate subtitles and captions\n    - Create text records of audio content\n    - Analyze multilingual audio content",
       "namespace": "fal.speech_to_text",
       "node_type": "fal.speech_to_text.Whisper",
-      "layout": "default",
       "properties": [
         {
           "name": "audio",
@@ -5968,242 +4543,17 @@
           "name": "diarization_segments"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "audio",
         "task",
         "diarize"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "F5 TTS",
-      "description": "F5 TTS (Text-to-Speech) model for generating natural-sounding speech from text with voice cloning capabilities.\n    audio, tts, voice-cloning, speech, synthesis, text-to-speech, tts, text-to-audio\n\n    Use cases:\n    - Generate natural speech from text\n    - Clone and replicate voices\n    - Create custom voiceovers\n    - Produce multilingual speech content\n    - Generate personalized audio content",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.F5TTS",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "gen_text",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Gen Text",
-          "description": "The text to be converted to speech"
-        },
-        {
-          "name": "ref_audio_url",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Ref Audio Url",
-          "description": "URL of the reference audio file to clone the voice from"
-        },
-        {
-          "name": "ref_text",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Ref Text",
-          "description": "Optional reference text. If not provided, ASR will be used"
-        },
-        {
-          "name": "model_type",
-          "type": {
-            "type": "str"
-          },
-          "default": "F5-TTS",
-          "title": "Model Type",
-          "description": "Model type to use (F5-TTS or E2-TTS)"
-        },
-        {
-          "name": "remove_silence",
-          "type": {
-            "type": "bool"
-          },
-          "default": true,
-          "title": "Remove Silence",
-          "description": "Whether to remove silence from the generated audio"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "audio"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "gen_text",
-        "ref_audio_url",
-        "model_type"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "MMAudio V2",
-      "description": "MMAudio V2 generates synchronized audio given text inputs. It can generate sounds described by a prompt.\n    audio, generation, synthesis, text-to-audio, synchronization\n\n    Use cases:\n    - Generate synchronized audio from text descriptions\n    - Create custom sound effects\n    - Produce ambient soundscapes\n    - Generate audio for multimedia content\n    - Create sound design elements",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.MMAudioV2",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate the audio for"
-        },
-        {
-          "name": "negative_prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Negative Prompt",
-          "description": "The negative prompt to avoid certain elements in the generated audio"
-        },
-        {
-          "name": "num_steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 25,
-          "title": "Num Steps",
-          "description": "The number of steps to generate the audio for",
-          "min": 1.0
-        },
-        {
-          "name": "duration",
-          "type": {
-            "type": "float"
-          },
-          "default": 8.0,
-          "title": "Duration",
-          "description": "The duration of the audio to generate in seconds",
-          "min": 1.0
-        },
-        {
-          "name": "cfg_strength",
-          "type": {
-            "type": "float"
-          },
-          "default": 4.5,
-          "title": "Cfg Strength",
-          "description": "The strength of Classifier Free Guidance"
-        },
-        {
-          "name": "mask_away_clip",
-          "type": {
-            "type": "bool"
-          },
-          "default": false,
-          "title": "Mask Away Clip",
-          "description": "Whether to mask away the clip"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "The same seed will output the same audio every time"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "audio"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "prompt",
-        "duration",
-        "num_steps"
-      ],
-      "is_dynamic": false
-    },
-    {
-      "title": "Stable Audio",
-      "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
-      "namespace": "fal.text_to_audio",
-      "node_type": "fal.text_to_audio.StableAudio",
-      "layout": "default",
-      "properties": [
-        {
-          "name": "prompt",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Prompt",
-          "description": "The prompt to generate the audio from"
-        },
-        {
-          "name": "seconds_start",
-          "type": {
-            "type": "int"
-          },
-          "default": 0,
-          "title": "Seconds Start",
-          "description": "The start point of the audio clip to generate"
-        },
-        {
-          "name": "seconds_total",
-          "type": {
-            "type": "int"
-          },
-          "default": 30,
-          "title": "Seconds Total",
-          "description": "The duration of the audio clip to generate in seconds"
-        },
-        {
-          "name": "steps",
-          "type": {
-            "type": "int"
-          },
-          "default": 100,
-          "title": "Steps",
-          "description": "The number of steps to denoise the audio for"
-        }
-      ],
-      "outputs": [
-        {
-          "type": {
-            "type": "audio"
-          },
-          "name": "output"
-        }
-      ],
-      "the_model_info": {},
-      "recommended_models": [],
-      "basic_fields": [
-        "prompt",
-        "seconds_total",
-        "steps"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "AMTInterpolation",
       "description": "Interpolate between image frames to create smooth video transitions. Supports configurable FPS and recursive interpolation passes for higher quality results.\n    video, interpolation, transitions, frames, smoothing, img2vid, image-to-video\n\n    Use cases:\n    - Create smooth frame transitions\n    - Generate fluid animations\n    - Enhance video frame rates\n    - Produce slow-motion effects\n    - Create seamless video blends",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.AMTInterpolation",
-      "layout": "default",
       "properties": [
         {
           "name": "frames",
@@ -6249,20 +4599,16 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "frames",
         "output_fps"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Cog Video X",
       "description": "Generate videos from images using CogVideoX-5B. Features high-quality motion synthesis with configurable parameters for fine-tuned control over the output.\n    video, generation, motion, synthesis, control, img2vid, image-to-video\n\n    Use cases:\n    - Create controlled video animations\n    - Generate precise motion effects\n    - Produce customized video content\n    - Create fine-tuned animations\n    - Generate motion sequences",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.CogVideoX",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6363,21 +4709,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "prompt",
         "video_size"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Fast SVD",
       "description": "Generate short video clips from your images using SVD v1.1 at Lightning Speed. Features high-quality motion synthesis with configurable parameters for rapid video generation.\n    video, generation, fast, motion, synthesis, img2vid, image-to-video\n\n    Use cases:\n    - Create quick video animations\n    - Generate rapid motion content\n    - Produce fast video transitions\n    - Create instant visual effects\n    - Generate quick previews",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.FastSVD",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6442,21 +4784,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "motion_bucket_id",
         "fps"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Haiper Image To Video",
       "description": "Transform images into hyper-realistic videos with Haiper 2.0. Experience industry-leading resolution, fluid motion, and rapid generation for stunning AI videos.\n    video, generation, hyper-realistic, motion, animation, image-to-video, img2vid\n\n    Use cases:\n    - Create cinematic animations\n    - Generate dynamic video content\n    - Transform static images into motion\n    - Produce high-resolution videos\n    - Create visual effects",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.HaiperImageToVideo",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6517,21 +4855,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "prompt",
         "duration"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Kling Video",
       "description": "Generate video clips from your images using Kling 1.6. Supports multiple durations and aspect ratios.\n    video, generation, animation, duration, aspect-ratio, img2vid, image-to-video\n\n    Use cases:\n    - Create custom video content\n    - Generate video animations\n    - Transform static images\n    - Produce motion graphics\n    - Create visual presentations",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingVideo",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6593,21 +4927,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "prompt",
         "duration"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Kling Video Pro",
       "description": "Generate video clips from your images using Kling 1.6 Pro. The professional version offers enhanced quality and performance compared to the standard version.\n    video, generation, professional, quality, performance, img2vid, image-to-video\n\n    Use cases:\n    - Create professional video content\n    - Generate high-quality animations\n    - Produce commercial video assets\n    - Create advanced motion graphics\n    - Generate premium visual content",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingVideoPro",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6669,21 +4999,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "prompt",
         "duration"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "LTXVideo",
       "description": "Generate videos from images using LTX Video. Best results with 768x512 images and detailed, chronological descriptions of actions and scenes.\n    video, generation, chronological, scenes, actions, img2vid, image-to-video\n\n    Use cases:\n    - Create scene-based animations\n    - Generate sequential video content\n    - Produce narrative videos\n    - Create storyboard animations\n    - Generate action sequences",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.LTXVideo",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6748,20 +5074,16 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "prompt"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Luma Dream Machine",
       "description": "Generate video clips from your images using Luma Dream Machine v1.5. Supports various aspect ratios and optional end-frame blending.\n    video, generation, animation, blending, aspect-ratio, img2vid, image-to-video\n\n    Use cases:\n    - Create seamless video loops\n    - Generate video transitions\n    - Transform images into animations\n    - Create motion graphics\n    - Produce video content",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.LumaDreamMachine",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6834,21 +5156,79 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "prompt",
         "aspect_ratio"
+      ]
+    },
+    {
+      "title": "Mini Max Hailuo 02",
+      "description": "Create videos from your images with MiniMax Hailuo-02 Standard. Choose the\n    clip length and optionally enhance prompts for sharper results.\n    video, generation, minimax, prompt-optimizer, img2vid, image-to-video\n\n    Use cases:\n    - Produce social media clips\n    - Generate cinematic sequences\n    - Visualize storyboards\n    - Create promotional videos\n    - Animate still graphics",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.MiniMaxHailuo02",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the video"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "6",
+              "10"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.HailuoDuration"
+          },
+          "default": "6",
+          "title": "Duration",
+          "description": "The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution."
+        },
+        {
+          "name": "prompt_optimizer",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Prompt Optimizer",
+          "description": "Whether to use the model's prompt optimizer"
+        }
       ],
-      "is_dynamic": false
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ]
     },
     {
       "title": "Mini Max Video",
       "description": "Generate video clips from your images using MiniMax Video model. Transform static art into dynamic masterpieces with enhanced smoothness and vivid motion.\n    video, generation, art, motion, smoothness, img2vid, image-to-video\n\n    Use cases:\n    - Transform artwork into videos\n    - Create smooth animations\n    - Generate artistic motion content\n    - Produce dynamic visualizations\n    - Create video art pieces",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.MiniMaxVideo",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -6886,20 +5266,16 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "prompt"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Muse Talk",
       "description": "Real-time high quality audio-driven lip-syncing model. Animate a face video with custom audio for natural-looking speech animation.\n    video, lip-sync, animation, speech, real-time, wav2vid, audio-to-video\n\n    Use cases:\n    - Create lip-synced videos\n    - Generate speech animations\n    - Produce dubbed content\n    - Create animated presentations\n    - Generate voice-over videos",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.MuseTalk",
-      "layout": "default",
       "properties": [
         {
           "name": "video",
@@ -6928,20 +5304,16 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "video",
         "audio"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Sad Talker",
       "description": "Generate talking face animations from a single image and audio file. Features configurable face model resolution and expression controls.\n    video, animation, face, talking, expression, img2vid, image-to-video, audio-to-video, wav2vid\n\n    Use cases:\n    - Create talking head videos\n    - Generate lip-sync animations\n    - Produce character animations\n    - Create video presentations\n    - Generate facial expressions",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.SadTalker",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -7019,21 +5391,17 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "audio",
         "face_model_resolution"
-      ],
-      "is_dynamic": false
+      ]
     },
     {
       "title": "Stable Video",
       "description": "Generate short video clips from your images using Stable Video Diffusion v1.1. Features high-quality motion synthesis with configurable parameters.\n    video, generation, diffusion, motion, synthesis, img2vid, image-to-video\n\n    Use cases:\n    - Create stable video animations\n    - Generate motion content\n    - Transform images into videos\n    - Produce smooth transitions\n    - Create visual effects",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.StableVideo",
-      "layout": "default",
       "properties": [
         {
           "name": "image",
@@ -7089,14 +5457,1475 @@
           "name": "output"
         }
       ],
-      "the_model_info": {},
-      "recommended_models": [],
       "basic_fields": [
         "image",
         "motion_bucket_id",
         "fps"
+      ]
+    },
+    {
+      "title": "Bria Background Remove",
+      "description": "Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks.\n    Trained exclusively on licensed data for safe and risk-free commercial use.",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaBackgroundRemove",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Input image to remove background from"
+        }
       ],
-      "is_dynamic": false
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image"
+      ]
+    },
+    {
+      "title": "Bria Background Replace",
+      "description": "Bria Background Replace allows for efficient swapping of backgrounds in images via text prompts or reference image, delivering realistic and polished results. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, background, replacement, swap\n\n    Use cases:\n    - Replace image backgrounds seamlessly\n    - Create professional photo compositions\n    - Generate custom scene settings\n    - Produce commercial-ready images\n    - Create consistent visual environments",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaBackgroundReplace",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Input image to replace background"
+        },
+        {
+          "name": "ref_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Ref Image",
+          "description": "Reference image for the new background"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt to generate new background"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "Negative prompt for background generation"
+        },
+        {
+          "name": "refine_prompt",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Refine Prompt",
+          "description": "Whether to refine the prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Bria Eraser",
+      "description": "Bria Eraser enables precise removal of unwanted objects from images while maintaining high-quality outputs. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, removal, cleanup\n\n    Use cases:\n    - Remove unwanted objects from images\n    - Clean up image imperfections\n    - Prepare images for commercial use\n    - Remove distracting elements\n    - Create clean, professional images",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaEraser",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Input image to erase from"
+        },
+        {
+          "name": "mask",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Mask",
+          "description": "The mask for areas to be cleaned"
+        },
+        {
+          "name": "mask_type",
+          "type": {
+            "type": "str"
+          },
+          "default": "manual",
+          "title": "Mask Type",
+          "description": "Type of mask - 'manual' for user-created or 'automatic' for algorithm-generated"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "mask"
+      ]
+    },
+    {
+      "title": "Bria Expand",
+      "description": "Bria Expand expands images beyond their borders in high quality. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, expansion, outpainting\n\n    Use cases:\n    - Extend image boundaries seamlessly\n    - Create wider or taller compositions\n    - Expand images for different aspect ratios\n    - Generate additional scene content",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaExpand",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to expand"
+        },
+        {
+          "name": "canvas_width",
+          "type": {
+            "type": "int"
+          },
+          "default": 1200,
+          "title": "Canvas Width",
+          "description": "The desired width of the final image, after the expansion"
+        },
+        {
+          "name": "canvas_height",
+          "type": {
+            "type": "int"
+          },
+          "default": 674,
+          "title": "Canvas Height",
+          "description": "The desired height of the final image, after the expansion"
+        },
+        {
+          "name": "original_image_width",
+          "type": {
+            "type": "int"
+          },
+          "default": 610,
+          "title": "Original Image Width",
+          "description": "The desired width of the original image, inside the full canvas"
+        },
+        {
+          "name": "original_image_height",
+          "type": {
+            "type": "int"
+          },
+          "default": 855,
+          "title": "Original Image Height",
+          "description": "The desired height of the original image, inside the full canvas"
+        },
+        {
+          "name": "original_image_x",
+          "type": {
+            "type": "int"
+          },
+          "default": 301,
+          "title": "Original Image X",
+          "description": "The desired x-coordinate of the original image, inside the full canvas"
+        },
+        {
+          "name": "original_image_y",
+          "type": {
+            "type": "int"
+          },
+          "default": -66,
+          "title": "Original Image Y",
+          "description": "The desired y-coordinate of the original image, inside the full canvas"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text on which you wish to base the image expansion"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to use when generating images"
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "Number of images to generate"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "canvas_width",
+        "canvas_height",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Bria Gen Fill",
+      "description": "Bria GenFill enables high-quality object addition or visual transformation. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, generation, filling, transformation\n\n    Use cases:\n    - Add new objects to existing images\n    - Transform specific image areas\n    - Generate contextual content\n    - Create seamless visual additions\n    - Produce professional image modifications",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaGenFill",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Input image to erase from"
+        },
+        {
+          "name": "mask",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Mask",
+          "description": "The mask for areas to be cleaned"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate images"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to use when generating images"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "mask",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Bria Product Shot",
+      "description": "Place any product in any scenery with just a prompt or reference image while maintaining high integrity of the product. Trained exclusively on licensed data for safe and risk-free commercial use and optimized for eCommerce.\n    image, product, placement, ecommerce\n\n    Use cases:\n    - Create professional product photography\n    - Generate contextual product shots\n    - Place products in custom environments\n    - Create eCommerce product listings\n    - Generate marketing visuals",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaProductShot",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The product image to be placed"
+        },
+        {
+          "name": "scene_description",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Scene Description",
+          "description": "Text description of the new scene/background"
+        },
+        {
+          "name": "ref_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Ref Image",
+          "description": "Reference image for the new scene/background"
+        },
+        {
+          "name": "optimize_description",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Optimize Description",
+          "description": "Whether to optimize the scene description"
+        },
+        {
+          "name": "placement_type",
+          "type": {
+            "type": "str"
+          },
+          "default": "manual_placement",
+          "title": "Placement Type",
+          "description": "How to position the product (original, automatic, manual_placement, manual_padding)"
+        },
+        {
+          "name": "manual_placement_selection",
+          "type": {
+            "type": "str"
+          },
+          "default": "bottom_center",
+          "title": "Manual Placement Selection",
+          "description": "Specific placement position when using manual_placement"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "scene_description"
+      ]
+    },
+    {
+      "title": "Clarity Upscaler",
+      "description": "Upscale images to improve resolution and sharpness.\n\n    clarity, upscale, enhancement\n\n    Use cases:\n    - Increase image resolution for printing\n    - Improve clarity of low-quality images\n    - Enhance textures and graphics",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.ClarityUpscaler",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Input image to upscale"
+        },
+        {
+          "name": "scale",
+          "type": {
+            "type": "int"
+          },
+          "default": 2,
+          "title": "Scale",
+          "description": "Upscaling factor",
+          "min": 1.0,
+          "max": 4.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "scale"
+      ]
+    },
+    {
+      "title": "Flux Dev Redux",
+      "description": "FLUX.1 [dev] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.\n    image, transformation, style-transfer, development, flux\n\n    Use cases:\n    - Transform images with advanced controls\n    - Create customized image variations\n    - Apply precise style modifications",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxDevRedux",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to transform"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance Scale",
+          "description": "How closely the model should stick to your prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "image_size",
+        "guidance_scale"
+      ]
+    },
+    {
+      "title": "Flux Lora Canny",
+      "description": "FLUX LoRA Canny enables precise control over composition and style through edge detection and LoRA-based guidance mechanisms.\n    image, edge, lora, style-transfer, control\n\n    Use cases:\n    - Generate stylized images with structural control\n    - Create edge-guided artistic transformations\n    - Apply custom styles while maintaining composition\n    - Produce consistent style variations",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxLoraCanny",
+      "properties": [
+        {
+          "name": "control_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Control Image",
+          "description": "The control image to generate the Canny edge map from"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance Scale",
+          "description": "How closely the model should stick to your prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "lora_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.6,
+          "title": "Lora Scale",
+          "description": "The strength of the LoRA adaptation"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "control_image",
+        "prompt",
+        "image_size"
+      ]
+    },
+    {
+      "title": "Flux Lora Depth",
+      "description": "FLUX LoRA Depth enables precise control over composition and structure through depth map detection and LoRA-based guidance mechanisms.\n    image, depth, lora, structure, control\n\n    Use cases:\n    - Generate depth-aware stylized images\n    - Create 3D-conscious artistic transformations\n    - Maintain spatial relationships with custom styles\n    - Produce depth-consistent variations\n    - Generate images with controlled perspective",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxLoraDepth",
+      "properties": [
+        {
+          "name": "control_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Control Image",
+          "description": "The control image to generate the depth map from"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance Scale",
+          "description": "How closely the model should stick to your prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "lora_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.6,
+          "title": "Lora Scale",
+          "description": "The strength of the LoRA adaptation"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "control_image",
+        "prompt",
+        "image_size"
+      ]
+    },
+    {
+      "title": "Flux Pro Canny",
+      "description": "FLUX.1 [pro] Canny enables precise control over composition, style, and structure through advanced edge detection and guidance mechanisms.\n    image, edge, composition, style, control\n\n    Use cases:\n    - Generate images with precise structural control\n    - Create artwork based on edge maps\n    - Transform sketches into detailed images\n    - Maintain specific compositional elements\n    - Generate variations with consistent structure",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxProCanny",
+      "properties": [
+        {
+          "name": "control_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Control Image",
+          "description": "The control image to generate the Canny edge map from"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance Scale",
+          "description": "How closely the model should stick to your prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "safety_tolerance",
+          "type": {
+            "type": "str"
+          },
+          "default": "2",
+          "title": "Safety Tolerance",
+          "description": "Safety tolerance level (1-6, 1 being most strict)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "control_image",
+        "prompt",
+        "image_size"
+      ]
+    },
+    {
+      "title": "Flux Pro Depth",
+      "description": "FLUX.1 [pro] Depth enables precise control over composition and structure through depth map detection and guidance mechanisms.\n    image, depth-map, composition, structure, control\n\n    Use cases:\n    - Generate images with controlled depth perception\n    - Create 3D-aware image transformations\n    - Maintain spatial relationships in generated images\n    - Produce images with accurate perspective\n    - Generate variations with consistent depth structure",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxProDepth",
+      "properties": [
+        {
+          "name": "control_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Control Image",
+          "description": "The control image to generate the depth map from"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance Scale",
+          "description": "How closely the model should stick to your prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "safety_tolerance",
+          "type": {
+            "type": "str"
+          },
+          "default": "2",
+          "title": "Safety Tolerance",
+          "description": "Safety tolerance level (1-6, 1 being most strict)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "control_image",
+        "prompt",
+        "image_size"
+      ]
+    },
+    {
+      "title": "Flux Pro Fill",
+      "description": "FLUX.1 [pro] Fill is a high-performance endpoint that enables rapid transformation of existing images with inpainting/outpainting capabilities.\n    image, inpainting, outpainting, transformation, professional\n\n    Use cases:\n    - Fill in missing or masked parts of images\n    - Extend images beyond their original boundaries\n    - Remove and replace unwanted elements\n    - Create seamless image completions\n    - Generate context-aware image content",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxProFill",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to transform"
+        },
+        {
+          "name": "mask",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Mask",
+          "description": "The mask for inpainting"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to fill the masked part of the image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "safety_tolerance",
+          "type": {
+            "type": "str"
+          },
+          "default": "2",
+          "title": "Safety Tolerance",
+          "description": "Safety tolerance level (1-6, 1 being most strict)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "mask",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Flux Pro Redux",
+      "description": "FLUX.1 [pro] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.\n    image, transformation, style-transfer, flux\n\n    Use cases:\n    - Create professional image transformations\n    - Generate style transfers",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxProRedux",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to transform"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance Scale",
+          "description": "How closely the model should stick to your prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "safety_tolerance",
+          "type": {
+            "type": "str"
+          },
+          "default": "2",
+          "title": "Safety Tolerance",
+          "description": "Safety tolerance level (1-6, 1 being most strict)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "image_size",
+        "guidance_scale"
+      ]
+    },
+    {
+      "title": "Flux Pro Ultra Redux",
+      "description": "FLUX1.1 [pro] ultra Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.\n    image, transformation, style-transfer, ultra, professional\n\n    Use cases:\n    - Apply precise image modifications\n    - Process images with maximum control",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxProUltraRedux",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to transform"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance Scale",
+          "description": "How closely the model should stick to your prompt"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "safety_tolerance",
+          "type": {
+            "type": "str"
+          },
+          "default": "2",
+          "title": "Safety Tolerance",
+          "description": "Safety tolerance level (1-6, 1 being most strict)"
+        },
+        {
+          "name": "image_prompt_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.1,
+          "title": "Image Prompt Strength",
+          "description": "The strength of the image prompt, between 0 and 1"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "image_size",
+        "guidance_scale"
+      ]
+    },
+    {
+      "title": "Flux Schnell Redux",
+      "description": "FLUX.1 [schnell] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.\n    image, transformation, style-transfer, fast, flux\n\n    Use cases:\n    - Transform images with style transfers\n    - Apply artistic modifications to photos\n    - Create image variations",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FluxSchnellRedux",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to transform"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 4,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 1.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "image_size",
+        "num_inference_steps"
+      ]
+    },
+    {
+      "title": "Ideogram V 2 Edit",
+      "description": "Transform existing images with Ideogram V2's editing capabilities. Modify, adjust, and refine images while maintaining high fidelity and realistic outputs with precise prompt control.\n    image, editing, transformation, fidelity, control\n\n    Use cases:\n    - Edit specific parts of images with precision\n    - Create targeted image modifications\n    - Refine and enhance image details\n    - Generate contextual image edits",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.IdeogramV2Edit",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to fill the masked part of the image"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to edit"
+        },
+        {
+          "name": "mask",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Mask",
+          "description": "The mask for editing"
+        },
+        {
+          "name": "style",
+          "type": {
+            "type": "str"
+          },
+          "default": "auto",
+          "title": "Style",
+          "description": "Style of generated image (auto, general, realistic, design, render_3D, anime)"
+        },
+        {
+          "name": "expand_prompt",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Expand Prompt",
+          "description": "Whether to expand the prompt with MagicPrompt functionality"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "image",
+        "mask"
+      ]
+    },
+    {
+      "title": "Ideogram V 2 Remix",
+      "description": "Reimagine existing images with Ideogram V2's remix feature. Create variations and adaptations while preserving core elements and adding new creative directions through prompt guidance.\n    image, remix, variation, creativity, adaptation\n\n    Use cases:\n    - Create artistic variations of images\n    - Generate style-transferred versions\n    - Produce creative image adaptations\n    - Transform images while preserving key elements\n    - Generate alternative interpretations",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.IdeogramV2Remix",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to remix the image with"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to remix"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "str"
+          },
+          "default": "1:1",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated image"
+        },
+        {
+          "name": "strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.8,
+          "title": "Strength",
+          "description": "Strength of the input image in the remix"
+        },
+        {
+          "name": "expand_prompt",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Expand Prompt",
+          "description": "Whether to expand the prompt with MagicPrompt functionality"
+        },
+        {
+          "name": "style",
+          "type": {
+            "type": "str"
+          },
+          "default": "auto",
+          "title": "Style",
+          "description": "Style of generated image (auto, general, realistic, design, render_3D, anime)"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "image",
+        "strength"
+      ]
+    },
+    {
+      "title": "Any LLM",
+      "description": "Use any large language model from a selected catalogue (powered by OpenRouter).\n    Supports various models including Claude 3, Gemini, Llama, and GPT-4.\n    llm, text, generation, ai, language\n\n    Use cases:\n    - Generate natural language responses\n    - Create conversational AI interactions\n    - Process and analyze text content\n    - Generate creative writing\n    - Assist with problem-solving tasks",
+      "namespace": "fal.llm",
+      "node_type": "fal.llm.AnyLLM",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to send to the language model"
+        },
+        {
+          "name": "system_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "System Prompt",
+          "description": "Optional system prompt to provide context or instructions"
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "anthropic/claude-3.5-sonnet",
+              "anthropic/claude-3-5-haiku",
+              "anthropic/claude-3-haiku",
+              "google/gemini-pro-1.5",
+              "google/gemini-flash-1.5",
+              "google/gemini-flash-1.5-8b",
+              "meta-llama/llama-3.2-1b-instruct",
+              "meta-llama/llama-3.2-3b-instruct",
+              "meta-llama/llama-3.1-8b-instruct",
+              "meta-llama/llama-3.1-70b-instruct",
+              "openai/gpt-4o-mini",
+              "openai/gpt-4o"
+            ],
+            "type_name": "nodetool.nodes.fal.llm.ModelEnum"
+          },
+          "default": "google/gemini-flash-1.5",
+          "title": "Model",
+          "description": "The language model to use for the completion"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "model",
+        "system_prompt"
+      ]
     }
   ]
 }
