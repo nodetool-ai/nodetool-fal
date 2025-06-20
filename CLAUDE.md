@@ -216,6 +216,85 @@ nodetool package scan
 nodetool codegen
 ```
 
+### DSL Generation with `nodetool codegen`
+
+The `nodetool codegen` command automatically generates DSL (Domain Specific Language) wrapper classes for your FAL nodes. Understanding this process helps ensure your nodes integrate properly with the nodetool ecosystem.
+
+#### How DSL Generation Works
+
+1. **Discovery**: `nodetool package scan` finds all node classes inheriting from `FALNode`
+2. **Metadata Generation**: Creates metadata describing node inputs, outputs, and properties
+3. **DSL Creation**: `nodetool codegen` generates corresponding DSL classes in `src/nodetool/dsl/fal/`
+
+#### DSL Class Structure
+
+For each FAL node, the codegen creates a DSL class that:
+- Inherits from `GraphNode` instead of `FALNode`
+- Converts all field types to unions supporting graph connectivity
+- Preserves docstrings and field descriptions
+- Adds a `get_node_type()` method returning the fully qualified node path
+
+**Example Transformation**:
+
+**Original FAL Node** (`src/nodetool/nodes/fal/image_to_video.py`):
+```python
+class LumaDreamMachine(FALNode):
+    image: ImageRef = Field(default=ImageRef(), description="Input image")
+    prompt: str = Field(default="", description="Text prompt")
+    aspect_ratio: AspectRatio = Field(default=AspectRatio.RATIO_16_9, description="Aspect ratio")
+```
+
+**Generated DSL Class** (`src/nodetool/dsl/fal/image_to_video.py`):
+```python
+class LumaDreamMachine(GraphNode):
+    image: ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=ImageRef(), description="Input image"
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="Text prompt"
+    )
+    aspect_ratio: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="16:9", description="Aspect ratio"
+    )
+    
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.LumaDreamMachine"
+```
+
+#### Key DSL Transformations
+
+1. **Field Types**: All fields become unions with `GraphNode` and `tuple[GraphNode, str]` to support:
+   - Direct values: `prompt="Hello world"`
+   - Node connections: `prompt=some_other_node`
+   - Node output references: `prompt=(some_node, "output_key")`
+
+2. **Enum Handling**: Enum fields are converted to string types with enum values as defaults:
+   ```python
+   # Node: AspectRatio.RATIO_16_9 
+   # DSL:  "16:9"
+   ```
+
+3. **Reference Types**: `ImageRef`, `VideoRef`, `AudioRef` are preserved but made connectable
+
+4. **Documentation**: Docstrings and field descriptions are maintained exactly
+
+#### File Organization
+
+DSL files mirror the node file structure:
+```
+src/nodetool/nodes/fal/image_to_video.py  →  src/nodetool/dsl/fal/image_to_video.py
+src/nodetool/nodes/fal/text_to_image.py   →  src/nodetool/dsl/fal/text_to_image.py
+src/nodetool/nodes/fal/speech_to_text.py  →  src/nodetool/dsl/fal/speech_to_text.py
+```
+
+#### Best Practices for DSL Compatibility
+
+1. **Descriptive Class Names**: Use clear, descriptive names as they appear in DSL
+2. **Complete Docstrings**: DSL preserves all documentation, so write comprehensive docstrings
+3. **Meaningful Field Names**: DSL field names are used directly in the graph API
+4. **Sensible Defaults**: DSL uses your default values for new nodes
+
 ## Linting and Tests
 
 Before submitting a pull request, run the following checks:
