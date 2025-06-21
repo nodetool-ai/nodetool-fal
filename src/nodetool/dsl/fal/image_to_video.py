@@ -404,6 +404,48 @@ class MuseTalk(GraphNode):
         return "fal.image_to_video.MuseTalk"
 
 
+class PixVerse(GraphNode):
+    """
+    Generate dynamic videos from images with PixVerse v4.5. Create high-quality motion
+    with detailed prompt control and advanced diffusion parameters.
+    video, generation, pixverse, motion, diffusion, img2vid, image-to-video
+
+    Use cases:
+    - Animate illustrations and photos
+    - Produce engaging social media clips
+    - Generate short cinematic shots
+    - Create motion for product showcases
+    - Experiment with creative video effects
+    """
+
+    image: types.ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=types.ImageRef(type="image", uri="", asset_id=None, data=None),
+        description="The image to transform into a video",
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    negative_prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="low quality, worst quality, distorted, blurred",
+        description="What to avoid in the generated video",
+    )
+    num_inference_steps: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=50,
+        description="Number of inference steps (higher = better quality but slower)",
+    )
+    guidance_scale: float | GraphNode | tuple[GraphNode, str] = Field(
+        default=7.5,
+        description="How closely to follow the prompt (higher = more faithful)",
+    )
+    seed: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.PixVerse"
+
+
 import nodetool.nodes.fal.image_to_video
 import nodetool.nodes.fal.image_to_video
 
