@@ -1,6 +1,6 @@
-# ruff: noqa: E402,F401
-from pydantic import Field
+from pydantic import BaseModel, Field
 import typing
+from typing import Any
 import nodetool.metadata.types
 import nodetool.metadata.types as types
 from nodetool.dsl.graph import GraphNode
@@ -721,3 +721,27 @@ class IdeogramV2Remix(GraphNode):
     @classmethod
     def get_node_type(cls):
         return "fal.image_to_image.IdeogramV2Remix"
+
+
+class WanEffects(GraphNode):
+    """Apply stylized effects to an image using the WAN Effects model.
+
+    image, transformation, style, filter
+
+    Use cases:
+    - Add artistic filters to photos
+    - Create stylized social media images
+    - Quickly generate meme-style effects
+    """
+
+    image: types.ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=types.ImageRef(type="image", uri="", asset_id=None, data=None),
+        description="Input image to apply the effect to",
+    )
+    effect: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="Name of the effect to apply"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_image.WanEffects"

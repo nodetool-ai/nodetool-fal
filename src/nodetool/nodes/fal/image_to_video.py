@@ -369,6 +369,60 @@ class MiniMaxVideo(FALNode):
         return ["image", "prompt"]
 
 
+class HailuoDuration(Enum):
+    SIX_SECONDS = "6"
+    TEN_SECONDS = "10"
+
+
+class MiniMaxHailuo02(FALNode):
+    """
+    Create videos from your images with MiniMax Hailuo-02 Standard. Choose the
+    clip length and optionally enhance prompts for sharper results.
+    video, generation, minimax, prompt-optimizer, img2vid, image-to-video
+
+    Use cases:
+    - Produce social media clips
+    - Generate cinematic sequences
+    - Visualize storyboards
+    - Create promotional videos
+    - Animate still graphics
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(default="", description="The prompt describing the video")
+    duration: HailuoDuration = Field(
+        default=HailuoDuration.SIX_SECONDS,
+        description="The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.",
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "prompt_optimizer": self.prompt_optimizer,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax/hailuo-02/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
 class LTXVideo(FALNode):
     """
     Generate videos from images using LTX Video. Best results with 768x512 images and detailed, chronological descriptions of actions and scenes.
@@ -430,6 +484,68 @@ class LTXVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+
+class PixVerse(FALNode):
+    """
+    Generate dynamic videos from images with PixVerse v4.5. Create high-quality motion
+    with detailed prompt control and advanced diffusion parameters.
+    video, generation, pixverse, motion, diffusion, img2vid, image-to-video
+
+    Use cases:
+    - Animate illustrations and photos
+    - Produce engaging social media clips
+    - Generate short cinematic shots
+    - Create motion for product showcases
+    - Experiment with creative video effects
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    negative_prompt: str = Field(
+        default="low quality, worst quality, distorted, blurred",
+        description="What to avoid in the generated video",
+    )
+    num_inference_steps: int = Field(
+        default=50,
+        description="Number of inference steps (higher = better quality but slower)",
+    )
+    guidance_scale: float = Field(
+        default=7.5,
+        description="How closely to follow the prompt (higher = more faithful)",
+    )
+    seed: int = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "negative_prompt": self.negative_prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/v4.5/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "num_inference_steps"]
 
 
 class StableVideo(FALNode):

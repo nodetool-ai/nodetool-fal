@@ -1,6 +1,6 @@
-# ruff: noqa: E402,F401
-from pydantic import Field
+from pydantic import BaseModel, Field
 import typing
+from typing import Any
 import nodetool.metadata.types
 import nodetool.metadata.types as types
 from nodetool.dsl.graph import GraphNode
@@ -346,6 +346,46 @@ class LumaDreamMachine(GraphNode):
         return "fal.image_to_video.LumaDreamMachine"
 
 
+import nodetool.nodes.fal.image_to_video
+
+
+class MiniMaxHailuo02(GraphNode):
+    """
+    Create videos from your images with MiniMax Hailuo-02 Standard. Choose the
+    clip length and optionally enhance prompts for sharper results.
+    video, generation, minimax, prompt-optimizer, img2vid, image-to-video
+
+    Use cases:
+    - Produce social media clips
+    - Generate cinematic sequences
+    - Visualize storyboards
+    - Create promotional videos
+    - Animate still graphics
+    """
+
+    HailuoDuration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.HailuoDuration
+    )
+    image: types.ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=types.ImageRef(type="image", uri="", asset_id=None, data=None),
+        description="The image to transform into a video",
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="The prompt describing the video"
+    )
+    duration: nodetool.nodes.fal.image_to_video.HailuoDuration = Field(
+        default=nodetool.nodes.fal.image_to_video.HailuoDuration.SIX_SECONDS,
+        description="The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.",
+    )
+    prompt_optimizer: bool | GraphNode | tuple[GraphNode, str] = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.MiniMaxHailuo02"
+
+
 class MiniMaxVideo(GraphNode):
     """
     Generate video clips from your images using MiniMax Video model. Transform static art into dynamic masterpieces with enhanced smoothness and vivid motion.
@@ -402,6 +442,48 @@ class MuseTalk(GraphNode):
     @classmethod
     def get_node_type(cls):
         return "fal.image_to_video.MuseTalk"
+
+
+class PixVerse(GraphNode):
+    """
+    Generate dynamic videos from images with PixVerse v4.5. Create high-quality motion
+    with detailed prompt control and advanced diffusion parameters.
+    video, generation, pixverse, motion, diffusion, img2vid, image-to-video
+
+    Use cases:
+    - Animate illustrations and photos
+    - Produce engaging social media clips
+    - Generate short cinematic shots
+    - Create motion for product showcases
+    - Experiment with creative video effects
+    """
+
+    image: types.ImageRef | GraphNode | tuple[GraphNode, str] = Field(
+        default=types.ImageRef(type="image", uri="", asset_id=None, data=None),
+        description="The image to transform into a video",
+    )
+    prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    negative_prompt: str | GraphNode | tuple[GraphNode, str] = Field(
+        default="low quality, worst quality, distorted, blurred",
+        description="What to avoid in the generated video",
+    )
+    num_inference_steps: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=50,
+        description="Number of inference steps (higher = better quality but slower)",
+    )
+    guidance_scale: float | GraphNode | tuple[GraphNode, str] = Field(
+        default=7.5,
+        description="How closely to follow the prompt (higher = more faithful)",
+    )
+    seed: int | GraphNode | tuple[GraphNode, str] = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    @classmethod
+    def get_node_type(cls):
+        return "fal.image_to_video.PixVerse"
 
 
 import nodetool.nodes.fal.image_to_video

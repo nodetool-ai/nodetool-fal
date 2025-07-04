@@ -1,10 +1,12 @@
-# ruff: noqa: E402,F401
-from pydantic import Field
+from pydantic import BaseModel, Field
 import typing
+from typing import Any
 import nodetool.metadata.types
 import nodetool.metadata.types as types
 from nodetool.dsl.graph import GraphNode
 
+import nodetool.nodes.fal.speech_to_text
+import nodetool.nodes.fal.speech_to_text
 import nodetool.nodes.fal.speech_to_text
 
 
