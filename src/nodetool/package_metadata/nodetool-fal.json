@@ -4618,6 +4618,201 @@
       ]
     },
     {
+      "title": "Wan Flf 2 V",
+      "description": "Generate video loops from text prompts using WAN-FLF2V.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Generate looping videos from descriptions\n    - Produce motion graphics from prompts\n    - Create abstract video ideas\n    - Develop creative transitions\n    - Experiment with AI-generated motion",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanFlf2V",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the desired video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt"
+      ]
+    },
+    {
+      "title": "Wan Pro Image To Video",
+      "description": "Convert an image into a short video clip using Wan Pro.\n    video, generation, wan, professional, image-to-video\n\n    Use cases:\n    - Create dynamic videos from product photos\n    - Generate animations from static artwork\n    - Produce short promotional clips\n    - Transform images into motion graphics\n    - Experiment with visual storytelling",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanProImageToVideo",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The input image to animate"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt describing the desired motion"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Wan Pro Text To Video",
+      "description": "Generate a short video clip from a text prompt using Wan Pro.\n    video, generation, wan, professional, text-to-video\n\n    Use cases:\n    - Create animated scenes from descriptions\n    - Generate short creative videos\n    - Produce promotional content\n    - Visualize storyboards\n    - Experiment with narrative ideas",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanProTextToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the desired video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt"
+      ]
+    },
+    {
+      "title": "Wan T 2 V",
+      "description": "Generate videos from text using the WAN-T2V model.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Produce creative videos from prompts\n    - Experiment with motion concepts\n    - Generate quick animated drafts\n    - Visualize ideas for stories\n    - Create short social media clips",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanT2V",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the desired video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt"
+      ]
+    },
+    {
+      "title": "Wan V 2 1 13 BText To Video",
+      "description": "Create videos from text using WAN v2.1 1.3B, an open-source text-to-video model.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Produce short clips from prompts\n    - Generate concept videos\n    - Create quick visualizations\n    - Iterate on storytelling ideas\n    - Experiment with AI video synthesis",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.WanV2_1_13BTextToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the desired video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Randomization seed for reproducible results"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt"
+      ]
+    },
+    {
       "title": "Whisper",
       "description": "Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.\n    speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text\n\n    Use cases:\n    - Transcribe spoken content to text\n    - Translate speech to English\n    - Generate subtitles and captions\n    - Create text records of audio content\n    - Analyze multilingual audio content",
       "namespace": "fal.speech_to_text",
