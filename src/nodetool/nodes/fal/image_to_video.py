@@ -928,3 +928,58 @@ class Veo2ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "duration"]
+
+
+class WanFlf2v(FALNode):
+    """
+    Generate short video clips from a single image using the WAN FLF2V model. This model converts a still image into an animated clip guided by a text prompt.
+    video, generation, animation, image-to-video, wan
+
+    Use cases:
+    - Animate still images into short clips
+    - Create dynamic content from artwork
+    - Produce promotional video snippets
+    - Generate visual effects for social posts
+    - Explore creative motion ideas
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(),
+        description="The source image for video generation",
+    )
+    prompt: str = Field(
+        default="",
+        description="Description of the desired motion and style",
+    )
+    num_frames: int = Field(
+        default=16,
+        ge=1,
+        description="Number of frames to generate",
+    )
+    seed: int = Field(
+        default=-1,
+        description="The same seed will output the same video every time",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "num_frames": self.num_frames,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-flf2v",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "num_frames"]
