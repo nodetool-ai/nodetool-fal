@@ -5848,6 +5848,159 @@
       ]
     },
     {
+      "title": "Veo 2",
+      "description": "Generate videos from text prompts using Veo 2. Creates short clips with\n    optional control over duration and aspect ratio.\n    video, text-to-video, generation, prompt, veo2\n\n    Use cases:\n    - Produce cinematic video clips from descriptions\n    - Generate marketing or social media footage\n    - Create animated scenes from storyboards\n    - Experiment with visual concepts rapidly",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.Veo2",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate a video from"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              4,
+              6
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.VideoDuration"
+          },
+          "default": 4,
+          "title": "Duration",
+          "description": "The duration of the generated video in seconds"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4",
+              "21:9",
+              "9:21",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "duration",
+        "aspect_ratio"
+      ]
+    },
+    {
+      "title": "Veo 2 Image To Video",
+      "description": "Animate a single image into a Veo 2 video clip. Provides control over\n    duration and aspect ratio while following an optional prompt.\n    video, image-to-video, veo2, animation\n\n    Use cases:\n    - Bring still artwork to life\n    - Create dynamic social media posts\n    - Generate quick product showcase videos\n    - Produce animated storyboards",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.Veo2ImageToVideo",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "The image to transform into a video"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional description of the desired motion"
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              4,
+              6
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.VideoDuration"
+          },
+          "default": 4,
+          "title": "Duration",
+          "description": "The duration of the generated video in seconds"
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4",
+              "21:9",
+              "9:21",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same video every time"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ]
+    },
+    {
       "title": "Bria Background Remove",
       "description": "Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks.\n    Trained exclusively on licensed data for safe and risk-free commercial use.",
       "namespace": "fal.image_to_image",

@@ -822,3 +822,109 @@ class MuseTalk(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["video", "audio"]
+
+
+class Veo2(FALNode):
+    """
+    Generate videos from text prompts using Veo 2. Creates short clips with
+    optional control over duration and aspect ratio.
+    video, text-to-video, generation, prompt, veo2
+
+    Use cases:
+    - Produce cinematic video clips from descriptions
+    - Generate marketing or social media footage
+    - Create animated scenes from storyboards
+    - Experiment with visual concepts rapidly
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate a video from")
+    duration: VideoDuration = Field(
+        default=VideoDuration.FOUR_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/veo2/api",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]
+
+
+class Veo2ImageToVideo(FALNode):
+    """
+    Animate a single image into a Veo 2 video clip. Provides control over
+    duration and aspect ratio while following an optional prompt.
+    video, image-to-video, veo2, animation
+
+    Use cases:
+    - Bring still artwork to life
+    - Create dynamic social media posts
+    - Generate quick product showcase videos
+    - Produce animated storyboards
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="Optional description of the desired motion"
+    )
+    duration: VideoDuration = Field(
+        default=VideoDuration.FOUR_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int = Field(
+        default=-1, description="The same seed will output the same video every time"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/veo2/image-to-video/api",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
