@@ -1,0 +1,26 @@
+name: Text2Image Example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-text2image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+      - name: Run example node
+        env:
+          FAL_API_KEY: ${{ secrets.FAL_API_KEY }}
+        run: python examples/run_text2image.py
+      - name: Upload generated image
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-image
+          path: generated_image.png

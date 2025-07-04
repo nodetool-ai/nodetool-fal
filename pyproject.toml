@@ -17,3 +17,15 @@ repository = "https://github.com/nodetool-ai/nodetool-fal"
 python = "^3.11"
 nodetool-core = { git = "https://github.com/nodetool-ai/nodetool-core.git", rev = "main" }
 fal-client = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+
+[tool.ruff]
+exclude = ["src/nodetool/dsl/*"]
+
+[tool.black]
+extend-exclude = 'src/nodetool/nodes/fal/(speech_to_text|image_to_image)\.py'

@@ -1249,22 +1249,25 @@ class IllusionDiffusion(GraphNode):
 
 
 import nodetool.nodes.fal.text_to_image
+import nodetool.nodes.fal.text_to_image
 
 
 class Imagen4Preview(GraphNode):
     """
-    Imagen 4 is an advanced text-to-image model providing high quality and
-    detailed visuals with strong prompt understanding.
-    image, generation, diffusion, text-to-image, txt2img
+    Imagen 4 Preview is the next iteration of Google's Imagen series, offering
+    high quality text-to-image generation with strong prompt adherence and
+    improved realism.
+    image, generation, google, text-to-image, txt2img
 
     Use cases:
+    - Generate photorealistic artwork and designs
     - Create marketing and product visuals
-    - Generate concept art and illustrations
-    - Produce photorealistic images from descriptions
-    - Experiment with advanced diffusion capabilities
-    - Rapidly prototype visual ideas
+    - Produce concept art or storyboards
+    - Explore creative ideas with high fidelity
+    - Rapid prototyping of imagery
     """
 
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
     ImageSizePreset: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_image.ImageSizePreset
     )
@@ -1272,8 +1275,11 @@ class Imagen4Preview(GraphNode):
         default="", description="The prompt to generate an image from"
     )
     negative_prompt: str | GraphNode | tuple[GraphNode, str] = Field(
-        default="",
-        description="Use it to address details that you don't want in the image",
+        default="", description="Elements to avoid in the generated image"
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1,
+        description="The aspect ratio of the generated image",
     )
     image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
         default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
@@ -1283,7 +1289,7 @@ class Imagen4Preview(GraphNode):
         default=50, description="The number of inference steps to perform"
     )
     guidance_scale: float | GraphNode | tuple[GraphNode, str] = Field(
-        default=5.0, description="How closely the model should stick to your prompt"
+        default=5.0, description="How closely the model should follow the prompt"
     )
     num_images: int | GraphNode | tuple[GraphNode, str] = Field(
         default=1, description="The number of images to generate"
