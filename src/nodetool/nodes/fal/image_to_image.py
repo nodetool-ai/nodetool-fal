@@ -1044,3 +1044,44 @@ class ClarityUpscaler(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "scale"]
+
+
+class WanEffects(FALNode):
+    """Apply stylized effects to an image using the WAN Effects model.
+
+    image, transformation, style, filter
+
+    Use cases:
+    - Add artistic filters to photos
+    - Create stylized social media images
+    - Quickly generate meme-style effects
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(),
+        description="Input image to apply the effect to",
+    )
+    effect: str = Field(default="", description="Name of the effect to apply")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "effect": self.effect,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-effects",
+            arguments=arguments,
+        )
+        if "image" in res:
+            return ImageRef(uri=res["image"]["url"])
+        assert res.get("images") is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "effect"]
