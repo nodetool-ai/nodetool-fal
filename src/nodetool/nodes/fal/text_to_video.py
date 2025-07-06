@@ -95,7 +95,7 @@ class PixverseTextToVideo(FALNode):
     seed: int = Field(default=-1, description="Optional seed for deterministic output")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments: dict[str, Any] = {"prompt": self.prompt}
+        arguments: dict[str, Any] = {"prompt": self.prompt, "seed": self.seed}
         if self.seed != -1:
             arguments["seed"] = self.seed
 
@@ -128,7 +128,7 @@ class PixverseTextToVideoFast(FALNode):
     seed: int = Field(default=-1, description="Optional seed for deterministic output")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments = {"prompt": self.prompt}
+        arguments: dict[str, Any] = {"prompt": self.prompt}
         if self.seed != -1:
             arguments["seed"] = str(self.seed)
 
@@ -287,7 +287,7 @@ class WanProImageToVideo(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_base64 = await context.image_to_base64(self.image)
-        arguments = {
+        arguments: dict[str, Any] = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
         }
@@ -328,7 +328,7 @@ class WanProTextToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments = {"prompt": self.prompt}
+        arguments: dict[str, Any] = {"prompt": self.prompt}
         if self.seed != -1:
             arguments["seed"] = self.seed
 
@@ -366,7 +366,7 @@ class WanV2_1_13BTextToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments = {"prompt": self.prompt}
+        arguments: dict[str, Any] = {"prompt": self.prompt}
         if self.seed != -1:
             arguments["seed"] = self.seed
 
@@ -404,7 +404,7 @@ class WanT2V(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments = {"prompt": self.prompt}
+        arguments: dict[str, Any] = {"prompt": self.prompt}
         if self.seed != -1:
             arguments["seed"] = self.seed
 
@@ -442,7 +442,7 @@ class WanFlf2V(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments = {"prompt": self.prompt}
+        arguments: dict[str, Any] = {"prompt": self.prompt}
         if self.seed != -1:
             arguments["seed"] = self.seed
 
