@@ -1,7 +1,7 @@
 import os
 from typing import Any
 from fal_client import AsyncClient
-from nodetool.workflows.base_node import BaseNode
+from nodetool.workflows.base_node import ApiKeyMissingError, BaseNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -17,7 +17,7 @@ class FALNode(BaseNode):
 
     def get_client(self, context: ProcessingContext) -> AsyncClient:
         if context.environment.get("FAL_API_KEY") is None:
-            raise ValueError("FAL_API_KEY is not set in the environment")
+            raise ApiKeyMissingError("FAL_API_KEY is not set in the environment")
 
         os.environ["FAL_KEY"] = context.environment.get("FAL_API_KEY")  # type: ignore
         return AsyncClient()
