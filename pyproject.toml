@@ -1,25 +1,35 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry]
+[project]
 name = "nodetool-fal"
 version = "0.1.0"
 description = "Nodetool FAL nodes"
 readme = "README.md"
-authors = ["Matthias Georgi <matti.georgi@gmail.com>"]
-packages = [{ include = "nodetool", from = "src" }]
-package-mode = true
-include = ["src/nodetool/package_metadata/nodetool-fal.json"]
-repository = "https://github.com/nodetool-ai/nodetool-fal"
+authors = [
+    {name = "Matthias Georgi", email = "matti.georgi@gmail.com"}
+]
+requires-python = ">=3.11"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-nodetool-core = { git = "https://github.com/nodetool-ai/nodetool-core.git", rev = "main" }
-fal-client = "*"
+dependencies = [
+    "nodetool-core>=0.6.0,<0.7.0",
+    "fal-client",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "*"
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nodetool"]
+artifacts = [
+    "src/nodetool/package_metadata/nodetool-fal.json",
+]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
