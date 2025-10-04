@@ -2,8 +2,8 @@
 
 # Register the image provider
 from nodetool.image.providers import register_image_provider
-from nodetool.fal.fal_image_provider import FalImageProvider
+from nodetool.fal.fal_image_provider import FalProvider
 
-register_image_provider("fal_ai", lambda: FalImageProvider())
+register_image_provider("fal_ai", lambda: FalProvider())
 
-__all__ = ["FalImageProvider"]
+__all__ = ["FalProvider"]

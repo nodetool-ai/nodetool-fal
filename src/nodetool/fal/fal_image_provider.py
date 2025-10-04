@@ -1,7 +1,8 @@
 """
-FAL image provider implementation.
+FAL provider implementation.
 
-This module implements the ImageProvider interface for FAL AI services.
+This module implements the BaseProvider interface for FAL AI services,
+supporting text-to-image, image-to-image, and text-to-speech generation.
 """
 
 import ast
@@ -9,8 +10,7 @@ import json
 import os
 import re
 from typing import Any, List, Set
-from nodetool.image.providers.base import ImageProvider
-from nodetool.chat.providers.base import ProviderCapability
+from nodetool.chat.providers.base import BaseProvider, ProviderCapability
 from nodetool.image.types import ImageBytes, TextToImageParams, ImageToImageParams
 from nodetool.config.environment import Environment
 from nodetool.metadata.types import ImageModel, Provider
@@ -23,8 +23,8 @@ from nodetool.config.logging_config import get_logger
 log = get_logger(__name__)
 
 
-class FalImageProvider(ImageProvider):
-    """Image provider for FAL AI services."""
+class FalProvider(BaseProvider):
+    """FAL AI provider supporting image and audio generation."""
 
     provider_name = "fal_ai"
 
@@ -39,10 +39,11 @@ class FalImageProvider(ImageProvider):
         os.environ["FAL_KEY"] = self.api_key
 
     def get_capabilities(self) -> Set[ProviderCapability]:
-        """FAL provider supports both text-to-image and image-to-image generation."""
+        """FAL provider supports text-to-image, image-to-image, and text-to-speech generation."""
         return {
             ProviderCapability.TEXT_TO_IMAGE,
             ProviderCapability.IMAGE_TO_IMAGE,
+            ProviderCapability.TEXT_TO_SPEECH,
         }
 
     def get_container_env(self) -> dict[str, str]:
@@ -484,3 +485,79 @@ class FalImageProvider(ImageProvider):
                 provider=Provider.FalAI,
             ),
         ]
+
+    async def text_to_speech(
+        self,
+        text: str,
+        model: str,
+        voice: str | None = None,
+        speed: float = 1.0,
+        timeout_s: int | None = None,
+        context: Any = None,
+        **kwargs: Any,
+    ) -> bytes:
+        """Generate speech audio from text using FAL AI text-to-audio models.
+
+        Args:
+            text: Input text to convert to speech
+            model: FAL model identifier (e.g., "fal-ai/mmaudio-v2/text-to-audio")
+            voice: Voice identifier (not used by most FAL TTS models)
+            speed: Speech speed multiplier (not used by most FAL TTS models)
+            timeout_s: Optional timeout in seconds
+            context: Optional processing context
+            **kwargs: Additional FAL parameters (e.g., num_steps, duration, cfg_strength)
+
+        Returns:
+            Raw audio bytes (typically FLAC or WAV format)
+
+        Raises:
+            ValueError: If required parameters are missing
+            RuntimeError: If generation fails
+        """
+        log.debug(f"Generating speech with FAL model: {model}")
+
+        if not text:
+            raise ValueError("text must not be empty")
+
+        client = self._get_client()
+
+        # Build arguments for FAL API
+        arguments: dict[str, Any] = {
+            "prompt": text,
+        }
+
+        # Add optional parameters from kwargs
+        if "num_steps" in kwargs:
+            arguments["num_steps"] = kwargs["num_steps"]
+        if "duration" in kwargs:
+            arguments["duration"] = kwargs["duration"]
+        if "cfg_strength" in kwargs:
+            arguments["cfg_strength"] = kwargs["cfg_strength"]
+        if "negative_prompt" in kwargs:
+            arguments["negative_prompt"] = kwargs["negative_prompt"]
+        if "seed" in kwargs and kwargs["seed"] != -1:
+            arguments["seed"] = kwargs["seed"]
+
+        try:
+            # Submit request and wait for result
+            handler = await client.submit(model, arguments=arguments)
+            result = await handler.get()
+
+            # Extract audio URL from result
+            if "audio" in result:
+                audio_url = result["audio"]["url"]
+            else:
+                raise RuntimeError(f"Unexpected FAL response format: {result}")
+
+            # Download the audio
+            async with httpx.AsyncClient() as http_client:
+                response = await http_client.get(audio_url)
+                response.raise_for_status()
+                audio_bytes = response.content
+
+            log.debug(f"Generated {len(audio_bytes)} bytes of audio")
+            return audio_bytes
+
+        except Exception as e:
+            error_msg = self._format_validation_error(str(e))
+            raise RuntimeError(f"FAL text-to-speech generation failed: {error_msg}")
