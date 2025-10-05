@@ -10,8 +10,8 @@ import json
 import os
 import re
 from typing import Any, List, Set
-from nodetool.chat.providers.base import BaseProvider, ProviderCapability
-from nodetool.image.types import ImageBytes, TextToImageParams, ImageToImageParams
+from nodetool.providers.base import BaseProvider, ProviderCapability
+from nodetool.providers.types import ImageBytes, TextToImageParams, ImageToImageParams
 from nodetool.config.environment import Environment
 from nodetool.metadata.types import ImageModel, Provider
 from nodetool.workflows.base_node import ApiKeyMissingError

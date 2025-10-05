@@ -1,11 +1,11 @@
 {
   "name": "nodetool-fal",
   "description": "Nodetool FAL nodes",
-  "version": "0.1.0",
+  "version": "0.6.0",
   "authors": [
     "Matthias Georgi <matti.georgi@gmail.com>"
   ],
-  "repo_id": "nodetool-ai/nodetool-fal",
+  "repo_id": "",
   "nodes": [
     {
       "title": "F5 TTS",
@@ -263,20 +263,6 @@
         "prompt",
         "seconds_total",
         "steps"
-      ]
-    },
-    {
-      "title": "FAL",
-      "description": "FAL Node for interacting with FAL AI services.\n    Provides methods to submit and handle API requests to FAL endpoints.",
-      "namespace": "fal.fal_node",
-      "node_type": "fal.fal_node.FAL",
-      "outputs": [
-        {
-          "type": {
-            "type": "any"
-          },
-          "name": "output"
-        }
       ]
     },
     {
@@ -727,7 +713,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to detect edges from"
         }
@@ -1136,7 +1127,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Control Image",
           "description": "The control image to use for generation"
         },
@@ -1451,7 +1447,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to transform"
         },
@@ -1787,7 +1788,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to inpaint"
         },
@@ -1796,7 +1802,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Mask",
           "description": "The mask indicating areas to inpaint (white=inpaint, black=keep)"
         },
@@ -2120,7 +2131,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image of the subject"
         },
@@ -2255,6 +2271,7 @@
             "type": "int",
             "optional": true
           },
+          "default": null,
           "title": "Seed",
           "description": "The same seed and the same prompt given to the same version of the model will output the same image every time."
         }
@@ -2587,7 +2604,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Control Image",
           "description": "Reference image for generation"
         },
@@ -2983,7 +3005,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "Input image URL for conditioning the generation"
         },
@@ -3401,7 +3428,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Input Image 1",
           "description": "The first input image to use for generation"
         },
@@ -3410,7 +3442,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Input Image 2",
           "description": "The second input image to use for generation"
         },
@@ -4430,7 +4467,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -4502,7 +4544,14 @@
           "type": {
             "type": "video"
           },
-          "default": {},
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "duration": null,
+            "format": null
+          },
           "title": "Video",
           "description": "The source video"
         },
@@ -4549,7 +4598,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The source image"
         },
@@ -4670,7 +4724,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Start Image",
           "description": "The starting image"
         },
@@ -4679,7 +4738,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "End Image",
           "description": "The ending image"
         },
@@ -4848,7 +4912,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to animate"
         },
@@ -5006,7 +5075,12 @@
           "type": {
             "type": "audio"
           },
-          "default": {},
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Audio",
           "description": "The audio file to transcribe"
         },
@@ -5302,7 +5376,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5413,7 +5492,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5488,7 +5572,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5559,7 +5648,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5631,7 +5725,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5703,7 +5802,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video (768x512 recommended)"
         },
@@ -5777,7 +5881,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5821,16 +5930,10 @@
         {
           "name": "end_image",
           "type": {
-            "type": "union",
-            "type_args": [
-              {
-                "type": "image"
-              },
-              {
-                "type": "none"
-              }
-            ]
+            "type": "image",
+            "optional": true
           },
+          "default": null,
           "title": "End Image",
           "description": "Optional image to blend the end of the video with"
         }
@@ -5860,7 +5963,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5922,7 +6030,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -5969,7 +6082,14 @@
           "type": {
             "type": "video"
           },
-          "default": {},
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "duration": null,
+            "format": null
+          },
           "title": "Video",
           "description": "URL of the source video to animate"
         },
@@ -5978,7 +6098,12 @@
           "type": {
             "type": "audio"
           },
-          "default": {},
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Audio",
           "description": "URL of the audio file to drive the lip sync"
         }
@@ -6007,7 +6132,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -6082,7 +6212,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The source image to animate"
         },
@@ -6170,7 +6305,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -6308,7 +6448,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to transform into a video"
         },
@@ -6389,7 +6534,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The source image for video generation"
         },
@@ -6447,7 +6597,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "Input image to remove background from"
         }
@@ -6475,7 +6630,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "Input image to replace background"
         },
@@ -6484,7 +6644,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Ref Image",
           "description": "Reference image for the new background"
         },
@@ -6549,7 +6714,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "Input image to erase from"
         },
@@ -6558,7 +6728,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Mask",
           "description": "The mask for areas to be cleaned"
         },
@@ -6596,7 +6771,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to expand"
         },
@@ -6717,7 +6897,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "Input image to erase from"
         },
@@ -6726,7 +6911,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Mask",
           "description": "The mask for areas to be cleaned"
         },
@@ -6783,7 +6973,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The product image to be placed"
         },
@@ -6801,7 +6996,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Ref Image",
           "description": "Reference image for the new scene/background"
         },
@@ -6857,7 +7057,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "Input image to upscale"
         },
@@ -6897,7 +7102,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to transform"
         },
@@ -6982,7 +7192,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Control Image",
           "description": "The control image to generate the Canny edge map from"
         },
@@ -7076,7 +7291,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Control Image",
           "description": "The control image to generate the depth map from"
         },
@@ -7170,7 +7390,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Control Image",
           "description": "The control image to generate the Canny edge map from"
         },
@@ -7264,7 +7489,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Control Image",
           "description": "The control image to generate the depth map from"
         },
@@ -7358,7 +7588,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to transform"
         },
@@ -7367,7 +7602,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Mask",
           "description": "The mask for inpainting"
         },
@@ -7434,7 +7674,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to transform"
         },
@@ -7519,7 +7764,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to transform"
         },
@@ -7613,7 +7863,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The input image to transform"
         },
@@ -7698,7 +7953,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to edit"
         },
@@ -7707,7 +7967,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Mask",
           "description": "The mask for editing"
         },
@@ -7773,7 +8038,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "The image to remix"
         },
@@ -7848,7 +8118,12 @@
           "type": {
             "type": "image"
           },
-          "default": {},
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null
+          },
           "title": "Image",
           "description": "Input image to apply the effect to"
         },

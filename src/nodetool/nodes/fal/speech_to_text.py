@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, TypedDict
 import fal_client
 from pydantic import Field
 
@@ -162,16 +162,13 @@ class Whisper(FALNode):
         default="", description="Optional prompt to guide the transcription"
     )
 
-    @classmethod
-    def return_type(cls):
-        return {
-            "text": str,
-            "chunks": list[dict],
-            "inferred_languages": list[str],
-            "diarization_segments": list[dict],
-        }
+    class OutputType(TypedDict):
+        text: str
+        chunks: list[dict]
+        inferred_languages: list[str]
+        diarization_segments: list[dict]
 
-    async def process(self, context: ProcessingContext) -> dict:
+    async def process(self, context: ProcessingContext) -> OutputType:
         """
         Process the audio file using Whisper model.
 
