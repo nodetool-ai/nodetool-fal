@@ -153,8 +153,6 @@ class FalProvider(BaseProvider):
             ValueError: If required parameters are missing
             RuntimeError: If generation fails
         """
-        self._log_api_request("text_to_image", params)
-
         client = self._get_client()
 
         # Build arguments for FAL API
@@ -199,7 +197,6 @@ class FalProvider(BaseProvider):
 
             self.usage["total_requests"] += 1
             self.usage["total_images"] += 1
-            self._log_api_response("text_to_image", 1)
 
             return image_bytes
 
@@ -228,8 +225,6 @@ class FalProvider(BaseProvider):
             ValueError: If required parameters are missing
             RuntimeError: If generation fails
         """
-        self._log_api_request("image_to_image", params)
-
         client = self._get_client()
 
         # FAL requires images as data URIs for image-to-image
@@ -283,7 +278,6 @@ class FalProvider(BaseProvider):
 
             self.usage["total_requests"] += 1
             self.usage["total_images"] += 1
-            self._log_api_response("image_to_image", 1)
 
             return image_bytes
 
