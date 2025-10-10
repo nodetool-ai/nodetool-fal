@@ -10,7 +10,7 @@ import json
 import os
 import re
 from typing import Any, List, Set
-from nodetool.providers.base import BaseProvider, ProviderCapability
+from nodetool.providers.base import BaseProvider
 from nodetool.providers.types import ImageBytes, TextToImageParams, ImageToImageParams
 from nodetool.config.environment import Environment
 from nodetool.metadata.types import ImageModel, Provider
@@ -37,14 +37,6 @@ class FalProvider(BaseProvider):
         self.api_key = api_key
         # Set FAL_KEY environment variable for the client
         os.environ["FAL_KEY"] = self.api_key
-
-    def get_capabilities(self) -> Set[ProviderCapability]:
-        """FAL provider supports text-to-image, image-to-image, and text-to-speech generation."""
-        return {
-            ProviderCapability.TEXT_TO_IMAGE,
-            ProviderCapability.IMAGE_TO_IMAGE,
-            ProviderCapability.TEXT_TO_SPEECH,
-        }
 
     def get_container_env(self) -> dict[str, str]:
         """Return environment variables needed when running inside Docker."""
@@ -158,7 +150,7 @@ class FalProvider(BaseProvider):
         # Build arguments for FAL API
         arguments: dict[str, Any] = {
             "prompt": params.prompt,
-            "output_format": params.image_format or "png",
+            "output_format": "png",
         }
 
         # Add optional parameters if provided
