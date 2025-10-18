@@ -80,14 +80,10 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/nodetool-ai/nodetool-core/main/build.py -o build.py
 
-      - name: Verify version in pyproject.toml
-        run: |
-          python build.py build-wheel --expected-version "${{ needs.validate.outputs.version }}" --skip-validate --skip-sidecar
-
       - name: Build wheel
         run: |
           echo "🏗️ Building wheel for ${{ env.PACKAGE_NAME }}"
-          python build.py build-wheel
+          python build.py build-wheel --expected-version "${{ needs.validate.outputs.version }}"
 
       - name: Validate wheel
         run: |
