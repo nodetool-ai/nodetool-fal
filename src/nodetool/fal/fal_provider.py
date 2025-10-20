@@ -28,19 +28,17 @@ class FalProvider(BaseProvider):
 
     provider_name = "fal_ai"
 
-    def __init__(self):
+    def __init__(self, api_key: str | None = None):
         super().__init__()
-        env = Environment.get_environment()
-        api_key = env.get("FAL_API_KEY")
-        if not api_key:
+        self.api_key = api_key or Environment.get_environment().get("FAL_API_KEY")
+        if not self.api_key:
             raise ApiKeyMissingError("FAL_API_KEY is not configured")
-        self.api_key = api_key
         # Set FAL_KEY environment variable for the client
         os.environ["FAL_KEY"] = self.api_key
 
-    def get_container_env(self) -> dict[str, str]:
+    def get_container_env(self, context: ProcessingContext) -> dict[str, str]:
         """Return environment variables needed when running inside Docker."""
-        return {"FAL_API_KEY": self.api_key}
+        return {"FAL_API_KEY": self.api_key} if self.api_key else {}
 
     def _get_client(self) -> AsyncClient:
         """Get the FAL async client."""
