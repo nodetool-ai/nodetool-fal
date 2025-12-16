@@ -104,6 +104,7 @@ class LumaDreamMachine(FALNode):
 ### Step 3: Map OpenAPI Types to Python Types
 
 Common mappings:
+
 - `string` → `str`
 - `integer` → `int`
 - `number` → `float`
@@ -115,6 +116,7 @@ Common mappings:
 ### Step 4: Handle Input Processing
 
 For different input types:
+
 - **Images**: Use `await context.image_to_base64(self.image)` and format as `data:image/png;base64,{base64}`
 - **Videos**: Use `await context.asset_to_bytes(self.video)` and upload with `await client.upload(video_bytes, "video/mp4")`
 - **Audio**: Use `await context.asset_to_bytes(self.audio)` and upload with `await client.upload(audio_bytes, "audio/mp3")`
@@ -122,6 +124,7 @@ For different input types:
 ### Step 5: Handle Output Processing
 
 Based on the output schema:
+
 - **Single image**: `return ImageRef(uri=res["images"][0]["url"])`
 - **Single video**: `return VideoRef(uri=res["video"]["url"])`
 - **Multiple outputs**: Return appropriate reference type or dict
@@ -147,6 +150,17 @@ class AspectRatio(Enum):
 4. **Optional Fields**: Handle conditional arguments properly
 5. **Error Handling**: Always assert expected output fields exist
 6. **Naming**: Use descriptive class names that reflect the model/functionality
+
+## ⚠️ Python Environment (IMPORTANT)
+
+**Local Development:** Use the conda `nodetool` environment. Do not use system Python.
+
+```bash
+conda activate nodetool
+# then run commands normally
+```
+
+**GitHub CI / Copilot Agent:** Uses standard Python 3.11 with pip. Dependencies are pre-installed via `.github/workflows/copilot-setup-steps.yml`. Run commands directly without conda.
 
 ## Commands
 
@@ -199,12 +213,14 @@ class LumaDreamMachine(GraphNode):
 ```
 
 **Key DSL Features**:
+
 - All field types become unions with `GraphNode` and `tuple[GraphNode, str]` for graph connectivity
 - Enum fields are converted to string types in DSL
 - The `get_node_type()` method returns the fully qualified node path
 - Docstrings and field descriptions are preserved
 
 **File Organization**: DSL files mirror the node file structure:
+
 - `src/nodetool/nodes/fal/image_to_video.py` → `src/nodetool/dsl/fal/image_to_video.py`
 - `src/nodetool/nodes/fal/text_to_image.py` → `src/nodetool/dsl/fal/text_to_image.py`
 
