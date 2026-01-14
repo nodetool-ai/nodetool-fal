@@ -1,0 +1,94 @@
+name: FAL Model Sync
+
+on:
+  schedule:
+    - cron: "45 */6 * * *" # Every 6 hours at minute 45
+  workflow_dispatch:
+
+jobs:
+  opencode:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev --extra-index-url https://nodetool-ai.github.io/nodetool-registry/simple/
+
+      - name: Run OpenCode
+        uses: anomalyco/opencode/github@latest
+        env:
+          FAL_API_KEY: ${{ secrets.FAL_API_KEY }}
+          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+        with:
+          model: minimax/MiniMax-M2.1
+          prompt: |
+            # FAL Model Sync (Scheduled)
+
+            You are an autonomous agent that adds new FAL models to the **nodetool-fal** repository.
+
+            ## Step 0: Avoid Duplicate Work
+            1. Run `git branch -a` to check existing branches
+            2. If there's an open PR for similar work, continue on that branch instead of duplicating
+
+            ## Step 1: Read Memory (Required)
+            - `.github/opencode-memory/README.md`
+            - `.github/opencode-memory/repository-context.md`
+            - `.github/opencode-memory/node-creation-guide.md`
+            - `.github/opencode-memory/features.md`
+
+            ## Step 2: Discover New Models
+            1. Use https://fal.ai/models or FAL documentation to find new endpoints
+            2. Focus on:
+               - Featured/official models from major providers
+               - Recent releases (last 30 days)
+               - Popular/high-usage models
+            3. Check existing nodes in `src/nodetool/nodes/fal/` to avoid duplicates
+            4. Pick 1-3 new models that are NOT already implemented
+
+            ## Step 3: Add New Models
+            1. Create new node classes in the correct modality file
+            2. Follow the `node-creation-guide.md` and repo coding style
+            3. Ensure:
+               - Correct endpoint ID
+               - Proper input/output typing
+               - Docstring with tags and use cases
+               - `get_basic_fields` method
+
+            ## Step 4: Regenerate Metadata and DSL
+            ```bash
+            nodetool package scan
+            nodetool codegen
+            ```
+
+            ## Step 5: Quality Checks
+            ```bash
+            ruff check .
+            black --check .
+            # Fix any issues before committing
+            black .
+            ```
+
+            ## Step 6: Update Memory
+            Add entries to `.github/opencode-memory/features.md` documenting what was added.
+
+            ## Guidelines
+            - Add only 1-3 models per run to keep PRs focused
+            - Prefer official/verified providers
+            - Skip models without stable endpoints
+            - If a model fails to implement, skip it and try another
+            - Always run linting before committing

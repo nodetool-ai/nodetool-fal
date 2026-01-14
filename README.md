@@ -68,3 +68,7 @@ The project is distributed under the terms of the GNU Affero General Public Lice
 ## Contributing
 
 Issues and pull requests are welcome. See the documentation in the main [Nodetool](https://github.com/nodetool-ai/nodetool) repository for guidelines on developing new nodes and workflows.
+
+### Automated Model Sync
+
+This repository includes an OpenCode workflow that periodically scans for new FAL endpoints and opens PRs with new nodes. See `.github/workflows/opencode-fal-model-sync.yml` for the schedule and prompt.
