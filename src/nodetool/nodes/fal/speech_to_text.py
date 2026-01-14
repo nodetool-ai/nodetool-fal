@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, TypedDict
+from typing import TypedDict
 import fal_client
 from pydantic import Field
 
@@ -210,3 +210,81 @@ class Whisper(FALNode):
     @classmethod
     def get_basic_fields(cls) -> list[str]:
         return ["audio", "task", "diarize"]
+
+
+class ElevenLabsScribeV2(FALNode):
+    """
+    ElevenLabs Scribe V2 is a state-of-the-art speech-to-text model with improved accuracy, word-level timestamps, and speaker identification.
+    speech, audio, transcription, scribe, elevenlabs, speech-to-text, audio-to-text, diarization
+
+    Use cases:
+    - Transcribe audio with high accuracy
+    - Generate subtitles with word-level timestamps
+    - Identify different speakers in conversations
+    - Support for 99 languages with biasing via keyterms
+    - Tag audio events like laughter and applause
+    """
+
+    audio: AudioRef = Field(
+        default=AudioRef(), description="The audio file to transcribe"
+    )
+    language_code: str = Field(
+        default="",
+        description="Language code of the audio (e.g., 'eng', 'spa'). Auto-detected if empty",
+    )
+    tag_audio_events: bool = Field(
+        default=True,
+        description="Whether to tag audio events like laughter, applause, etc.",
+    )
+    diarize: bool = Field(
+        default=True, description="Whether to annotate who is speaking"
+    )
+    keyterms: list[str] = Field(
+        default_factory=list,
+        description="Words or phrases to bias the model towards transcribing (up to 100, max 50 chars each)",
+    )
+
+    class OutputType(TypedDict):
+        text: str
+        language_code: str
+        language_probability: float
+        words: list[dict]
+
+    async def process(self, context: ProcessingContext) -> OutputType:
+        """
+        Process the audio file using ElevenLabs Scribe V2 model.
+
+        Returns:
+            dict: Contains transcription text, language info, and word-level details
+        """
+        client: fal_client.AsyncClient = self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "audio_url": audio_url,
+            "tag_audio_events": self.tag_audio_events,
+            "diarize": self.diarize,
+        }
+
+        if self.language_code:
+            arguments["language_code"] = self.language_code
+        if self.keyterms:
+            arguments["keyterms"] = self.keyterms
+
+        result = await self.submit_request(
+            context=context,
+            application="fal-ai/elevenlabs/speech-to-text/scribe-v2",
+            arguments=arguments,
+        )
+
+        return {
+            "text": result["text"],
+            "language_code": result["language_code"],
+            "language_probability": result["language_probability"],
+            "words": result["words"],
+        }
+
+    @classmethod
+    def get_basic_fields(cls) -> list[str]:
+        return ["audio", "diarize", "language_code"]

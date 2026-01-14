@@ -7,7 +7,6 @@ from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.nodes.fal.image_to_video import AspectRatio, KlingDuration
 
 
-
 class Veo3AspectRatio(Enum):
     RATIO_16_9 = "16:9"
     RATIO_9_16 = "9:16"
@@ -459,6 +458,7 @@ class WanFlf2V(FALNode):
     @classmethod
     def get_basic_fields(cls) -> list[str]:
         return ["prompt"]
+
 
 class KlingVideoV2(FALNode):
     """

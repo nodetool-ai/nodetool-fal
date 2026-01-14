@@ -20,9 +20,10 @@ async def main() -> None:
     # Download the generated image so it can be uploaded as a workflow artifact
     import urllib.request
 
-    with urllib.request.urlopen(image.uri) as response, open(
-        "generated_image.png", "wb"
-    ) as out_file:
+    with (
+        urllib.request.urlopen(image.uri) as response,
+        open("generated_image.png", "wb") as out_file,
+    ):
         out_file.write(response.read())
     print("Image saved to generated_image.png")
 

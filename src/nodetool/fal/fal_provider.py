@@ -9,7 +9,7 @@ import ast
 import json
 import os
 import re
-from typing import Any, List, Set
+from typing import Any, List
 from nodetool.providers.base import BaseProvider
 from nodetool.providers.types import ImageBytes, TextToImageParams, ImageToImageParams
 from nodetool.config.environment import Environment
