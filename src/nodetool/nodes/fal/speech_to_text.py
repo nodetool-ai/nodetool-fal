@@ -175,7 +175,7 @@ class Whisper(FALNode):
         Returns:
             dict: Contains transcription text, chunks, and optionally diarization segments
         """
-        client: fal_client.AsyncClient = self.get_client(context)
+        client: fal_client.AsyncClient = await self.get_client(context)
         audio_bytes = await context.asset_to_bytes(self.audio)
         audio_url = await client.upload(audio_bytes, "audio/mp3")
 
