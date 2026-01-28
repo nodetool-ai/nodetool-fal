@@ -1,3 +1,4 @@
+from lazy_object_proxy.utils import await_
 import os
 from typing import Any
 from fal_client import AsyncClient
@@ -15,12 +16,12 @@ class FALNode(BaseNode):
     def is_visible(cls) -> bool:
         return cls is not FALNode
 
-    def get_client(self, context: ProcessingContext) -> AsyncClient:
-        if context.environment.get("FAL_API_KEY") is None:
+    async def get_client(self, context: ProcessingContext) -> AsyncClient:
+        key = await context.get_secret("FAL_API_KEY") 
+        if key is None:
             raise ApiKeyMissingError("FAL_API_KEY is not set in the environment")
 
-        os.environ["FAL_KEY"] = context.environment.get("FAL_API_KEY")  # type: ignore
-        return AsyncClient()
+        return AsyncClient(key=key)
 
     async def submit_request(
         self,
@@ -39,7 +40,7 @@ class FALNode(BaseNode):
         Returns:
             Dict[str, Any]: The result from the FAL API
         """
-        client = self.get_client(context)
+        client = await self.get_client(context)
         handler = await client.submit(
             application,
             arguments=arguments,

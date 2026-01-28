@@ -203,7 +203,7 @@ class PixverseEffects(FALNode):
     seed: int = Field(default=-1, description="Optional seed for deterministic output")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        client = self.get_client(context)
+        client = await self.get_client(context)
         video_bytes = await context.asset_to_bytes(self.video)
         video_url = await client.upload(video_bytes, "video/mp4")
 

@@ -803,7 +803,7 @@ class MuseTalk(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        client = self.get_client(context)
+        client = await self.get_client(context)
         video_bytes = await context.asset_to_bytes(self.video)
         audio_bytes = await context.asset_to_bytes(self.audio)
         video_url = await client.upload(video_bytes, "video/mp4")

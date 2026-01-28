@@ -6,6 +6,6 @@ from nodetool.metadata.types import Provider
 from nodetool.fal.fal_provider import FalProvider
 
 # Register as general provider (handles image and video generation)
-register_provider(Provider.FAL)(FalProvider)
+register_provider(Provider.FalAI)(FalProvider)
 
 __all__ = ["FalProvider"]

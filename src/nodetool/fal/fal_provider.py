@@ -28,9 +28,15 @@ class FalProvider(BaseProvider):
 
     provider_name = "fal_ai"
 
-    def __init__(self, api_key: str | None = None):
-        super().__init__()
-        self.api_key = api_key or Environment.get_environment().get("FAL_API_KEY")
+    @classmethod
+    def required_secrets(cls) -> list[str]:
+        return ["FAL_API_KEY"]
+
+    def __init__(self, secrets: dict[str, str] | None = None):
+        super().__init__(secrets=secrets)
+        self.api_key = (secrets or {}).get(
+            "FAL_API_KEY"
+        ) or Environment.get_environment().get("FAL_API_KEY")
         if not self.api_key:
             raise ApiKeyMissingError("FAL_API_KEY is not configured")
         # Set FAL_KEY environment variable for the client
@@ -479,9 +485,9 @@ class FalProvider(BaseProvider):
         voice: str | None = None,
         speed: float = 1.0,
         timeout_s: int | None = None,
-        context: Any = None,
+        context: Any = None,  # ProcessingContext, but imported later
         **kwargs: Any,
-    ) -> bytes:
+    ) -> AsyncGenerator[np.ndarray[Any, np.dtype[np.int16]], None]:
         """Generate speech audio from text using FAL AI text-to-audio models.
 
         Args:
@@ -540,9 +546,8 @@ class FalProvider(BaseProvider):
                 response = await http_client.get(audio_url)
                 response.raise_for_status()
                 audio_bytes = response.content
-
-            log.debug(f"Generated {len(audio_bytes)} bytes of audio")
-            return audio_bytes
+                yield np.frombuffer(audio_bytes, dtype=np.int16)
+                log.debug(f"Generated {len(audio_bytes)} bytes of audio")
 
         except Exception as e:
             error_msg = self._format_validation_error(str(e))
