@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import Field
 from nodetool.metadata.types import AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
@@ -223,3 +224,60 @@ class PlayAITTSDialog(FALNode):
     @classmethod
     def get_title(cls):
         return "PlayAI Dialog TTS"
+
+
+class AudioFormatEnum(str, Enum):
+    MP3 = "mp3"
+    AAC = "aac"
+    M4A = "m4a"
+    OGG = "ogg"
+    OPUS = "opus"
+    FLAC = "flac"
+    WAV = "wav"
+
+
+class NovaSR(FALNode):
+    """
+    Nova SR enhances muffled 16 kHz speech audio into crystal-clear 48 kHz audio using super-resolution.
+    audio, enhancement, super-resolution, speech, upsampling, audio-to-audio, nova-sr
+
+    Use cases:
+    - Enhance low-quality speech recordings
+    - Upsample audio from 16kHz to 48kHz
+    - Improve audio clarity for voice content
+    - Prepare speech for downstream processing
+    - Recover details from compressed audio
+    """
+
+    audio: AudioRef = Field(default=AudioRef(), description="The audio file to enhance")
+    audio_format: AudioFormatEnum = Field(
+        default=AudioFormatEnum.MP3, description="Output audio format"
+    )
+    bitrate: str = Field(default="192k", description="Output audio bitrate")
+    sync_mode: bool = Field(
+        default=False, description="If True, media returned as data URI"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        client = self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "audio_url": audio_url,
+            "audio_format": self.audio_format.value,
+            "bitrate": self.bitrate,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/nova-sr",
+            arguments=arguments,
+        )
+
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls) -> list[str]:
+        return ["audio", "audio_format", "bitrate"]

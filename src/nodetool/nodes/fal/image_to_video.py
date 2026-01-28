@@ -983,3 +983,160 @@ class WanFlf2v(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "num_frames"]
+
+
+class LtxVideoSize(Enum):
+    AUTO = "auto"
+    SQUARE_HD = "square_hd"
+    SQUARE = "square"
+    PORTRAIT_4_3 = "portrait_4_3"
+    PORTRAIT_16_9 = "portrait_16_9"
+    LANDSCAPE_4_3 = "landscape_4_3"
+    LANDSCAPE_16_9 = "landscape_16_9"
+
+
+class LtxAcceleration(Enum):
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+
+class LtxCameraLora(Enum):
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+
+class LtxVideoOutputType(Enum):
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF = "GIF (.gif)"
+
+
+class LtxVideoQuality(Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+
+class LtxVideoWriteMode(Enum):
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+
+class LTX219BImageToVideo(FALNode):
+    """
+    Generate video with audio from images using LTX-2 19B model. A state-of-the-art video generation model with camera motion control and multi-scale generation.
+    video, generation, ltx, ltx-2, image-to-video, motion-control, camera, audio
+
+    Use cases:
+    - Generate high-quality videos from images
+    - Create videos with synchronized audio
+    - Control camera movements with LoRA
+    - Produce professional video content
+    - Animate static images with fluid motion
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to generate the video from"
+    )
+    prompt: str = Field(
+        default="",
+        description="The prompt describing the desired video motion and style",
+    )
+    num_frames: int = Field(
+        default=121, ge=1, description="Number of frames to generate"
+    )
+    video_size: LtxVideoSize = Field(
+        default=LtxVideoSize.AUTO, description="Size of the generated video"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate audio for the video"
+    )
+    use_multiscale: bool = Field(
+        default=True, description="Use multi-scale generation for better coherence"
+    )
+    fps: float = Field(default=25, description="Frames per second")
+    guidance_scale: float = Field(
+        default=3, description="Guidance scale for generation"
+    )
+    num_inference_steps: int = Field(
+        default=40, ge=1, description="Number of inference steps"
+    )
+    acceleration: LtxAcceleration = Field(
+        default=LtxAcceleration.REGULAR, description="Acceleration level"
+    )
+    camera_lora: LtxCameraLora = Field(
+        default=LtxCameraLora.NONE, description="Camera movement LoRA"
+    )
+    camera_lora_scale: float = Field(
+        default=1, ge=0, le=1, description="Camera LoRA scale"
+    )
+    negative_prompt: str = Field(
+        default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur",
+        description="Negative prompt to avoid",
+    )
+    seed: int = Field(default=-1, description="Random seed for reproducibility")
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Enable prompt expansion"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Enable safety checker"
+    )
+    video_output_type: LtxVideoOutputType = Field(
+        default=LtxVideoOutputType.X264_MP4, description="Output video format"
+    )
+    video_quality: LtxVideoQuality = Field(
+        default=LtxVideoQuality.HIGH, description="Video quality"
+    )
+    video_write_mode: LtxVideoWriteMode = Field(
+        default=LtxVideoWriteMode.BALANCED, description="Video write mode"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "num_frames": self.num_frames,
+            "video_size": self.video_size.value,
+            "generate_audio": self.generate_audio,
+            "use_multiscale": self.use_multiscale,
+            "fps": self.fps,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "acceleration": self.acceleration.value,
+            "camera_lora": self.camera_lora.value,
+            "camera_lora_scale": self.camera_lora_scale,
+            "negative_prompt": self.negative_prompt,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "enable_safety_checker": self.enable_safety_checker,
+            "video_output_type": self.video_output_type.value,
+            "video_quality": self.video_quality.value,
+            "video_write_mode": self.video_write_mode.value,
+        }
+
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-2-19b/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "generate_audio", "video_size"]
