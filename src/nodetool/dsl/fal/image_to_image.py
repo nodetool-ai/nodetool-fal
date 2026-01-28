@@ -19,6 +19,80 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class BiRefNet(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    BiRefNet is a high-quality background removal model using bilateral reference.
+    image, background-removal, segmentation, matting
+
+    Use cases:
+    - Remove backgrounds from photos
+    - Create product images with transparent backgrounds
+    - Extract subjects from images
+    - Prepare images for compositing
+    - Create stickers and cutouts
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image for background removal",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BiRefNet
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class BiRefNetV2(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    BiRefNet V2 is an improved background removal model with better edge detection.
+    image, background-removal, segmentation, matting, v2
+
+    Use cases:
+    - High-quality background removal
+    - Precise edge detection for cutouts
+    - Product photography processing
+    - Portrait extraction
+    - Complex background handling
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image for background removal",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BiRefNetV2
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class BriaBackgroundRemove(
     SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
 ):
@@ -332,6 +406,83 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class CCSR(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    CCSR (Content-Consistent Super-Resolution) for high-quality image upscaling.
+    image, upscaling, super-resolution, enhancement
+
+    Use cases:
+    - Upscale images with content consistency
+    - Enhance low-resolution photos
+    - Improve image details
+    - Prepare images for printing
+    - Restore compressed images
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to upscale",
+    )
+    scale: int | OutputHandle[int] = connect_field(
+        default=4, description="Upscaling factor"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.CCSR
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Cartoonify(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Cartoonify transforms photos into cartoon-style images.
+    image, cartoon, style-transfer, fun, artistic
+
+    Use cases:
+    - Convert photos to cartoon style
+    - Create animated-style portraits
+    - Design fun profile pictures
+    - Generate cartoon avatars
+    - Create artistic transformations
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to cartoonify",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Cartoonify
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class ClarityUpscaler(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Upscale images to improve resolution and sharpness.
@@ -357,6 +508,233 @@ class ClarityUpscaler(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.ClarityUpscaler
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class CodeFormer(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    CodeFormer is a face restoration model for enhancing and restoring face quality.
+    image, face-restoration, enhancement, quality
+
+    Use cases:
+    - Restore old or damaged photos
+    - Enhance low-quality face images
+    - Improve portrait quality
+    - Fix facial artifacts
+    - Upscale face details
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image with faces to restore",
+    )
+    fidelity: float | OutputHandle[float] = connect_field(
+        default=0.5,
+        description="Balance between quality and fidelity (0=quality, 1=fidelity)",
+    )
+    background_enhance: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to enhance the background"
+    )
+    face_upsample: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to upsample the face"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.CodeFormer
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class CreativeUpscaler(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Creative Upscaler enhances image resolution while adding creative details.
+    image, upscaling, enhancement, super-resolution, creative
+
+    Use cases:
+    - Upscale low-resolution images
+    - Enhance image details creatively
+    - Improve image quality
+    - Prepare images for print
+    - Restore old or compressed images
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to upscale",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Optional prompt to guide the upscaling"
+    )
+    scale: float | OutputHandle[float] = connect_field(
+        default=2.0, description="Upscaling factor"
+    )
+    creativity: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Level of creative enhancement"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.CreativeUpscaler
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class ESRGAN(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    ESRGAN (Enhanced Super-Resolution GAN) for high-quality image upscaling.
+    image, upscaling, super-resolution, enhancement
+
+    Use cases:
+    - Upscale images to higher resolution
+    - Enhance image details
+    - Improve image quality for printing
+    - Restore low-resolution images
+    - Prepare images for large displays
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to upscale",
+    )
+    scale: int | OutputHandle[int] = connect_field(
+        default=4, description="Upscaling factor"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ESRGAN
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class FaceToSticker(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Face to Sticker transforms face photos into fun sticker-style images.
+    image, face, sticker, fun, transformation
+
+    Use cases:
+    - Create fun stickers from photos
+    - Generate emoji-style faces
+    - Design personalized sticker packs
+    - Create cartoon avatars
+    - Produce fun social media content
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The face image to convert to sticker",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="sticker", description="Optional prompt to guide the sticker style"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FaceToSticker
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Flux2TurboEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    FLUX 2 Turbo Edit for fast image editing with the FLUX 2 model.
+    image, editing, flux, fast, turbo, text-guided
+
+    Use cases:
+    - Rapid image modifications
+    - Quick style transfers
+    - Fast object editing
+    - Iterative refinement
+    - Real-time editing workflows
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to edit",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the edit"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=4, description="Number of inference steps"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Flux2TurboEdit
 
     @classmethod
     def get_node_type(cls):
@@ -889,6 +1267,101 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class GPTImage1Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    OpenAI GPT Image 1 Edit for modifying images with text instructions.
+    image, editing, openai, gpt, text-guided
+
+    Use cases:
+    - Edit images with natural language
+    - Modify specific elements in photos
+    - Add or change objects
+    - Apply creative edits
+    - Refine images iteratively
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to edit",
+    )
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The mask for inpainting (optional)",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Instructions for editing the image"
+    )
+    size: str | OutputHandle[str] = connect_field(
+        default="1024x1024", description="The size of the output image"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.GPTImage1Edit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class GeminiFlashEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Google Gemini Flash Edit for fast image editing with text prompts.
+    image, editing, google, gemini, fast, text-guided
+
+    Use cases:
+    - Quick image modifications
+    - Fast iterative edits
+    - Object addition or removal
+    - Style adjustments
+    - Rapid prototyping
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to edit",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Instructions for editing the image"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.GeminiFlashEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class IdeogramV2Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Transform existing images with Ideogram V2's editing capabilities. Modify, adjust, and refine images while maintaining high fidelity and realistic outputs with precise prompt control.
@@ -987,6 +1460,425 @@ class IdeogramV2Remix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.IdeogramV2Remix
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class IdeogramV3Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Ideogram V3 Edit for editing images with text prompts while maintaining structure.
+    image, editing, ideogram, inpainting, text-guided
+
+    Use cases:
+    - Edit specific parts of images with prompts
+    - Modify text in images
+    - Change elements while preserving composition
+    - Add or remove objects from images
+    - Refine generated images
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to edit",
+    )
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The mask indicating areas to edit",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the edit"
+    )
+    style: str | OutputHandle[str] = connect_field(
+        default="auto", description="The style of the edit"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.IdeogramV3Edit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class ImageUtilsDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Depth estimation utility for generating depth maps from images.
+    image, depth-map, estimation, 3d, utility
+
+    Use cases:
+    - Generate depth maps for 3D effects
+    - Create parallax animations
+    - Enable depth-aware editing
+    - Generate ControlNet inputs
+    - Analyze image depth structure
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image for depth estimation",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageUtilsDepth
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class ImageUtilsRembg(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Rembg utility for removing image backgrounds with high accuracy.
+    image, background-removal, utility, processing
+
+    Use cases:
+    - Remove backgrounds from product photos
+    - Create transparent PNG images
+    - Extract subjects for compositing
+    - Prepare images for design work
+    - Create profile picture cutouts
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image for background removal",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageUtilsRembg
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class KolorsImageToImage(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Kolors Image-to-Image transforms images with the Kolors model.
+    image, transformation, kolors, style-transfer
+
+    Use cases:
+    - Transform image style
+    - Apply artistic effects
+    - Modify image content
+    - Create style variations
+    - Generate image edits
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the transformation"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    strength: float | OutputHandle[float] = connect_field(
+        default=0.8, description="Transformation strength"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=25, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.KolorsImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class LivePortrait(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+    Live Portrait animates a single portrait image based on a driving video.
+    image, animation, portrait, face, motion-transfer
+
+    Use cases:
+    - Animate static portraits
+    - Create talking head videos
+    - Transfer facial expressions
+    - Create avatar animations
+    - Generate video from single photo
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The portrait image to animate",
+    )
+    driving_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+        default=types.VideoRef(
+            type="video",
+            uri="",
+            asset_id=None,
+            data=None,
+            metadata=None,
+            duration=None,
+            format=None,
+        ),
+        description="The driving video with motion reference",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.LivePortrait
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class ObjectRemoval(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Object Removal removes unwanted objects from images using AI.
+    image, inpainting, removal, cleanup
+
+    Use cases:
+    - Remove unwanted objects from photos
+    - Clean up image backgrounds
+    - Remove watermarks or logos
+    - Fix photo imperfections
+    - Create clean product shots
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image",
+    )
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Mask indicating objects to remove",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ObjectRemoval
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class PhotoMaker(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    PhotoMaker generates images with customizable subject identity from reference photos.
+    image, face, identity, customization, generation
+
+    Use cases:
+    - Generate images with specific person identity
+    - Create personalized marketing content
+    - Design custom avatars
+    - Produce character-consistent images
+    - Generate variations of a person
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The reference image of the subject",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired image"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=50, description="Number of inference steps"
+    )
+    style_strength: float | OutputHandle[float] = connect_field(
+        default=20.0, description="Strength of the style transfer"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PhotoMaker
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class PuLID(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    PuLID generates images with consistent face identity from a reference face.
+    image, face, identity, generation, consistency
+
+    Use cases:
+    - Generate images with consistent face identity
+    - Create character variations
+    - Design personalized avatars
+    - Produce face-consistent content
+    - Generate marketing images with specific faces
+    """
+
+    face_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The reference face image",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired image"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=20, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=1.2, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PuLID
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Retoucher(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Retoucher enhances and retouches photos with AI-powered corrections.
+    image, enhancement, retouching, beautification
+
+    Use cases:
+    - Enhance portrait photos
+    - Apply skin retouching
+    - Improve photo quality
+    - Fix lighting issues
+    - Professional photo editing
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to retouch",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Optional prompt to guide the retouching"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Retoucher
 
     @classmethod
     def get_node_type(cls):

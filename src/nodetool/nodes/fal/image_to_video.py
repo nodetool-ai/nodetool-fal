@@ -1140,3 +1140,536 @@ class LTX219BImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "generate_audio", "video_size"]
+
+
+class LumaRay2ImageToVideo(FALNode):
+    """
+    Luma Ray 2 Image-to-Video generates high-quality videos from images with improved motion.
+    video, generation, luma, ray2, image-to-video, img2vid
+
+    Use cases:
+    - Create cinematic video from images
+    - Generate smooth motion animations
+    - Produce high-quality video content
+    - Transform photos into videos
+    - Create professional video clips
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    loop: bool = Field(default=False, description="Whether the video should loop")
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "loop": self.loop,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "aspect_ratio"]
+
+
+class LumaRay2FlashImageToVideo(FALNode):
+    """
+    Luma Ray 2 Flash Image-to-Video is a fast version for quick video generation.
+    video, generation, luma, ray2, flash, image-to-video, fast
+
+    Use cases:
+    - Quick video prototyping
+    - Rapid content creation
+    - Fast video iterations
+    - Real-time video generation
+    - Quick motion tests
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2-flash/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "aspect_ratio"]
+
+
+class KlingVideoV21Pro(FALNode):
+    """
+    Kling Video V2.1 Pro Image-to-Video with enhanced quality and motion.
+    video, generation, kling, v2.1, pro, image-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic video clips
+    - Transform images with smooth motion
+    - Create promotional videos
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    duration: KlingDuration = Field(
+        default=KlingDuration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v2.1/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
+class HunyuanVideoImageToVideo(FALNode):
+    """
+    Hunyuan Video Image-to-Video generates videos from images with Tencent's model.
+    video, generation, hunyuan, tencent, image-to-video
+
+    Use cases:
+    - Create videos from still images
+    - Generate motion for photos
+    - Produce animated content
+    - Transform artwork into video
+    - Create video transitions
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="Number of inference steps"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video-image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class HunyuanVideoV15ImageToVideo(FALNode):
+    """
+    Hunyuan Video V1.5 Image-to-Video with improved quality and motion.
+    video, generation, hunyuan, v1.5, image-to-video
+
+    Use cases:
+    - Create high-quality video from images
+    - Generate smooth animations
+    - Produce professional video content
+    - Transform photos with motion
+    - Create video effects
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video-v1.5/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class PikaV22ImageToVideo(FALNode):
+    """
+    Pika V2.2 Image-to-Video generates creative videos from images.
+    video, generation, pika, v2.2, image-to-video, creative
+
+    Use cases:
+    - Create creative video content
+    - Generate artistic animations
+    - Produce stylized videos
+    - Transform images with effects
+    - Create unique video clips
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pika/v2.2/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class PikaV21ImageToVideo(FALNode):
+    """
+    Pika V2.1 Image-to-Video generates videos from images with the Pika model.
+    video, generation, pika, v2.1, image-to-video
+
+    Use cases:
+    - Create video content from images
+    - Generate animated clips
+    - Produce motion graphics
+    - Transform still photos
+    - Create video effects
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pika/v2.1/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class ViduQ2ImageToVideo(FALNode):
+    """
+    Vidu Q2 Image-to-Video Turbo generates fast videos from images.
+    video, generation, vidu, q2, turbo, image-to-video, fast
+
+    Use cases:
+    - Quick video generation
+    - Rapid prototyping
+    - Fast content creation
+    - Quick motion tests
+    - Real-time video production
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/vidu/q2/image-to-video/turbo",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class Sora2ImageToVideo(FALNode):
+    """
+    OpenAI Sora 2 Image-to-Video generates high-quality videos from images.
+    video, generation, openai, sora, sora2, image-to-video
+
+    Use cases:
+    - Create cinematic videos from images
+    - Generate realistic motion
+    - Produce professional video content
+    - Transform photos into movies
+    - Create video narratives
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    duration: int = Field(
+        default=5, ge=1, le=20, description="Duration of the video in seconds"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "duration": self.duration,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sora-2/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
+class SeedanceV15ProImageToVideo(FALNode):
+    """
+    ByteDance Seedance V1.5 Pro Image-to-Video with high-quality motion.
+    video, generation, bytedance, seedance, pro, image-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic clips
+    - Transform images with motion
+    - Create promotional videos
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bytedance/seedance/v1.5/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class MiniMaxHailuo23ImageToVideo(FALNode):
+    """
+    MiniMax Hailuo 2.3 Standard Image-to-Video with improved quality.
+    video, generation, minimax, hailuo, 2.3, image-to-video
+
+    Use cases:
+    - Create video from images
+    - Generate smooth animations
+    - Produce video content
+    - Transform photos into clips
+    - Create motion graphics
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the prompt optimizer"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax/hailuo-2.3/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]

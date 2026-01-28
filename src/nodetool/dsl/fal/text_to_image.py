@@ -252,6 +252,60 @@ import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class CogView4(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    CogView4 is a powerful text-to-image model with strong understanding and generation capabilities.
+    image, generation, cogview, text-to-image, txt2img, ai
+
+    Use cases:
+    - Generate creative images from descriptions
+    - Create concept art
+    - Design visual content
+    - Produce illustrations
+    - Create artistic images
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=50, description="The number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.CogView4
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class DiffusionEdge(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
@@ -592,6 +646,108 @@ class FastTurboDiffusion(
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_image.FastTurboDiffusion
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Flux2Flash(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    FLUX 2 Flash is an ultra-fast text-to-image model optimized for speed while maintaining quality.
+    image, generation, flux, ultra-fast, text-to-image, txt2img, flash
+
+    Use cases:
+    - Real-time image generation
+    - Interactive creative tools
+    - Rapid prototyping
+    - High-throughput applications
+    - Quick visual exploration
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=4, description="The number of inference steps"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Flash
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Flux2Turbo(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    FLUX 2 Turbo is a fast text-to-image model delivering high-quality results with reduced generation time.
+    image, generation, flux, fast, text-to-image, txt2img, turbo
+
+    Use cases:
+    - Rapid image prototyping
+    - High-volume image generation
+    - Quick concept visualization
+    - Fast design iterations
+    - Real-time creative workflows
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=4, description="The number of inference steps"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Turbo
 
     @classmethod
     def get_node_type(cls):
@@ -1340,6 +1496,150 @@ import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class GPTImage1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    OpenAI's GPT Image 1 model for generating images from text prompts with high quality and creative outputs.
+    image, generation, openai, gpt, text-to-image, txt2img, creative
+
+    Use cases:
+    - Generate creative illustrations
+    - Create concept art and designs
+    - Produce marketing visuals
+    - Design digital artwork
+    - Create custom graphics
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    size: str | OutputHandle[str] = connect_field(
+        default="1024x1024",
+        description="The size of the generated image (e.g., 1024x1024, 1792x1024, 1024x1792)",
+    )
+    quality: str | OutputHandle[str] = connect_field(
+        default="auto",
+        description="The quality of the generated image (auto, high, medium, low)",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.GPTImage1
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Gemini25FlashImage(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Google's Gemini 2.5 Flash model for fast high-quality image generation from text.
+    image, generation, google, gemini, text-to-image, txt2img, fast
+
+    Use cases:
+    - Generate images quickly
+    - Create visual content at scale
+    - Produce concept visualizations
+    - Design marketing materials
+    - Create educational illustrations
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1,
+        description="The aspect ratio of the generated image",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Gemini25FlashImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class HunyuanImageV3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Hunyuan Image V3 is Tencent's advanced text-to-image model with exceptional detail and artistic quality.
+    image, generation, hunyuan, tencent, text-to-image, txt2img, artistic
+
+    Use cases:
+    - Create detailed digital artwork
+    - Generate photorealistic images
+    - Produce high-quality illustrations
+    - Design creative visuals
+    - Create artistic compositions
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=30, description="The number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.HunyuanImageV3
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class HyperSDXL(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
@@ -1503,6 +1803,63 @@ import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class IdeogramV3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Ideogram V3 is the latest generation text-to-image model with enhanced typography and photorealistic outputs.
+    image, generation, typography, realistic, text-to-image, txt2img, ideogram
+
+    Use cases:
+    - Create professional marketing materials with text
+    - Generate logos and brand assets
+    - Design posters and advertisements
+    - Produce photorealistic product images
+    - Create typography-heavy artwork
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
+    IdeogramStyle: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.IdeogramStyle
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1,
+        description="The aspect ratio of the generated image",
+    )
+    style: nodetool.nodes.fal.text_to_image.IdeogramStyle = Field(
+        default=nodetool.nodes.fal.text_to_image.IdeogramStyle.AUTO,
+        description="The style of the generated image",
+    )
+    expand_prompt: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Whether to expand the prompt with MagicPrompt functionality",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A negative prompt to avoid in the generated image"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.IdeogramV3
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class IllusionDiffusion(
     SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
 ):
@@ -1546,6 +1903,52 @@ class IllusionDiffusion(
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_image.IllusionDiffusion
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Imagen3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Google Imagen 3 is a state-of-the-art text-to-image model with exceptional quality and understanding.
+    image, generation, google, imagen, text-to-image, txt2img, high-quality
+
+    Use cases:
+    - Generate photorealistic images
+    - Create professional marketing content
+    - Design visual assets
+    - Produce high-quality illustrations
+    - Create detailed artwork
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1,
+        description="The aspect ratio of the generated image",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Imagen3
 
     @classmethod
     def get_node_type(cls):
@@ -1614,6 +2017,63 @@ class Imagen4Preview(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_image.Imagen4Preview
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Kolors(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Kolors is an advanced text-to-image model with excellent color reproduction and artistic style.
+    image, generation, kolors, text-to-image, txt2img, artistic, color
+
+    Use cases:
+    - Create vibrant colorful artwork
+    - Generate stylized illustrations
+    - Design visually striking content
+    - Produce artistic images
+    - Create color-rich visuals
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=25, description="The number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Kolors
 
     @classmethod
     def get_node_type(cls):
@@ -1876,6 +2336,54 @@ import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class QwenImageMax(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Qwen Image Max is Alibaba's advanced text-to-image model with exceptional quality and detail.
+    image, generation, qwen, alibaba, text-to-image, txt2img, high-quality
+
+    Use cases:
+    - Generate detailed images
+    - Create professional visuals
+    - Design marketing content
+    - Produce high-quality artwork
+    - Create commercial graphics
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.QwenImageMax
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class Recraft20B(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
@@ -1975,6 +2483,60 @@ import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class Reve(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Reve is a creative text-to-image model with unique artistic capabilities and style.
+    image, generation, reve, text-to-image, txt2img, artistic, creative
+
+    Use cases:
+    - Create artistic illustrations
+    - Generate unique visual content
+    - Design creative artwork
+    - Produce stylized images
+    - Create imaginative visuals
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=28, description="The number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=3.5, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Reve
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class SanaV1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
@@ -2024,6 +2586,57 @@ class SanaV1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_image.SanaV1
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class Seedream45(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    ByteDance Seedream V4.5 is a state-of-the-art text-to-image model with exceptional detail and artistic quality.
+    image, generation, bytedance, seedream, text-to-image, txt2img, artistic
+
+    Use cases:
+    - Create high-quality digital art
+    - Generate photorealistic images
+    - Design marketing visuals
+    - Produce detailed illustrations
+    - Create professional graphics
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Seedream45
 
     @classmethod
     def get_node_type(cls):
@@ -2266,6 +2879,57 @@ class Switti(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_image.Switti
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class ZImageTurbo(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+    Z-Image Turbo is a fast text-to-image model optimized for quick generation with good quality.
+    image, generation, z-image, text-to-image, txt2img, fast, turbo
+
+    Use cases:
+    - Rapid image generation
+    - Quick prototyping
+    - High-volume content creation
+    - Fast design iterations
+    - Real-time applications
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to generate an image from"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=4, description="The number of inference steps"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.ZImageTurbo
 
     @classmethod
     def get_node_type(cls):

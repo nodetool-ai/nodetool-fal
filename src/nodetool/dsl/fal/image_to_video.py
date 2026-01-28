@@ -248,6 +248,105 @@ import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
 
+class HunyuanVideoImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Hunyuan Video Image-to-Video generates videos from images with Tencent's model.
+    video, generation, hunyuan, tencent, image-to-video
+
+    Use cases:
+    - Create videos from still images
+    - Generate motion for photos
+    - Produce animated content
+    - Transform artwork into video
+    - Create video transitions
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=30, description="Number of inference steps"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.HunyuanVideoImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class HunyuanVideoV15ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Hunyuan Video V1.5 Image-to-Video with improved quality and motion.
+    video, generation, hunyuan, v1.5, image-to-video
+
+    Use cases:
+    - Create high-quality video from images
+    - Generate smooth animations
+    - Produce professional video content
+    - Transform photos with motion
+    - Create video effects
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=30, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.HunyuanVideoV15ImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
 class KlingVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
@@ -341,6 +440,61 @@ class KlingVideoPro(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_video.KlingVideoPro
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingVideoV21Pro(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Kling Video V2.1 Pro Image-to-Video with enhanced quality and motion.
+    video, generation, kling, v2.1, pro, image-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic video clips
+    - Transform images with smooth motion
+    - Create promotional videos
+    """
+
+    KlingDuration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.KlingDuration
+    )
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(
+        default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.KlingVideoV21Pro
 
     @classmethod
     def get_node_type(cls):
@@ -587,6 +741,111 @@ import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
 
+class LumaRay2FlashImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Luma Ray 2 Flash Image-to-Video is a fast version for quick video generation.
+    video, generation, luma, ray2, flash, image-to-video, fast
+
+    Use cases:
+    - Quick video prototyping
+    - Rapid content creation
+    - Fast video iterations
+    - Real-time video generation
+    - Quick motion tests
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.LumaRay2FlashImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class LumaRay2ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Luma Ray 2 Image-to-Video generates high-quality videos from images with improved motion.
+    video, generation, luma, ray2, image-to-video, img2vid
+
+    Use cases:
+    - Create cinematic video from images
+    - Generate smooth motion animations
+    - Produce high-quality video content
+    - Transform photos into videos
+    - Create professional video clips
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    loop: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Whether the video should loop"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.LumaRay2ImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
 class MiniMaxHailuo02(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
@@ -626,6 +885,54 @@ class MiniMaxHailuo02(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_video.MiniMaxHailuo02
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class MiniMaxHailuo23ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    MiniMax Hailuo 2.3 Standard Image-to-Video with improved quality.
+    video, generation, minimax, hailuo, 2.3, image-to-video
+
+    Use cases:
+    - Create video from images
+    - Generate smooth animations
+    - Produce video content
+    - Transform photos into clips
+    - Create motion graphics
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to use the prompt optimizer"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.MiniMaxHailuo23ImageToVideo
 
     @classmethod
     def get_node_type(cls):
@@ -718,6 +1025,99 @@ class MuseTalk(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef])
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_video.MuseTalk
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class PikaV21ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Pika V2.1 Image-to-Video generates videos from images with the Pika model.
+    video, generation, pika, v2.1, image-to-video
+
+    Use cases:
+    - Create video content from images
+    - Generate animated clips
+    - Produce motion graphics
+    - Transform still photos
+    - Create video effects
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.PikaV21ImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class PikaV22ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Pika V2.2 Image-to-Video generates creative videos from images.
+    video, generation, pika, v2.2, image-to-video, creative
+
+    Use cases:
+    - Create creative video content
+    - Generate artistic animations
+    - Produce stylized videos
+    - Transform images with effects
+    - Create unique video clips
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated video"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.PikaV22ImageToVideo
 
     @classmethod
     def get_node_type(cls):
@@ -837,6 +1237,105 @@ class SadTalker(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_video.SadTalker
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class SeedanceV15ProImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    ByteDance Seedance V1.5 Pro Image-to-Video with high-quality motion.
+    video, generation, bytedance, seedance, pro, image-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic clips
+    - Transform images with motion
+    - Create promotional videos
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.SeedanceV15ProImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class Sora2ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    OpenAI Sora 2 Image-to-Video generates high-quality videos from images.
+    video, generation, openai, sora, sora2, image-to-video
+
+    Use cases:
+    - Create cinematic videos from images
+    - Generate realistic motion
+    - Produce professional video content
+    - Transform photos into movies
+    - Create video narratives
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    duration: int | OutputHandle[int] = connect_field(
+        default=5, description="Duration of the video in seconds"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.Sora2ImageToVideo
 
     @classmethod
     def get_node_type(cls):
@@ -995,6 +1494,51 @@ class Veo2ImageToVideo(
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_video.Veo2ImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class ViduQ2ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Vidu Q2 Image-to-Video Turbo generates fast videos from images.
+    video, generation, vidu, q2, turbo, image-to-video, fast
+
+    Use cases:
+    - Quick video generation
+    - Rapid prototyping
+    - Fast content creation
+    - Quick motion tests
+    - Real-time video production
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.ViduQ2ImageToVideo
 
     @classmethod
     def get_node_type(cls):

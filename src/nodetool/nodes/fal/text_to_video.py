@@ -551,3 +551,551 @@ class KlingTextToVideoV2(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "duration"]
+
+
+class LumaRay2TextToVideo(FALNode):
+    """
+    Luma Ray 2 Text-to-Video generates high-quality videos from text prompts.
+    video, generation, luma, ray2, text-to-video, txt2vid
+
+    Use cases:
+    - Create videos from descriptions
+    - Generate cinematic content
+    - Produce creative videos
+    - Create marketing clips
+    - Generate concept videos
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    loop: bool = Field(default=False, description="Whether the video should loop")
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "loop": self.loop,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "aspect_ratio"]
+
+
+class LumaRay2FlashTextToVideo(FALNode):
+    """
+    Luma Ray 2 Flash Text-to-Video is a fast version for quick video generation.
+    video, generation, luma, ray2, flash, text-to-video, fast
+
+    Use cases:
+    - Quick video prototyping
+    - Rapid content creation
+    - Fast video iterations
+    - Real-time video generation
+    - Quick concept tests
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2-flash",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "aspect_ratio"]
+
+
+class KlingVideoV21TextToVideo(FALNode):
+    """
+    Kling Video V2.1 Master Text-to-Video with enhanced quality and motion.
+    video, generation, kling, v2.1, text-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic clips
+    - Create promotional videos
+    - Generate concept previews
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    duration: KlingDuration = Field(
+        default=KlingDuration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v2.1/master/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration"]
+
+
+class HunyuanVideo(FALNode):
+    """
+    Hunyuan Video generates videos from text prompts using Tencent's model.
+    video, generation, hunyuan, tencent, text-to-video
+
+    Use cases:
+    - Create videos from descriptions
+    - Generate animated content
+    - Produce motion graphics
+    - Create promotional clips
+    - Generate concept videos
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "guidance_scale"]
+
+
+class HunyuanVideoV15TextToVideo(FALNode):
+    """
+    Hunyuan Video V1.5 Text-to-Video with improved quality and motion.
+    video, generation, hunyuan, v1.5, text-to-video
+
+    Use cases:
+    - Create high-quality video content
+    - Generate smooth animations
+    - Produce professional videos
+    - Create motion graphics
+    - Generate video effects
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video-v1.5/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "guidance_scale"]
+
+
+class PikaV22TextToVideo(FALNode):
+    """
+    Pika V2.2 Text-to-Video generates creative videos from text prompts.
+    video, generation, pika, v2.2, text-to-video, creative
+
+    Use cases:
+    - Create creative video content
+    - Generate artistic animations
+    - Produce stylized videos
+    - Create unique video clips
+    - Generate experimental content
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pika/v2.2/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt"]
+
+
+class PikaV21TextToVideo(FALNode):
+    """
+    Pika V2.1 Text-to-Video generates videos from text prompts.
+    video, generation, pika, v2.1, text-to-video
+
+    Use cases:
+    - Create video content from text
+    - Generate animated clips
+    - Produce motion graphics
+    - Create video effects
+    - Generate promotional content
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pika/v2.1/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt"]
+
+
+class Sora2TextToVideo(FALNode):
+    """
+    OpenAI Sora 2 Text-to-Video generates high-quality videos from text.
+    video, generation, openai, sora, sora2, text-to-video
+
+    Use cases:
+    - Create cinematic videos from text
+    - Generate realistic motion
+    - Produce professional video content
+    - Create video narratives
+    - Generate concept videos
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    duration: int = Field(
+        default=5, ge=1, le=20, description="Duration of the video in seconds"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "duration": self.duration,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sora-2/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration"]
+
+
+class MiniMaxHailuo23TextToVideo(FALNode):
+    """
+    MiniMax Hailuo 2.3 Standard Text-to-Video with improved quality.
+    video, generation, minimax, hailuo, 2.3, text-to-video
+
+    Use cases:
+    - Create videos from text
+    - Generate smooth animations
+    - Produce video content
+    - Create motion graphics
+    - Generate promotional clips
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the prompt optimizer"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax/hailuo-2.3/standard/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt"]
+
+
+class MochiV1(FALNode):
+    """
+    Mochi V1 generates creative videos from text prompts with unique style.
+    video, generation, mochi, text-to-video, creative
+
+    Use cases:
+    - Create creative video content
+    - Generate artistic animations
+    - Produce stylized videos
+    - Create experimental clips
+    - Generate unique video effects
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    num_inference_steps: int = Field(
+        default=50, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=4.5, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/mochi-v1",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "guidance_scale"]
+
+
+class LTX2TextToVideo(FALNode):
+    """
+    LTX 2 Text-to-Video generates videos from text with the LTX model.
+    video, generation, ltx, text-to-video
+
+    Use cases:
+    - Create videos from descriptions
+    - Generate animated content
+    - Produce motion graphics
+    - Create video clips
+    - Generate promotional content
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=3.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-2/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "guidance_scale"]
+
+
+class Kandinsky5TextToVideo(FALNode):
+    """
+    Kandinsky 5 Text-to-Video generates creative videos from text prompts.
+    video, generation, kandinsky, text-to-video, artistic
+
+    Use cases:
+    - Create artistic video content
+    - Generate creative animations
+    - Produce stylized videos
+    - Create video art
+    - Generate experimental content
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    num_inference_steps: int = Field(
+        default=50, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=4.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kandinsky5/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "guidance_scale"]
