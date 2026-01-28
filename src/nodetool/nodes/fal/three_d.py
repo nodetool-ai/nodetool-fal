@@ -1,6 +1,7 @@
+from typing import TypedDict
 from pydantic import Field
 
-from nodetool.metadata.types import ImageRef
+from nodetool.metadata.types import ImageRef, Model3DRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -23,7 +24,7 @@ class Trellis(FALNode):
     )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
-    async def process(self, context: ProcessingContext) -> dict:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
@@ -37,18 +38,11 @@ class Trellis(FALNode):
             application="fal-ai/trellis",
             arguments=arguments,
         )
-        return {
-            "model_url": res.get("model", {}).get("url", ""),
-            "glb_url": res.get("glb", {}).get("url", ""),
-        }
+        return Model3DRef(uri=res.get("glb", {}).get("url", ""))
 
     @classmethod
     def get_basic_fields(cls):
         return ["image"]
-
-    @classmethod
-    def return_type(cls):
-        return {"model_url": str, "glb_url": str}
 
 
 class Hunyuan3DV2(FALNode):
@@ -69,7 +63,7 @@ class Hunyuan3DV2(FALNode):
     )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
-    async def process(self, context: ProcessingContext) -> dict:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
@@ -83,18 +77,11 @@ class Hunyuan3DV2(FALNode):
             application="fal-ai/hunyuan3d/v2",
             arguments=arguments,
         )
-        return {
-            "model_url": res.get("model", {}).get("url", ""),
-            "glb_url": res.get("glb", {}).get("url", ""),
-        }
+        return Model3DRef(uri=res.get("glb", {}).get("url", ""))
 
     @classmethod
     def get_basic_fields(cls):
         return ["image"]
-
-    @classmethod
-    def return_type(cls):
-        return {"model_url": str, "glb_url": str}
 
 
 class TripoSR(FALNode):
@@ -114,7 +101,7 @@ class TripoSR(FALNode):
         default=ImageRef(), description="The image to convert to 3D"
     )
 
-    async def process(self, context: ProcessingContext) -> dict:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
@@ -126,9 +113,7 @@ class TripoSR(FALNode):
             application="fal-ai/triposr",
             arguments=arguments,
         )
-        return {
-            "model_url": res.get("model", {}).get("url", ""),
-        }
+        return Model3DRef(uri=res.get("glb", {}).get("url", ""))
 
     @classmethod
     def get_basic_fields(cls):
@@ -157,7 +142,11 @@ class Era3D(FALNode):
     )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
-    async def process(self, context: ProcessingContext) -> dict:
+    class OutputType(TypedDict):
+        images: list[ImageRef]
+        model: Model3DRef
+
+    async def process(self, context: ProcessingContext) -> OutputType:
         image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
@@ -173,13 +162,9 @@ class Era3D(FALNode):
         )
         return {
             "images": [ImageRef(uri=img["url"]) for img in res.get("images", [])],
-            "model_url": res.get("model", {}).get("url", ""),
+            "model": Model3DRef(uri=res.get("model", {}).get("url", "")),
         }
 
     @classmethod
     def get_basic_fields(cls):
         return ["image"]
-
-    @classmethod
-    def return_type(cls):
-        return {"images": list, "model_url": str}
