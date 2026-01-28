@@ -1,5 +1,3 @@
-from lazy_object_proxy.utils import await_
-import os
 from typing import Any
 from fal_client import AsyncClient
 from nodetool.workflows.base_node import ApiKeyMissingError, BaseNode
@@ -17,7 +15,7 @@ class FALNode(BaseNode):
         return cls is not FALNode
 
     async def get_client(self, context: ProcessingContext) -> AsyncClient:
-        key = await context.get_secret("FAL_API_KEY") 
+        key = await context.get_secret("FAL_API_KEY")
         if key is None:
             raise ApiKeyMissingError("FAL_API_KEY is not set in the environment")
 

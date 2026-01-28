@@ -2542,3 +2542,672 @@ class Imagen4Preview(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "aspect_ratio", "guidance_scale"]
+
+
+class IdeogramV3(FALNode):
+    """
+    Ideogram V3 is the latest generation text-to-image model with enhanced typography and photorealistic outputs.
+    image, generation, typography, realistic, text-to-image, txt2img, ideogram
+
+    Use cases:
+    - Create professional marketing materials with text
+    - Generate logos and brand assets
+    - Design posters and advertisements
+    - Produce photorealistic product images
+    - Create typography-heavy artwork
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1,
+        description="The aspect ratio of the generated image",
+    )
+    style: IdeogramStyle = Field(
+        default=IdeogramStyle.AUTO, description="The style of the generated image"
+    )
+    expand_prompt: bool = Field(
+        default=True,
+        description="Whether to expand the prompt with MagicPrompt functionality",
+    )
+    negative_prompt: str = Field(
+        default="", description="A negative prompt to avoid in the generated image"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "style": self.style.value,
+            "expand_prompt": self.expand_prompt,
+            "output_format": "png",
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v3",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "aspect_ratio", "style"]
+
+
+class GPTImage1(FALNode):
+    """
+    OpenAI's GPT Image 1 model for generating images from text prompts with high quality and creative outputs.
+    image, generation, openai, gpt, text-to-image, txt2img, creative
+
+    Use cases:
+    - Generate creative illustrations
+    - Create concept art and designs
+    - Produce marketing visuals
+    - Design digital artwork
+    - Create custom graphics
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    size: str = Field(
+        default="1024x1024",
+        description="The size of the generated image (e.g., 1024x1024, 1792x1024, 1024x1792)",
+    )
+    quality: str = Field(
+        default="auto",
+        description="The quality of the generated image (auto, high, medium, low)",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "size": self.size,
+            "quality": self.quality,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/gpt-image-1/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "size", "quality"]
+
+
+class Gemini25FlashImage(FALNode):
+    """
+    Google's Gemini 2.5 Flash model for fast high-quality image generation from text.
+    image, generation, google, gemini, text-to-image, txt2img, fast
+
+    Use cases:
+    - Generate images quickly
+    - Create visual content at scale
+    - Produce concept visualizations
+    - Design marketing materials
+    - Create educational illustrations
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1,
+        description="The aspect ratio of the generated image",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/gemini-25-flash-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "aspect_ratio"]
+
+
+class Flux2Turbo(FALNode):
+    """
+    FLUX 2 Turbo is a fast text-to-image model delivering high-quality results with reduced generation time.
+    image, generation, flux, fast, text-to-image, txt2img, turbo
+
+    Use cases:
+    - Rapid image prototyping
+    - High-volume image generation
+    - Quick concept visualization
+    - Fast design iterations
+    - Real-time creative workflows
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=4, ge=1, le=12, description="The number of inference steps"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": "png",
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-2/turbo",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "num_inference_steps"]
+
+
+class Flux2Flash(FALNode):
+    """
+    FLUX 2 Flash is an ultra-fast text-to-image model optimized for speed while maintaining quality.
+    image, generation, flux, ultra-fast, text-to-image, txt2img, flash
+
+    Use cases:
+    - Real-time image generation
+    - Interactive creative tools
+    - Rapid prototyping
+    - High-throughput applications
+    - Quick visual exploration
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=4, ge=1, le=8, description="The number of inference steps"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": "png",
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-2/flash",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "num_inference_steps"]
+
+
+class HunyuanImageV3(FALNode):
+    """
+    Hunyuan Image V3 is Tencent's advanced text-to-image model with exceptional detail and artistic quality.
+    image, generation, hunyuan, tencent, text-to-image, txt2img, artistic
+
+    Use cases:
+    - Create detailed digital artwork
+    - Generate photorealistic images
+    - Produce high-quality illustrations
+    - Design creative visuals
+    - Create artistic compositions
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="The number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-image/v3/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale"]
+
+
+class CogView4(FALNode):
+    """
+    CogView4 is a powerful text-to-image model with strong understanding and generation capabilities.
+    image, generation, cogview, text-to-image, txt2img, ai
+
+    Use cases:
+    - Generate creative images from descriptions
+    - Create concept art
+    - Design visual content
+    - Produce illustrations
+    - Create artistic images
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=50, ge=1, description="The number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/cogview4",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale"]
+
+
+class Kolors(FALNode):
+    """
+    Kolors is an advanced text-to-image model with excellent color reproduction and artistic style.
+    image, generation, kolors, text-to-image, txt2img, artistic, color
+
+    Use cases:
+    - Create vibrant colorful artwork
+    - Generate stylized illustrations
+    - Design visually striking content
+    - Produce artistic images
+    - Create color-rich visuals
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=25, ge=1, description="The number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": "png",
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kolors",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale"]
+
+
+class Seedream45(FALNode):
+    """
+    ByteDance Seedream V4.5 is a state-of-the-art text-to-image model with exceptional detail and artistic quality.
+    image, generation, bytedance, seedream, text-to-image, txt2img, artistic
+
+    Use cases:
+    - Create high-quality digital art
+    - Generate photorealistic images
+    - Design marketing visuals
+    - Produce detailed illustrations
+    - Create professional graphics
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    guidance_scale: float = Field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bytedance/seedream/v4.5/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale"]
+
+
+class Reve(FALNode):
+    """
+    Reve is a creative text-to-image model with unique artistic capabilities and style.
+    image, generation, reve, text-to-image, txt2img, artistic, creative
+
+    Use cases:
+    - Create artistic illustrations
+    - Generate unique visual content
+    - Design creative artwork
+    - Produce stylized images
+    - Create imaginative visuals
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=28, ge=1, description="The number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/reve/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale"]
+
+
+class Imagen3(FALNode):
+    """
+    Google Imagen 3 is a state-of-the-art text-to-image model with exceptional quality and understanding.
+    image, generation, google, imagen, text-to-image, txt2img, high-quality
+
+    Use cases:
+    - Generate photorealistic images
+    - Create professional marketing content
+    - Design visual assets
+    - Produce high-quality illustrations
+    - Create detailed artwork
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1,
+        description="The aspect ratio of the generated image",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imagen3",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "aspect_ratio"]
+
+
+class QwenImageMax(FALNode):
+    """
+    Qwen Image Max is Alibaba's advanced text-to-image model with exceptional quality and detail.
+    image, generation, qwen, alibaba, text-to-image, txt2img, high-quality
+
+    Use cases:
+    - Generate detailed images
+    - Create professional visuals
+    - Design marketing content
+    - Produce high-quality artwork
+    - Create commercial graphics
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/qwen-image-max/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size"]
+
+
+class ZImageTurbo(FALNode):
+    """
+    Z-Image Turbo is a fast text-to-image model optimized for quick generation with good quality.
+    image, generation, z-image, text-to-image, txt2img, fast, turbo
+
+    Use cases:
+    - Rapid image generation
+    - Quick prototyping
+    - High-volume content creation
+    - Fast design iterations
+    - Real-time applications
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.SQUARE_HD,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=4, ge=1, description="The number of inference steps"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/z-image/turbo",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "num_inference_steps"]

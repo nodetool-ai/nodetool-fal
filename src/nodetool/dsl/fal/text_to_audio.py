@@ -19,6 +19,357 @@ import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
 
+class ChatterboxTTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+    Chatterbox Text-to-Speech with conversational voice synthesis.
+    audio, tts, text-to-speech, chatterbox, conversational
+
+    Use cases:
+    - Generate conversational speech
+    - Create chat bot voices
+    - Produce dialogue audio
+    - Create interactive content
+    - Generate voice assistants
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.ChatterboxTTS
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class Demucs(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
+    """
+
+    Demucs separates audio tracks into stems (vocals, drums, bass, other).
+    audio, separation, stems, demucs
+
+    Use cases:
+    - Separate music into stems
+    - Extract vocals or instruments
+    - Create remix material
+    - Analyze music components
+    - Isolate specific tracks
+    """
+
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The audio file to separate",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.Demucs
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class DiaTTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+    Dia TTS generates natural speech with emotion and expression control.
+    audio, tts, text-to-speech, dia, expressive
+
+    Use cases:
+    - Generate expressive speech
+    - Create emotional voiceovers
+    - Produce dynamic audio content
+    - Create character voices
+    - Generate storytelling audio
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    voice: str | OutputHandle[str] = connect_field(
+        default="", description="The voice preset to use"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.DiaTTS
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class ElevenLabsAudioIsolation(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
+    """
+
+    ElevenLabs Audio Isolation separates vocals from audio tracks.
+    audio, isolation, separation, elevenlabs
+
+    Use cases:
+    - Extract vocals from music
+    - Remove background noise
+    - Isolate speech
+    - Create acapella tracks
+    - Clean audio recordings
+    """
+
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The audio file to process",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.ElevenLabsAudioIsolation
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class ElevenLabsMultilingual(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
+    """
+
+    ElevenLabs Multilingual V2 Text-to-Speech with support for 29 languages.
+    audio, tts, text-to-speech, elevenlabs, multilingual
+
+    Use cases:
+    - Generate speech in multiple languages
+    - Create localized content
+    - Produce multilingual voiceovers
+    - Create international audio
+    - Generate language learning content
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    voice_id: str | OutputHandle[str] = connect_field(
+        default="", description="The voice ID to use for synthesis"
+    )
+    language_code: str | OutputHandle[str] = connect_field(
+        default="en", description="Language code (e.g., en, es, fr)"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.ElevenLabsMultilingual
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class ElevenLabsMusic(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+    ElevenLabs Music generates music from text descriptions.
+    audio, music, generation, elevenlabs, creative
+
+    Use cases:
+    - Generate custom music tracks
+    - Create background music
+    - Produce jingles
+    - Create audio branding
+    - Generate ambient music
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the music to generate"
+    )
+    duration: float | OutputHandle[float] = connect_field(
+        default=30.0, description="Duration in seconds"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.ElevenLabsMusic
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class ElevenLabsSoundEffects(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
+    """
+
+    ElevenLabs Sound Effects V2 generates sound effects from text descriptions.
+    audio, sound-effects, generation, elevenlabs
+
+    Use cases:
+    - Generate custom sound effects
+    - Create audio for videos
+    - Produce game audio
+    - Create ambient sounds
+    - Generate UI sounds
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the sound effect"
+    )
+    duration: float | OutputHandle[float] = connect_field(
+        default=5.0, description="Duration in seconds"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.ElevenLabsSoundEffects
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class ElevenLabsTTSTurbo(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
+    """
+
+    ElevenLabs Turbo V2.5 Text-to-Speech for fast voice synthesis.
+    audio, tts, text-to-speech, elevenlabs, fast, turbo
+
+    Use cases:
+    - Quick voice generation
+    - Real-time speech synthesis
+    - Rapid prototyping
+    - Fast audio content
+    - Interactive applications
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    voice_id: str | OutputHandle[str] = connect_field(
+        default="", description="The voice ID to use for synthesis"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.ElevenLabsTTSTurbo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class ElevenLabsTTSV3(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+    ElevenLabs Eleven V3 Text-to-Speech with high-quality voice synthesis.
+    audio, tts, text-to-speech, elevenlabs, voice, synthesis
+
+    Use cases:
+    - Generate natural speech from text
+    - Create voiceovers
+    - Produce audio content
+    - Create audiobooks
+    - Generate voice notifications
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    voice_id: str | OutputHandle[str] = connect_field(
+        default="", description="The voice ID to use for synthesis"
+    )
+    model_id: str | OutputHandle[str] = connect_field(
+        default="eleven_multilingual_v2",
+        description="The model ID (e.g., eleven_multilingual_v2)",
+    )
+    stability: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Voice stability"
+    )
+    similarity_boost: float | OutputHandle[float] = connect_field(
+        default=0.75, description="Voice similarity boost"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
 class F5TTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
@@ -54,6 +405,46 @@ class F5TTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_audio.F5TTS
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class KokoroTTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+    Kokoro American English Text-to-Speech with natural voice synthesis.
+    audio, tts, text-to-speech, kokoro, english
+
+    Use cases:
+    - Generate natural English speech
+    - Create voiceovers
+    - Produce audio content
+    - Create educational material
+    - Generate voice notifications
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    voice: str | OutputHandle[str] = connect_field(
+        default="af_sky", description="The voice to use"
+    )
+    speed: float | OutputHandle[float] = connect_field(
+        default=1.0, description="Speech speed multiplier"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.KokoroTTS
 
     @classmethod
     def get_node_type(cls):
@@ -120,6 +511,79 @@ import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
 
+class MiniMaxMusic(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+    MiniMax Music generates music tracks from text descriptions.
+    audio, music, generation, minimax
+
+    Use cases:
+    - Generate custom music
+    - Create background tracks
+    - Produce audio content
+    - Create music for videos
+    - Generate jingles
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the music to generate"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.MiniMaxMusic
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class MiniMaxSpeech02HD(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
+    """
+
+    MiniMax Speech 02 HD generates high-quality speech synthesis.
+    audio, tts, text-to-speech, minimax, hd
+
+    Use cases:
+    - Generate HD quality speech
+    - Create professional audio
+    - Produce voiceovers
+    - Create content narration
+    - Generate announcements
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    voice_id: str | OutputHandle[str] = connect_field(
+        default="", description="The voice ID to use"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.MiniMaxSpeech02HD
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
 class NovaSR(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
@@ -158,6 +622,43 @@ class NovaSR(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_audio.NovaSR
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+
+class OrpheusTTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+    Orpheus TTS generates high-quality speech with natural prosody.
+    audio, tts, text-to-speech, orpheus, natural
+
+    Use cases:
+    - Generate natural-sounding speech
+    - Create professional voiceovers
+    - Produce high-quality audio
+    - Create audiobooks
+    - Generate podcast content
+    """
+
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    voice: str | OutputHandle[str] = connect_field(
+        default="", description="The voice to use"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_audio.OrpheusTTS
 
     @classmethod
     def get_node_type(cls):

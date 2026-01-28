@@ -1,7 +1,7 @@
 from typing import Any
 from pydantic import Field
 
-from nodetool.metadata.types import ImageRef
+from nodetool.metadata.types import ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 from .text_to_image import ImageSizePreset
@@ -1085,3 +1085,893 @@ class WanEffects(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "effect"]
+
+
+class IdeogramV3Edit(FALNode):
+    """
+    Ideogram V3 Edit for editing images with text prompts while maintaining structure.
+    image, editing, ideogram, inpainting, text-guided
+
+    Use cases:
+    - Edit specific parts of images with prompts
+    - Modify text in images
+    - Change elements while preserving composition
+    - Add or remove objects from images
+    - Refine generated images
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to edit")
+    mask: ImageRef = Field(
+        default=ImageRef(), description="The mask indicating areas to edit"
+    )
+    prompt: str = Field(default="", description="The prompt describing the edit")
+    style: str = Field(default="auto", description="The style of the edit")
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
+            "prompt": self.prompt,
+            "style": self.style,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v3/edit",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "mask", "prompt"]
+
+
+class GPTImage1Edit(FALNode):
+    """
+    OpenAI GPT Image 1 Edit for modifying images with text instructions.
+    image, editing, openai, gpt, text-guided
+
+    Use cases:
+    - Edit images with natural language
+    - Modify specific elements in photos
+    - Add or change objects
+    - Apply creative edits
+    - Refine images iteratively
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to edit")
+    mask: ImageRef = Field(
+        default=ImageRef(), description="The mask for inpainting (optional)"
+    )
+    prompt: str = Field(default="", description="Instructions for editing the image")
+    size: str = Field(default="1024x1024", description="The size of the output image")
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "size": self.size,
+        }
+        if self.mask and self.mask.uri:
+            mask_base64 = await context.image_to_base64(self.mask)
+            arguments["mask_url"] = f"data:image/png;base64,{mask_base64}"
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/gpt-image-1/edit-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class GeminiFlashEdit(FALNode):
+    """
+    Google Gemini Flash Edit for fast image editing with text prompts.
+    image, editing, google, gemini, fast, text-guided
+
+    Use cases:
+    - Quick image modifications
+    - Fast iterative edits
+    - Object addition or removal
+    - Style adjustments
+    - Rapid prototyping
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to edit")
+    prompt: str = Field(default="", description="Instructions for editing the image")
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/gemini-flash-edit",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class Flux2TurboEdit(FALNode):
+    """
+    FLUX 2 Turbo Edit for fast image editing with the FLUX 2 model.
+    image, editing, flux, fast, turbo, text-guided
+
+    Use cases:
+    - Rapid image modifications
+    - Quick style transfers
+    - Fast object editing
+    - Iterative refinement
+    - Real-time editing workflows
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to edit")
+    prompt: str = Field(default="", description="The prompt describing the edit")
+    num_inference_steps: int = Field(
+        default=4, ge=1, description="Number of inference steps"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-2/turbo/edit",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class CreativeUpscaler(FALNode):
+    """
+    Creative Upscaler enhances image resolution while adding creative details.
+    image, upscaling, enhancement, super-resolution, creative
+
+    Use cases:
+    - Upscale low-resolution images
+    - Enhance image details creatively
+    - Improve image quality
+    - Prepare images for print
+    - Restore old or compressed images
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to upscale")
+    prompt: str = Field(
+        default="", description="Optional prompt to guide the upscaling"
+    )
+    scale: float = Field(default=2.0, ge=1.0, le=4.0, description="Upscaling factor")
+    creativity: float = Field(
+        default=0.5, ge=0.0, le=1.0, description="Level of creative enhancement"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "scale": self.scale,
+            "creativity": self.creativity,
+        }
+        if self.prompt:
+            arguments["prompt"] = self.prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/creative-upscaler",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "scale", "creativity"]
+
+
+class BiRefNet(FALNode):
+    """
+    BiRefNet is a high-quality background removal model using bilateral reference.
+    image, background-removal, segmentation, matting
+
+    Use cases:
+    - Remove backgrounds from photos
+    - Create product images with transparent backgrounds
+    - Extract subjects from images
+    - Prepare images for compositing
+    - Create stickers and cutouts
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image for background removal"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/birefnet",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+
+class BiRefNetV2(FALNode):
+    """
+    BiRefNet V2 is an improved background removal model with better edge detection.
+    image, background-removal, segmentation, matting, v2
+
+    Use cases:
+    - High-quality background removal
+    - Precise edge detection for cutouts
+    - Product photography processing
+    - Portrait extraction
+    - Complex background handling
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image for background removal"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/birefnet/v2",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+
+class CodeFormer(FALNode):
+    """
+    CodeFormer is a face restoration model for enhancing and restoring face quality.
+    image, face-restoration, enhancement, quality
+
+    Use cases:
+    - Restore old or damaged photos
+    - Enhance low-quality face images
+    - Improve portrait quality
+    - Fix facial artifacts
+    - Upscale face details
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image with faces to restore"
+    )
+    fidelity: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Balance between quality and fidelity (0=quality, 1=fidelity)",
+    )
+    background_enhance: bool = Field(
+        default=True, description="Whether to enhance the background"
+    )
+    face_upsample: bool = Field(
+        default=True, description="Whether to upsample the face"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "fidelity": self.fidelity,
+            "background_enhance": self.background_enhance,
+            "face_upsample": self.face_upsample,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/codeformer",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "fidelity"]
+
+
+class ESRGAN(FALNode):
+    """
+    ESRGAN (Enhanced Super-Resolution GAN) for high-quality image upscaling.
+    image, upscaling, super-resolution, enhancement
+
+    Use cases:
+    - Upscale images to higher resolution
+    - Enhance image details
+    - Improve image quality for printing
+    - Restore low-resolution images
+    - Prepare images for large displays
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to upscale")
+    scale: int = Field(default=4, ge=2, le=8, description="Upscaling factor")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "scale": self.scale,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/esrgan",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "scale"]
+
+
+class ImageUtilsRembg(FALNode):
+    """
+    Rembg utility for removing image backgrounds with high accuracy.
+    image, background-removal, utility, processing
+
+    Use cases:
+    - Remove backgrounds from product photos
+    - Create transparent PNG images
+    - Extract subjects for compositing
+    - Prepare images for design work
+    - Create profile picture cutouts
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image for background removal"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imageutils/rembg",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+
+class ImageUtilsDepth(FALNode):
+    """
+    Depth estimation utility for generating depth maps from images.
+    image, depth-map, estimation, 3d, utility
+
+    Use cases:
+    - Generate depth maps for 3D effects
+    - Create parallax animations
+    - Enable depth-aware editing
+    - Generate ControlNet inputs
+    - Analyze image depth structure
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image for depth estimation"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imageutils/depth",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+
+class LivePortrait(FALNode):
+    """
+    Live Portrait animates a single portrait image based on a driving video.
+    image, animation, portrait, face, motion-transfer
+
+    Use cases:
+    - Animate static portraits
+    - Create talking head videos
+    - Transfer facial expressions
+    - Create avatar animations
+    - Generate video from single photo
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The portrait image to animate"
+    )
+    driving_video: VideoRef = Field(
+        default=VideoRef(), description="The driving video with motion reference"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        from nodetool.metadata.types import VideoRef as VideoRefType
+
+        client = await self.get_client(context)
+        image_base64 = await context.image_to_base64(self.image)
+        video_bytes = await context.asset_to_bytes(self.driving_video)
+        video_url = await client.upload(video_bytes, "video/mp4")
+
+        arguments = {
+            "source_image_url": f"data:image/png;base64,{image_base64}",
+            "driving_video_url": video_url,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/live-portrait",
+            arguments=arguments,
+        )
+        assert res["video"] is not None
+        return VideoRefType(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "driving_video"]
+
+
+class PuLID(FALNode):
+    """
+    PuLID generates images with consistent face identity from a reference face.
+    image, face, identity, generation, consistency
+
+    Use cases:
+    - Generate images with consistent face identity
+    - Create character variations
+    - Design personalized avatars
+    - Produce face-consistent content
+    - Generate marketing images with specific faces
+    """
+
+    face_image: ImageRef = Field(
+        default=ImageRef(), description="The reference face image"
+    )
+    prompt: str = Field(
+        default="", description="The prompt describing the desired image"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    num_inference_steps: int = Field(
+        default=20, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=1.2, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        face_base64 = await context.image_to_base64(self.face_image)
+
+        arguments = {
+            "reference_images": [f"data:image/png;base64,{face_base64}"],
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pulid",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["face_image", "prompt"]
+
+
+class PhotoMaker(FALNode):
+    """
+    PhotoMaker generates images with customizable subject identity from reference photos.
+    image, face, identity, customization, generation
+
+    Use cases:
+    - Generate images with specific person identity
+    - Create personalized marketing content
+    - Design custom avatars
+    - Produce character-consistent images
+    - Generate variations of a person
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The reference image of the subject"
+    )
+    prompt: str = Field(
+        default="", description="The prompt describing the desired image"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    num_inference_steps: int = Field(
+        default=50, ge=1, description="Number of inference steps"
+    )
+    style_strength: float = Field(
+        default=20.0, description="Strength of the style transfer"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_archive_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "style_strength": self.style_strength,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/photomaker",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class FaceToSticker(FALNode):
+    """
+    Face to Sticker transforms face photos into fun sticker-style images.
+    image, face, sticker, fun, transformation
+
+    Use cases:
+    - Create fun stickers from photos
+    - Generate emoji-style faces
+    - Design personalized sticker packs
+    - Create cartoon avatars
+    - Produce fun social media content
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The face image to convert to sticker"
+    )
+    prompt: str = Field(
+        default="sticker", description="Optional prompt to guide the sticker style"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+        if self.prompt:
+            arguments["prompt"] = self.prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/face-to-sticker",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+
+class Cartoonify(FALNode):
+    """
+    Cartoonify transforms photos into cartoon-style images.
+    image, cartoon, style-transfer, fun, artistic
+
+    Use cases:
+    - Convert photos to cartoon style
+    - Create animated-style portraits
+    - Design fun profile pictures
+    - Generate cartoon avatars
+    - Create artistic transformations
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to cartoonify"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/cartoonify",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+
+class KolorsImageToImage(FALNode):
+    """
+    Kolors Image-to-Image transforms images with the Kolors model.
+    image, transformation, kolors, style-transfer
+
+    Use cases:
+    - Transform image style
+    - Apply artistic effects
+    - Modify image content
+    - Create style variations
+    - Generate image edits
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image")
+    prompt: str = Field(default="", description="The prompt describing the transformation")
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    strength: float = Field(
+        default=0.8, ge=0.0, le=1.0, description="Transformation strength"
+    )
+    num_inference_steps: int = Field(
+        default=25, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=5.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "strength": self.strength,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kolors/image-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "strength"]
+
+
+class ObjectRemoval(FALNode):
+    """
+    Object Removal removes unwanted objects from images using AI.
+    image, inpainting, removal, cleanup
+
+    Use cases:
+    - Remove unwanted objects from photos
+    - Clean up image backgrounds
+    - Remove watermarks or logos
+    - Fix photo imperfections
+    - Create clean product shots
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image")
+    mask: ImageRef = Field(
+        default=ImageRef(), description="Mask indicating objects to remove"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/object-removal",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "mask"]
+
+
+class Retoucher(FALNode):
+    """
+    Retoucher enhances and retouches photos with AI-powered corrections.
+    image, enhancement, retouching, beautification
+
+    Use cases:
+    - Enhance portrait photos
+    - Apply skin retouching
+    - Improve photo quality
+    - Fix lighting issues
+    - Professional photo editing
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The image to retouch")
+    prompt: str = Field(
+        default="", description="Optional prompt to guide the retouching"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+        if self.prompt:
+            arguments["prompt"] = self.prompt
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/retoucher",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+
+class CCSR(FALNode):
+    """
+    CCSR (Content-Consistent Super-Resolution) for high-quality image upscaling.
+    image, upscaling, super-resolution, enhancement
+
+    Use cases:
+    - Upscale images with content consistency
+    - Enhance low-resolution photos
+    - Improve image details
+    - Prepare images for printing
+    - Restore compressed images
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to upscale")
+    scale: int = Field(default=4, ge=2, le=4, description="Upscaling factor")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "scale": self.scale,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ccsr",
+            arguments=arguments,
+        )
+        assert res["image"] is not None
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "scale"]

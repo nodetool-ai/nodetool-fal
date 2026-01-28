@@ -17,6 +17,142 @@ from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_video
 from nodetool.workflows.base_node import BaseNode
+
+
+class HunyuanVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+    Hunyuan Video generates videos from text prompts using Tencent's model.
+    video, generation, hunyuan, tencent, text-to-video
+
+    Use cases:
+    - Create videos from descriptions
+    - Generate animated content
+    - Produce motion graphics
+    - Create promotional clips
+    - Generate concept videos
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=30, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.HunyuanVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class HunyuanVideoV15TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Hunyuan Video V1.5 Text-to-Video with improved quality and motion.
+    video, generation, hunyuan, v1.5, text-to-video
+
+    Use cases:
+    - Create high-quality video content
+    - Generate smooth animations
+    - Produce professional videos
+    - Create motion graphics
+    - Generate video effects
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=30, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.HunyuanVideoV15TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class Kandinsky5TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Kandinsky 5 Text-to-Video generates creative videos from text prompts.
+    video, generation, kandinsky, text-to-video, artistic
+
+    Use cases:
+    - Create artistic video content
+    - Generate creative animations
+    - Produce stylized videos
+    - Create video art
+    - Generate experimental content
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated video"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=50, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=4.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.Kandinsky5TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.image_to_video
 
 
@@ -110,6 +246,366 @@ class KlingVideoV2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_video.KlingVideoV2
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+import nodetool.nodes.fal.image_to_video
+
+
+class KlingVideoV21TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Kling Video V2.1 Master Text-to-Video with enhanced quality and motion.
+    video, generation, kling, v2.1, text-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic clips
+    - Create promotional videos
+    - Generate concept previews
+    """
+
+    KlingDuration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.KlingDuration
+    )
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(
+        default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.KlingVideoV21TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class LTX2TextToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+    LTX 2 Text-to-Video generates videos from text with the LTX model.
+    video, generation, ltx, text-to-video
+
+    Use cases:
+    - Create videos from descriptions
+    - Generate animated content
+    - Produce motion graphics
+    - Create video clips
+    - Generate promotional content
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated video"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=30, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=3.0, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.LTX2TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+import nodetool.nodes.fal.image_to_video
+
+
+class LumaRay2FlashTextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Luma Ray 2 Flash Text-to-Video is a fast version for quick video generation.
+    video, generation, luma, ray2, flash, text-to-video, fast
+
+    Use cases:
+    - Quick video prototyping
+    - Rapid content creation
+    - Fast video iterations
+    - Real-time video generation
+    - Quick concept tests
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.LumaRay2FlashTextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+import nodetool.nodes.fal.image_to_video
+
+
+class LumaRay2TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Luma Ray 2 Text-to-Video generates high-quality videos from text prompts.
+    video, generation, luma, ray2, text-to-video, txt2vid
+
+    Use cases:
+    - Create videos from descriptions
+    - Generate cinematic content
+    - Produce creative videos
+    - Create marketing clips
+    - Generate concept videos
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    loop: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Whether the video should loop"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.LumaRay2TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class MiniMaxHailuo23TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    MiniMax Hailuo 2.3 Standard Text-to-Video with improved quality.
+    video, generation, minimax, hailuo, 2.3, text-to-video
+
+    Use cases:
+    - Create videos from text
+    - Generate smooth animations
+    - Produce video content
+    - Create motion graphics
+    - Generate promotional clips
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to use the prompt optimizer"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.MiniMaxHailuo23TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class MochiV1(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+    Mochi V1 generates creative videos from text prompts with unique style.
+    video, generation, mochi, text-to-video, creative
+
+    Use cases:
+    - Create creative video content
+    - Generate artistic animations
+    - Produce stylized videos
+    - Create experimental clips
+    - Generate unique video effects
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated video"
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=50, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=4.5, description="How closely to follow the prompt"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.MochiV1
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class PikaV21TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Pika V2.1 Text-to-Video generates videos from text prompts.
+    video, generation, pika, v2.1, text-to-video
+
+    Use cases:
+    - Create video content from text
+    - Generate animated clips
+    - Produce motion graphics
+    - Create video effects
+    - Generate promotional content
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.PikaV21TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class PikaV22TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Pika V2.2 Text-to-Video generates creative videos from text prompts.
+    video, generation, pika, v2.2, text-to-video, creative
+
+    Use cases:
+    - Create creative video content
+    - Generate artistic animations
+    - Produce stylized videos
+    - Create unique video clips
+    - Generate experimental content
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated video"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.PikaV22TextToVideo
 
     @classmethod
     def get_node_type(cls):
@@ -325,6 +821,55 @@ class PixverseTransition(
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_video.PixverseTransition
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+import nodetool.nodes.fal.image_to_video
+
+
+class Sora2TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    OpenAI Sora 2 Text-to-Video generates high-quality videos from text.
+    video, generation, openai, sora, sora2, text-to-video
+
+    Use cases:
+    - Create cinematic videos from text
+    - Generate realistic motion
+    - Produce professional video content
+    - Create video narratives
+    - Generate concept videos
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt describing the desired video"
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    duration: int | OutputHandle[int] = connect_field(
+        default=5, description="Duration of the video in seconds"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.Sora2TextToVideo
 
     @classmethod
     def get_node_type(cls):

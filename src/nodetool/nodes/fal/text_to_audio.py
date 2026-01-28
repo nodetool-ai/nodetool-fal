@@ -281,3 +281,512 @@ class NovaSR(FALNode):
     @classmethod
     def get_basic_fields(cls) -> list[str]:
         return ["audio", "audio_format", "bitrate"]
+
+
+class ElevenLabsTTSV3(FALNode):
+    """
+    ElevenLabs Eleven V3 Text-to-Speech with high-quality voice synthesis.
+    audio, tts, text-to-speech, elevenlabs, voice, synthesis
+
+    Use cases:
+    - Generate natural speech from text
+    - Create voiceovers
+    - Produce audio content
+    - Create audiobooks
+    - Generate voice notifications
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+    voice_id: str = Field(default="", description="The voice ID to use for synthesis")
+    model_id: str = Field(
+        default="eleven_multilingual_v2",
+        description="The model ID (e.g., eleven_multilingual_v2)",
+    )
+    stability: float = Field(default=0.5, ge=0.0, le=1.0, description="Voice stability")
+    similarity_boost: float = Field(
+        default=0.75, ge=0.0, le=1.0, description="Voice similarity boost"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+            "model_id": self.model_id,
+            "voice_settings": {
+                "stability": self.stability,
+                "similarity_boost": self.similarity_boost,
+            },
+        }
+        if self.voice_id:
+            arguments["voice_id"] = self.voice_id
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/elevenlabs/tts/eleven-v3",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "voice_id"]
+
+
+class ElevenLabsTTSTurbo(FALNode):
+    """
+    ElevenLabs Turbo V2.5 Text-to-Speech for fast voice synthesis.
+    audio, tts, text-to-speech, elevenlabs, fast, turbo
+
+    Use cases:
+    - Quick voice generation
+    - Real-time speech synthesis
+    - Rapid prototyping
+    - Fast audio content
+    - Interactive applications
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+    voice_id: str = Field(default="", description="The voice ID to use for synthesis")
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+        }
+        if self.voice_id:
+            arguments["voice_id"] = self.voice_id
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/elevenlabs/tts/turbo-v2.5",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "voice_id"]
+
+
+class ElevenLabsMultilingual(FALNode):
+    """
+    ElevenLabs Multilingual V2 Text-to-Speech with support for 29 languages.
+    audio, tts, text-to-speech, elevenlabs, multilingual
+
+    Use cases:
+    - Generate speech in multiple languages
+    - Create localized content
+    - Produce multilingual voiceovers
+    - Create international audio
+    - Generate language learning content
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+    voice_id: str = Field(default="", description="The voice ID to use for synthesis")
+    language_code: str = Field(
+        default="en", description="Language code (e.g., en, es, fr)"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+        }
+        if self.voice_id:
+            arguments["voice_id"] = self.voice_id
+        if self.language_code:
+            arguments["language_code"] = self.language_code
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/elevenlabs/tts/multilingual-v2",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "voice_id", "language_code"]
+
+
+class KokoroTTS(FALNode):
+    """
+    Kokoro American English Text-to-Speech with natural voice synthesis.
+    audio, tts, text-to-speech, kokoro, english
+
+    Use cases:
+    - Generate natural English speech
+    - Create voiceovers
+    - Produce audio content
+    - Create educational material
+    - Generate voice notifications
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+    voice: str = Field(default="af_sky", description="The voice to use")
+    speed: float = Field(
+        default=1.0, ge=0.5, le=2.0, description="Speech speed multiplier"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+            "voice": self.voice,
+            "speed": self.speed,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/american-english",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "voice"]
+
+
+class DiaTTS(FALNode):
+    """
+    Dia TTS generates natural speech with emotion and expression control.
+    audio, tts, text-to-speech, dia, expressive
+
+    Use cases:
+    - Generate expressive speech
+    - Create emotional voiceovers
+    - Produce dynamic audio content
+    - Create character voices
+    - Generate storytelling audio
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+    voice: str = Field(default="", description="The voice preset to use")
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+        }
+        if self.voice:
+            arguments["voice"] = self.voice
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/dia-tts",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+
+class ChatterboxTTS(FALNode):
+    """
+    Chatterbox Text-to-Speech with conversational voice synthesis.
+    audio, tts, text-to-speech, chatterbox, conversational
+
+    Use cases:
+    - Generate conversational speech
+    - Create chat bot voices
+    - Produce dialogue audio
+    - Create interactive content
+    - Generate voice assistants
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/chatterbox/text-to-speech",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+
+class OrpheusTTS(FALNode):
+    """
+    Orpheus TTS generates high-quality speech with natural prosody.
+    audio, tts, text-to-speech, orpheus, natural
+
+    Use cases:
+    - Generate natural-sounding speech
+    - Create professional voiceovers
+    - Produce high-quality audio
+    - Create audiobooks
+    - Generate podcast content
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+    voice: str = Field(default="", description="The voice to use")
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+        }
+        if self.voice:
+            arguments["voice"] = self.voice
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/orpheus-tts",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+
+class MiniMaxSpeech02HD(FALNode):
+    """
+    MiniMax Speech 02 HD generates high-quality speech synthesis.
+    audio, tts, text-to-speech, minimax, hd
+
+    Use cases:
+    - Generate HD quality speech
+    - Create professional audio
+    - Produce voiceovers
+    - Create content narration
+    - Generate announcements
+    """
+
+    text: str = Field(default="", description="The text to convert to speech")
+    voice_id: str = Field(default="", description="The voice ID to use")
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+        }
+        if self.voice_id:
+            arguments["voice_id"] = self.voice_id
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax/speech-02-hd",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+
+class ElevenLabsMusic(FALNode):
+    """
+    ElevenLabs Music generates music from text descriptions.
+    audio, music, generation, elevenlabs, creative
+
+    Use cases:
+    - Generate custom music tracks
+    - Create background music
+    - Produce jingles
+    - Create audio branding
+    - Generate ambient music
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the music to generate"
+    )
+    duration: float = Field(
+        default=30.0, ge=1.0, le=120.0, description="Duration in seconds"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/elevenlabs/music",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration"]
+
+
+class ElevenLabsSoundEffects(FALNode):
+    """
+    ElevenLabs Sound Effects V2 generates sound effects from text descriptions.
+    audio, sound-effects, generation, elevenlabs
+
+    Use cases:
+    - Generate custom sound effects
+    - Create audio for videos
+    - Produce game audio
+    - Create ambient sounds
+    - Generate UI sounds
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the sound effect"
+    )
+    duration: float = Field(
+        default=5.0, ge=0.5, le=22.0, description="Duration in seconds"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/elevenlabs/sound-effects/v2",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration"]
+
+
+class MiniMaxMusic(FALNode):
+    """
+    MiniMax Music generates music tracks from text descriptions.
+    audio, music, generation, minimax
+
+    Use cases:
+    - Generate custom music
+    - Create background tracks
+    - Produce audio content
+    - Create music for videos
+    - Generate jingles
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt describing the music to generate"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax-music",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt"]
+
+
+class ElevenLabsAudioIsolation(FALNode):
+    """
+    ElevenLabs Audio Isolation separates vocals from audio tracks.
+    audio, isolation, separation, elevenlabs
+
+    Use cases:
+    - Extract vocals from music
+    - Remove background noise
+    - Isolate speech
+    - Create acapella tracks
+    - Clean audio recordings
+    """
+
+    audio: AudioRef = Field(default=AudioRef(), description="The audio file to process")
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "audio_url": audio_url,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/elevenlabs/audio-isolation",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["audio"]
+
+
+class Demucs(FALNode):
+    """
+    Demucs separates audio tracks into stems (vocals, drums, bass, other).
+    audio, separation, stems, demucs
+
+    Use cases:
+    - Separate music into stems
+    - Extract vocals or instruments
+    - Create remix material
+    - Analyze music components
+    - Isolate specific tracks
+    """
+
+    audio: AudioRef = Field(
+        default=AudioRef(), description="The audio file to separate"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "audio_url": audio_url,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/demucs",
+            arguments=arguments,
+        )
+
+        return {
+            "vocals": AudioRef(uri=res["vocals"]["url"]) if "vocals" in res else None,
+            "drums": AudioRef(uri=res["drums"]["url"]) if "drums" in res else None,
+            "bass": AudioRef(uri=res["bass"]["url"]) if "bass" in res else None,
+            "other": AudioRef(uri=res["other"]["url"]) if "other" in res else None,
+        }
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["audio"]
+
+    @classmethod
+    def return_type(cls):
+        return {
+            "vocals": AudioRef,
+            "drums": AudioRef,
+            "bass": AudioRef,
+            "other": AudioRef,
+        }
