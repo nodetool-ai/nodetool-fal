@@ -2124,3 +2124,63 @@ class QwenImageMaxEdit(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "image_urls", "enable_prompt_expansion"]
+
+
+class BriaReplaceBackground(FALNode):
+    """
+    Creates enriched product shots by placing them in various environments using textual descriptions.
+    image, background, replacement, product, enhancement, bria
+
+    Use cases:
+    - Replace product image backgrounds with custom environments
+    - Create professional product photography
+    - Generate contextual product shots
+    - Enhance e-commerce product images
+    - Create marketing visuals with custom backgrounds
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="Reference image for background replacement"
+    )
+    prompt: str = Field(
+        default="", description="Prompt for background replacement"
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt for background replacement"
+    )
+    seed: int = Field(
+        default=4925634, description="Random seed for reproducibility"
+    )
+    steps_num: int = Field(
+        default=30, description="Number of inference steps"
+    )
+    sync_mode: bool = Field(
+        default=False,
+        description="If true, returns the image directly in the response (increases latency)",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "seed": self.seed,
+            "steps_num": self.steps_num,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.sync_mode:
+            arguments["sync_mode"] = self.sync_mode
+
+        res = await self.submit_request(
+            context=context,
+            application="bria/replace-background",
+            arguments=arguments,
+        )
+        assert "image" in res
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "steps_num"]

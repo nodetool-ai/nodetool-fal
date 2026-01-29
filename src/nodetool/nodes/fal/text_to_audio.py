@@ -790,3 +790,394 @@ class Demucs(FALNode):
             "bass": AudioRef,
             "other": AudioRef,
         }
+
+
+class Qwen3Voice(Enum):
+    VIVIAN = "Vivian"
+    SERENA = "Serena"
+    UNCLE_FU = "Uncle_Fu"
+    DYLAN = "Dylan"
+    ERIC = "Eric"
+    RYAN = "Ryan"
+    AIDEN = "Aiden"
+    ONO_ANNA = "Ono_Anna"
+    SOHEE = "Sohee"
+
+
+class Qwen3Language(Enum):
+    AUTO = "Auto"
+    ENGLISH = "English"
+    CHINESE = "Chinese"
+    SPANISH = "Spanish"
+    FRENCH = "French"
+    GERMAN = "German"
+    ITALIAN = "Italian"
+    JAPANESE = "Japanese"
+    KOREAN = "Korean"
+    PORTUGUESE = "Portuguese"
+    RUSSIAN = "Russian"
+
+
+class Qwen3TTS17B(FALNode):
+    """
+    High-quality text-to-speech synthesis with multiple voice options and language support. Uses the Qwen 3 TTS 1.7B model for natural-sounding speech generation.
+    tts, text-to-speech, voice, synthesis, multilingual, qwen
+
+    Use cases:
+    - Generate natural-sounding speech from text
+    - Create voiceovers in multiple languages
+    - Produce audio content with custom voice characteristics
+    - Generate speech with specific emotional tones
+    - Create multilingual audio content
+    """
+
+    text: str = Field(
+        default="", description="The text to be converted to speech"
+    )
+    voice: Qwen3Voice = Field(
+        default=Qwen3Voice.VIVIAN,
+        description="The voice to be used for speech synthesis",
+    )
+    language: Qwen3Language = Field(
+        default=Qwen3Language.AUTO,
+        description="The language of the voice",
+    )
+    prompt: str = Field(
+        default="",
+        description="Optional prompt to guide the style of the generated speech",
+    )
+    speaker_voice_embedding_file_url: str = Field(
+        default="",
+        description="URL to a speaker embedding file from clone-voice endpoint",
+    )
+    reference_text: str = Field(
+        default="",
+        description="Optional reference text used when creating the speaker embedding",
+    )
+    top_k: int = Field(
+        default=50, description="Top-k sampling parameter"
+    )
+    top_p: float = Field(
+        default=1.0, description="Top-p sampling parameter"
+    )
+    temperature: float = Field(
+        default=0.9, description="Sampling temperature; higher => more random"
+    )
+    repetition_penalty: float = Field(
+        default=1.05, description="Penalty to reduce repeated tokens/codes"
+    )
+    max_new_tokens: int = Field(
+        default=200, description="Maximum number of new codec tokens to generate"
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "Qwen 3 TTS 1.7B"
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+            "voice": self.voice.value,
+            "language": self.language.value,
+            "top_k": self.top_k,
+            "top_p": self.top_p,
+            "temperature": self.temperature,
+            "repetition_penalty": self.repetition_penalty,
+            "max_new_tokens": self.max_new_tokens,
+        }
+
+        if self.prompt:
+            arguments["prompt"] = self.prompt
+        if self.speaker_voice_embedding_file_url:
+            arguments["speaker_voice_embedding_file_url"] = self.speaker_voice_embedding_file_url
+        if self.reference_text:
+            arguments["reference_text"] = self.reference_text
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/qwen-3-tts/text-to-speech/1.7b",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "voice", "language"]
+
+
+class Qwen3TTS06B(FALNode):
+    """
+    Efficient text-to-speech synthesis with the lighter Qwen 3 TTS 0.6B model. Provides fast speech generation with multiple voice options.
+    tts, text-to-speech, voice, synthesis, fast, qwen
+
+    Use cases:
+    - Generate quick speech output from text
+    - Create fast voiceovers for applications
+    - Produce audio content efficiently
+    - Generate speech for real-time applications
+    - Create lightweight audio content
+    """
+
+    text: str = Field(
+        default="", description="The text to be converted to speech"
+    )
+    voice: Qwen3Voice = Field(
+        default=Qwen3Voice.VIVIAN,
+        description="The voice to be used for speech synthesis",
+    )
+    language: Qwen3Language = Field(
+        default=Qwen3Language.AUTO,
+        description="The language of the voice",
+    )
+    prompt: str = Field(
+        default="",
+        description="Optional prompt to guide the style of the generated speech",
+    )
+    speaker_voice_embedding_file_url: str = Field(
+        default="",
+        description="URL to a speaker embedding file from clone-voice endpoint",
+    )
+    reference_text: str = Field(
+        default="",
+        description="Optional reference text used when creating the speaker embedding",
+    )
+    top_k: int = Field(
+        default=50, description="Top-k sampling parameter"
+    )
+    top_p: float = Field(
+        default=1.0, description="Top-p sampling parameter"
+    )
+    temperature: float = Field(
+        default=0.9, description="Sampling temperature; higher => more random"
+    )
+    repetition_penalty: float = Field(
+        default=1.05, description="Penalty to reduce repeated tokens/codes"
+    )
+    max_new_tokens: int = Field(
+        default=200, description="Maximum number of new codec tokens to generate"
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "Qwen 3 TTS 0.6B"
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+            "voice": self.voice.value,
+            "language": self.language.value,
+            "top_k": self.top_k,
+            "top_p": self.top_p,
+            "temperature": self.temperature,
+            "repetition_penalty": self.repetition_penalty,
+            "max_new_tokens": self.max_new_tokens,
+        }
+
+        if self.prompt:
+            arguments["prompt"] = self.prompt
+        if self.speaker_voice_embedding_file_url:
+            arguments["speaker_voice_embedding_file_url"] = self.speaker_voice_embedding_file_url
+        if self.reference_text:
+            arguments["reference_text"] = self.reference_text
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/qwen-3-tts/text-to-speech/0.6b",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "voice", "language"]
+
+
+class Qwen3VoiceDesign17B(FALNode):
+    """
+    Design custom voice styles and emotions using text prompts. Create expressive speech with specific tones and characteristics using the 1.7B model.
+    tts, text-to-speech, voice-design, emotion, synthesis, qwen
+
+    Use cases:
+    - Create speech with specific emotional characteristics
+    - Design custom voice styles for creative content
+    - Generate expressive voiceovers with nuanced tones
+    - Produce character voices with distinct personalities
+    - Create contextually appropriate speech delivery
+    """
+
+    text: str = Field(
+        default="", description="The text to be converted to speech"
+    )
+    prompt: str = Field(
+        default="",
+        description="Prompt to guide the style and emotion of the generated speech",
+    )
+    language: Qwen3Language = Field(
+        default=Qwen3Language.AUTO,
+        description="The language of the voice to be designed",
+    )
+    top_k: int = Field(
+        default=50, description="Top-k sampling parameter"
+    )
+    top_p: float = Field(
+        default=1.0, description="Top-p sampling parameter"
+    )
+    temperature: float = Field(
+        default=0.9, description="Sampling temperature; higher => more random"
+    )
+    repetition_penalty: float = Field(
+        default=1.05, description="Penalty to reduce repeated tokens/codes"
+    )
+    max_new_tokens: int = Field(
+        default=200, description="Maximum number of new codec tokens to generate"
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "Qwen 3 Voice Design 1.7B"
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "text": self.text,
+            "prompt": self.prompt,
+            "language": self.language.value,
+            "top_k": self.top_k,
+            "top_p": self.top_p,
+            "temperature": self.temperature,
+            "repetition_penalty": self.repetition_penalty,
+            "max_new_tokens": self.max_new_tokens,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/qwen-3-tts/voice-design/1.7b",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text", "prompt", "language"]
+
+
+class Qwen3CloneVoice17B(FALNode):
+    """
+    Clone a voice from an audio sample for text-to-speech synthesis. Creates a speaker embedding that can be used with other Qwen 3 TTS models.
+    tts, voice-cloning, speaker-embedding, voice-synthesis, qwen
+
+    Use cases:
+    - Clone custom voices from audio samples
+    - Create personalized text-to-speech voices
+    - Preserve voice characteristics for content creation
+    - Generate speaker embeddings for consistent voices
+    - Create voice profiles for character consistency
+    """
+
+    audio: AudioRef = Field(
+        default=AudioRef(),
+        description="Reference audio file used for voice cloning",
+    )
+    reference_text: str = Field(
+        default="",
+        description="Optional reference text that corresponds to the audio sample",
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "Qwen 3 Clone Voice 1.7B"
+
+    async def process(self, context: ProcessingContext) -> dict:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "audio_url": audio_url,
+        }
+
+        if self.reference_text:
+            arguments["reference_text"] = self.reference_text
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/qwen-3-tts/clone-voice/1.7b",
+            arguments=arguments,
+        )
+        assert "speaker_embedding" in res
+        
+        return {
+            "speaker_embedding_url": res["speaker_embedding"]["url"],
+        }
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["audio", "reference_text"]
+
+    @classmethod
+    def return_type(cls):
+        return {
+            "speaker_embedding_url": str,
+        }
+
+
+class Qwen3CloneVoice06B(FALNode):
+    """
+    Clone a voice from an audio sample using the efficient 0.6B model. Creates a speaker embedding for fast voice cloning.
+    tts, voice-cloning, speaker-embedding, fast, qwen
+
+    Use cases:
+    - Quick voice cloning from audio samples
+    - Create lightweight speaker embeddings
+    - Generate fast voice profiles
+    - Clone voices for real-time applications
+    - Create efficient voice profiles
+    """
+
+    audio: AudioRef = Field(
+        default=AudioRef(),
+        description="Reference audio file used for voice cloning",
+    )
+    reference_text: str = Field(
+        default="",
+        description="Optional reference text that corresponds to the audio sample",
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "Qwen 3 Clone Voice 0.6B"
+
+    async def process(self, context: ProcessingContext) -> dict:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "audio_url": audio_url,
+        }
+
+        if self.reference_text:
+            arguments["reference_text"] = self.reference_text
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/qwen-3-tts/clone-voice/0.6b",
+            arguments=arguments,
+        )
+        assert "speaker_embedding" in res
+        
+        return {
+            "speaker_embedding_url": res["speaker_embedding"]["url"],
+        }
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["audio", "reference_text"]
+
+    @classmethod
+    def return_type(cls):
+        return {
+            "speaker_embedding_url": str,
+        }

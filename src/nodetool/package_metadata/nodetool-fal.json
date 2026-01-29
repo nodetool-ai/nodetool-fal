@@ -546,6 +546,87 @@
       ]
     },
     {
+      "title": "Bria Replace Background",
+      "description": "Creates enriched product shots by placing them in various environments using textual descriptions.\n    image, background, replacement, product, enhancement, bria\n\n    Use cases:\n    - Replace product image backgrounds with custom environments\n    - Create professional product photography\n    - Generate contextual product shots\n    - Enhance e-commerce product images\n    - Create marketing visuals with custom backgrounds",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaReplaceBackground",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "Reference image for background replacement"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt for background replacement"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "Negative prompt for background replacement"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": 4925634,
+          "title": "Seed",
+          "description": "Random seed for reproducibility"
+        },
+        {
+          "name": "steps_num",
+          "type": {
+            "type": "int"
+          },
+          "default": 30,
+          "title": "Steps Num",
+          "description": "Number of inference steps"
+        },
+        {
+          "name": "sync_mode",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Sync Mode",
+          "description": "If true, returns the image directly in the response (increases latency)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "steps_num"
+      ]
+    },
+    {
       "title": "CCSR",
       "description": "CCSR (Content-Consistent Super-Resolution) for high-quality image upscaling.\n    image, upscaling, super-resolution, enhancement\n\n    Use cases:\n    - Upscale images with content consistency\n    - Enhance low-resolution photos\n    - Improve image details\n    - Prepare images for printing\n    - Restore compressed images",
       "namespace": "fal.image_to_image",
@@ -4404,6 +4485,493 @@
       "basic_fields": [
         "text",
         "voice"
+      ]
+    },
+    {
+      "title": "Qwen 3 Clone Voice 0.6B",
+      "description": "Clone a voice from an audio sample using the efficient 0.6B model. Creates a speaker embedding for fast voice cloning.\n    tts, voice-cloning, speaker-embedding, fast, qwen\n\n    Use cases:\n    - Quick voice cloning from audio samples\n    - Create lightweight speaker embeddings\n    - Generate fast voice profiles\n    - Clone voices for real-time applications\n    - Create efficient voice profiles",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3CloneVoice06B",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "Reference audio file used for voice cloning"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text that corresponds to the audio sample"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "speaker_embedding_url"
+        }
+      ],
+      "basic_fields": [
+        "audio",
+        "reference_text"
+      ]
+    },
+    {
+      "title": "Qwen 3 Clone Voice 1.7B",
+      "description": "Clone a voice from an audio sample for text-to-speech synthesis. Creates a speaker embedding that can be used with other Qwen 3 TTS models.\n    tts, voice-cloning, speaker-embedding, voice-synthesis, qwen\n\n    Use cases:\n    - Clone custom voices from audio samples\n    - Create personalized text-to-speech voices\n    - Preserve voice characteristics for content creation\n    - Generate speaker embeddings for consistent voices\n    - Create voice profiles for character consistency",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3CloneVoice17B",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "Reference audio file used for voice cloning"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text that corresponds to the audio sample"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "speaker_embedding_url"
+        }
+      ],
+      "basic_fields": [
+        "audio",
+        "reference_text"
+      ]
+    },
+    {
+      "title": "Qwen 3 TTS 0.6B",
+      "description": "Efficient text-to-speech synthesis with the lighter Qwen 3 TTS 0.6B model. Provides fast speech generation with multiple voice options.\n    tts, text-to-speech, voice, synthesis, fast, qwen\n\n    Use cases:\n    - Generate quick speech output from text\n    - Create fast voiceovers for applications\n    - Produce audio content efficiently\n    - Generate speech for real-time applications\n    - Create lightweight audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3TTS06B",
+      "properties": [
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Vivian",
+              "Serena",
+              "Uncle_Fu",
+              "Dylan",
+              "Eric",
+              "Ryan",
+              "Aiden",
+              "Ono_Anna",
+              "Sohee"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Voice"
+          },
+          "default": "Vivian",
+          "title": "Voice",
+          "description": "The voice to be used for speech synthesis"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Auto",
+              "English",
+              "Chinese",
+              "Spanish",
+              "French",
+              "German",
+              "Italian",
+              "Japanese",
+              "Korean",
+              "Portuguese",
+              "Russian"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Language"
+          },
+          "default": "Auto",
+          "title": "Language",
+          "description": "The language of the voice"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt to guide the style of the generated speech"
+        },
+        {
+          "name": "speaker_voice_embedding_file_url",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Speaker Voice Embedding File Url",
+          "description": "URL to a speaker embedding file from clone-voice endpoint"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text used when creating the speaker embedding"
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Top K",
+          "description": "Top-k sampling parameter"
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Top P",
+          "description": "Top-p sampling parameter"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Temperature",
+          "description": "Sampling temperature; higher => more random"
+        },
+        {
+          "name": "repetition_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.05,
+          "title": "Repetition Penalty",
+          "description": "Penalty to reduce repeated tokens/codes"
+        },
+        {
+          "name": "max_new_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 200,
+          "title": "Max New Tokens",
+          "description": "Maximum number of new codec tokens to generate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "text",
+        "voice",
+        "language"
+      ]
+    },
+    {
+      "title": "Qwen 3 TTS 1.7B",
+      "description": "High-quality text-to-speech synthesis with multiple voice options and language support. Uses the Qwen 3 TTS 1.7B model for natural-sounding speech generation.\n    tts, text-to-speech, voice, synthesis, multilingual, qwen\n\n    Use cases:\n    - Generate natural-sounding speech from text\n    - Create voiceovers in multiple languages\n    - Produce audio content with custom voice characteristics\n    - Generate speech with specific emotional tones\n    - Create multilingual audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3TTS17B",
+      "properties": [
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Vivian",
+              "Serena",
+              "Uncle_Fu",
+              "Dylan",
+              "Eric",
+              "Ryan",
+              "Aiden",
+              "Ono_Anna",
+              "Sohee"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Voice"
+          },
+          "default": "Vivian",
+          "title": "Voice",
+          "description": "The voice to be used for speech synthesis"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Auto",
+              "English",
+              "Chinese",
+              "Spanish",
+              "French",
+              "German",
+              "Italian",
+              "Japanese",
+              "Korean",
+              "Portuguese",
+              "Russian"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Language"
+          },
+          "default": "Auto",
+          "title": "Language",
+          "description": "The language of the voice"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt to guide the style of the generated speech"
+        },
+        {
+          "name": "speaker_voice_embedding_file_url",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Speaker Voice Embedding File Url",
+          "description": "URL to a speaker embedding file from clone-voice endpoint"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text used when creating the speaker embedding"
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Top K",
+          "description": "Top-k sampling parameter"
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Top P",
+          "description": "Top-p sampling parameter"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Temperature",
+          "description": "Sampling temperature; higher => more random"
+        },
+        {
+          "name": "repetition_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.05,
+          "title": "Repetition Penalty",
+          "description": "Penalty to reduce repeated tokens/codes"
+        },
+        {
+          "name": "max_new_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 200,
+          "title": "Max New Tokens",
+          "description": "Maximum number of new codec tokens to generate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "text",
+        "voice",
+        "language"
+      ]
+    },
+    {
+      "title": "Qwen 3 Voice Design 1.7B",
+      "description": "Design custom voice styles and emotions using text prompts. Create expressive speech with specific tones and characteristics using the 1.7B model.\n    tts, text-to-speech, voice-design, emotion, synthesis, qwen\n\n    Use cases:\n    - Create speech with specific emotional characteristics\n    - Design custom voice styles for creative content\n    - Generate expressive voiceovers with nuanced tones\n    - Produce character voices with distinct personalities\n    - Create contextually appropriate speech delivery",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3VoiceDesign17B",
+      "properties": [
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt to guide the style and emotion of the generated speech"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Auto",
+              "English",
+              "Chinese",
+              "Spanish",
+              "French",
+              "German",
+              "Italian",
+              "Japanese",
+              "Korean",
+              "Portuguese",
+              "Russian"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Language"
+          },
+          "default": "Auto",
+          "title": "Language",
+          "description": "The language of the voice to be designed"
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Top K",
+          "description": "Top-k sampling parameter"
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Top P",
+          "description": "Top-p sampling parameter"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Temperature",
+          "description": "Sampling temperature; higher => more random"
+        },
+        {
+          "name": "repetition_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.05,
+          "title": "Repetition Penalty",
+          "description": "Penalty to reduce repeated tokens/codes"
+        },
+        {
+          "name": "max_new_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 200,
+          "title": "Max New Tokens",
+          "description": "Maximum number of new codec tokens to generate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "text",
+        "prompt",
+        "language"
       ]
     },
     {
