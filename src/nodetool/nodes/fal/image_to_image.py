@@ -1283,7 +1283,9 @@ class CreativeUpscaler(FALNode):
     - Restore old or compressed images
     """
 
-    image: ImageRef = Field(default=ImageRef(), description="The input image to upscale")
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image to upscale"
+    )
     prompt: str = Field(
         default="", description="Optional prompt to guide the upscaling"
     )
@@ -1459,7 +1461,9 @@ class ESRGAN(FALNode):
     - Prepare images for large displays
     """
 
-    image: ImageRef = Field(default=ImageRef(), description="The input image to upscale")
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image to upscale"
+    )
     scale: int = Field(default=4, ge=2, le=8, description="Upscaling factor")
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -1778,9 +1782,7 @@ class Cartoonify(FALNode):
     - Create artistic transformations
     """
 
-    image: ImageRef = Field(
-        default=ImageRef(), description="The image to cartoonify"
-    )
+    image: ImageRef = Field(default=ImageRef(), description="The image to cartoonify")
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_base64 = await context.image_to_base64(self.image)
@@ -1816,7 +1818,9 @@ class KolorsImageToImage(FALNode):
     """
 
     image: ImageRef = Field(default=ImageRef(), description="The input image")
-    prompt: str = Field(default="", description="The prompt describing the transformation")
+    prompt: str = Field(
+        default="", description="The prompt describing the transformation"
+    )
     negative_prompt: str = Field(
         default="", description="What to avoid in the generated image"
     )
@@ -1953,7 +1957,9 @@ class CCSR(FALNode):
     - Restore compressed images
     """
 
-    image: ImageRef = Field(default=ImageRef(), description="The input image to upscale")
+    image: ImageRef = Field(
+        default=ImageRef(), description="The input image to upscale"
+    )
     scale: int = Field(default=4, ge=2, le=4, description="Upscaling factor")
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -1990,9 +1996,7 @@ class HunyuanImageV3InstructEdit(FALNode):
     - Transform images with advanced prompt interpretation
     """
 
-    prompt: str = Field(
-        default="", description="The text prompt for editing the image"
-    )
+    prompt: str = Field(default="", description="The text prompt for editing the image")
     image_urls: list[ImageRef] = Field(
         default_factory=list,
         description="Reference images to use (maximum 2 images)",
