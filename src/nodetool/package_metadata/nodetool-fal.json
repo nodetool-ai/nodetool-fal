@@ -382,6 +382,40 @@
       ]
     },
     {
+      "title": "Bria Fibo Restore",
+      "description": "Restore and enhance damaged or low-quality images using AI-powered restoration. Improves clarity, removes artifacts, and enhances overall image quality.\n    image, restoration, enhancement, quality, repair, bria\n\n    Use cases:\n    - Restore old or damaged photographs\n    - Enhance low-quality images\n    - Remove compression artifacts\n    - Improve image clarity\n    - Repair degraded images",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaFiboRestore",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "The source image to restore"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image"
+      ]
+    },
+    {
       "title": "Bria Gen Fill",
       "description": "Bria GenFill enables high-quality object addition or visual transformation. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, generation, filling, transformation\n\n    Use cases:\n    - Add new objects to existing images\n    - Transform specific image areas\n    - Generate contextual content\n    - Create seamless visual additions\n    - Produce professional image modifications",
       "namespace": "fal.image_to_image",
@@ -6796,6 +6830,67 @@
         "prompt",
         "model",
         "system_prompt"
+      ]
+    },
+    {
+      "title": "Face Swap Video",
+      "description": "Swap faces in videos using a source face image. Replaces faces in the target video with the source face while maintaining natural motion and expressions.\n    face-swap, video-editing, face-replacement, deep-fake, video-manipulation\n\n    Use cases:\n    - Create face-swapped video content\n    - Generate creative video edits\n    - Produce entertainment content\n    - Test different faces in video footage\n    - Create video memes and parodies",
+      "namespace": "fal.video_processing",
+      "node_type": "fal.video_processing.FaceSwapVideo",
+      "properties": [
+        {
+          "name": "source_face",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Source Face",
+          "description": "Source face image to swap into video"
+        },
+        {
+          "name": "target_video",
+          "type": {
+            "type": "video"
+          },
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null,
+            "duration": null,
+            "format": null
+          },
+          "title": "Target Video",
+          "description": "Target video to swap face in (max 25 minutes)"
+        },
+        {
+          "name": "enable_occlusion_prevention",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Occlusion Prevention",
+          "description": "Enable occlusion prevention for faces covered by hands/objects (costs 2x more)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "source_face",
+        "target_video"
       ]
     },
     {

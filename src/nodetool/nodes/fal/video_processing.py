@@ -237,3 +237,55 @@ class TopazVideoUpscale(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["video", "scale"]
+
+
+class FaceSwapVideo(FALNode):
+    """
+    Swap faces in videos using a source face image. Replaces faces in the target video with the source face while maintaining natural motion and expressions.
+    face-swap, video-editing, face-replacement, deep-fake, video-manipulation
+
+    Use cases:
+    - Create face-swapped video content
+    - Generate creative video edits
+    - Produce entertainment content
+    - Test different faces in video footage
+    - Create video memes and parodies
+    """
+
+    source_face: ImageRef = Field(
+        default=ImageRef(), description="Source face image to swap into video"
+    )
+    target_video: VideoRef = Field(
+        default=VideoRef(), description="Target video to swap face in (max 25 minutes)"
+    )
+    enable_occlusion_prevention: bool = Field(
+        default=False,
+        description="Enable occlusion prevention for faces covered by hands/objects (costs 2x more)",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        
+        source_base64 = await context.image_to_base64(self.source_face)
+        video_bytes = await context.asset_to_bytes(self.target_video)
+        video_url = await client.upload(video_bytes, "video/mp4")
+
+        arguments = {
+            "source_face_url": f"data:image/png;base64,{source_base64}",
+            "target_video_url": video_url,
+        }
+
+        if self.enable_occlusion_prevention:
+            arguments["enable_occlusion_prevention"] = self.enable_occlusion_prevention
+
+        res = await self.submit_request(
+            context=context,
+            application="half-moon-ai/ai-face-swap/faceswapvideo",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["source_face", "target_video"]

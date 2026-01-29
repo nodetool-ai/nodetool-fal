@@ -211,6 +211,37 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class BriaFiboRestore(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Restore and enhance damaged or low-quality images using AI-powered restoration. Improves clarity, removes artifacts, and enhances overall image quality.
+        image, restoration, enhancement, quality, repair, bria
+
+        Use cases:
+        - Restore old or damaged photographs
+        - Enhance low-quality images
+        - Remove compression artifacts
+        - Improve image clarity
+        - Repair degraded images
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image to restore')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BriaFiboRestore
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class BriaGenFill(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Bria GenFill enables high-quality object addition or visual transformation. Trained exclusively on licensed data for safe and risk-free commercial use.

@@ -18,6 +18,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
+class FaceSwapVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+        Swap faces in videos using a source face image. Replaces faces in the target video with the source face while maintaining natural motion and expressions.
+        face-swap, video-editing, face-replacement, deep-fake, video-manipulation
+
+        Use cases:
+        - Create face-swapped video content
+        - Generate creative video edits
+        - Produce entertainment content
+        - Test different faces in video footage
+        - Create video memes and parodies
+    """
+
+    source_face: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Source face image to swap into video')
+    target_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='Target video to swap face in (max 25 minutes)')
+    enable_occlusion_prevention: bool | OutputHandle[bool] = connect_field(default=False, description='Enable occlusion prevention for faces covered by hands/objects (costs 2x more)')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.video_processing.FaceSwapVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.video_processing
+from nodetool.workflows.base_node import BaseNode
+
 class LiveAvatar(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 

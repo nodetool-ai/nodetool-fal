@@ -2233,3 +2233,40 @@ class FaceSwapImage(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["source_face", "target_image"]
+
+
+class BriaFiboRestore(FALNode):
+    """
+    Restore and enhance damaged or low-quality images using AI-powered restoration. Improves clarity, removes artifacts, and enhances overall image quality.
+    image, restoration, enhancement, quality, repair, bria
+
+    Use cases:
+    - Restore old or damaged photographs
+    - Enhance low-quality images
+    - Remove compression artifacts
+    - Improve image clarity
+    - Repair degraded images
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The source image to restore"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="bria/fibo-edit/restore",
+            arguments=arguments,
+        )
+        assert "image" in res
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
