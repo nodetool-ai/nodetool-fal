@@ -9,7 +9,10 @@ import ast
 import json
 import os
 import re
+from collections.abc import AsyncGenerator
 from typing import Any, List
+
+import numpy as np
 from nodetool.providers.base import BaseProvider
 from nodetool.providers.types import ImageBytes, TextToImageParams, ImageToImageParams
 from nodetool.config.environment import Environment

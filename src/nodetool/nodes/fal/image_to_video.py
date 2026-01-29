@@ -98,9 +98,9 @@ class PixverseV56Resolution(Enum):
 
 
 class PixverseV56Duration(Enum):
-    FIVE_SECONDS = 5
-    EIGHT_SECONDS = 8
-    TEN_SECONDS = 10
+    FIVE_SECONDS = "5"
+    EIGHT_SECONDS = "8"
+    TEN_SECONDS = "10"
 
 
 class PixverseV56Style(Enum):
@@ -115,6 +115,17 @@ class PixverseV56ThinkingType(Enum):
     ENABLED = "enabled"
     DISABLED = "disabled"
     AUTO = "auto"
+
+
+class LumaRay2Resolution(Enum):
+    RES_540P = "540p"
+    RES_720P = "720p"
+    RES_1080P = "1080p"
+
+
+class LumaRay2Duration(Enum):
+    FIVE_SECONDS = "5s"
+    NINE_SECONDS = "9s"
 
 
 class LumaDreamMachine(FALNode):
@@ -410,6 +421,11 @@ class HailuoDuration(Enum):
     TEN_SECONDS = "10"
 
 
+class MiniMaxHailuoResolution(Enum):
+    RES_512P = "512P"
+    RES_768P = "768P"
+
+
 class MiniMaxHailuo02(FALNode):
     """
     Create videos from your images with MiniMax Hailuo-02 Standard. Choose the
@@ -435,16 +451,28 @@ class MiniMaxHailuo02(FALNode):
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
+    resolution: MiniMaxHailuoResolution = Field(
+        default=MiniMaxHailuoResolution.RES_768P,
+        description="The resolution of the generated video",
+    )
+    end_image: ImageRef | None = Field(
+        default=None, description="Optional image to use as the last frame"
+    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_base64 = await context.image_to_base64(self.image)
-
-        arguments = {
+        
+        arguments: dict[str, Any] = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "duration": self.duration.value,
             "prompt_optimizer": self.prompt_optimizer,
+            "resolution": self.resolution.value,
         }
+
+        if self.end_image:
+            end_image_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
 
         res = await self.submit_request(
             context=context,
@@ -1276,6 +1304,14 @@ class LumaRay2ImageToVideo(FALNode):
         description="The aspect ratio of the generated video",
     )
     loop: bool = Field(default=False, description="Whether the video should loop")
+    resolution: LumaRay2Resolution = Field(
+        default=LumaRay2Resolution.RES_540P,
+        description="The resolution of the generated video",
+    )
+    duration: LumaRay2Duration = Field(
+        default=LumaRay2Duration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1286,6 +1322,8 @@ class LumaRay2ImageToVideo(FALNode):
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "loop": self.loop,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -1300,7 +1338,7 @@ class LumaRay2ImageToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image", "prompt", "aspect_ratio"]
+        return ["image", "prompt", "aspect_ratio", "duration"]
 
 
 class LumaRay2FlashImageToVideo(FALNode):
@@ -1326,6 +1364,14 @@ class LumaRay2FlashImageToVideo(FALNode):
         default=AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
+    resolution: LumaRay2Resolution = Field(
+        default=LumaRay2Resolution.RES_540P,
+        description="The resolution of the generated video",
+    )
+    duration: LumaRay2Duration = Field(
+        default=LumaRay2Duration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1335,6 +1381,8 @@ class LumaRay2FlashImageToVideo(FALNode):
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -1349,7 +1397,7 @@ class LumaRay2FlashImageToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image", "prompt", "aspect_ratio"]
+        return ["image", "prompt", "aspect_ratio", "duration"]
 
 
 class KlingVideoV21Pro(FALNode):
@@ -1756,6 +1804,10 @@ class MiniMaxHailuo23ImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="A description of the desired video motion"
     )
+    duration: HailuoDuration = Field(
+        default=HailuoDuration.SIX_SECONDS,
+        description="The duration of the video in seconds",
+    )
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the prompt optimizer"
     )
@@ -1767,6 +1819,7 @@ class MiniMaxHailuo23ImageToVideo(FALNode):
         arguments = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
+            "duration": self.duration.value,
             "prompt_optimizer": self.prompt_optimizer,
         }
         if self.seed != -1:
@@ -1782,7 +1835,7 @@ class MiniMaxHailuo23ImageToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image", "prompt"]
+        return ["image", "prompt", "duration"]
 
 
 class LTXVideoSize(Enum):

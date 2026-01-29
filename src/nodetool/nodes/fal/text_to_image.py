@@ -206,6 +206,19 @@ class FluxV1Pro(FALNode):
         default=None,
         description="The same seed and the same prompt given to the same version of the model will output the same image every time.",
     )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate (1-4)"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+    safety_tolerance: str = Field(
+        default="2",
+        description="Safety tolerance level (1-6), 1 being strict, 6 being permissive",
+    )
+    output_format: str = Field(
+        default="jpeg", description="Output format (jpeg or png)"
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
@@ -213,9 +226,12 @@ class FluxV1Pro(FALNode):
             "image_size": self.image_size.value,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "output_format": "png",
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "safety_tolerance": self.safety_tolerance,
+            "output_format": self.output_format,
         }
-        if self.seed != -1:
+        if self.seed is not None:
             arguments["seed"] = self.seed
 
         res = await self.submit_request(
@@ -229,7 +245,7 @@ class FluxV1Pro(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "image_size", "guidance_scale"]
+        return ["prompt", "image_size", "guidance_scale", "num_images"]
 
 
 class FluxV1ProUltra(FALNode):
@@ -257,6 +273,28 @@ class FluxV1ProUltra(FALNode):
         default=-1,
         description="The same seed and the same prompt given to the same version of the model will output the same image every time.",
     )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate (1-4)"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+    safety_tolerance: str = Field(
+        default="2",
+        description="Safety tolerance level (1-6), 1 being strict, 6 being permissive",
+    )
+    output_format: str = Field(
+        default="jpeg", description="Output format (jpeg or png)"
+    )
+    raw: bool = Field(
+        default=False, description="Generate less processed, more natural-looking images"
+    )
+    aspect_ratio: str = Field(
+        default="16:9", description="Aspect ratio of the generated image"
+    )
+    image_prompt_strength: float = Field(
+        default=0.1, ge=0.0, le=1.0, description="Strength of the image prompt"
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
@@ -264,7 +302,13 @@ class FluxV1ProUltra(FALNode):
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "image_size": self.image_size.value,
-            "output_format": "png",
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "safety_tolerance": self.safety_tolerance,
+            "output_format": self.output_format,
+            "raw": self.raw,
+            "aspect_ratio": self.aspect_ratio,
+            "image_prompt_strength": self.image_prompt_strength,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -280,7 +324,7 @@ class FluxV1ProUltra(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "image_size", "guidance_scale"]
+        return ["prompt", "image_size", "guidance_scale", "aspect_ratio"]
 
 
 class RecraftV3(FALNode):

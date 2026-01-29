@@ -34,6 +34,16 @@ class FluxSchnellRedux(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If true, the safety checker will be enabled"
     )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate (1-4)"
+    )
+    output_format: str = Field(
+        default="jpeg", description="Output format (jpeg or png)"
+    )
+    acceleration: str = Field(
+        default="none",
+        description="Acceleration speed: 'none', 'regular', or 'high'",
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_base64 = await context.image_to_base64(self.image)
@@ -43,8 +53,11 @@ class FluxSchnellRedux(FALNode):
             "image_size": self.image_size.value,
             "num_inference_steps": self.num_inference_steps,
             "enable_safety_checker": self.enable_safety_checker,
-            "output_format": "png",
+            "num_images": self.num_images,
+            "output_format": self.output_format,
         }
+        if self.acceleration != "none":
+            arguments["acceleration"] = self.acceleration
         if self.seed != -1:
             arguments["seed"] = self.seed
 
@@ -59,7 +72,7 @@ class FluxSchnellRedux(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image", "image_size", "num_inference_steps"]
+        return ["image", "image_size", "num_inference_steps", "num_images"]
 
 
 class FluxDevRedux(FALNode):
@@ -92,6 +105,16 @@ class FluxDevRedux(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If true, the safety checker will be enabled"
     )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate (1-4)"
+    )
+    output_format: str = Field(
+        default="jpeg", description="Output format (jpeg or png)"
+    )
+    acceleration: str = Field(
+        default="none",
+        description="Acceleration speed: 'none', 'regular', or 'high'",
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_base64 = await context.image_to_base64(self.image)
@@ -102,8 +125,11 @@ class FluxDevRedux(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
-            "output_format": "png",
+            "num_images": self.num_images,
+            "output_format": self.output_format,
         }
+        if self.acceleration != "none":
+            arguments["acceleration"] = self.acceleration
         if self.seed != -1:
             arguments["seed"] = self.seed
 

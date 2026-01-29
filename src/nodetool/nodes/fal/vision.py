@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import Field
 
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
@@ -32,7 +33,7 @@ class Florence2Caption(FALNode):
             application="fal-ai/florence-2-large/caption",
             arguments=arguments,
         )
-        return res.get("caption", "")
+        return res.get("results", "")
 
     @classmethod
     def get_basic_fields(cls):
@@ -66,7 +67,7 @@ class Florence2DetailedCaption(FALNode):
             application="fal-ai/florence-2-large/detailed-caption",
             arguments=arguments,
         )
-        return res.get("caption", "")
+        return res.get("results", "")
 
     @classmethod
     def get_basic_fields(cls):
@@ -100,9 +101,10 @@ class Florence2ObjectDetection(FALNode):
             application="fal-ai/florence-2-large/object-detection",
             arguments=arguments,
         )
+        results = res.get("results", {})
         return {
-            "objects": res.get("objects", []),
-            "labels": res.get("labels", []),
+            "objects": results.get("bboxes", []),
+            "labels": [b.get("label") for b in results.get("bboxes", []) if "label" in b],
         }
 
     @classmethod
@@ -143,7 +145,7 @@ class Florence2OCR(FALNode):
             application="fal-ai/florence-2-large/ocr",
             arguments=arguments,
         )
-        return res.get("text", "")
+        return res.get("results", "")
 
     @classmethod
     def get_basic_fields(cls):
@@ -207,6 +209,15 @@ class LlavaNext(FALNode):
         default="Describe this image in detail.",
         description="The question or prompt about the image",
     )
+    max_tokens: int = Field(
+        default=64, description="Maximum number of tokens to generate"
+    )
+    temperature: float = Field(
+        default=0.2, description="Temperature for sampling"
+    )
+    top_p: float = Field(
+        default=1.0, ge=0.0, le=1.0, description="Top P for sampling"
+    )
 
     async def process(self, context: ProcessingContext) -> str:
         image_base64 = await context.image_to_base64(self.image)
@@ -214,6 +225,9 @@ class LlavaNext(FALNode):
         arguments = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
         }
 
         res = await self.submit_request(
@@ -225,7 +239,7 @@ class LlavaNext(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image", "prompt"]
+        return ["image", "prompt", "max_tokens"]
 
 
 class VideoUnderstanding(FALNode):
@@ -339,7 +353,7 @@ class GotOCR(FALNode):
             application="fal-ai/got-ocr/v2",
             arguments=arguments,
         )
-        return res.get("text", "")
+        return "\n".join(res.get("outputs", []))
 
     @classmethod
     def get_basic_fields(cls):
@@ -348,29 +362,30 @@ class GotOCR(FALNode):
 
 class VideoPromptGenerator(FALNode):
     """
-    Video Prompt Generator creates detailed prompts for video generation from reference videos.
-    vision, video, prompt, generation
+    Video Prompt Generator creates detailed prompts for video generation from a concept or image.
+    vision, video, prompt, generation, tool
 
     Use cases:
-    - Generate prompts from reference videos
-    - Create video descriptions
-    - Extract video styles
-    - Analyze video content for prompts
-    - Enable video-to-video workflows
+    - Generate detailed video prompts from simple concepts
+    - Enhance video generation prompts
+    - Create prompts from reference images
     """
 
-    video: VideoRef = Field(
-        default=VideoRef(), description="The reference video to analyze"
+    input_concept: str = Field(
+        default="", description="Core concept or thematic input for the video prompt"
+    )
+    image: Optional[ImageRef] = Field(
+        default=None, description="Optional reference image to analyze"
     )
 
     async def process(self, context: ProcessingContext) -> str:
-        client = await self.get_client(context)
-        video_bytes = await context.asset_to_bytes(self.video)
-        video_url = await client.upload(video_bytes, "video/mp4")
-
         arguments = {
-            "video_url": video_url,
+            "input_concept": self.input_concept,
         }
+
+        if self.image:
+            image_base64 = await context.image_to_base64(self.image)
+            arguments["image_url"] = f"data:image/png;base64,{image_base64}"
 
         res = await self.submit_request(
             context=context,
@@ -381,4 +396,4 @@ class VideoPromptGenerator(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["video"]
+        return ["input_concept", "image"]

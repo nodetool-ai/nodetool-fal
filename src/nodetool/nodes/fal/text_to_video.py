@@ -12,17 +12,25 @@ from nodetool.nodes.fal.image_to_video import (
     PixverseV56Duration,
     PixverseV56Style,
     PixverseV56ThinkingType,
+    LumaRay2Resolution,
+    LumaRay2Duration,
 )
 
 
 class Veo3AspectRatio(Enum):
     RATIO_16_9 = "16:9"
     RATIO_9_16 = "9:16"
-    RATIO_1_1 = "1:1"
 
 
 class Veo3Duration(Enum):
+    FOUR_SECONDS = "4s"
+    SIX_SECONDS = "6s"
     EIGHT_SECONDS = "8s"
+
+
+class Veo3Resolution(Enum):
+    RES_720P = "720p"
+    RES_1080P = "1080p"
 
 
 class Veo3(FALNode):
@@ -44,11 +52,15 @@ class Veo3(FALNode):
     )
     aspect_ratio: Veo3AspectRatio = Field(
         default=Veo3AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video. If it is not set to 16:9, the video will be outpainted with Luma Ray 2 Reframe functionality.",
+        description="The aspect ratio of the generated video.",
     )
     duration: Veo3Duration = Field(
         default=Veo3Duration.EIGHT_SECONDS,
         description="The duration of the generated video in seconds",
+    )
+    resolution: Veo3Resolution = Field(
+        default=Veo3Resolution.RES_720P,
+        description="The resolution of the generated video",
     )
     generate_audio: bool = Field(
         default=True,
@@ -58,8 +70,8 @@ class Veo3(FALNode):
     negative_prompt: str = Field(
         default="", description="A negative prompt to guide the video generation"
     )
-    enhance_prompt: bool = Field(
-        default=True, description="Whether to enhance the video generation"
+    auto_fix: bool = Field(
+        default=True, description="Whether to automatically attempt to fix prompts"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -67,8 +79,9 @@ class Veo3(FALNode):
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
+            "resolution": self.resolution.value,
             "generate_audio": self.generate_audio,
-            "enhance_prompt": self.enhance_prompt,
+            "auto_fix": self.auto_fix,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -440,12 +453,17 @@ class WanProImageToVideo(FALNode):
     seed: int = Field(
         default=-1, description="Randomization seed for reproducible results"
     )
+    enable_safety_checker: bool = Field(
+        default=True,
+        description="Whether to enable the safety checker",
+    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments: dict[str, Any] = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
+            "enable_safety_checker": self.enable_safety_checker,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -482,9 +500,16 @@ class WanProTextToVideo(FALNode):
     seed: int = Field(
         default=-1, description="Randomization seed for reproducible results"
     )
+    enable_safety_checker: bool = Field(
+        default=True,
+        description="Whether to enable the safety checker",
+    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments: dict[str, Any] = {"prompt": self.prompt}
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
         if self.seed != -1:
             arguments["seed"] = self.seed
 
@@ -638,9 +663,15 @@ class KlingVideoV2(FALNode):
         default=KlingDuration.FIVE_SECONDS,
         description="The duration of the generated video",
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="Negative prompt to be used for the generation",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -649,7 +680,8 @@ class KlingVideoV2(FALNode):
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "aspect_ratio": self.aspect_ratio.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
         }
         res = await self.submit_request(
             context=context,
@@ -688,12 +720,24 @@ class KlingTextToVideoV2(FALNode):
         default=AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video frame",
     )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="Negative prompt to be used for the generation",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
         }
         res = await self.submit_request(
             context=context,
@@ -706,6 +750,9 @@ class KlingTextToVideoV2(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "duration"]
+
+
+
 
 
 class LumaRay2TextToVideo(FALNode):
@@ -729,6 +776,14 @@ class LumaRay2TextToVideo(FALNode):
         description="The aspect ratio of the generated video",
     )
     loop: bool = Field(default=False, description="Whether the video should loop")
+    resolution: LumaRay2Resolution = Field(
+        default=LumaRay2Resolution.RES_540P,
+        description="The resolution of the generated video",
+    )
+    duration: LumaRay2Duration = Field(
+        default=LumaRay2Duration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -736,6 +791,8 @@ class LumaRay2TextToVideo(FALNode):
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "loop": self.loop,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -750,7 +807,7 @@ class LumaRay2TextToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "aspect_ratio"]
+        return ["prompt", "aspect_ratio", "duration", "resolution"]
 
 
 class LumaRay2FlashTextToVideo(FALNode):
@@ -773,12 +830,22 @@ class LumaRay2FlashTextToVideo(FALNode):
         default=AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
+    resolution: LumaRay2Resolution = Field(
+        default=LumaRay2Resolution.RES_540P,
+        description="The resolution of the generated video",
+    )
+    duration: LumaRay2Duration = Field(
+        default=LumaRay2Duration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -793,7 +860,7 @@ class LumaRay2FlashTextToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "aspect_ratio"]
+        return ["prompt", "aspect_ratio", "duration", "resolution"]
 
 
 class KlingVideoV21TextToVideo(FALNode):
@@ -1061,6 +1128,11 @@ class Sora2TextToVideo(FALNode):
         return ["prompt", "duration"]
 
 
+class MiniMaxDuration(Enum):
+    SIX_SECONDS = "6"
+    TEN_SECONDS = "10"
+
+
 class MiniMaxHailuo23TextToVideo(FALNode):
     """
     MiniMax Hailuo 2.3 Standard Text-to-Video with improved quality.
@@ -1080,12 +1152,17 @@ class MiniMaxHailuo23TextToVideo(FALNode):
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the prompt optimizer"
     )
+    duration: MiniMaxDuration = Field(
+        default=MiniMaxDuration.SIX_SECONDS,
+        description="The duration of the video in seconds",
+    )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
             "prompt_optimizer": self.prompt_optimizer,
+            "duration": self.duration.value,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
@@ -1100,7 +1177,7 @@ class MiniMaxHailuo23TextToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "duration"]
 
 
 class MochiV1(FALNode):

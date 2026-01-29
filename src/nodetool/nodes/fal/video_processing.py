@@ -19,7 +19,7 @@ class VideoUpscaler(FALNode):
     """
 
     video: VideoRef = Field(default=VideoRef(), description="The video to upscale")
-    scale: int = Field(default=2, ge=2, le=4, description="Upscaling factor")
+    scale: float = Field(default=2.0, ge=1.0, le=8.0, description="Upscaling factor (1-8)")
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         client = await self.get_client(context)

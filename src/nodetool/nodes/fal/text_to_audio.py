@@ -259,7 +259,7 @@ class NovaSR(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
-        client = self.get_client(context)
+        client = await self.get_client(context)
         audio_bytes = await context.asset_to_bytes(self.audio)
         audio_url = await client.upload(audio_bytes, "audio/mp3")
 
@@ -568,13 +568,24 @@ class MiniMaxSpeech02HD(FALNode):
 
     text: str = Field(default="", description="The text to convert to speech")
     voice_id: str = Field(default="", description="The voice ID to use")
+    reference_audio_url: str = Field(
+        default="", description="URL of reference audio for voice cloning"
+    )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "text": self.text,
         }
+        
+        voice_setting = {}
         if self.voice_id:
-            arguments["voice_id"] = self.voice_id
+            voice_setting["voice_id"] = self.voice_id
+            
+        if voice_setting:
+            arguments["voice_setting"] = voice_setting
+
+        if self.reference_audio_url:
+            arguments["reference_audio_url"] = self.reference_audio_url
 
         res = await self.submit_request(
             context=context,
@@ -586,7 +597,7 @@ class MiniMaxSpeech02HD(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["text"]
+        return ["text", "voice_id", "reference_audio_url"]
 
 
 class ElevenLabsMusic(FALNode):
@@ -683,10 +694,15 @@ class MiniMaxMusic(FALNode):
     prompt: str = Field(
         default="", description="The prompt describing the music to generate"
     )
+    reference_audio: AudioRef = Field(
+        default=AudioRef(), description="Reference audio for music generation"
+    )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
+        data_uri = await context.asset_to_data_uri(self.reference_audio, mime_type="audio/mpeg")
         arguments = {
             "prompt": self.prompt,
+            "reference_audio_url": data_uri,
         }
 
         res = await self.submit_request(
@@ -699,7 +715,7 @@ class MiniMaxMusic(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "reference_audio"]
 
 
 class ElevenLabsAudioIsolation(FALNode):
