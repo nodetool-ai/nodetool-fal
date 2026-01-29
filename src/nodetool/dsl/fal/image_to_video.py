@@ -18,41 +18,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class AMTInterpolation(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class AMTInterpolation(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Interpolate between image frames to create smooth video transitions. Supports configurable FPS and recursive interpolation passes for higher quality results.
-    video, interpolation, transitions, frames, smoothing, img2vid, image-to-video
+        Interpolate between image frames to create smooth video transitions. Supports configurable FPS and recursive interpolation passes for higher quality results.
+        video, interpolation, transitions, frames, smoothing, img2vid, image-to-video
 
-    Use cases:
-    - Create smooth frame transitions
-    - Generate fluid animations
-    - Enhance video frame rates
-    - Produce slow-motion effects
-    - Create seamless video blends
+        Use cases:
+        - Create smooth frame transitions
+        - Generate fluid animations
+        - Enhance video frame rates
+        - Produce slow-motion effects
+        - Create seamless video blends
     """
 
-    frames: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
-        default=[
-            types.ImageRef(
-                type="image", uri="", asset_id=None, data=None, metadata=None
-            ),
-            types.ImageRef(
-                type="image", uri="", asset_id=None, data=None, metadata=None
-            ),
-        ],
-        description="List of frames to interpolate between (minimum 2 frames required)",
-    )
-    output_fps: int | OutputHandle[int] = connect_field(
-        default=24, description="Output frames per second"
-    )
-    recursive_interpolation_passes: int | OutputHandle[int] = connect_field(
-        default=4,
-        description="Number of recursive interpolation passes (higher = smoother)",
-    )
+    frames: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None)], description='List of frames to interpolate between (minimum 2 frames required)')
+    output_fps: int | OutputHandle[int] = connect_field(default=24, description='Output frames per second')
+    recursive_interpolation_passes: int | OutputHandle[int] = connect_field(default=4, description='Number of recursive interpolation passes (higher = smoother)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -69,57 +51,31 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class CogVideoX(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate videos from images using CogVideoX-5B. Features high-quality motion synthesis with configurable parameters for fine-tuned control over the output.
-    video, generation, motion, synthesis, control, img2vid, image-to-video
+        Generate videos from images using CogVideoX-5B. Features high-quality motion synthesis with configurable parameters for fine-tuned control over the output.
+        video, generation, motion, synthesis, control, img2vid, image-to-video
 
-    Use cases:
-    - Create controlled video animations
-    - Generate precise motion effects
-    - Produce customized video content
-    - Create fine-tuned animations
-    - Generate motion sequences
+        Use cases:
+        - Create controlled video animations
+        - Generate precise motion effects
+        - Produce customized video content
+        - Create fine-tuned animations
+        - Generate motion sequences
     """
 
     VideoSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.VideoSize
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion and style"
-    )
-    video_size: nodetool.nodes.fal.image_to_video.VideoSize = Field(
-        default=nodetool.nodes.fal.image_to_video.VideoSize.LANDSCAPE_16_9,
-        description="The size/aspect ratio of the generated video",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="Distorted, discontinuous, Ugly, blurry, low resolution, motionless, static, disfigured, disconnected limbs, Ugly faces, incomplete arms",
-        description="What to avoid in the generated video",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=50,
-        description="Number of denoising steps (higher = better quality but slower)",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=7.0,
-        description="How closely to follow the prompt (higher = more faithful but less creative)",
-    )
-    use_rife: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use RIFE for video interpolation"
-    )
-    export_fps: int | OutputHandle[int] = connect_field(
-        default=16, description="Target frames per second for the output video"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
+    video_size: nodetool.nodes.fal.image_to_video.VideoSize = Field(default=nodetool.nodes.fal.image_to_video.VideoSize.LANDSCAPE_16_9, description='The size/aspect ratio of the generated video')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='Distorted, discontinuous, Ugly, blurry, low resolution, motionless, static, disfigured, disconnected limbs, Ugly faces, incomplete arms', description='What to avoid in the generated video')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Number of denoising steps (higher = better quality but slower)')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=7.0, description='How closely to follow the prompt (higher = more faithful but less creative)')
+    use_rife: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use RIFE for video interpolation')
+    export_fps: int | OutputHandle[int] = connect_field(default=16, description='Target frames per second for the output video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -136,45 +92,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class FastSVD(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate short video clips from your images using SVD v1.1 at Lightning Speed. Features high-quality motion synthesis with configurable parameters for rapid video generation.
-    video, generation, fast, motion, synthesis, img2vid, image-to-video
+        Generate short video clips from your images using SVD v1.1 at Lightning Speed. Features high-quality motion synthesis with configurable parameters for rapid video generation.
+        video, generation, fast, motion, synthesis, img2vid, image-to-video
 
-    Use cases:
-    - Create quick video animations
-    - Generate rapid motion content
-    - Produce fast video transitions
-    - Create instant visual effects
-    - Generate quick previews
+        Use cases:
+        - Create quick video animations
+        - Generate rapid motion content
+        - Produce fast video transitions
+        - Create instant visual effects
+        - Generate quick previews
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    motion_bucket_id: int | OutputHandle[int] = connect_field(
-        default=127, description="Controls motion intensity (higher = more motion)"
-    )
-    cond_aug: float | OutputHandle[float] = connect_field(
-        default=0.02,
-        description="Amount of noise added to conditioning (higher = more motion)",
-    )
-    steps: int | OutputHandle[int] = connect_field(
-        default=4,
-        description="Number of inference steps (higher = better quality but slower)",
-    )
-    fps: int | OutputHandle[int] = connect_field(
-        default=10,
-        description="Frames per second of the output video (total length is 25 frames)",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    motion_bucket_id: int | OutputHandle[int] = connect_field(default=127, description='Controls motion intensity (higher = more motion)')
+    cond_aug: float | OutputHandle[float] = connect_field(default=0.02, description='Amount of noise added to conditioning (higher = more motion)')
+    steps: int | OutputHandle[int] = connect_field(default=4, description='Number of inference steps (higher = better quality but slower)')
+    fps: int | OutputHandle[int] = connect_field(default=10, description='Frames per second of the output video (total length is 25 frames)')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -191,46 +128,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class HaiperImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class HaiperImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Transform images into hyper-realistic videos with Haiper 2.0. Experience industry-leading resolution, fluid motion, and rapid generation for stunning AI videos.
-    video, generation, hyper-realistic, motion, animation, image-to-video, img2vid
+        Transform images into hyper-realistic videos with Haiper 2.0. Experience industry-leading resolution, fluid motion, and rapid generation for stunning AI videos.
+        video, generation, hyper-realistic, motion, animation, image-to-video, img2vid
 
-    Use cases:
-    - Create cinematic animations
-    - Generate dynamic video content
-    - Transform static images into motion
-    - Produce high-resolution videos
-    - Create visual effects
+        Use cases:
+        - Create cinematic animations
+        - Generate dynamic video content
+        - Transform static images into motion
+        - Produce high-resolution videos
+        - Create visual effects
     """
 
-    VideoDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.VideoDuration
-    )
+    VideoDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.VideoDuration
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion and style"
-    )
-    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(
-        default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS,
-        description="The duration of the generated video in seconds",
-    )
-    prompt_enhancer: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the model's prompt enhancer"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
+    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS, description='The duration of the generated video in seconds')
+    prompt_enhancer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt enhancer")
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -247,38 +165,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class HunyuanVideoImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class HunyuanVideoImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Hunyuan Video Image-to-Video generates videos from images with Tencent's model.
-    video, generation, hunyuan, tencent, image-to-video
+        Hunyuan Video Image-to-Video generates videos from images with Tencent's model.
+        video, generation, hunyuan, tencent, image-to-video
 
-    Use cases:
-    - Create videos from still images
-    - Generate motion for photos
-    - Produce animated content
-    - Transform artwork into video
-    - Create video transitions
+        Use cases:
+        - Create videos from still images
+        - Generate motion for photos
+        - Produce animated content
+        - Transform artwork into video
+        - Create video transitions
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=30, description="Number of inference steps"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -295,41 +199,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class HunyuanVideoV15ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class HunyuanVideoV15ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Hunyuan Video V1.5 Image-to-Video with improved quality and motion.
-    video, generation, hunyuan, v1.5, image-to-video
+        Hunyuan Video V1.5 Image-to-Video with improved quality and motion.
+        video, generation, hunyuan, v1.5, image-to-video
 
-    Use cases:
-    - Create high-quality video from images
-    - Generate smooth animations
-    - Produce professional video content
-    - Transform photos with motion
-    - Create video effects
+        Use cases:
+        - Create high-quality video from images
+        - Generate smooth animations
+        - Produce professional video content
+        - Transform photos with motion
+        - Create video effects
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=30, description="Number of inference steps"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=7.0, description="How closely to follow the prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=7.0, description='How closely to follow the prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -346,43 +234,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class KlingVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate video clips from your images using Kling 1.6. Supports multiple durations and aspect ratios.
-    video, generation, animation, duration, aspect-ratio, img2vid, image-to-video
+        Generate video clips from your images using Kling 1.6. Supports multiple durations and aspect ratios.
+        video, generation, animation, duration, aspect-ratio, img2vid, image-to-video
 
-    Use cases:
-    - Create custom video content
-    - Generate video animations
-    - Transform static images
-    - Produce motion graphics
-    - Create visual presentations
+        Use cases:
+        - Create custom video content
+        - Generate video animations
+        - Transform static images
+        - Produce motion graphics
+        - Create visual presentations
     """
 
-    KlingDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.KlingDuration
-    )
+    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingDuration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion and style"
-    )
-    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(
-        default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS,
-        description="The duration of the generated video",
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
+    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -399,43 +271,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class KlingVideoPro(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate video clips from your images using Kling 1.6 Pro. The professional version offers enhanced quality and performance compared to the standard version.
-    video, generation, professional, quality, performance, img2vid, image-to-video
+        Generate video clips from your images using Kling 1.6 Pro. The professional version offers enhanced quality and performance compared to the standard version.
+        video, generation, professional, quality, performance, img2vid, image-to-video
 
-    Use cases:
-    - Create professional video content
-    - Generate high-quality animations
-    - Produce commercial video assets
-    - Create advanced motion graphics
-    - Generate premium visual content
+        Use cases:
+        - Create professional video content
+        - Generate high-quality animations
+        - Produce commercial video assets
+        - Create advanced motion graphics
+        - Generate premium visual content
     """
 
-    KlingDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.KlingDuration
-    )
+    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingDuration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion and style"
-    )
-    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(
-        default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS,
-        description="The duration of the generated video",
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
+    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -452,45 +308,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class KlingVideoV21Pro(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class KlingVideoV21Pro(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Kling Video V2.1 Pro Image-to-Video with enhanced quality and motion.
-    video, generation, kling, v2.1, pro, image-to-video
+        Kling Video V2.1 Pro Image-to-Video with enhanced quality and motion.
+        video, generation, kling, v2.1, pro, image-to-video
 
-    Use cases:
-    - Create professional video content
-    - Generate high-quality animations
-    - Produce cinematic video clips
-    - Transform images with smooth motion
-    - Create promotional videos
+        Use cases:
+        - Create professional video content
+        - Generate high-quality animations
+        - Produce cinematic video clips
+        - Transform images with smooth motion
+        - Create promotional videos
     """
 
-    KlingDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.KlingDuration
-    )
+    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingDuration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(
-        default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS,
-        description="The duration of the generated video",
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -507,108 +345,166 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class LTX219BImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class LTX219BAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate video with audio from images using LTX-2 19B model. A state-of-the-art video generation model with camera motion control and multi-scale generation.
-    video, generation, ltx, ltx-2, image-to-video, motion-control, camera, audio
+        Generate videos from audio with optional text or image prompts using the LTX-2 19B model. Supports advanced camera controls and high-quality video generation.
+        video, audio-to-video, generation, ltx, camera-control, audio-driven
 
-    Use cases:
-    - Generate high-quality videos from images
-    - Create videos with synchronized audio
-    - Control camera movements with LoRA
-    - Produce professional video content
-    - Animate static images with fluid motion
+        Use cases:
+        - Generate talking head videos from audio
+        - Create music visualizations from audio tracks
+        - Produce audio-driven animations
+        - Generate synchronized video content from podcasts
+        - Create video content from voice recordings
+    """
+
+    LTXVideoSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoSize
+    LTXAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXAcceleration
+    LTXCameraLoRA: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXCameraLoRA
+    LTXVideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoOutputType
+    LTXVideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoQuality
+    LTXVideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoWriteMode
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio to generate the video from')
+    image: nodetool.metadata.types.ImageRef | OutputHandle[nodetool.metadata.types.ImageRef] | None = connect_field(default=None, description='Optional image to use as the first frame')
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='Calculate frames based on audio duration and FPS')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate')
+    video_size: nodetool.nodes.fal.image_to_video.LTXVideoSize = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoSize.LANDSCAPE_4_3, description='The size of the generated video')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Use multi-scale generation for better coherence')
+    fps: float | OutputHandle[float] = connect_field(default=25.0, description='The frames per second of the generated video')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.0, description='The guidance scale to use')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps')
+    acceleration: nodetool.nodes.fal.image_to_video.LTXAcceleration = Field(default=nodetool.nodes.fal.image_to_video.LTXAcceleration.REGULAR, description='The acceleration level to use')
+    camera_lora: nodetool.nodes.fal.image_to_video.LTXCameraLoRA = Field(default=nodetool.nodes.fal.image_to_video.LTXCameraLoRA.NONE, description='The camera LoRA for movement control')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1.0, description='The scale of the camera LoRA')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt for video generation')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker')
+    video_output_type: nodetool.nodes.fal.image_to_video.LTXVideoOutputType = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoOutputType.X264_MP4, description='The output type of the generated video')
+    video_quality: nodetool.nodes.fal.image_to_video.LTXVideoQuality = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoQuality.HIGH, description='The quality of the generated video')
+    video_write_mode: nodetool.nodes.fal.image_to_video.LTXVideoWriteMode = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoWriteMode.BALANCED, description='The write mode of the generated video')
+    image_strength: float | OutputHandle[float] = connect_field(default=1.0, description='The strength of the image for video generation')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1.0, description='Audio conditioning strength')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.LTX219BAudioToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+class LTX219BDistilledAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+        Faster audio-to-video generation using the distilled LTX-2 19B model. Provides quicker video generation from audio with optional prompts.
+        video, audio-to-video, generation, ltx, distilled, fast
+
+        Use cases:
+        - Quick audio-driven video generation
+        - Fast talking head video creation
+        - Rapid music visualization
+        - Time-efficient audio-to-video conversion
+        - Fast prototype video generation from audio
+    """
+
+    LTXVideoSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoSize
+    LTXAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXAcceleration
+    LTXCameraLoRA: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXCameraLoRA
+    LTXVideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoOutputType
+    LTXVideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoQuality
+    LTXVideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoWriteMode
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio to generate the video from')
+    image: nodetool.metadata.types.ImageRef | OutputHandle[nodetool.metadata.types.ImageRef] | None = connect_field(default=None, description='Optional image to use as the first frame')
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='Calculate frames based on audio duration and FPS')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate')
+    video_size: nodetool.nodes.fal.image_to_video.LTXVideoSize = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoSize.LANDSCAPE_4_3, description='The size of the generated video')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Use multi-scale generation for better coherence')
+    fps: float | OutputHandle[float] = connect_field(default=25.0, description='The frames per second of the generated video')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.0, description='The guidance scale to use')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps')
+    acceleration: nodetool.nodes.fal.image_to_video.LTXAcceleration = Field(default=nodetool.nodes.fal.image_to_video.LTXAcceleration.REGULAR, description='The acceleration level to use')
+    camera_lora: nodetool.nodes.fal.image_to_video.LTXCameraLoRA = Field(default=nodetool.nodes.fal.image_to_video.LTXCameraLoRA.NONE, description='The camera LoRA for movement control')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1.0, description='The scale of the camera LoRA')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt for video generation')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker')
+    video_output_type: nodetool.nodes.fal.image_to_video.LTXVideoOutputType = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoOutputType.X264_MP4, description='The output type of the generated video')
+    video_quality: nodetool.nodes.fal.image_to_video.LTXVideoQuality = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoQuality.HIGH, description='The quality of the generated video')
+    video_write_mode: nodetool.nodes.fal.image_to_video.LTXVideoWriteMode = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoWriteMode.BALANCED, description='The write mode of the generated video')
+    image_strength: float | OutputHandle[float] = connect_field(default=1.0, description='The strength of the image for video generation')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1.0, description='Audio conditioning strength')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.LTX219BDistilledAudioToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+class LTX219BImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+        Generate video with audio from images using LTX-2 19B model. A state-of-the-art video generation model with camera motion control and multi-scale generation.
+        video, generation, ltx, ltx-2, image-to-video, motion-control, camera, audio
+
+        Use cases:
+        - Generate high-quality videos from images
+        - Create videos with synchronized audio
+        - Control camera movements with LoRA
+        - Produce professional video content
+        - Animate static images with fluid motion
     """
 
     LtxVideoSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LtxVideoSize
-    LtxAcceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.LtxAcceleration
-    )
-    LtxCameraLora: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.LtxCameraLora
-    )
-    LtxVideoOutputType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.LtxVideoOutputType
-    )
-    LtxVideoQuality: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.LtxVideoQuality
-    )
-    LtxVideoWriteMode: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.LtxVideoWriteMode
-    )
+    LtxAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LtxAcceleration
+    LtxCameraLora: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LtxCameraLora
+    LtxVideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LtxVideoOutputType
+    LtxVideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LtxVideoQuality
+    LtxVideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LtxVideoWriteMode
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to generate the video from",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The prompt describing the desired video motion and style",
-    )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=121, description="Number of frames to generate"
-    )
-    video_size: nodetool.nodes.fal.image_to_video.LtxVideoSize = Field(
-        default=nodetool.nodes.fal.image_to_video.LtxVideoSize.AUTO,
-        description="Size of the generated video",
-    )
-    generate_audio: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to generate audio for the video"
-    )
-    use_multiscale: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Use multi-scale generation for better coherence"
-    )
-    fps: float | OutputHandle[float] = connect_field(
-        default=25, description="Frames per second"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3, description="Guidance scale for generation"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=40, description="Number of inference steps"
-    )
-    acceleration: nodetool.nodes.fal.image_to_video.LtxAcceleration = Field(
-        default=nodetool.nodes.fal.image_to_video.LtxAcceleration.REGULAR,
-        description="Acceleration level",
-    )
-    camera_lora: nodetool.nodes.fal.image_to_video.LtxCameraLora = Field(
-        default=nodetool.nodes.fal.image_to_video.LtxCameraLora.NONE,
-        description="Camera movement LoRA",
-    )
-    camera_lora_scale: float | OutputHandle[float] = connect_field(
-        default=1, description="Camera LoRA scale"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur",
-        description="Negative prompt to avoid",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Random seed for reproducibility"
-    )
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Enable prompt expansion"
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Enable safety checker"
-    )
-    video_output_type: nodetool.nodes.fal.image_to_video.LtxVideoOutputType = Field(
-        default=nodetool.nodes.fal.image_to_video.LtxVideoOutputType.X264_MP4,
-        description="Output video format",
-    )
-    video_quality: nodetool.nodes.fal.image_to_video.LtxVideoQuality = Field(
-        default=nodetool.nodes.fal.image_to_video.LtxVideoQuality.HIGH,
-        description="Video quality",
-    )
-    video_write_mode: nodetool.nodes.fal.image_to_video.LtxVideoWriteMode = Field(
-        default=nodetool.nodes.fal.image_to_video.LtxVideoWriteMode.BALANCED,
-        description="Video write mode",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to generate the video from')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the desired video motion and style')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='Number of frames to generate')
+    video_size: nodetool.nodes.fal.image_to_video.LtxVideoSize = Field(default=nodetool.nodes.fal.image_to_video.LtxVideoSize.AUTO, description='Size of the generated video')
+    generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate audio for the video')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Use multi-scale generation for better coherence')
+    fps: float | OutputHandle[float] = connect_field(default=25, description='Frames per second')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='Guidance scale for generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='Number of inference steps')
+    acceleration: nodetool.nodes.fal.image_to_video.LtxAcceleration = Field(default=nodetool.nodes.fal.image_to_video.LtxAcceleration.REGULAR, description='Acceleration level')
+    camera_lora: nodetool.nodes.fal.image_to_video.LtxCameraLora = Field(default=nodetool.nodes.fal.image_to_video.LtxCameraLora.NONE, description='Camera movement LoRA')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1, description='Camera LoRA scale')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur', description='Negative prompt to avoid')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Enable prompt expansion')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker')
+    video_output_type: nodetool.nodes.fal.image_to_video.LtxVideoOutputType = Field(default=nodetool.nodes.fal.image_to_video.LtxVideoOutputType.X264_MP4, description='Output video format')
+    video_quality: nodetool.nodes.fal.image_to_video.LtxVideoQuality = Field(default=nodetool.nodes.fal.image_to_video.LtxVideoQuality.HIGH, description='Video quality')
+    video_write_mode: nodetool.nodes.fal.image_to_video.LtxVideoWriteMode = Field(default=nodetool.nodes.fal.image_to_video.LtxVideoWriteMode.BALANCED, description='Video write mode')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -625,46 +521,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class LTXVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate videos from images using LTX Video. Best results with 768x512 images and detailed, chronological descriptions of actions and scenes.
-    video, generation, chronological, scenes, actions, img2vid, image-to-video
+        Generate videos from images using LTX Video. Best results with 768x512 images and detailed, chronological descriptions of actions and scenes.
+        video, generation, chronological, scenes, actions, img2vid, image-to-video
 
-    Use cases:
-    - Create scene-based animations
-    - Generate sequential video content
-    - Produce narrative videos
-    - Create storyboard animations
-    - Generate action sequences
+        Use cases:
+        - Create scene-based animations
+        - Generate sequential video content
+        - Produce narrative videos
+        - Create storyboard animations
+        - Generate action sequences
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video (768x512 recommended)",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="A detailed description of the desired video motion and style",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, fused fingers, bad anatomy, weird hand, ugly",
-        description="What to avoid in the generated video",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=30,
-        description="Number of inference steps (higher = better quality but slower)",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.0,
-        description="How closely to follow the prompt (higher = more faithful)",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video (768x512 recommended)')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A detailed description of the desired video motion and style')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, fused fingers, bad anatomy, weird hand, ugly', description='What to avoid in the generated video')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps (higher = better quality but slower)')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.0, description='How closely to follow the prompt (higher = more faithful)')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -681,49 +557,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class LumaDreamMachine(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class LumaDreamMachine(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate video clips from your images using Luma Dream Machine v1.5. Supports various aspect ratios and optional end-frame blending.
-    video, generation, animation, blending, aspect-ratio, img2vid, image-to-video
+        Generate video clips from your images using Luma Dream Machine v1.5. Supports various aspect ratios and optional end-frame blending.
+        video, generation, animation, blending, aspect-ratio, img2vid, image-to-video
 
-    Use cases:
-    - Create seamless video loops
-    - Generate video transitions
-    - Transform images into animations
-    - Create motion graphics
-    - Produce video content
+        Use cases:
+        - Create seamless video loops
+        - Generate video transitions
+        - Transform images into animations
+        - Create motion graphics
+        - Produce video content
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion and style"
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
-    loop: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Whether the video should loop (end blends with beginning)",
-    )
-    end_image: (
-        nodetool.metadata.types.ImageRef
-        | OutputHandle[nodetool.metadata.types.ImageRef]
-        | None
-    ) = connect_field(
-        default=None, description="Optional image to blend the end of the video with"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    loop: bool | OutputHandle[bool] = connect_field(default=False, description='Whether the video should loop (end blends with beginning)')
+    end_image: nodetool.metadata.types.ImageRef | OutputHandle[nodetool.metadata.types.ImageRef] | None = connect_field(default=None, description='Optional image to blend the end of the video with')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -740,41 +594,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class LumaRay2FlashImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class LumaRay2FlashImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Luma Ray 2 Flash Image-to-Video is a fast version for quick video generation.
-    video, generation, luma, ray2, flash, image-to-video, fast
+        Luma Ray 2 Flash Image-to-Video is a fast version for quick video generation.
+        video, generation, luma, ray2, flash, image-to-video, fast
 
-    Use cases:
-    - Quick video prototyping
-    - Rapid content creation
-    - Fast video iterations
-    - Real-time video generation
-    - Quick motion tests
+        Use cases:
+        - Quick video prototyping
+        - Rapid content creation
+        - Fast video iterations
+        - Real-time video generation
+        - Quick motion tests
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -791,44 +630,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class LumaRay2ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class LumaRay2ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Luma Ray 2 Image-to-Video generates high-quality videos from images with improved motion.
-    video, generation, luma, ray2, image-to-video, img2vid
+        Luma Ray 2 Image-to-Video generates high-quality videos from images with improved motion.
+        video, generation, luma, ray2, image-to-video, img2vid
 
-    Use cases:
-    - Create cinematic video from images
-    - Generate smooth motion animations
-    - Produce high-quality video content
-    - Transform photos into videos
-    - Create professional video clips
+        Use cases:
+        - Create cinematic video from images
+        - Generate smooth motion animations
+        - Produce high-quality video content
+        - Transform photos into videos
+        - Create professional video clips
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
-    loop: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Whether the video should loop"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    loop: bool | OutputHandle[bool] = connect_field(default=False, description='Whether the video should loop')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -845,42 +667,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class MiniMaxHailuo02(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Create videos from your images with MiniMax Hailuo-02 Standard. Choose the
-    clip length and optionally enhance prompts for sharper results.
-    video, generation, minimax, prompt-optimizer, img2vid, image-to-video
+        Create videos from your images with MiniMax Hailuo-02 Standard. Choose the
+        clip length and optionally enhance prompts for sharper results.
+        video, generation, minimax, prompt-optimizer, img2vid, image-to-video
 
-    Use cases:
-    - Produce social media clips
-    - Generate cinematic sequences
-    - Visualize storyboards
-    - Create promotional videos
-    - Animate still graphics
+        Use cases:
+        - Produce social media clips
+        - Generate cinematic sequences
+        - Visualize storyboards
+        - Create promotional videos
+        - Animate still graphics
     """
 
-    HailuoDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.HailuoDuration
-    )
+    HailuoDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.HailuoDuration
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt describing the video"
-    )
-    duration: nodetool.nodes.fal.image_to_video.HailuoDuration = Field(
-        default=nodetool.nodes.fal.image_to_video.HailuoDuration.SIX_SECONDS,
-        description="The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.",
-    )
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the video')
+    duration: nodetool.nodes.fal.image_to_video.HailuoDuration = Field(default=nodetool.nodes.fal.image_to_video.HailuoDuration.SIX_SECONDS, description='The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.')
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -897,38 +704,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class MiniMaxHailuo23ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class MiniMaxHailuo23ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    MiniMax Hailuo 2.3 Standard Image-to-Video with improved quality.
-    video, generation, minimax, hailuo, 2.3, image-to-video
+        MiniMax Hailuo 2.3 Standard Image-to-Video with improved quality.
+        video, generation, minimax, hailuo, 2.3, image-to-video
 
-    Use cases:
-    - Create video from images
-    - Generate smooth animations
-    - Produce video content
-    - Transform photos into clips
-    - Create motion graphics
+        Use cases:
+        - Create video from images
+        - Generate smooth animations
+        - Produce video content
+        - Transform photos into clips
+        - Create motion graphics
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the prompt optimizer"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use the prompt optimizer')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -945,33 +738,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class MiniMaxVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate video clips from your images using MiniMax Video model. Transform static art into dynamic masterpieces with enhanced smoothness and vivid motion.
-    video, generation, art, motion, smoothness, img2vid, image-to-video
+        Generate video clips from your images using MiniMax Video model. Transform static art into dynamic masterpieces with enhanced smoothness and vivid motion.
+        video, generation, art, motion, smoothness, img2vid, image-to-video
 
-    Use cases:
-    - Transform artwork into videos
-    - Create smooth animations
-    - Generate artistic motion content
-    - Produce dynamic visualizations
-    - Create video art pieces
+        Use cases:
+        - Transform artwork into videos
+        - Create smooth animations
+        - Generate artistic motion content
+        - Produce dynamic visualizations
+        - Create video art pieces
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion and style"
-    )
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -988,39 +771,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class MuseTalk(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Real-time high quality audio-driven lip-syncing model. Animate a face video with custom audio for natural-looking speech animation.
-    video, lip-sync, animation, speech, real-time, wav2vid, audio-to-video
+        Real-time high quality audio-driven lip-syncing model. Animate a face video with custom audio for natural-looking speech animation.
+        video, lip-sync, animation, speech, real-time, wav2vid, audio-to-video
 
-    Use cases:
-    - Create lip-synced videos
-    - Generate speech animations
-    - Produce dubbed content
-    - Create animated presentations
-    - Generate voice-over videos
+        Use cases:
+        - Create lip-synced videos
+        - Generate speech animations
+        - Produce dubbed content
+        - Create animated presentations
+        - Generate voice-over videos
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="URL of the source video to animate",
-    )
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the audio file to drive the lip sync",
-    )
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='URL of the source video to animate')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to drive the lip sync')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1037,35 +803,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class PikaV21ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class PikaV21ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Pika V2.1 Image-to-Video generates videos from images with the Pika model.
-    video, generation, pika, v2.1, image-to-video
+        Pika V2.1 Image-to-Video generates videos from images with the Pika model.
+        video, generation, pika, v2.1, image-to-video
 
-    Use cases:
-    - Create video content from images
-    - Generate animated clips
-    - Produce motion graphics
-    - Transform still photos
-    - Create video effects
+        Use cases:
+        - Create video content from images
+        - Generate animated clips
+        - Produce motion graphics
+        - Transform still photos
+        - Create video effects
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1082,38 +836,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class PikaV22ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class PikaV22ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Pika V2.2 Image-to-Video generates creative videos from images.
-    video, generation, pika, v2.2, image-to-video, creative
+        Pika V2.2 Image-to-Video generates creative videos from images.
+        video, generation, pika, v2.2, image-to-video, creative
 
-    Use cases:
-    - Create creative video content
-    - Generate artistic animations
-    - Produce stylized videos
-    - Transform images with effects
-    - Create unique video clips
+        Use cases:
+        - Create creative video content
+        - Generate artistic animations
+        - Produce stylized videos
+        - Transform images with effects
+        - Create unique video clips
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="What to avoid in the generated video"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1130,46 +870,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class PixVerse(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate dynamic videos from images with PixVerse v4.5. Create high-quality motion
-    with detailed prompt control and advanced diffusion parameters.
-    video, generation, pixverse, motion, diffusion, img2vid, image-to-video
+        Generate dynamic videos from images with PixVerse v4.5. Create high-quality motion
+        with detailed prompt control and advanced diffusion parameters.
+        video, generation, pixverse, motion, diffusion, img2vid, image-to-video
 
-    Use cases:
-    - Animate illustrations and photos
-    - Produce engaging social media clips
-    - Generate short cinematic shots
-    - Create motion for product showcases
-    - Experiment with creative video effects
+        Use cases:
+        - Animate illustrations and photos
+        - Produce engaging social media clips
+        - Generate short cinematic shots
+        - Create motion for product showcases
+        - Experiment with creative video effects
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion and style"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="low quality, worst quality, distorted, blurred",
-        description="What to avoid in the generated video",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=50,
-        description="Number of inference steps (higher = better quality but slower)",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=7.5,
-        description="How closely to follow the prompt (higher = more faithful)",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='low quality, worst quality, distorted, blurred', description='What to avoid in the generated video')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Number of inference steps (higher = better quality but slower)')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='How closely to follow the prompt (higher = more faithful)')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1186,10 +907,7 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class PixverseV56ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class PixverseV56ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
     Generate high-quality videos from images with Pixverse v5.6.
         video, generation, pixverse, v5.6, image-to-video, img2vid
@@ -1202,49 +920,18 @@ class PixverseV56ImageToVideo(
         - Transform static images with various visual styles
     """
 
-    PixverseV56Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.PixverseV56Resolution
-    )
-    PixverseV56Duration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.PixverseV56Duration
-    )
+    PixverseV56Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PixverseV56Resolution
+    PixverseV56Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PixverseV56Duration
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Text prompt describing the desired video motion"
-    )
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(
-        default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.RES_720P,
-        description="The resolution quality of the output video",
-    )
-    duration: nodetool.nodes.fal.image_to_video.PixverseV56Duration = Field(
-        default=nodetool.nodes.fal.image_to_video.PixverseV56Duration.FIVE_SECONDS,
-        description="The duration of the generated video in seconds",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="What to avoid in the generated video"
-    )
-    style: (
-        nodetool.nodes.fal.image_to_video.PixverseV56Style
-        | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56Style]
-        | None
-    ) = connect_field(default=None, description="Optional visual style for the video")
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Optional seed for reproducible generation"
-    )
-    generate_audio_switch: bool | OutputHandle[bool] | None = connect_field(
-        default=None, description="Whether to generate audio for the video"
-    )
-    thinking_type: (
-        nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType
-        | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType]
-        | None
-    ) = connect_field(default=None, description="Thinking mode for video generation")
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the desired video motion')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.RES_720P, description='The resolution quality of the output video')
+    duration: nodetool.nodes.fal.image_to_video.PixverseV56Duration = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56Duration.FIVE_SECONDS, description='The duration of the generated video in seconds')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated video')
+    style: nodetool.nodes.fal.image_to_video.PixverseV56Style | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56Style] | None = connect_field(default=None, description='Optional visual style for the video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Optional seed for reproducible generation')
+    generate_audio_switch: bool | OutputHandle[bool] | None = connect_field(default=None, description='Whether to generate audio for the video')
+    thinking_type: nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType] | None = connect_field(default=None, description='Thinking mode for video generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1261,53 +948,29 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class SadTalker(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate talking face animations from a single image and audio file. Features configurable face model resolution and expression controls.
-    video, animation, face, talking, expression, img2vid, image-to-video, audio-to-video, wav2vid
+        Generate talking face animations from a single image and audio file. Features configurable face model resolution and expression controls.
+        video, animation, face, talking, expression, img2vid, image-to-video, audio-to-video, wav2vid
 
-    Use cases:
-    - Create talking head videos
-    - Generate lip-sync animations
-    - Produce character animations
-    - Create video presentations
-    - Generate facial expressions
+        Use cases:
+        - Create talking head videos
+        - Generate lip-sync animations
+        - Produce character animations
+        - Create video presentations
+        - Generate facial expressions
     """
 
-    FaceModelResolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.FaceModelResolution
-    )
-    PreprocessType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.PreprocessType
-    )
+    FaceModelResolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.FaceModelResolution
+    PreprocessType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PreprocessType
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The source image to animate",
-    )
-    audio: str | OutputHandle[str] = connect_field(
-        default="", description="URL of the audio file to drive the animation"
-    )
-    face_model_resolution: nodetool.nodes.fal.image_to_video.FaceModelResolution = (
-        Field(
-            default=nodetool.nodes.fal.image_to_video.FaceModelResolution.RESOLUTION_256,
-            description="Resolution of the face model",
-        )
-    )
-    expression_scale: float | OutputHandle[float] = connect_field(
-        default=1.0, description="Scale of the expression (1.0 = normal)"
-    )
-    still_mode: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Reduce head motion (works with preprocess 'full')"
-    )
-    preprocess: nodetool.nodes.fal.image_to_video.PreprocessType = Field(
-        default=nodetool.nodes.fal.image_to_video.PreprocessType.CROP,
-        description="Type of image preprocessing to apply",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image to animate')
+    audio: str | OutputHandle[str] = connect_field(default='', description='URL of the audio file to drive the animation')
+    face_model_resolution: nodetool.nodes.fal.image_to_video.FaceModelResolution = Field(default=nodetool.nodes.fal.image_to_video.FaceModelResolution.RESOLUTION_256, description='Resolution of the face model')
+    expression_scale: float | OutputHandle[float] = connect_field(default=1.0, description='Scale of the expression (1.0 = normal)')
+    still_mode: bool | OutputHandle[bool] = connect_field(default=False, description="Reduce head motion (works with preprocess 'full')")
+    preprocess: nodetool.nodes.fal.image_to_video.PreprocessType = Field(default=nodetool.nodes.fal.image_to_video.PreprocessType.CROP, description='Type of image preprocessing to apply')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1324,35 +987,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class SeedanceV15ProImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class SeedanceV15ProImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    ByteDance Seedance V1.5 Pro Image-to-Video with high-quality motion.
-    video, generation, bytedance, seedance, pro, image-to-video
+        ByteDance Seedance V1.5 Pro Image-to-Video with high-quality motion.
+        video, generation, bytedance, seedance, pro, image-to-video
 
-    Use cases:
-    - Create professional video content
-    - Generate high-quality animations
-    - Produce cinematic clips
-    - Transform images with motion
-    - Create promotional videos
+        Use cases:
+        - Create professional video content
+        - Generate high-quality animations
+        - Produce cinematic clips
+        - Transform images with motion
+        - Create promotional videos
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1369,44 +1020,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class Sora2ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class Sora2ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    OpenAI Sora 2 Image-to-Video generates high-quality videos from images.
-    video, generation, openai, sora, sora2, image-to-video
+        OpenAI Sora 2 Image-to-Video generates high-quality videos from images.
+        video, generation, openai, sora, sora2, image-to-video
 
-    Use cases:
-    - Create cinematic videos from images
-    - Generate realistic motion
-    - Produce professional video content
-    - Transform photos into movies
-    - Create video narratives
+        Use cases:
+        - Create cinematic videos from images
+        - Generate realistic motion
+        - Produce professional video content
+        - Transform photos into movies
+        - Create video narratives
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
-    duration: int | OutputHandle[int] = connect_field(
-        default=5, description="Duration of the video in seconds"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    duration: int | OutputHandle[int] = connect_field(default=5, description='Duration of the video in seconds')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1423,40 +1057,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class StableVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate short video clips from your images using Stable Video Diffusion v1.1. Features high-quality motion synthesis with configurable parameters.
-    video, generation, diffusion, motion, synthesis, img2vid, image-to-video
+        Generate short video clips from your images using Stable Video Diffusion v1.1. Features high-quality motion synthesis with configurable parameters.
+        video, generation, diffusion, motion, synthesis, img2vid, image-to-video
 
-    Use cases:
-    - Create stable video animations
-    - Generate motion content
-    - Transform images into videos
-    - Produce smooth transitions
-    - Create visual effects
+        Use cases:
+        - Create stable video animations
+        - Generate motion content
+        - Transform images into videos
+        - Produce smooth transitions
+        - Create visual effects
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    motion_bucket_id: int | OutputHandle[int] = connect_field(
-        default=127, description="Controls motion intensity (higher = more motion)"
-    )
-    cond_aug: float | OutputHandle[float] = connect_field(
-        default=0.02,
-        description="Amount of noise added to conditioning (higher = more motion)",
-    )
-    fps: int | OutputHandle[int] = connect_field(
-        default=25, description="Frames per second of the output video"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    motion_bucket_id: int | OutputHandle[int] = connect_field(default=127, description='Controls motion intensity (higher = more motion)')
+    cond_aug: float | OutputHandle[float] = connect_field(default=0.02, description='Amount of noise added to conditioning (higher = more motion)')
+    fps: int | OutputHandle[int] = connect_field(default=25, description='Frames per second of the output video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1473,40 +1092,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class Veo2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate videos from text prompts using Veo 2. Creates short clips with
-    optional control over duration and aspect ratio.
-    video, text-to-video, generation, prompt, veo2
+        Generate videos from text prompts using Veo 2. Creates short clips with
+        optional control over duration and aspect ratio.
+        video, text-to-video, generation, prompt, veo2
 
-    Use cases:
-    - Produce cinematic video clips from descriptions
-    - Generate marketing or social media footage
-    - Create animated scenes from storyboards
-    - Experiment with visual concepts rapidly
+        Use cases:
+        - Produce cinematic video clips from descriptions
+        - Generate marketing or social media footage
+        - Create animated scenes from storyboards
+        - Experiment with visual concepts rapidly
     """
 
-    VideoDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.VideoDuration
-    )
+    VideoDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.VideoDuration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate a video from"
-    )
-    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(
-        default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS,
-        description="The duration of the generated video in seconds",
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate a video from')
+    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS, description='The duration of the generated video in seconds')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1523,48 +1129,28 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class Veo2ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class Veo2ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Animate a single image into a Veo 2 video clip. Provides control over
-    duration and aspect ratio while following an optional prompt.
-    video, image-to-video, veo2, animation
+        Animate a single image into a Veo 2 video clip. Provides control over
+        duration and aspect ratio while following an optional prompt.
+        video, image-to-video, veo2, animation
 
-    Use cases:
-    - Bring still artwork to life
-    - Create dynamic social media posts
-    - Generate quick product showcase videos
-    - Produce animated storyboards
+        Use cases:
+        - Bring still artwork to life
+        - Create dynamic social media posts
+        - Generate quick product showcase videos
+        - Produce animated storyboards
     """
 
-    VideoDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.VideoDuration
-    )
+    VideoDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.VideoDuration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Optional description of the desired motion"
-    )
-    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(
-        default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS,
-        description="The duration of the generated video in seconds",
-    )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Optional description of the desired motion')
+    duration: nodetool.nodes.fal.image_to_video.VideoDuration = Field(default=nodetool.nodes.fal.image_to_video.VideoDuration.FOUR_SECONDS, description='The duration of the generated video in seconds')
+    aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1581,35 +1167,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class ViduQ2ImageToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class ViduQ2ImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Vidu Q2 Image-to-Video Turbo generates fast videos from images.
-    video, generation, vidu, q2, turbo, image-to-video, fast
+        Vidu Q2 Image-to-Video Turbo generates fast videos from images.
+        video, generation, vidu, q2, turbo, image-to-video, fast
 
-    Use cases:
-    - Quick video generation
-    - Rapid prototyping
-    - Fast content creation
-    - Quick motion tests
-    - Real-time video production
+        Use cases:
+        - Quick video generation
+        - Rapid prototyping
+        - Fast content creation
+        - Quick motion tests
+        - Real-time video production
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to transform into a video",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="A description of the desired video motion"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1626,36 +1200,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class WanFlf2v(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate short video clips from a single image using the WAN FLF2V model. This model converts a still image into an animated clip guided by a text prompt.
-    video, generation, animation, image-to-video, wan
+        Generate short video clips from a single image using the WAN FLF2V model. This model converts a still image into an animated clip guided by a text prompt.
+        video, generation, animation, image-to-video, wan
 
-    Use cases:
-    - Animate still images into short clips
-    - Create dynamic content from artwork
-    - Produce promotional video snippets
-    - Generate visual effects for social posts
-    - Explore creative motion ideas
+        Use cases:
+        - Animate still images into short clips
+        - Create dynamic content from artwork
+        - Produce promotional video snippets
+        - Generate visual effects for social posts
+        - Explore creative motion ideas
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The source image for video generation",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Description of the desired motion and style"
-    )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=16, description="Number of frames to generate"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same video every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image for video generation')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Description of the desired motion and style')
+    num_frames: int | OutputHandle[int] = connect_field(default=16, description='Number of frames to generate')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same video every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1664,3 +1226,5 @@ class WanFlf2v(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef])
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

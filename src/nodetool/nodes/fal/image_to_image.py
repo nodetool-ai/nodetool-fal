@@ -2124,3 +2124,149 @@ class QwenImageMaxEdit(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "image_urls", "enable_prompt_expansion"]
+
+
+class BriaReplaceBackground(FALNode):
+    """
+    Creates enriched product shots by placing them in various environments using textual descriptions.
+    image, background, replacement, product, enhancement, bria
+
+    Use cases:
+    - Replace product image backgrounds with custom environments
+    - Create professional product photography
+    - Generate contextual product shots
+    - Enhance e-commerce product images
+    - Create marketing visuals with custom backgrounds
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="Reference image for background replacement"
+    )
+    prompt: str = Field(
+        default="", description="Prompt for background replacement"
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt for background replacement"
+    )
+    seed: int = Field(
+        default=4925634, description="Random seed for reproducibility"
+    )
+    steps_num: int = Field(
+        default=30, description="Number of inference steps"
+    )
+    sync_mode: bool = Field(
+        default=False,
+        description="If true, returns the image directly in the response (increases latency)",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "seed": self.seed,
+            "steps_num": self.steps_num,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.sync_mode:
+            arguments["sync_mode"] = self.sync_mode
+
+        res = await self.submit_request(
+            context=context,
+            application="bria/replace-background",
+            arguments=arguments,
+        )
+        assert "image" in res
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "steps_num"]
+
+
+class FaceSwapImage(FALNode):
+    """
+    Swap faces between source and target images. Creates realistic face swaps with optional occlusion prevention for handling objects covering faces.
+    face-swap, face-transfer, image-manipulation, face-replacement, portrait
+
+    Use cases:
+    - Swap faces in photos for creative content
+    - Create fun photo edits with friend's faces
+    - Generate alternative portraits
+    - Test how you'd look with different hairstyles
+    - Create face-swapped memes and social content
+    """
+
+    source_face: ImageRef = Field(
+        default=ImageRef(), description="Source face image to swap from"
+    )
+    target_image: ImageRef = Field(
+        default=ImageRef(), description="Target image to swap face into"
+    )
+    enable_occlusion_prevention: bool = Field(
+        default=False,
+        description="Enable occlusion prevention for faces covered by hands/objects (costs 2x more)",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        source_base64 = await context.image_to_base64(self.source_face)
+        target_base64 = await context.image_to_base64(self.target_image)
+
+        arguments = {
+            "source_face_url": f"data:image/png;base64,{source_base64}",
+            "target_image_url": f"data:image/png;base64,{target_base64}",
+        }
+
+        if self.enable_occlusion_prevention:
+            arguments["enable_occlusion_prevention"] = self.enable_occlusion_prevention
+
+        res = await self.submit_request(
+            context=context,
+            application="half-moon-ai/ai-face-swap/faceswapimage",
+            arguments=arguments,
+        )
+        assert "image" in res
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["source_face", "target_image"]
+
+
+class BriaFiboRestore(FALNode):
+    """
+    Restore and enhance damaged or low-quality images using AI-powered restoration. Improves clarity, removes artifacts, and enhances overall image quality.
+    image, restoration, enhancement, quality, repair, bria
+
+    Use cases:
+    - Restore old or damaged photographs
+    - Enhance low-quality images
+    - Remove compression artifacts
+    - Improve image clarity
+    - Repair degraded images
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The source image to restore"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="bria/fibo-edit/restore",
+            arguments=arguments,
+        )
+        assert "image" in res
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]

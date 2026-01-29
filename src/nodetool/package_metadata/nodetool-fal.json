@@ -382,6 +382,40 @@
       ]
     },
     {
+      "title": "Bria Fibo Restore",
+      "description": "Restore and enhance damaged or low-quality images using AI-powered restoration. Improves clarity, removes artifacts, and enhances overall image quality.\n    image, restoration, enhancement, quality, repair, bria\n\n    Use cases:\n    - Restore old or damaged photographs\n    - Enhance low-quality images\n    - Remove compression artifacts\n    - Improve image clarity\n    - Repair degraded images",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaFiboRestore",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "The source image to restore"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image"
+      ]
+    },
+    {
       "title": "Bria Gen Fill",
       "description": "Bria GenFill enables high-quality object addition or visual transformation. Trained exclusively on licensed data for safe and risk-free commercial use.\n    image, generation, filling, transformation\n\n    Use cases:\n    - Add new objects to existing images\n    - Transform specific image areas\n    - Generate contextual content\n    - Create seamless visual additions\n    - Produce professional image modifications",
       "namespace": "fal.image_to_image",
@@ -543,6 +577,87 @@
       "basic_fields": [
         "image",
         "scene_description"
+      ]
+    },
+    {
+      "title": "Bria Replace Background",
+      "description": "Creates enriched product shots by placing them in various environments using textual descriptions.\n    image, background, replacement, product, enhancement, bria\n\n    Use cases:\n    - Replace product image backgrounds with custom environments\n    - Create professional product photography\n    - Generate contextual product shots\n    - Enhance e-commerce product images\n    - Create marketing visuals with custom backgrounds",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.BriaReplaceBackground",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "Reference image for background replacement"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt for background replacement"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "Negative prompt for background replacement"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": 4925634,
+          "title": "Seed",
+          "description": "Random seed for reproducibility"
+        },
+        {
+          "name": "steps_num",
+          "type": {
+            "type": "int"
+          },
+          "default": 30,
+          "title": "Steps Num",
+          "description": "Number of inference steps"
+        },
+        {
+          "name": "sync_mode",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Sync Mode",
+          "description": "If true, returns the image directly in the response (increases latency)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "steps_num"
       ]
     },
     {
@@ -855,6 +970,65 @@
       "basic_fields": [
         "image",
         "scale"
+      ]
+    },
+    {
+      "title": "Face Swap Image",
+      "description": "Swap faces between source and target images. Creates realistic face swaps with optional occlusion prevention for handling objects covering faces.\n    face-swap, face-transfer, image-manipulation, face-replacement, portrait\n\n    Use cases:\n    - Swap faces in photos for creative content\n    - Create fun photo edits with friend's faces\n    - Generate alternative portraits\n    - Test how you'd look with different hairstyles\n    - Create face-swapped memes and social content",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FaceSwapImage",
+      "properties": [
+        {
+          "name": "source_face",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Source Face",
+          "description": "Source face image to swap from"
+        },
+        {
+          "name": "target_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Target Image",
+          "description": "Target image to swap face into"
+        },
+        {
+          "name": "enable_occlusion_prevention",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Occlusion Prevention",
+          "description": "Enable occlusion prevention for faces covered by hands/objects (costs 2x more)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "source_face",
+        "target_image"
       ]
     },
     {
@@ -4407,6 +4581,493 @@
       ]
     },
     {
+      "title": "Qwen 3 Clone Voice 0.6B",
+      "description": "Clone a voice from an audio sample using the efficient 0.6B model. Creates a speaker embedding for fast voice cloning.\n    tts, voice-cloning, speaker-embedding, fast, qwen\n\n    Use cases:\n    - Quick voice cloning from audio samples\n    - Create lightweight speaker embeddings\n    - Generate fast voice profiles\n    - Clone voices for real-time applications\n    - Create efficient voice profiles",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3CloneVoice06B",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "Reference audio file used for voice cloning"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text that corresponds to the audio sample"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "speaker_embedding_url"
+        }
+      ],
+      "basic_fields": [
+        "audio",
+        "reference_text"
+      ]
+    },
+    {
+      "title": "Qwen 3 Clone Voice 1.7B",
+      "description": "Clone a voice from an audio sample for text-to-speech synthesis. Creates a speaker embedding that can be used with other Qwen 3 TTS models.\n    tts, voice-cloning, speaker-embedding, voice-synthesis, qwen\n\n    Use cases:\n    - Clone custom voices from audio samples\n    - Create personalized text-to-speech voices\n    - Preserve voice characteristics for content creation\n    - Generate speaker embeddings for consistent voices\n    - Create voice profiles for character consistency",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3CloneVoice17B",
+      "properties": [
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "Reference audio file used for voice cloning"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text that corresponds to the audio sample"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "speaker_embedding_url"
+        }
+      ],
+      "basic_fields": [
+        "audio",
+        "reference_text"
+      ]
+    },
+    {
+      "title": "Qwen 3 TTS 0.6B",
+      "description": "Efficient text-to-speech synthesis with the lighter Qwen 3 TTS 0.6B model. Provides fast speech generation with multiple voice options.\n    tts, text-to-speech, voice, synthesis, fast, qwen\n\n    Use cases:\n    - Generate quick speech output from text\n    - Create fast voiceovers for applications\n    - Produce audio content efficiently\n    - Generate speech for real-time applications\n    - Create lightweight audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3TTS06B",
+      "properties": [
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Vivian",
+              "Serena",
+              "Uncle_Fu",
+              "Dylan",
+              "Eric",
+              "Ryan",
+              "Aiden",
+              "Ono_Anna",
+              "Sohee"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Voice"
+          },
+          "default": "Vivian",
+          "title": "Voice",
+          "description": "The voice to be used for speech synthesis"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Auto",
+              "English",
+              "Chinese",
+              "Spanish",
+              "French",
+              "German",
+              "Italian",
+              "Japanese",
+              "Korean",
+              "Portuguese",
+              "Russian"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Language"
+          },
+          "default": "Auto",
+          "title": "Language",
+          "description": "The language of the voice"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt to guide the style of the generated speech"
+        },
+        {
+          "name": "speaker_voice_embedding_file_url",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Speaker Voice Embedding File Url",
+          "description": "URL to a speaker embedding file from clone-voice endpoint"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text used when creating the speaker embedding"
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Top K",
+          "description": "Top-k sampling parameter"
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Top P",
+          "description": "Top-p sampling parameter"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Temperature",
+          "description": "Sampling temperature; higher => more random"
+        },
+        {
+          "name": "repetition_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.05,
+          "title": "Repetition Penalty",
+          "description": "Penalty to reduce repeated tokens/codes"
+        },
+        {
+          "name": "max_new_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 200,
+          "title": "Max New Tokens",
+          "description": "Maximum number of new codec tokens to generate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "text",
+        "voice",
+        "language"
+      ]
+    },
+    {
+      "title": "Qwen 3 TTS 1.7B",
+      "description": "High-quality text-to-speech synthesis with multiple voice options and language support. Uses the Qwen 3 TTS 1.7B model for natural-sounding speech generation.\n    tts, text-to-speech, voice, synthesis, multilingual, qwen\n\n    Use cases:\n    - Generate natural-sounding speech from text\n    - Create voiceovers in multiple languages\n    - Produce audio content with custom voice characteristics\n    - Generate speech with specific emotional tones\n    - Create multilingual audio content",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3TTS17B",
+      "properties": [
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Vivian",
+              "Serena",
+              "Uncle_Fu",
+              "Dylan",
+              "Eric",
+              "Ryan",
+              "Aiden",
+              "Ono_Anna",
+              "Sohee"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Voice"
+          },
+          "default": "Vivian",
+          "title": "Voice",
+          "description": "The voice to be used for speech synthesis"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Auto",
+              "English",
+              "Chinese",
+              "Spanish",
+              "French",
+              "German",
+              "Italian",
+              "Japanese",
+              "Korean",
+              "Portuguese",
+              "Russian"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Language"
+          },
+          "default": "Auto",
+          "title": "Language",
+          "description": "The language of the voice"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Optional prompt to guide the style of the generated speech"
+        },
+        {
+          "name": "speaker_voice_embedding_file_url",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Speaker Voice Embedding File Url",
+          "description": "URL to a speaker embedding file from clone-voice endpoint"
+        },
+        {
+          "name": "reference_text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Reference Text",
+          "description": "Optional reference text used when creating the speaker embedding"
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Top K",
+          "description": "Top-k sampling parameter"
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Top P",
+          "description": "Top-p sampling parameter"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Temperature",
+          "description": "Sampling temperature; higher => more random"
+        },
+        {
+          "name": "repetition_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.05,
+          "title": "Repetition Penalty",
+          "description": "Penalty to reduce repeated tokens/codes"
+        },
+        {
+          "name": "max_new_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 200,
+          "title": "Max New Tokens",
+          "description": "Maximum number of new codec tokens to generate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "text",
+        "voice",
+        "language"
+      ]
+    },
+    {
+      "title": "Qwen 3 Voice Design 1.7B",
+      "description": "Design custom voice styles and emotions using text prompts. Create expressive speech with specific tones and characteristics using the 1.7B model.\n    tts, text-to-speech, voice-design, emotion, synthesis, qwen\n\n    Use cases:\n    - Create speech with specific emotional characteristics\n    - Design custom voice styles for creative content\n    - Generate expressive voiceovers with nuanced tones\n    - Produce character voices with distinct personalities\n    - Create contextually appropriate speech delivery",
+      "namespace": "fal.text_to_audio",
+      "node_type": "fal.text_to_audio.Qwen3VoiceDesign17B",
+      "properties": [
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "The text to be converted to speech"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt to guide the style and emotion of the generated speech"
+        },
+        {
+          "name": "language",
+          "type": {
+            "type": "enum",
+            "values": [
+              "Auto",
+              "English",
+              "Chinese",
+              "Spanish",
+              "French",
+              "German",
+              "Italian",
+              "Japanese",
+              "Korean",
+              "Portuguese",
+              "Russian"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_audio.Qwen3Language"
+          },
+          "default": "Auto",
+          "title": "Language",
+          "description": "The language of the voice to be designed"
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Top K",
+          "description": "Top-k sampling parameter"
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Top P",
+          "description": "Top-p sampling parameter"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Temperature",
+          "description": "Sampling temperature; higher => more random"
+        },
+        {
+          "name": "repetition_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.05,
+          "title": "Repetition Penalty",
+          "description": "Penalty to reduce repeated tokens/codes"
+        },
+        {
+          "name": "max_new_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 200,
+          "title": "Max New Tokens",
+          "description": "Maximum number of new codec tokens to generate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "text",
+        "prompt",
+        "language"
+      ]
+    },
+    {
       "title": "Stable Audio",
       "description": "Stable Audio generates audio from text prompts. Open source text-to-audio model from fal.ai.\n    audio, generation, synthesis, text-to-audio, open-source\n\n    Use cases:\n    - Generate custom audio content from text\n    - Create background music and sounds\n    - Produce audio assets for projects\n    - Generate sound effects\n    - Create experimental audio content",
       "namespace": "fal.text_to_audio",
@@ -6169,6 +6830,67 @@
         "prompt",
         "model",
         "system_prompt"
+      ]
+    },
+    {
+      "title": "Face Swap Video",
+      "description": "Swap faces in videos using a source face image. Replaces faces in the target video with the source face while maintaining natural motion and expressions.\n    face-swap, video-editing, face-replacement, deep-fake, video-manipulation\n\n    Use cases:\n    - Create face-swapped video content\n    - Generate creative video edits\n    - Produce entertainment content\n    - Test different faces in video footage\n    - Create video memes and parodies",
+      "namespace": "fal.video_processing",
+      "node_type": "fal.video_processing.FaceSwapVideo",
+      "properties": [
+        {
+          "name": "source_face",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Source Face",
+          "description": "Source face image to swap into video"
+        },
+        {
+          "name": "target_video",
+          "type": {
+            "type": "video"
+          },
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null,
+            "duration": null,
+            "format": null
+          },
+          "title": "Target Video",
+          "description": "Target video to swap face in (max 25 minutes)"
+        },
+        {
+          "name": "enable_occlusion_prevention",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Occlusion Prevention",
+          "description": "Enable occlusion prevention for faces covered by hands/objects (costs 2x more)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "source_face",
+        "target_video"
       ]
     },
     {
@@ -11805,6 +12527,270 @@
       ]
     },
     {
+      "title": "ZImage Base",
+      "description": "Generate high-quality images using the Z-Image Base model. Provides detailed image generation with multiple acceleration and quality options.\n    image, generation, text-to-image, z-image, detailed, quality\n\n    Use cases:\n    - Generate detailed images from text prompts\n    - Create high-quality artwork\n    - Produce professional illustrations\n    - Generate concept art\n    - Create visual content for projects",
+      "namespace": "fal.text_to_image",
+      "node_type": "fal.text_to_image.ZImageBase",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "enum",
+            "values": [
+              "jpeg",
+              "png",
+              "webp"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.OutputFormat"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "The format of the generated image"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ZImageAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 4.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use for image generation"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to use for image generation"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "image_size",
+        "num_inference_steps"
+      ]
+    },
+    {
+      "title": "ZImage Base Lora",
+      "description": "Generate high-quality images using the Z-Image Base model with LoRA support. Allows fine-tuned image generation with custom LoRA models.\n    image, generation, text-to-image, z-image, lora, fine-tuning\n\n    Use cases:\n    - Generate images with custom LoRA fine-tuning\n    - Create specialized style images\n    - Produce character-consistent artwork\n    - Generate images matching specific aesthetics\n    - Create brand-aligned visual content",
+      "namespace": "fal.text_to_image",
+      "node_type": "fal.text_to_image.ZImageBaseLora",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "enum",
+            "values": [
+              "jpeg",
+              "png",
+              "webp"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.OutputFormat"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "The format of the generated image"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ZImageAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 4.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use for image generation"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to use for image generation"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "image_size",
+        "num_inference_steps"
+      ]
+    },
+    {
       "title": "ZImage Turbo",
       "description": "Z-Image Turbo is a fast text-to-image model optimized for quick generation with good quality.\n    image, generation, z-image, text-to-image, txt2img, fast, turbo\n\n    Use cases:\n    - Rapid image generation\n    - Quick prototyping\n    - High-volume content creation\n    - Fast design iterations\n    - Real-time applications",
       "namespace": "fal.text_to_image",
@@ -12577,6 +13563,572 @@
         "image",
         "prompt",
         "duration"
+      ]
+    },
+    {
+      "title": "LTX-2 19B Audio to Video",
+      "description": "Generate videos from audio with optional text or image prompts using the LTX-2 19B model. Supports advanced camera controls and high-quality video generation.\n    video, audio-to-video, generation, ltx, camera-control, audio-driven\n\n    Use cases:\n    - Generate talking head videos from audio\n    - Create music visualizations from audio tracks\n    - Produce audio-driven animations\n    - Generate synchronized video content from podcasts\n    - Create video content from voice recordings",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.LTX219BAudioToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the video from"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "The audio to generate the video from"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image",
+            "optional": true
+          },
+          "default": null,
+          "title": "Image",
+          "description": "Optional image to use as the first frame"
+        },
+        {
+          "name": "match_audio_length",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Match Audio Length",
+          "description": "Calculate frames based on audio duration and FPS"
+        },
+        {
+          "name": "num_frames",
+          "type": {
+            "type": "int"
+          },
+          "default": 121,
+          "title": "Num Frames",
+          "description": "The number of frames to generate"
+        },
+        {
+          "name": "video_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto",
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoSize"
+          },
+          "default": "landscape_4_3",
+          "title": "Video Size",
+          "description": "The size of the generated video"
+        },
+        {
+          "name": "use_multiscale",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Use Multiscale",
+          "description": "Use multi-scale generation for better coherence"
+        },
+        {
+          "name": "fps",
+          "type": {
+            "type": "float"
+          },
+          "default": 25.0,
+          "title": "Fps",
+          "description": "The frames per second of the generated video"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 40,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high",
+              "full"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "camera_lora",
+          "type": {
+            "type": "enum",
+            "values": [
+              "dolly_in",
+              "dolly_out",
+              "dolly_left",
+              "dolly_right",
+              "jib_up",
+              "jib_down",
+              "static",
+              "none"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXCameraLoRA"
+          },
+          "default": "none",
+          "title": "Camera Lora",
+          "description": "The camera LoRA for movement control"
+        },
+        {
+          "name": "camera_lora_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Camera Lora Scale",
+          "description": "The scale of the camera LoRA"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt for video generation"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The seed for the random number generator"
+        },
+        {
+          "name": "enable_prompt_expansion",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Prompt Expansion",
+          "description": "Whether to enable prompt expansion"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "Whether to enable the safety checker"
+        },
+        {
+          "name": "video_output_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "X264 (.mp4)",
+              "VP9 (.webm)",
+              "PRORES4444 (.mov)",
+              "GIF (.gif)"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoOutputType"
+          },
+          "default": "X264 (.mp4)",
+          "title": "Video Output Type",
+          "description": "The output type of the generated video"
+        },
+        {
+          "name": "video_quality",
+          "type": {
+            "type": "enum",
+            "values": [
+              "low",
+              "medium",
+              "high",
+              "maximum"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoQuality"
+          },
+          "default": "high",
+          "title": "Video Quality",
+          "description": "The quality of the generated video"
+        },
+        {
+          "name": "video_write_mode",
+          "type": {
+            "type": "enum",
+            "values": [
+              "fast",
+              "balanced",
+              "small"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoWriteMode"
+          },
+          "default": "balanced",
+          "title": "Video Write Mode",
+          "description": "The write mode of the generated video"
+        },
+        {
+          "name": "image_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Image Strength",
+          "description": "The strength of the image for video generation"
+        },
+        {
+          "name": "audio_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Audio Strength",
+          "description": "Audio conditioning strength"
+        },
+        {
+          "name": "preprocess_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Preprocess Audio",
+          "description": "Whether to preprocess the audio"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "audio",
+        "video_size"
+      ]
+    },
+    {
+      "title": "LTX-2 19B Distilled Audio to Video",
+      "description": "Faster audio-to-video generation using the distilled LTX-2 19B model. Provides quicker video generation from audio with optional prompts.\n    video, audio-to-video, generation, ltx, distilled, fast\n\n    Use cases:\n    - Quick audio-driven video generation\n    - Fast talking head video creation\n    - Rapid music visualization\n    - Time-efficient audio-to-video conversion\n    - Fast prototype video generation from audio",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.LTX219BDistilledAudioToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the video from"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "The audio to generate the video from"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image",
+            "optional": true
+          },
+          "default": null,
+          "title": "Image",
+          "description": "Optional image to use as the first frame"
+        },
+        {
+          "name": "match_audio_length",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Match Audio Length",
+          "description": "Calculate frames based on audio duration and FPS"
+        },
+        {
+          "name": "num_frames",
+          "type": {
+            "type": "int"
+          },
+          "default": 121,
+          "title": "Num Frames",
+          "description": "The number of frames to generate"
+        },
+        {
+          "name": "video_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto",
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoSize"
+          },
+          "default": "landscape_4_3",
+          "title": "Video Size",
+          "description": "The size of the generated video"
+        },
+        {
+          "name": "use_multiscale",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Use Multiscale",
+          "description": "Use multi-scale generation for better coherence"
+        },
+        {
+          "name": "fps",
+          "type": {
+            "type": "float"
+          },
+          "default": 25.0,
+          "title": "Fps",
+          "description": "The frames per second of the generated video"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 40,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high",
+              "full"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "camera_lora",
+          "type": {
+            "type": "enum",
+            "values": [
+              "dolly_in",
+              "dolly_out",
+              "dolly_left",
+              "dolly_right",
+              "jib_up",
+              "jib_down",
+              "static",
+              "none"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXCameraLoRA"
+          },
+          "default": "none",
+          "title": "Camera Lora",
+          "description": "The camera LoRA for movement control"
+        },
+        {
+          "name": "camera_lora_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Camera Lora Scale",
+          "description": "The scale of the camera LoRA"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt for video generation"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The seed for the random number generator"
+        },
+        {
+          "name": "enable_prompt_expansion",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Prompt Expansion",
+          "description": "Whether to enable prompt expansion"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "Whether to enable the safety checker"
+        },
+        {
+          "name": "video_output_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "X264 (.mp4)",
+              "VP9 (.webm)",
+              "PRORES4444 (.mov)",
+              "GIF (.gif)"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoOutputType"
+          },
+          "default": "X264 (.mp4)",
+          "title": "Video Output Type",
+          "description": "The output type of the generated video"
+        },
+        {
+          "name": "video_quality",
+          "type": {
+            "type": "enum",
+            "values": [
+              "low",
+              "medium",
+              "high",
+              "maximum"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoQuality"
+          },
+          "default": "high",
+          "title": "Video Quality",
+          "description": "The quality of the generated video"
+        },
+        {
+          "name": "video_write_mode",
+          "type": {
+            "type": "enum",
+            "values": [
+              "fast",
+              "balanced",
+              "small"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoWriteMode"
+          },
+          "default": "balanced",
+          "title": "Video Write Mode",
+          "description": "The write mode of the generated video"
+        },
+        {
+          "name": "image_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Image Strength",
+          "description": "The strength of the image for video generation"
+        },
+        {
+          "name": "audio_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Audio Strength",
+          "description": "Audio conditioning strength"
+        },
+        {
+          "name": "preprocess_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Preprocess Audio",
+          "description": "Whether to preprocess the audio"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "audio",
+        "video_size"
       ]
     },
     {

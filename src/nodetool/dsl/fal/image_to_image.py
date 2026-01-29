@@ -18,27 +18,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class BiRefNet(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    BiRefNet is a high-quality background removal model using bilateral reference.
-    image, background-removal, segmentation, matting
+        BiRefNet is a high-quality background removal model using bilateral reference.
+        image, background-removal, segmentation, matting
 
-    Use cases:
-    - Remove backgrounds from photos
-    - Create product images with transparent backgrounds
-    - Extract subjects from images
-    - Prepare images for compositing
-    - Create stickers and cutouts
+        Use cases:
+        - Remove backgrounds from photos
+        - Create product images with transparent backgrounds
+        - Extract subjects from images
+        - Prepare images for compositing
+        - Create stickers and cutouts
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image for background removal",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image for background removal')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -55,27 +49,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class BiRefNetV2(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    BiRefNet V2 is an improved background removal model with better edge detection.
-    image, background-removal, segmentation, matting, v2
+        BiRefNet V2 is an improved background removal model with better edge detection.
+        image, background-removal, segmentation, matting, v2
 
-    Use cases:
-    - High-quality background removal
-    - Precise edge detection for cutouts
-    - Product photography processing
-    - Portrait extraction
-    - Complex background handling
+        Use cases:
+        - High-quality background removal
+        - Precise edge detection for cutouts
+        - Product photography processing
+        - Portrait extraction
+        - Complex background handling
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image for background removal",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image for background removal')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -92,22 +80,14 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
-class BriaBackgroundRemove(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class BriaBackgroundRemove(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks.
-    Trained exclusively on licensed data for safe and risk-free commercial use.
+        Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks.
+        Trained exclusively on licensed data for safe and risk-free commercial use.
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Input image to remove background from",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input image to remove background from')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -124,10 +104,7 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
-class BriaBackgroundReplace(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class BriaBackgroundReplace(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Bria Background Replace allows for efficient swapping of backgrounds in images via text prompts or reference image, delivering realistic and polished results. Trained exclusively on licensed data for safe and risk-free commercial use.
         image, background, replacement, swap
@@ -140,30 +117,12 @@ class BriaBackgroundReplace(
         - Create consistent visual environments
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Input image to replace background",
-    )
-    ref_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference image for the new background",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt to generate new background"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Negative prompt for background generation"
-    )
-    refine_prompt: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to refine the prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input image to replace background')
+    ref_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image for the new background')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to generate new background')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for background generation')
+    refine_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to refine the prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -180,37 +139,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class BriaEraser(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Bria Eraser enables precise removal of unwanted objects from images while maintaining high-quality outputs. Trained exclusively on licensed data for safe and risk-free commercial use.
-    image, removal, cleanup
+        Bria Eraser enables precise removal of unwanted objects from images while maintaining high-quality outputs. Trained exclusively on licensed data for safe and risk-free commercial use.
+        image, removal, cleanup
 
-    Use cases:
-    - Remove unwanted objects from images
-    - Clean up image imperfections
-    - Prepare images for commercial use
-    - Remove distracting elements
-    - Create clean, professional images
+        Use cases:
+        - Remove unwanted objects from images
+        - Clean up image imperfections
+        - Prepare images for commercial use
+        - Remove distracting elements
+        - Create clean, professional images
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Input image to erase from",
-    )
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The mask for areas to be cleaned",
-    )
-    mask_type: str | OutputHandle[str] = connect_field(
-        default="manual",
-        description="Type of mask - 'manual' for user-created or 'automatic' for algorithm-generated",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input image to erase from')
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask for areas to be cleaned')
+    mask_type: str | OutputHandle[str] = connect_field(default='manual', description="Type of mask - 'manual' for user-created or 'automatic' for algorithm-generated")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -227,7 +172,6 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class BriaExpand(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Bria Expand expands images beyond their borders in high quality. Trained exclusively on licensed data for safe and risk-free commercial use.
@@ -240,48 +184,17 @@ class BriaExpand(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
         - Generate additional scene content
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to expand",
-    )
-    canvas_width: int | OutputHandle[int] = connect_field(
-        default=1200,
-        description="The desired width of the final image, after the expansion",
-    )
-    canvas_height: int | OutputHandle[int] = connect_field(
-        default=674,
-        description="The desired height of the final image, after the expansion",
-    )
-    original_image_width: int | OutputHandle[int] = connect_field(
-        default=610,
-        description="The desired width of the original image, inside the full canvas",
-    )
-    original_image_height: int | OutputHandle[int] = connect_field(
-        default=855,
-        description="The desired height of the original image, inside the full canvas",
-    )
-    original_image_x: int | OutputHandle[int] = connect_field(
-        default=301,
-        description="The desired x-coordinate of the original image, inside the full canvas",
-    )
-    original_image_y: int | OutputHandle[int] = connect_field(
-        default=-66,
-        description="The desired y-coordinate of the original image, inside the full canvas",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Text on which you wish to base the image expansion"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The negative prompt to use when generating images"
-    )
-    num_images: int | OutputHandle[int] = connect_field(
-        default=1, description="Number of images to generate"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to expand')
+    canvas_width: int | OutputHandle[int] = connect_field(default=1200, description='The desired width of the final image, after the expansion')
+    canvas_height: int | OutputHandle[int] = connect_field(default=674, description='The desired height of the final image, after the expansion')
+    original_image_width: int | OutputHandle[int] = connect_field(default=610, description='The desired width of the original image, inside the full canvas')
+    original_image_height: int | OutputHandle[int] = connect_field(default=855, description='The desired height of the original image, inside the full canvas')
+    original_image_x: int | OutputHandle[int] = connect_field(default=301, description='The desired x-coordinate of the original image, inside the full canvas')
+    original_image_y: int | OutputHandle[int] = connect_field(default=-66, description='The desired y-coordinate of the original image, inside the full canvas')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text on which you wish to base the image expansion')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use when generating images')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -298,6 +211,36 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class BriaFiboRestore(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Restore and enhance damaged or low-quality images using AI-powered restoration. Improves clarity, removes artifacts, and enhances overall image quality.
+        image, restoration, enhancement, quality, repair, bria
+
+        Use cases:
+        - Restore old or damaged photographs
+        - Enhance low-quality images
+        - Remove compression artifacts
+        - Improve image clarity
+        - Repair degraded images
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image to restore')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BriaFiboRestore
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
 
 class BriaGenFill(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
@@ -312,27 +255,11 @@ class BriaGenFill(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRe
         - Produce professional image modifications
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Input image to erase from",
-    )
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The mask for areas to be cleaned",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate images"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The negative prompt to use when generating images"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input image to erase from')
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask for areas to be cleaned')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate images')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use when generating images')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -349,7 +276,6 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class BriaProductShot(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Place any product in any scenery with just a prompt or reference image while maintaining high integrity of the product. Trained exclusively on licensed data for safe and risk-free commercial use and optimized for eCommerce.
@@ -363,32 +289,12 @@ class BriaProductShot(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
         - Generate marketing visuals
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The product image to be placed",
-    )
-    scene_description: str | OutputHandle[str] = connect_field(
-        default="", description="Text description of the new scene/background"
-    )
-    ref_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference image for the new scene/background",
-    )
-    optimize_description: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to optimize the scene description"
-    )
-    placement_type: str | OutputHandle[str] = connect_field(
-        default="manual_placement",
-        description="How to position the product (original, automatic, manual_placement, manual_padding)",
-    )
-    manual_placement_selection: str | OutputHandle[str] = connect_field(
-        default="bottom_center",
-        description="Specific placement position when using manual_placement",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The product image to be placed')
+    scene_description: str | OutputHandle[str] = connect_field(default='', description='Text description of the new scene/background')
+    ref_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image for the new scene/background')
+    optimize_description: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to optimize the scene description')
+    placement_type: str | OutputHandle[str] = connect_field(default='manual_placement', description='How to position the product (original, automatic, manual_placement, manual_padding)')
+    manual_placement_selection: str | OutputHandle[str] = connect_field(default='bottom_center', description='Specific placement position when using manual_placement')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -405,30 +311,58 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class BriaReplaceBackground(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Creates enriched product shots by placing them in various environments using textual descriptions.
+        image, background, replacement, product, enhancement, bria
+
+        Use cases:
+        - Replace product image backgrounds with custom environments
+        - Create professional product photography
+        - Generate contextual product shots
+        - Enhance e-commerce product images
+        - Create marketing visuals with custom backgrounds
+    """
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image for background replacement')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt for background replacement')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for background replacement')
+    seed: int | OutputHandle[int] = connect_field(default=4925634, description='Random seed for reproducibility')
+    steps_num: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If true, returns the image directly in the response (increases latency)')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BriaReplaceBackground
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
 
 class CCSR(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    CCSR (Content-Consistent Super-Resolution) for high-quality image upscaling.
-    image, upscaling, super-resolution, enhancement
+        CCSR (Content-Consistent Super-Resolution) for high-quality image upscaling.
+        image, upscaling, super-resolution, enhancement
 
-    Use cases:
-    - Upscale images with content consistency
-    - Enhance low-resolution photos
-    - Improve image details
-    - Prepare images for printing
-    - Restore compressed images
+        Use cases:
+        - Upscale images with content consistency
+        - Enhance low-resolution photos
+        - Improve image details
+        - Prepare images for printing
+        - Restore compressed images
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to upscale",
-    )
-    scale: int | OutputHandle[int] = connect_field(
-        default=4, description="Upscaling factor"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to upscale')
+    scale: int | OutputHandle[int] = connect_field(default=4, description='Upscaling factor')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -445,27 +379,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class Cartoonify(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Cartoonify transforms photos into cartoon-style images.
-    image, cartoon, style-transfer, fun, artistic
+        Cartoonify transforms photos into cartoon-style images.
+        image, cartoon, style-transfer, fun, artistic
 
-    Use cases:
-    - Convert photos to cartoon style
-    - Create animated-style portraits
-    - Design fun profile pictures
-    - Generate cartoon avatars
-    - Create artistic transformations
+        Use cases:
+        - Convert photos to cartoon style
+        - Create animated-style portraits
+        - Design fun profile pictures
+        - Generate cartoon avatars
+        - Create artistic transformations
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to cartoonify",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to cartoonify')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -482,7 +410,6 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class ClarityUpscaler(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Upscale images to improve resolution and sharpness.
@@ -495,15 +422,8 @@ class ClarityUpscaler(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
         - Enhance textures and graphics
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Input image to upscale",
-    )
-    scale: int | OutputHandle[int] = connect_field(
-        default=2, description="Upscaling factor"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input image to upscale')
+    scale: int | OutputHandle[int] = connect_field(default=2, description='Upscaling factor')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -520,37 +440,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class CodeFormer(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    CodeFormer is a face restoration model for enhancing and restoring face quality.
-    image, face-restoration, enhancement, quality
+        CodeFormer is a face restoration model for enhancing and restoring face quality.
+        image, face-restoration, enhancement, quality
 
-    Use cases:
-    - Restore old or damaged photos
-    - Enhance low-quality face images
-    - Improve portrait quality
-    - Fix facial artifacts
-    - Upscale face details
+        Use cases:
+        - Restore old or damaged photos
+        - Enhance low-quality face images
+        - Improve portrait quality
+        - Fix facial artifacts
+        - Upscale face details
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image with faces to restore",
-    )
-    fidelity: float | OutputHandle[float] = connect_field(
-        default=0.5,
-        description="Balance between quality and fidelity (0=quality, 1=fidelity)",
-    )
-    background_enhance: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enhance the background"
-    )
-    face_upsample: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to upsample the face"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image with faces to restore')
+    fidelity: float | OutputHandle[float] = connect_field(default=0.5, description='Balance between quality and fidelity (0=quality, 1=fidelity)')
+    background_enhance: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enhance the background')
+    face_upsample: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to upsample the face')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -567,41 +474,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
-class CreativeUpscaler(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class CreativeUpscaler(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Creative Upscaler enhances image resolution while adding creative details.
-    image, upscaling, enhancement, super-resolution, creative
+        Creative Upscaler enhances image resolution while adding creative details.
+        image, upscaling, enhancement, super-resolution, creative
 
-    Use cases:
-    - Upscale low-resolution images
-    - Enhance image details creatively
-    - Improve image quality
-    - Prepare images for print
-    - Restore old or compressed images
+        Use cases:
+        - Upscale low-resolution images
+        - Enhance image details creatively
+        - Improve image quality
+        - Prepare images for print
+        - Restore old or compressed images
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to upscale",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Optional prompt to guide the upscaling"
-    )
-    scale: float | OutputHandle[float] = connect_field(
-        default=2.0, description="Upscaling factor"
-    )
-    creativity: float | OutputHandle[float] = connect_field(
-        default=0.5, description="Level of creative enhancement"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to upscale')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Optional prompt to guide the upscaling')
+    scale: float | OutputHandle[float] = connect_field(default=2.0, description='Upscaling factor')
+    creativity: float | OutputHandle[float] = connect_field(default=0.5, description='Level of creative enhancement')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -618,30 +509,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class ESRGAN(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    ESRGAN (Enhanced Super-Resolution GAN) for high-quality image upscaling.
-    image, upscaling, super-resolution, enhancement
+        ESRGAN (Enhanced Super-Resolution GAN) for high-quality image upscaling.
+        image, upscaling, super-resolution, enhancement
 
-    Use cases:
-    - Upscale images to higher resolution
-    - Enhance image details
-    - Improve image quality for printing
-    - Restore low-resolution images
-    - Prepare images for large displays
+        Use cases:
+        - Upscale images to higher resolution
+        - Enhance image details
+        - Improve image quality for printing
+        - Restore low-resolution images
+        - Prepare images for large displays
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to upscale",
-    )
-    scale: int | OutputHandle[int] = connect_field(
-        default=4, description="Upscaling factor"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to upscale')
+    scale: int | OutputHandle[int] = connect_field(default=4, description='Upscaling factor')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -658,33 +541,56 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class FaceSwapImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Swap faces between source and target images. Creates realistic face swaps with optional occlusion prevention for handling objects covering faces.
+        face-swap, face-transfer, image-manipulation, face-replacement, portrait
+
+        Use cases:
+        - Swap faces in photos for creative content
+        - Create fun photo edits with friend's faces
+        - Generate alternative portraits
+        - Test how you'd look with different hairstyles
+        - Create face-swapped memes and social content
+    """
+
+    source_face: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Source face image to swap from')
+    target_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Target image to swap face into')
+    enable_occlusion_prevention: bool | OutputHandle[bool] = connect_field(default=False, description='Enable occlusion prevention for faces covered by hands/objects (costs 2x more)')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FaceSwapImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
 
 class FaceToSticker(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Face to Sticker transforms face photos into fun sticker-style images.
-    image, face, sticker, fun, transformation
+        Face to Sticker transforms face photos into fun sticker-style images.
+        image, face, sticker, fun, transformation
 
-    Use cases:
-    - Create fun stickers from photos
-    - Generate emoji-style faces
-    - Design personalized sticker packs
-    - Create cartoon avatars
-    - Produce fun social media content
+        Use cases:
+        - Create fun stickers from photos
+        - Generate emoji-style faces
+        - Design personalized sticker packs
+        - Create cartoon avatars
+        - Produce fun social media content
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The face image to convert to sticker",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="sticker", description="Optional prompt to guide the sticker style"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The face image to convert to sticker')
+    prompt: str | OutputHandle[str] = connect_field(default='sticker', description='Optional prompt to guide the sticker style')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -701,36 +607,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class Flux2TurboEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    FLUX 2 Turbo Edit for fast image editing with the FLUX 2 model.
-    image, editing, flux, fast, turbo, text-guided
+        FLUX 2 Turbo Edit for fast image editing with the FLUX 2 model.
+        image, editing, flux, fast, turbo, text-guided
 
-    Use cases:
-    - Rapid image modifications
-    - Quick style transfers
-    - Fast object editing
-    - Iterative refinement
-    - Real-time editing workflows
+        Use cases:
+        - Rapid image modifications
+        - Quick style transfers
+        - Fast object editing
+        - Iterative refinement
+        - Real-time editing workflows
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to edit",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt describing the edit"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=4, description="Number of inference steps"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to edit')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the edit')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='Number of inference steps')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -748,45 +642,26 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
 class FluxDevRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    FLUX.1 [dev] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.
-    image, transformation, style-transfer, development, flux
+        FLUX.1 [dev] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.
+        image, transformation, style-transfer, development, flux
 
-    Use cases:
-    - Transform images with advanced controls
-    - Create customized image variations
-    - Apply precise style modifications
+        Use cases:
+        - Transform images with advanced controls
+        - Create customized image variations
+        - Apply precise style modifications
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to transform",
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="If true, the safety checker will be enabled"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to transform')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -804,7 +679,6 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
 class FluxLoraCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     FLUX LoRA Canny enables precise control over composition and style through edge detection and LoRA-based guidance mechanisms.
@@ -817,35 +691,15 @@ class FluxLoraCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
         - Produce consistent style variations
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The control image to generate the Canny edge map from",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate an image from"
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    lora_scale: float | OutputHandle[float] = connect_field(
-        default=0.6, description="The strength of the LoRA adaptation"
-    )
+    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The control image to generate the Canny edge map from')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    lora_scale: float | OutputHandle[float] = connect_field(default=0.6, description='The strength of the LoRA adaptation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -863,7 +717,6 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
 class FluxLoraDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     FLUX LoRA Depth enables precise control over composition and structure through depth map detection and LoRA-based guidance mechanisms.
@@ -877,35 +730,15 @@ class FluxLoraDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
         - Generate images with controlled perspective
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The control image to generate the depth map from",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate an image from"
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    lora_scale: float | OutputHandle[float] = connect_field(
-        default=0.6, description="The strength of the LoRA adaptation"
-    )
+    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The control image to generate the depth map from')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    lora_scale: float | OutputHandle[float] = connect_field(default=0.6, description='The strength of the LoRA adaptation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -923,7 +756,6 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
 class FluxProCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     FLUX.1 [pro] Canny enables precise control over composition, style, and structure through advanced edge detection and guidance mechanisms.
@@ -937,35 +769,15 @@ class FluxProCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
         - Generate variations with consistent structure
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The control image to generate the Canny edge map from",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate an image from"
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    safety_tolerance: str | OutputHandle[str] = connect_field(
-        default="2", description="Safety tolerance level (1-6, 1 being most strict)"
-    )
+    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The control image to generate the Canny edge map from')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    safety_tolerance: str | OutputHandle[str] = connect_field(default='2', description='Safety tolerance level (1-6, 1 being most strict)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -983,7 +795,6 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
 class FluxProDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     FLUX.1 [pro] Depth enables precise control over composition and structure through depth map detection and guidance mechanisms.
@@ -997,35 +808,15 @@ class FluxProDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
         - Generate variations with consistent depth structure
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The control image to generate the depth map from",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate an image from"
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    safety_tolerance: str | OutputHandle[str] = connect_field(
-        default="2", description="Safety tolerance level (1-6, 1 being most strict)"
-    )
+    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The control image to generate the depth map from')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    safety_tolerance: str | OutputHandle[str] = connect_field(default='2', description='Safety tolerance level (1-6, 1 being most strict)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1042,7 +833,6 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class FluxProFill(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     FLUX.1 [pro] Fill is a high-performance endpoint that enables rapid transformation of existing images with inpainting/outpainting capabilities.
@@ -1056,30 +846,12 @@ class FluxProFill(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRe
         - Generate context-aware image content
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to transform",
-    )
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The mask for inpainting",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to fill the masked part of the image"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    safety_tolerance: str | OutputHandle[str] = connect_field(
-        default="2", description="Safety tolerance level (1-6, 1 being most strict)"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to transform')
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask for inpainting')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to fill the masked part of the image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    safety_tolerance: str | OutputHandle[str] = connect_field(default='2', description='Safety tolerance level (1-6, 1 being most strict)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1097,44 +869,25 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
 class FluxProRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    FLUX.1 [pro] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.
-    image, transformation, style-transfer, flux
+        FLUX.1 [pro] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications.
+        image, transformation, style-transfer, flux
 
-    Use cases:
-    - Create professional image transformations
-    - Generate style transfers
+        Use cases:
+        - Create professional image transformations
+        - Generate style transfers
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to transform",
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    safety_tolerance: str | OutputHandle[str] = connect_field(
-        default="2", description="Safety tolerance level (1-6, 1 being most strict)"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to transform')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    safety_tolerance: str | OutputHandle[str] = connect_field(default='2', description='Safety tolerance level (1-6, 1 being most strict)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1152,49 +905,26 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
-class FluxProUltraRedux(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class FluxProUltraRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    FLUX1.1 [pro] ultra Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
-    image, transformation, style-transfer, ultra, professional
+        FLUX1.1 [pro] ultra Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
+        image, transformation, style-transfer, ultra, professional
 
-    Use cases:
-    - Apply precise image modifications
-    - Process images with maximum control
+        Use cases:
+        - Apply precise image modifications
+        - Process images with maximum control
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to transform",
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=28, description="The number of inference steps to perform"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    safety_tolerance: str | OutputHandle[str] = connect_field(
-        default="2", description="Safety tolerance level (1-6, 1 being most strict)"
-    )
-    image_prompt_strength: float | OutputHandle[float] = connect_field(
-        default=0.1, description="The strength of the image prompt, between 0 and 1"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to transform')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    safety_tolerance: str | OutputHandle[str] = connect_field(default='2', description='Safety tolerance level (1-6, 1 being most strict)')
+    image_prompt_strength: float | OutputHandle[float] = connect_field(default=0.1, description='The strength of the image prompt, between 0 and 1')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1212,44 +942,25 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
-class FluxSchnellRedux(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class FluxSchnellRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    FLUX.1 [schnell] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
-    image, transformation, style-transfer, fast, flux
+        FLUX.1 [schnell] Redux is a high-performance endpoint that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
+        image, transformation, style-transfer, fast, flux
 
-    Use cases:
-    - Transform images with style transfers
-    - Apply artistic modifications to photos
-    - Create image variations
+        Use cases:
+        - Transform images with style transfers
+        - Apply artistic modifications to photos
+        - Create image variations
     """
 
-    ImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-    )
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to transform",
-    )
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3,
-        description="The size of the generated image",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=4, description="The number of inference steps to perform"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="If true, the safety checker will be enabled"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to transform')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1266,42 +977,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class GPTImage1Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    OpenAI GPT Image 1 Edit for modifying images with text instructions.
-    image, editing, openai, gpt, text-guided
+        OpenAI GPT Image 1 Edit for modifying images with text instructions.
+        image, editing, openai, gpt, text-guided
 
-    Use cases:
-    - Edit images with natural language
-    - Modify specific elements in photos
-    - Add or change objects
-    - Apply creative edits
-    - Refine images iteratively
+        Use cases:
+        - Edit images with natural language
+        - Modify specific elements in photos
+        - Add or change objects
+        - Apply creative edits
+        - Refine images iteratively
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to edit",
-    )
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The mask for inpainting (optional)",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Instructions for editing the image"
-    )
-    size: str | OutputHandle[str] = connect_field(
-        default="1024x1024", description="The size of the output image"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to edit')
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask for inpainting (optional)')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Instructions for editing the image')
+    size: str | OutputHandle[str] = connect_field(default='1024x1024', description='The size of the output image')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1318,33 +1012,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class GeminiFlashEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Google Gemini Flash Edit for fast image editing with text prompts.
-    image, editing, google, gemini, fast, text-guided
+        Google Gemini Flash Edit for fast image editing with text prompts.
+        image, editing, google, gemini, fast, text-guided
 
-    Use cases:
-    - Quick image modifications
-    - Fast iterative edits
-    - Object addition or removal
-    - Style adjustments
-    - Rapid prototyping
+        Use cases:
+        - Quick image modifications
+        - Fast iterative edits
+        - Object addition or removal
+        - Style adjustments
+        - Rapid prototyping
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to edit",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Instructions for editing the image"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to edit')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Instructions for editing the image')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1362,53 +1046,29 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.text_to_image
 
-
-class HunyuanImageV3InstructEdit(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class HunyuanImageV3InstructEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Hunyuan Image V3 Instruct Edit with reasoning capabilities for advanced image-to-image editing.
-    image, edit, hunyuan, tencent, instruct, reasoning, image-to-image, img2img, advanced
+        Hunyuan Image V3 Instruct Edit with reasoning capabilities for advanced image-to-image editing.
+        image, edit, hunyuan, tencent, instruct, reasoning, image-to-image, img2img, advanced
 
-    Use cases:
-    - Edit images with complex instructions
-    - Apply style transfers with reasoning
-    - Modify images with multiple reference images
-    - Create variations with intelligent understanding
-    - Transform images with advanced prompt interpretation
+        Use cases:
+        - Edit images with complex instructions
+        - Apply style transfers with reasoning
+        - Modify images with multiple reference images
+        - Create variations with intelligent understanding
+        - Transform images with advanced prompt interpretation
     """
 
-    HunyuanImageSizePreset: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset
-    )
+    HunyuanImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The text prompt for editing the image"
-    )
-    image_urls: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
-        connect_field(
-            default=PydanticUndefined,
-            description="Reference images to use (maximum 2 images)",
-        )
-    )
-    image_size: nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset = Field(
-        default=nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset.AUTO,
-        description="The desired size of the generated image. If auto, size is determined by the model",
-    )
-    num_images: int | OutputHandle[int] = connect_field(
-        default=1, description="The number of images to generate"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5,
-        description="How closely to follow the prompt (higher = stricter adherence)",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Enable safety checker to filter unsafe content"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt for editing the image')
+    image_urls: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=PydanticUndefined, description='Reference images to use (maximum 2 images)')
+    image_size: nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset.AUTO, description='The desired size of the generated image. If auto, size is determined by the model')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely to follow the prompt (higher = stricter adherence)')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1425,7 +1085,6 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class IdeogramV2Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Transform existing images with Ideogram V2's editing capabilities. Modify, adjust, and refine images while maintaining high fidelity and realistic outputs with precise prompt control.
@@ -1438,32 +1097,12 @@ class IdeogramV2Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
         - Generate contextual image edits
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to fill the masked part of the image"
-    )
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to edit",
-    )
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The mask for editing",
-    )
-    style: str | OutputHandle[str] = connect_field(
-        default="auto",
-        description="Style of generated image (auto, general, realistic, design, render_3D, anime)",
-    )
-    expand_prompt: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to expand the prompt with MagicPrompt functionality",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to fill the masked part of the image')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to edit')
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask for editing')
+    style: str | OutputHandle[str] = connect_field(default='auto', description='Style of generated image (auto, general, realistic, design, render_3D, anime)')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1480,7 +1119,6 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class IdeogramV2Remix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Reimagine existing images with Ideogram V2's remix feature. Create variations and adaptations while preserving core elements and adding new creative directions through prompt guidance.
@@ -1494,32 +1132,13 @@ class IdeogramV2Remix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
         - Generate alternative interpretations
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to remix the image with"
-    )
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to remix",
-    )
-    aspect_ratio: str | OutputHandle[str] = connect_field(
-        default="1:1", description="The aspect ratio of the generated image"
-    )
-    strength: float | OutputHandle[float] = connect_field(
-        default=0.8, description="Strength of the input image in the remix"
-    )
-    expand_prompt: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to expand the prompt with MagicPrompt functionality",
-    )
-    style: str | OutputHandle[str] = connect_field(
-        default="auto",
-        description="Style of generated image (auto, general, realistic, design, render_3D, anime)",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The same seed will output the same image every time"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to remix the image with')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to remix')
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='1:1', description='The aspect ratio of the generated image')
+    strength: float | OutputHandle[float] = connect_field(default=0.8, description='Strength of the input image in the remix')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality')
+    style: str | OutputHandle[str] = connect_field(default='auto', description='Style of generated image (auto, general, realistic, design, render_3D, anime)')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1536,42 +1155,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class IdeogramV3Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Ideogram V3 Edit for editing images with text prompts while maintaining structure.
-    image, editing, ideogram, inpainting, text-guided
+        Ideogram V3 Edit for editing images with text prompts while maintaining structure.
+        image, editing, ideogram, inpainting, text-guided
 
-    Use cases:
-    - Edit specific parts of images with prompts
-    - Modify text in images
-    - Change elements while preserving composition
-    - Add or remove objects from images
-    - Refine generated images
+        Use cases:
+        - Edit specific parts of images with prompts
+        - Modify text in images
+        - Change elements while preserving composition
+        - Add or remove objects from images
+        - Refine generated images
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image to edit",
-    )
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The mask indicating areas to edit",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt describing the edit"
-    )
-    style: str | OutputHandle[str] = connect_field(
-        default="auto", description="The style of the edit"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to edit')
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask indicating areas to edit')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the edit')
+    style: str | OutputHandle[str] = connect_field(default='auto', description='The style of the edit')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1588,27 +1190,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class ImageUtilsDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Depth estimation utility for generating depth maps from images.
-    image, depth-map, estimation, 3d, utility
+        Depth estimation utility for generating depth maps from images.
+        image, depth-map, estimation, 3d, utility
 
-    Use cases:
-    - Generate depth maps for 3D effects
-    - Create parallax animations
-    - Enable depth-aware editing
-    - Generate ControlNet inputs
-    - Analyze image depth structure
+        Use cases:
+        - Generate depth maps for 3D effects
+        - Create parallax animations
+        - Enable depth-aware editing
+        - Generate ControlNet inputs
+        - Analyze image depth structure
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image for depth estimation",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image for depth estimation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1625,27 +1221,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class ImageUtilsRembg(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Rembg utility for removing image backgrounds with high accuracy.
-    image, background-removal, utility, processing
+        Rembg utility for removing image backgrounds with high accuracy.
+        image, background-removal, utility, processing
 
-    Use cases:
-    - Remove backgrounds from product photos
-    - Create transparent PNG images
-    - Extract subjects for compositing
-    - Prepare images for design work
-    - Create profile picture cutouts
+        Use cases:
+        - Remove backgrounds from product photos
+        - Create transparent PNG images
+        - Extract subjects for compositing
+        - Prepare images for design work
+        - Create profile picture cutouts
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image for background removal",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image for background removal')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1662,47 +1252,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
-class KolorsImageToImage(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class KolorsImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Kolors Image-to-Image transforms images with the Kolors model.
-    image, transformation, kolors, style-transfer
+        Kolors Image-to-Image transforms images with the Kolors model.
+        image, transformation, kolors, style-transfer
 
-    Use cases:
-    - Transform image style
-    - Apply artistic effects
-    - Modify image content
-    - Create style variations
-    - Generate image edits
+        Use cases:
+        - Transform image style
+        - Apply artistic effects
+        - Modify image content
+        - Create style variations
+        - Generate image edits
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt describing the transformation"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="What to avoid in the generated image"
-    )
-    strength: float | OutputHandle[float] = connect_field(
-        default=0.8, description="Transformation strength"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=25, description="Number of inference steps"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=5.0, description="How closely to follow the prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the transformation')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
+    strength: float | OutputHandle[float] = connect_field(default=0.8, description='Transformation strength')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=25, description='Number of inference steps')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely to follow the prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1719,39 +1289,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class LivePortrait(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Live Portrait animates a single portrait image based on a driving video.
-    image, animation, portrait, face, motion-transfer
+        Live Portrait animates a single portrait image based on a driving video.
+        image, animation, portrait, face, motion-transfer
 
-    Use cases:
-    - Animate static portraits
-    - Create talking head videos
-    - Transfer facial expressions
-    - Create avatar animations
-    - Generate video from single photo
+        Use cases:
+        - Animate static portraits
+        - Create talking head videos
+        - Transfer facial expressions
+        - Create avatar animations
+        - Generate video from single photo
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The portrait image to animate",
-    )
-    driving_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The driving video with motion reference",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The portrait image to animate')
+    driving_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The driving video with motion reference')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1768,33 +1321,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class ObjectRemoval(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Object Removal removes unwanted objects from images using AI.
-    image, inpainting, removal, cleanup
+        Object Removal removes unwanted objects from images using AI.
+        image, inpainting, removal, cleanup
 
-    Use cases:
-    - Remove unwanted objects from photos
-    - Clean up image backgrounds
-    - Remove watermarks or logos
-    - Fix photo imperfections
-    - Create clean product shots
+        Use cases:
+        - Remove unwanted objects from photos
+        - Clean up image backgrounds
+        - Remove watermarks or logos
+        - Fix photo imperfections
+        - Create clean product shots
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The input image",
-    )
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Mask indicating objects to remove",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image')
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Mask indicating objects to remove')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1811,42 +1353,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class PhotoMaker(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    PhotoMaker generates images with customizable subject identity from reference photos.
-    image, face, identity, customization, generation
+        PhotoMaker generates images with customizable subject identity from reference photos.
+        image, face, identity, customization, generation
 
-    Use cases:
-    - Generate images with specific person identity
-    - Create personalized marketing content
-    - Design custom avatars
-    - Produce character-consistent images
-    - Generate variations of a person
+        Use cases:
+        - Generate images with specific person identity
+        - Create personalized marketing content
+        - Design custom avatars
+        - Produce character-consistent images
+        - Generate variations of a person
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The reference image of the subject",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt describing the desired image"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="What to avoid in the generated image"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=50, description="Number of inference steps"
-    )
-    style_strength: float | OutputHandle[float] = connect_field(
-        default=20.0, description="Strength of the style transfer"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The reference image of the subject')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the desired image')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Number of inference steps')
+    style_strength: float | OutputHandle[float] = connect_field(default=20.0, description='Strength of the style transfer')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1863,42 +1389,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class PuLID(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    PuLID generates images with consistent face identity from a reference face.
-    image, face, identity, generation, consistency
+        PuLID generates images with consistent face identity from a reference face.
+        image, face, identity, generation, consistency
 
-    Use cases:
-    - Generate images with consistent face identity
-    - Create character variations
-    - Design personalized avatars
-    - Produce face-consistent content
-    - Generate marketing images with specific faces
+        Use cases:
+        - Generate images with consistent face identity
+        - Create character variations
+        - Design personalized avatars
+        - Produce face-consistent content
+        - Generate marketing images with specific faces
     """
 
-    face_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The reference face image",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt describing the desired image"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="What to avoid in the generated image"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=20, description="Number of inference steps"
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=1.2, description="How closely to follow the prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    face_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The reference face image')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the desired image')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=20, description='Number of inference steps')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1.2, description='How closely to follow the prompt')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1915,55 +1425,28 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
-class QwenImageMaxEdit(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class QwenImageMaxEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Qwen Image Max Edit for advanced image editing with reference images.
-    image, edit, qwen, alibaba, image-to-image, img2img, high-quality
+        Qwen Image Max Edit for advanced image editing with reference images.
+        image, edit, qwen, alibaba, image-to-image, img2img, high-quality
 
-    Use cases:
-    - Edit images with complex instructions
-    - Transform images based on references
-    - Apply style transfers with multiple images
-    - Create variations with intelligent editing
-    - Modify images with detailed prompts
+        Use cases:
+        - Edit images with complex instructions
+        - Transform images based on references
+        - Apply style transfers with multiple images
+        - Create variations with intelligent editing
+        - Modify images with detailed prompts
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Text prompt describing the desired edits"
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Content to avoid in the edited image"
-    )
-    image_urls: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
-        connect_field(
-            default=PydanticUndefined,
-            description="Reference images for editing (1-3 images)",
-        )
-    )
-    image_size: (
-        nodetool.nodes.fal.text_to_image.ImageSizePreset
-        | OutputHandle[nodetool.nodes.fal.text_to_image.ImageSizePreset]
-        | None
-    ) = connect_field(
-        default=None,
-        description="The size of the generated image. If not provided, uses input image size",
-    )
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Enable LLM prompt optimization for better results"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Enable content moderation"
-    )
-    num_images: int | OutputHandle[int] = connect_field(
-        default=1, description="The number of images to generate"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the desired edits')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Content to avoid in the edited image')
+    image_urls: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=PydanticUndefined, description='Reference images for editing (1-3 images)')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset | OutputHandle[nodetool.nodes.fal.text_to_image.ImageSizePreset] | None = connect_field(default=None, description='The size of the generated image. If not provided, uses input image size')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Enable LLM prompt optimization for better results')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable content moderation')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1980,30 +1463,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class Retoucher(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Retoucher enhances and retouches photos with AI-powered corrections.
-    image, enhancement, retouching, beautification
+        Retoucher enhances and retouches photos with AI-powered corrections.
+        image, enhancement, retouching, beautification
 
-    Use cases:
-    - Enhance portrait photos
-    - Apply skin retouching
-    - Improve photo quality
-    - Fix lighting issues
-    - Professional photo editing
+        Use cases:
+        - Enhance portrait photos
+        - Apply skin retouching
+        - Improve photo quality
+        - Fix lighting issues
+        - Professional photo editing
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to retouch",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Optional prompt to guide the retouching"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to retouch')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Optional prompt to guide the retouching')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2020,7 +1495,6 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
-
 class WanEffects(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
     Apply stylized effects to an image using the WAN Effects model.
@@ -2033,15 +1507,8 @@ class WanEffects(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
         - Quickly generate meme-style effects
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Input image to apply the effect to",
-    )
-    effect: str | OutputHandle[str] = connect_field(
-        default="", description="Name of the effect to apply"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input image to apply the effect to')
+    effect: str | OutputHandle[str] = connect_field(default='', description='Name of the effect to apply')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2050,3 +1517,5 @@ class WanEffects(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

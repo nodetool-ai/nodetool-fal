@@ -3280,3 +3280,167 @@ class ZImageTurbo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_inference_steps"]
+
+
+class ZImageAcceleration(str, Enum):
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+
+class OutputFormat(str, Enum):
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
+class ZImageBase(FALNode):
+    """
+    Generate high-quality images using the Z-Image Base model. Provides detailed image generation with multiple acceleration and quality options.
+    image, generation, text-to-image, z-image, detailed, quality
+
+    Use cases:
+    - Generate detailed images from text prompts
+    - Create high-quality artwork
+    - Produce professional illustrations
+    - Generate concept art
+    - Create visual content for projects
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.LANDSCAPE_4_3,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform"
+    )
+    seed: int = Field(
+        default=-1, description="The same seed will output the same image every time"
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image"
+    )
+    acceleration: ZImageAcceleration = Field(
+        default=ZImageAcceleration.REGULAR,
+        description="The acceleration level to use",
+    )
+    guidance_scale: float = Field(
+        default=4.0, description="The guidance scale to use for image generation"
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use for image generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": self.output_format.value,
+            "acceleration": self.acceleration.value,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/z-image/base",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "num_inference_steps"]
+
+
+class ZImageBaseLora(FALNode):
+    """
+    Generate high-quality images using the Z-Image Base model with LoRA support. Allows fine-tuned image generation with custom LoRA models.
+    image, generation, text-to-image, z-image, lora, fine-tuning
+
+    Use cases:
+    - Generate images with custom LoRA fine-tuning
+    - Create specialized style images
+    - Produce character-consistent artwork
+    - Generate images matching specific aesthetics
+    - Create brand-aligned visual content
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from"
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.LANDSCAPE_4_3,
+        description="The size of the generated image",
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform"
+    )
+    seed: int = Field(
+        default=-1, description="The same seed will output the same image every time"
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image"
+    )
+    acceleration: ZImageAcceleration = Field(
+        default=ZImageAcceleration.REGULAR,
+        description="The acceleration level to use",
+    )
+    guidance_scale: float = Field(
+        default=4.0, description="The guidance scale to use for image generation"
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use for image generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_inference_steps": self.num_inference_steps,
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": self.output_format.value,
+            "acceleration": self.acceleration.value,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/z-image/base/lora",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "num_inference_steps"]

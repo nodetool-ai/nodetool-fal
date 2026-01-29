@@ -1783,3 +1783,337 @@ class MiniMaxHailuo23ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+
+class LTXVideoSize(Enum):
+    AUTO = "auto"
+    SQUARE_HD = "square_hd"
+    SQUARE = "square"
+    PORTRAIT_4_3 = "portrait_4_3"
+    PORTRAIT_16_9 = "portrait_16_9"
+    LANDSCAPE_4_3 = "landscape_4_3"
+    LANDSCAPE_16_9 = "landscape_16_9"
+
+
+class LTXAcceleration(Enum):
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+
+class LTXCameraLoRA(Enum):
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+
+class LTXVideoOutputType(Enum):
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF = "GIF (.gif)"
+
+
+class LTXVideoQuality(Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+
+class LTXVideoWriteMode(Enum):
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+
+class LTX219BAudioToVideo(FALNode):
+    """
+    Generate videos from audio with optional text or image prompts using the LTX-2 19B model. Supports advanced camera controls and high-quality video generation.
+    video, audio-to-video, generation, ltx, camera-control, audio-driven
+
+    Use cases:
+    - Generate talking head videos from audio
+    - Create music visualizations from audio tracks
+    - Produce audio-driven animations
+    - Generate synchronized video content from podcasts
+    - Create video content from voice recordings
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate the video from"
+    )
+    audio: AudioRef = Field(
+        default=AudioRef(), description="The audio to generate the video from"
+    )
+    image: ImageRef | None = Field(
+        default=None, description="Optional image to use as the first frame"
+    )
+    match_audio_length: bool = Field(
+        default=True,
+        description="Calculate frames based on audio duration and FPS",
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames to generate"
+    )
+    video_size: LTXVideoSize = Field(
+        default=LTXVideoSize.LANDSCAPE_4_3,
+        description="The size of the generated video",
+    )
+    use_multiscale: bool = Field(
+        default=True,
+        description="Use multi-scale generation for better coherence",
+    )
+    fps: float = Field(
+        default=25.0, description="The frames per second of the generated video"
+    )
+    guidance_scale: float = Field(
+        default=3.0, description="The guidance scale to use"
+    )
+    num_inference_steps: int = Field(
+        default=40, description="The number of inference steps"
+    )
+    acceleration: LTXAcceleration = Field(
+        default=LTXAcceleration.REGULAR, description="The acceleration level to use"
+    )
+    camera_lora: LTXCameraLoRA = Field(
+        default=LTXCameraLoRA.NONE, description="The camera LoRA for movement control"
+    )
+    camera_lora_scale: float = Field(
+        default=1.0, description="The scale of the camera LoRA"
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt for video generation"
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker"
+    )
+    video_output_type: LTXVideoOutputType = Field(
+        default=LTXVideoOutputType.X264_MP4,
+        description="The output type of the generated video",
+    )
+    video_quality: LTXVideoQuality = Field(
+        default=LTXVideoQuality.HIGH, description="The quality of the generated video"
+    )
+    video_write_mode: LTXVideoWriteMode = Field(
+        default=LTXVideoWriteMode.BALANCED,
+        description="The write mode of the generated video",
+    )
+    image_strength: float = Field(
+        default=1.0, description="The strength of the image for video generation"
+    )
+    audio_strength: float = Field(
+        default=1.0, description="Audio conditioning strength"
+    )
+    preprocess_audio: bool = Field(
+        default=True, description="Whether to preprocess the audio"
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "LTX-2 19B Audio to Video"
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "prompt": self.prompt,
+            "audio_url": audio_url,
+            "match_audio_length": self.match_audio_length,
+            "num_frames": self.num_frames,
+            "video_size": self.video_size.value,
+            "use_multiscale": self.use_multiscale,
+            "fps": self.fps,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "acceleration": self.acceleration.value,
+            "camera_lora": self.camera_lora.value,
+            "camera_lora_scale": self.camera_lora_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "video_output_type": self.video_output_type.value,
+            "video_quality": self.video_quality.value,
+            "video_write_mode": self.video_write_mode.value,
+            "image_strength": self.image_strength,
+            "audio_strength": self.audio_strength,
+            "preprocess_audio": self.preprocess_audio,
+        }
+
+        if self.image and self.image.uri:
+            image_base64 = await context.image_to_base64(self.image)
+            arguments["image_url"] = f"data:image/png;base64,{image_base64}"
+
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+        if self.enable_prompt_expansion:
+            arguments["enable_prompt_expansion"] = self.enable_prompt_expansion
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-2-19b/audio-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "audio", "video_size"]
+
+
+class LTX219BDistilledAudioToVideo(FALNode):
+    """
+    Faster audio-to-video generation using the distilled LTX-2 19B model. Provides quicker video generation from audio with optional prompts.
+    video, audio-to-video, generation, ltx, distilled, fast
+
+    Use cases:
+    - Quick audio-driven video generation
+    - Fast talking head video creation
+    - Rapid music visualization
+    - Time-efficient audio-to-video conversion
+    - Fast prototype video generation from audio
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate the video from"
+    )
+    audio: AudioRef = Field(
+        default=AudioRef(), description="The audio to generate the video from"
+    )
+    image: ImageRef | None = Field(
+        default=None, description="Optional image to use as the first frame"
+    )
+    match_audio_length: bool = Field(
+        default=True,
+        description="Calculate frames based on audio duration and FPS",
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames to generate"
+    )
+    video_size: LTXVideoSize = Field(
+        default=LTXVideoSize.LANDSCAPE_4_3,
+        description="The size of the generated video",
+    )
+    use_multiscale: bool = Field(
+        default=True,
+        description="Use multi-scale generation for better coherence",
+    )
+    fps: float = Field(
+        default=25.0, description="The frames per second of the generated video"
+    )
+    guidance_scale: float = Field(
+        default=3.0, description="The guidance scale to use"
+    )
+    num_inference_steps: int = Field(
+        default=40, description="The number of inference steps"
+    )
+    acceleration: LTXAcceleration = Field(
+        default=LTXAcceleration.REGULAR, description="The acceleration level to use"
+    )
+    camera_lora: LTXCameraLoRA = Field(
+        default=LTXCameraLoRA.NONE, description="The camera LoRA for movement control"
+    )
+    camera_lora_scale: float = Field(
+        default=1.0, description="The scale of the camera LoRA"
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt for video generation"
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker"
+    )
+    video_output_type: LTXVideoOutputType = Field(
+        default=LTXVideoOutputType.X264_MP4,
+        description="The output type of the generated video",
+    )
+    video_quality: LTXVideoQuality = Field(
+        default=LTXVideoQuality.HIGH, description="The quality of the generated video"
+    )
+    video_write_mode: LTXVideoWriteMode = Field(
+        default=LTXVideoWriteMode.BALANCED,
+        description="The write mode of the generated video",
+    )
+    image_strength: float = Field(
+        default=1.0, description="The strength of the image for video generation"
+    )
+    audio_strength: float = Field(
+        default=1.0, description="Audio conditioning strength"
+    )
+    preprocess_audio: bool = Field(
+        default=True, description="Whether to preprocess the audio"
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "LTX-2 19B Distilled Audio to Video"
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "prompt": self.prompt,
+            "audio_url": audio_url,
+            "match_audio_length": self.match_audio_length,
+            "num_frames": self.num_frames,
+            "video_size": self.video_size.value,
+            "use_multiscale": self.use_multiscale,
+            "fps": self.fps,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "acceleration": self.acceleration.value,
+            "camera_lora": self.camera_lora.value,
+            "camera_lora_scale": self.camera_lora_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "video_output_type": self.video_output_type.value,
+            "video_quality": self.video_quality.value,
+            "video_write_mode": self.video_write_mode.value,
+            "image_strength": self.image_strength,
+            "audio_strength": self.audio_strength,
+            "preprocess_audio": self.preprocess_audio,
+        }
+
+        if self.image and self.image.uri:
+            image_base64 = await context.image_to_base64(self.image)
+            arguments["image_url"] = f"data:image/png;base64,{image_base64}"
+
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+        if self.enable_prompt_expansion:
+            arguments["enable_prompt_expansion"] = self.enable_prompt_expansion
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-2-19b/distilled/audio-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "audio", "video_size"]

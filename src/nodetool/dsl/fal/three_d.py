@@ -18,30 +18,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.three_d
 from nodetool.workflows.base_node import BaseNode
 
-
 class Era3D(GraphNode[nodetool.nodes.fal.three_d.Era3D.OutputType]):
     """
 
-    Era-3D generates multi-view images and 3D models from single images.
-    3d, generation, image-to-3d, era3d, multiview
+        Era-3D generates multi-view images and 3D models from single images.
+        3d, generation, image-to-3d, era3d, multiview
 
-    Use cases:
-    - Generate multi-view images
-    - Create 3D from single photo
-    - Produce 3D content
-    - Generate 3D assets
-    - Create 3D visualizations
+        Use cases:
+        - Generate multi-view images
+        - Create 3D from single photo
+        - Produce 3D content
+        - Generate 3D assets
+        - Create 3D visualizations
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to convert to 3D",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to convert to 3D')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @property
     def out(self) -> "Era3DOutputs":
@@ -55,15 +47,14 @@ class Era3D(GraphNode[nodetool.nodes.fal.three_d.Era3D.OutputType]):
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
 
-
 class Era3DOutputs(OutputsProxy):
     @property
     def images(self) -> OutputHandle[list[types.ImageRef]]:
-        return typing.cast(OutputHandle[list[types.ImageRef]], self["images"])
+        return typing.cast(OutputHandle[list[types.ImageRef]], self['images'])
 
     @property
     def model(self) -> OutputHandle[types.Model3DRef]:
-        return typing.cast(OutputHandle[types.Model3DRef], self["model"])
+        return typing.cast(OutputHandle[types.Model3DRef], self['model'])
 
 
 import typing
@@ -72,30 +63,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.three_d
 from nodetool.workflows.base_node import BaseNode
 
-
 class Hunyuan3DV2(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRef]):
     """
 
-    Hunyuan3D V2 generates high-quality 3D models from images.
-    3d, generation, image-to-3d, hunyuan
+        Hunyuan3D V2 generates high-quality 3D models from images.
+        3d, generation, image-to-3d, hunyuan
 
-    Use cases:
-    - Generate detailed 3D models
-    - Create 3D assets from photos
-    - Produce high-quality 3D content
-    - Create 3D visualizations
-    - Generate 3D for productions
+        Use cases:
+        - Generate detailed 3D models
+        - Create 3D assets from photos
+        - Produce high-quality 3D content
+        - Create 3D visualizations
+        - Generate 3D for productions
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to convert to 3D",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to convert to 3D')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -112,30 +95,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.three_d
 from nodetool.workflows.base_node import BaseNode
 
-
 class Trellis(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRef]):
     """
 
-    Trellis generates 3D models from single images.
-    3d, generation, image-to-3d, trellis
+        Trellis generates 3D models from single images.
+        3d, generation, image-to-3d, trellis
 
-    Use cases:
-    - Generate 3D models from images
-    - Create 3D assets from photos
-    - Produce 3D content for games
-    - Create 3D visualizations
-    - Generate 3D for AR/VR
+        Use cases:
+        - Generate 3D models from images
+        - Create 3D assets from photos
+        - Produce 3D content for games
+        - Create 3D visualizations
+        - Generate 3D for AR/VR
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to convert to 3D",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to convert to 3D')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -152,27 +127,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.three_d
 from nodetool.workflows.base_node import BaseNode
 
-
 class TripoSR(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     """
 
-    TripoSR generates 3D models from single images with fast inference.
-    3d, generation, image-to-3d, triposr, fast
+        TripoSR generates 3D models from single images with fast inference.
+        3d, generation, image-to-3d, triposr, fast
 
-    Use cases:
-    - Quick 3D model generation
-    - Fast prototyping
-    - Create 3D assets rapidly
-    - Real-time 3D conversion
-    - Batch 3D generation
+        Use cases:
+        - Quick 3D model generation
+        - Fast prototyping
+        - Create 3D assets rapidly
+        - Real-time 3D conversion
+        - Batch 3D generation
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to convert to 3D",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to convert to 3D')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -181,3 +150,5 @@ class TripoSR(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+
