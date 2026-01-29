@@ -510,6 +510,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class FaceSwapImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Swap faces between source and target images. Creates realistic face swaps with optional occlusion prevention for handling objects covering faces.
+        face-swap, face-transfer, image-manipulation, face-replacement, portrait
+
+        Use cases:
+        - Swap faces in photos for creative content
+        - Create fun photo edits with friend's faces
+        - Generate alternative portraits
+        - Test how you'd look with different hairstyles
+        - Create face-swapped memes and social content
+    """
+
+    source_face: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Source face image to swap from')
+    target_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Target image to swap face into')
+    enable_occlusion_prevention: bool | OutputHandle[bool] = connect_field(default=False, description='Enable occlusion prevention for faces covered by hands/objects (costs 2x more)')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FaceSwapImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class FaceToSticker(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 

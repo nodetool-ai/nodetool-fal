@@ -1861,6 +1861,94 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class ZImageBase(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Generate high-quality images using the Z-Image Base model. Provides detailed image generation with multiple acceleration and quality options.
+        image, generation, text-to-image, z-image, detailed, quality
+
+        Use cases:
+        - Generate detailed images from text prompts
+        - Create high-quality artwork
+        - Produce professional illustrations
+        - Generate concept art
+        - Create visual content for projects
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+    ZImageAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ZImageAcceleration
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image')
+    acceleration: nodetool.nodes.fal.text_to_image.ZImageAcceleration = Field(default=nodetool.nodes.fal.text_to_image.ZImageAcceleration.REGULAR, description='The acceleration level to use')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.0, description='The guidance scale to use for image generation')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use for image generation')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.ZImageBase
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ZImageBaseLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Generate high-quality images using the Z-Image Base model with LoRA support. Allows fine-tuned image generation with custom LoRA models.
+        image, generation, text-to-image, z-image, lora, fine-tuning
+
+        Use cases:
+        - Generate images with custom LoRA fine-tuning
+        - Create specialized style images
+        - Produce character-consistent artwork
+        - Generate images matching specific aesthetics
+        - Create brand-aligned visual content
+    """
+
+    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+    ZImageAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ZImageAcceleration
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image')
+    acceleration: nodetool.nodes.fal.text_to_image.ZImageAcceleration = Field(default=nodetool.nodes.fal.text_to_image.ZImageAcceleration.REGULAR, description='The acceleration level to use')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.0, description='The guidance scale to use for image generation')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use for image generation')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.ZImageBaseLora
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class ZImageTurbo(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 

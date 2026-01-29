@@ -2184,3 +2184,52 @@ class BriaReplaceBackground(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "steps_num"]
+
+
+class FaceSwapImage(FALNode):
+    """
+    Swap faces between source and target images. Creates realistic face swaps with optional occlusion prevention for handling objects covering faces.
+    face-swap, face-transfer, image-manipulation, face-replacement, portrait
+
+    Use cases:
+    - Swap faces in photos for creative content
+    - Create fun photo edits with friend's faces
+    - Generate alternative portraits
+    - Test how you'd look with different hairstyles
+    - Create face-swapped memes and social content
+    """
+
+    source_face: ImageRef = Field(
+        default=ImageRef(), description="Source face image to swap from"
+    )
+    target_image: ImageRef = Field(
+        default=ImageRef(), description="Target image to swap face into"
+    )
+    enable_occlusion_prevention: bool = Field(
+        default=False,
+        description="Enable occlusion prevention for faces covered by hands/objects (costs 2x more)",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        source_base64 = await context.image_to_base64(self.source_face)
+        target_base64 = await context.image_to_base64(self.target_image)
+
+        arguments = {
+            "source_face_url": f"data:image/png;base64,{source_base64}",
+            "target_image_url": f"data:image/png;base64,{target_base64}",
+        }
+
+        if self.enable_occlusion_prevention:
+            arguments["enable_occlusion_prevention"] = self.enable_occlusion_prevention
+
+        res = await self.submit_request(
+            context=context,
+            application="half-moon-ai/ai-face-swap/faceswapimage",
+            arguments=arguments,
+        )
+        assert "image" in res
+        return ImageRef(uri=res["image"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["source_face", "target_image"]

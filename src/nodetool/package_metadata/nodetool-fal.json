@@ -939,6 +939,65 @@
       ]
     },
     {
+      "title": "Face Swap Image",
+      "description": "Swap faces between source and target images. Creates realistic face swaps with optional occlusion prevention for handling objects covering faces.\n    face-swap, face-transfer, image-manipulation, face-replacement, portrait\n\n    Use cases:\n    - Swap faces in photos for creative content\n    - Create fun photo edits with friend's faces\n    - Generate alternative portraits\n    - Test how you'd look with different hairstyles\n    - Create face-swapped memes and social content",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.FaceSwapImage",
+      "properties": [
+        {
+          "name": "source_face",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Source Face",
+          "description": "Source face image to swap from"
+        },
+        {
+          "name": "target_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Target Image",
+          "description": "Target image to swap face into"
+        },
+        {
+          "name": "enable_occlusion_prevention",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Occlusion Prevention",
+          "description": "Enable occlusion prevention for faces covered by hands/objects (costs 2x more)"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "source_face",
+        "target_image"
+      ]
+    },
+    {
       "title": "Face To Sticker",
       "description": "Face to Sticker transforms face photos into fun sticker-style images.\n    image, face, sticker, fun, transformation\n\n    Use cases:\n    - Create fun stickers from photos\n    - Generate emoji-style faces\n    - Design personalized sticker packs\n    - Create cartoon avatars\n    - Produce fun social media content",
       "namespace": "fal.image_to_image",
@@ -12370,6 +12429,270 @@
         "prompt",
         "guidance_scale",
         "negative_prompt"
+      ]
+    },
+    {
+      "title": "ZImage Base",
+      "description": "Generate high-quality images using the Z-Image Base model. Provides detailed image generation with multiple acceleration and quality options.\n    image, generation, text-to-image, z-image, detailed, quality\n\n    Use cases:\n    - Generate detailed images from text prompts\n    - Create high-quality artwork\n    - Produce professional illustrations\n    - Generate concept art\n    - Create visual content for projects",
+      "namespace": "fal.text_to_image",
+      "node_type": "fal.text_to_image.ZImageBase",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "enum",
+            "values": [
+              "jpeg",
+              "png",
+              "webp"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.OutputFormat"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "The format of the generated image"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ZImageAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 4.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use for image generation"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to use for image generation"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "image_size",
+        "num_inference_steps"
+      ]
+    },
+    {
+      "title": "ZImage Base Lora",
+      "description": "Generate high-quality images using the Z-Image Base model with LoRA support. Allows fine-tuned image generation with custom LoRA models.\n    image, generation, text-to-image, z-image, lora, fine-tuning\n\n    Use cases:\n    - Generate images with custom LoRA fine-tuning\n    - Create specialized style images\n    - Produce character-consistent artwork\n    - Generate images matching specific aesthetics\n    - Create brand-aligned visual content",
+      "namespace": "fal.text_to_image",
+      "node_type": "fal.text_to_image.ZImageBaseLora",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the generated image"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The same seed will output the same image every time"
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "enum",
+            "values": [
+              "jpeg",
+              "png",
+              "webp"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.OutputFormat"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "The format of the generated image"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ZImageAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 4.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use for image generation"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt to use for image generation"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "image_size",
+        "num_inference_steps"
       ]
     },
     {
