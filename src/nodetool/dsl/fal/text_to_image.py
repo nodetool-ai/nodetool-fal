@@ -1640,6 +1640,63 @@ import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class HunyuanImageV3Instruct(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Hunyuan Image V3 Instruct with internal reasoning capabilities for advanced text-to-image generation.
+    image, generation, hunyuan, tencent, instruct, reasoning, text-to-image, txt2img, advanced
+
+    Use cases:
+    - Generate highly detailed images with reasoning
+    - Create complex compositions with multiple elements
+    - Produce photorealistic images with fine control
+    - Generate artistic images with advanced understanding
+    - Create images with complex prompt interpretation
+    """
+
+    HunyuanImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The text prompt to generate an image from"
+    )
+    image_size: nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset.AUTO,
+        description="The desired size of the generated image. If auto, size is determined by the model",
+    )
+    num_images: int | OutputHandle[int] = connect_field(
+        default=1, description="The number of images to generate"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=3.5,
+        description="How closely to follow the prompt (higher = stricter adherence)",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Enable safety checker to filter unsafe content"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.HunyuanImageV3Instruct
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class HyperSDXL(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 

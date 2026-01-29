@@ -1187,6 +1187,81 @@ import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
 
+class PixverseV56ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+    Generate high-quality videos from images with Pixverse v5.6.
+        video, generation, pixverse, v5.6, image-to-video, img2vid
+
+        Use cases:
+        - Animate photos into professional video clips
+        - Create dynamic product showcase videos
+        - Generate stylized video content from artwork
+        - Produce high-resolution social media animations
+        - Transform static images with various visual styles
+    """
+
+    PixverseV56Resolution: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.PixverseV56Resolution
+    )
+    PixverseV56Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.PixverseV56Duration
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Text prompt describing the desired video motion"
+    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to transform into a video",
+    )
+    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(
+        default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.RES_720P,
+        description="The resolution quality of the output video",
+    )
+    duration: nodetool.nodes.fal.image_to_video.PixverseV56Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.PixverseV56Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated video"
+    )
+    style: (
+        nodetool.nodes.fal.image_to_video.PixverseV56Style
+        | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56Style]
+        | None
+    ) = connect_field(default=None, description="Optional visual style for the video")
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Optional seed for reproducible generation"
+    )
+    generate_audio_switch: bool | OutputHandle[bool] | None = connect_field(
+        default=None, description="Whether to generate audio for the video"
+    )
+    thinking_type: (
+        nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType
+        | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType]
+        | None
+    ) = connect_field(default=None, description="Thinking mode for video generation")
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.PixverseV56ImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
 class SadTalker(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 

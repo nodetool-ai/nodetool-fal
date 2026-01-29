@@ -19,7 +19,7 @@ import nodetool.nodes.fal.three_d
 from nodetool.workflows.base_node import BaseNode
 
 
-class Era3D(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
+class Era3D(GraphNode[nodetool.nodes.fal.three_d.Era3D.OutputType]):
     """
 
     Era-3D generates multi-view images and 3D models from single images.
@@ -43,6 +43,10 @@ class Era3D(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
         default=-1, description="Seed for reproducible generation"
     )
 
+    @property
+    def out(self) -> "Era3DOutputs":
+        return Era3DOutputs(self)
+
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.three_d.Era3D
@@ -52,6 +56,16 @@ class Era3D(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
         return cls.get_node_class().get_node_type()
 
 
+class Era3DOutputs(OutputsProxy):
+    @property
+    def images(self) -> OutputHandle[list[types.ImageRef]]:
+        return typing.cast(OutputHandle[list[types.ImageRef]], self["images"])
+
+    @property
+    def model(self) -> OutputHandle[types.Model3DRef]:
+        return typing.cast(OutputHandle[types.Model3DRef], self["model"])
+
+
 import typing
 from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
@@ -59,7 +73,7 @@ import nodetool.nodes.fal.three_d
 from nodetool.workflows.base_node import BaseNode
 
 
-class Hunyuan3DV2(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
+class Hunyuan3DV2(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRef]):
     """
 
     Hunyuan3D V2 generates high-quality 3D models from images.
@@ -99,7 +113,7 @@ import nodetool.nodes.fal.three_d
 from nodetool.workflows.base_node import BaseNode
 
 
-class Trellis(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
+class Trellis(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRef]):
     """
 
     Trellis generates 3D models from single images.
