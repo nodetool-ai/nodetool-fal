@@ -345,6 +345,126 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
+class LTX219BAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+        Generate videos from audio with optional text or image prompts using the LTX-2 19B model. Supports advanced camera controls and high-quality video generation.
+        video, audio-to-video, generation, ltx, camera-control, audio-driven
+
+        Use cases:
+        - Generate talking head videos from audio
+        - Create music visualizations from audio tracks
+        - Produce audio-driven animations
+        - Generate synchronized video content from podcasts
+        - Create video content from voice recordings
+    """
+
+    LTXVideoSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoSize
+    LTXAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXAcceleration
+    LTXCameraLoRA: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXCameraLoRA
+    LTXVideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoOutputType
+    LTXVideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoQuality
+    LTXVideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoWriteMode
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio to generate the video from')
+    image: nodetool.metadata.types.ImageRef | OutputHandle[nodetool.metadata.types.ImageRef] | None = connect_field(default=None, description='Optional image to use as the first frame')
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='Calculate frames based on audio duration and FPS')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate')
+    video_size: nodetool.nodes.fal.image_to_video.LTXVideoSize = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoSize.LANDSCAPE_4_3, description='The size of the generated video')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Use multi-scale generation for better coherence')
+    fps: float | OutputHandle[float] = connect_field(default=25.0, description='The frames per second of the generated video')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.0, description='The guidance scale to use')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps')
+    acceleration: nodetool.nodes.fal.image_to_video.LTXAcceleration = Field(default=nodetool.nodes.fal.image_to_video.LTXAcceleration.REGULAR, description='The acceleration level to use')
+    camera_lora: nodetool.nodes.fal.image_to_video.LTXCameraLoRA = Field(default=nodetool.nodes.fal.image_to_video.LTXCameraLoRA.NONE, description='The camera LoRA for movement control')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1.0, description='The scale of the camera LoRA')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt for video generation')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker')
+    video_output_type: nodetool.nodes.fal.image_to_video.LTXVideoOutputType = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoOutputType.X264_MP4, description='The output type of the generated video')
+    video_quality: nodetool.nodes.fal.image_to_video.LTXVideoQuality = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoQuality.HIGH, description='The quality of the generated video')
+    video_write_mode: nodetool.nodes.fal.image_to_video.LTXVideoWriteMode = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoWriteMode.BALANCED, description='The write mode of the generated video')
+    image_strength: float | OutputHandle[float] = connect_field(default=1.0, description='The strength of the image for video generation')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1.0, description='Audio conditioning strength')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.LTX219BAudioToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+class LTX219BDistilledAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+    """
+
+        Faster audio-to-video generation using the distilled LTX-2 19B model. Provides quicker video generation from audio with optional prompts.
+        video, audio-to-video, generation, ltx, distilled, fast
+
+        Use cases:
+        - Quick audio-driven video generation
+        - Fast talking head video creation
+        - Rapid music visualization
+        - Time-efficient audio-to-video conversion
+        - Fast prototype video generation from audio
+    """
+
+    LTXVideoSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoSize
+    LTXAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXAcceleration
+    LTXCameraLoRA: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXCameraLoRA
+    LTXVideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoOutputType
+    LTXVideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoQuality
+    LTXVideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LTXVideoWriteMode
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio to generate the video from')
+    image: nodetool.metadata.types.ImageRef | OutputHandle[nodetool.metadata.types.ImageRef] | None = connect_field(default=None, description='Optional image to use as the first frame')
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='Calculate frames based on audio duration and FPS')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate')
+    video_size: nodetool.nodes.fal.image_to_video.LTXVideoSize = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoSize.LANDSCAPE_4_3, description='The size of the generated video')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Use multi-scale generation for better coherence')
+    fps: float | OutputHandle[float] = connect_field(default=25.0, description='The frames per second of the generated video')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.0, description='The guidance scale to use')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps')
+    acceleration: nodetool.nodes.fal.image_to_video.LTXAcceleration = Field(default=nodetool.nodes.fal.image_to_video.LTXAcceleration.REGULAR, description='The acceleration level to use')
+    camera_lora: nodetool.nodes.fal.image_to_video.LTXCameraLoRA = Field(default=nodetool.nodes.fal.image_to_video.LTXCameraLoRA.NONE, description='The camera LoRA for movement control')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1.0, description='The scale of the camera LoRA')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt for video generation')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker')
+    video_output_type: nodetool.nodes.fal.image_to_video.LTXVideoOutputType = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoOutputType.X264_MP4, description='The output type of the generated video')
+    video_quality: nodetool.nodes.fal.image_to_video.LTXVideoQuality = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoQuality.HIGH, description='The quality of the generated video')
+    video_write_mode: nodetool.nodes.fal.image_to_video.LTXVideoWriteMode = Field(default=nodetool.nodes.fal.image_to_video.LTXVideoWriteMode.BALANCED, description='The write mode of the generated video')
+    image_strength: float | OutputHandle[float] = connect_field(default=1.0, description='The strength of the image for video generation')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1.0, description='Audio conditioning strength')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.LTX219BDistilledAudioToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
 class LTX219BImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 

@@ -13148,6 +13148,572 @@
       ]
     },
     {
+      "title": "LTX-2 19B Audio to Video",
+      "description": "Generate videos from audio with optional text or image prompts using the LTX-2 19B model. Supports advanced camera controls and high-quality video generation.\n    video, audio-to-video, generation, ltx, camera-control, audio-driven\n\n    Use cases:\n    - Generate talking head videos from audio\n    - Create music visualizations from audio tracks\n    - Produce audio-driven animations\n    - Generate synchronized video content from podcasts\n    - Create video content from voice recordings",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.LTX219BAudioToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the video from"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "The audio to generate the video from"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image",
+            "optional": true
+          },
+          "default": null,
+          "title": "Image",
+          "description": "Optional image to use as the first frame"
+        },
+        {
+          "name": "match_audio_length",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Match Audio Length",
+          "description": "Calculate frames based on audio duration and FPS"
+        },
+        {
+          "name": "num_frames",
+          "type": {
+            "type": "int"
+          },
+          "default": 121,
+          "title": "Num Frames",
+          "description": "The number of frames to generate"
+        },
+        {
+          "name": "video_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto",
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoSize"
+          },
+          "default": "landscape_4_3",
+          "title": "Video Size",
+          "description": "The size of the generated video"
+        },
+        {
+          "name": "use_multiscale",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Use Multiscale",
+          "description": "Use multi-scale generation for better coherence"
+        },
+        {
+          "name": "fps",
+          "type": {
+            "type": "float"
+          },
+          "default": 25.0,
+          "title": "Fps",
+          "description": "The frames per second of the generated video"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 40,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high",
+              "full"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "camera_lora",
+          "type": {
+            "type": "enum",
+            "values": [
+              "dolly_in",
+              "dolly_out",
+              "dolly_left",
+              "dolly_right",
+              "jib_up",
+              "jib_down",
+              "static",
+              "none"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXCameraLoRA"
+          },
+          "default": "none",
+          "title": "Camera Lora",
+          "description": "The camera LoRA for movement control"
+        },
+        {
+          "name": "camera_lora_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Camera Lora Scale",
+          "description": "The scale of the camera LoRA"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt for video generation"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The seed for the random number generator"
+        },
+        {
+          "name": "enable_prompt_expansion",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Prompt Expansion",
+          "description": "Whether to enable prompt expansion"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "Whether to enable the safety checker"
+        },
+        {
+          "name": "video_output_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "X264 (.mp4)",
+              "VP9 (.webm)",
+              "PRORES4444 (.mov)",
+              "GIF (.gif)"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoOutputType"
+          },
+          "default": "X264 (.mp4)",
+          "title": "Video Output Type",
+          "description": "The output type of the generated video"
+        },
+        {
+          "name": "video_quality",
+          "type": {
+            "type": "enum",
+            "values": [
+              "low",
+              "medium",
+              "high",
+              "maximum"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoQuality"
+          },
+          "default": "high",
+          "title": "Video Quality",
+          "description": "The quality of the generated video"
+        },
+        {
+          "name": "video_write_mode",
+          "type": {
+            "type": "enum",
+            "values": [
+              "fast",
+              "balanced",
+              "small"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoWriteMode"
+          },
+          "default": "balanced",
+          "title": "Video Write Mode",
+          "description": "The write mode of the generated video"
+        },
+        {
+          "name": "image_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Image Strength",
+          "description": "The strength of the image for video generation"
+        },
+        {
+          "name": "audio_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Audio Strength",
+          "description": "Audio conditioning strength"
+        },
+        {
+          "name": "preprocess_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Preprocess Audio",
+          "description": "Whether to preprocess the audio"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "audio",
+        "video_size"
+      ]
+    },
+    {
+      "title": "LTX-2 19B Distilled Audio to Video",
+      "description": "Faster audio-to-video generation using the distilled LTX-2 19B model. Provides quicker video generation from audio with optional prompts.\n    video, audio-to-video, generation, ltx, distilled, fast\n\n    Use cases:\n    - Quick audio-driven video generation\n    - Fast talking head video creation\n    - Rapid music visualization\n    - Time-efficient audio-to-video conversion\n    - Fast prototype video generation from audio",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.LTX219BDistilledAudioToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate the video from"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {
+            "type": "audio",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Audio",
+          "description": "The audio to generate the video from"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image",
+            "optional": true
+          },
+          "default": null,
+          "title": "Image",
+          "description": "Optional image to use as the first frame"
+        },
+        {
+          "name": "match_audio_length",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Match Audio Length",
+          "description": "Calculate frames based on audio duration and FPS"
+        },
+        {
+          "name": "num_frames",
+          "type": {
+            "type": "int"
+          },
+          "default": 121,
+          "title": "Num Frames",
+          "description": "The number of frames to generate"
+        },
+        {
+          "name": "video_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto",
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoSize"
+          },
+          "default": "landscape_4_3",
+          "title": "Video Size",
+          "description": "The size of the generated video"
+        },
+        {
+          "name": "use_multiscale",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Use Multiscale",
+          "description": "Use multi-scale generation for better coherence"
+        },
+        {
+          "name": "fps",
+          "type": {
+            "type": "float"
+          },
+          "default": 25.0,
+          "title": "Fps",
+          "description": "The frames per second of the generated video"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.0,
+          "title": "Guidance Scale",
+          "description": "The guidance scale to use"
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 40,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high",
+              "full"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use"
+        },
+        {
+          "name": "camera_lora",
+          "type": {
+            "type": "enum",
+            "values": [
+              "dolly_in",
+              "dolly_out",
+              "dolly_left",
+              "dolly_right",
+              "jib_up",
+              "jib_down",
+              "static",
+              "none"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXCameraLoRA"
+          },
+          "default": "none",
+          "title": "Camera Lora",
+          "description": "The camera LoRA for movement control"
+        },
+        {
+          "name": "camera_lora_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Camera Lora Scale",
+          "description": "The scale of the camera LoRA"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "The negative prompt for video generation"
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The seed for the random number generator"
+        },
+        {
+          "name": "enable_prompt_expansion",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Enable Prompt Expansion",
+          "description": "Whether to enable prompt expansion"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "Whether to enable the safety checker"
+        },
+        {
+          "name": "video_output_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "X264 (.mp4)",
+              "VP9 (.webm)",
+              "PRORES4444 (.mov)",
+              "GIF (.gif)"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoOutputType"
+          },
+          "default": "X264 (.mp4)",
+          "title": "Video Output Type",
+          "description": "The output type of the generated video"
+        },
+        {
+          "name": "video_quality",
+          "type": {
+            "type": "enum",
+            "values": [
+              "low",
+              "medium",
+              "high",
+              "maximum"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoQuality"
+          },
+          "default": "high",
+          "title": "Video Quality",
+          "description": "The quality of the generated video"
+        },
+        {
+          "name": "video_write_mode",
+          "type": {
+            "type": "enum",
+            "values": [
+              "fast",
+              "balanced",
+              "small"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.LTXVideoWriteMode"
+          },
+          "default": "balanced",
+          "title": "Video Write Mode",
+          "description": "The write mode of the generated video"
+        },
+        {
+          "name": "image_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Image Strength",
+          "description": "The strength of the image for video generation"
+        },
+        {
+          "name": "audio_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 1.0,
+          "title": "Audio Strength",
+          "description": "Audio conditioning strength"
+        },
+        {
+          "name": "preprocess_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Preprocess Audio",
+          "description": "Whether to preprocess the audio"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "audio",
+        "video_size"
+      ]
+    },
+    {
       "title": "LTX 219B Image To Video",
       "description": "Generate video with audio from images using LTX-2 19B model. A state-of-the-art video generation model with camera motion control and multi-scale generation.\n    video, generation, ltx, ltx-2, image-to-video, motion-control, camera, audio\n\n    Use cases:\n    - Generate high-quality videos from images\n    - Create videos with synchronized audio\n    - Control camera movements with LoRA\n    - Produce professional video content\n    - Animate static images with fluid motion",
       "namespace": "fal.image_to_video",
