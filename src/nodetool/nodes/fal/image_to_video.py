@@ -1,4 +1,5 @@
 from pydantic import Field
+from typing import Any
 
 from nodetool.metadata.types import AudioRef, ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
@@ -79,6 +80,41 @@ class AspectRatio(Enum):
 class KlingDuration(Enum):
     FIVE_SECONDS = "5"
     TEN_SECONDS = "10"
+
+
+class PixverseV56AspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+
+class PixverseV56Resolution(Enum):
+    RES_360P = "360p"
+    RES_540P = "540p"
+    RES_720P = "720p"
+    RES_1080P = "1080p"
+
+
+class PixverseV56Duration(Enum):
+    FIVE_SECONDS = 5
+    EIGHT_SECONDS = 8
+    TEN_SECONDS = 10
+
+
+class PixverseV56Style(Enum):
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+
+class PixverseV56ThinkingType(Enum):
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
 
 
 class LumaDreamMachine(FALNode):
@@ -546,6 +582,80 @@ class PixVerse(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "num_inference_steps"]
+
+
+class PixverseV56ImageToVideo(FALNode):
+    """Generate high-quality videos from images with Pixverse v5.6.
+    video, generation, pixverse, v5.6, image-to-video, img2vid
+
+    Use cases:
+    - Animate photos into professional video clips
+    - Create dynamic product showcase videos
+    - Generate stylized video content from artwork
+    - Produce high-resolution social media animations
+    - Transform static images with various visual styles
+    """
+
+    prompt: str = Field(
+        default="", description="Text prompt describing the desired video motion"
+    )
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    resolution: PixverseV56Resolution = Field(
+        default=PixverseV56Resolution.RES_720P,
+        description="The resolution quality of the output video",
+    )
+    duration: PixverseV56Duration = Field(
+        default=PixverseV56Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    style: PixverseV56Style | None = Field(
+        default=None, description="Optional visual style for the video"
+    )
+    seed: int = Field(
+        default=-1, description="Optional seed for reproducible generation"
+    )
+    generate_audio_switch: bool | None = Field(
+        default=None, description="Whether to generate audio for the video"
+    )
+    thinking_type: PixverseV56ThinkingType | None = Field(
+        default=None, description="Thinking mode for video generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
+            "negative_prompt": self.negative_prompt,
+        }
+        if self.style is not None:
+            arguments["style"] = self.style.value
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+        if self.generate_audio_switch is not None:
+            arguments["generate_audio_switch"] = self.generate_audio_switch
+        if self.thinking_type is not None:
+            arguments["thinking_type"] = self.thinking_type.value
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/v5.6/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "resolution"]
 
 
 class StableVideo(FALNode):

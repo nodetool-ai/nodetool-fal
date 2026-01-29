@@ -7,6 +7,41 @@ from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.nodes.fal.image_to_video import AspectRatio, KlingDuration
 
 
+class PixverseV56AspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+
+class PixverseV56Resolution(Enum):
+    RES_360P = "360p"
+    RES_540P = "540p"
+    RES_720P = "720p"
+    RES_1080P = "1080p"
+
+
+class PixverseV56Duration(Enum):
+    FIVE_SECONDS = 5
+    EIGHT_SECONDS = 8
+    TEN_SECONDS = 10
+
+
+class PixverseV56Style(Enum):
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+
+class PixverseV56ThinkingType(Enum):
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
+
+
 class Veo3AspectRatio(Enum):
     RATIO_16_9 = "16:9"
     RATIO_9_16 = "9:16"
@@ -261,6 +296,153 @@ class PixverseImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+
+class PixverseV56TextToVideo(FALNode):
+    """Generate high-quality videos from text prompts with Pixverse v5.6.
+    video, generation, pixverse, v5.6, text-to-video, creative
+
+    Use cases:
+    - Create professional animated scenes from descriptions
+    - Generate marketing and promotional videos
+    - Produce dynamic social media content
+    - Prototype video concepts with various styles
+    - Create stylized video content with anime or cyberpunk themes
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt describing the desired video"
+    )
+    aspect_ratio: PixverseV56AspectRatio = Field(
+        default=PixverseV56AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    resolution: PixverseV56Resolution = Field(
+        default=PixverseV56Resolution.RES_720P,
+        description="The resolution quality of the output video",
+    )
+    duration: PixverseV56Duration = Field(
+        default=PixverseV56Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    style: PixverseV56Style | None = Field(
+        default=None, description="Optional visual style for the video"
+    )
+    seed: int = Field(
+        default=-1, description="Optional seed for reproducible generation"
+    )
+    generate_audio_switch: bool | None = Field(
+        default=None, description="Whether to generate audio for the video"
+    )
+    thinking_type: PixverseV56ThinkingType | None = Field(
+        default=None, description="Thinking mode for video generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
+            "negative_prompt": self.negative_prompt,
+        }
+        if self.style is not None:
+            arguments["style"] = self.style.value
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+        if self.generate_audio_switch is not None:
+            arguments["generate_audio_switch"] = self.generate_audio_switch
+        if self.thinking_type is not None:
+            arguments["thinking_type"] = self.thinking_type.value
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/v5.6/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "resolution", "duration"]
+
+
+class PixverseV56Transition(FALNode):
+    """Create smooth transitions between images with Pixverse v5.6.
+    video, generation, transition, pixverse, v5.6, morphing
+
+    Use cases:
+    - Create seamless transitions between two images
+    - Generate morphing effects for presentations
+    - Produce smooth scene changes for videos
+    - Create animated visual flows
+    - Generate creative blending effects
+    """
+
+    prompt: str = Field(
+        default="", description="Text prompt describing the transition style"
+    )
+    first_image: ImageRef = Field(
+        default=ImageRef(), description="The starting image for the transition"
+    )
+    end_image: ImageRef | None = Field(
+        default=None, description="Optional ending image for the transition"
+    )
+    aspect_ratio: PixverseV56AspectRatio = Field(
+        default=PixverseV56AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    resolution: PixverseV56Resolution = Field(
+        default=PixverseV56Resolution.RES_720P,
+        description="The resolution quality of the output video",
+    )
+    duration: int = Field(
+        default=5, description="Duration in seconds (5 or 8)", ge=5, le=8
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated transition"
+    )
+    style: PixverseV56Style | None = Field(
+        default=None, description="Optional visual style for the transition"
+    )
+    seed: int = Field(
+        default=-1, description="Optional seed for reproducible generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        first_image_base64 = await context.image_to_base64(self.first_image)
+
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "first_image_url": f"data:image/png;base64,{first_image_base64}",
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "duration": self.duration,
+            "negative_prompt": self.negative_prompt,
+        }
+        if self.end_image is not None:
+            end_image_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
+        if self.style is not None:
+            arguments["style"] = self.style.value
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/v5.6/transition",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "first_image", "resolution"]
 
 
 class WanProImageToVideo(FALNode):

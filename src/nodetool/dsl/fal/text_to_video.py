@@ -832,6 +832,161 @@ from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_video
 from nodetool.workflows.base_node import BaseNode
+
+
+class PixverseV56TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+    Generate high-quality videos from text prompts with Pixverse v5.6.
+        video, generation, pixverse, v5.6, text-to-video, creative
+
+        Use cases:
+        - Create professional animated scenes from descriptions
+        - Generate marketing and promotional videos
+        - Produce dynamic social media content
+        - Prototype video concepts with various styles
+        - Create stylized video content with anime or cyberpunk themes
+    """
+
+    PixverseV56AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio
+    )
+    PixverseV56Resolution: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.PixverseV56Resolution
+    )
+    PixverseV56Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.PixverseV56Duration
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The text prompt describing the desired video"
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    resolution: nodetool.nodes.fal.text_to_video.PixverseV56Resolution = Field(
+        default=nodetool.nodes.fal.text_to_video.PixverseV56Resolution.RES_720P,
+        description="The resolution quality of the output video",
+    )
+    duration: nodetool.nodes.fal.text_to_video.PixverseV56Duration = Field(
+        default=nodetool.nodes.fal.text_to_video.PixverseV56Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated video"
+    )
+    style: (
+        nodetool.nodes.fal.text_to_video.PixverseV56Style
+        | OutputHandle[nodetool.nodes.fal.text_to_video.PixverseV56Style]
+        | None
+    ) = connect_field(default=None, description="Optional visual style for the video")
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Optional seed for reproducible generation"
+    )
+    generate_audio_switch: bool | OutputHandle[bool] | None = connect_field(
+        default=None, description="Whether to generate audio for the video"
+    )
+    thinking_type: (
+        nodetool.nodes.fal.text_to_video.PixverseV56ThinkingType
+        | OutputHandle[nodetool.nodes.fal.text_to_video.PixverseV56ThinkingType]
+        | None
+    ) = connect_field(default=None, description="Thinking mode for video generation")
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.PixverseV56TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class PixverseV56Transition(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+    Create smooth transitions between images with Pixverse v5.6.
+        video, generation, transition, pixverse, v5.6, morphing
+
+        Use cases:
+        - Create seamless transitions between two images
+        - Generate morphing effects for presentations
+        - Produce smooth scene changes for videos
+        - Create animated visual flows
+        - Generate creative blending effects
+    """
+
+    PixverseV56AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio
+    )
+    PixverseV56Resolution: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.PixverseV56Resolution
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Text prompt describing the transition style"
+    )
+    first_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The starting image for the transition",
+    )
+    end_image: (
+        nodetool.metadata.types.ImageRef
+        | OutputHandle[nodetool.metadata.types.ImageRef]
+        | None
+    ) = connect_field(
+        default=None, description="Optional ending image for the transition"
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    resolution: nodetool.nodes.fal.text_to_video.PixverseV56Resolution = Field(
+        default=nodetool.nodes.fal.text_to_video.PixverseV56Resolution.RES_720P,
+        description="The resolution quality of the output video",
+    )
+    duration: int | OutputHandle[int] = connect_field(
+        default=5, description="Duration in seconds (5 or 8)"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated transition"
+    )
+    style: (
+        nodetool.nodes.fal.text_to_video.PixverseV56Style
+        | OutputHandle[nodetool.nodes.fal.text_to_video.PixverseV56Style]
+        | None
+    ) = connect_field(
+        default=None, description="Optional visual style for the transition"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Optional seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.PixverseV56Transition
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.image_to_video
 
 

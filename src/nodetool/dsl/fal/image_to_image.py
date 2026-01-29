@@ -1360,6 +1360,70 @@ from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
+import nodetool.nodes.fal.text_to_image
+
+
+class HunyuanImageV3InstructEdit(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Hunyuan Image V3 Instruct Edit with reasoning capabilities for advanced image-to-image editing.
+    image, edit, hunyuan, tencent, instruct, reasoning, image-to-image, img2img, advanced
+
+    Use cases:
+    - Edit images with complex instructions
+    - Apply style transfers with reasoning
+    - Modify images with multiple reference images
+    - Create variations with intelligent understanding
+    - Transform images with advanced prompt interpretation
+    """
+
+    HunyuanImageSizePreset: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The text prompt for editing the image"
+    )
+    image_urls: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=PydanticUndefined,
+            description="Reference images to use (maximum 2 images)",
+        )
+    )
+    image_size: nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset = Field(
+        default=nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset.AUTO,
+        description="The desired size of the generated image. If auto, size is determined by the model",
+    )
+    num_images: int | OutputHandle[int] = connect_field(
+        default=1, description="The number of images to generate"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=3.5,
+        description="How closely to follow the prompt (higher = stricter adherence)",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Enable safety checker to filter unsafe content"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.HunyuanImageV3InstructEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
 
 
 class IdeogramV2Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
@@ -1839,6 +1903,71 @@ class PuLID(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.PuLID
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
+class QwenImageMaxEdit(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Qwen Image Max Edit for advanced image editing with reference images.
+    image, edit, qwen, alibaba, image-to-image, img2img, high-quality
+
+    Use cases:
+    - Edit images with complex instructions
+    - Transform images based on references
+    - Apply style transfers with multiple images
+    - Create variations with intelligent editing
+    - Modify images with detailed prompts
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Text prompt describing the desired edits"
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Content to avoid in the edited image"
+    )
+    image_urls: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=PydanticUndefined,
+            description="Reference images for editing (1-3 images)",
+        )
+    )
+    image_size: (
+        nodetool.nodes.fal.text_to_image.ImageSizePreset
+        | OutputHandle[nodetool.nodes.fal.text_to_image.ImageSizePreset]
+        | None
+    ) = connect_field(
+        default=None,
+        description="The size of the generated image. If not provided, uses input image size",
+    )
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Enable LLM prompt optimization for better results"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Enable content moderation"
+    )
+    num_images: int | OutputHandle[int] = connect_field(
+        default=1, description="The number of images to generate"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageMaxEdit
 
     @classmethod
     def get_node_type(cls):
