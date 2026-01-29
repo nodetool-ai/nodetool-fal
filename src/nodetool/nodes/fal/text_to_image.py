@@ -2847,6 +2847,75 @@ class HunyuanImageV3(FALNode):
         return ["prompt", "image_size", "guidance_scale"]
 
 
+class HunyuanImageSizePreset(str, Enum):
+    AUTO = "auto"
+    SQUARE_HD = "square_hd"
+    SQUARE = "square"
+    PORTRAIT_4_3 = "portrait_4_3"
+    PORTRAIT_16_9 = "portrait_16_9"
+    LANDSCAPE_4_3 = "landscape_4_3"
+    LANDSCAPE_16_9 = "landscape_16_9"
+
+
+class HunyuanImageV3Instruct(FALNode):
+    """
+    Hunyuan Image V3 Instruct with internal reasoning capabilities for advanced text-to-image generation.
+    image, generation, hunyuan, tencent, instruct, reasoning, text-to-image, txt2img, advanced
+
+    Use cases:
+    - Generate highly detailed images with reasoning
+    - Create complex compositions with multiple elements
+    - Produce photorealistic images with fine control
+    - Generate artistic images with advanced understanding
+    - Create images with complex prompt interpretation
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt to generate an image from"
+    )
+    image_size: HunyuanImageSizePreset = Field(
+        default=HunyuanImageSizePreset.AUTO,
+        description="The desired size of the generated image. If auto, size is determined by the model",
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate"
+    )
+    guidance_scale: float = Field(
+        default=3.5,
+        ge=1.0,
+        le=20.0,
+        description="How closely to follow the prompt (higher = stricter adherence)",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="Enable safety checker to filter unsafe content"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size.value,
+            "num_images": self.num_images,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-image/v3/instruct/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale"]
+
+
 class CogView4(FALNode):
     """
     CogView4 is a powerful text-to-image model with strong understanding and generation capabilities.

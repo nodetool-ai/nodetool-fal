@@ -4,7 +4,7 @@ from pydantic import Field
 from nodetool.metadata.types import ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
-from .text_to_image import ImageSizePreset
+from .text_to_image import ImageSizePreset, HunyuanImageSizePreset
 
 
 class FluxSchnellRedux(FALNode):
@@ -1975,3 +1975,148 @@ class CCSR(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "scale"]
+
+
+class HunyuanImageV3InstructEdit(FALNode):
+    """
+    Hunyuan Image V3 Instruct Edit with reasoning capabilities for advanced image-to-image editing.
+    image, edit, hunyuan, tencent, instruct, reasoning, image-to-image, img2img, advanced
+
+    Use cases:
+    - Edit images with complex instructions
+    - Apply style transfers with reasoning
+    - Modify images with multiple reference images
+    - Create variations with intelligent understanding
+    - Transform images with advanced prompt interpretation
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt for editing the image"
+    )
+    image_urls: list[ImageRef] = Field(
+        default_factory=list,
+        description="Reference images to use (maximum 2 images)",
+    )
+    image_size: HunyuanImageSizePreset = Field(
+        default=HunyuanImageSizePreset.AUTO,
+        description="The desired size of the generated image. If auto, size is determined by the model",
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate"
+    )
+    guidance_scale: float = Field(
+        default=3.5,
+        ge=1.0,
+        le=20.0,
+        description="How closely to follow the prompt (higher = stricter adherence)",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="Enable safety checker to filter unsafe content"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        # Convert images to base64
+        image_urls_base64 = []
+        for image_ref in self.image_urls[:2]:  # Maximum 2 images
+            if image_ref.uri:
+                image_base64 = await context.image_to_base64(image_ref)
+                image_urls_base64.append(f"data:image/png;base64,{image_base64}")
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_urls": image_urls_base64,
+            "image_size": self.image_size.value,
+            "num_images": self.num_images,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-image/v3/instruct/edit",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_urls", "guidance_scale"]
+
+
+class QwenImageMaxEdit(FALNode):
+    """
+    Qwen Image Max Edit for advanced image editing with reference images.
+    image, edit, qwen, alibaba, image-to-image, img2img, high-quality
+
+    Use cases:
+    - Edit images with complex instructions
+    - Transform images based on references
+    - Apply style transfers with multiple images
+    - Create variations with intelligent editing
+    - Modify images with detailed prompts
+    """
+
+    prompt: str = Field(
+        default="", description="Text prompt describing the desired edits"
+    )
+    negative_prompt: str = Field(
+        default="", description="Content to avoid in the edited image"
+    )
+    image_urls: list[ImageRef] = Field(
+        default_factory=list,
+        description="Reference images for editing (1-3 images)",
+    )
+    image_size: ImageSizePreset | None = Field(
+        default=None,
+        description="The size of the generated image. If not provided, uses input image size",
+    )
+    enable_prompt_expansion: bool = Field(
+        default=True, description="Enable LLM prompt optimization for better results"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="Enable content moderation"
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        # Convert images to base64
+        image_urls_base64 = []
+        for image_ref in self.image_urls[:3]:  # Maximum 3 images
+            if image_ref.uri:
+                image_base64 = await context.image_to_base64(image_ref)
+                image_urls_base64.append(f"data:image/png;base64,{image_base64}")
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_urls": image_urls_base64,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_images": self.num_images,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.image_size:
+            arguments["image_size"] = self.image_size.value
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/qwen-image-max/edit",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_urls", "enable_prompt_expansion"]
