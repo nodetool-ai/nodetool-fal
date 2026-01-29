@@ -832,6 +832,7 @@ from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_video
 from nodetool.workflows.base_node import BaseNode
+import nodetool.nodes.fal.image_to_video
 
 
 class PixverseV56TextToVideo(
@@ -850,36 +851,36 @@ class PixverseV56TextToVideo(
     """
 
     PixverseV56AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio
+        nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio
     )
     PixverseV56Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.PixverseV56Resolution
+        nodetool.nodes.fal.image_to_video.PixverseV56Resolution
     )
     PixverseV56Duration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.PixverseV56Duration
+        nodetool.nodes.fal.image_to_video.PixverseV56Duration
     )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt describing the desired video"
     )
-    aspect_ratio: nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio = Field(
-        default=nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio.RATIO_16_9,
+    aspect_ratio: nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    resolution: nodetool.nodes.fal.text_to_video.PixverseV56Resolution = Field(
-        default=nodetool.nodes.fal.text_to_video.PixverseV56Resolution.RES_720P,
+    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(
+        default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.RES_720P,
         description="The resolution quality of the output video",
     )
-    duration: nodetool.nodes.fal.text_to_video.PixverseV56Duration = Field(
-        default=nodetool.nodes.fal.text_to_video.PixverseV56Duration.FIVE_SECONDS,
+    duration: nodetool.nodes.fal.image_to_video.PixverseV56Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.PixverseV56Duration.FIVE_SECONDS,
         description="The duration of the generated video in seconds",
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="", description="What to avoid in the generated video"
     )
     style: (
-        nodetool.nodes.fal.text_to_video.PixverseV56Style
-        | OutputHandle[nodetool.nodes.fal.text_to_video.PixverseV56Style]
+        nodetool.nodes.fal.image_to_video.PixverseV56Style
+        | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56Style]
         | None
     ) = connect_field(default=None, description="Optional visual style for the video")
     seed: int | OutputHandle[int] = connect_field(
@@ -889,8 +890,8 @@ class PixverseV56TextToVideo(
         default=None, description="Whether to generate audio for the video"
     )
     thinking_type: (
-        nodetool.nodes.fal.text_to_video.PixverseV56ThinkingType
-        | OutputHandle[nodetool.nodes.fal.text_to_video.PixverseV56ThinkingType]
+        nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType
+        | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType]
         | None
     ) = connect_field(default=None, description="Thinking mode for video generation")
 
@@ -908,6 +909,7 @@ from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_video
 from nodetool.workflows.base_node import BaseNode
+import nodetool.nodes.fal.image_to_video
 
 
 class PixverseV56Transition(
@@ -926,10 +928,10 @@ class PixverseV56Transition(
     """
 
     PixverseV56AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio
+        nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio
     )
     PixverseV56Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.PixverseV56Resolution
+        nodetool.nodes.fal.image_to_video.PixverseV56Resolution
     )
 
     prompt: str | OutputHandle[str] = connect_field(
@@ -948,12 +950,12 @@ class PixverseV56Transition(
     ) = connect_field(
         default=None, description="Optional ending image for the transition"
     )
-    aspect_ratio: nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio = Field(
-        default=nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio.RATIO_16_9,
+    aspect_ratio: nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    resolution: nodetool.nodes.fal.text_to_video.PixverseV56Resolution = Field(
-        default=nodetool.nodes.fal.text_to_video.PixverseV56Resolution.RES_720P,
+    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(
+        default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.RES_720P,
         description="The resolution quality of the output video",
     )
     duration: int | OutputHandle[int] = connect_field(
@@ -963,8 +965,8 @@ class PixverseV56Transition(
         default="", description="What to avoid in the generated transition"
     )
     style: (
-        nodetool.nodes.fal.text_to_video.PixverseV56Style
-        | OutputHandle[nodetool.nodes.fal.text_to_video.PixverseV56Style]
+        nodetool.nodes.fal.image_to_video.PixverseV56Style
+        | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56Style]
         | None
     ) = connect_field(
         default=None, description="Optional visual style for the transition"

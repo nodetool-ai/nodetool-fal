@@ -5496,7 +5496,7 @@
               "3:4",
               "9:16"
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio"
           },
           "default": "16:9",
           "title": "Aspect Ratio",
@@ -5512,7 +5512,7 @@
               "720p",
               "1080p"
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56Resolution"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56Resolution"
           },
           "default": "720p",
           "title": "Resolution",
@@ -5527,7 +5527,7 @@
               8,
               10
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56Duration"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56Duration"
           },
           "default": 5,
           "title": "Duration",
@@ -5554,7 +5554,7 @@
               "comic",
               "cyberpunk"
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56Style"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56Style"
           },
           "default": null,
           "title": "Style",
@@ -5589,7 +5589,7 @@
               "disabled",
               "auto"
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56ThinkingType"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56ThinkingType"
           },
           "default": null,
           "title": "Thinking Type",
@@ -5661,7 +5661,7 @@
               "3:4",
               "9:16"
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio"
           },
           "default": "16:9",
           "title": "Aspect Ratio",
@@ -5677,7 +5677,7 @@
               "720p",
               "1080p"
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56Resolution"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56Resolution"
           },
           "default": "720p",
           "title": "Resolution",
@@ -5715,7 +5715,7 @@
               "comic",
               "cyberpunk"
             ],
-            "type_name": "nodetool.nodes.fal.text_to_video.PixverseV56Style"
+            "type_name": "nodetool.nodes.fal.image_to_video.PixverseV56Style"
           },
           "default": null,
           "title": "Style",

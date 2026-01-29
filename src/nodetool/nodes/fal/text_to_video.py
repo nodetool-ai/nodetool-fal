@@ -4,42 +4,15 @@ from pydantic import Field
 from nodetool.metadata.types import ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
-from nodetool.nodes.fal.image_to_video import AspectRatio, KlingDuration
-
-
-class PixverseV56AspectRatio(Enum):
-    RATIO_16_9 = "16:9"
-    RATIO_4_3 = "4:3"
-    RATIO_1_1 = "1:1"
-    RATIO_3_4 = "3:4"
-    RATIO_9_16 = "9:16"
-
-
-class PixverseV56Resolution(Enum):
-    RES_360P = "360p"
-    RES_540P = "540p"
-    RES_720P = "720p"
-    RES_1080P = "1080p"
-
-
-class PixverseV56Duration(Enum):
-    FIVE_SECONDS = 5
-    EIGHT_SECONDS = 8
-    TEN_SECONDS = 10
-
-
-class PixverseV56Style(Enum):
-    ANIME = "anime"
-    ANIMATION_3D = "3d_animation"
-    CLAY = "clay"
-    COMIC = "comic"
-    CYBERPUNK = "cyberpunk"
-
-
-class PixverseV56ThinkingType(Enum):
-    ENABLED = "enabled"
-    DISABLED = "disabled"
-    AUTO = "auto"
+from nodetool.nodes.fal.image_to_video import (
+    AspectRatio,
+    KlingDuration,
+    PixverseV56AspectRatio,
+    PixverseV56Resolution,
+    PixverseV56Duration,
+    PixverseV56Style,
+    PixverseV56ThinkingType,
+)
 
 
 class Veo3AspectRatio(Enum):
