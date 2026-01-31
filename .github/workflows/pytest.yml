@@ -1,31 +1,32 @@
-name: CI
+name: Python Tests
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Install dependencies
-        env:
-          NODETOOL_CORE_REF: v0.6.2-rc.26
-        shell: bash
         run: |
-          python -m pip install --upgrade pip
-          # Clone and install nodetool-core manually to avoid git submodule issues
-          # Direct git installation fails with: "fatal: No url found for submodule path 'workflow_templates'"
-          git clone --depth 1 --branch ${NODETOOL_CORE_REF} https://github.com/nodetool-ai/nodetool-core.git ${{ runner.temp }}/nodetool-core
-          pip install ${{ runner.temp }}/nodetool-core
-          rm -rf ${{ runner.temp }}/nodetool-core
-          pip install .[dev]
+          uv sync \
+            --extra-index-url https://nodetool-ai.github.io/nodetool-registry/simple/ \
+            --index-strategy unsafe-best-match
+          uv sync --extra dev --index-strategy unsafe-best-match
+
       - name: Run tests
-        run: |
-          pytest -ra
+        run: uv run pytest
