@@ -1,4 +1,5 @@
 from pydantic import Field
+from typing import Any
 
 from nodetool.metadata.types import AudioRef, ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
@@ -79,6 +80,52 @@ class AspectRatio(Enum):
 class KlingDuration(Enum):
     FIVE_SECONDS = "5"
     TEN_SECONDS = "10"
+
+
+class PixverseV56AspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+
+class PixverseV56Resolution(Enum):
+    RES_360P = "360p"
+    RES_540P = "540p"
+    RES_720P = "720p"
+    RES_1080P = "1080p"
+
+
+class PixverseV56Duration(Enum):
+    FIVE_SECONDS = "5"
+    EIGHT_SECONDS = "8"
+    TEN_SECONDS = "10"
+
+
+class PixverseV56Style(Enum):
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+
+class PixverseV56ThinkingType(Enum):
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
+
+
+class LumaRay2Resolution(Enum):
+    RES_540P = "540p"
+    RES_720P = "720p"
+    RES_1080P = "1080p"
+
+
+class LumaRay2Duration(Enum):
+    FIVE_SECONDS = "5s"
+    NINE_SECONDS = "9s"
 
 
 class LumaDreamMachine(FALNode):
@@ -374,6 +421,11 @@ class HailuoDuration(Enum):
     TEN_SECONDS = "10"
 
 
+class MiniMaxHailuoResolution(Enum):
+    RES_512P = "512P"
+    RES_768P = "768P"
+
+
 class MiniMaxHailuo02(FALNode):
     """
     Create videos from your images with MiniMax Hailuo-02 Standard. Choose the
@@ -399,16 +451,28 @@ class MiniMaxHailuo02(FALNode):
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
+    resolution: MiniMaxHailuoResolution = Field(
+        default=MiniMaxHailuoResolution.RES_768P,
+        description="The resolution of the generated video",
+    )
+    end_image: ImageRef | None = Field(
+        default=None, description="Optional image to use as the last frame"
+    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_base64 = await context.image_to_base64(self.image)
-
-        arguments = {
+        
+        arguments: dict[str, Any] = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "duration": self.duration.value,
             "prompt_optimizer": self.prompt_optimizer,
+            "resolution": self.resolution.value,
         }
+
+        if self.end_image:
+            end_image_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
 
         res = await self.submit_request(
             context=context,
@@ -546,6 +610,80 @@ class PixVerse(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "num_inference_steps"]
+
+
+class PixverseV56ImageToVideo(FALNode):
+    """Generate high-quality videos from images with Pixverse v5.6.
+    video, generation, pixverse, v5.6, image-to-video, img2vid
+
+    Use cases:
+    - Animate photos into professional video clips
+    - Create dynamic product showcase videos
+    - Generate stylized video content from artwork
+    - Produce high-resolution social media animations
+    - Transform static images with various visual styles
+    """
+
+    prompt: str = Field(
+        default="", description="Text prompt describing the desired video motion"
+    )
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    resolution: PixverseV56Resolution = Field(
+        default=PixverseV56Resolution.RES_720P,
+        description="The resolution quality of the output video",
+    )
+    duration: PixverseV56Duration = Field(
+        default=PixverseV56Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    style: PixverseV56Style | None = Field(
+        default=None, description="Optional visual style for the video"
+    )
+    seed: int = Field(
+        default=-1, description="Optional seed for reproducible generation"
+    )
+    generate_audio_switch: bool | None = Field(
+        default=None, description="Whether to generate audio for the video"
+    )
+    thinking_type: PixverseV56ThinkingType | None = Field(
+        default=None, description="Thinking mode for video generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
+            "negative_prompt": self.negative_prompt,
+        }
+        if self.style is not None:
+            arguments["style"] = self.style.value
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+        if self.generate_audio_switch is not None:
+            arguments["generate_audio_switch"] = self.generate_audio_switch
+        if self.thinking_type is not None:
+            arguments["thinking_type"] = self.thinking_type.value
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/v5.6/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "resolution"]
 
 
 class StableVideo(FALNode):
@@ -803,7 +941,7 @@ class MuseTalk(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        client = self.get_client(context)
+        client = await self.get_client(context)
         video_bytes = await context.asset_to_bytes(self.video)
         audio_bytes = await context.asset_to_bytes(self.audio)
         video_url = await client.upload(video_bytes, "video/mp4")
@@ -983,3 +1121,1052 @@ class WanFlf2v(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "num_frames"]
+
+
+class LtxVideoSize(Enum):
+    AUTO = "auto"
+    SQUARE_HD = "square_hd"
+    SQUARE = "square"
+    PORTRAIT_4_3 = "portrait_4_3"
+    PORTRAIT_16_9 = "portrait_16_9"
+    LANDSCAPE_4_3 = "landscape_4_3"
+    LANDSCAPE_16_9 = "landscape_16_9"
+
+
+class LtxAcceleration(Enum):
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+
+class LtxCameraLora(Enum):
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+
+class LtxVideoOutputType(Enum):
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF = "GIF (.gif)"
+
+
+class LtxVideoQuality(Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+
+class LtxVideoWriteMode(Enum):
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+
+class LTX219BImageToVideo(FALNode):
+    """
+    Generate video with audio from images using LTX-2 19B model. A state-of-the-art video generation model with camera motion control and multi-scale generation.
+    video, generation, ltx, ltx-2, image-to-video, motion-control, camera, audio
+
+    Use cases:
+    - Generate high-quality videos from images
+    - Create videos with synchronized audio
+    - Control camera movements with LoRA
+    - Produce professional video content
+    - Animate static images with fluid motion
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to generate the video from"
+    )
+    prompt: str = Field(
+        default="",
+        description="The prompt describing the desired video motion and style",
+    )
+    num_frames: int = Field(
+        default=121, ge=1, description="Number of frames to generate"
+    )
+    video_size: LtxVideoSize = Field(
+        default=LtxVideoSize.AUTO, description="Size of the generated video"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate audio for the video"
+    )
+    use_multiscale: bool = Field(
+        default=True, description="Use multi-scale generation for better coherence"
+    )
+    fps: float = Field(default=25, description="Frames per second")
+    guidance_scale: float = Field(
+        default=3, description="Guidance scale for generation"
+    )
+    num_inference_steps: int = Field(
+        default=40, ge=1, description="Number of inference steps"
+    )
+    acceleration: LtxAcceleration = Field(
+        default=LtxAcceleration.REGULAR, description="Acceleration level"
+    )
+    camera_lora: LtxCameraLora = Field(
+        default=LtxCameraLora.NONE, description="Camera movement LoRA"
+    )
+    camera_lora_scale: float = Field(
+        default=1, ge=0, le=1, description="Camera LoRA scale"
+    )
+    negative_prompt: str = Field(
+        default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur",
+        description="Negative prompt to avoid",
+    )
+    seed: int = Field(default=-1, description="Random seed for reproducibility")
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Enable prompt expansion"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Enable safety checker"
+    )
+    video_output_type: LtxVideoOutputType = Field(
+        default=LtxVideoOutputType.X264_MP4, description="Output video format"
+    )
+    video_quality: LtxVideoQuality = Field(
+        default=LtxVideoQuality.HIGH, description="Video quality"
+    )
+    video_write_mode: LtxVideoWriteMode = Field(
+        default=LtxVideoWriteMode.BALANCED, description="Video write mode"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "num_frames": self.num_frames,
+            "video_size": self.video_size.value,
+            "generate_audio": self.generate_audio,
+            "use_multiscale": self.use_multiscale,
+            "fps": self.fps,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "acceleration": self.acceleration.value,
+            "camera_lora": self.camera_lora.value,
+            "camera_lora_scale": self.camera_lora_scale,
+            "negative_prompt": self.negative_prompt,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "enable_safety_checker": self.enable_safety_checker,
+            "video_output_type": self.video_output_type.value,
+            "video_quality": self.video_quality.value,
+            "video_write_mode": self.video_write_mode.value,
+        }
+
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-2-19b/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "generate_audio", "video_size"]
+
+
+class LumaRay2ImageToVideo(FALNode):
+    """
+    Luma Ray 2 Image-to-Video generates high-quality videos from images with improved motion.
+    video, generation, luma, ray2, image-to-video, img2vid
+
+    Use cases:
+    - Create cinematic video from images
+    - Generate smooth motion animations
+    - Produce high-quality video content
+    - Transform photos into videos
+    - Create professional video clips
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    loop: bool = Field(default=False, description="Whether the video should loop")
+    resolution: LumaRay2Resolution = Field(
+        default=LumaRay2Resolution.RES_540P,
+        description="The resolution of the generated video",
+    )
+    duration: LumaRay2Duration = Field(
+        default=LumaRay2Duration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "loop": self.loop,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "aspect_ratio", "duration"]
+
+
+class LumaRay2FlashImageToVideo(FALNode):
+    """
+    Luma Ray 2 Flash Image-to-Video is a fast version for quick video generation.
+    video, generation, luma, ray2, flash, image-to-video, fast
+
+    Use cases:
+    - Quick video prototyping
+    - Rapid content creation
+    - Fast video iterations
+    - Real-time video generation
+    - Quick motion tests
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    resolution: LumaRay2Resolution = Field(
+        default=LumaRay2Resolution.RES_540P,
+        description="The resolution of the generated video",
+    )
+    duration: LumaRay2Duration = Field(
+        default=LumaRay2Duration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2-flash/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "aspect_ratio", "duration"]
+
+
+class KlingVideoV21Pro(FALNode):
+    """
+    Kling Video V2.1 Pro Image-to-Video with enhanced quality and motion.
+    video, generation, kling, v2.1, pro, image-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic video clips
+    - Transform images with smooth motion
+    - Create promotional videos
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    duration: KlingDuration = Field(
+        default=KlingDuration.FIVE_SECONDS,
+        description="The duration of the generated video",
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v2.1/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
+class HunyuanVideoImageToVideo(FALNode):
+    """
+    Hunyuan Video Image-to-Video generates videos from images with Tencent's model.
+    video, generation, hunyuan, tencent, image-to-video
+
+    Use cases:
+    - Create videos from still images
+    - Generate motion for photos
+    - Produce animated content
+    - Transform artwork into video
+    - Create video transitions
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="Number of inference steps"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video-image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class HunyuanVideoV15ImageToVideo(FALNode):
+    """
+    Hunyuan Video V1.5 Image-to-Video with improved quality and motion.
+    video, generation, hunyuan, v1.5, image-to-video
+
+    Use cases:
+    - Create high-quality video from images
+    - Generate smooth animations
+    - Produce professional video content
+    - Transform photos with motion
+    - Create video effects
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    num_inference_steps: int = Field(
+        default=30, ge=1, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=7.0, description="How closely to follow the prompt"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video-v1.5/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class PikaV22ImageToVideo(FALNode):
+    """
+    Pika V2.2 Image-to-Video generates creative videos from images.
+    video, generation, pika, v2.2, image-to-video, creative
+
+    Use cases:
+    - Create creative video content
+    - Generate artistic animations
+    - Produce stylized videos
+    - Transform images with effects
+    - Create unique video clips
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated video"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pika/v2.2/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class PikaV21ImageToVideo(FALNode):
+    """
+    Pika V2.1 Image-to-Video generates videos from images with the Pika model.
+    video, generation, pika, v2.1, image-to-video
+
+    Use cases:
+    - Create video content from images
+    - Generate animated clips
+    - Produce motion graphics
+    - Transform still photos
+    - Create video effects
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pika/v2.1/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class ViduQ2ImageToVideo(FALNode):
+    """
+    Vidu Q2 Image-to-Video Turbo generates fast videos from images.
+    video, generation, vidu, q2, turbo, image-to-video, fast
+
+    Use cases:
+    - Quick video generation
+    - Rapid prototyping
+    - Fast content creation
+    - Quick motion tests
+    - Real-time video production
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/vidu/q2/image-to-video/turbo",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class Sora2ImageToVideo(FALNode):
+    """
+    OpenAI Sora 2 Image-to-Video generates high-quality videos from images.
+    video, generation, openai, sora, sora2, image-to-video
+
+    Use cases:
+    - Create cinematic videos from images
+    - Generate realistic motion
+    - Produce professional video content
+    - Transform photos into movies
+    - Create video narratives
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    duration: int = Field(
+        default=5, ge=1, le=20, description="Duration of the video in seconds"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "duration": self.duration,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sora-2/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
+class SeedanceV15ProImageToVideo(FALNode):
+    """
+    ByteDance Seedance V1.5 Pro Image-to-Video with high-quality motion.
+    video, generation, bytedance, seedance, pro, image-to-video
+
+    Use cases:
+    - Create professional video content
+    - Generate high-quality animations
+    - Produce cinematic clips
+    - Transform images with motion
+    - Create promotional videos
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bytedance/seedance/v1.5/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class MiniMaxHailuo23ImageToVideo(FALNode):
+    """
+    MiniMax Hailuo 2.3 Standard Image-to-Video with improved quality.
+    video, generation, minimax, hailuo, 2.3, image-to-video
+
+    Use cases:
+    - Create video from images
+    - Generate smooth animations
+    - Produce video content
+    - Transform photos into clips
+    - Create motion graphics
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The image to transform into a video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion"
+    )
+    duration: HailuoDuration = Field(
+        default=HailuoDuration.SIX_SECONDS,
+        description="The duration of the video in seconds",
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the prompt optimizer"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "prompt_optimizer": self.prompt_optimizer,
+        }
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax/hailuo-2.3/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
+class LTXVideoSize(Enum):
+    AUTO = "auto"
+    SQUARE_HD = "square_hd"
+    SQUARE = "square"
+    PORTRAIT_4_3 = "portrait_4_3"
+    PORTRAIT_16_9 = "portrait_16_9"
+    LANDSCAPE_4_3 = "landscape_4_3"
+    LANDSCAPE_16_9 = "landscape_16_9"
+
+
+class LTXAcceleration(Enum):
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+
+class LTXCameraLoRA(Enum):
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+
+class LTXVideoOutputType(Enum):
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF = "GIF (.gif)"
+
+
+class LTXVideoQuality(Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+
+class LTXVideoWriteMode(Enum):
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+
+class LTX219BAudioToVideo(FALNode):
+    """
+    Generate videos from audio with optional text or image prompts using the LTX-2 19B model. Supports advanced camera controls and high-quality video generation.
+    video, audio-to-video, generation, ltx, camera-control, audio-driven
+
+    Use cases:
+    - Generate talking head videos from audio
+    - Create music visualizations from audio tracks
+    - Produce audio-driven animations
+    - Generate synchronized video content from podcasts
+    - Create video content from voice recordings
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate the video from"
+    )
+    audio: AudioRef = Field(
+        default=AudioRef(), description="The audio to generate the video from"
+    )
+    image: ImageRef | None = Field(
+        default=None, description="Optional image to use as the first frame"
+    )
+    match_audio_length: bool = Field(
+        default=True,
+        description="Calculate frames based on audio duration and FPS",
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames to generate"
+    )
+    video_size: LTXVideoSize = Field(
+        default=LTXVideoSize.LANDSCAPE_4_3,
+        description="The size of the generated video",
+    )
+    use_multiscale: bool = Field(
+        default=True,
+        description="Use multi-scale generation for better coherence",
+    )
+    fps: float = Field(
+        default=25.0, description="The frames per second of the generated video"
+    )
+    guidance_scale: float = Field(
+        default=3.0, description="The guidance scale to use"
+    )
+    num_inference_steps: int = Field(
+        default=40, description="The number of inference steps"
+    )
+    acceleration: LTXAcceleration = Field(
+        default=LTXAcceleration.REGULAR, description="The acceleration level to use"
+    )
+    camera_lora: LTXCameraLoRA = Field(
+        default=LTXCameraLoRA.NONE, description="The camera LoRA for movement control"
+    )
+    camera_lora_scale: float = Field(
+        default=1.0, description="The scale of the camera LoRA"
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt for video generation"
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker"
+    )
+    video_output_type: LTXVideoOutputType = Field(
+        default=LTXVideoOutputType.X264_MP4,
+        description="The output type of the generated video",
+    )
+    video_quality: LTXVideoQuality = Field(
+        default=LTXVideoQuality.HIGH, description="The quality of the generated video"
+    )
+    video_write_mode: LTXVideoWriteMode = Field(
+        default=LTXVideoWriteMode.BALANCED,
+        description="The write mode of the generated video",
+    )
+    image_strength: float = Field(
+        default=1.0, description="The strength of the image for video generation"
+    )
+    audio_strength: float = Field(
+        default=1.0, description="Audio conditioning strength"
+    )
+    preprocess_audio: bool = Field(
+        default=True, description="Whether to preprocess the audio"
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "LTX-2 19B Audio to Video"
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "prompt": self.prompt,
+            "audio_url": audio_url,
+            "match_audio_length": self.match_audio_length,
+            "num_frames": self.num_frames,
+            "video_size": self.video_size.value,
+            "use_multiscale": self.use_multiscale,
+            "fps": self.fps,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "acceleration": self.acceleration.value,
+            "camera_lora": self.camera_lora.value,
+            "camera_lora_scale": self.camera_lora_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "video_output_type": self.video_output_type.value,
+            "video_quality": self.video_quality.value,
+            "video_write_mode": self.video_write_mode.value,
+            "image_strength": self.image_strength,
+            "audio_strength": self.audio_strength,
+            "preprocess_audio": self.preprocess_audio,
+        }
+
+        if self.image and self.image.uri:
+            image_base64 = await context.image_to_base64(self.image)
+            arguments["image_url"] = f"data:image/png;base64,{image_base64}"
+
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+        if self.enable_prompt_expansion:
+            arguments["enable_prompt_expansion"] = self.enable_prompt_expansion
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-2-19b/audio-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "audio", "video_size"]
+
+
+class LTX219BDistilledAudioToVideo(FALNode):
+    """
+    Faster audio-to-video generation using the distilled LTX-2 19B model. Provides quicker video generation from audio with optional prompts.
+    video, audio-to-video, generation, ltx, distilled, fast
+
+    Use cases:
+    - Quick audio-driven video generation
+    - Fast talking head video creation
+    - Rapid music visualization
+    - Time-efficient audio-to-video conversion
+    - Fast prototype video generation from audio
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate the video from"
+    )
+    audio: AudioRef = Field(
+        default=AudioRef(), description="The audio to generate the video from"
+    )
+    image: ImageRef | None = Field(
+        default=None, description="Optional image to use as the first frame"
+    )
+    match_audio_length: bool = Field(
+        default=True,
+        description="Calculate frames based on audio duration and FPS",
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames to generate"
+    )
+    video_size: LTXVideoSize = Field(
+        default=LTXVideoSize.LANDSCAPE_4_3,
+        description="The size of the generated video",
+    )
+    use_multiscale: bool = Field(
+        default=True,
+        description="Use multi-scale generation for better coherence",
+    )
+    fps: float = Field(
+        default=25.0, description="The frames per second of the generated video"
+    )
+    guidance_scale: float = Field(
+        default=3.0, description="The guidance scale to use"
+    )
+    num_inference_steps: int = Field(
+        default=40, description="The number of inference steps"
+    )
+    acceleration: LTXAcceleration = Field(
+        default=LTXAcceleration.REGULAR, description="The acceleration level to use"
+    )
+    camera_lora: LTXCameraLoRA = Field(
+        default=LTXCameraLoRA.NONE, description="The camera LoRA for movement control"
+    )
+    camera_lora_scale: float = Field(
+        default=1.0, description="The scale of the camera LoRA"
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt for video generation"
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker"
+    )
+    video_output_type: LTXVideoOutputType = Field(
+        default=LTXVideoOutputType.X264_MP4,
+        description="The output type of the generated video",
+    )
+    video_quality: LTXVideoQuality = Field(
+        default=LTXVideoQuality.HIGH, description="The quality of the generated video"
+    )
+    video_write_mode: LTXVideoWriteMode = Field(
+        default=LTXVideoWriteMode.BALANCED,
+        description="The write mode of the generated video",
+    )
+    image_strength: float = Field(
+        default=1.0, description="The strength of the image for video generation"
+    )
+    audio_strength: float = Field(
+        default=1.0, description="Audio conditioning strength"
+    )
+    preprocess_audio: bool = Field(
+        default=True, description="Whether to preprocess the audio"
+    )
+
+    @classmethod
+    def get_title(cls):
+        return "LTX-2 19B Distilled Audio to Video"
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        audio_bytes = await context.asset_to_bytes(self.audio)
+        audio_url = await client.upload(audio_bytes, "audio/mp3")
+
+        arguments = {
+            "prompt": self.prompt,
+            "audio_url": audio_url,
+            "match_audio_length": self.match_audio_length,
+            "num_frames": self.num_frames,
+            "video_size": self.video_size.value,
+            "use_multiscale": self.use_multiscale,
+            "fps": self.fps,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "acceleration": self.acceleration.value,
+            "camera_lora": self.camera_lora.value,
+            "camera_lora_scale": self.camera_lora_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "video_output_type": self.video_output_type.value,
+            "video_quality": self.video_quality.value,
+            "video_write_mode": self.video_write_mode.value,
+            "image_strength": self.image_strength,
+            "audio_strength": self.audio_strength,
+            "preprocess_audio": self.preprocess_audio,
+        }
+
+        if self.image and self.image.uri:
+            image_base64 = await context.image_to_base64(self.image)
+            arguments["image_url"] = f"data:image/png;base64,{image_base64}"
+
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+        if self.enable_prompt_expansion:
+            arguments["enable_prompt_expansion"] = self.enable_prompt_expansion
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-2-19b/distilled/audio-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "audio", "video_size"]

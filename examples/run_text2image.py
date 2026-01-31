@@ -1,8 +1,12 @@
 import asyncio
+import logging
 import os
 
 from nodetool.nodes.fal.text_to_image import IdeogramV2
 from nodetool.workflows.processing_context import ProcessingContext
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 async def main() -> None:
@@ -15,16 +19,17 @@ async def main() -> None:
     )
 
     image = await node.process(context)
-    print("Generated image URL:", image.uri)
+    logger.info("Generated image URL: %s", image.uri)
 
     # Download the generated image so it can be uploaded as a workflow artifact
     import urllib.request
 
-    with urllib.request.urlopen(image.uri) as response, open(
-        "generated_image.png", "wb"
-    ) as out_file:
+    with (
+        urllib.request.urlopen(image.uri) as response,
+        open("generated_image.png", "wb") as out_file,
+    ):
         out_file.write(response.read())
-    print("Image saved to generated_image.png")
+    logger.info("Image saved to generated_image.png")
 
 
 if __name__ == "__main__":
