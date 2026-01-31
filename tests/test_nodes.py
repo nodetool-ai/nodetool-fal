@@ -69,11 +69,11 @@ class TestEnums:
 class TestNodeVisibility:
     """Test node visibility settings."""
 
-    def test_anyLLM_is_visible(self):
+    def test_any_llm_is_visible(self):
         """AnyLLM node should be visible."""
         assert AnyLLM.is_visible() is True
 
-    def test_ideogramV2_is_visible(self):
+    def test_ideogram_v2_is_visible(self):
         """IdeogramV2 node should be visible."""
         assert IdeogramV2.is_visible() is True
 
@@ -81,13 +81,13 @@ class TestNodeVisibility:
 class TestNodeBasicFields:
     """Test get_basic_fields method on nodes."""
 
-    def test_anyLLM_basic_fields(self):
+    def test_any_llm_basic_fields(self):
         """Test AnyLLM basic fields."""
         fields = AnyLLM.get_basic_fields()
         assert "prompt" in fields
         assert "model" in fields
 
-    def test_ideogramV2_basic_fields(self):
+    def test_ideogram_v2_basic_fields(self):
         """Test IdeogramV2 basic fields."""
         # IdeogramV2 should have get_basic_fields if implemented
         if hasattr(IdeogramV2, "get_basic_fields"):
