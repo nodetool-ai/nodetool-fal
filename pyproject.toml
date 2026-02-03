@@ -19,7 +19,9 @@ dev = ["pytest"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/nodetool"]
-artifacts = ["src/nodetool/package_metadata/nodetool-fal.json", "package_metadata/nodetool-fal.json"]
+include = [
+    "src/nodetool/package_metadata/*.json",
+]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
