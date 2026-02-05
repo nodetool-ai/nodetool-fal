@@ -1392,7 +1392,7 @@ class KlingV3TextToVideo(FALNode):
     )
     voice_ids: list[str] = Field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     shot_type: Kling3ShotType = Field(
         default=Kling3ShotType.CUSTOMIZE,
@@ -1465,7 +1465,7 @@ class KlingV3ProTextToVideo(FALNode):
     )
     voice_ids: list[str] = Field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     shot_type: Kling3ShotType = Field(
         default=Kling3ShotType.CUSTOMIZE,
@@ -1538,7 +1538,7 @@ class KlingO3TextToVideo(FALNode):
     )
     voice_ids: list[str] = Field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     shot_type: Kling3ShotType = Field(
         default=Kling3ShotType.CUSTOMIZE,
@@ -1600,7 +1600,7 @@ class KlingO3ProTextToVideo(FALNode):
     )
     voice_ids: list[str] = Field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     shot_type: Kling3ShotType = Field(
         default=Kling3ShotType.CUSTOMIZE,

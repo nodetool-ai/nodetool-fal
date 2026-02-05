@@ -2227,7 +2227,7 @@ class KlingV3ImageToVideo(FALNode):
     )
     voice_ids: list[str] = Field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     reference_images: list[ImageRef] = Field(
         default=[],
@@ -2327,7 +2327,7 @@ class KlingV3ProImageToVideo(FALNode):
     )
     voice_ids: list[str] = Field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     reference_images: list[ImageRef] = Field(
         default=[],
