@@ -4287,7 +4287,7 @@
           },
           "default": [],
           "title": "Voice Ids",
-          "description": "Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)"
+          "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
         },
         {
           "name": "reference_images",
@@ -4444,7 +4444,7 @@
           },
           "default": [],
           "title": "Voice Ids",
-          "description": "Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)"
+          "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
         },
         {
           "name": "reference_images",
@@ -15480,7 +15480,7 @@
           },
           "default": [],
           "title": "Voice Ids",
-          "description": "Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)"
+          "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
         },
         {
           "name": "shot_type",
@@ -15587,7 +15587,7 @@
           },
           "default": [],
           "title": "Voice Ids",
-          "description": "Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)"
+          "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
         },
         {
           "name": "shot_type",
@@ -15776,7 +15776,7 @@
           },
           "default": [],
           "title": "Voice Ids",
-          "description": "Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)"
+          "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
         },
         {
           "name": "shot_type",
@@ -15903,7 +15903,7 @@
           },
           "default": [],
           "title": "Voice Ids",
-          "description": "Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)"
+          "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
         },
         {
           "name": "shot_type",
