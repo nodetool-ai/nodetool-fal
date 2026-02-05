@@ -461,7 +461,7 @@ class MiniMaxHailuo02(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_base64 = await context.image_to_base64(self.image)
-        
+
         arguments: dict[str, Any] = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
@@ -1899,9 +1899,7 @@ class LTX219BAudioToVideo(FALNode):
     - Create video content from voice recordings
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate the video from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate the video from")
     audio: AudioRef = Field(
         default=AudioRef(), description="The audio to generate the video from"
     )
@@ -1912,9 +1910,7 @@ class LTX219BAudioToVideo(FALNode):
         default=True,
         description="Calculate frames based on audio duration and FPS",
     )
-    num_frames: int = Field(
-        default=121, description="The number of frames to generate"
-    )
+    num_frames: int = Field(default=121, description="The number of frames to generate")
     video_size: LTXVideoSize = Field(
         default=LTXVideoSize.LANDSCAPE_4_3,
         description="The size of the generated video",
@@ -1926,9 +1922,7 @@ class LTX219BAudioToVideo(FALNode):
     fps: float = Field(
         default=25.0, description="The frames per second of the generated video"
     )
-    guidance_scale: float = Field(
-        default=3.0, description="The guidance scale to use"
-    )
+    guidance_scale: float = Field(default=3.0, description="The guidance scale to use")
     num_inference_steps: int = Field(
         default=40, description="The number of inference steps"
     )
@@ -2042,9 +2036,7 @@ class LTX219BDistilledAudioToVideo(FALNode):
     - Fast prototype video generation from audio
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate the video from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate the video from")
     audio: AudioRef = Field(
         default=AudioRef(), description="The audio to generate the video from"
     )
@@ -2055,9 +2047,7 @@ class LTX219BDistilledAudioToVideo(FALNode):
         default=True,
         description="Calculate frames based on audio duration and FPS",
     )
-    num_frames: int = Field(
-        default=121, description="The number of frames to generate"
-    )
+    num_frames: int = Field(default=121, description="The number of frames to generate")
     video_size: LTXVideoSize = Field(
         default=LTXVideoSize.LANDSCAPE_4_3,
         description="The size of the generated video",
@@ -2069,9 +2059,7 @@ class LTX219BDistilledAudioToVideo(FALNode):
     fps: float = Field(
         default=25.0, description="The frames per second of the generated video"
     )
-    guidance_scale: float = Field(
-        default=3.0, description="The guidance scale to use"
-    )
+    guidance_scale: float = Field(default=3.0, description="The guidance scale to use")
     num_inference_steps: int = Field(
         default=40, description="The number of inference steps"
     )
@@ -2174,6 +2162,7 @@ class LTX219BDistilledAudioToVideo(FALNode):
 
 class Kling3Duration(Enum):
     """Duration for Kling 3.0/O3 videos (3-15 seconds)."""
+
     THREE_SECONDS = "3"
     FOUR_SECONDS = "4"
     FIVE_SECONDS = "5"
@@ -2197,7 +2186,9 @@ class Kling3AspectRatio(Enum):
 
 class Kling3ShotType(Enum):
     """Shot type for multi-shot video generation."""
+
     CUSTOMIZE = "customize"
+    INTELLIGENT = "intelligent"
 
 
 class KlingV3ImageToVideo(FALNode):
@@ -2279,9 +2270,11 @@ class KlingV3ImageToVideo(FALNode):
             for ref_image in self.reference_images:
                 if ref_image.uri:
                     ref_base64 = await context.image_to_base64(ref_image)
-                    elements.append({
-                        "frontal_image_url": f"data:image/png;base64,{ref_base64}",
-                    })
+                    elements.append(
+                        {
+                            "frontal_image_url": f"data:image/png;base64,{ref_base64}",
+                        }
+                    )
             if elements:
                 arguments["elements"] = elements
 
@@ -2377,9 +2370,11 @@ class KlingV3ProImageToVideo(FALNode):
             for ref_image in self.reference_images:
                 if ref_image.uri:
                     ref_base64 = await context.image_to_base64(ref_image)
-                    elements.append({
-                        "frontal_image_url": f"data:image/png;base64,{ref_base64}",
-                    })
+                    elements.append(
+                        {
+                            "frontal_image_url": f"data:image/png;base64,{ref_base64}",
+                        }
+                    )
             if elements:
                 arguments["elements"] = elements
 
@@ -2458,9 +2453,11 @@ class KlingO3ImageToVideo(FALNode):
             for ref_image in self.reference_images:
                 if ref_image.uri:
                     ref_base64 = await context.image_to_base64(ref_image)
-                    elements.append({
-                        "frontal_image_url": f"data:image/png;base64,{ref_base64}",
-                    })
+                    elements.append(
+                        {
+                            "frontal_image_url": f"data:image/png;base64,{ref_base64}",
+                        }
+                    )
             if elements:
                 arguments["elements"] = elements
 
@@ -2561,9 +2558,11 @@ class KlingO3ReferenceToVideo(FALNode):
             for elem_image in self.element_images:
                 if elem_image.uri:
                     elem_base64 = await context.image_to_base64(elem_image)
-                    elements.append({
-                        "frontal_image_url": f"data:image/png;base64,{elem_base64}",
-                    })
+                    elements.append(
+                        {
+                            "frontal_image_url": f"data:image/png;base64,{elem_base64}",
+                        }
+                    )
             if elements:
                 arguments["elements"] = elements
 
@@ -2664,9 +2663,11 @@ class KlingO3ProReferenceToVideo(FALNode):
             for elem_image in self.element_images:
                 if elem_image.uri:
                     elem_base64 = await context.image_to_base64(elem_image)
-                    elements.append({
-                        "frontal_image_url": f"data:image/png;base64,{elem_base64}",
-                    })
+                    elements.append(
+                        {
+                            "frontal_image_url": f"data:image/png;base64,{elem_base64}",
+                        }
+                    )
             if elements:
                 arguments["elements"] = elements
 
