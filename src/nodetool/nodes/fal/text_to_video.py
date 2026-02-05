@@ -1331,3 +1331,243 @@ class Kandinsky5TextToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "guidance_scale"]
+
+
+class Kling3Duration(Enum):
+    THREE_SECONDS = "3"
+    FIVE_SECONDS = "5"
+    TEN_SECONDS = "10"
+
+
+class Kling3AspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+
+class KlingV3TextToVideo(FALNode):
+    """
+    Generate high-quality videos from text prompts using Kling Video 3.0 Standard with improved motion and realistic acting.
+    video, generation, kling, v3, text-to-video, cinematic
+
+    Use cases:
+    - Create cinematic video clips from descriptions
+    - Generate marketing and promotional videos
+    - Produce dynamic social media content
+    - Visualize creative concepts and storyboards
+    - Create professional video content
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/standard/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]
+
+
+class KlingV3ProTextToVideo(FALNode):
+    """
+    Generate premium quality videos from text prompts using Kling Video 3.0 Pro with enhanced quality and performance.
+    video, generation, kling, v3, pro, text-to-video, premium
+
+    Use cases:
+    - Create high-end promotional content
+    - Generate professional cinematic sequences
+    - Produce premium marketing videos
+    - Create detailed visual narratives
+    - Generate broadcast-quality content
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/pro/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]
+
+
+class KlingO3TextToVideo(FALNode):
+    """
+    Generate cinematic videos with Kling Video O3 Standard supporting storyboard-first creation and character consistency.
+    video, generation, kling, o3, text-to-video, storyboard, cinematic
+
+    Use cases:
+    - Create multi-shot video sequences
+    - Generate story-driven content
+    - Produce character-consistent videos
+    - Create structured narrative videos
+    - Generate cinematic sequences with continuity
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]
+
+
+class KlingO3ProTextToVideo(FALNode):
+    """
+    Generate premium cinematic videos with Kling Video O3 Pro featuring higher-end customization and storyboard-first creation.
+    video, generation, kling, o3, pro, text-to-video, premium, storyboard
+
+    Use cases:
+    - Create professional multi-shot sequences
+    - Generate premium story-driven content
+    - Produce high-quality character-consistent videos
+    - Create broadcast-quality narrative videos
+    - Generate cinematic content with advanced controls
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]

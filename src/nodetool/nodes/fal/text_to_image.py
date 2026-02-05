@@ -3,7 +3,7 @@ from pydantic import Field
 from nodetool.metadata.types import ColorRef, ImageRef, LoraWeight
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
-from typing import Optional
+from typing import Any, Optional
 
 
 class ImageSizePreset(str, Enum):
@@ -3488,3 +3488,69 @@ class ZImageBaseLora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_inference_steps"]
+
+
+class Kling3ImageAspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+    RATIO_21_9 = "21:9"
+    RATIO_9_21 = "9:21"
+
+
+class KlingImage3TextToImage(FALNode):
+    """
+    Generate high-quality images from text prompts using Kling Image 3.0.
+    Supports sharp outputs up to 4K resolution with strong prompt adherence.
+    image, generation, kling, v3, text-to-image, 4k, high-resolution
+
+    Use cases:
+    - Create high-resolution images from descriptions
+    - Generate 4K quality artwork
+    - Produce photorealistic images
+    - Create detailed visual content
+    - Generate images with strong prompt adherence
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt describing the desired image"
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    aspect_ratio: Kling3ImageAspectRatio = Field(
+        default=Kling3ImageAspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated image",
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="Number of images to generate"
+    )
+    seed: int = Field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "n": self.num_images,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-image/v3/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "aspect_ratio"]
