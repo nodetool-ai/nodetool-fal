@@ -1081,6 +1081,12 @@ class PikaV21TextToVideo(FALNode):
         return ["prompt"]
 
 
+class Sora2Duration(int, Enum):
+    _4s = 4
+    _8s = 8
+    _12s = 12
+
+
 class Sora2TextToVideo(FALNode):
     """
     OpenAI Sora 2 Text-to-Video generates high-quality videos from text.
@@ -1101,8 +1107,9 @@ class Sora2TextToVideo(FALNode):
         default=AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    duration: int = Field(
-        default=5, ge=1, le=20, description="Duration of the video in seconds"
+    duration: Sora2Duration = Field(
+        default=Sora2Duration._4s,
+        description="Duration of the video in seconds",
     )
     seed: int = Field(default=-1, description="Seed for reproducible generation")
 
@@ -1110,7 +1117,7 @@ class Sora2TextToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "duration": self.duration,
+            "duration": self.duration.value,
         }
         if self.seed != -1:
             arguments["seed"] = self.seed
