@@ -107,7 +107,7 @@ class Hunyuan3DV2(FALNode):
         image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "input_image_url": f"data:image/png;base64,{image_base64}",
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
             "octree_resolution": self.octree_resolution,

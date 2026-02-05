@@ -16212,8 +16212,8 @@
     {
       "title": "Era 3D",
       "description": "Era3D creates multi-view consistent 3D models from images.\n    3d, generation, image-to-3d, era3d, multi-view\n\n    Use cases:\n    - Generate multi-view 3D models\n    - Create consistent 3D assets\n    - Produce 3D content with multiple views\n    - Generate detailed 3D models\n    - Create multi-view 3D for games",
-      "namespace": "fal.three_d",
-      "node_type": "fal.three_d.Era3D",
+      "namespace": "fal.model3d",
+      "node_type": "fal.model3d.Era3D",
       "properties": [
         {
           "name": "image",
@@ -16272,8 +16272,8 @@
     {
       "title": "Hunyuan 3DV 2",
       "description": "Hunyuan3D V2 generates high-quality 3D models from images.\n    3d, generation, image-to-3d, hunyuan\n\n    Use cases:\n    - Generate detailed 3D models\n    - Create 3D assets from photos\n    - Produce high-quality 3D content\n    - Create 3D visualizations\n    - Generate 3D for productions",
-      "namespace": "fal.three_d",
-      "node_type": "fal.three_d.Hunyuan3DV2",
+      "namespace": "fal.model3d",
+      "node_type": "fal.model3d.Hunyuan3DV2",
       "properties": [
         {
           "name": "image",
@@ -16346,8 +16346,8 @@
     {
       "title": "Trellis",
       "description": "Trellis generates 3D models from single images.\n    3d, generation, image-to-3d, trellis\n\n    Use cases:\n    - Generate 3D models from images\n    - Create 3D assets from photos\n    - Produce 3D content for games\n    - Create 3D visualizations\n    - Generate 3D for AR/VR",
-      "namespace": "fal.three_d",
-      "node_type": "fal.three_d.Trellis",
+      "namespace": "fal.model3d",
+      "node_type": "fal.model3d.Trellis",
       "properties": [
         {
           "name": "image",
@@ -16428,7 +16428,7 @@
               1024,
               2048
             ],
-            "type_name": "nodetool.nodes.fal.three_d.TextureSizeEnum"
+            "type_name": "nodetool.nodes.fal.model3d.TextureSizeEnum"
           },
           "default": 1024,
           "title": "Texture Size",
@@ -16460,8 +16460,8 @@
     {
       "title": "Tripo SR",
       "description": "TripoSR generates 3D models from images with fast processing.\n    3d, generation, image-to-3d, triposr, fast\n\n    Use cases:\n    - Quick 3D model generation\n    - Rapid prototyping\n    - Create 3D assets from photos\n    - Generate 3D content quickly\n    - Fast 3D for AR/VR",
-      "namespace": "fal.three_d",
-      "node_type": "fal.three_d.TripoSR",
+      "namespace": "fal.model3d",
+      "node_type": "fal.model3d.TripoSR",
       "properties": [
         {
           "name": "image",

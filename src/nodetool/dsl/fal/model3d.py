@@ -15,11 +15,11 @@ from nodetool.dsl.graph import GraphNode, SingleOutputGraphNode
 import typing
 from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.three_d
+import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
 
-class Era3D(GraphNode[nodetool.nodes.fal.three_d.Era3D.OutputType]):
+class Era3D(GraphNode[nodetool.nodes.fal.model3d.Era3D.OutputType]):
     """
 
     Era3D creates multi-view consistent 3D models from images.
@@ -52,7 +52,7 @@ class Era3D(GraphNode[nodetool.nodes.fal.three_d.Era3D.OutputType]):
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.three_d.Era3D
+        return nodetool.nodes.fal.model3d.Era3D
 
     @classmethod
     def get_node_type(cls):
@@ -72,7 +72,7 @@ class Era3DOutputs(OutputsProxy):
 import typing
 from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.three_d
+import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
 
@@ -111,7 +111,7 @@ class Hunyuan3DV2(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.three_d.Hunyuan3DV2
+        return nodetool.nodes.fal.model3d.Hunyuan3DV2
 
     @classmethod
     def get_node_type(cls):
@@ -121,7 +121,7 @@ class Hunyuan3DV2(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model
 import typing
 from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.three_d
+import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
 
@@ -139,7 +139,7 @@ class Trellis(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRe
     - Generate 3D for AR/VR
     """
 
-    TextureSizeEnum: typing.ClassVar[type] = nodetool.nodes.fal.three_d.TextureSizeEnum
+    TextureSizeEnum: typing.ClassVar[type] = nodetool.nodes.fal.model3d.TextureSizeEnum
 
     image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
@@ -162,8 +162,8 @@ class Trellis(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRe
     mesh_simplify: float | OutputHandle[float] = connect_field(
         default=0.95, description="Mesh simplification ratio"
     )
-    texture_size: nodetool.nodes.fal.three_d.TextureSizeEnum = Field(
-        default=nodetool.nodes.fal.three_d.TextureSizeEnum.SIZE_1024,
+    texture_size: nodetool.nodes.fal.model3d.TextureSizeEnum = Field(
+        default=nodetool.nodes.fal.model3d.TextureSizeEnum.SIZE_1024,
         description="Texture resolution",
     )
     seed: int | OutputHandle[int] = connect_field(
@@ -172,7 +172,7 @@ class Trellis(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRe
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.three_d.Trellis
+        return nodetool.nodes.fal.model3d.Trellis
 
     @classmethod
     def get_node_type(cls):
@@ -182,7 +182,7 @@ class Trellis(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRe
 import typing
 from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.three_d
+import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
 
@@ -212,7 +212,7 @@ class TripoSR(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRe
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.three_d.TripoSR
+        return nodetool.nodes.fal.model3d.TripoSR
 
     @classmethod
     def get_node_type(cls):
