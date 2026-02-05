@@ -1820,6 +1820,78 @@ import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class KlingImage3ImageToImage(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Transform and edit images using Kling Image 3.0. Features powerful image-to-image
+    editing workflows for modifying backgrounds, clothing, subjects, and more.
+    image, editing, kling, v3, image-to-image, transformation, style-transfer
+
+    Use cases:
+    - Change image backgrounds
+    - Modify clothing and subjects in images
+    - Transform image styles
+    - Edit and enhance existing images
+    - Create variations of existing artwork
+    """
+
+    Kling3ImageAspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_image.Kling3ImageAspectRatio
+    )
+    Kling3ImageResolution: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_image.Kling3ImageResolution
+    )
+
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The source image to transform",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text prompt describing the desired transformation (max 2500 characters)",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_image.Kling3ImageAspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_image.Kling3ImageAspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated image",
+    )
+    resolution: nodetool.nodes.fal.image_to_image.Kling3ImageResolution = Field(
+        default=nodetool.nodes.fal.image_to_image.Kling3ImageResolution.RES_1K,
+        description="Image generation resolution. 1K: standard, 2K: high-res",
+    )
+    num_images: int | OutputHandle[int] = connect_field(
+        default=1, description="Number of images to generate (1-9)"
+    )
+    elements: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
+        default=[],
+        description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.KlingImage3ImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class KolorsImageToImage(
     SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
 ):

@@ -287,7 +287,8 @@ class FluxV1ProUltra(FALNode):
         default="jpeg", description="Output format (jpeg or png)"
     )
     raw: bool = Field(
-        default=False, description="Generate less processed, more natural-looking images"
+        default=False,
+        description="Generate less processed, more natural-looking images",
     )
     aspect_ratio: str = Field(
         default="16:9", description="Aspect ratio of the generated image"
@@ -3351,9 +3352,7 @@ class ZImageBase(FALNode):
     - Create visual content for projects
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate an image from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate an image from")
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3,
         description="The size of the generated image",
@@ -3364,9 +3363,7 @@ class ZImageBase(FALNode):
     seed: int = Field(
         default=-1, description="The same seed will output the same image every time"
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate"
-    )
+    num_images: int = Field(default=1, description="The number of images to generate")
     enable_safety_checker: bool = Field(
         default=True, description="If true, the safety checker will be enabled"
     )
@@ -3427,9 +3424,7 @@ class ZImageBaseLora(FALNode):
     - Create brand-aligned visual content
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate an image from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate an image from")
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3,
         description="The size of the generated image",
@@ -3440,9 +3435,7 @@ class ZImageBaseLora(FALNode):
     seed: int = Field(
         default=-1, description="The same seed will output the same image every time"
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate"
-    )
+    num_images: int = Field(default=1, description="The number of images to generate")
     enable_safety_checker: bool = Field(
         default=True, description="If true, the safety checker will be enabled"
     )
@@ -3496,26 +3489,33 @@ class Kling3ImageAspectRatio(Enum):
     RATIO_4_3 = "4:3"
     RATIO_3_4 = "3:4"
     RATIO_1_1 = "1:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
     RATIO_21_9 = "21:9"
-    RATIO_9_21 = "9:21"
+
+
+class Kling3ImageResolution(Enum):
+    RES_1K = "1K"
+    RES_2K = "2K"
 
 
 class KlingImage3TextToImage(FALNode):
     """
     Generate high-quality images from text prompts using Kling Image 3.0.
-    Supports sharp outputs up to 4K resolution with strong prompt adherence.
-    image, generation, kling, v3, text-to-image, 4k, high-resolution
+    Supports sharp outputs up to 2K resolution with strong prompt adherence.
+    image, generation, kling, v3, text-to-image, high-resolution
 
     Use cases:
     - Create high-resolution images from descriptions
-    - Generate 4K quality artwork
+    - Generate 2K quality artwork
     - Produce photorealistic images
     - Create detailed visual content
     - Generate images with strong prompt adherence
     """
 
     prompt: str = Field(
-        default="", description="The text prompt describing the desired image"
+        default="",
+        description="The text prompt describing the desired image (max 2500 characters)",
     )
     negative_prompt: str = Field(
         default="", description="What to avoid in the generated image"
@@ -3524,23 +3524,42 @@ class KlingImage3TextToImage(FALNode):
         default=Kling3ImageAspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated image",
     )
+    resolution: Kling3ImageResolution = Field(
+        default=Kling3ImageResolution.RES_1K,
+        description="Image generation resolution. 1K: standard, 2K: high-res",
+    )
     num_images: int = Field(
-        default=1, ge=1, le=4, description="Number of images to generate"
+        default=1, ge=1, le=9, description="Number of images to generate (1-9)"
     )
-    seed: int = Field(
-        default=-1, description="Seed for reproducible generation"
+    elements: list[ImageRef] = Field(
+        default=[],
+        description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
     )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments: dict[str, Any] = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "n": self.num_images,
+            "resolution": self.resolution.value,
+            "num_images": self.num_images,
         }
         if self.negative_prompt:
             arguments["negative_prompt"] = self.negative_prompt
         if self.seed != -1:
             arguments["seed"] = self.seed
+
+        # Add elements for face/character control
+        if self.elements:
+            element_list = []
+            for elem in self.elements:
+                if elem.uri:
+                    elem_base64 = await context.image_to_base64(elem)
+                    element_list.append(
+                        {"frontal_image_url": f"data:image/png;base64,{elem_base64}"}
+                    )
+            if element_list:
+                arguments["elements"] = element_list
 
         res = await self.submit_request(
             context=context,

@@ -2169,18 +2169,12 @@ class BriaReplaceBackground(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="Reference image for background replacement"
     )
-    prompt: str = Field(
-        default="", description="Prompt for background replacement"
-    )
+    prompt: str = Field(default="", description="Prompt for background replacement")
     negative_prompt: str = Field(
         default="", description="Negative prompt for background replacement"
     )
-    seed: int = Field(
-        default=4925634, description="Random seed for reproducibility"
-    )
-    steps_num: int = Field(
-        default=30, description="Number of inference steps"
-    )
+    seed: int = Field(default=4925634, description="Random seed for reproducibility")
+    steps_num: int = Field(default=30, description="Number of inference steps")
     sync_mode: bool = Field(
         default=False,
         description="If true, returns the image directly in the response (increases latency)",
@@ -2305,8 +2299,14 @@ class Kling3ImageAspectRatio(Enum):
     RATIO_4_3 = "4:3"
     RATIO_3_4 = "3:4"
     RATIO_1_1 = "1:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
     RATIO_21_9 = "21:9"
-    RATIO_9_21 = "9:21"
+
+
+class Kling3ImageResolution(Enum):
+    RES_1K = "1K"
+    RES_2K = "2K"
 
 
 class KlingImage3ImageToImage(FALNode):
@@ -2327,7 +2327,8 @@ class KlingImage3ImageToImage(FALNode):
         default=ImageRef(), description="The source image to transform"
     )
     prompt: str = Field(
-        default="", description="The text prompt describing the desired transformation"
+        default="",
+        description="The text prompt describing the desired transformation (max 2500 characters)",
     )
     negative_prompt: str = Field(
         default="", description="What to avoid in the generated image"
@@ -2336,12 +2337,18 @@ class KlingImage3ImageToImage(FALNode):
         default=Kling3ImageAspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated image",
     )
+    resolution: Kling3ImageResolution = Field(
+        default=Kling3ImageResolution.RES_1K,
+        description="Image generation resolution. 1K: standard, 2K: high-res",
+    )
     num_images: int = Field(
-        default=1, ge=1, le=4, description="Number of images to generate"
+        default=1, ge=1, le=9, description="Number of images to generate (1-9)"
     )
-    seed: int = Field(
-        default=-1, description="Seed for reproducible generation"
+    elements: list[ImageRef] = Field(
+        default=[],
+        description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
     )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_base64 = await context.image_to_base64(self.image)
@@ -2350,12 +2357,25 @@ class KlingImage3ImageToImage(FALNode):
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "n": self.num_images,
+            "resolution": self.resolution.value,
+            "num_images": self.num_images,
         }
         if self.negative_prompt:
             arguments["negative_prompt"] = self.negative_prompt
         if self.seed != -1:
             arguments["seed"] = self.seed
+
+        # Add elements for face/character control
+        if self.elements:
+            element_list = []
+            for elem in self.elements:
+                if elem.uri:
+                    elem_base64 = await context.image_to_base64(elem)
+                    element_list.append(
+                        {"frontal_image_url": f"data:image/png;base64,{elem_base64}"}
+                    )
+            if element_list:
+                arguments["elements"] = element_list
 
         res = await self.submit_request(
             context=context,

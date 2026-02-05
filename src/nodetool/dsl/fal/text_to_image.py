@@ -2123,6 +2123,72 @@ import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
 
+class KlingImage3TextToImage(
+    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
+):
+    """
+
+    Generate high-quality images from text prompts using Kling Image 3.0.
+    Supports sharp outputs up to 2K resolution with strong prompt adherence.
+    image, generation, kling, v3, text-to-image, high-resolution
+
+    Use cases:
+    - Create high-resolution images from descriptions
+    - Generate 2K quality artwork
+    - Produce photorealistic images
+    - Create detailed visual content
+    - Generate images with strong prompt adherence
+    """
+
+    Kling3ImageAspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.Kling3ImageAspectRatio
+    )
+    Kling3ImageResolution: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_image.Kling3ImageResolution
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text prompt describing the desired image (max 2500 characters)",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="", description="What to avoid in the generated image"
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_image.Kling3ImageAspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_image.Kling3ImageAspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated image",
+    )
+    resolution: nodetool.nodes.fal.text_to_image.Kling3ImageResolution = Field(
+        default=nodetool.nodes.fal.text_to_image.Kling3ImageResolution.RES_1K,
+        description="Image generation resolution. 1K: standard, 2K: high-res",
+    )
+    num_images: int | OutputHandle[int] = connect_field(
+        default=1, description="Number of images to generate (1-9)"
+    )
+    elements: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
+        default=[],
+        description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.KlingImage3TextToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+
 class Kolors(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
