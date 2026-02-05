@@ -1334,15 +1334,32 @@ class Kandinsky5TextToVideo(FALNode):
 
 
 class Kling3Duration(Enum):
+    """Duration for Kling 3.0/O3 videos (3-15 seconds)."""
     THREE_SECONDS = "3"
+    FOUR_SECONDS = "4"
     FIVE_SECONDS = "5"
+    SIX_SECONDS = "6"
+    SEVEN_SECONDS = "7"
+    EIGHT_SECONDS = "8"
+    NINE_SECONDS = "9"
     TEN_SECONDS = "10"
+    ELEVEN_SECONDS = "11"
+    TWELVE_SECONDS = "12"
+    THIRTEEN_SECONDS = "13"
+    FOURTEEN_SECONDS = "14"
+    FIFTEEN_SECONDS = "15"
 
 
 class Kling3AspectRatio(Enum):
     RATIO_16_9 = "16:9"
     RATIO_9_16 = "9:16"
     RATIO_1_1 = "1:1"
+
+
+class Kling3ShotType(Enum):
+    """Shot type for multi-shot video generation."""
+    CUSTOMIZE = "customize"
+    INTELLIGENT = "intelligent"
 
 
 class KlingV3TextToVideo(FALNode):
@@ -1363,11 +1380,23 @@ class KlingV3TextToVideo(FALNode):
     )
     duration: Kling3Duration = Field(
         default=Kling3Duration.FIVE_SECONDS,
-        description="The duration of the generated video in seconds",
+        description="The duration of the generated video in seconds (3-15)",
     )
     aspect_ratio: Kling3AspectRatio = Field(
         default=Kling3AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] = Field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: Kling3ShotType = Field(
+        default=Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality",
@@ -1385,9 +1414,13 @@ class KlingV3TextToVideo(FALNode):
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
+            "generate_audio": self.generate_audio,
+            "shot_type": self.shot_type.value,
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
 
         res = await self.submit_request(
             context=context,
@@ -1420,11 +1453,23 @@ class KlingV3ProTextToVideo(FALNode):
     )
     duration: Kling3Duration = Field(
         default=Kling3Duration.FIVE_SECONDS,
-        description="The duration of the generated video in seconds",
+        description="The duration of the generated video in seconds (3-15)",
     )
     aspect_ratio: Kling3AspectRatio = Field(
         default=Kling3AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] = Field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: Kling3ShotType = Field(
+        default=Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality",
@@ -1442,9 +1487,13 @@ class KlingV3ProTextToVideo(FALNode):
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
+            "generate_audio": self.generate_audio,
+            "shot_type": self.shot_type.value,
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
 
         res = await self.submit_request(
             context=context,
@@ -1477,21 +1526,23 @@ class KlingO3TextToVideo(FALNode):
     )
     duration: Kling3Duration = Field(
         default=Kling3Duration.FIVE_SECONDS,
-        description="The duration of the generated video in seconds",
+        description="The duration of the generated video in seconds (3-15)",
     )
     aspect_ratio: Kling3AspectRatio = Field(
         default=Kling3AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    negative_prompt: str = Field(
-        default="blur, distort, and low quality",
-        description="What to avoid in the generated video",
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video",
     )
-    cfg_scale: float = Field(
-        default=0.5,
-        ge=0.0,
-        le=1.0,
-        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    voice_ids: list[str] = Field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: Kling3ShotType = Field(
+        default=Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1499,9 +1550,12 @@ class KlingO3TextToVideo(FALNode):
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "negative_prompt": self.negative_prompt,
-            "cfg_scale": self.cfg_scale,
+            "shot_type": self.shot_type.value,
         }
+        if self.generate_audio:
+            arguments["generate_audio"] = self.generate_audio
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
 
         res = await self.submit_request(
             context=context,
@@ -1534,21 +1588,23 @@ class KlingO3ProTextToVideo(FALNode):
     )
     duration: Kling3Duration = Field(
         default=Kling3Duration.FIVE_SECONDS,
-        description="The duration of the generated video in seconds",
+        description="The duration of the generated video in seconds (3-15)",
     )
     aspect_ratio: Kling3AspectRatio = Field(
         default=Kling3AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    negative_prompt: str = Field(
-        default="blur, distort, and low quality",
-        description="What to avoid in the generated video",
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video",
     )
-    cfg_scale: float = Field(
-        default=0.5,
-        ge=0.0,
-        le=1.0,
-        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    voice_ids: list[str] = Field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: Kling3ShotType = Field(
+        default=Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1556,9 +1612,12 @@ class KlingO3ProTextToVideo(FALNode):
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "negative_prompt": self.negative_prompt,
-            "cfg_scale": self.cfg_scale,
+            "shot_type": self.shot_type.value,
         }
+        if self.generate_audio:
+            arguments["generate_audio"] = self.generate_audio
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
 
         res = await self.submit_request(
             context=context,
