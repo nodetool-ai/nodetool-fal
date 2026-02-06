@@ -462,7 +462,7 @@ class FluxLoraCanny(FALNode):
     - Produce consistent style variations
     """
 
-    control_image: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(),
         description="The control image to generate the Canny edge map from",
     )
@@ -472,28 +472,31 @@ class FluxLoraCanny(FALNode):
         description="The size of the generated image",
     )
     num_inference_steps: int = Field(
-        default=28, ge=1, description="The number of inference steps to perform"
+        default=28, ge=1, le=50, description="The number of inference steps to perform"
     )
     guidance_scale: float = Field(
-        default=3.5, description="How closely the model should stick to your prompt"
+        default=30,
+        ge=20,
+        le=40,
+        description="The CFG scale - how closely the model should stick to your prompt (20-40)",
     )
     seed: int = Field(
         default=-1, description="The same seed will output the same image every time"
     )
-    lora_scale: float = Field(
-        default=0.6, description="The strength of the LoRA adaptation"
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate (1-4)"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_image_base64 = await context.image_to_base64(self.control_image)
+        image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
-            "control_image_url": f"data:image/png;base64,{control_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "image_size": self.image_size.value,
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
-            "lora_scale": self.lora_scale,
+            "num_images": self.num_images,
             "output_format": "png",
         }
         if self.seed != -1:
@@ -510,7 +513,7 @@ class FluxLoraCanny(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["control_image", "prompt", "image_size"]
+        return ["image", "prompt", "guidance_scale"]
 
 
 class FluxLoraDepth(FALNode):
@@ -525,7 +528,7 @@ class FluxLoraDepth(FALNode):
     - Generate images with controlled perspective
     """
 
-    control_image: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(),
         description="The control image to generate the depth map from",
     )
@@ -535,28 +538,31 @@ class FluxLoraDepth(FALNode):
         description="The size of the generated image",
     )
     num_inference_steps: int = Field(
-        default=28, ge=1, description="The number of inference steps to perform"
+        default=28, ge=1, le=50, description="The number of inference steps to perform"
     )
     guidance_scale: float = Field(
-        default=3.5, description="How closely the model should stick to your prompt"
+        default=3.5,
+        ge=0,
+        le=35,
+        description="The CFG scale - how closely the model should stick to your prompt (0-35)",
     )
     seed: int = Field(
         default=-1, description="The same seed will output the same image every time"
     )
-    lora_scale: float = Field(
-        default=0.6, description="The strength of the LoRA adaptation"
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate (1-4)"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_image_base64 = await context.image_to_base64(self.control_image)
+        image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
-            "control_image_url": f"data:image/png;base64,{control_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "image_size": self.image_size.value,
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
-            "lora_scale": self.lora_scale,
+            "num_images": self.num_images,
             "output_format": "png",
         }
         if self.seed != -1:
@@ -573,7 +579,7 @@ class FluxLoraDepth(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["control_image", "prompt", "image_size"]
+        return ["image", "prompt", "guidance_scale"]
 
 
 # ... existing code ...
