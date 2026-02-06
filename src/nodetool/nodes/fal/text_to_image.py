@@ -2617,8 +2617,6 @@ class IdeogramV3(FALNode):
     negative_prompt: str = Field(
         default="", description="A negative prompt to avoid in the generated image"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2627,10 +2625,8 @@ class IdeogramV3(FALNode):
             "expand_prompt": self.expand_prompt,
             "output_format": "png",
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -2668,8 +2664,6 @@ class GPTImage1(FALNode):
         default="auto",
         description="The quality of the generated image (auto, high, medium, low)",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2711,8 +2705,6 @@ class Gemini25FlashImage(FALNode):
         default=AspectRatio.RATIO_1_1,
         description="The aspect ratio of the generated image",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2864,8 +2856,6 @@ class HunyuanImageV3(FALNode):
     guidance_scale: float = Field(
         default=5.0, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2873,10 +2863,8 @@ class HunyuanImageV3(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -2988,8 +2976,6 @@ class CogView4(FALNode):
     guidance_scale: float = Field(
         default=7.0, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2997,10 +2983,8 @@ class CogView4(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3057,10 +3041,8 @@ class Kolors(FALNode):
             "enable_safety_checker": self.enable_safety_checker,
             "output_format": "png",
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3100,18 +3082,14 @@ class Seedream45(FALNode):
     guidance_scale: float = Field(
         default=5.0, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size.value,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3154,8 +3132,6 @@ class Reve(FALNode):
     guidance_scale: float = Field(
         default=3.5, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -3163,10 +3139,8 @@ class Reve(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3203,17 +3177,13 @@ class Imagen3(FALNode):
         default=AspectRatio.RATIO_1_1,
         description="The aspect ratio of the generated image",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3250,17 +3220,13 @@ class QwenImageMax(FALNode):
         default=ImageSizePreset.SQUARE_HD,
         description="The size of the generated image",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size.value,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3300,18 +3266,14 @@ class ZImageTurbo(FALNode):
     num_inference_steps: int = Field(
         default=4, ge=1, description="The number of inference steps"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size.value,
             "num_inference_steps": self.num_inference_steps,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3392,10 +3354,8 @@ class ZImageBase(FALNode):
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3464,10 +3424,8 @@ class ZImageBaseLora(FALNode):
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3535,8 +3493,6 @@ class KlingImage3TextToImage(FALNode):
         default=[],
         description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments: dict[str, Any] = {
             "prompt": self.prompt,
@@ -3544,10 +3500,8 @@ class KlingImage3TextToImage(FALNode):
             "resolution": self.resolution.value,
             "num_images": self.num_images,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         # Add elements for face/character control
         if self.elements:
@@ -3555,8 +3509,12 @@ class KlingImage3TextToImage(FALNode):
             for elem in self.elements:
                 if elem.uri:
                     elem_base64 = await context.image_to_base64(elem)
+                    ref_data_url = f"data:image/png;base64,{elem_base64}"
                     element_list.append(
-                        {"frontal_image_url": f"data:image/png;base64,{elem_base64}"}
+                        {
+                            "frontal_image_url": ref_data_url,
+                            "reference_image_urls": [ref_data_url],
+                        }
                     )
             if element_list:
                 arguments["elements"] = element_list
