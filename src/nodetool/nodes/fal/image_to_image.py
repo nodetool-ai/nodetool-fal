@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Any
 from pydantic import Field
 
-from nodetool.metadata.types import ImageRef, VideoRef
+from nodetool.metadata.types import ImageRef, LoraWeight, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 from .text_to_image import ImageSizePreset, HunyuanImageSizePreset
@@ -1301,6 +1301,259 @@ class Flux2TurboEdit(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+
+class Flux2Klein4bBaseEdit(FALNode):
+    """
+    Image-to-image editing with Flux 2 [klein] 4B Base from Black Forest Labs. Precise modifications using natural language descriptions and hex color control.
+    image, editing, flux, klein, 4b, natural-language, color-control
+
+    Use cases:
+    - Edit images with natural language descriptions
+    - Apply precise modifications with hex color control
+    - Style transfer and content edits
+    - Reference-image style application
+    - Targeted image transformations
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to edit")
+    prompt: str = Field(
+        default="",
+        description="The prompt describing the edit (e.g. 'Imagine view of Fuji mount. Use style of reference image.')",
+    )
+    negative_prompt: str = Field(
+        default="",
+        description="Negative prompt for classifier-free guidance. Describes what to avoid in the image.",
+    )
+    guidance_scale: float = Field(
+        default=5.0,
+        ge=0,
+        le=20,
+        description="Guidance scale for classifier-free guidance",
+    )
+    num_inference_steps: int = Field(
+        default=28, ge=4, le=50, description="The number of inference steps to perform"
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+    output_format: str = Field(
+        default="png", description="Output format: jpeg, png, or webp"
+    )
+    acceleration: str = Field(
+        default="regular",
+        description="Acceleration level: none, regular, or high",
+    )
+    image_size: ImageSizePreset | None = Field(
+        default=None,
+        description="The size of the generated image. If not provided, uses the input image size.",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+        image_urls = [f"data:image/png;base64,{image_base64}"]
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_urls": image_urls,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": self.output_format,
+            "acceleration": self.acceleration,
+        }
+        if self.image_size is not None:
+            arguments["image_size"] = self.image_size.value
+        if self.negative_prompt is not None and self.negative_prompt.strip():
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-2/klein/4b/base/edit",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+
+class Flux2Klein4bBaseEditLora(FALNode):
+    """
+    Image-to-image editing with LoRA support for FLUX.2 [klein] 4B Base from Black Forest Labs. Specialized style transfer and domain-specific modifications.
+    image, editing, flux, klein, 4b, lora, style-transfer
+
+    Use cases:
+    - Style transfer with custom LoRAs
+    - Domain-specific image modifications
+    - Apply trained LoRA weights to edits
+    - Consistent character or style editing
+    - Specialized editorial transformations
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to edit")
+    prompt: str = Field(
+        default="",
+        description="The prompt to edit the image (e.g. 'Change his clothes to casual suit and tie')",
+    )
+    loras: list[LoraWeight] = Field(
+        default_factory=list,
+        description="List of LoRA weights to apply (maximum 3)",
+    )
+    negative_prompt: str = Field(
+        default="",
+        description="Negative prompt for classifier-free guidance",
+    )
+    guidance_scale: float = Field(
+        default=5.0,
+        ge=0,
+        le=20,
+        description="Guidance scale for classifier-free guidance",
+    )
+    num_inference_steps: int = Field(
+        default=28, ge=4, le=50, description="The number of inference steps to perform"
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+    output_format: str = Field(
+        default="png", description="Output format: jpeg, png, or webp"
+    )
+    acceleration: str = Field(
+        default="regular",
+        description="Acceleration level: none, regular, or high",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+        image_urls = [f"data:image/png;base64,{image_base64}"]
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_urls": image_urls,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": self.output_format,
+            "acceleration": self.acceleration,
+            "loras": [{"path": lora.url, "scale": lora.scale} for lora in self.loras],
+        }
+        if self.negative_prompt is not None and self.negative_prompt.strip():
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-2/klein/4b/base/edit/lora",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "loras"]
+
+
+class Flux2Klein9bBaseEditLora(FALNode):
+    """
+    Image-to-image editing with LoRA support for FLUX.2 [klein] 9B Base from Black Forest Labs. Specialized style transfer and domain-specific modifications.
+    image, editing, flux, klein, 9b, lora, style-transfer
+
+    Use cases:
+    - Higher-quality style transfer with custom LoRAs
+    - Domain-specific image modifications with 9B model
+    - Apply trained LoRA weights to edits
+    - Consistent character or style editing
+    - Specialized editorial transformations
+    """
+
+    image: ImageRef = Field(default=ImageRef(), description="The input image to edit")
+    prompt: str = Field(
+        default="",
+        description="The prompt to edit the image (e.g. 'Change his clothes to casual suit and tie')",
+    )
+    loras: list[LoraWeight] = Field(
+        default_factory=list,
+        description="List of LoRA weights to apply (maximum 3)",
+    )
+    negative_prompt: str = Field(
+        default="",
+        description="Negative prompt for classifier-free guidance",
+    )
+    guidance_scale: float = Field(
+        default=5.0,
+        ge=0,
+        le=20,
+        description="Guidance scale for classifier-free guidance",
+    )
+    num_inference_steps: int = Field(
+        default=28, ge=4, le=50, description="The number of inference steps to perform"
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=4, description="The number of images to generate"
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+    enable_safety_checker: bool = Field(
+        default=True, description="If true, the safety checker will be enabled"
+    )
+    output_format: str = Field(
+        default="png", description="Output format: jpeg, png, or webp"
+    )
+    acceleration: str = Field(
+        default="regular",
+        description="Acceleration level: none, regular, or high",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+        image_urls = [f"data:image/png;base64,{image_base64}"]
+
+        arguments = {
+            "prompt": self.prompt,
+            "image_urls": image_urls,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "num_images": self.num_images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": self.output_format,
+            "acceleration": self.acceleration,
+            "loras": [{"path": lora.url, "scale": lora.scale} for lora in self.loras],
+        }
+        if self.negative_prompt is not None and self.negative_prompt.strip():
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-2/klein/9b/base/edit/lora",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "loras"]
 
 
 class CreativeUpscaler(FALNode):

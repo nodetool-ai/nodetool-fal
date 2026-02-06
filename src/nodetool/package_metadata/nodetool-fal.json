@@ -1,7 +1,7 @@
 {
   "name": "nodetool-fal",
   "description": "Nodetool FAL nodes",
-  "version": "0.6.3-rc.16",
+  "version": "0.6.3-rc.17",
   "authors": [
     "Matthias Georgi <matti.georgi@gmail.com>"
   ],
@@ -1081,6 +1081,423 @@
       ],
       "basic_fields": [
         "image"
+      ]
+    },
+    {
+      "title": "Flux 2 Klein 4 b Base Edit",
+      "description": "Image-to-image editing with Flux 2 [klein] 4B Base from Black Forest Labs. Precise modifications using natural language descriptions and hex color control.\n    image, editing, flux, klein, 4b, natural-language, color-control\n\n    Use cases:\n    - Edit images with natural language descriptions\n    - Apply precise modifications with hex color control\n    - Style transfer and content edits\n    - Reference-image style application\n    - Targeted image transformations",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.Flux2Klein4bBaseEdit",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "The input image to edit"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt describing the edit (e.g. 'Imagine view of Fuji mount. Use style of reference image.')"
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "Negative prompt for classifier-free guidance. Describes what to avoid in the image."
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 5.0,
+          "title": "Guidance Scale",
+          "description": "Guidance scale for classifier-free guidance",
+          "min": 0.0,
+          "max": 20.0
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 4.0,
+          "max": 50.0
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate",
+          "min": 1.0,
+          "max": 4.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Seed for reproducible generation"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "str"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "Output format: jpeg, png, or webp"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "str"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "Acceleration level: none, regular, or high"
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "optional": true,
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": null,
+          "title": "Image Size",
+          "description": "The size of the generated image. If not provided, uses the input image size."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Flux 2 Klein 4 b Base Edit Lora",
+      "description": "Image-to-image editing with LoRA support for FLUX.2 [klein] 4B Base from Black Forest Labs. Specialized style transfer and domain-specific modifications.\n    image, editing, flux, klein, 4b, lora, style-transfer\n\n    Use cases:\n    - Style transfer with custom LoRAs\n    - Domain-specific image modifications\n    - Apply trained LoRA weights to edits\n    - Consistent character or style editing\n    - Specialized editorial transformations",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.Flux2Klein4bBaseEditLora",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "The input image to edit"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to edit the image (e.g. 'Change his clothes to casual suit and tie')"
+        },
+        {
+          "name": "loras",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "lora_weight"
+              }
+            ]
+          },
+          "default": null,
+          "title": "Loras",
+          "description": "List of LoRA weights to apply (maximum 3)",
+          "required": true
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "Negative prompt for classifier-free guidance"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 5.0,
+          "title": "Guidance Scale",
+          "description": "Guidance scale for classifier-free guidance",
+          "min": 0.0,
+          "max": 20.0
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 4.0,
+          "max": 50.0
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate",
+          "min": 1.0,
+          "max": 4.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Seed for reproducible generation"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "str"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "Output format: jpeg, png, or webp"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "str"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "Acceleration level: none, regular, or high"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "loras"
+      ]
+    },
+    {
+      "title": "Flux 2 Klein 9 b Base Edit Lora",
+      "description": "Image-to-image editing with LoRA support for FLUX.2 [klein] 9B Base from Black Forest Labs. Specialized style transfer and domain-specific modifications.\n    image, editing, flux, klein, 9b, lora, style-transfer\n\n    Use cases:\n    - Higher-quality style transfer with custom LoRAs\n    - Domain-specific image modifications with 9B model\n    - Apply trained LoRA weights to edits\n    - Consistent character or style editing\n    - Specialized editorial transformations",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.Flux2Klein9bBaseEditLora",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "The input image to edit"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to edit the image (e.g. 'Change his clothes to casual suit and tie')"
+        },
+        {
+          "name": "loras",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "lora_weight"
+              }
+            ]
+          },
+          "default": null,
+          "title": "Loras",
+          "description": "List of LoRA weights to apply (maximum 3)",
+          "required": true
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "Negative prompt for classifier-free guidance"
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 5.0,
+          "title": "Guidance Scale",
+          "description": "Guidance scale for classifier-free guidance",
+          "min": 0.0,
+          "max": 20.0
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform",
+          "min": 4.0,
+          "max": 50.0
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate",
+          "min": 1.0,
+          "max": 4.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Seed for reproducible generation"
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If true, the safety checker will be enabled"
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "str"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "Output format: jpeg, png, or webp"
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "str"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "Acceleration level: none, regular, or high"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "loras"
       ]
     },
     {
@@ -6684,13 +7101,17 @@
         {
           "name": "duration",
           "type": {
-            "type": "int"
+            "type": "enum",
+            "values": [
+              4,
+              8,
+              12
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.Sora2Duration"
           },
-          "default": 5,
+          "default": 4,
           "title": "Duration",
-          "description": "Duration of the video in seconds",
-          "min": 1.0,
-          "max": 20.0
+          "description": "Duration of the video in seconds"
         },
         {
           "name": "seed",
@@ -10681,6 +11102,149 @@
         "prompt",
         "image_size",
         "num_inference_steps"
+      ]
+    },
+    {
+      "title": "Flux 2 Klein 9 b Base",
+      "description": "FLUX.2 [klein] 9B Base: fast text-to-image for real-time apps and high volume. Sub-second speed, high quality (not maximum). Supports up to 4 images.\n    flux, text-to-image, klein, black-forest-labs, real-time, fast, high-volume\n\n    Use cases:\n    - Real-time and interactive image generation\n    - High-volume batch or API workloads\n    - Fast iteration and previews\n    - Apps needing sub-second latency\n    - High-quality output where speed matters more than max quality",
+      "namespace": "fal.text_to_image",
+      "node_type": "fal.text_to_image.Flux2Klein9bBase",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The prompt to generate an image from."
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str",
+            "optional": true
+          },
+          "default": "",
+          "title": "Negative Prompt",
+          "description": "Negative prompt for classifier-free guidance. Describes what to avoid in the image."
+        },
+        {
+          "name": "guidance_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 5.0,
+          "title": "Guidance Scale",
+          "description": "Guidance scale for classifier-free guidance.",
+          "min": 0.0,
+          "max": 20.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "The seed to use for the generation. If not provided, a random seed will be used."
+        },
+        {
+          "name": "num_inference_steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 28,
+          "title": "Num Inference Steps",
+          "description": "The number of inference steps to perform.",
+          "min": 4.0,
+          "max": 50.0
+        },
+        {
+          "name": "image_size",
+          "type": {
+            "type": "enum",
+            "values": [
+              "square_hd",
+              "square",
+              "portrait_4_3",
+              "portrait_16_9",
+              "landscape_4_3",
+              "landscape_16_9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.ImageSizePreset"
+          },
+          "default": "landscape_4_3",
+          "title": "Image Size",
+          "description": "The size of the image to generate."
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate.",
+          "min": 1.0,
+          "max": 4.0
+        },
+        {
+          "name": "acceleration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "none",
+              "regular",
+              "high"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.Flux2KleinAcceleration"
+          },
+          "default": "regular",
+          "title": "Acceleration",
+          "description": "The acceleration level to use for image generation."
+        },
+        {
+          "name": "sync_mode",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Sync Mode",
+          "description": "If True, the media will be returned as a data URI. Output is not stored when this is True."
+        },
+        {
+          "name": "enable_safety_checker",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Enable Safety Checker",
+          "description": "If set to true, the safety checker will be enabled."
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "str"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "The format of the generated image."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "image_size",
+        "guidance_scale",
+        "num_images"
       ]
     },
     {
@@ -16935,13 +17499,17 @@
         {
           "name": "duration",
           "type": {
-            "type": "int"
+            "type": "enum",
+            "values": [
+              4,
+              8,
+              12
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.Sora2Duration"
           },
-          "default": 5,
+          "default": 4,
           "title": "Duration",
-          "description": "Duration of the video in seconds",
-          "min": 1.0,
-          "max": 20.0
+          "description": "Duration of the video in seconds"
         },
         {
           "name": "seed",

@@ -561,6 +561,105 @@ class FluxDev(FALNode):
         return ["prompt", "image_size", "guidance_scale"]
 
 
+class Flux2KleinAcceleration(str, Enum):
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+
+class Flux2Klein9bBase(FALNode):
+    """
+    FLUX.2 [klein] 9B Base: fast text-to-image for real-time apps and high volume. Sub-second speed, high quality (not maximum). Supports up to 4 images.
+    flux, text-to-image, klein, black-forest-labs, real-time, fast, high-volume
+
+    Use cases:
+    - Real-time and interactive image generation
+    - High-volume batch or API workloads
+    - Fast iteration and previews
+    - Apps needing sub-second latency
+    - High-quality output where speed matters more than max quality
+    """
+
+    prompt: str = Field(default="", description="The prompt to generate an image from.")
+    negative_prompt: str | None = Field(
+        default="",
+        description="Negative prompt for classifier-free guidance. Describes what to avoid in the image.",
+    )
+    guidance_scale: float = Field(
+        default=5.0,
+        ge=0,
+        le=20,
+        description="Guidance scale for classifier-free guidance.",
+    )
+    seed: int = Field(
+        default=-1,
+        description="The seed to use for the generation. If not provided, a random seed will be used.",
+    )
+    num_inference_steps: int = Field(
+        default=28,
+        ge=4,
+        le=50,
+        description="The number of inference steps to perform.",
+    )
+    image_size: ImageSizePreset = Field(
+        default=ImageSizePreset.LANDSCAPE_4_3,
+        description="The size of the image to generate.",
+    )
+    num_images: int = Field(
+        default=1,
+        ge=1,
+        le=4,
+        description="The number of images to generate.",
+    )
+    acceleration: Flux2KleinAcceleration = Field(
+        default=Flux2KleinAcceleration.REGULAR,
+        description="The acceleration level to use for image generation.",
+    )
+    sync_mode: bool = Field(
+        default=False,
+        description="If True, the media will be returned as a data URI. Output is not stored when this is True.",
+    )
+    enable_safety_checker: bool = Field(
+        default=True,
+        description="If set to true, the safety checker will be enabled.",
+    )
+    output_format: str = Field(
+        default="png",
+        description="The format of the generated image.",
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "image_size": self.image_size.value,
+            "num_images": self.num_images,
+            "acceleration": self.acceleration.value,
+            "sync_mode": self.sync_mode,
+            "enable_safety_checker": self.enable_safety_checker,
+            "output_format": self.output_format,
+        }
+        if self.negative_prompt is not None and self.negative_prompt.strip():
+            arguments["negative_prompt"] = self.negative_prompt.strip()
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-2/klein/9b/base",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "image_size", "guidance_scale", "num_images"]
+
+
 class FluxLora(FALNode):
     """
     FLUX.1 [dev] with LoRAs is a text-to-image model that supports LoRA adaptations, enabling rapid and high-quality image generation with pre-trained LoRA weights for personalization, specific styles, brand identities, and product-specific outputs.
