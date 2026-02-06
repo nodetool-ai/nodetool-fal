@@ -2270,9 +2270,11 @@ class KlingV3ImageToVideo(FALNode):
             for ref_image in self.reference_images:
                 if ref_image.uri:
                     ref_base64 = await context.image_to_base64(ref_image)
+                    ref_data_url = f"data:image/png;base64,{ref_base64}"
                     elements.append(
                         {
-                            "frontal_image_url": f"data:image/png;base64,{ref_base64}",
+                            "frontal_image_url": ref_data_url,
+                            "reference_image_urls": [ref_data_url],
                         }
                     )
             if elements:
@@ -2370,9 +2372,11 @@ class KlingV3ProImageToVideo(FALNode):
             for ref_image in self.reference_images:
                 if ref_image.uri:
                     ref_base64 = await context.image_to_base64(ref_image)
+                    ref_data_url = f"data:image/png;base64,{ref_base64}"
                     elements.append(
                         {
-                            "frontal_image_url": f"data:image/png;base64,{ref_base64}",
+                            "frontal_image_url": ref_data_url,
+                            "reference_image_urls": [ref_data_url],
                         }
                     )
             if elements:
@@ -2404,7 +2408,7 @@ class KlingO3ImageToVideo(FALNode):
     - Generate cinematic content with continuity
     """
 
-    start_image: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The starting image for the video"
     )
     end_image: ImageRef = Field(
@@ -2417,27 +2421,19 @@ class KlingO3ImageToVideo(FALNode):
         default=Kling3Duration.FIVE_SECONDS,
         description="The duration of the generated video in seconds (3-15)",
     )
-    aspect_ratio: Kling3AspectRatio = Field(
-        default=Kling3AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
     generate_audio: bool = Field(
         default=True,
         description="Generate native audio for the video",
     )
-    reference_images: list[ImageRef] = Field(
-        default=[],
-        description="Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt",
-    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_base64 = await context.image_to_base64(self.start_image)
+        image_base64 = await context.image_to_base64(self.image)
 
         arguments = {
-            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "aspect_ratio": self.aspect_ratio.value,
+            "shot_type": "customize",
         }
 
         if self.generate_audio:
@@ -2446,20 +2442,6 @@ class KlingO3ImageToVideo(FALNode):
         if self.end_image and self.end_image.uri:
             end_image_base64 = await context.image_to_base64(self.end_image)
             arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
-
-        # Build elements from reference images
-        if self.reference_images:
-            elements = []
-            for ref_image in self.reference_images:
-                if ref_image.uri:
-                    ref_base64 = await context.image_to_base64(ref_image)
-                    elements.append(
-                        {
-                            "frontal_image_url": f"data:image/png;base64,{ref_base64}",
-                        }
-                    )
-            if elements:
-                arguments["elements"] = elements
 
         res = await self.submit_request(
             context=context,
@@ -2471,7 +2453,7 @@ class KlingO3ImageToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["start_image", "prompt", "duration"]
+        return ["image", "prompt", "duration"]
 
 
 class KlingO3ReferenceToVideo(FALNode):
@@ -2518,17 +2500,13 @@ class KlingO3ReferenceToVideo(FALNode):
         default=True,
         description="Generate native audio for the video",
     )
-    shot_type: Kling3ShotType = Field(
-        default=Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
-    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "shot_type": self.shot_type.value,
+            "shot_type": "customize",
         }
 
         if self.generate_audio:
@@ -2558,9 +2536,11 @@ class KlingO3ReferenceToVideo(FALNode):
             for elem_image in self.element_images:
                 if elem_image.uri:
                     elem_base64 = await context.image_to_base64(elem_image)
+                    elem_data_url = f"data:image/png;base64,{elem_base64}"
                     elements.append(
                         {
-                            "frontal_image_url": f"data:image/png;base64,{elem_base64}",
+                            "frontal_image_url": elem_data_url,
+                            "reference_image_urls": [elem_data_url],
                         }
                     )
             if elements:
@@ -2623,17 +2603,13 @@ class KlingO3ProReferenceToVideo(FALNode):
         default=True,
         description="Generate native audio for the video",
     )
-    shot_type: Kling3ShotType = Field(
-        default=Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
-    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "shot_type": self.shot_type.value,
+            "shot_type": "customize",
         }
 
         if self.generate_audio:
@@ -2663,9 +2639,11 @@ class KlingO3ProReferenceToVideo(FALNode):
             for elem_image in self.element_images:
                 if elem_image.uri:
                     elem_base64 = await context.image_to_base64(elem_image)
+                    elem_data_url = f"data:image/png;base64,{elem_base64}"
                     elements.append(
                         {
-                            "frontal_image_url": f"data:image/png;base64,{elem_base64}",
+                            "frontal_image_url": elem_data_url,
+                            "reference_image_urls": [elem_data_url],
                         }
                     )
             if elements:

@@ -1540,17 +1540,13 @@ class KlingO3TextToVideo(FALNode):
         default=[],
         description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
-    shot_type: Kling3ShotType = Field(
-        default=Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
-    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "shot_type": self.shot_type.value,
+            "shot_type": "customize",
         }
         if self.generate_audio:
             arguments["generate_audio"] = self.generate_audio
@@ -1602,17 +1598,13 @@ class KlingO3ProTextToVideo(FALNode):
         default=[],
         description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
-    shot_type: Kling3ShotType = Field(
-        default=Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
-    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "shot_type": self.shot_type.value,
+            "shot_type": "customize",
         }
         if self.generate_audio:
             arguments["generate_audio"] = self.generate_audio
