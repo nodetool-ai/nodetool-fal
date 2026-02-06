@@ -4025,6 +4025,7 @@
           "name": "inputs",
           "type": {
             "type": "dict",
+            "optional": true,
             "type_args": [
               {
                 "type": "str"
@@ -4036,8 +4037,7 @@
           },
           "default": null,
           "title": "Inputs",
-          "description": "Optional input values for the endpoint (overrides dynamic properties)",
-          "required": true
+          "description": "Optional input values for the endpoint (overrides dynamic properties)"
         }
       ],
       "basic_fields": [

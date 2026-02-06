@@ -74,8 +74,8 @@ class DynamicFalSchema(FALNode):
         default=None,
         description="Raw OpenAPI schema JSON (string or object)",
     )
-    inputs: dict[str, Any] = Field(
-        default_factory=dict,
+    inputs: dict[str, Any] | None = Field(
+        default=None,
         description="Optional input values for the endpoint (overrides dynamic properties)",
     )
 
@@ -534,8 +534,6 @@ def _coerce_asset_ref(value: Any) -> AssetRef | None:
     if isinstance(value, AssetRef):
         return value
     if isinstance(value, BaseType):
-        if isinstance(value, AssetRef):
-            return value
         return None
     if isinstance(value, dict) and value.get("type") in asset_types:
         try:

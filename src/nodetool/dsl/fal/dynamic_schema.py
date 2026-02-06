@@ -60,9 +60,11 @@ class DynamicFalSchema(GraphNode[dict[str, Any]]):
     ) = connect_field(
         default=None, description="Raw OpenAPI schema JSON (string or object)"
     )
-    inputs: dict[str, Any] | OutputHandle[dict[str, Any]] = connect_field(
-        default=PydanticUndefined,
-        description="Optional input values for the endpoint (overrides dynamic properties)",
+    inputs: dict[str, typing.Any] | OutputHandle[dict[str, typing.Any]] | None = (
+        connect_field(
+            default=None,
+            description="Optional input values for the endpoint (overrides dynamic properties)",
+        )
     )
 
     def __init__(
