@@ -42,7 +42,7 @@
       ]
     },
     {
-      "title": "Bi Ref Net V 2",
+      "title": "Bi Ref Net V2",
       "description": "BiRefNet V2 is an improved background removal model with better edge detection.\n    image, background-removal, segmentation, matting, v2\n\n    Use cases:\n    - High-quality background removal\n    - Precise edge detection for cutouts\n    - Product photography processing\n    - Portrait extraction\n    - Complex background handling",
       "namespace": "fal.image_to_image",
       "node_type": "fal.image_to_image.BiRefNetV2",
@@ -1273,7 +1273,7 @@
       "node_type": "fal.image_to_image.FluxLoraCanny",
       "properties": [
         {
-          "name": "control_image",
+          "name": "image",
           "type": {
             "type": "image"
           },
@@ -1284,7 +1284,7 @@
             "data": null,
             "metadata": null
           },
-          "title": "Control Image",
+          "title": "Image",
           "description": "The control image to generate the Canny edge map from"
         },
         {
@@ -1322,16 +1322,19 @@
           "default": 28,
           "title": "Num Inference Steps",
           "description": "The number of inference steps to perform",
-          "min": 1.0
+          "min": 1.0,
+          "max": 50.0
         },
         {
           "name": "guidance_scale",
           "type": {
             "type": "float"
           },
-          "default": 3.5,
+          "default": 30,
           "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
+          "description": "The CFG scale - how closely the model should stick to your prompt (20-40)",
+          "min": 20.0,
+          "max": 40.0
         },
         {
           "name": "seed",
@@ -1343,13 +1346,15 @@
           "description": "The same seed will output the same image every time"
         },
         {
-          "name": "lora_scale",
+          "name": "num_images",
           "type": {
-            "type": "float"
+            "type": "int"
           },
-          "default": 0.6,
-          "title": "Lora Scale",
-          "description": "The strength of the LoRA adaptation"
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate (1-4)",
+          "min": 1.0,
+          "max": 4.0
         }
       ],
       "outputs": [
@@ -1361,9 +1366,9 @@
         }
       ],
       "basic_fields": [
-        "control_image",
+        "image",
         "prompt",
-        "image_size"
+        "guidance_scale"
       ]
     },
     {
@@ -1373,7 +1378,7 @@
       "node_type": "fal.image_to_image.FluxLoraDepth",
       "properties": [
         {
-          "name": "control_image",
+          "name": "image",
           "type": {
             "type": "image"
           },
@@ -1384,7 +1389,7 @@
             "data": null,
             "metadata": null
           },
-          "title": "Control Image",
+          "title": "Image",
           "description": "The control image to generate the depth map from"
         },
         {
@@ -1422,7 +1427,8 @@
           "default": 28,
           "title": "Num Inference Steps",
           "description": "The number of inference steps to perform",
-          "min": 1.0
+          "min": 1.0,
+          "max": 50.0
         },
         {
           "name": "guidance_scale",
@@ -1431,7 +1437,9 @@
           },
           "default": 3.5,
           "title": "Guidance Scale",
-          "description": "How closely the model should stick to your prompt"
+          "description": "The CFG scale - how closely the model should stick to your prompt (0-35)",
+          "min": 0.0,
+          "max": 35.0
         },
         {
           "name": "seed",
@@ -1443,13 +1451,15 @@
           "description": "The same seed will output the same image every time"
         },
         {
-          "name": "lora_scale",
+          "name": "num_images",
           "type": {
-            "type": "float"
+            "type": "int"
           },
-          "default": 0.6,
-          "title": "Lora Scale",
-          "description": "The strength of the LoRA adaptation"
+          "default": 1,
+          "title": "Num Images",
+          "description": "The number of images to generate (1-4)",
+          "min": 1.0,
+          "max": 4.0
         }
       ],
       "outputs": [
@@ -1461,9 +1471,9 @@
         }
       ],
       "basic_fields": [
-        "control_image",
+        "image",
         "prompt",
-        "image_size"
+        "guidance_scale"
       ]
     },
     {
@@ -2188,7 +2198,7 @@
       ]
     },
     {
-      "title": "Hunyuan Image V 3 Instruct Edit",
+      "title": "Hunyuan Image V3 Instruct Edit",
       "description": "Hunyuan Image V3 Instruct Edit with reasoning capabilities for advanced image-to-image editing.\n    image, edit, hunyuan, tencent, instruct, reasoning, image-to-image, img2img, advanced\n\n    Use cases:\n    - Edit images with complex instructions\n    - Apply style transfers with reasoning\n    - Modify images with multiple reference images\n    - Create variations with intelligent understanding\n    - Transform images with advanced prompt interpretation",
       "namespace": "fal.image_to_image",
       "node_type": "fal.image_to_image.HunyuanImageV3InstructEdit",
@@ -2292,7 +2302,7 @@
       ]
     },
     {
-      "title": "Ideogram V 2 Edit",
+      "title": "Ideogram V2 Edit",
       "description": "Transform existing images with Ideogram V2's editing capabilities. Modify, adjust, and refine images while maintaining high fidelity and realistic outputs with precise prompt control.\n    image, editing, transformation, fidelity, control\n\n    Use cases:\n    - Edit specific parts of images with precision\n    - Create targeted image modifications\n    - Refine and enhance image details\n    - Generate contextual image edits",
       "namespace": "fal.image_to_image",
       "node_type": "fal.image_to_image.IdeogramV2Edit",
@@ -2379,7 +2389,7 @@
       ]
     },
     {
-      "title": "Ideogram V 2 Remix",
+      "title": "Ideogram V2 Remix",
       "description": "Reimagine existing images with Ideogram V2's remix feature. Create variations and adaptations while preserving core elements and adding new creative directions through prompt guidance.\n    image, remix, variation, creativity, adaptation\n\n    Use cases:\n    - Create artistic variations of images\n    - Generate style-transferred versions\n    - Produce creative image adaptations\n    - Transform images while preserving key elements\n    - Generate alternative interpretations",
       "namespace": "fal.image_to_image",
       "node_type": "fal.image_to_image.IdeogramV2Remix",
@@ -2469,7 +2479,7 @@
       ]
     },
     {
-      "title": "Ideogram V 3 Edit",
+      "title": "Ideogram V3 Edit",
       "description": "Ideogram V3 Edit for editing images with text prompts while maintaining structure.\n    image, editing, ideogram, inpainting, text-guided\n\n    Use cases:\n    - Edit specific parts of images with prompts\n    - Modify text in images\n    - Change elements while preserving composition\n    - Add or remove objects from images\n    - Refine generated images",
       "namespace": "fal.image_to_image",
       "node_type": "fal.image_to_image.IdeogramV3Edit",
@@ -3685,7 +3695,7 @@
       ]
     },
     {
-      "title": "Hunyuan Video V 15 Image To Video",
+      "title": "Hunyuan Video V15 Image To Video",
       "description": "Hunyuan Video V1.5 Image-to-Video with improved quality and motion.\n    video, generation, hunyuan, v1.5, image-to-video\n\n    Use cases:\n    - Create high-quality video from images\n    - Generate smooth animations\n    - Produce professional video content\n    - Transform photos with motion\n    - Create video effects",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.HunyuanVideoV15ImageToVideo",
@@ -3757,13 +3767,13 @@
       ]
     },
     {
-      "title": "Kling O 3 Image To Video",
+      "title": "Kling O3 Image To Video",
       "description": "Transform images into cinematic videos using Kling Video O3 Standard with storyboard-first creation and character consistency.\n    video, generation, kling, o3, image-to-video, storyboard, img2vid\n\n    Use cases:\n    - Create story-driven video from images\n    - Generate character-consistent animations\n    - Produce multi-shot sequences from stills\n    - Create structured narrative videos\n    - Generate cinematic content with continuity",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingO3ImageToVideo",
       "properties": [
         {
-          "name": "start_image",
+          "name": "image",
           "type": {
             "type": "image"
           },
@@ -3774,7 +3784,7 @@
             "data": null,
             "metadata": null
           },
-          "title": "Start Image",
+          "title": "Image",
           "description": "The starting image for the video"
         },
         {
@@ -3827,21 +3837,6 @@
           "description": "The duration of the generated video in seconds (3-15)"
         },
         {
-          "name": "aspect_ratio",
-          "type": {
-            "type": "enum",
-            "values": [
-              "16:9",
-              "9:16",
-              "1:1"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.Kling3AspectRatio"
-          },
-          "default": "16:9",
-          "title": "Aspect Ratio",
-          "description": "The aspect ratio of the generated video"
-        },
-        {
           "name": "generate_audio",
           "type": {
             "type": "bool"
@@ -3849,20 +3844,6 @@
           "default": true,
           "title": "Generate Audio",
           "description": "Generate native audio for the video"
-        },
-        {
-          "name": "reference_images",
-          "type": {
-            "type": "list",
-            "type_args": [
-              {
-                "type": "image"
-              }
-            ]
-          },
-          "default": [],
-          "title": "Reference Images",
-          "description": "Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt"
         }
       ],
       "outputs": [
@@ -3874,13 +3855,13 @@
         }
       ],
       "basic_fields": [
-        "start_image",
+        "image",
         "prompt",
         "duration"
       ]
     },
     {
-      "title": "Kling O 3 Pro Reference To Video",
+      "title": "Kling O3 Pro Reference To Video",
       "description": "Generate premium videos with character consistency using Kling Video O3 Pro reference-to-video with enhanced quality.\n    video, generation, kling, o3, pro, reference-to-video, character-consistency, premium\n\n    Use cases:\n    - Create high-quality videos with consistent characters\n    - Generate professional story sequences\n    - Produce premium branded content\n    - Create broadcast-quality serialized content\n    - Generate professional character-driven narratives",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingO3ProReferenceToVideo",
@@ -4000,20 +3981,6 @@
           "default": true,
           "title": "Generate Audio",
           "description": "Generate native audio for the video"
-        },
-        {
-          "name": "shot_type",
-          "type": {
-            "type": "enum",
-            "values": [
-              "customize",
-              "intelligent"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.Kling3ShotType"
-          },
-          "default": "customize",
-          "title": "Shot Type",
-          "description": "Shot type for multi-shot generation"
         }
       ],
       "outputs": [
@@ -4031,7 +3998,7 @@
       ]
     },
     {
-      "title": "Kling O 3 Reference To Video",
+      "title": "Kling O3 Reference To Video",
       "description": "Generate videos with character consistency using Kling Video O3 reference-to-video with reusable character elements.\n    video, generation, kling, o3, reference-to-video, character-consistency\n\n    Use cases:\n    - Create videos with consistent character appearances\n    - Generate story sequences with recurring characters\n    - Produce branded content with consistent subjects\n    - Create serialized video content\n    - Generate character-driven narratives",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingO3ReferenceToVideo",
@@ -4151,20 +4118,6 @@
           "default": true,
           "title": "Generate Audio",
           "description": "Generate native audio for the video"
-        },
-        {
-          "name": "shot_type",
-          "type": {
-            "type": "enum",
-            "values": [
-              "customize",
-              "intelligent"
-            ],
-            "type_name": "nodetool.nodes.fal.image_to_video.Kling3ShotType"
-          },
-          "default": "customize",
-          "title": "Shot Type",
-          "description": "Shot type for multi-shot generation"
         }
       ],
       "outputs": [
@@ -4182,7 +4135,7 @@
       ]
     },
     {
-      "title": "Kling V 3 Image To Video",
+      "title": "Kling V3 Image To Video",
       "description": "Transform images into high-quality videos using Kling Video 3.0 Standard with improved motion and realistic acting.\n    video, generation, kling, v3, image-to-video, animation, img2vid\n\n    Use cases:\n    - Animate still images into cinematic clips\n    - Create dynamic product showcase videos\n    - Generate motion graphics from static designs\n    - Transform artwork into video content\n    - Create engaging social media animations",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingV3ImageToVideo",
@@ -4339,7 +4292,7 @@
       ]
     },
     {
-      "title": "Kling V 3 Pro Image To Video",
+      "title": "Kling V3 Pro Image To Video",
       "description": "Transform images into premium quality videos using Kling Video 3.0 Pro with enhanced quality and performance.\n    video, generation, kling, v3, pro, image-to-video, premium, img2vid\n\n    Use cases:\n    - Create high-end video content from images\n    - Generate professional product animations\n    - Produce broadcast-quality video from stills\n    - Create premium visual narratives\n    - Generate detailed cinematic sequences",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingV3ProImageToVideo",
@@ -4652,7 +4605,7 @@
       ]
     },
     {
-      "title": "Kling Video V 21 Pro",
+      "title": "Kling Video V21 Pro",
       "description": "Kling Video V2.1 Pro Image-to-Video with enhanced quality and motion.\n    video, generation, kling, v2.1, pro, image-to-video\n\n    Use cases:\n    - Create professional video content\n    - Generate high-quality animations\n    - Produce cinematic video clips\n    - Transform images with smooth motion\n    - Create promotional videos",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.KlingVideoV21Pro",
@@ -5296,7 +5249,7 @@
       ]
     },
     {
-      "title": "LTX 219B Image To Video",
+      "title": "LTX219 BImage To Video",
       "description": "Generate video with audio from images using LTX-2 19B model. A state-of-the-art video generation model with camera motion control and multi-scale generation.\n    video, generation, ltx, ltx-2, image-to-video, motion-control, camera, audio\n\n    Use cases:\n    - Generate high-quality videos from images\n    - Create videos with synchronized audio\n    - Control camera movements with LoRA\n    - Produce professional video content\n    - Animate static images with fluid motion",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.LTX219BImageToVideo",
@@ -6199,7 +6152,7 @@
       ]
     },
     {
-      "title": "Pika V 21 Image To Video",
+      "title": "Pika V21 Image To Video",
       "description": "Pika V2.1 Image-to-Video generates videos from images with the Pika model.\n    video, generation, pika, v2.1, image-to-video\n\n    Use cases:\n    - Create video content from images\n    - Generate animated clips\n    - Produce motion graphics\n    - Transform still photos\n    - Create video effects",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.PikaV21ImageToVideo",
@@ -6252,7 +6205,7 @@
       ]
     },
     {
-      "title": "Pika V 22 Image To Video",
+      "title": "Pika V22 Image To Video",
       "description": "Pika V2.2 Image-to-Video generates creative videos from images.\n    video, generation, pika, v2.2, image-to-video, creative\n\n    Use cases:\n    - Create creative video content\n    - Generate artistic animations\n    - Produce stylized videos\n    - Transform images with effects\n    - Create unique video clips",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.PikaV22ImageToVideo",
@@ -6395,7 +6348,7 @@
       ]
     },
     {
-      "title": "Pixverse V 56 Image To Video",
+      "title": "Pixverse V56 Image To Video",
       "description": "Generate high-quality videos from images with Pixverse v5.6.\n    video, generation, pixverse, v5.6, image-to-video, img2vid\n\n    Use cases:\n    - Animate photos into professional video clips\n    - Create dynamic product showcase videos\n    - Generate stylized video content from artwork\n    - Produce high-resolution social media animations\n    - Transform static images with various visual styles",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.PixverseV56ImageToVideo",
@@ -6627,7 +6580,7 @@
       ]
     },
     {
-      "title": "Seedance V 15 Pro Image To Video",
+      "title": "Seedance V15 Pro Image To Video",
       "description": "ByteDance Seedance V1.5 Pro Image-to-Video with high-quality motion.\n    video, generation, bytedance, seedance, pro, image-to-video\n\n    Use cases:\n    - Create professional video content\n    - Generate high-quality animations\n    - Produce cinematic clips\n    - Transform images with motion\n    - Create promotional videos",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.SeedanceV15ProImageToVideo",
@@ -6995,7 +6948,7 @@
       ]
     },
     {
-      "title": "Vidu Q 2 Image To Video",
+      "title": "Vidu Q2 Image To Video",
       "description": "Vidu Q2 Image-to-Video Turbo generates fast videos from images.\n    video, generation, vidu, q2, turbo, image-to-video, fast\n\n    Use cases:\n    - Quick video generation\n    - Rapid prototyping\n    - Fast content creation\n    - Quick motion tests\n    - Real-time video production",
       "namespace": "fal.image_to_video",
       "node_type": "fal.image_to_video.ViduQ2ImageToVideo",
@@ -7508,7 +7461,7 @@
       ]
     },
     {
-      "title": "Image Preprocessor Depth Anything V 2",
+      "title": "Image Preprocessor Depth Anything V2",
       "description": "Depth Anything V2 generates high-quality depth maps from images.\n    depth, preprocessor, depth-map, estimation\n\n    Use cases:\n    - Generate accurate depth maps\n    - Enable depth-aware effects\n    - Create 3D visualizations\n    - Prepare ControlNet inputs\n    - Analyze image depth",
       "namespace": "fal.segmentation",
       "node_type": "fal.segmentation.ImagePreprocessorDepthAnythingV2",
@@ -7576,7 +7529,7 @@
       ]
     },
     {
-      "title": "SAM 2 Image",
+      "title": "SAM2 Image",
       "description": "SAM 2 Image segments objects in images with high accuracy.\n    segmentation, sam, image, masks\n\n    Use cases:\n    - Segment objects in images\n    - Create object masks\n    - Enable object selection\n    - Generate cutouts\n    - Create selection masks",
       "namespace": "fal.segmentation",
       "node_type": "fal.segmentation.SAM2Image",
@@ -7643,7 +7596,7 @@
       ]
     },
     {
-      "title": "SAM 2 Video",
+      "title": "SAM2 Video",
       "description": "SAM 2 Video segments and tracks objects across video frames.\n    segmentation, sam, video, tracking\n\n    Use cases:\n    - Track objects in videos\n    - Create video masks\n    - Segment moving objects\n    - Generate video cutouts\n    - Enable video object selection",
       "namespace": "fal.segmentation",
       "node_type": "fal.segmentation.SAM2Video",
@@ -7712,7 +7665,7 @@
       ]
     },
     {
-      "title": "SAM 3 Image",
+      "title": "SAM3 Image",
       "description": "SAM 3 Image provides advanced segmentation with improved accuracy.\n    segmentation, sam3, image, masks, advanced\n\n    Use cases:\n    - High-accuracy object segmentation\n    - Complex scene segmentation\n    - Precise mask generation\n    - Advanced object selection\n    - Detailed cutout creation",
       "namespace": "fal.segmentation",
       "node_type": "fal.segmentation.SAM3Image",
@@ -7779,7 +7732,7 @@
       ]
     },
     {
-      "title": "Eleven Labs Scribe V 2",
+      "title": "Eleven Labs Scribe V2",
       "description": "ElevenLabs Scribe V2 is a state-of-the-art speech-to-text model with improved accuracy, word-level timestamps, and speaker identification.\n    speech, audio, transcription, scribe, elevenlabs, speech-to-text, audio-to-text, diarization\n\n    Use cases:\n    - Transcribe audio with high accuracy\n    - Generate subtitles with word-level timestamps\n    - Identify different speakers in conversations\n    - Support for 99 languages with biasing via keyterms\n    - Tag audio events like laughter and applause",
       "namespace": "fal.speech_to_text",
       "node_type": "fal.speech_to_text.ElevenLabsScribeV2",
@@ -8444,7 +8397,7 @@
       ]
     },
     {
-      "title": "Eleven Labs TTSV 3",
+      "title": "Eleven Labs TTSV3",
       "description": "ElevenLabs Eleven V3 Text-to-Speech with high-quality voice synthesis.\n    audio, tts, text-to-speech, elevenlabs, voice, synthesis\n\n    Use cases:\n    - Generate natural speech from text\n    - Create voiceovers\n    - Produce audio content\n    - Create audiobooks\n    - Generate voice notifications",
       "namespace": "fal.text_to_audio",
       "node_type": "fal.text_to_audio.ElevenLabsTTSV3",
@@ -9509,7 +9462,7 @@
       ]
     },
     {
-      "title": "Aura Flow V 03",
+      "title": "Aura Flow V03",
       "description": "AuraFlow v0.3 is an open-source flow-based text-to-image generation model that achieves state-of-the-art results on GenEval.\n    image, generation, flow-based, text-to-image, txt2img\n\n    Use cases:\n    - Generate high-quality images\n    - Create artistic visualizations",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.AuraFlowV03",
@@ -9586,7 +9539,7 @@
       ]
     },
     {
-      "title": "Bria V 1",
+      "title": "Bria V1",
       "description": "Bria's Text-to-Image model, trained exclusively on licensed data for safe and risk-free commercial use.\n    Features exceptional image quality and commercial licensing safety.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.BriaV1",
@@ -9706,7 +9659,7 @@
       ]
     },
     {
-      "title": "Bria V 1 Fast",
+      "title": "Bria V1 Fast",
       "description": "Bria's Text-to-Image model with perfect harmony of latency and quality.\n    Trained exclusively on licensed data for safe and risk-free commercial use.\n    Features faster inference times while maintaining high image quality.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.BriaV1Fast",
@@ -9826,7 +9779,7 @@
       ]
     },
     {
-      "title": "Bria V 1HD",
+      "title": "Bria V1 HD",
       "description": "Bria's Text-to-Image model for HD images. Trained exclusively on licensed data for safe and risk-free commercial use. Features exceptional image quality and commercial licensing safety.\n    image, generation, hd, text-to-image, txt2img\n\n    Use cases:\n    - Create commercial marketing materials\n    - Generate licensed artwork\n    - Produce high-definition visuals\n    - Design professional content\n    - Create legally safe visual assets",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.BriaV1HD",
@@ -10005,15 +9958,6 @@
           "default": 7.0,
           "title": "Guidance Scale",
           "description": "How closely to follow the prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -11699,7 +11643,7 @@
       ]
     },
     {
-      "title": "Flux V 1 Pro",
+      "title": "Flux V1 Pro",
       "description": "FLUX1.1 [pro] is an enhanced version of FLUX.1 [pro], improved image generation capabilities, delivering superior composition, detail, and artistic fidelity compared to its predecessor.\n    image, generation, composition, detail, artistic, text-to-image, txt2img\n\n    Use cases:\n    - Generate high-fidelity artwork\n    - Create detailed illustrations\n    - Design complex compositions\n    - Produce artistic renderings\n    - Generate professional visuals",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxV1Pro",
@@ -11818,7 +11762,7 @@
       ]
     },
     {
-      "title": "Flux V 1 Pro New",
+      "title": "Flux V1 Pro New",
       "description": "FLUX.1 [pro] new is an accelerated version of FLUX.1 [pro], maintaining professional-grade\n    image quality while delivering significantly faster generation speeds.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxV1ProNew",
@@ -11917,7 +11861,7 @@
       ]
     },
     {
-      "title": "Flux V 1 Pro Ultra",
+      "title": "Flux V1 Pro Ultra",
       "description": "FLUX1.1 [ultra] is the latest and most advanced version of FLUX.1 [pro],\n    featuring cutting-edge improvements in image generation, delivering unparalleled\n    composition, detail, and artistic fidelity.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.FluxV1ProUltra",
@@ -12299,15 +12243,6 @@
           "default": "auto",
           "title": "Quality",
           "description": "The quality of the generated image (auto, high, medium, low)"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -12363,15 +12298,6 @@
           "default": "1:1",
           "title": "Aspect Ratio",
           "description": "The aspect ratio of the generated image"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -12388,7 +12314,7 @@
       ]
     },
     {
-      "title": "Hunyuan Image V 3",
+      "title": "Hunyuan Image V3",
       "description": "Hunyuan Image V3 is Tencent's advanced text-to-image model with exceptional detail and artistic quality.\n    image, generation, hunyuan, tencent, text-to-image, txt2img, artistic\n\n    Use cases:\n    - Create detailed digital artwork\n    - Generate photorealistic images\n    - Produce high-quality illustrations\n    - Design creative visuals\n    - Create artistic compositions",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.HunyuanImageV3",
@@ -12447,15 +12373,6 @@
           "default": 5.0,
           "title": "Guidance Scale",
           "description": "How closely to follow the prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -12473,7 +12390,7 @@
       ]
     },
     {
-      "title": "Hunyuan Image V 3 Instruct",
+      "title": "Hunyuan Image V3 Instruct",
       "description": "Hunyuan Image V3 Instruct with internal reasoning capabilities for advanced text-to-image generation.\n    image, generation, hunyuan, tencent, instruct, reasoning, text-to-image, txt2img, advanced\n\n    Use cases:\n    - Generate highly detailed images with reasoning\n    - Create complex compositions with multiple elements\n    - Produce photorealistic images with fine control\n    - Generate artistic images with advanced understanding\n    - Create images with complex prompt interpretation",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.HunyuanImageV3Instruct",
@@ -12667,7 +12584,7 @@
       ]
     },
     {
-      "title": "Ideogram V 2",
+      "title": "Ideogram V2",
       "description": "Ideogram V2 is a state-of-the-art image generation model optimized for commercial and creative use, featuring exceptional typography handling and realistic outputs.\n    image, generation, ai, typography, realistic, text-to-image, txt2img\n\n    Use cases:\n    - Create commercial artwork and designs\n    - Generate realistic product visualizations\n    - Design marketing materials with text\n    - Produce high-quality illustrations\n    - Create brand assets and logos",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.IdeogramV2",
@@ -12767,7 +12684,7 @@
       ]
     },
     {
-      "title": "Ideogram V 2 Turbo",
+      "title": "Ideogram V2 Turbo",
       "description": "Accelerated image generation with Ideogram V2 Turbo. Create high-quality visuals, posters,\n    and logos with enhanced speed while maintaining Ideogram's signature quality.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.IdeogramV2Turbo",
@@ -12867,7 +12784,7 @@
       ]
     },
     {
-      "title": "Ideogram V 3",
+      "title": "Ideogram V3",
       "description": "Ideogram V3 is the latest generation text-to-image model with enhanced typography and photorealistic outputs.\n    image, generation, typography, realistic, text-to-image, txt2img, ideogram\n\n    Use cases:\n    - Create professional marketing materials with text\n    - Generate logos and brand assets\n    - Design posters and advertisements\n    - Produce photorealistic product images\n    - Create typography-heavy artwork",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.IdeogramV3",
@@ -12941,15 +12858,6 @@
           "default": "",
           "title": "Negative Prompt",
           "description": "A negative prompt to avoid in the generated image"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -13114,15 +13022,6 @@
           "default": "1:1",
           "title": "Aspect Ratio",
           "description": "The aspect ratio of the generated image"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -13349,15 +13248,6 @@
           "default": [],
           "title": "Elements",
           "description": "Optional elements for face/character control. Reference as @Element1, @Element2 in prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -13672,7 +13562,7 @@
       ]
     },
     {
-      "title": "Omni Gen V 1",
+      "title": "Omni Gen V1",
       "description": "OmniGen is a unified image generation model that can generate a wide range of images from multi-modal prompts. It can be used for various tasks such as Image Editing, Personalized Image Generation, Virtual Try-On, Multi Person Generation and more!\n    image, generation, multi-modal, editing, personalization, text-to-image, txt2img\n\n    Use cases:\n    - Edit and modify existing images\n    - Create personalized visual content\n    - Generate virtual try-on images\n    - Create multi-person compositions\n    - Combine multiple images creatively",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.OmniGenV1",
@@ -13806,7 +13696,7 @@
       ]
     },
     {
-      "title": "Playground V 25",
+      "title": "Playground V25",
       "description": "Playground v2.5 is a state-of-the-art open-source model that excels in aesthetic quality\n    for text-to-image generation.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.PlaygroundV25",
@@ -13931,15 +13821,6 @@
           "default": "square_hd",
           "title": "Image Size",
           "description": "The size of the generated image"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -14065,7 +13946,7 @@
       ]
     },
     {
-      "title": "Recraft V 3",
+      "title": "Recraft V3",
       "description": "Recraft V3 is a text-to-image model with the ability to generate long texts, vector art, images in brand style, and much more.\n    image, text",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.RecraftV3",
@@ -14233,15 +14114,6 @@
           "default": 3.5,
           "title": "Guidance Scale",
           "description": "How closely to follow the prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -14259,7 +14131,7 @@
       ]
     },
     {
-      "title": "Sana V 1",
+      "title": "Sana V1",
       "description": "Sana can synthesize high-resolution, high-quality images with strong text-image alignment at a remarkably fast speed, with the ability to generate 4K images in less than a second.\n    image, generation, high-resolution, fast, text-alignment, text-to-image, txt2img\n\n    Use cases:\n    - Generate 4K quality images\n    - Create high-resolution artwork\n    - Produce rapid visual prototypes\n    - Design detailed illustrations\n    - Generate precise text-aligned visuals",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.SanaV1",
@@ -14412,15 +14284,6 @@
           "default": 5.0,
           "title": "Guidance Scale",
           "description": "How closely to follow the prompt"
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -14549,7 +14412,7 @@
       ]
     },
     {
-      "title": "Stable Diffusion V 35 Large",
+      "title": "Stable Diffusion V35 Large",
       "description": "Stable Diffusion 3.5 Large is a Multimodal Diffusion Transformer (MMDiT) text-to-image model that features\n    improved performance in image quality, typography, complex prompt understanding, and resource-efficiency.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.StableDiffusionV35Large",
@@ -14643,7 +14506,7 @@
       ]
     },
     {
-      "title": "Stable Diffusion V 3 Medium",
+      "title": "Stable Diffusion V3 Medium",
       "description": "Stable Diffusion 3 Medium (Text to Image) is a Multimodal Diffusion Transformer (MMDiT) model\n    that improves image quality, typography, prompt understanding, and efficiency.",
       "namespace": "fal.text_to_image",
       "node_type": "fal.text_to_image.StableDiffusionV3Medium",
@@ -15199,15 +15062,6 @@
           "title": "Num Inference Steps",
           "description": "The number of inference steps",
           "min": 1.0
-        },
-        {
-          "name": "seed",
-          "type": {
-            "type": "int"
-          },
-          "default": -1,
-          "title": "Seed",
-          "description": "Seed for reproducible generation"
         }
       ],
       "outputs": [
@@ -15282,7 +15136,7 @@
       ]
     },
     {
-      "title": "Hunyuan Video V 15 Text To Video",
+      "title": "Hunyuan Video V15 Text To Video",
       "description": "Hunyuan Video V1.5 Text-to-Video with improved quality and motion.\n    video, generation, hunyuan, v1.5, text-to-video\n\n    Use cases:\n    - Create high-quality video content\n    - Generate smooth animations\n    - Produce professional videos\n    - Create motion graphics\n    - Generate video effects",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.HunyuanVideoV15TextToVideo",
@@ -15405,7 +15259,7 @@
       ]
     },
     {
-      "title": "Kling O 3 Pro Text To Video",
+      "title": "Kling O3 Pro Text To Video",
       "description": "Generate premium cinematic videos with Kling Video O3 Pro featuring higher-end customization and storyboard-first creation.\n    video, generation, kling, o3, pro, text-to-video, premium, storyboard\n\n    Use cases:\n    - Create professional multi-shot sequences\n    - Generate premium story-driven content\n    - Produce high-quality character-consistent videos\n    - Create broadcast-quality narrative videos\n    - Generate cinematic content with advanced controls",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.KlingO3ProTextToVideo",
@@ -15481,20 +15335,6 @@
           "default": [],
           "title": "Voice Ids",
           "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
-        },
-        {
-          "name": "shot_type",
-          "type": {
-            "type": "enum",
-            "values": [
-              "customize",
-              "intelligent"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_video.Kling3ShotType"
-          },
-          "default": "customize",
-          "title": "Shot Type",
-          "description": "Shot type for multi-shot generation"
         }
       ],
       "outputs": [
@@ -15512,7 +15352,7 @@
       ]
     },
     {
-      "title": "Kling O 3 Text To Video",
+      "title": "Kling O3 Text To Video",
       "description": "Generate cinematic videos with Kling Video O3 Standard supporting storyboard-first creation and character consistency.\n    video, generation, kling, o3, text-to-video, storyboard, cinematic\n\n    Use cases:\n    - Create multi-shot video sequences\n    - Generate story-driven content\n    - Produce character-consistent videos\n    - Create structured narrative videos\n    - Generate cinematic sequences with continuity",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.KlingO3TextToVideo",
@@ -15588,20 +15428,6 @@
           "default": [],
           "title": "Voice Ids",
           "description": "Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)"
-        },
-        {
-          "name": "shot_type",
-          "type": {
-            "type": "enum",
-            "values": [
-              "customize",
-              "intelligent"
-            ],
-            "type_name": "nodetool.nodes.fal.text_to_video.Kling3ShotType"
-          },
-          "default": "customize",
-          "title": "Shot Type",
-          "description": "Shot type for multi-shot generation"
         }
       ],
       "outputs": [
@@ -15619,7 +15445,7 @@
       ]
     },
     {
-      "title": "Kling Text To Video V 2",
+      "title": "Kling Text To Video V2",
       "description": "Generate videos directly from text prompts using Kling Video V2 Master.\n    video, generation, animation, text-to-video, kling-v2\n\n    Use cases:\n    - Visualize scripts or storyboards\n    - Produce short promotional videos from text\n    - Create animated social media content\n    - Generate concept previews for film ideas\n    - Produce text-driven motion graphics",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.KlingTextToVideoV2",
@@ -15701,7 +15527,7 @@
       ]
     },
     {
-      "title": "Kling V 3 Pro Text To Video",
+      "title": "Kling V3 Pro Text To Video",
       "description": "Generate premium quality videos from text prompts using Kling Video 3.0 Pro with enhanced quality and performance.\n    video, generation, kling, v3, pro, text-to-video, premium\n\n    Use cases:\n    - Create high-end promotional content\n    - Generate professional cinematic sequences\n    - Produce premium marketing videos\n    - Create detailed visual narratives\n    - Generate broadcast-quality content",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.KlingV3ProTextToVideo",
@@ -15828,7 +15654,7 @@
       ]
     },
     {
-      "title": "Kling V 3 Text To Video",
+      "title": "Kling V3 Text To Video",
       "description": "Generate high-quality videos from text prompts using Kling Video 3.0 Standard with improved motion and realistic acting.\n    video, generation, kling, v3, text-to-video, cinematic\n\n    Use cases:\n    - Create cinematic video clips from descriptions\n    - Generate marketing and promotional videos\n    - Produce dynamic social media content\n    - Visualize creative concepts and storyboards\n    - Create professional video content",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.KlingV3TextToVideo",
@@ -15955,7 +15781,7 @@
       ]
     },
     {
-      "title": "Kling Video V 2",
+      "title": "Kling Video V2",
       "description": "Generate videos from images using Kling Video V2 Master. Create smooth and realistic animations from a single frame.\n    video, generation, animation, img2vid, kling-v2\n\n    Use cases:\n    - Convert artwork into animated clips\n    - Produce dynamic marketing visuals\n    - Generate motion graphics from static scenes\n    - Create short cinematic sequences\n    - Enhance presentations with video content",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.KlingVideoV2",
@@ -16034,7 +15860,7 @@
       ]
     },
     {
-      "title": "Kling Video V 21 Text To Video",
+      "title": "Kling Video V21 Text To Video",
       "description": "Kling Video V2.1 Master Text-to-Video with enhanced quality and motion.\n    video, generation, kling, v2.1, text-to-video\n\n    Use cases:\n    - Create professional video content\n    - Generate high-quality animations\n    - Produce cinematic clips\n    - Create promotional videos\n    - Generate concept previews",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.KlingVideoV21TextToVideo",
@@ -16096,7 +15922,7 @@
       ]
     },
     {
-      "title": "LTX 2 Text To Video",
+      "title": "LTX2 Text To Video",
       "description": "LTX 2 Text-to-Video generates videos from text with the LTX model.\n    video, generation, ltx, text-to-video\n\n    Use cases:\n    - Create videos from descriptions\n    - Generate animated content\n    - Produce motion graphics\n    - Create video clips\n    - Generate promotional content",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.LTX2TextToVideo",
@@ -16408,7 +16234,7 @@
       ]
     },
     {
-      "title": "Mochi V 1",
+      "title": "Mochi V1",
       "description": "Mochi V1 generates creative videos from text prompts with unique style.\n    video, generation, mochi, text-to-video, creative\n\n    Use cases:\n    - Create creative video content\n    - Generate artistic animations\n    - Produce stylized videos\n    - Create experimental clips\n    - Generate unique video effects",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.MochiV1",
@@ -16474,7 +16300,7 @@
       ]
     },
     {
-      "title": "Pika V 21 Text To Video",
+      "title": "Pika V21 Text To Video",
       "description": "Pika V2.1 Text-to-Video generates videos from text prompts.\n    video, generation, pika, v2.1, text-to-video\n\n    Use cases:\n    - Create video content from text\n    - Generate animated clips\n    - Produce motion graphics\n    - Create video effects\n    - Generate promotional content",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.PikaV21TextToVideo",
@@ -16511,7 +16337,7 @@
       ]
     },
     {
-      "title": "Pika V 22 Text To Video",
+      "title": "Pika V22 Text To Video",
       "description": "Pika V2.2 Text-to-Video generates creative videos from text prompts.\n    video, generation, pika, v2.2, text-to-video, creative\n\n    Use cases:\n    - Create creative video content\n    - Generate artistic animations\n    - Produce stylized videos\n    - Create unique video clips\n    - Generate experimental content",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.PikaV22TextToVideo",
@@ -16798,7 +16624,7 @@
       ]
     },
     {
-      "title": "Pixverse V 56 Text To Video",
+      "title": "Pixverse V56 Text To Video",
       "description": "Generate high-quality videos from text prompts with Pixverse v5.6.\n    video, generation, pixverse, v5.6, text-to-video, creative\n\n    Use cases:\n    - Create professional animated scenes from descriptions\n    - Generate marketing and promotional videos\n    - Produce dynamic social media content\n    - Prototype video concepts with various styles\n    - Create stylized video content with anime or cyberpunk themes",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.PixverseV56TextToVideo",
@@ -16938,7 +16764,7 @@
       ]
     },
     {
-      "title": "Pixverse V 56 Transition",
+      "title": "Pixverse V56 Transition",
       "description": "Create smooth transitions between images with Pixverse v5.6.\n    video, generation, transition, pixverse, v5.6, morphing\n\n    Use cases:\n    - Create seamless transitions between two images\n    - Generate morphing effects for presentations\n    - Produce smooth scene changes for videos\n    - Create animated visual flows\n    - Generate creative blending effects",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.PixverseV56Transition",
@@ -17395,7 +17221,7 @@
       ]
     },
     {
-      "title": "Wan T 2V",
+      "title": "Wan T2 V",
       "description": "Generate videos from text using the WAN-T2V model.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Produce creative videos from prompts\n    - Experiment with motion concepts\n    - Generate quick animated drafts\n    - Visualize ideas for stories\n    - Create short social media clips",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.WanT2V",
@@ -17432,7 +17258,7 @@
       ]
     },
     {
-      "title": "Wan V 2 1 13B Text To Video",
+      "title": "Wan V2 1 13B Text To Video",
       "description": "Create videos from text using WAN v2.1 1.3B, an open-source text-to-video model.\n    video, generation, wan, text-to-video\n\n    Use cases:\n    - Produce short clips from prompts\n    - Generate concept videos\n    - Create quick visualizations\n    - Iterate on storytelling ideas\n    - Experiment with AI video synthesis",
       "namespace": "fal.text_to_video",
       "node_type": "fal.text_to_video.WanV2_1_13BTextToVideo",
@@ -17684,7 +17510,7 @@
       ]
     },
     {
-      "title": "Sync Lipsync V 2",
+      "title": "Sync Lipsync V2",
       "description": "Sync Lipsync V2 synchronizes lip movements to audio.\n    video, lipsync, audio, synchronization\n\n    Use cases:\n    - Sync lips to new audio\n    - Create talking head videos\n    - Dub videos in other languages\n    - Generate speaking animations\n    - Create video voice-overs",
       "namespace": "fal.video_processing",
       "node_type": "fal.video_processing.SyncLipsyncV2",
