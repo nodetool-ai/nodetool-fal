@@ -6,3 +6,4 @@ import nodetool.nodes.fal.image_to_image  # noqa: F401
 import nodetool.nodes.fal.image_to_video  # noqa: F401
 import nodetool.nodes.fal.text_to_video  # noqa: F401
 import nodetool.nodes.fal.model3d  # noqa: F401
+import nodetool.nodes.fal.dynamic_schema  # noqa: F401

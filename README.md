@@ -22,6 +22,10 @@ All nodes expect a valid `FAL_API_KEY` in the workflow environment. The key is e
 
 The package defines nodes grouped by modality. Each node is a subclass of `FALNode` which provides the common logic for calling a FAL endpoint.
 
+### Dynamic Schema
+
+- **DynamicFalSchema** – call any fal.ai model by supplying an endpoint id, a fal.ai model URL, or a pasted OpenAPI JSON document. The node fetches the model schema (and `llms.txt` metadata when available), builds inputs/outputs at runtime, and caches schema fetches locally for faster re-use.
+
 ### Large Language Model
 
 - **AnyLLM** – interface to multiple LLMs (Claude 3, Gemini, Llama, GPT‑4 and others) allowing you to select the model via the `model` field.
