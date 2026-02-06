@@ -124,7 +124,9 @@ class DynamicFalSchema(FALNode):
         bundle = await self._load_schema_bundle(context)
         self._set_dynamic_outputs(bundle)
 
-        input_values = self.inputs if self.inputs else dict(self.dynamic_properties)
+        input_values = dict(self.dynamic_properties)
+        if self.inputs is not None:
+            input_values = self.inputs
         arguments = await self._build_arguments(
             bundle.openapi,
             bundle.input_schema,
@@ -212,10 +214,6 @@ class DynamicFalSchema(FALNode):
 
         arguments: dict[str, Any] = {}
         for name, prop_schema in schema_props.items():
-            if name not in input_values:
-                if name in required_props:
-                    raise ValueError(f"Missing required input: {name}")
-                continue
             value = input_values.get(name)
             if value is None:
                 if name in required_props:
@@ -513,10 +511,6 @@ async def _coerce_input_value(
         required = set(resolved.get("required", []))
         output: dict[str, Any] = {}
         for key, prop_schema in properties.items():
-            if key not in value:
-                if key in required:
-                    raise ValueError(f"Missing required input: {name}.{key}")
-                continue
             nested_value = value.get(key)
             if nested_value is None:
                 if key in required:
