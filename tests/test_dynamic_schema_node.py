@@ -9,10 +9,10 @@ from nodetool.metadata.types import VideoRef
 from nodetool.nodes.fal.dynamic_schema import (
     DynamicFalSchema,
     _build_output_types,
-    _endpoint_from_model_url,
     _map_output_values,
+    _normalize_model_info,
     _parse_openapi_schema,
-    _resolve_urls,
+    _parse_model_info_text,
 )
 
 SCHEMA_EXAMPLE = {
@@ -100,19 +100,33 @@ SCHEMA_EXAMPLE = {
 }
 
 
-def test_model_url_resolution():
+def test_model_info_normalization():
     model_url = "https://fal.ai/models/fal-ai/kling-video/o3/standard/image-to-video"
-    endpoint = _endpoint_from_model_url(model_url)
+    text, url, endpoint = _normalize_model_info(model_url)
+    assert text is None
+    assert url.endswith("/llms.txt")
     assert endpoint == "fal-ai/kling-video/o3/standard/image-to-video"
 
-    cache_key, schema_url, llm_url = _resolve_urls(
-        model_url=model_url,
-        endpoint_id="",
-        schema_url="",
+    text, url, endpoint = _normalize_model_info(
+        "fal-ai/kling-video/o3/standard/image-to-video"
     )
-    assert cache_key == endpoint
-    assert schema_url.endswith(f"endpoint_id={endpoint}")
-    assert llm_url.endswith(f"/{endpoint}/llms.txt")
+    assert text is None
+    assert url.endswith("/llms.txt")
+    assert endpoint == "fal-ai/kling-video/o3/standard/image-to-video"
+
+
+def test_parse_model_info_text():
+    model_info = (
+        "- **Endpoint**: `https://fal.run/fal-ai/kling-video/o3/standard/image-to-video`\n"
+        "- **Model ID**: `fal-ai/kling-video/o3/standard/image-to-video`\n"
+        "- **OpenAPI Schema**: "
+        "`https://fal.ai/api/openapi/queue/openapi.json?endpoint_id=fal-ai/kling-video/o3/standard/image-to-video`\n"
+    )
+    endpoint_id, openapi_url = _parse_model_info_text(model_info, None)
+    assert endpoint_id == "fal-ai/kling-video/o3/standard/image-to-video"
+    assert openapi_url.endswith(
+        "endpoint_id=fal-ai/kling-video/o3/standard/image-to-video"
+    )
 
 
 def test_parse_openapi_schema():

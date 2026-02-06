@@ -3962,89 +3962,22 @@
     },
     {
       "title": "Dynamic Fal Schema",
-      "description": "Dynamic FAL schema-driven node for running any fal.ai endpoint.\n    fal, schema, dynamic, openapi, inference, runtime, model\n\n    Use cases:\n    - Call new fal.ai endpoints without adding new Python nodes\n    - Prototype workflows with experimental FAL models\n    - Run custom endpoints by pasting their OpenAPI schema\n    - Build flexible pipelines that depend on runtime model selection\n    - Explore model inputs/outputs directly from OpenAPI metadata",
+      "description": "Dynamic FAL schema-driven node for running any fal.ai endpoint.\n    fal, schema, dynamic, openapi, inference, runtime, model\n\n    Use cases:\n    - Call new fal.ai endpoints without adding new Python nodes\n    - Prototype workflows with experimental FAL models\n    - Run custom endpoints by sharing model info (llms.txt)\n    - Build flexible pipelines that depend on runtime model selection\n    - Explore model inputs/outputs directly from OpenAPI metadata",
       "namespace": "fal.dynamic_schema",
       "node_type": "fal.dynamic_schema.DynamicFalSchema",
       "properties": [
         {
-          "name": "model_url",
+          "name": "model_info",
           "type": {
             "type": "str"
           },
           "default": "",
-          "title": "Model Url",
-          "description": "fal.ai model URL (e.g. https://fal.ai/models/fal-ai/flux/dev)"
-        },
-        {
-          "name": "endpoint_id",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Endpoint Id",
-          "description": "FAL endpoint id (e.g. fal-ai/flux/dev)"
-        },
-        {
-          "name": "schema_url",
-          "type": {
-            "type": "str"
-          },
-          "default": "",
-          "title": "Schema Url",
-          "description": "URL to the OpenAPI schema JSON for the endpoint"
-        },
-        {
-          "name": "openapi_json",
-          "type": {
-            "type": "union",
-            "type_args": [
-              {
-                "type": "dict",
-                "type_args": [
-                  {
-                    "type": "str"
-                  },
-                  {
-                    "type": "any"
-                  }
-                ]
-              },
-              {
-                "type": "str"
-              },
-              {
-                "type": "none"
-              }
-            ]
-          },
-          "default": null,
-          "title": "Openapi Json",
-          "description": "Raw OpenAPI schema JSON (string or object)"
-        },
-        {
-          "name": "inputs",
-          "type": {
-            "type": "dict",
-            "optional": true,
-            "type_args": [
-              {
-                "type": "str"
-              },
-              {
-                "type": "any"
-              }
-            ]
-          },
-          "default": null,
-          "title": "Inputs",
-          "description": "Optional input values for the endpoint (overrides dynamic properties)"
+          "title": "Model Info",
+          "description": "fal.ai llms.txt URL, fal.ai model URL, endpoint id, or raw llms.txt content used to derive the OpenAPI schema."
         }
       ],
       "basic_fields": [
-        "model_url",
-        "endpoint_id",
-        "schema_url",
-        "openapi_json"
+        "model_info"
       ],
       "is_dynamic": true,
       "supports_dynamic_outputs": true

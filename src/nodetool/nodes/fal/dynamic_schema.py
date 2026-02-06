@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -50,7 +51,7 @@ class DynamicFalSchema(FALNode):
     Use cases:
     - Call new fal.ai endpoints without adding new Python nodes
     - Prototype workflows with experimental FAL models
-    - Run custom endpoints by pasting their OpenAPI schema
+    - Run custom endpoints by sharing model info (llms.txt)
     - Build flexible pipelines that depend on runtime model selection
     - Explore model inputs/outputs directly from OpenAPI metadata
     """
@@ -58,25 +59,12 @@ class DynamicFalSchema(FALNode):
     _is_dynamic = True
     _supports_dynamic_outputs = True
 
-    model_url: str = Field(
+    model_info: str = Field(
         default="",
-        description="fal.ai model URL (e.g. https://fal.ai/models/fal-ai/flux/dev)",
-    )
-    endpoint_id: str = Field(
-        default="",
-        description="FAL endpoint id (e.g. fal-ai/flux/dev)",
-    )
-    schema_url: str = Field(
-        default="",
-        description="URL to the OpenAPI schema JSON for the endpoint",
-    )
-    openapi_json: dict[str, Any] | str | None = Field(
-        default=None,
-        description="Raw OpenAPI schema JSON (string or object)",
-    )
-    inputs: dict[str, Any] | None = Field(
-        default=None,
-        description="Optional input values for the endpoint (overrides dynamic properties)",
+        description=(
+            "fal.ai llms.txt URL, fal.ai model URL, endpoint id, or raw llms.txt "
+            "content used to derive the OpenAPI schema."
+        ),
     )
 
     def __init__(self, **data: Any):
@@ -85,7 +73,7 @@ class DynamicFalSchema(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["model_url", "endpoint_id", "schema_url", "openapi_json"]
+        return ["model_info"]
 
     @classmethod
     def _cache_dir(cls) -> Path:
@@ -93,40 +81,28 @@ class DynamicFalSchema(FALNode):
         return CACHE_DIR
 
     def _prime_schema_outputs(self) -> None:
-        schema_payload = _parse_schema_payload(self.openapi_json)
-        if schema_payload:
-            bundle = _parse_openapi_schema(schema_payload, llm_info=None)
-            self._set_dynamic_outputs(bundle)
-            self._ui_properties["fal_schema"] = {
-                "endpoint_id": bundle.endpoint_id,
-                "source": "openapi_json",
-            }
-            return
-
-        cache_key, _schema_url, _llm_url = _resolve_urls(
-            model_url=self.model_url,
-            endpoint_id=self.endpoint_id,
-            schema_url=self.schema_url,
+        model_info_text, model_info_url, endpoint_hint = _normalize_model_info(
+            self.model_info
+        )
+        cache_key = _cache_key_for_model_info(
+            model_info_text, model_info_url, endpoint_hint
         )
         if not cache_key:
             return
 
         cached = _load_cached_schema(self._cache_dir(), cache_key)
         if cached is not None:
-            bundle = _parse_openapi_schema(cached["openapi"], cached.get("llm_info"))
+            bundle = _parse_openapi_schema(
+                cached["openapi"], cached.get("llm_info"), endpoint_hint=endpoint_hint
+            )
             self._set_dynamic_outputs(bundle)
-            self._ui_properties["fal_schema"] = {
-                "endpoint_id": bundle.endpoint_id,
-                "source": "cache",
-            }
+            _set_ui_schema_metadata(self._ui_properties, bundle, source="cache")
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         bundle = await self._load_schema_bundle(context)
         self._set_dynamic_outputs(bundle)
 
         input_values = dict(self.dynamic_properties)
-        if self.inputs is not None:
-            input_values = self.inputs
         arguments = await self._build_arguments(
             bundle.openapi,
             bundle.input_schema,
@@ -154,41 +130,47 @@ class DynamicFalSchema(FALNode):
         return None
 
     async def _load_schema_bundle(self, context: ProcessingContext) -> FalSchemaBundle:
-        schema_payload = _parse_schema_payload(self.openapi_json)
-        if schema_payload:
-            bundle = _parse_openapi_schema(schema_payload, llm_info=None)
-            self._ui_properties["fal_schema"] = {
-                "endpoint_id": bundle.endpoint_id,
-                "source": "openapi_json",
-            }
-            return bundle
-
-        cache_key, schema_url, llm_url = _resolve_urls(
-            model_url=self.model_url,
-            endpoint_id=self.endpoint_id,
-            schema_url=self.schema_url,
+        model_info_text, model_info_url, endpoint_hint = _normalize_model_info(
+            self.model_info
         )
-        if not schema_url:
-            raise ValueError(
-                "A model_url, endpoint_id, schema_url, or openapi_json is required"
-            )
+        if not model_info_text and not model_info_url:
+            raise ValueError("model_info is required and cannot be empty")
 
+        openapi_url: str | None = None
+        endpoint_id: str | None = endpoint_hint
+        llm_info = model_info_text
+
+        cache_key = _cache_key_for_model_info(
+            model_info_text, model_info_url, endpoint_hint
+        )
         cached = _load_cached_schema(self._cache_dir(), cache_key)
         if cached is not None:
-            bundle = _parse_openapi_schema(cached["openapi"], cached.get("llm_info"))
-            self._ui_properties["fal_schema"] = {
-                "endpoint_id": bundle.endpoint_id,
-                "source": "cache",
-            }
+            bundle = _parse_openapi_schema(
+                cached["openapi"], cached.get("llm_info"), endpoint_hint=endpoint_hint
+            )
+            _set_ui_schema_metadata(self._ui_properties, bundle, source="cache")
             return bundle
 
-        openapi, llm_info = await _fetch_openapi_and_llm(schema_url, llm_url)
+        if model_info_url:
+            if _is_openapi_url(model_info_url):
+                openapi_url = model_info_url
+                endpoint_id = endpoint_id or _endpoint_from_openapi_url(model_info_url)
+            else:
+                llm_info = await _fetch_model_info(model_info_url)
+
+        if llm_info:
+            endpoint_id, openapi_url = _parse_model_info_text(llm_info, endpoint_id)
+
+        if openapi_url is None and endpoint_id:
+            openapi_url = _openapi_url_for_endpoint(endpoint_id)
+
+        if openapi_url is None:
+            raise ValueError("Unable to resolve an OpenAPI schema URL from model_info")
+
+        openapi = await _fetch_openapi(openapi_url)
         _save_cached_schema(self._cache_dir(), cache_key, openapi, llm_info)
-        bundle = _parse_openapi_schema(openapi, llm_info)
-        self._ui_properties["fal_schema"] = {
-            "endpoint_id": bundle.endpoint_id,
-            "source": "remote",
-        }
+        bundle = _parse_openapi_schema(openapi, llm_info, endpoint_hint=endpoint_id)
+        _set_ui_schema_metadata(self._ui_properties, bundle, source="remote")
         if llm_info:
             self._ui_properties["fal_llm_info"] = llm_info
         return bundle
@@ -231,84 +213,138 @@ class DynamicFalSchema(FALNode):
         return arguments
 
 
-async def _fetch_openapi_and_llm(
-    schema_url: str, llm_url: str | None
-) -> tuple[dict[str, Any], str | None]:
+async def _fetch_openapi(openapi_url: str) -> dict[str, Any]:
     timeout = httpx.Timeout(20.0)
     async with httpx.AsyncClient(timeout=timeout) as client:
-        schema_resp = await client.get(schema_url)
+        schema_resp = await client.get(openapi_url)
         schema_resp.raise_for_status()
-        openapi = schema_resp.json()
-
-        llm_info = None
-        if llm_url:
-            llm_resp = await client.get(llm_url)
-            if llm_resp.status_code == 200:
-                llm_info = llm_resp.text
-        return openapi, llm_info
+        return schema_resp.json()
 
 
-def _parse_schema_payload(
-    openapi_json: dict[str, Any] | str | None,
-) -> dict[str, Any] | None:
-    if openapi_json is None:
-        return None
-    if isinstance(openapi_json, dict):
-        return openapi_json
-    if isinstance(openapi_json, str) and openapi_json.strip():
-        return json.loads(openapi_json)
+async def _fetch_model_info(model_info_url: str) -> str:
+    timeout = httpx.Timeout(20.0)
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.get(model_info_url)
+        resp.raise_for_status()
+        return resp.text
+
+
+def _normalize_model_info(
+    model_info: str,
+) -> tuple[str | None, str | None, str | None]:
+    normalized = model_info.strip()
+    if not normalized:
+        return None, None, None
+    if _is_url(normalized):
+        llms_url = _coerce_llms_url(normalized)
+        endpoint_hint = _endpoint_from_llms_url(llms_url) if llms_url else None
+        return None, llms_url or normalized, endpoint_hint
+    if _looks_like_endpoint_id(normalized):
+        llms_url = f"https://fal.ai/models/{normalized}/llms.txt"
+        return None, llms_url, normalized
+    return normalized, None, None
+
+
+def _cache_key_for_model_info(
+    model_info_text: str | None,
+    model_info_url: str | None,
+    endpoint_hint: str | None,
+) -> str | None:
+    if endpoint_hint:
+        return endpoint_hint
+    if model_info_url:
+        return hashlib.sha256(model_info_url.encode("utf-8")).hexdigest()
+    if model_info_text:
+        return hashlib.sha256(model_info_text.encode("utf-8")).hexdigest()
     return None
 
 
-def _resolve_urls(
-    *,
-    model_url: str,
-    endpoint_id: str,
-    schema_url: str,
-) -> tuple[str | None, str | None, str | None]:
-    resolved_endpoint = endpoint_id.strip("/") if endpoint_id else ""
-    resolved_schema_url = schema_url.strip()
-    resolved_llm_url = None
-
-    if model_url:
-        candidate = _endpoint_from_model_url(model_url)
-        if candidate:
-            resolved_endpoint = candidate
-
-    if resolved_endpoint:
-        resolved_schema_url = (
-            resolved_schema_url
-            or f"https://fal.ai/api/openapi/queue/openapi.json?endpoint_id={resolved_endpoint}"
-        )
-        resolved_llm_url = f"https://fal.ai/models/{resolved_endpoint}/llms.txt"
-
-    if not resolved_endpoint and resolved_schema_url:
-        parsed = urlparse(resolved_schema_url)
-        query = parse_qs(parsed.query)
-        endpoint_candidates = query.get("endpoint_id") or []
-        if endpoint_candidates:
-            resolved_endpoint = endpoint_candidates[0]
-            resolved_llm_url = f"https://fal.ai/models/{resolved_endpoint}/llms.txt"
-
-    cache_key = None
-    if resolved_endpoint:
-        cache_key = resolved_endpoint
-    elif resolved_schema_url:
-        cache_key = hashlib.sha256(resolved_schema_url.encode("utf-8")).hexdigest()
-
-    return cache_key, resolved_schema_url or None, resolved_llm_url
+def _is_url(value: str) -> bool:
+    return value.startswith(("http://", "https://"))
 
 
-def _endpoint_from_model_url(model_url: str) -> str | None:
+def _looks_like_endpoint_id(value: str) -> bool:
+    return "/" in value and " " not in value and "\n" not in value
+
+
+def _coerce_llms_url(value: str) -> str | None:
+    if value.endswith("/llms.txt"):
+        return value
+    parsed = urlparse(value)
+    if parsed.netloc.endswith("fal.ai") and parsed.path.startswith("/models/"):
+        return f"{value.rstrip('/')}/llms.txt"
+    return value
+
+
+def _is_openapi_url(value: str) -> bool:
+    return "openapi.json?endpoint_id=" in value
+
+
+def _openapi_url_for_endpoint(endpoint_id: str) -> str:
+    return f"https://fal.ai/api/openapi/queue/openapi.json?endpoint_id={endpoint_id}"
+
+
+def _endpoint_from_llms_url(model_info_url: str | None) -> str | None:
+    if not model_info_url:
+        return None
     try:
-        parsed = urlparse(model_url)
+        parsed = urlparse(model_info_url)
     except Exception:
         return None
     if not parsed.netloc.endswith("fal.ai"):
         return None
     if not parsed.path.startswith("/models/"):
         return None
-    return parsed.path.replace("/models/", "").strip("/")
+    if not parsed.path.endswith("/llms.txt"):
+        return None
+    endpoint_path = parsed.path.replace("/models/", "").replace("/llms.txt", "")
+    return endpoint_path.strip("/")
+
+
+def _endpoint_from_openapi_url(openapi_url: str) -> str | None:
+    parsed = urlparse(openapi_url)
+    query = parse_qs(parsed.query)
+    endpoint_candidates = query.get("endpoint_id") or []
+    if endpoint_candidates:
+        return endpoint_candidates[0]
+    return None
+
+
+def _parse_model_info_text(
+    model_info: str, endpoint_hint: str | None
+) -> tuple[str | None, str | None]:
+    endpoint_id = endpoint_hint
+    openapi_url = None
+
+    openapi_match = re.search(
+        r"https?://[^\s`]+openapi\.json\?endpoint_id=[^`\s]+", model_info
+    )
+    if openapi_match:
+        openapi_url = openapi_match.group(0)
+
+    model_id_match = re.search(r"Model ID\*\*:\s*`([^`]+)`", model_info)
+    if model_id_match:
+        endpoint_id = model_id_match.group(1)
+
+    endpoint_match = re.search(r"Endpoint\*\*:\s*`https?://[^/]+/([^`]+)`", model_info)
+    if endpoint_match:
+        endpoint_id = endpoint_match.group(1)
+
+    if not endpoint_id and openapi_url:
+        endpoint_id = _endpoint_from_openapi_url(openapi_url)
+
+    return endpoint_id, openapi_url
+
+
+def _set_ui_schema_metadata(
+    ui_properties: dict[str, Any],
+    bundle: FalSchemaBundle,
+    *,
+    source: str,
+) -> None:
+    ui_properties["fal_schema"] = {"endpoint_id": bundle.endpoint_id, "source": source}
+    ui_properties["fal_input_schema"] = bundle.input_schema
+    ui_properties["fal_output_schema"] = bundle.output_schema
 
 
 def _load_cached_schema(
@@ -345,7 +381,10 @@ def _save_cached_schema(
 
 
 def _parse_openapi_schema(
-    openapi: dict[str, Any], llm_info: str | None
+    openapi: dict[str, Any],
+    llm_info: str | None,
+    *,
+    endpoint_hint: str | None = None,
 ) -> FalSchemaBundle:
     metadata = (openapi.get("info") or {}).get("x-fal-metadata") or {}
     endpoint_id = metadata.get("endpointId", "")
@@ -354,7 +393,7 @@ def _parse_openapi_schema(
     output_schema = _extract_output_schema(openapi)
 
     if not endpoint_id:
-        endpoint_id = _fallback_endpoint_id(openapi)
+        endpoint_id = endpoint_hint or _fallback_endpoint_id(openapi)
 
     if not input_schema:
         raise ValueError("Failed to locate input schema in OpenAPI document")

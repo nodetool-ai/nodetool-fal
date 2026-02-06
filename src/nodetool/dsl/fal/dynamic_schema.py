@@ -33,7 +33,7 @@ class DynamicFalSchema(GraphNode[dict[str, Any]]):
         Use cases:
         - Call new fal.ai endpoints without adding new Python nodes
         - Prototype workflows with experimental FAL models
-        - Run custom endpoints by pasting their OpenAPI schema
+        - Run custom endpoints by sharing model info (llms.txt)
         - Build flexible pipelines that depend on runtime model selection
         - Explore model inputs/outputs directly from OpenAPI metadata
 
@@ -45,26 +45,9 @@ class DynamicFalSchema(GraphNode[dict[str, Any]]):
         node = DynamicFalSchema(prop1=value1, prop2=value2)
     """
 
-    model_url: str | OutputHandle[str] = connect_field(
+    model_info: str | OutputHandle[str] = connect_field(
         default="",
-        description="fal.ai model URL (e.g. https://fal.ai/models/fal-ai/flux/dev)",
-    )
-    endpoint_id: str | OutputHandle[str] = connect_field(
-        default="", description="FAL endpoint id (e.g. fal-ai/flux/dev)"
-    )
-    schema_url: str | OutputHandle[str] = connect_field(
-        default="", description="URL to the OpenAPI schema JSON for the endpoint"
-    )
-    openapi_json: (
-        dict[str, typing.Any] | str | OutputHandle[dict[str, typing.Any] | str] | None
-    ) = connect_field(
-        default=None, description="Raw OpenAPI schema JSON (string or object)"
-    )
-    inputs: dict[str, typing.Any] | OutputHandle[dict[str, typing.Any]] | None = (
-        connect_field(
-            default=None,
-            description="Optional input values for the endpoint (overrides dynamic properties)",
-        )
+        description="fal.ai llms.txt URL, fal.ai model URL, endpoint id, or raw llms.txt content used to derive the OpenAPI schema.",
     )
 
     def __init__(
