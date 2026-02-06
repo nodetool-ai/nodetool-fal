@@ -151,6 +151,77 @@ class AspectRatio(Enum):
 5. **Error Handling**: Always assert expected output fields exist
 6. **Naming**: Use descriptive class names that reflect the model/functionality
 
+## Validation Checklist (Common Pitfalls)
+
+When adding or reviewing provider nodes, verify each point against the actual OpenAPI schema.
+These are real mistakes that caused production errors in the past.
+
+### 1. Field names must match the API exactly
+
+Do NOT guess field names. Always check the OpenAPI schema.
+
+- Wrong: `start_image_url` when API expects `image_url`
+- Wrong: `image` when API expects `image_url`
+- Get the schema: `https://fal.ai/api/openapi/queue/openapi.json?endpoint_id=<ENDPOINT_ID>`
+
+### 2. Never send fields the API does not support
+
+If a field is not in the OpenAPI schema, do NOT include it in `arguments`.
+Different API variants (e.g., V3 vs O3) often support different parameter sets.
+
+- Example: `seed` was added to a node but the API had no `seed` property
+- Example: `aspect_ratio` was sent to an endpoint that does not accept it
+
+### 3. Never send `None` values to the API
+
+Optional string fields may arrive as `None` from the UI. Sending `null` to the API causes `input_value_error`.
+
+```python
+# BAD - sends None if field is empty
+arguments["negative_prompt"] = self.negative_prompt
+
+# GOOD - only include when the value is actually set
+if self.negative_prompt is not None and self.negative_prompt.strip():
+    arguments["negative_prompt"] = self.negative_prompt
+```
+
+### 4. Compound objects must include all required sub-fields
+
+When an API expects a structured object (e.g., `elements`), check which sub-fields are required.
+
+```python
+# BAD - missing reference_image_urls
+element_list.append({"frontal_image_url": url})
+
+# GOOD - includes both fields as expected by the schema
+element_list.append({
+    "frontal_image_url": url,
+    "reference_image_urls": [url],
+})
+```
+
+### 5. Do not share enums across API variants without checking
+
+Different endpoints may support different enum values.
+If an enum value is not listed in a specific endpoint's schema, do not expose it.
+
+- Example: `shot_type: "intelligent"` was valid for V3 but not for O3 endpoints
+- Fix: either create separate enums per variant, or hardcode the only valid value
+
+### 6. Verify each variant independently
+
+When a provider has multiple model tiers (e.g., Standard/Pro, V3/O3), treat each as a separate API.
+Do NOT copy-paste one node to create another without re-checking the schema for the new endpoint.
+
+**Recommended workflow for each new node:**
+
+1. Fetch the OpenAPI schema for the exact endpoint ID
+2. List every input property, its type, whether it is required, and its default
+3. Compare against your node fields one-by-one
+4. Build `arguments` dict using only properties that exist in the schema
+5. Guard all optional fields with `if value is not None` checks
+6. Test with minimal inputs first, then add optional fields
+
 ## ⚠️ Python Environment (IMPORTANT)
 
 **Local Development:** Use the conda `nodetool` environment. Do not use system Python.
