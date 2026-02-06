@@ -93,3 +93,25 @@ pytest -q
 ```
 
 Use `nodetool package scan` and `nodetool codegen` whenever node definitions changed.
+
+---
+
+## Important: Validation checklist (from AGENTS.md)
+
+Before considering a node done, verify:
+
+1. **Field names match the API exactly** — Check OpenAPI: `https://fal.ai/api/openapi/queue/openapi.json?endpoint_id=<ENDPOINT_ID>`
+2. **Only send fields the API supports** — Variants (e.g. V3 vs O3) have different parameters.
+3. **Never send `None` to the API** — Optional strings from the UI can be `None`; sending `null` causes `input_value_error`. Guard with:
+   ```python
+   if self.negative_prompt is not None and self.negative_prompt.strip():
+       arguments["negative_prompt"] = self.negative_prompt
+   ```
+4. **Compound objects** — Include every required sub-field the schema expects.
+5. **Enums** — Do not reuse across API variants without checking; each endpoint may support different values.
+6. **Variants** — Treat Standard/Pro or V3/O3 as separate APIs; re-check schema for the exact endpoint.
+7. **Docstring Format**: First line describes the model, second line contains comma-separated tags, followed by use cases
+8. **Field Descriptions**: Use clear, descriptive text from the OpenAPI schema
+9. **Default Values**: Set sensible defaults based on schema defaults
+10. **Optional Fields**: Handle conditional arguments properly
+11. **Error Handling**: Always assert expected output fields exist
