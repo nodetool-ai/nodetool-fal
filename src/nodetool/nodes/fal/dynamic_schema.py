@@ -134,7 +134,10 @@ class DynamicFalSchema(FALNode):
             self.model_info
         )
         if not model_info_text and not model_info_url:
-            raise ValueError("model_info is required and cannot be empty")
+            raise ValueError(
+                "model_info must be a fal.ai llms.txt URL, model URL, endpoint id, or "
+                "llms.txt content"
+            )
 
         openapi_url: str | None = None
         endpoint_id: str | None = endpoint_hint
@@ -236,9 +239,13 @@ def _normalize_model_info(
     if not normalized:
         return None, None, None
     if _is_url(normalized):
+        if _is_openapi_url(normalized):
+            return None, normalized, _endpoint_from_openapi_url(normalized)
         llms_url = _coerce_llms_url(normalized)
-        endpoint_hint = _endpoint_from_llms_url(llms_url) if llms_url else None
-        return None, llms_url or normalized, endpoint_hint
+        if llms_url:
+            endpoint_hint = _endpoint_from_llms_url(llms_url)
+            return None, llms_url, endpoint_hint
+        return None, None, None
     if _looks_like_endpoint_id(normalized):
         llms_url = f"https://fal.ai/models/{normalized}/llms.txt"
         return None, llms_url, normalized
@@ -273,7 +280,7 @@ def _coerce_llms_url(value: str) -> str | None:
     parsed = urlparse(value)
     if parsed.netloc.endswith("fal.ai") and parsed.path.startswith("/models/"):
         return f"{value.rstrip('/')}/llms.txt"
-    return value
+    return None
 
 
 def _is_openapi_url(value: str) -> bool:
