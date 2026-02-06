@@ -3,7 +3,7 @@ from pydantic import Field
 from nodetool.metadata.types import ColorRef, ImageRef, LoraWeight
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
-from typing import Optional
+from typing import Any, Optional
 
 
 class ImageSizePreset(str, Enum):
@@ -287,7 +287,8 @@ class FluxV1ProUltra(FALNode):
         default="jpeg", description="Output format (jpeg or png)"
     )
     raw: bool = Field(
-        default=False, description="Generate less processed, more natural-looking images"
+        default=False,
+        description="Generate less processed, more natural-looking images",
     )
     aspect_ratio: str = Field(
         default="16:9", description="Aspect ratio of the generated image"
@@ -2616,8 +2617,6 @@ class IdeogramV3(FALNode):
     negative_prompt: str = Field(
         default="", description="A negative prompt to avoid in the generated image"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2626,10 +2625,8 @@ class IdeogramV3(FALNode):
             "expand_prompt": self.expand_prompt,
             "output_format": "png",
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -2667,8 +2664,6 @@ class GPTImage1(FALNode):
         default="auto",
         description="The quality of the generated image (auto, high, medium, low)",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2710,8 +2705,6 @@ class Gemini25FlashImage(FALNode):
         default=AspectRatio.RATIO_1_1,
         description="The aspect ratio of the generated image",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2863,8 +2856,6 @@ class HunyuanImageV3(FALNode):
     guidance_scale: float = Field(
         default=5.0, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2872,10 +2863,8 @@ class HunyuanImageV3(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -2987,8 +2976,6 @@ class CogView4(FALNode):
     guidance_scale: float = Field(
         default=7.0, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -2996,10 +2983,8 @@ class CogView4(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3056,10 +3041,8 @@ class Kolors(FALNode):
             "enable_safety_checker": self.enable_safety_checker,
             "output_format": "png",
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3099,18 +3082,14 @@ class Seedream45(FALNode):
     guidance_scale: float = Field(
         default=5.0, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size.value,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3153,8 +3132,6 @@ class Reve(FALNode):
     guidance_scale: float = Field(
         default=3.5, description="How closely to follow the prompt"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
@@ -3162,10 +3139,8 @@ class Reve(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3202,17 +3177,13 @@ class Imagen3(FALNode):
         default=AspectRatio.RATIO_1_1,
         description="The aspect ratio of the generated image",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3249,17 +3220,13 @@ class QwenImageMax(FALNode):
         default=ImageSizePreset.SQUARE_HD,
         description="The size of the generated image",
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size.value,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3299,18 +3266,14 @@ class ZImageTurbo(FALNode):
     num_inference_steps: int = Field(
         default=4, ge=1, description="The number of inference steps"
     )
-    seed: int = Field(default=-1, description="Seed for reproducible generation")
-
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size.value,
             "num_inference_steps": self.num_inference_steps,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3351,9 +3314,7 @@ class ZImageBase(FALNode):
     - Create visual content for projects
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate an image from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate an image from")
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3,
         description="The size of the generated image",
@@ -3364,9 +3325,7 @@ class ZImageBase(FALNode):
     seed: int = Field(
         default=-1, description="The same seed will output the same image every time"
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate"
-    )
+    num_images: int = Field(default=1, description="The number of images to generate")
     enable_safety_checker: bool = Field(
         default=True, description="If true, the safety checker will be enabled"
     )
@@ -3395,10 +3354,8 @@ class ZImageBase(FALNode):
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3427,9 +3384,7 @@ class ZImageBaseLora(FALNode):
     - Create brand-aligned visual content
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate an image from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate an image from")
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3,
         description="The size of the generated image",
@@ -3440,9 +3395,7 @@ class ZImageBaseLora(FALNode):
     seed: int = Field(
         default=-1, description="The same seed will output the same image every time"
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate"
-    )
+    num_images: int = Field(default=1, description="The number of images to generate")
     enable_safety_checker: bool = Field(
         default=True, description="If true, the safety checker will be enabled"
     )
@@ -3471,10 +3424,8 @@ class ZImageBaseLora(FALNode):
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
         }
-        if self.negative_prompt:
+        if self.negative_prompt is not None and self.negative_prompt.strip():
             arguments["negative_prompt"] = self.negative_prompt
-        if self.seed != -1:
-            arguments["seed"] = self.seed
 
         res = await self.submit_request(
             context=context,
@@ -3488,3 +3439,95 @@ class ZImageBaseLora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_inference_steps"]
+
+
+class Kling3ImageAspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+    RATIO_21_9 = "21:9"
+
+
+class Kling3ImageResolution(Enum):
+    RES_1K = "1K"
+    RES_2K = "2K"
+
+
+class KlingImage3TextToImage(FALNode):
+    """
+    Generate high-quality images from text prompts using Kling Image 3.0.
+    Supports sharp outputs up to 2K resolution with strong prompt adherence.
+    image, generation, kling, v3, text-to-image, high-resolution
+
+    Use cases:
+    - Create high-resolution images from descriptions
+    - Generate 2K quality artwork
+    - Produce photorealistic images
+    - Create detailed visual content
+    - Generate images with strong prompt adherence
+    """
+
+    prompt: str = Field(
+        default="",
+        description="The text prompt describing the desired image (max 2500 characters)",
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    aspect_ratio: Kling3ImageAspectRatio = Field(
+        default=Kling3ImageAspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated image",
+    )
+    resolution: Kling3ImageResolution = Field(
+        default=Kling3ImageResolution.RES_1K,
+        description="Image generation resolution. 1K: standard, 2K: high-res",
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=9, description="Number of images to generate (1-9)"
+    )
+    elements: list[ImageRef] = Field(
+        default=[],
+        description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
+    )
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments: dict[str, Any] = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "num_images": self.num_images,
+        }
+        if self.negative_prompt is not None and self.negative_prompt.strip():
+            arguments["negative_prompt"] = self.negative_prompt
+
+        # Add elements for face/character control
+        if self.elements:
+            element_list = []
+            for elem in self.elements:
+                if elem.uri:
+                    elem_base64 = await context.image_to_base64(elem)
+                    ref_data_url = f"data:image/png;base64,{elem_base64}"
+                    element_list.append(
+                        {
+                            "frontal_image_url": ref_data_url,
+                            "reference_image_urls": [ref_data_url],
+                        }
+                    )
+            if element_list:
+                arguments["elements"] = element_list
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-image/v3/text-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "aspect_ratio"]

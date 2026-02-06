@@ -461,7 +461,7 @@ class MiniMaxHailuo02(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_base64 = await context.image_to_base64(self.image)
-        
+
         arguments: dict[str, Any] = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "prompt": self.prompt,
@@ -1905,9 +1905,7 @@ class LTX219BAudioToVideo(FALNode):
     - Create video content from voice recordings
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate the video from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate the video from")
     audio: AudioRef = Field(
         default=AudioRef(), description="The audio to generate the video from"
     )
@@ -1918,9 +1916,7 @@ class LTX219BAudioToVideo(FALNode):
         default=True,
         description="Calculate frames based on audio duration and FPS",
     )
-    num_frames: int = Field(
-        default=121, description="The number of frames to generate"
-    )
+    num_frames: int = Field(default=121, description="The number of frames to generate")
     video_size: LTXVideoSize = Field(
         default=LTXVideoSize.LANDSCAPE_4_3,
         description="The size of the generated video",
@@ -1932,9 +1928,7 @@ class LTX219BAudioToVideo(FALNode):
     fps: float = Field(
         default=25.0, description="The frames per second of the generated video"
     )
-    guidance_scale: float = Field(
-        default=3.0, description="The guidance scale to use"
-    )
+    guidance_scale: float = Field(default=3.0, description="The guidance scale to use")
     num_inference_steps: int = Field(
         default=40, description="The number of inference steps"
     )
@@ -2048,9 +2042,7 @@ class LTX219BDistilledAudioToVideo(FALNode):
     - Fast prototype video generation from audio
     """
 
-    prompt: str = Field(
-        default="", description="The prompt to generate the video from"
-    )
+    prompt: str = Field(default="", description="The prompt to generate the video from")
     audio: AudioRef = Field(
         default=AudioRef(), description="The audio to generate the video from"
     )
@@ -2061,9 +2053,7 @@ class LTX219BDistilledAudioToVideo(FALNode):
         default=True,
         description="Calculate frames based on audio duration and FPS",
     )
-    num_frames: int = Field(
-        default=121, description="The number of frames to generate"
-    )
+    num_frames: int = Field(default=121, description="The number of frames to generate")
     video_size: LTXVideoSize = Field(
         default=LTXVideoSize.LANDSCAPE_4_3,
         description="The size of the generated video",
@@ -2075,9 +2065,7 @@ class LTX219BDistilledAudioToVideo(FALNode):
     fps: float = Field(
         default=25.0, description="The frames per second of the generated video"
     )
-    guidance_scale: float = Field(
-        default=3.0, description="The guidance scale to use"
-    )
+    guidance_scale: float = Field(default=3.0, description="The guidance scale to use")
     num_inference_steps: int = Field(
         default=40, description="The number of inference steps"
     )
@@ -2176,3 +2164,505 @@ class LTX219BDistilledAudioToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt", "audio", "video_size"]
+
+
+class Kling3Duration(Enum):
+    """Duration for Kling 3.0/O3 videos (3-15 seconds)."""
+
+    THREE_SECONDS = "3"
+    FOUR_SECONDS = "4"
+    FIVE_SECONDS = "5"
+    SIX_SECONDS = "6"
+    SEVEN_SECONDS = "7"
+    EIGHT_SECONDS = "8"
+    NINE_SECONDS = "9"
+    TEN_SECONDS = "10"
+    ELEVEN_SECONDS = "11"
+    TWELVE_SECONDS = "12"
+    THIRTEEN_SECONDS = "13"
+    FOURTEEN_SECONDS = "14"
+    FIFTEEN_SECONDS = "15"
+
+
+class Kling3AspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+
+class Kling3ShotType(Enum):
+    """Shot type for multi-shot video generation."""
+
+    CUSTOMIZE = "customize"
+    INTELLIGENT = "intelligent"
+
+
+class KlingV3ImageToVideo(FALNode):
+    """
+    Transform images into high-quality videos using Kling Video 3.0 Standard with improved motion and realistic acting.
+    video, generation, kling, v3, image-to-video, animation, img2vid
+
+    Use cases:
+    - Animate still images into cinematic clips
+    - Create dynamic product showcase videos
+    - Generate motion graphics from static designs
+    - Transform artwork into video content
+    - Create engaging social media animations
+    """
+
+    start_image: ImageRef = Field(
+        default=ImageRef(), description="The starting image for the video"
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="Optional ending image for the video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] = Field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
+    )
+    reference_images: list[ImageRef] = Field(
+        default=[],
+        description="Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt",
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_base64 = await context.image_to_base64(self.start_image)
+
+        arguments = {
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "generate_audio": self.generate_audio,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        if self.end_image and self.end_image.uri:
+            end_image_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
+
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
+
+        # Build elements from reference images
+        if self.reference_images:
+            elements = []
+            for ref_image in self.reference_images:
+                if ref_image.uri:
+                    ref_base64 = await context.image_to_base64(ref_image)
+                    ref_data_url = f"data:image/png;base64,{ref_base64}"
+                    elements.append(
+                        {
+                            "frontal_image_url": ref_data_url,
+                            "reference_image_urls": [ref_data_url],
+                        }
+                    )
+            if elements:
+                arguments["elements"] = elements
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image", "prompt", "duration"]
+
+
+class KlingV3ProImageToVideo(FALNode):
+    """
+    Transform images into premium quality videos using Kling Video 3.0 Pro with enhanced quality and performance.
+    video, generation, kling, v3, pro, image-to-video, premium, img2vid
+
+    Use cases:
+    - Create high-end video content from images
+    - Generate professional product animations
+    - Produce broadcast-quality video from stills
+    - Create premium visual narratives
+    - Generate detailed cinematic sequences
+    """
+
+    start_image: ImageRef = Field(
+        default=ImageRef(), description="The starting image for the video"
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="Optional ending image for the video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] = Field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
+    )
+    reference_images: list[ImageRef] = Field(
+        default=[],
+        description="Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt",
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Classifier Free Guidance scale (0.0 to 1.0)",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_base64 = await context.image_to_base64(self.start_image)
+
+        arguments = {
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "generate_audio": self.generate_audio,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        if self.end_image and self.end_image.uri:
+            end_image_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
+
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
+
+        # Build elements from reference images
+        if self.reference_images:
+            elements = []
+            for ref_image in self.reference_images:
+                if ref_image.uri:
+                    ref_base64 = await context.image_to_base64(ref_image)
+                    ref_data_url = f"data:image/png;base64,{ref_base64}"
+                    elements.append(
+                        {
+                            "frontal_image_url": ref_data_url,
+                            "reference_image_urls": [ref_data_url],
+                        }
+                    )
+            if elements:
+                arguments["elements"] = elements
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image", "prompt", "duration"]
+
+
+class KlingO3ImageToVideo(FALNode):
+    """
+    Transform images into cinematic videos using Kling Video O3 Standard with storyboard-first creation and character consistency.
+    video, generation, kling, o3, image-to-video, storyboard, img2vid
+
+    Use cases:
+    - Create story-driven video from images
+    - Generate character-consistent animations
+    - Produce multi-shot sequences from stills
+    - Create structured narrative videos
+    - Generate cinematic content with continuity
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The starting image for the video"
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="Optional ending image for the video"
+    )
+    prompt: str = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "shot_type": "customize",
+        }
+
+        if self.generate_audio:
+            arguments["generate_audio"] = self.generate_audio
+
+        if self.end_image and self.end_image.uri:
+            end_image_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
+class KlingO3ReferenceToVideo(FALNode):
+    """
+    Generate videos with character consistency using Kling Video O3 reference-to-video with reusable character elements.
+    video, generation, kling, o3, reference-to-video, character-consistency
+
+    Use cases:
+    - Create videos with consistent character appearances
+    - Generate story sequences with recurring characters
+    - Produce branded content with consistent subjects
+    - Create serialized video content
+    - Generate character-driven narratives
+    """
+
+    prompt: str = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    start_image: ImageRef = Field(
+        default=ImageRef(),
+        description="Optional starting image for the video",
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(),
+        description="Optional ending image for the video",
+    )
+    reference_images: list[ImageRef] = Field(
+        default=[],
+        description="Reference images for style/appearance (up to 4). Reference as @Image1, @Image2 in prompt",
+    )
+    element_images: list[ImageRef] = Field(
+        default=[],
+        description="Character/element images for consistency. Reference as @Element1, @Element2 in prompt",
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "shot_type": "customize",
+        }
+
+        if self.generate_audio:
+            arguments["generate_audio"] = self.generate_audio
+
+        if self.start_image and self.start_image.uri:
+            start_base64 = await context.image_to_base64(self.start_image)
+            arguments["start_image_url"] = f"data:image/png;base64,{start_base64}"
+
+        if self.end_image and self.end_image.uri:
+            end_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_base64}"
+
+        # Build image_urls from reference images (up to 4)
+        if self.reference_images:
+            image_urls = []
+            for ref_image in self.reference_images[:4]:
+                if ref_image.uri:
+                    ref_base64 = await context.image_to_base64(ref_image)
+                    image_urls.append(f"data:image/png;base64,{ref_base64}")
+            if image_urls:
+                arguments["image_urls"] = image_urls
+
+        # Build elements from element images
+        if self.element_images:
+            elements = []
+            for elem_image in self.element_images:
+                if elem_image.uri:
+                    elem_base64 = await context.image_to_base64(elem_image)
+                    elem_data_url = f"data:image/png;base64,{elem_base64}"
+                    elements.append(
+                        {
+                            "frontal_image_url": elem_data_url,
+                            "reference_image_urls": [elem_data_url],
+                        }
+                    )
+            if elements:
+                arguments["elements"] = elements
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/reference-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "reference_images", "duration"]
+
+
+class KlingO3ProReferenceToVideo(FALNode):
+    """
+    Generate premium videos with character consistency using Kling Video O3 Pro reference-to-video with enhanced quality.
+    video, generation, kling, o3, pro, reference-to-video, character-consistency, premium
+
+    Use cases:
+    - Create high-quality videos with consistent characters
+    - Generate professional story sequences
+    - Produce premium branded content
+    - Create broadcast-quality serialized content
+    - Generate professional character-driven narratives
+    """
+
+    prompt: str = Field(
+        default="", description="A description of the desired video motion and style"
+    )
+    start_image: ImageRef = Field(
+        default=ImageRef(),
+        description="Optional starting image for the video",
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(),
+        description="Optional ending image for the video",
+    )
+    reference_images: list[ImageRef] = Field(
+        default=[],
+        description="Reference images for style/appearance (up to 4). Reference as @Image1, @Image2 in prompt",
+    )
+    element_images: list[ImageRef] = Field(
+        default=[],
+        description="Character/element images for consistency. Reference as @Element1, @Element2 in prompt",
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: Kling3AspectRatio = Field(
+        default=Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool = Field(
+        default=True,
+        description="Generate native audio for the video",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "shot_type": "customize",
+        }
+
+        if self.generate_audio:
+            arguments["generate_audio"] = self.generate_audio
+
+        if self.start_image and self.start_image.uri:
+            start_base64 = await context.image_to_base64(self.start_image)
+            arguments["start_image_url"] = f"data:image/png;base64,{start_base64}"
+
+        if self.end_image and self.end_image.uri:
+            end_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_base64}"
+
+        # Build image_urls from reference images (up to 4)
+        if self.reference_images:
+            image_urls = []
+            for ref_image in self.reference_images[:4]:
+                if ref_image.uri:
+                    ref_base64 = await context.image_to_base64(ref_image)
+                    image_urls.append(f"data:image/png;base64,{ref_base64}")
+            if image_urls:
+                arguments["image_urls"] = image_urls
+
+        # Build elements from element images
+        if self.element_images:
+            elements = []
+            for elem_image in self.element_images:
+                if elem_image.uri:
+                    elem_base64 = await context.image_to_base64(elem_image)
+                    elem_data_url = f"data:image/png;base64,{elem_base64}"
+                    elements.append(
+                        {
+                            "frontal_image_url": elem_data_url,
+                            "reference_image_urls": [elem_data_url],
+                        }
+                    )
+            if elements:
+                arguments["elements"] = elements
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/reference-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "reference_images", "duration"]

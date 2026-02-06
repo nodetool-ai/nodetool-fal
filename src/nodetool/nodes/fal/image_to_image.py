@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any
 from pydantic import Field
 
@@ -2174,18 +2175,12 @@ class BriaReplaceBackground(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="Reference image for background replacement"
     )
-    prompt: str = Field(
-        default="", description="Prompt for background replacement"
-    )
+    prompt: str = Field(default="", description="Prompt for background replacement")
     negative_prompt: str = Field(
         default="", description="Negative prompt for background replacement"
     )
-    seed: int = Field(
-        default=4925634, description="Random seed for reproducibility"
-    )
-    steps_num: int = Field(
-        default=30, description="Number of inference steps"
-    )
+    seed: int = Field(default=4925634, description="Random seed for reproducibility")
+    steps_num: int = Field(default=30, description="Number of inference steps")
     sync_mode: bool = Field(
         default=False,
         description="If true, returns the image directly in the response (increases latency)",
@@ -2302,3 +2297,101 @@ class BriaFiboRestore(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image"]
+
+
+class Kling3ImageAspectRatio(Enum):
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+    RATIO_21_9 = "21:9"
+
+
+class Kling3ImageResolution(Enum):
+    RES_1K = "1K"
+    RES_2K = "2K"
+
+
+class KlingImage3ImageToImage(FALNode):
+    """
+    Transform and edit images using Kling Image 3.0. Features powerful image-to-image
+    editing workflows for modifying backgrounds, clothing, subjects, and more.
+    image, editing, kling, v3, image-to-image, transformation, style-transfer
+
+    Use cases:
+    - Change image backgrounds
+    - Modify clothing and subjects in images
+    - Transform image styles
+    - Edit and enhance existing images
+    - Create variations of existing artwork
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="The source image to transform"
+    )
+    prompt: str = Field(
+        default="",
+        description="The text prompt describing the desired transformation (max 2500 characters)",
+    )
+    negative_prompt: str = Field(
+        default="", description="What to avoid in the generated image"
+    )
+    aspect_ratio: Kling3ImageAspectRatio = Field(
+        default=Kling3ImageAspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated image",
+    )
+    resolution: Kling3ImageResolution = Field(
+        default=Kling3ImageResolution.RES_1K,
+        description="Image generation resolution. 1K: standard, 2K: high-res",
+    )
+    num_images: int = Field(
+        default=1, ge=1, le=9, description="Number of images to generate (1-9)"
+    )
+    elements: list[ImageRef] = Field(
+        default=[],
+        description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
+    )
+    seed: int = Field(default=-1, description="Seed for reproducible generation")
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_base64 = await context.image_to_base64(self.image)
+
+        arguments: dict[str, Any] = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "num_images": self.num_images,
+        }
+        if self.negative_prompt:
+            arguments["negative_prompt"] = self.negative_prompt
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        # Add elements for face/character control
+        if self.elements:
+            element_list = []
+            for elem in self.elements:
+                if elem.uri:
+                    elem_base64 = await context.image_to_base64(elem)
+                    element_list.append(
+                        {"frontal_image_url": f"data:image/png;base64,{elem_base64}"}
+                    )
+            if element_list:
+                arguments["elements"] = element_list
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-image/v3/image-to-image",
+            arguments=arguments,
+        )
+        assert res["images"] is not None
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "aspect_ratio"]

@@ -347,6 +347,416 @@ import nodetool.nodes.fal.image_to_video
 from nodetool.workflows.base_node import BaseNode
 
 
+class KlingO3ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Transform images into cinematic videos using Kling Video O3 Standard with storyboard-first creation and character consistency.
+    video, generation, kling, o3, image-to-video, storyboard, img2vid
+
+    Use cases:
+    - Create story-driven video from images
+    - Generate character-consistent animations
+    - Produce multi-shot sequences from stills
+    - Create structured narrative videos
+    - Generate cinematic content with continuity
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3AspectRatio
+    )
+
+    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The starting image for the video",
+    )
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional ending image for the video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion and style"
+    )
+    duration: nodetool.nodes.fal.image_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Generate native audio for the video"
+    )
+    reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=[],
+            description="Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt",
+        )
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.KlingO3ImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingO3ProReferenceToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Generate premium videos with character consistency using Kling Video O3 Pro reference-to-video with enhanced quality.
+    video, generation, kling, o3, pro, reference-to-video, character-consistency, premium
+
+    Use cases:
+    - Create high-quality videos with consistent characters
+    - Generate professional story sequences
+    - Produce premium branded content
+    - Create broadcast-quality serialized content
+    - Generate professional character-driven narratives
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3AspectRatio
+    )
+    Kling3ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion and style"
+    )
+    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional starting image for the video",
+    )
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional ending image for the video",
+    )
+    reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=[],
+            description="Reference images for style/appearance (up to 4). Reference as @Image1, @Image2 in prompt",
+        )
+    )
+    element_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=[],
+            description="Character/element images for consistency. Reference as @Element1, @Element2 in prompt",
+        )
+    )
+    duration: nodetool.nodes.fal.image_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Generate native audio for the video"
+    )
+    shot_type: nodetool.nodes.fal.image_to_video.Kling3ShotType = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.KlingO3ProReferenceToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingO3ReferenceToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Generate videos with character consistency using Kling Video O3 reference-to-video with reusable character elements.
+    video, generation, kling, o3, reference-to-video, character-consistency
+
+    Use cases:
+    - Create videos with consistent character appearances
+    - Generate story sequences with recurring characters
+    - Produce branded content with consistent subjects
+    - Create serialized video content
+    - Generate character-driven narratives
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3AspectRatio
+    )
+    Kling3ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion and style"
+    )
+    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional starting image for the video",
+    )
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional ending image for the video",
+    )
+    reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=[],
+            description="Reference images for style/appearance (up to 4). Reference as @Image1, @Image2 in prompt",
+        )
+    )
+    element_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=[],
+            description="Character/element images for consistency. Reference as @Element1, @Element2 in prompt",
+        )
+    )
+    duration: nodetool.nodes.fal.image_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Generate native audio for the video"
+    )
+    shot_type: nodetool.nodes.fal.image_to_video.Kling3ShotType = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.KlingO3ReferenceToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingV3ImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Transform images into high-quality videos using Kling Video 3.0 Standard with improved motion and realistic acting.
+    video, generation, kling, v3, image-to-video, animation, img2vid
+
+    Use cases:
+    - Animate still images into cinematic clips
+    - Create dynamic product showcase videos
+    - Generate motion graphics from static designs
+    - Transform artwork into video content
+    - Create engaging social media animations
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3AspectRatio
+    )
+
+    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The starting image for the video",
+    )
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional ending image for the video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion and style"
+    )
+    duration: nodetool.nodes.fal.image_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=[],
+            description="Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt",
+        )
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Classifier Free Guidance scale (0.0 to 1.0)"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.KlingV3ImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingV3ProImageToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Transform images into premium quality videos using Kling Video 3.0 Pro with enhanced quality and performance.
+    video, generation, kling, v3, pro, image-to-video, premium, img2vid
+
+    Use cases:
+    - Create high-end video content from images
+    - Generate professional product animations
+    - Produce broadcast-quality video from stills
+    - Create premium visual narratives
+    - Generate detailed cinematic sequences
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Kling3AspectRatio
+    )
+
+    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The starting image for the video",
+    )
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional ending image for the video",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="A description of the desired video motion and style"
+    )
+    duration: nodetool.nodes.fal.image_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.image_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.image_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
+        connect_field(
+            default=[],
+            description="Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt",
+        )
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Classifier Free Guidance scale (0.0 to 1.0)"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_video.KlingV3ProImageToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
 class KlingVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 

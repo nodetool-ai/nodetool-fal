@@ -153,6 +153,136 @@ from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_video
 from nodetool.workflows.base_node import BaseNode
+
+
+class KlingO3ProTextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Generate premium cinematic videos with Kling Video O3 Pro featuring higher-end customization and storyboard-first creation.
+    video, generation, kling, o3, pro, text-to-video, premium, storyboard
+
+    Use cases:
+    - Create professional multi-shot sequences
+    - Generate premium story-driven content
+    - Produce high-quality character-consistent videos
+    - Create broadcast-quality narrative videos
+    - Generate cinematic content with advanced controls
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3AspectRatio
+    )
+    Kling3ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: nodetool.nodes.fal.text_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Generate native audio for the video"
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.KlingO3ProTextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingO3TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Generate cinematic videos with Kling Video O3 Standard supporting storyboard-first creation and character consistency.
+    video, generation, kling, o3, text-to-video, storyboard, cinematic
+
+    Use cases:
+    - Create multi-shot video sequences
+    - Generate story-driven content
+    - Produce character-consistent videos
+    - Create structured narrative videos
+    - Generate cinematic sequences with continuity
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3AspectRatio
+    )
+    Kling3ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: nodetool.nodes.fal.text_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Generate native audio for the video"
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.KlingO3TextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
 import nodetool.nodes.fal.image_to_video
 
 
@@ -199,6 +329,152 @@ class KlingTextToVideoV2(
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_video.KlingTextToVideoV2
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingV3ProTextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Generate premium quality videos from text prompts using Kling Video 3.0 Pro with enhanced quality and performance.
+    video, generation, kling, v3, pro, text-to-video, premium
+
+    Use cases:
+    - Create high-end promotional content
+    - Generate professional cinematic sequences
+    - Produce premium marketing videos
+    - Create detailed visual narratives
+    - Generate broadcast-quality content
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3AspectRatio
+    )
+    Kling3ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: nodetool.nodes.fal.text_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Classifier Free Guidance scale (0.0 to 1.0)"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.KlingV3ProTextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingV3TextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Generate high-quality videos from text prompts using Kling Video 3.0 Standard with improved motion and realistic acting.
+    video, generation, kling, v3, text-to-video, cinematic
+
+    Use cases:
+    - Create cinematic video clips from descriptions
+    - Generate marketing and promotional videos
+    - Produce dynamic social media content
+    - Visualize creative concepts and storyboards
+    - Create professional video content
+    """
+
+    Kling3Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3Duration
+    )
+    Kling3AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3AspectRatio
+    )
+    Kling3ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Kling3ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The text prompt describing the desired video"
+    )
+    duration: nodetool.nodes.fal.text_to_video.Kling3Duration = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3Duration.FIVE_SECONDS,
+        description="The duration of the generated video in seconds (3-15)",
+    )
+    aspect_ratio: nodetool.nodes.fal.text_to_video.Kling3AspectRatio = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Generate native audio for the video (supports Chinese/English)",
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+    )
+    shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
+        default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
+        description="Shot type for multi-shot generation",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="blur, distort, and low quality",
+        description="What to avoid in the generated video",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Classifier Free Guidance scale (0.0 to 1.0)"
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.KlingV3TextToVideo
 
     @classmethod
     def get_node_type(cls):
