@@ -2911,7 +2911,7 @@ class ViduQ2TextToImage(FALNode):
         return ["prompt"]
 
 
-class ImagineartImagineart15ProPreviewTextToImage(FALNode):
+class ImagineartImagineart1_5ProPreviewTextToImage(FALNode):
     """
     ImagineArt 1.5 Pro Preview
     generation, text-to-image, txt2img, ai-art, professional
@@ -3812,7 +3812,7 @@ class NanoBananaPro(FALNode):
         return ["prompt"]
 
 
-class ImagineartImagineart15PreviewTextToImage(FALNode):
+class ImagineartImagineart1_5PreviewTextToImage(FALNode):
     """
     Imagineart 1.5 Preview
     generation, text-to-image, txt2img, ai-art

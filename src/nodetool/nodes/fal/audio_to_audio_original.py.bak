@@ -29,6 +29,7 @@ class OutputFormat(Enum):
     OPUS_48000_96 = "opus_48000_96"
     OPUS_48000_128 = "opus_48000_128"
     OPUS_48000_192 = "opus_48000_192"
+    WAV = "wav"
 
 
 class AudioFormat(Enum):
@@ -359,7 +360,7 @@ class Demucs(FALNode):
         default="", description="Length in seconds of each segment for processing. Smaller values use less memory but may reduce quality. Default is model-specific."
     )
     output_format: OutputFormat = Field(
-        default=OutputFormat.MP3, description="Output audio format for the separated stems"
+        default=OutputFormat.MP3_44100_128, description="Output audio format for the separated stems"
     )
     stems: str = Field(
         default="", description="Specific stems to extract. If None, extracts all available stems. Available stems depend on model: vocals, drums, bass, other, guitar, piano (for 6s model)"
@@ -466,44 +467,3 @@ class StableAudio25AudioToAudio(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["audio", "prompt"]
-
-class FfmpegApiMergeAudios(FALNode):
-    """
-    FFmpeg API Merge Audios combines multiple audio files into a single output.
-    audio, processing, audio-to-audio, merging, ffmpeg
-
-    Use cases:
-    - Combine multiple audio tracks
-    - Merge audio segments
-    - Create audio compilations
-    - Join split audio files
-    - Generate combined audio output
-    """
-
-    audio_urls: list[str] = Field(
-        default=[], description="List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate."
-    )
-    output_format: str = Field(
-        default="", description="Output format of the combined audio. If not used, will be determined automatically using FFMPEG. Formatted as codec_sample_rate_bitrate."
-    )
-
-    async def process(self, context: ProcessingContext) -> AudioRef:
-        arguments = {
-            "audio_urls": self.audio_urls,
-            "output_format": self.output_format,
-        }
-
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
-
-        res = await self.submit_request(
-            context=context,
-            application="fal-ai/ffmpeg-api/merge-audios",
-            arguments=arguments,
-        )
-        assert "audio" in res
-        return AudioRef(uri=res["audio"]["url"])
-
-    @classmethod
-    def get_basic_fields(cls):
-        return ["audio"]
