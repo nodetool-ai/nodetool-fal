@@ -746,3 +746,851 @@ class Hunyuan_WorldImageToWorld(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["classes", "export_drc", "labels_fg1", "labels_fg2", "image_url"]
+
+class Tripo3dTripoV25MultiviewTo3d(FALNode):
+    """
+    State of the art Multiview to 3D Object generation. Generate 3D models from multiple images!
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    class Style(Enum):
+        """
+        [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
+        """
+        PERSON_PERSON2CARTOON = "person:person2cartoon"
+        OBJECT_CLAY = "object:clay"
+        OBJECT_STEAMPUNK = "object:steampunk"
+        ANIMAL_VENOM = "animal:venom"
+        OBJECT_BARBIE = "object:barbie"
+        OBJECT_CHRISTMAS = "object:christmas"
+        GOLD = "gold"
+        ANCIENT_BRONZE = "ancient_bronze"
+
+    class TextureAlignment(Enum):
+        """
+        Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
+        """
+        ORIGINAL_IMAGE = "original_image"
+        GEOMETRY = "geometry"
+
+    class Texture(Enum):
+        """
+        An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
+        """
+        NO = "no"
+        STANDARD = "standard"
+        HD = "HD"
+
+    class Orientation(Enum):
+        """
+        Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
+        """
+        DEFAULT = "default"
+        ALIGN_IMAGE = "align_image"
+
+
+    face_limit: int = Field(
+        default=0, description="Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined."
+    )
+    right_image_url: ImageRef = Field(
+        default=ImageRef(), description="Right view image of the object."
+    )
+    style: Style | None = Field(
+        default=None, description="[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance."
+    )
+    quad: bool = Field(
+        default=False, description="Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model."
+    )
+    front_image_url: ImageRef = Field(
+        default=ImageRef(), description="Front view image of the object."
+    )
+    texture_seed: int = Field(
+        default=-1, description="This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed."
+    )
+    back_image_url: ImageRef = Field(
+        default=ImageRef(), description="Back view image of the object."
+    )
+    pbr: bool = Field(
+        default=False, description="A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True."
+    )
+    texture_alignment: TextureAlignment = Field(
+        default=TextureAlignment.ORIGINAL_IMAGE, description="Determines the prioritization of texture alignment in the 3D model. The default value is original_image."
+    )
+    texture: Texture = Field(
+        default=Texture.STANDARD, description="An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures."
+    )
+    auto_size: bool = Field(
+        default=False, description="Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False."
+    )
+    seed: int = Field(
+        default=-1, description="This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set."
+    )
+    orientation: Orientation = Field(
+        default=Orientation.DEFAULT, description="Set orientation=align_image to automatically rotate the model to align the original image. The default value is default."
+    )
+    left_image_url: ImageRef = Field(
+        default=ImageRef(), description="Left view image of the object."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        right_image_url_base64 = await context.image_to_base64(self.right_image_url)
+        front_image_url_base64 = await context.image_to_base64(self.front_image_url)
+        back_image_url_base64 = await context.image_to_base64(self.back_image_url)
+        left_image_url_base64 = await context.image_to_base64(self.left_image_url)
+        arguments = {
+            "face_limit": self.face_limit,
+            "right_image_url": f"data:image/png;base64,{right_image_url_base64}",
+            "style": self.style.value if self.style else None,
+            "quad": self.quad,
+            "front_image_url": f"data:image/png;base64,{front_image_url_base64}",
+            "texture_seed": self.texture_seed,
+            "back_image_url": f"data:image/png;base64,{back_image_url_base64}",
+            "pbr": self.pbr,
+            "texture_alignment": self.texture_alignment.value,
+            "texture": self.texture.value,
+            "auto_size": self.auto_size,
+            "seed": self.seed,
+            "orientation": self.orientation.value,
+            "left_image_url": f"data:image/png;base64,{left_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="tripo3d/tripo/v2.5/multiview-to-3d",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["face_limit", "right_image_url", "style", "quad", "front_image_url"]
+
+class Hunyuan3dV21(FALNode):
+    """
+    Hunyuan3D-2.1 is a scalable 3D asset creation system that advances state-of-the-art 3D generation through Physically-Based Rendering (PBR).
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    input_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    octree_resolution: int = Field(
+        default=256, description="Octree resolution for the model."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="Guidance scale for the model."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps to perform."
+    )
+    textured_mesh: bool = Field(
+        default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        arguments = {
+            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "octree_resolution": self.octree_resolution,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "textured_mesh": self.textured_mesh,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan3d-v21",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+
+class Tripo3dTripoV25ImageTo3d(FALNode):
+    """
+    State of the art Image to 3D Object generation. Generate 3D model from a single image!
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    class Style(Enum):
+        """
+        [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
+        """
+        PERSON_PERSON2CARTOON = "person:person2cartoon"
+        OBJECT_CLAY = "object:clay"
+        OBJECT_STEAMPUNK = "object:steampunk"
+        ANIMAL_VENOM = "animal:venom"
+        OBJECT_BARBIE = "object:barbie"
+        OBJECT_CHRISTMAS = "object:christmas"
+        GOLD = "gold"
+        ANCIENT_BRONZE = "ancient_bronze"
+
+    class TextureAlignment(Enum):
+        """
+        Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
+        """
+        ORIGINAL_IMAGE = "original_image"
+        GEOMETRY = "geometry"
+
+    class Texture(Enum):
+        """
+        An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
+        """
+        NO = "no"
+        STANDARD = "standard"
+        HD = "HD"
+
+    class Orientation(Enum):
+        """
+        Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
+        """
+        DEFAULT = "default"
+        ALIGN_IMAGE = "align_image"
+
+
+    face_limit: int = Field(
+        default=0, description="Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined."
+    )
+    style: Style | None = Field(
+        default=None, description="[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance."
+    )
+    pbr: bool = Field(
+        default=False, description="A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True."
+    )
+    texture_alignment: TextureAlignment = Field(
+        default=TextureAlignment.ORIGINAL_IMAGE, description="Determines the prioritization of texture alignment in the 3D model. The default value is original_image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to use for model generation."
+    )
+    texture: Texture = Field(
+        default=Texture.STANDARD, description="An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures."
+    )
+    auto_size: bool = Field(
+        default=False, description="Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False."
+    )
+    seed: int = Field(
+        default=-1, description="This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set."
+    )
+    quad: bool = Field(
+        default=False, description="Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model."
+    )
+    orientation: Orientation = Field(
+        default=Orientation.DEFAULT, description="Set orientation=align_image to automatically rotate the model to align the original image. The default value is default."
+    )
+    texture_seed: int = Field(
+        default=-1, description="This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "face_limit": self.face_limit,
+            "style": self.style.value if self.style else None,
+            "pbr": self.pbr,
+            "texture_alignment": self.texture_alignment.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "texture": self.texture.value,
+            "auto_size": self.auto_size,
+            "seed": self.seed,
+            "quad": self.quad,
+            "orientation": self.orientation.value,
+            "texture_seed": self.texture_seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="tripo3d/tripo/v2.5/image-to-3d",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["face_limit", "style", "pbr", "texture_alignment", "image_url"]
+
+class Hunyuan3dV2MultiView(FALNode):
+    """
+    Generate 3D models from your images using Hunyuan 3D. A native 3D generative model enabling versatile and high-quality 3D asset creation.
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    front_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    octree_resolution: int = Field(
+        default=256, description="Octree resolution for the model."
+    )
+    back_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="Guidance scale for the model."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps to perform."
+    )
+    textured_mesh: bool = Field(
+        default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    left_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        front_image_url_base64 = await context.image_to_base64(self.front_image_url)
+        back_image_url_base64 = await context.image_to_base64(self.back_image_url)
+        left_image_url_base64 = await context.image_to_base64(self.left_image_url)
+        arguments = {
+            "front_image_url": f"data:image/png;base64,{front_image_url_base64}",
+            "octree_resolution": self.octree_resolution,
+            "back_image_url": f"data:image/png;base64,{back_image_url_base64}",
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "textured_mesh": self.textured_mesh,
+            "seed": self.seed,
+            "left_image_url": f"data:image/png;base64,{left_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan3d/v2/multi-view",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["front_image_url", "octree_resolution", "back_image_url", "guidance_scale", "num_inference_steps"]
+
+class Hunyuan3dV2Mini(FALNode):
+    """
+    Generate 3D models from your images using Hunyuan 3D. A native 3D generative model enabling versatile and high-quality 3D asset creation.
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    input_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    octree_resolution: int = Field(
+        default=256, description="Octree resolution for the model."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="Guidance scale for the model."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps to perform."
+    )
+    textured_mesh: bool = Field(
+        default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        arguments = {
+            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "octree_resolution": self.octree_resolution,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "textured_mesh": self.textured_mesh,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan3d/v2/mini",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+
+class Hunyuan3dV2Turbo(FALNode):
+    """
+    Generate 3D models from your images using Hunyuan 3D. A native 3D generative model enabling versatile and high-quality 3D asset creation.
+    3d, generation, image-to-3d, modeling, fast
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    input_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    octree_resolution: int = Field(
+        default=256, description="Octree resolution for the model."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="Guidance scale for the model."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps to perform."
+    )
+    textured_mesh: bool = Field(
+        default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        arguments = {
+            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "octree_resolution": self.octree_resolution,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "textured_mesh": self.textured_mesh,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan3d/v2/turbo",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+
+class Hunyuan3dV2MiniTurbo(FALNode):
+    """
+    Generate 3D models from your images using Hunyuan 3D. A native 3D generative model enabling versatile and high-quality 3D asset creation.
+    3d, generation, image-to-3d, modeling, fast
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    input_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    octree_resolution: int = Field(
+        default=256, description="Octree resolution for the model."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="Guidance scale for the model."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps to perform."
+    )
+    textured_mesh: bool = Field(
+        default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        arguments = {
+            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "octree_resolution": self.octree_resolution,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "textured_mesh": self.textured_mesh,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan3d/v2/mini/turbo",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+
+class Hunyuan3dV2(FALNode):
+    """
+    Generate 3D models from your images using Hunyuan 3D. A native 3D generative model enabling versatile and high-quality 3D asset creation.
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    input_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    octree_resolution: int = Field(
+        default=256, description="Octree resolution for the model."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="Guidance scale for the model."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps to perform."
+    )
+    textured_mesh: bool = Field(
+        default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        arguments = {
+            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "octree_resolution": self.octree_resolution,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "textured_mesh": self.textured_mesh,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan3d/v2",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+
+class Hunyuan3dV2MultiViewTurbo(FALNode):
+    """
+    Generate 3D models from your images using Hunyuan 3D. A native 3D generative model enabling versatile and high-quality 3D asset creation.
+    3d, generation, image-to-3d, modeling, fast
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    front_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    octree_resolution: int = Field(
+        default=256, description="Octree resolution for the model."
+    )
+    back_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="Guidance scale for the model."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps to perform."
+    )
+    textured_mesh: bool = Field(
+        default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    left_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use while generating the 3D model."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        front_image_url_base64 = await context.image_to_base64(self.front_image_url)
+        back_image_url_base64 = await context.image_to_base64(self.back_image_url)
+        left_image_url_base64 = await context.image_to_base64(self.left_image_url)
+        arguments = {
+            "front_image_url": f"data:image/png;base64,{front_image_url_base64}",
+            "octree_resolution": self.octree_resolution,
+            "back_image_url": f"data:image/png;base64,{back_image_url_base64}",
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "textured_mesh": self.textured_mesh,
+            "seed": self.seed,
+            "left_image_url": f"data:image/png;base64,{left_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan3d/v2/multi-view/turbo",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["front_image_url", "octree_resolution", "back_image_url", "guidance_scale", "num_inference_steps"]
+
+class Hyper3dRodin(FALNode):
+    """
+    Rodin by Hyper3D generates realistic and production ready 3D models from text or images.
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    class ConditionMode(Enum):
+        """
+        For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)
+        """
+        FUSE = "fuse"
+        CONCAT = "concat"
+
+    class Tier(Enum):
+        """
+        Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.
+        """
+        REGULAR = "Regular"
+        SKETCH = "Sketch"
+
+    class Quality(Enum):
+        """
+        Generation quality. Possible values: high, medium, low, extra-low. Default is medium.
+        """
+        HIGH = "high"
+        MEDIUM = "medium"
+        LOW = "low"
+        EXTRA_LOW = "extra-low"
+
+    class GeometryFileFormat(Enum):
+        """
+        Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
+        """
+        GLB = "glb"
+        USDZ = "usdz"
+        FBX = "fbx"
+        OBJ = "obj"
+        STL = "stl"
+
+    class Addons(Enum):
+        """
+        Generation add-on features. Default is []. Possible values are HighPack. The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost triple the billable units.
+        """
+        HIGHPACK = "HighPack"
+
+    class Material(Enum):
+        """
+        Material type. Possible values: PBR, Shaded. Default is PBR.
+        """
+        PBR = "PBR"
+        SHADED = "Shaded"
+
+
+    prompt: str = Field(
+        default="", description="A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode."
+    )
+    condition_mode: ConditionMode = Field(
+        default=ConditionMode.CONCAT, description="For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)"
+    )
+    bbox_condition: list[int] = Field(
+        default=[], description="An array that specifies the dimensions and scaling factor of the bounding box. Typically, this array contains 3 elements, Length(X-axis), Width(Y-axis) and Height(Z-axis)."
+    )
+    tier: Tier = Field(
+        default=Tier.REGULAR, description="Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular."
+    )
+    quality: Quality = Field(
+        default=Quality.MEDIUM, description="Generation quality. Possible values: high, medium, low, extra-low. Default is medium."
+    )
+    TAPose: bool = Field(
+        default=False, description="When generating the human-like model, this parameter control the generation result to T/A Pose."
+    )
+    input_image_urls: list[str] = Field(
+        default=[], description="URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode."
+    )
+    geometry_file_format: GeometryFileFormat = Field(
+        default=GeometryFileFormat.GLB, description="Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb."
+    )
+    use_hyper: bool = Field(
+        default=False, description="Whether to export the model using hyper mode. Default is false."
+    )
+    addons: Addons | None = Field(
+        default=None, description="Generation add-on features. Default is []. Possible values are HighPack. The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost triple the billable units."
+    )
+    seed: int = Field(
+        default=-1, description="Seed value for randomization, ranging from 0 to 65535. Optional."
+    )
+    material: Material = Field(
+        default=Material.PBR, description="Material type. Possible values: PBR, Shaded. Default is PBR."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        arguments = {
+            "prompt": self.prompt,
+            "condition_mode": self.condition_mode.value,
+            "bbox_condition": self.bbox_condition,
+            "tier": self.tier.value,
+            "quality": self.quality.value,
+            "TAPose": self.TAPose,
+            "input_image_urls": self.input_image_urls,
+            "geometry_file_format": self.geometry_file_format.value,
+            "use_hyper": self.use_hyper,
+            "addons": self.addons.value if self.addons else None,
+            "seed": self.seed,
+            "material": self.material.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hyper3d/rodin",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "condition_mode", "bbox_condition", "tier", "quality"]
+
+class Triposr(FALNode):
+    """
+    State of the art Image to 3D Object generation
+    3d, generation, image-to-3d, modeling
+
+    Use cases:
+    - 3D model generation from photos
+    - Product 3D visualization
+    - AR/VR content creation
+    - Game asset generation
+    - Architectural visualization
+    """
+
+    class OutputFormat(Enum):
+        """
+        Output format for the 3D model.
+        """
+        GLB = "glb"
+        OBJ = "obj"
+
+
+    mc_resolution: int = Field(
+        default=256, description="Resolution of the marching cubes. Above 512 is not recommended."
+    )
+    do_remove_background: bool = Field(
+        default=True, description="Whether to remove the background from the input image."
+    )
+    foreground_ratio: float = Field(
+        default=0.9, description="Ratio of the foreground image to the original image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.GLB, description="Output format for the 3D model."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Path for the image file to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "mc_resolution": self.mc_resolution,
+            "do_remove_background": self.do_remove_background,
+            "foreground_ratio": self.foreground_ratio,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/triposr",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["mc_resolution", "do_remove_background", "foreground_ratio", "output_format", "image_url"]

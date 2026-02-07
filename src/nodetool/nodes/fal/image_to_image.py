@@ -1061,87 +1061,87 @@ class RecraftV3ImageToImage(FALNode):
         REALISTIC_IMAGE = "realistic_image"
         DIGITAL_ILLUSTRATION = "digital_illustration"
         VECTOR_ILLUSTRATION = "vector_illustration"
-        REALISTIC_IMAGE__B_AND_W = "realistic_image/b_and_w"
-        REALISTIC_IMAGE__HARD_FLASH = "realistic_image/hard_flash"
-        REALISTIC_IMAGE__HDR = "realistic_image/hdr"
-        REALISTIC_IMAGE__NATURAL_LIGHT = "realistic_image/natural_light"
-        REALISTIC_IMAGE__STUDIO_PORTRAIT = "realistic_image/studio_portrait"
-        REALISTIC_IMAGE__ENTERPRISE = "realistic_image/enterprise"
-        REALISTIC_IMAGE__MOTION_BLUR = "realistic_image/motion_blur"
-        REALISTIC_IMAGE__EVENING_LIGHT = "realistic_image/evening_light"
-        REALISTIC_IMAGE__FADED_NOSTALGIA = "realistic_image/faded_nostalgia"
-        REALISTIC_IMAGE__FOREST_LIFE = "realistic_image/forest_life"
-        REALISTIC_IMAGE__MYSTIC_NATURALISM = "realistic_image/mystic_naturalism"
-        REALISTIC_IMAGE__NATURAL_TONES = "realistic_image/natural_tones"
-        REALISTIC_IMAGE__ORGANIC_CALM = "realistic_image/organic_calm"
-        REALISTIC_IMAGE__REAL_LIFE_GLOW = "realistic_image/real_life_glow"
-        REALISTIC_IMAGE__RETRO_REALISM = "realistic_image/retro_realism"
-        REALISTIC_IMAGE__RETRO_SNAPSHOT = "realistic_image/retro_snapshot"
-        REALISTIC_IMAGE__URBAN_DRAMA = "realistic_image/urban_drama"
-        REALISTIC_IMAGE__VILLAGE_REALISM = "realistic_image/village_realism"
-        REALISTIC_IMAGE__WARM_FOLK = "realistic_image/warm_folk"
-        DIGITAL_ILLUSTRATION__PIXEL_ART = "digital_illustration/pixel_art"
-        DIGITAL_ILLUSTRATION__HAND_DRAWN = "digital_illustration/hand_drawn"
-        DIGITAL_ILLUSTRATION__GRAIN = "digital_illustration/grain"
-        DIGITAL_ILLUSTRATION__INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
-        DIGITAL_ILLUSTRATION__2D_ART_POSTER = "digital_illustration/2d_art_poster"
-        DIGITAL_ILLUSTRATION__HANDMADE_3D = "digital_illustration/handmade_3d"
-        DIGITAL_ILLUSTRATION__HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
-        DIGITAL_ILLUSTRATION__ENGRAVING_COLOR = "digital_illustration/engraving_color"
-        DIGITAL_ILLUSTRATION__2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
-        DIGITAL_ILLUSTRATION__ANTIQUARIAN = "digital_illustration/antiquarian"
-        DIGITAL_ILLUSTRATION__BOLD_FANTASY = "digital_illustration/bold_fantasy"
-        DIGITAL_ILLUSTRATION__CHILD_BOOK = "digital_illustration/child_book"
-        DIGITAL_ILLUSTRATION__CHILD_BOOKS = "digital_illustration/child_books"
-        DIGITAL_ILLUSTRATION__COVER = "digital_illustration/cover"
-        DIGITAL_ILLUSTRATION__CROSSHATCH = "digital_illustration/crosshatch"
-        DIGITAL_ILLUSTRATION__DIGITAL_ENGRAVING = "digital_illustration/digital_engraving"
-        DIGITAL_ILLUSTRATION__EXPRESSIONISM = "digital_illustration/expressionism"
-        DIGITAL_ILLUSTRATION__FREEHAND_DETAILS = "digital_illustration/freehand_details"
-        DIGITAL_ILLUSTRATION__GRAIN_20 = "digital_illustration/grain_20"
-        DIGITAL_ILLUSTRATION__GRAPHIC_INTENSITY = "digital_illustration/graphic_intensity"
-        DIGITAL_ILLUSTRATION__HARD_COMICS = "digital_illustration/hard_comics"
-        DIGITAL_ILLUSTRATION__LONG_SHADOW = "digital_illustration/long_shadow"
-        DIGITAL_ILLUSTRATION__MODERN_FOLK = "digital_illustration/modern_folk"
-        DIGITAL_ILLUSTRATION__MULTICOLOR = "digital_illustration/multicolor"
-        DIGITAL_ILLUSTRATION__NEON_CALM = "digital_illustration/neon_calm"
-        DIGITAL_ILLUSTRATION__NOIR = "digital_illustration/noir"
-        DIGITAL_ILLUSTRATION__NOSTALGIC_PASTEL = "digital_illustration/nostalgic_pastel"
-        DIGITAL_ILLUSTRATION__OUTLINE_DETAILS = "digital_illustration/outline_details"
-        DIGITAL_ILLUSTRATION__PASTEL_GRADIENT = "digital_illustration/pastel_gradient"
-        DIGITAL_ILLUSTRATION__PASTEL_SKETCH = "digital_illustration/pastel_sketch"
-        DIGITAL_ILLUSTRATION__POP_ART = "digital_illustration/pop_art"
-        DIGITAL_ILLUSTRATION__POP_RENAISSANCE = "digital_illustration/pop_renaissance"
-        DIGITAL_ILLUSTRATION__STREET_ART = "digital_illustration/street_art"
-        DIGITAL_ILLUSTRATION__TABLET_SKETCH = "digital_illustration/tablet_sketch"
-        DIGITAL_ILLUSTRATION__URBAN_GLOW = "digital_illustration/urban_glow"
-        DIGITAL_ILLUSTRATION__URBAN_SKETCHING = "digital_illustration/urban_sketching"
-        DIGITAL_ILLUSTRATION__VANILLA_DREAMS = "digital_illustration/vanilla_dreams"
-        DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK = "digital_illustration/young_adult_book"
-        DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK_2 = "digital_illustration/young_adult_book_2"
-        VECTOR_ILLUSTRATION__BOLD_STROKE = "vector_illustration/bold_stroke"
-        VECTOR_ILLUSTRATION__CHEMISTRY = "vector_illustration/chemistry"
-        VECTOR_ILLUSTRATION__COLORED_STENCIL = "vector_illustration/colored_stencil"
-        VECTOR_ILLUSTRATION__CONTOUR_POP_ART = "vector_illustration/contour_pop_art"
-        VECTOR_ILLUSTRATION__COSMICS = "vector_illustration/cosmics"
-        VECTOR_ILLUSTRATION__CUTOUT = "vector_illustration/cutout"
-        VECTOR_ILLUSTRATION__DEPRESSIVE = "vector_illustration/depressive"
-        VECTOR_ILLUSTRATION__EDITORIAL = "vector_illustration/editorial"
-        VECTOR_ILLUSTRATION__EMOTIONAL_FLAT = "vector_illustration/emotional_flat"
-        VECTOR_ILLUSTRATION__INFOGRAPHICAL = "vector_illustration/infographical"
-        VECTOR_ILLUSTRATION__MARKER_OUTLINE = "vector_illustration/marker_outline"
-        VECTOR_ILLUSTRATION__MOSAIC = "vector_illustration/mosaic"
-        VECTOR_ILLUSTRATION__NAIVECTOR = "vector_illustration/naivector"
-        VECTOR_ILLUSTRATION__ROUNDISH_FLAT = "vector_illustration/roundish_flat"
-        VECTOR_ILLUSTRATION__SEGMENTED_COLORS = "vector_illustration/segmented_colors"
-        VECTOR_ILLUSTRATION__SHARP_CONTRAST = "vector_illustration/sharp_contrast"
-        VECTOR_ILLUSTRATION__THIN = "vector_illustration/thin"
-        VECTOR_ILLUSTRATION__VECTOR_PHOTO = "vector_illustration/vector_photo"
-        VECTOR_ILLUSTRATION__VIVID_SHAPES = "vector_illustration/vivid_shapes"
-        VECTOR_ILLUSTRATION__ENGRAVING = "vector_illustration/engraving"
-        VECTOR_ILLUSTRATION__LINE_ART = "vector_illustration/line_art"
-        VECTOR_ILLUSTRATION__LINE_CIRCUIT = "vector_illustration/line_circuit"
-        VECTOR_ILLUSTRATION__LINOCUT = "vector_illustration/linocut"
+        REALISTIC_IMAGE_B_AND_W = "realistic_image/b_and_w"
+        REALISTIC_IMAGE_HARD_FLASH = "realistic_image/hard_flash"
+        REALISTIC_IMAGE_HDR = "realistic_image/hdr"
+        REALISTIC_IMAGE_NATURAL_LIGHT = "realistic_image/natural_light"
+        REALISTIC_IMAGE_STUDIO_PORTRAIT = "realistic_image/studio_portrait"
+        REALISTIC_IMAGE_ENTERPRISE = "realistic_image/enterprise"
+        REALISTIC_IMAGE_MOTION_BLUR = "realistic_image/motion_blur"
+        REALISTIC_IMAGE_EVENING_LIGHT = "realistic_image/evening_light"
+        REALISTIC_IMAGE_FADED_NOSTALGIA = "realistic_image/faded_nostalgia"
+        REALISTIC_IMAGE_FOREST_LIFE = "realistic_image/forest_life"
+        REALISTIC_IMAGE_MYSTIC_NATURALISM = "realistic_image/mystic_naturalism"
+        REALISTIC_IMAGE_NATURAL_TONES = "realistic_image/natural_tones"
+        REALISTIC_IMAGE_ORGANIC_CALM = "realistic_image/organic_calm"
+        REALISTIC_IMAGE_REAL_LIFE_GLOW = "realistic_image/real_life_glow"
+        REALISTIC_IMAGE_RETRO_REALISM = "realistic_image/retro_realism"
+        REALISTIC_IMAGE_RETRO_SNAPSHOT = "realistic_image/retro_snapshot"
+        REALISTIC_IMAGE_URBAN_DRAMA = "realistic_image/urban_drama"
+        REALISTIC_IMAGE_VILLAGE_REALISM = "realistic_image/village_realism"
+        REALISTIC_IMAGE_WARM_FOLK = "realistic_image/warm_folk"
+        DIGITAL_ILLUSTRATION_PIXEL_ART = "digital_illustration/pixel_art"
+        DIGITAL_ILLUSTRATION_HAND_DRAWN = "digital_illustration/hand_drawn"
+        DIGITAL_ILLUSTRATION_GRAIN = "digital_illustration/grain"
+        DIGITAL_ILLUSTRATION_INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
+        DIGITAL_ILLUSTRATION_2D_ART_POSTER = "digital_illustration/2d_art_poster"
+        DIGITAL_ILLUSTRATION_HANDMADE_3D = "digital_illustration/handmade_3d"
+        DIGITAL_ILLUSTRATION_HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
+        DIGITAL_ILLUSTRATION_ENGRAVING_COLOR = "digital_illustration/engraving_color"
+        DIGITAL_ILLUSTRATION_2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
+        DIGITAL_ILLUSTRATION_ANTIQUARIAN = "digital_illustration/antiquarian"
+        DIGITAL_ILLUSTRATION_BOLD_FANTASY = "digital_illustration/bold_fantasy"
+        DIGITAL_ILLUSTRATION_CHILD_BOOK = "digital_illustration/child_book"
+        DIGITAL_ILLUSTRATION_CHILD_BOOKS = "digital_illustration/child_books"
+        DIGITAL_ILLUSTRATION_COVER = "digital_illustration/cover"
+        DIGITAL_ILLUSTRATION_CROSSHATCH = "digital_illustration/crosshatch"
+        DIGITAL_ILLUSTRATION_DIGITAL_ENGRAVING = "digital_illustration/digital_engraving"
+        DIGITAL_ILLUSTRATION_EXPRESSIONISM = "digital_illustration/expressionism"
+        DIGITAL_ILLUSTRATION_FREEHAND_DETAILS = "digital_illustration/freehand_details"
+        DIGITAL_ILLUSTRATION_GRAIN_20 = "digital_illustration/grain_20"
+        DIGITAL_ILLUSTRATION_GRAPHIC_INTENSITY = "digital_illustration/graphic_intensity"
+        DIGITAL_ILLUSTRATION_HARD_COMICS = "digital_illustration/hard_comics"
+        DIGITAL_ILLUSTRATION_LONG_SHADOW = "digital_illustration/long_shadow"
+        DIGITAL_ILLUSTRATION_MODERN_FOLK = "digital_illustration/modern_folk"
+        DIGITAL_ILLUSTRATION_MULTICOLOR = "digital_illustration/multicolor"
+        DIGITAL_ILLUSTRATION_NEON_CALM = "digital_illustration/neon_calm"
+        DIGITAL_ILLUSTRATION_NOIR = "digital_illustration/noir"
+        DIGITAL_ILLUSTRATION_NOSTALGIC_PASTEL = "digital_illustration/nostalgic_pastel"
+        DIGITAL_ILLUSTRATION_OUTLINE_DETAILS = "digital_illustration/outline_details"
+        DIGITAL_ILLUSTRATION_PASTEL_GRADIENT = "digital_illustration/pastel_gradient"
+        DIGITAL_ILLUSTRATION_PASTEL_SKETCH = "digital_illustration/pastel_sketch"
+        DIGITAL_ILLUSTRATION_POP_ART = "digital_illustration/pop_art"
+        DIGITAL_ILLUSTRATION_POP_RENAISSANCE = "digital_illustration/pop_renaissance"
+        DIGITAL_ILLUSTRATION_STREET_ART = "digital_illustration/street_art"
+        DIGITAL_ILLUSTRATION_TABLET_SKETCH = "digital_illustration/tablet_sketch"
+        DIGITAL_ILLUSTRATION_URBAN_GLOW = "digital_illustration/urban_glow"
+        DIGITAL_ILLUSTRATION_URBAN_SKETCHING = "digital_illustration/urban_sketching"
+        DIGITAL_ILLUSTRATION_VANILLA_DREAMS = "digital_illustration/vanilla_dreams"
+        DIGITAL_ILLUSTRATION_YOUNG_ADULT_BOOK = "digital_illustration/young_adult_book"
+        DIGITAL_ILLUSTRATION_YOUNG_ADULT_BOOK_2 = "digital_illustration/young_adult_book_2"
+        VECTOR_ILLUSTRATION_BOLD_STROKE = "vector_illustration/bold_stroke"
+        VECTOR_ILLUSTRATION_CHEMISTRY = "vector_illustration/chemistry"
+        VECTOR_ILLUSTRATION_COLORED_STENCIL = "vector_illustration/colored_stencil"
+        VECTOR_ILLUSTRATION_CONTOUR_POP_ART = "vector_illustration/contour_pop_art"
+        VECTOR_ILLUSTRATION_COSMICS = "vector_illustration/cosmics"
+        VECTOR_ILLUSTRATION_CUTOUT = "vector_illustration/cutout"
+        VECTOR_ILLUSTRATION_DEPRESSIVE = "vector_illustration/depressive"
+        VECTOR_ILLUSTRATION_EDITORIAL = "vector_illustration/editorial"
+        VECTOR_ILLUSTRATION_EMOTIONAL_FLAT = "vector_illustration/emotional_flat"
+        VECTOR_ILLUSTRATION_INFOGRAPHICAL = "vector_illustration/infographical"
+        VECTOR_ILLUSTRATION_MARKER_OUTLINE = "vector_illustration/marker_outline"
+        VECTOR_ILLUSTRATION_MOSAIC = "vector_illustration/mosaic"
+        VECTOR_ILLUSTRATION_NAIVECTOR = "vector_illustration/naivector"
+        VECTOR_ILLUSTRATION_ROUNDISH_FLAT = "vector_illustration/roundish_flat"
+        VECTOR_ILLUSTRATION_SEGMENTED_COLORS = "vector_illustration/segmented_colors"
+        VECTOR_ILLUSTRATION_SHARP_CONTRAST = "vector_illustration/sharp_contrast"
+        VECTOR_ILLUSTRATION_THIN = "vector_illustration/thin"
+        VECTOR_ILLUSTRATION_VECTOR_PHOTO = "vector_illustration/vector_photo"
+        VECTOR_ILLUSTRATION_VIVID_SHAPES = "vector_illustration/vivid_shapes"
+        VECTOR_ILLUSTRATION_ENGRAVING = "vector_illustration/engraving"
+        VECTOR_ILLUSTRATION_LINE_ART = "vector_illustration/line_art"
+        VECTOR_ILLUSTRATION_LINE_CIRCUIT = "vector_illustration/line_circuit"
+        VECTOR_ILLUSTRATION_LINOCUT = "vector_illustration/linocut"
 
 
     prompt: str = Field(
@@ -9543,7 +9543,7 @@ class FluxVisionUpscaler(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-class Emu3_5ImageEditImage(FALNode):
+class Emu35ImageEditImage(FALNode):
     """
     Emu 3.5 Image
     editing, transformation, image-to-image, img2img
@@ -12270,7 +12270,7 @@ class BytedanceSeedreamV4Edit(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-class WanV2_2A14BImageToImage(FALNode):
+class WanV22A14BImageToImage(FALNode):
     """
     Wan
     editing, transformation, image-to-image, img2img
@@ -12679,7 +12679,7 @@ class QwenImageImageToImage(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-class BriaReimagine3_2(FALNode):
+class BriaReimagine32(FALNode):
     """
     Reimagine
     editing, transformation, image-to-image, img2img
@@ -15141,6 +15141,14507 @@ class PostProcessingColorTint(FALNode):
         res = await self.submit_request(
             context=context,
             application="fal-ai/post-processing/color-tint",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class PostProcessingColorCorrection(FALNode):
+    """
+    Adjust color temperature, brightness, contrast, saturation, and gamma values for color correction.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    gamma: float = Field(
+        default=1, description="Gamma adjustment"
+    )
+    saturation: float = Field(
+        default=0, description="Saturation adjustment"
+    )
+    temperature: float = Field(
+        default=0, description="Color temperature adjustment"
+    )
+    brightness: float = Field(
+        default=0, description="Brightness adjustment"
+    )
+    contrast: float = Field(
+        default=0, description="Contrast adjustment"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "gamma": self.gamma,
+            "saturation": self.saturation,
+            "temperature": self.temperature,
+            "brightness": self.brightness,
+            "contrast": self.contrast,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/post-processing/color-correction",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class PostProcessingChromaticAberration(FALNode):
+    """
+    Create chromatic aberration by shifting red, green, and blue channels horizontally or vertically with customizable shift amounts.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class GreenDirection(Enum):
+        """
+        Green channel shift direction
+        """
+        HORIZONTAL = "horizontal"
+        VERTICAL = "vertical"
+
+    class BlueDirection(Enum):
+        """
+        Blue channel shift direction
+        """
+        HORIZONTAL = "horizontal"
+        VERTICAL = "vertical"
+
+    class RedDirection(Enum):
+        """
+        Red channel shift direction
+        """
+        HORIZONTAL = "horizontal"
+        VERTICAL = "vertical"
+
+
+    blue_shift: int = Field(
+        default=0, description="Blue channel shift amount"
+    )
+    red_shift: int = Field(
+        default=0, description="Red channel shift amount"
+    )
+    green_direction: GreenDirection = Field(
+        default=GreenDirection.HORIZONTAL, description="Green channel shift direction"
+    )
+    blue_direction: BlueDirection = Field(
+        default=BlueDirection.HORIZONTAL, description="Blue channel shift direction"
+    )
+    red_direction: RedDirection = Field(
+        default=RedDirection.HORIZONTAL, description="Red channel shift direction"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to process"
+    )
+    green_shift: int = Field(
+        default=0, description="Green channel shift amount"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "blue_shift": self.blue_shift,
+            "red_shift": self.red_shift,
+            "green_direction": self.green_direction.value,
+            "blue_direction": self.blue_direction.value,
+            "red_direction": self.red_direction.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "green_shift": self.green_shift,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/post-processing/chromatic-aberration",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class PostProcessingBlur(FALNode):
+    """
+    Apply Gaussian or Kuwahara blur effects with adjustable radius and sigma parameters
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class BlurType(Enum):
+        """
+        Type of blur to apply
+        """
+        GAUSSIAN = "gaussian"
+        KUWAHARA = "kuwahara"
+
+
+    blur_sigma: float = Field(
+        default=1, description="Sigma for Gaussian blur"
+    )
+    blur_radius: int = Field(
+        default=3, description="Blur radius"
+    )
+    blur_type: BlurType = Field(
+        default=BlurType.GAUSSIAN, description="Type of blur to apply"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "blur_sigma": self.blur_sigma,
+            "blur_radius": self.blur_radius,
+            "blur_type": self.blur_type.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/post-processing/blur",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingYoutubeThumbnails(FALNode):
+    """
+    Generate YouTube thumbnails with custom text
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="Generate youtube thumbnails", description="The text to include in the YouTube thumbnail."
+    )
+    lora_scale: float = Field(
+        default=0.5, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to convert to YouTube thumbnail style."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker for the generated image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "lora_scale": self.lora_scale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/youtube-thumbnails",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class TopazUpscaleImage(FALNode):
+    """
+    Use the powerful and accurate topaz image enhancer to enhance your images.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        Output format of the upscaled image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class Model(Enum):
+        """
+        Model to use for image enhancement.
+        """
+        LOW_RESOLUTION_V2 = "Low Resolution V2"
+        STANDARD_V2 = "Standard V2"
+        CGI = "CGI"
+        HIGH_FIDELITY_V2 = "High Fidelity V2"
+        TEXT_REFINE = "Text Refine"
+        RECOVERY = "Recovery"
+        REDEFINE = "Redefine"
+        RECOVERY_V2 = "Recovery V2"
+
+    class SubjectDetection(Enum):
+        """
+        Subject detection mode for the image enhancement.
+        """
+        ALL = "All"
+        FOREGROUND = "Foreground"
+        BACKGROUND = "Background"
+
+
+    face_enhancement_creativity: float = Field(
+        default=0, description="Creativity level for face enhancement. 0.0 means no creativity, 1.0 means maximum creativity. Ignored if face ehnancement is disabled."
+    )
+    face_enhancement_strength: float = Field(
+        default=0.8, description="Strength of the face enhancement. 0.0 means no enhancement, 1.0 means maximum enhancement. Ignored if face ehnancement is disabled."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="Output format of the upscaled image."
+    )
+    face_enhancement: bool = Field(
+        default=True, description="Whether to apply face enhancement to the image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Url of the image to be upscaled"
+    )
+    model: Model = Field(
+        default=Model.STANDARD_V2, description="Model to use for image enhancement."
+    )
+    subject_detection: SubjectDetection = Field(
+        default=SubjectDetection.ALL, description="Subject detection mode for the image enhancement."
+    )
+    crop_to_fill: bool = Field(
+        default=False
+    )
+    upscale_factor: float = Field(
+        default=2, description="Factor to upscale the video by (e.g. 2.0 doubles width and height)"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "face_enhancement_creativity": self.face_enhancement_creativity,
+            "face_enhancement_strength": self.face_enhancement_strength,
+            "output_format": self.output_format.value,
+            "face_enhancement": self.face_enhancement,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "model": self.model.value,
+            "subject_detection": self.subject_detection.value,
+            "crop_to_fill": self.crop_to_fill,
+            "upscale_factor": self.upscale_factor,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/topaz/upscale/image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingBroccoliHaircut(FALNode):
+    """
+    Transform your character's hair into broccoli style while keeping the original characters likeness
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    lora_scale: float = Field(
+        default=1, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to apply broccoli haircut style."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker for the generated image."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "lora_scale": self.lora_scale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/broccoli-haircut",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingWojakStyle(FALNode):
+    """
+    Transform your photos into wojak style while keeping the original characters likeness
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    lora_scale: float = Field(
+        default=1, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to convert to wojak style."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker for the generated image."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "lora_scale": self.lora_scale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/wojak-style",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingPlushieStyle(FALNode):
+    """
+    Transform your photos into cool plushies while keeping the original characters likeness
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    lora_scale: float = Field(
+        default=1, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to convert to plushie style."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker for the generated image."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "lora_scale": self.lora_scale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/plushie-style",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxKontextLora(FALNode):
+    """
+    Fast endpoint for the FLUX.1 Kontext [dev] model with LoRA support, enabling rapid and high-quality image editing using pre-trained LoRA adaptations for specific styles, brand identities, and product-specific outputs.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class ResolutionMode(Enum):
+        """
+        Determines how the output resolution is set for image editing.
+        - `auto`: The model selects an optimal resolution from a predefined set that best matches the input image's aspect ratio. This is the recommended setting for most use cases as it's what the model was trained on.
+        - `match_input`: The model will attempt to use the same resolution as the input image. The resolution will be adjusted to be compatible with the model's requirements (e.g. dimensions must be multiples of 16 and within supported limits).
+        Apart from these, a few aspect ratios are also supported.
+        """
+        AUTO = "auto"
+        MATCH_INPUT = "match_input"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_21_9 = "21:9"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+        RATIO_4_5 = "4:5"
+        RATIO_5_4 = "5:4"
+        RATIO_3_4 = "3:4"
+        RATIO_4_3 = "4:3"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to edit the image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    acceleration: Acceleration = Field(
+        default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
+    resolution_mode: ResolutionMode = Field(
+        default=ResolutionMode.MATCH_INPUT, description="Determines how the output resolution is set for image editing. - `auto`: The model selects an optimal resolution from a predefined set that best matches the input image's aspect ratio. This is the recommended setting for most use cases as it's what the model was trained on. - `match_input`: The model will attempt to use the same resolution as the input image. The resolution will be adjusted to be compatible with the model's requirements (e.g. dimensions must be multiples of 16 and within supported limits). Apart from these, a few aspect ratios are also supported."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to edit. Max width: 14142px, Max height: 14142px, Timeout: 20s"
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="The number of inference steps to perform."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "acceleration": self.acceleration.value,
+            "resolution_mode": self.resolution_mode.value,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "loras": self.loras,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-kontext-lora",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FashnTryonV16(FALNode):
+    """
+    FASHN v1.6 delivers precise virtual try-on capabilities, accurately rendering garment details like text and patterns at 864x1296 resolution from both on-model and flat-lay photo references.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ModerationLevel(Enum):
+        """
+        Content moderation level for garment images. 'none' disables moderation, 'permissive' blocks only explicit content, 'conservative' also blocks underwear and swimwear.
+        """
+        NONE = "none"
+        PERMISSIVE = "permissive"
+        CONSERVATIVE = "conservative"
+
+    class GarmentPhotoType(Enum):
+        """
+        Specifies the type of garment photo to optimize internal parameters for better performance. 'model' is for photos of garments on a model, 'flat-lay' is for flat-lay or ghost mannequin images, and 'auto' attempts to automatically detect the photo type.
+        """
+        AUTO = "auto"
+        MODEL = "model"
+        FLAT_LAY = "flat-lay"
+
+    class Category(Enum):
+        """
+        Category of the garment to try-on. 'auto' will attempt to automatically detect the category of the garment.
+        """
+        TOPS = "tops"
+        BOTTOMS = "bottoms"
+        ONE_PIECES = "one-pieces"
+        AUTO = "auto"
+
+    class Mode(Enum):
+        """
+        Specifies the mode of operation. 'performance' mode is faster but may sacrifice quality, 'balanced' mode is a balance between speed and quality, and 'quality' mode is slower but produces higher quality results.
+        """
+        PERFORMANCE = "performance"
+        BALANCED = "balanced"
+        QUALITY = "quality"
+
+    class OutputFormat(Enum):
+        """
+        Output format of the generated images. 'png' is highest quality, while 'jpeg' is faster
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+
+
+    model_image: str = Field(
+        default="", description="URL or base64 of the model image"
+    )
+    moderation_level: ModerationLevel = Field(
+        default=ModerationLevel.PERMISSIVE, description="Content moderation level for garment images. 'none' disables moderation, 'permissive' blocks only explicit content, 'conservative' also blocks underwear and swimwear."
+    )
+    garment_photo_type: GarmentPhotoType = Field(
+        default=GarmentPhotoType.AUTO, description="Specifies the type of garment photo to optimize internal parameters for better performance. 'model' is for photos of garments on a model, 'flat-lay' is for flat-lay or ghost mannequin images, and 'auto' attempts to automatically detect the photo type."
+    )
+    garment_image: str = Field(
+        default="", description="URL or base64 of the garment image"
+    )
+    category: Category = Field(
+        default=Category.AUTO, description="Category of the garment to try-on. 'auto' will attempt to automatically detect the category of the garment."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    segmentation_free: bool = Field(
+        default=True, description="Disables human parsing on the model image."
+    )
+    num_samples: int = Field(
+        default=1, description="Number of images to generate in a single run. Image generation has a random element in it, so trying multiple images at once increases the chances of getting a good result."
+    )
+    mode: Mode = Field(
+        default=Mode.BALANCED, description="Specifies the mode of operation. 'performance' mode is faster but may sacrifice quality, 'balanced' mode is a balance between speed and quality, and 'quality' mode is slower but produces higher quality results."
+    )
+    seed: int = Field(
+        default=-1, description="Sets random operations to a fixed state. Use the same seed to reproduce results with the same inputs, or different seed to force different results."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="Output format of the generated images. 'png' is highest quality, while 'jpeg' is faster"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "model_image": self.model_image,
+            "moderation_level": self.moderation_level.value,
+            "garment_photo_type": self.garment_photo_type.value,
+            "garment_image": self.garment_image,
+            "category": self.category.value,
+            "sync_mode": self.sync_mode,
+            "segmentation_free": self.segmentation_free,
+            "num_samples": self.num_samples,
+            "mode": self.mode.value,
+            "seed": self.seed,
+            "output_format": self.output_format.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fashn/tryon/v1.6",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ChainOfZoom(FALNode):
+    """
+    Extreme Super-Resolution via Scale Autoregression and Preference Alignment
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    center_y: float = Field(
+        default=0.5, description="Y coordinate of zoom center (0-1)"
+    )
+    scale: float = Field(
+        default=5, description="Zoom scale in powers of 2"
+    )
+    center_x: float = Field(
+        default=0.5, description="X coordinate of zoom center (0-1)"
+    )
+    user_prompt: str = Field(
+        default="", description="Additional prompt text to guide the zoom enhancement"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image to zoom into"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "center_y": self.center_y,
+            "scale": self.scale,
+            "center_x": self.center_x,
+            "user_prompt": self.user_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/chain-of-zoom",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Pasd(FALNode):
+    """
+    Pixel-Aware Diffusion Model for Realistic Image Super-Resolution and Personalized Stylization
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    conditioning_scale: float = Field(
+        default=0.8, description="ControlNet conditioning scale (0.1-1.0)"
+    )
+    prompt: str = Field(
+        default="", description="Additional prompt to guide super-resolution"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image to super-resolve"
+    )
+    steps: int = Field(
+        default=25, description="Number of inference steps (10-50)"
+    )
+    scale: int = Field(
+        default=2, description="Upscaling factor (1-4x)"
+    )
+    guidance_scale: float = Field(
+        default=7, description="Guidance scale for diffusion (1.0-20.0)"
+    )
+    negative_prompt: str = Field(
+        default="blurry, dirty, messy, frames, deformed, dotted, noise, raster lines, unclear, lowres, over-smoothed, painting, ai generated", description="Negative prompt to avoid unwanted artifacts"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "conditioning_scale": self.conditioning_scale,
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "steps": self.steps,
+            "scale": self.scale,
+            "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pasd",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ObjectRemovalBbox(FALNode):
+    """
+    Removes box-selected objects and their visual effects, seamlessly reconstructing the scene with contextually appropriate content.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Model(Enum):
+        LOW_QUALITY = "low_quality"
+        MEDIUM_QUALITY = "medium_quality"
+        HIGH_QUALITY = "high_quality"
+        BEST_QUALITY = "best_quality"
+
+
+    model: Model = Field(
+        default=Model.BEST_QUALITY
+    )
+    mask_expansion: int = Field(
+        default=15, description="Amount of pixels to expand the mask by. Range: 0-50"
+    )
+    box_prompts: list[str] = Field(
+        default=[], description="List of bounding box coordinates to erase (only one box prompt is supported)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to remove objects from."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "model": self.model.value,
+            "mask_expansion": self.mask_expansion,
+            "box_prompts": self.box_prompts,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/object-removal/bbox",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ObjectRemovalMask(FALNode):
+    """
+    Removes mask-selected objects and their visual effects, seamlessly reconstructing the scene with contextually appropriate content.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Model(Enum):
+        LOW_QUALITY = "low_quality"
+        MEDIUM_QUALITY = "medium_quality"
+        HIGH_QUALITY = "high_quality"
+        BEST_QUALITY = "best_quality"
+
+
+    model: Model = Field(
+        default=Model.BEST_QUALITY
+    )
+    mask_expansion: int = Field(
+        default=15, description="Amount of pixels to expand the mask by. Range: 0-50"
+    )
+    mask_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the mask image. White pixels (255) indicate areas to remove."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to remove objects from."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "model": self.model.value,
+            "mask_expansion": self.mask_expansion,
+            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/object-removal/mask",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ObjectRemoval(FALNode):
+    """
+    Removes objects and their visual effects using natural language, replacing them with contextually appropriate content
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Model(Enum):
+        LOW_QUALITY = "low_quality"
+        MEDIUM_QUALITY = "medium_quality"
+        HIGH_QUALITY = "high_quality"
+        BEST_QUALITY = "best_quality"
+
+
+    prompt: str = Field(
+        default="", description="Text description of the object to remove."
+    )
+    mask_expansion: int = Field(
+        default=15, description="Amount of pixels to expand the mask by. Range: 0-50"
+    )
+    model: Model = Field(
+        default=Model.BEST_QUALITY
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to remove objects from."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "mask_expansion": self.mask_expansion,
+            "model": self.model.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/object-removal",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class RecraftVectorize(FALNode):
+    """
+    Converts a given raster image to SVG format using Recraft model.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be vectorized. Must be in PNG, JPG or WEBP format, less than 5 MB in size, have resolution less than 16 MP and max dimension less than 4096 pixels, min dimension more than 256 pixels."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/recraft/vectorize",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FfmpegApiExtractFrame(FALNode):
+    """
+    ffmpeg endpoint for first, middle and last frame extraction from videos
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class FrameType(Enum):
+        """
+        Type of frame to extract: first, middle, or last frame of the video
+        """
+        FIRST = "first"
+        MIDDLE = "middle"
+        LAST = "last"
+
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video file to use as the video track"
+    )
+    frame_type: FrameType = Field(
+        default=FrameType.FIRST, description="Type of frame to extract: first, middle, or last frame of the video"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "video_url": self.video_url,
+            "frame_type": self.frame_type.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ffmpeg-api/extract-frame",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LumaPhotonFlashModify(FALNode):
+    """
+    Edit images from your prompts using Luma Photon. Photon is the most creative, personalizable, and intelligent visual models for creatives, bringing a step-function change in the cost of high-quality image generation.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the reframed image
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_21_9 = "21:9"
+        RATIO_9_21 = "9:21"
+
+
+    prompt: str = Field(
+        default="", description="Instruction for modifying the image"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default="", description="The aspect ratio of the reframed image"
+    )
+    strength: float = Field(
+        default=0.0, description="The strength of the initial image. Higher strength values are corresponding to more influence of the initial image on the output."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image to reframe"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "strength": self.strength,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-photon/flash/modify",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LumaPhotonModify(FALNode):
+    """
+    Edit images from your prompts using Luma Photon. Photon is the most creative, personalizable, and intelligent visual models for creatives, bringing a step-function change in the cost of high-quality image generation.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the reframed image
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_21_9 = "21:9"
+        RATIO_9_21 = "9:21"
+
+
+    prompt: str = Field(
+        default="", description="Instruction for modifying the image"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default="", description="The aspect ratio of the reframed image"
+    )
+    strength: float = Field(
+        default=0.0, description="The strength of the initial image. Higher strength values are corresponding to more influence of the initial image on the output."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image to reframe"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "strength": self.strength,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-photon/modify",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingReframe(FALNode):
+    """
+    The reframe endpoint intelligently adjusts an image's aspect ratio while preserving the main subject's position, composition, pose, and perspective
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The desired aspect ratio for the reframed image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The desired aspect ratio for the reframed image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the old or damaged photo to restore."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/reframe",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingBabyVersion(FALNode):
+    """
+    Transform any person into their baby version, while preserving the original pose and expression with childlike features.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to transform into a baby version."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/baby-version",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LumaPhotonFlashReframe(FALNode):
+    """
+    This advanced tool intelligently expands your visuals, seamlessly blending new content to enhance creativity and adaptability, offering unmatched speed and quality for creators at a fraction of the cost.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the reframed image
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_21_9 = "21:9"
+        RATIO_9_21 = "9:21"
+
+
+    prompt: str = Field(
+        default="", description="Optional prompt for reframing"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default="", description="The aspect ratio of the reframed image"
+    )
+    y_start: int = Field(
+        default=0, description="Start Y coordinate for reframing"
+    )
+    x_end: int = Field(
+        default=0, description="End X coordinate for reframing"
+    )
+    y_end: int = Field(
+        default=0, description="End Y coordinate for reframing"
+    )
+    grid_position_y: int = Field(
+        default=0, description="Y position of the grid for reframing"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image to reframe"
+    )
+    grid_position_x: int = Field(
+        default=0, description="X position of the grid for reframing"
+    )
+    x_start: int = Field(
+        default=0, description="Start X coordinate for reframing"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "y_start": self.y_start,
+            "x_end": self.x_end,
+            "y_end": self.y_end,
+            "grid_position_y": self.grid_position_y,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "grid_position_x": self.grid_position_x,
+            "x_start": self.x_start,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-photon/flash/reframe",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LumaPhotonReframe(FALNode):
+    """
+    Extend and reframe images with Luma Photon Reframe. This advanced tool intelligently expands your visuals, seamlessly blending new content to enhance creativity and adaptability, offering unmatched personalization and quality for creators at a fraction of the cost.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the reframed image
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_21_9 = "21:9"
+        RATIO_9_21 = "9:21"
+
+
+    prompt: str = Field(
+        default="", description="Optional prompt for reframing"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default="", description="The aspect ratio of the reframed image"
+    )
+    y_start: int = Field(
+        default=0, description="Start Y coordinate for reframing"
+    )
+    x_end: int = Field(
+        default=0, description="End X coordinate for reframing"
+    )
+    y_end: int = Field(
+        default=0, description="End Y coordinate for reframing"
+    )
+    grid_position_y: int = Field(
+        default=0, description="Y position of the grid for reframing"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image to reframe"
+    )
+    grid_position_x: int = Field(
+        default=0, description="X position of the grid for reframing"
+    )
+    x_start: int = Field(
+        default=0, description="Start X coordinate for reframing"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "y_start": self.y_start,
+            "x_end": self.x_end,
+            "y_end": self.y_end,
+            "grid_position_y": self.grid_position_y,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "grid_position_x": self.grid_position_x,
+            "x_start": self.x_start,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-photon/reframe",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Flux1SchnellRedux(FALNode):
+    """
+    FLUX.1 [schnell] Redux is a high-performance endpoint for the FLUX.1 [schnell] model that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities. 
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="landscape_4_3", description="The size of the generated image."
+    )
+    acceleration: Acceleration = Field(
+        default=Acceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to generate an image from."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_inference_steps: int = Field(
+        default=4, description="The number of inference steps to perform."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "acceleration": self.acceleration.value,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-1/schnell/redux",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Flux1DevRedux(FALNode):
+    """
+    FLUX.1 [dev] Redux is a high-performance endpoint for the FLUX.1 [dev] model that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="landscape_4_3", description="The size of the generated image."
+    )
+    acceleration: Acceleration = Field(
+        default=Acceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to generate an image from."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "acceleration": self.acceleration.value,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-1/dev/redux",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Flux1DevImageToImage(FALNode):
+    """
+    FLUX.1 [dev] is a 12 billion parameter flow transformer that generates high-quality images from text. It is suitable for personal and commercial use. 
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    acceleration: Acceleration = Field(
+        default=Acceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to generate an image from."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    strength: float = Field(
+        default=0.95, description="The strength of the initial image. Higher strength values are better for this model."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_inference_steps: int = Field(
+        default=40, description="The number of inference steps to perform."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "acceleration": self.acceleration.value,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "strength": self.strength,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-1/dev/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingTextRemoval(FALNode):
+    """
+    Remove all text and writing from images while preserving the background and natural appearance.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image containing text to be removed."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/text-removal",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingPhotoRestoration(FALNode):
+    """
+    Restore and enhance old or damaged photos by removing imperfections, adding color while preserving the original character and details of the image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the old or damaged photo to restore."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/photo-restoration",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingWeatherEffect(FALNode):
+    """
+    Add realistic weather effects like snowfall, rain, or fog to your photos while maintaining the scene's mood.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="heavy snowfall", description="The weather effect to apply."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/weather-effect",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingTimeOfDay(FALNode):
+    """
+    Transform your photos to any time of day, from golden hour to midnight, with appropriate lighting and atmosphere.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="golden hour", description="The time of day to transform the scene to."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/time-of-day",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingStyleTransfer(FALNode):
+    """
+    Transform your photos into artistic masterpieces inspired by famous styles like Van Gogh's Starry Night or any artistic style you choose.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="Van Gogh's Starry Night", description="The artistic style to apply."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/style-transfer",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingSceneComposition(FALNode):
+    """
+    Place your subject in any scene you imagine, from enchanted forests to urban settings, with professional composition and lighting
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="enchanted forest", description="Describe the scene where you want to place the subject."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/scene-composition",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingProfessionalPhoto(FALNode):
+    """
+    Turn your casual photos into stunning professional studio portraits with perfect lighting and high-end photography style.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/professional-photo",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingObjectRemoval(FALNode):
+    """
+    Remove unwanted objects or people from your photos while seamlessly blending the background.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="background people", description="Specify which objects to remove from the image."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/object-removal",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingHairChange(FALNode):
+    """
+    Experiment with different hairstyles, from bald to any style you can imagine, while maintaining natural lighting and realistic results.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="bald", description="The desired hair style to apply."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/hair-change",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingFaceEnhancement(FALNode):
+    """
+    Enhance facial features with professional retouching while maintaining a natural, realistic look
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/face-enhancement",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingExpressionChange(FALNode):
+    """
+    Change facial expressions in photos to any emotion you desire, from smiles to serious looks.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="sad", description="The desired facial expression to apply."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/expression-change",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingColorCorrection(FALNode):
+    """
+    Perfect your photos with professional color grading, balanced tones, and vibrant yet natural colors
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/color-correction",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingCartoonify(FALNode):
+    """
+    Transform your photos into vibrant cool cartoons with bold outlines and rich colors.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/cartoonify",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingBackgroundChange(FALNode):
+    """
+    Replace your photo's background with any scene you desire, from beach sunsets to urban landscapes, with perfect lighting and shadows
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="beach sunset with palm trees", description="The desired background to apply."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/background-change",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageEditingAgeProgression(FALNode):
+    """
+    See how you or others might look at different ages, from younger to older, while preserving core facial features.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="20 years older", description="The age change to apply."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 6 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-editing/age-progression",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxProKontextMaxMulti(FALNode):
+    """
+    Experimental version of FLUX.1 Kontext [max] with multi image handling capabilities
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    image_urls: list[str] = Field(
+        default=[], description="Image prompt for the omni model."
+    )
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "image_urls": self.image_urls,
+            "enhance_prompt": self.enhance_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-pro/kontext/max/multi",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxProKontextMulti(FALNode):
+    """
+    Experimental version of FLUX.1 Kontext [pro] with multi image handling capabilities
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    image_urls: list[str] = Field(
+        default=[], description="Image prompt for the omni model."
+    )
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "image_urls": self.image_urls,
+            "enhance_prompt": self.enhance_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-pro/kontext/multi",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxProKontextMax(FALNode):
+    """
+    FLUX.1 Kontext [max] is a model with greatly improved prompt adherence and typography generation meet premium consistency for editing without compromise on speed.   
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The aspect ratio of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image prompt for the omni model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "enhance_prompt": self.enhance_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-pro/kontext/max",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxKontextDev(FALNode):
+    """
+    Frontier image editing model.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ResolutionMode(Enum):
+        """
+        Determines how the output resolution is set for image editing.
+        - `auto`: The model selects an optimal resolution from a predefined set that best matches the input image's aspect ratio. This is the recommended setting for most use cases as it's what the model was trained on.
+        - `match_input`: The model will attempt to use the same resolution as the input image. The resolution will be adjusted to be compatible with the model's requirements (e.g. dimensions must be multiples of 16 and within supported limits).
+        Apart from these, a few aspect ratios are also supported.
+        """
+        AUTO = "auto"
+        MATCH_INPUT = "match_input"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_21_9 = "21:9"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+        RATIO_4_5 = "4:5"
+        RATIO_5_4 = "5:4"
+        RATIO_3_4 = "3:4"
+        RATIO_4_3 = "4:3"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        Output format
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to edit the image."
+    )
+    resolution_mode: ResolutionMode = Field(
+        default=ResolutionMode.MATCH_INPUT, description="Determines how the output resolution is set for image editing. - `auto`: The model selects an optimal resolution from a predefined set that best matches the input image's aspect ratio. This is the recommended setting for most use cases as it's what the model was trained on. - `match_input`: The model will attempt to use the same resolution as the input image. The resolution will be adjusted to be compatible with the model's requirements (e.g. dimensions must be multiples of 16 and within supported limits). Apart from these, a few aspect ratios are also supported."
+    )
+    acceleration: Acceleration = Field(
+        default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="Output format"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to edit."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    guidance_scale: float = Field(
+        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "resolution_mode": self.resolution_mode.value,
+            "acceleration": self.acceleration.value,
+            "num_images": self.num_images,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-kontext/dev",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BagelEdit(FALNode):
+    """
+    Bagel is a 7B parameter multimodal model from Bytedance-Seed that can generate both images and text.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to edit the image with."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    seed: int = Field(
+        default=-1, description="The seed to use for the generation."
+    )
+    use_thought: bool = Field(
+        default=False, description="Whether to use thought tokens for generation. If set to true, the model will \"think\" to potentially improve generation quality. Increases generation time and increases the cost by 20%."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to edit."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "use_thought": self.use_thought,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bagel/edit",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class SmoretalkAiRembgEnhance(FALNode):
+    """
+    Rembg-enhance is optimized for 2D vector images, 3D graphics, and photos by leveraging matting technology.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="smoretalk-ai/rembg-enhance",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class RecraftUpscaleCreative(FALNode):
+    """
+    Enhances a given raster image using the 'creative upscale' tool, increasing image resolution, making the image sharper and cleaner.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be upscaled. Must be in PNG format."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "enable_safety_checker": self.enable_safety_checker,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/recraft/upscale/creative",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class RecraftUpscaleCrisp(FALNode):
+    """
+    Enhances a given raster image using 'crisp upscale' tool, boosting resolution with a focus on refining small details and faces.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be upscaled. Must be in PNG format."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "enable_safety_checker": self.enable_safety_checker,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/recraft/upscale/crisp",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class MinimaxImage01SubjectReference(FALNode):
+    """
+    Generate images from text and a reference image using MiniMax Image-01 for consistent character appearance.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated image
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_21_9 = "21:9"
+
+
+    prompt_optimizer: bool = Field(
+        default=False, description="Whether to enable automatic prompt optimization"
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate (1-9)"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1, description="Aspect ratio of the generated image"
+    )
+    prompt: str = Field(
+        default="", description="Text prompt for image generation (max 1500 characters)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the subject reference image to use for consistent character appearance"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt_optimizer": self.prompt_optimizer,
+            "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio.value,
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax/image-01/subject-reference",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class HidreamI1FullImageToImage(FALNode):
+    """
+    HiDream-I1 full is a new open-source image generative foundation model with 17B parameters that achieves state-of-the-art image generation quality within seconds.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image. Setting to None uses the input image's size."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    loras: list[str] = Field(
+        default=[], description="A list of LoRAs to apply to the model. Each LoRA specifies its path, scale, and optional weight name."
+    )
+    strength: float = Field(
+        default=0.75, description="Denoising strength for image-to-image generation."
+    )
+    guidance_scale: float = Field(
+        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "loras": self.loras,
+            "strength": self.strength,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hidream-i1-full/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramV3Reframe(FALNode):
+    """
+    Extend existing images with Ideogram V3's reframe feature. Create expanded versions and adaptations while preserving main image and adding new creative directions through prompt guidance.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class RenderingSpeed(Enum):
+        """
+        The rendering speed to use.
+        """
+        TURBO = "TURBO"
+        BALANCED = "BALANCED"
+        QUALITY = "QUALITY"
+
+
+    num_images: int = Field(
+        default=1, description="Number of images to generate."
+    )
+    image_size: str = Field(
+        default="", description="The resolution for the reframed output image"
+    )
+    style: str = Field(
+        default="", description="The style type to generate with. Cannot be used with style_codes."
+    )
+    style_preset: str = Field(
+        default="", description="Style preset for generation. The chosen style preset will guide the generation."
+    )
+    rendering_speed: RenderingSpeed = Field(
+        default=RenderingSpeed.BALANCED, description="The rendering speed to use."
+    )
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    )
+    color_palette: str = Field(
+        default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to reframe"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+    image_urls: ImageRef = Field(
+        default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        arguments = {
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "style": self.style,
+            "style_preset": self.style_preset,
+            "rendering_speed": self.rendering_speed.value,
+            "style_codes": self.style_codes,
+            "color_palette": self.color_palette,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v3/reframe",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramV3ReplaceBackground(FALNode):
+    """
+    Replace backgrounds existing images with Ideogram V3's replace background feature. Create variations and adaptations while preserving core elements and adding new creative directions through prompt guidance.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class RenderingSpeed(Enum):
+        """
+        The rendering speed to use.
+        """
+        TURBO = "TURBO"
+        BALANCED = "BALANCED"
+        QUALITY = "QUALITY"
+
+
+    prompt: str = Field(
+        default="", description="Cyber punk city with neon lights and skyscrappers"
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate."
+    )
+    style: str = Field(
+        default="", description="The style type to generate with. Cannot be used with style_codes."
+    )
+    style_preset: str = Field(
+        default="", description="Style preset for generation. The chosen style preset will guide the generation."
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Determine if MagicPrompt should be used in generating the request or not."
+    )
+    rendering_speed: RenderingSpeed = Field(
+        default=RenderingSpeed.BALANCED, description="The rendering speed to use."
+    )
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    )
+    color_palette: str = Field(
+        default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL whose background needs to be replaced"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+    image_urls: ImageRef = Field(
+        default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "style": self.style,
+            "style_preset": self.style_preset,
+            "expand_prompt": self.expand_prompt,
+            "rendering_speed": self.rendering_speed.value,
+            "style_codes": self.style_codes,
+            "color_palette": self.color_palette,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v3/replace-background",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramV3Remix(FALNode):
+    """
+    Reimagine existing images with Ideogram V3's remix feature. Create variations and adaptations while preserving core elements and adding new creative directions through prompt guidance.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class RenderingSpeed(Enum):
+        """
+        The rendering speed to use.
+        """
+        TURBO = "TURBO"
+        BALANCED = "BALANCED"
+        QUALITY = "QUALITY"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to remix the image with"
+    )
+    image_size: str = Field(
+        default="square_hd", description="The resolution of the generated image"
+    )
+    style: str = Field(
+        default="", description="The style type to generate with. Cannot be used with style_codes."
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Determine if MagicPrompt should be used in generating the request or not."
+    )
+    rendering_speed: RenderingSpeed = Field(
+        default=RenderingSpeed.BALANCED, description="The rendering speed to use."
+    )
+    image_urls: ImageRef = Field(
+        default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
+    )
+    negative_prompt: str = Field(
+        default="", description="Description of what to exclude from an image. Descriptions in the prompt take precedence to descriptions in the negative prompt."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to remix"
+    )
+    strength: float = Field(
+        default=0.8, description="Strength of the input image in the remix"
+    )
+    color_palette: str = Field(
+        default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
+    )
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "style": self.style,
+            "expand_prompt": self.expand_prompt,
+            "rendering_speed": self.rendering_speed.value,
+            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "negative_prompt": self.negative_prompt,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "color_palette": self.color_palette,
+            "style_codes": self.style_codes,
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v3/remix",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Step1xEdit(FALNode):
+    """
+    Step1X-Edit transforms your photos with simple instructions into stunning, professional-quality edits—rivaling top proprietary tools.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    guidance_scale: float = Field(
+        default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/step1x-edit",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Image2svg(FALNode):
+    """
+    Image2SVG transforms raster images into clean vector graphics, preserving visual quality while enabling scalable, customizable SVG outputs with precise control over detail levels.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Hierarchical(Enum):
+        """
+        Hierarchical mode: stacked or cutout
+        """
+        STACKED = "stacked"
+        CUTOUT = "cutout"
+
+    class Colormode(Enum):
+        """
+        Choose between color or binary (black and white) output
+        """
+        COLOR = "color"
+        BINARY = "binary"
+
+    class Mode(Enum):
+        """
+        Mode: spline (curved) or polygon (straight lines)
+        """
+        SPLINE = "spline"
+        POLYGON = "polygon"
+
+
+    splice_threshold: int = Field(
+        default=45, description="Splice threshold for joining paths"
+    )
+    hierarchical: Hierarchical = Field(
+        default=Hierarchical.STACKED, description="Hierarchical mode: stacked or cutout"
+    )
+    color_precision: int = Field(
+        default=6, description="Color quantization level"
+    )
+    colormode: Colormode = Field(
+        default=Colormode.COLOR, description="Choose between color or binary (black and white) output"
+    )
+    max_iterations: int = Field(
+        default=10, description="Maximum number of iterations for optimization"
+    )
+    length_threshold: float = Field(
+        default=4, description="Length threshold for curves/lines"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to convert to SVG"
+    )
+    mode: Mode = Field(
+        default=Mode.SPLINE, description="Mode: spline (curved) or polygon (straight lines)"
+    )
+    corner_threshold: int = Field(
+        default=60, description="Corner detection threshold in degrees"
+    )
+    path_precision: int = Field(
+        default=3, description="Decimal precision for path coordinates"
+    )
+    filter_speckle: int = Field(
+        default=4, description="Filter out small speckles and noise"
+    )
+    layer_difference: int = Field(
+        default=16, description="Layer difference threshold for hierarchical mode"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "splice_threshold": self.splice_threshold,
+            "hierarchical": self.hierarchical.value,
+            "color_precision": self.color_precision,
+            "colormode": self.colormode.value,
+            "max_iterations": self.max_iterations,
+            "length_threshold": self.length_threshold,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "mode": self.mode.value,
+            "corner_threshold": self.corner_threshold,
+            "path_precision": self.path_precision,
+            "filter_speckle": self.filter_speckle,
+            "layer_difference": self.layer_difference,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image2svg",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Uno(FALNode):
+    """
+    An AI model that transforms input images into new ones based on text prompts, blending reference visuals with your creative directions.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image. You can choose between some presets or custom height and width that **must be multiples of 8**."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    input_image_urls: list[str] = Field(
+        default=[], description="URL of images to use while generating the image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation. If set none, a random seed will be used."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "output_format": self.output_format.value,
+            "input_image_urls": self.input_image_urls,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/uno",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class GptImage1EditImage(FALNode):
+    """
+    OpenAI's latest image generation and editing model: gpt-1-image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ImageSize(Enum):
+        """
+        Aspect ratio for the generated image
+        """
+        AUTO = "auto"
+        VALUE_1024X1024 = "1024x1024"
+        VALUE_1536X1024 = "1536x1024"
+        VALUE_1024X1536 = "1024x1536"
+
+    class InputFidelity(Enum):
+        """
+        Input fidelity for the generated image
+        """
+        LOW = "low"
+        HIGH = "high"
+
+    class Quality(Enum):
+        """
+        Quality for the generated image
+        """
+        AUTO = "auto"
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        Output format for the images
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
+    class Background(Enum):
+        """
+        Background for the generated image
+        """
+        AUTO = "auto"
+        TRANSPARENT = "transparent"
+        OPAQUE = "opaque"
+
+
+    prompt: str = Field(
+        default="", description="The prompt for image generation"
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate"
+    )
+    image_size: ImageSize = Field(
+        default=ImageSize.AUTO, description="Aspect ratio for the generated image"
+    )
+    input_fidelity: InputFidelity = Field(
+        default=InputFidelity.HIGH, description="Input fidelity for the generated image"
+    )
+    quality: Quality = Field(
+        default=Quality.AUTO, description="Quality for the generated image"
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="Output format for the images"
+    )
+    background: Background = Field(
+        default=Background.AUTO, description="Background for the generated image"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    image_urls: list[str] = Field(
+        default=[], description="The URLs of the images to use as a reference for the generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size.value,
+            "input_fidelity": self.input_fidelity.value,
+            "quality": self.quality.value,
+            "output_format": self.output_format.value,
+            "background": self.background.value,
+            "sync_mode": self.sync_mode,
+            "image_urls": self.image_urls,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/gpt-image-1/edit-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class RundiffusionFalJuggernautFluxLoraInpainting(FALNode):
+    """
+    Juggernaut Base Flux LoRA Inpainting by RunDiffusion is a drop-in replacement for Flux [Dev] inpainting that delivers sharper details, richer colors, and enhanced realism to all your LoRAs and LyCORIS with full compatibility.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for inpainting. or img2img"
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    mask_url: str = Field(
+        default="", description="The mask to area to Inpaint in."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "loras": self.loras,
+            "sync_mode": self.sync_mode,
+            "strength": self.strength,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "mask_url": self.mask_url,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="rundiffusion-fal/juggernaut-flux-lora/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FashnTryonV15(FALNode):
+    """
+    FASHN v1.5 delivers precise virtual try-on capabilities, accurately rendering garment details like text and patterns at 576x864 resolution from both on-model and flat-lay photo references.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ModerationLevel(Enum):
+        """
+        Content moderation level for garment images. 'none' disables moderation, 'permissive' blocks only explicit content, 'conservative' also blocks underwear and swimwear.
+        """
+        NONE = "none"
+        PERMISSIVE = "permissive"
+        CONSERVATIVE = "conservative"
+
+    class GarmentPhotoType(Enum):
+        """
+        Specifies the type of garment photo to optimize internal parameters for better performance. 'model' is for photos of garments on a model, 'flat-lay' is for flat-lay or ghost mannequin images, and 'auto' attempts to automatically detect the photo type.
+        """
+        AUTO = "auto"
+        MODEL = "model"
+        FLAT_LAY = "flat-lay"
+
+    class Category(Enum):
+        """
+        Category of the garment to try-on. 'auto' will attempt to automatically detect the category of the garment.
+        """
+        TOPS = "tops"
+        BOTTOMS = "bottoms"
+        ONE_PIECES = "one-pieces"
+        AUTO = "auto"
+
+    class Mode(Enum):
+        """
+        Specifies the mode of operation. 'performance' mode is faster but may sacrifice quality, 'balanced' mode is a balance between speed and quality, and 'quality' mode is slower but produces higher quality results.
+        """
+        PERFORMANCE = "performance"
+        BALANCED = "balanced"
+        QUALITY = "quality"
+
+    class OutputFormat(Enum):
+        """
+        Output format of the generated images. 'png' is highest quality, while 'jpeg' is faster
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+
+
+    model_image: str = Field(
+        default="", description="URL or base64 of the model image"
+    )
+    moderation_level: ModerationLevel = Field(
+        default=ModerationLevel.PERMISSIVE, description="Content moderation level for garment images. 'none' disables moderation, 'permissive' blocks only explicit content, 'conservative' also blocks underwear and swimwear."
+    )
+    garment_photo_type: GarmentPhotoType = Field(
+        default=GarmentPhotoType.AUTO, description="Specifies the type of garment photo to optimize internal parameters for better performance. 'model' is for photos of garments on a model, 'flat-lay' is for flat-lay or ghost mannequin images, and 'auto' attempts to automatically detect the photo type."
+    )
+    garment_image: str = Field(
+        default="", description="URL or base64 of the garment image"
+    )
+    category: Category = Field(
+        default=Category.AUTO, description="Category of the garment to try-on. 'auto' will attempt to automatically detect the category of the garment."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    segmentation_free: bool = Field(
+        default=True, description="Disables human parsing on the model image."
+    )
+    num_samples: int = Field(
+        default=1, description="Number of images to generate in a single run. Image generation has a random element in it, so trying multiple images at once increases the chances of getting a good result."
+    )
+    mode: Mode = Field(
+        default=Mode.BALANCED, description="Specifies the mode of operation. 'performance' mode is faster but may sacrifice quality, 'balanced' mode is a balance between speed and quality, and 'quality' mode is slower but produces higher quality results."
+    )
+    seed: int = Field(
+        default=-1, description="Sets random operations to a fixed state. Use the same seed to reproduce results with the same inputs, or different seed to force different results."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="Output format of the generated images. 'png' is highest quality, while 'jpeg' is faster"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "model_image": self.model_image,
+            "moderation_level": self.moderation_level.value,
+            "garment_photo_type": self.garment_photo_type.value,
+            "garment_image": self.garment_image,
+            "category": self.category.value,
+            "sync_mode": self.sync_mode,
+            "segmentation_free": self.segmentation_free,
+            "num_samples": self.num_samples,
+            "mode": self.mode.value,
+            "seed": self.seed,
+            "output_format": self.output_format.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fashn/tryon/v1.5",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Plushify(FALNode):
+    """
+    Turn any image into a cute plushie!
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="Prompt for the generation. Default is empty which is usually best, but sometimes it can help to add a description of the subject."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate"
+    )
+    use_cfg_zero: bool = Field(
+        default=False, description="Whether to use CFG zero"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to apply cartoon style to"
+    )
+    scale: float = Field(
+        default=1, description="Scale factor for the Cartoon effect"
+    )
+    num_inference_steps: int = Field(
+        default=28, description="Number of inference steps"
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="Guidance scale for the generation"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker"
+    )
+    seed: int = Field(
+        default=-1, description="The seed for image generation. Same seed with same parameters will generate same image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "use_cfg_zero": self.use_cfg_zero,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "scale": self.scale,
+            "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/plushify",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class InstantCharacter(FALNode):
+    """
+    InstantCharacter creates high-quality, consistent characters from text prompts, supporting diverse poses, styles, and appearances with strong identity control.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    scale: float = Field(
+        default=1, description="The scale of the subject image. Higher values will make the subject image more prominent in the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "scale": self.scale,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/instant-character",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Cartoonify(FALNode):
+    """
+    Transform images into 3D cartoon artwork using an AI model that applies cartoon stylization while preserving the original image's composition and details.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    use_cfg_zero: bool = Field(
+        default=False, description="Whether to use CFG zero"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to apply Pixar style to"
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="Guidance scale for the generation"
+    )
+    num_inference_steps: int = Field(
+        default=28, description="Number of inference steps"
+    )
+    scale: float = Field(
+        default=1, description="Scale factor for the Pixar effect"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker"
+    )
+    seed: int = Field(
+        default=-1, description="The seed for image generation. Same seed with same parameters will generate same image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "use_cfg_zero": self.use_cfg_zero,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "scale": self.scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/cartoonify",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FinegrainEraserMask(FALNode):
+    """
+    Finegrain Eraser removes any object selected with a mask—along with its shadows, reflections, and lighting artifacts—seamlessly reconstructing the scene with contextually accurate content.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Mode(Enum):
+        """
+        Erase quality mode
+        """
+        EXPRESS = "express"
+        STANDARD = "standard"
+        PREMIUM = "premium"
+
+
+    mode: Mode = Field(
+        default=Mode.STANDARD, description="Erase quality mode"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation"
+    )
+    mask_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the mask image. Should be a binary mask where white (255) indicates areas to erase"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to edit"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "mode": self.mode.value,
+            "seed": self.seed,
+            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/finegrain-eraser/mask",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FinegrainEraserBbox(FALNode):
+    """
+    Finegrain Eraser removes any object selected with a bounding box—along with its shadows, reflections, and lighting artifacts—seamlessly reconstructing the scene with contextually accurate content.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Mode(Enum):
+        """
+        Erase quality mode
+        """
+        EXPRESS = "express"
+        STANDARD = "standard"
+        PREMIUM = "premium"
+
+
+    mode: Mode = Field(
+        default=Mode.STANDARD, description="Erase quality mode"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation"
+    )
+    box_prompts: list[str] = Field(
+        default=[], description="List of bounding box coordinates to erase (only one box prompt is supported)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to edit"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "mode": self.mode.value,
+            "seed": self.seed,
+            "box_prompts": self.box_prompts,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/finegrain-eraser/bbox",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FinegrainEraser(FALNode):
+    """
+    Finegrain Eraser removes objects—along with their shadows, reflections, and lighting artifacts—using only natural language, seamlessly filling the scene with contextually accurate content.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Mode(Enum):
+        """
+        Erase quality mode
+        """
+        EXPRESS = "express"
+        STANDARD = "standard"
+        PREMIUM = "premium"
+
+
+    prompt: str = Field(
+        default="", description="Text description of what to erase"
+    )
+    mode: Mode = Field(
+        default=Mode.STANDARD, description="Erase quality mode"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to edit"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "mode": self.mode.value,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/finegrain-eraser",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class StarVector(FALNode):
+    """
+    AI vectorization model that transforms raster images into scalable SVG graphics, preserving visual details while enabling infinite scaling and easy editing capabilities.  
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    seed: int = Field(
+        default=-1, description="seed to be used for generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/star-vector",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Ghiblify(FALNode):
+    """
+    Reimagine and transform your ordinary photos into enchanting Studio Ghibli style artwork
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    seed: str = Field(
+        default="", description="The seed to use for the upscale. If not provided, a random seed will be used."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to upscale."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ghiblify",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Thera(FALNode):
+    """
+    Fix low resolution images with fast speed and quality of thera.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Backbone(Enum):
+        """
+        Backbone to use for upscaling
+        """
+        EDSR = "edsr"
+        RDN = "rdn"
+
+
+    upscale_factor: float = Field(
+        default=2, description="The upscaling factor for the image."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    backbone: Backbone = Field(
+        default="", description="Backbone to use for upscaling"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for upscaling"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "upscale_factor": self.upscale_factor,
+            "seed": self.seed,
+            "backbone": self.backbone.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/thera",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class MixDehazeNet(FALNode):
+    """
+    An advanced dehaze model to remove atmospheric haze, restoring clarity and detail in images through intelligent neural network processing.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Model(Enum):
+        """
+        Model to be used for dehazing
+        """
+        INDOOR = "indoor"
+        OUTDOOR = "outdoor"
+
+
+    model: Model = Field(
+        default=Model.INDOOR, description="Model to be used for dehazing"
+    )
+    seed: int = Field(
+        default=-1, description="seed to be used for generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for image enhancement"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "model": self.model.value,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/mix-dehaze-net",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class GeminiFlashEdit(FALNode):
+    """
+    Gemini Flash Edit is a model that can edit single image using a text prompt and a reference image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt for image generation or editing"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional URL of an input image for editing. If not provided, generates a new image."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/gemini-flash-edit",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class GeminiFlashEditMulti(FALNode):
+    """
+    Gemini Flash Edit Multi Image is a model that can edit multiple images using a text prompt and a reference image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt for image generation or editing"
+    )
+    input_image_urls: list[str] = Field(
+        default=[], description="List of URLs of input images for editing"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        arguments = {
+            "prompt": self.prompt,
+            "input_image_urls": self.input_image_urls,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/gemini-flash-edit/multi",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class InvisibleWatermark(FALNode):
+    """
+    Invisible Watermark is a model that can add an invisible watermark to an image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    decode: bool = Field(
+        default=False, description="Whether to decode a watermark from the image instead of encoding"
+    )
+    watermark: str = Field(
+        default="watermark", description="Text to use as watermark (for encoding only)"
+    )
+    length: int = Field(
+        default=0, description="Length of watermark bits to decode (required when decode=True)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be watermarked or decoded"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "decode": self.decode,
+            "watermark": self.watermark,
+            "length": self.length,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/invisible-watermark",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class RundiffusionFalJuggernautFluxBaseImageToImage(FALNode):
+    """
+    Juggernaut Base Flux by RunDiffusion is a drop-in replacement for Flux [Dev] that delivers sharper details, richer colors, and enhanced realism, while instantly boosting LoRAs and LyCORIS with full compatibility.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to generate an image from."
+    )
+    strength: float = Field(
+        default=0.95, description="The strength of the initial image. Higher strength values are better for this model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=40, description="The number of inference steps to perform."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="rundiffusion-fal/juggernaut-flux/base/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class RundiffusionFalJuggernautFluxProImageToImage(FALNode):
+    """
+    Juggernaut Pro Flux by RunDiffusion is the flagship Juggernaut model rivaling some of the most advanced image models available, often surpassing them in realism. It combines Juggernaut Base with RunDiffusion Photo and features enhancements like reduced background blurriness.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to generate an image from."
+    )
+    strength: float = Field(
+        default=0.95, description="The strength of the initial image. Higher strength values are better for this model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=40, description="The number of inference steps to perform."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="rundiffusion-fal/juggernaut-flux/pro/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class DocresDewarp(FALNode):
+    """
+    Enhance wraped, folded documents with the superior quality of docres for sharper, clearer results.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/docres/dewarp",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Docres(FALNode):
+    """
+    Enhance low-resolution, blur, shadowed documents with the superior quality of docres for sharper, clearer results.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Task(Enum):
+        """
+        Task to perform
+        """
+        DESHADOWING = "deshadowing"
+        APPEARANCE = "appearance"
+        DEBLURRING = "deblurring"
+        BINARIZATION = "binarization"
+
+
+    task: Task = Field(
+        default="", description="Task to perform"
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "task": self.task.value,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/docres",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Swin2sr(FALNode):
+    """
+    Enhance low-resolution images with the superior quality of Swin2SR for sharper, clearer results.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Task(Enum):
+        """
+        Task to perform
+        """
+        CLASSICAL_SR = "classical_sr"
+        COMPRESSED_SR = "compressed_sr"
+        REAL_SR = "real_sr"
+
+
+    task: Task = Field(
+        default=Task.CLASSICAL_SR, description="Task to perform"
+    )
+    seed: int = Field(
+        default=-1, description="seed to be used for generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for image enhancement"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "task": self.task.value,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/swin2sr",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramV2aRemix(FALNode):
+    """
+    Create variations of existing images with Ideogram V2A Remix while maintaining creative control through prompt guidance.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image
+        """
+        RATIO_10_16 = "10:16"
+        RATIO_16_10 = "16:10"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_1_1 = "1:1"
+        RATIO_1_3 = "1:3"
+        RATIO_3_1 = "3:1"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+
+    class Style(Enum):
+        """
+        The style of the generated image
+        """
+        AUTO = "auto"
+        GENERAL = "general"
+        REALISTIC = "realistic"
+        DESIGN = "design"
+        RENDER_3D = "render_3D"
+        ANIME = "anime"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to remix the image with"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    )
+    style: Style = Field(
+        default=Style.AUTO, description="The style of the generated image"
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Whether to expand the prompt with MagicPrompt functionality."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to remix"
+    )
+    strength: float = Field(
+        default=0.8, description="Strength of the input image in the remix"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "style": self.style.value,
+            "expand_prompt": self.expand_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v2a/remix",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramV2aTurboRemix(FALNode):
+    """
+    Rapidly create image variations with Ideogram V2A Turbo Remix. Fast and efficient reimagining of existing images while maintaining creative control through prompt guidance.
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image
+        """
+        RATIO_10_16 = "10:16"
+        RATIO_16_10 = "16:10"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_1_1 = "1:1"
+        RATIO_1_3 = "1:3"
+        RATIO_3_1 = "3:1"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+
+    class Style(Enum):
+        """
+        The style of the generated image
+        """
+        AUTO = "auto"
+        GENERAL = "general"
+        REALISTIC = "realistic"
+        DESIGN = "design"
+        RENDER_3D = "render_3D"
+        ANIME = "anime"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to remix the image with"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    )
+    style: Style = Field(
+        default=Style.AUTO, description="The style of the generated image"
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Whether to expand the prompt with MagicPrompt functionality."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to remix"
+    )
+    strength: float = Field(
+        default=0.8, description="Strength of the input image in the remix"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "style": self.style.value,
+            "expand_prompt": self.expand_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v2a/turbo/remix",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class EvfSam(FALNode):
+    """
+    EVF-SAM2 combines natural language understanding with advanced segmentation capabilities, allowing you to precisely mask image regions using intuitive positive and negative text prompts.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate segmentation from."
+    )
+    use_grounding_dino: bool = Field(
+        default=False, description="Use GroundingDINO instead of SAM for segmentation"
+    )
+    semantic_type: bool = Field(
+        default=False, description="Enable semantic level segmentation for body parts, background or multi objects"
+    )
+    fill_holes: bool = Field(
+        default=False, description="Fill holes in the mask using morphological operations"
+    )
+    expand_mask: int = Field(
+        default=0, description="Expand/dilate the mask by specified pixels"
+    )
+    mask_only: bool = Field(
+        default=True, description="Output only the binary mask instead of masked image"
+    )
+    revert_mask: bool = Field(
+        default=False, description="Invert the mask (background becomes foreground and vice versa)"
+    )
+    blur_mask: int = Field(
+        default=0, description="Apply Gaussian blur to the mask. Value determines kernel size (must be odd number)"
+    )
+    negative_prompt: str = Field(
+        default="", description="Areas to exclude from segmentation (will be subtracted from prompt results)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "use_grounding_dino": self.use_grounding_dino,
+            "semantic_type": self.semantic_type,
+            "fill_holes": self.fill_holes,
+            "expand_mask": self.expand_mask,
+            "mask_only": self.mask_only,
+            "revert_mask": self.revert_mask,
+            "blur_mask": self.blur_mask,
+            "negative_prompt": self.negative_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/evf-sam",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Ddcolor(FALNode):
+    """
+    Bring colors into old or new black and white photos with DDColor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    seed: int = Field(
+        default=-1, description="seed to be used for generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ddcolor",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Sam2AutoSegment(FALNode):
+    """
+    SAM 2 is a model for segmenting images automatically. It can return individual masks or a single mask for the entire image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    points_per_side: int = Field(
+        default=32, description="Number of points to sample along each side of the image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    min_mask_region_area: int = Field(
+        default=100, description="Minimum area of a mask region."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be automatically segmented"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    pred_iou_thresh: float = Field(
+        default=0.88, description="Threshold for predicted IOU score."
+    )
+    stability_score_thresh: float = Field(
+        default=0.95, description="Threshold for stability score."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "points_per_side": self.points_per_side,
+            "output_format": self.output_format.value,
+            "min_mask_region_area": self.min_mask_region_area,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "pred_iou_thresh": self.pred_iou_thresh,
+            "stability_score_thresh": self.stability_score_thresh,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sam2/auto-segment",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class NafnetDeblur(FALNode):
+    """
+    Use NAFNet to fix issues like blurriness and noise in your images. This model specializes in image restoration and can help enhance the overall quality of your photography.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    seed: int = Field(
+        default=-1, description="seed to be used for generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/nafnet/deblur",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class NafnetDenoise(FALNode):
+    """
+    Use NAFNet to fix issues like blurriness and noise in your images. This model specializes in image restoration and can help enhance the overall quality of your photography.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    seed: int = Field(
+        default=-1, description="seed to be used for generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/nafnet/denoise",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class PostProcessing(FALNode):
+    """
+    Post Processing is an endpoint that can enhance images using a variety of techniques including grain, blur, sharpen, and more.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class GreenDirection(Enum):
+        """
+        Green channel shift direction
+        """
+        HORIZONTAL = "horizontal"
+        VERTICAL = "vertical"
+
+    class DodgeBurnMode(Enum):
+        """
+        Dodge and burn mode
+        """
+        DODGE = "dodge"
+        BURN = "burn"
+        DODGE_AND_BURN = "dodge_and_burn"
+        BURN_AND_DODGE = "burn_and_dodge"
+        COLOR_DODGE = "color_dodge"
+        COLOR_BURN = "color_burn"
+        LINEAR_DODGE = "linear_dodge"
+        LINEAR_BURN = "linear_burn"
+
+    class DesaturateMethod(Enum):
+        """
+        Desaturation method
+        """
+        LUMINANCE_REC_709 = "luminance (Rec.709)"
+        LUMINANCE_REC_601 = "luminance (Rec.601)"
+        AVERAGE = "average"
+        LIGHTNESS = "lightness"
+
+    class GrainStyle(Enum):
+        """
+        Style of film grain to apply
+        """
+        MODERN = "modern"
+        ANALOG = "analog"
+        KODAK = "kodak"
+        FUJI = "fuji"
+        CINEMATIC = "cinematic"
+        NEWSPAPER = "newspaper"
+
+    class TintMode(Enum):
+        """
+        Tint color mode
+        """
+        SEPIA = "sepia"
+        RED = "red"
+        GREEN = "green"
+        BLUE = "blue"
+        CYAN = "cyan"
+        MAGENTA = "magenta"
+        YELLOW = "yellow"
+        PURPLE = "purple"
+        ORANGE = "orange"
+        WARM = "warm"
+        COOL = "cool"
+        LIME = "lime"
+        NAVY = "navy"
+        VINTAGE = "vintage"
+        ROSE = "rose"
+        TEAL = "teal"
+        MAROON = "maroon"
+        PEACH = "peach"
+        LAVENDER = "lavender"
+        OLIVE = "olive"
+
+    class BlurType(Enum):
+        """
+        Type of blur to apply
+        """
+        GAUSSIAN = "gaussian"
+        KUWAHARA = "kuwahara"
+
+    class RedDirection(Enum):
+        """
+        Red channel shift direction
+        """
+        HORIZONTAL = "horizontal"
+        VERTICAL = "vertical"
+
+    class BlueDirection(Enum):
+        """
+        Blue channel shift direction
+        """
+        HORIZONTAL = "horizontal"
+        VERTICAL = "vertical"
+
+    class SharpenMode(Enum):
+        """
+        Type of sharpening to apply
+        """
+        BASIC = "basic"
+        SMART = "smart"
+        CAS = "cas"
+
+
+    blue_shift: int = Field(
+        default=0, description="Blue channel shift amount"
+    )
+    vertex_y: float = Field(
+        default=0.5, description="Vertex Y position"
+    )
+    green_direction: GreenDirection = Field(
+        default=GreenDirection.HORIZONTAL, description="Green channel shift direction"
+    )
+    enable_glow: bool = Field(
+        default=False, description="Enable glow effect"
+    )
+    dodge_burn_mode: DodgeBurnMode = Field(
+        default=DodgeBurnMode.DODGE, description="Dodge and burn mode"
+    )
+    glow_intensity: float = Field(
+        default=1, description="Glow intensity"
+    )
+    blur_sigma: float = Field(
+        default=1, description="Sigma for Gaussian blur"
+    )
+    desaturate_method: DesaturateMethod = Field(
+        default=DesaturateMethod.LUMINANCE_REC_709, description="Desaturation method"
+    )
+    enable_blur: bool = Field(
+        default=False, description="Enable blur effect"
+    )
+    blur_radius: int = Field(
+        default=3, description="Blur radius"
+    )
+    grain_style: GrainStyle = Field(
+        default=GrainStyle.MODERN, description="Style of film grain to apply"
+    )
+    cas_amount: float = Field(
+        default=0.8, description="CAS sharpening amount"
+    )
+    gamma: float = Field(
+        default=1, description="Gamma adjustment"
+    )
+    tint_mode: TintMode = Field(
+        default=TintMode.SEPIA, description="Tint color mode"
+    )
+    blur_type: BlurType = Field(
+        default=BlurType.GAUSSIAN, description="Type of blur to apply"
+    )
+    enable_vignette: bool = Field(
+        default=False, description="Enable vignette effect"
+    )
+    dissolve_image_url: ImageRef = Field(
+        default="", description="URL of second image for dissolve"
+    )
+    red_shift: int = Field(
+        default=0, description="Red channel shift amount"
+    )
+    enable_desaturate: bool = Field(
+        default=False, description="Enable desaturation effect"
+    )
+    grain_intensity: float = Field(
+        default=0.4, description="Film grain intensity (when enabled)"
+    )
+    dodge_burn_intensity: float = Field(
+        default=0.5, description="Dodge and burn intensity"
+    )
+    smart_sharpen_strength: float = Field(
+        default=5, description="Smart sharpen strength"
+    )
+    red_direction: RedDirection = Field(
+        default=RedDirection.HORIZONTAL, description="Red channel shift direction"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to process"
+    )
+    vertex_x: float = Field(
+        default=0.5, description="Vertex X position"
+    )
+    tint_strength: float = Field(
+        default=1, description="Tint strength"
+    )
+    enable_dissolve: bool = Field(
+        default=False, description="Enable dissolve effect"
+    )
+    enable_parabolize: bool = Field(
+        default=False, description="Enable parabolize effect"
+    )
+    enable_grain: bool = Field(
+        default=False, description="Enable film grain effect"
+    )
+    solarize_threshold: float = Field(
+        default=0.5, description="Solarize threshold"
+    )
+    enable_sharpen: bool = Field(
+        default=False, description="Enable sharpen effect"
+    )
+    enable_dodge_burn: bool = Field(
+        default=False, description="Enable dodge and burn effect"
+    )
+    glow_radius: int = Field(
+        default=5, description="Glow blur radius"
+    )
+    sharpen_alpha: float = Field(
+        default=1, description="Sharpen strength (for basic mode)"
+    )
+    enable_color_correction: bool = Field(
+        default=False, description="Enable color correction"
+    )
+    contrast: float = Field(
+        default=0, description="Contrast adjustment"
+    )
+    enable_solarize: bool = Field(
+        default=False, description="Enable solarize effect"
+    )
+    noise_radius: int = Field(
+        default=7, description="Noise radius for smart sharpen"
+    )
+    grain_scale: float = Field(
+        default=10, description="Film grain scale (when enabled)"
+    )
+    temperature: float = Field(
+        default=0, description="Color temperature adjustment"
+    )
+    brightness: float = Field(
+        default=0, description="Brightness adjustment"
+    )
+    blue_direction: BlueDirection = Field(
+        default=BlueDirection.HORIZONTAL, description="Blue channel shift direction"
+    )
+    dissolve_factor: float = Field(
+        default=0.5, description="Dissolve blend factor"
+    )
+    sharpen_mode: SharpenMode = Field(
+        default=SharpenMode.BASIC, description="Type of sharpening to apply"
+    )
+    vignette_strength: float = Field(
+        default=0.5, description="Vignette strength (when enabled)"
+    )
+    sharpen_radius: int = Field(
+        default=1, description="Sharpen radius (for basic mode)"
+    )
+    parabolize_coeff: float = Field(
+        default=1, description="Parabolize coefficient"
+    )
+    saturation: float = Field(
+        default=0, description="Saturation adjustment"
+    )
+    enable_tint: bool = Field(
+        default=False, description="Enable color tint effect"
+    )
+    green_shift: int = Field(
+        default=0, description="Green channel shift amount"
+    )
+    preserve_edges: float = Field(
+        default=0.75, description="Edge preservation factor"
+    )
+    desaturate_factor: float = Field(
+        default=1, description="Desaturation factor"
+    )
+    smart_sharpen_ratio: float = Field(
+        default=0.5, description="Smart sharpen blend ratio"
+    )
+    enable_chromatic: bool = Field(
+        default=False, description="Enable chromatic aberration"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        dissolve_image_url_base64 = await context.image_to_base64(self.dissolve_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "blue_shift": self.blue_shift,
+            "vertex_y": self.vertex_y,
+            "green_direction": self.green_direction.value,
+            "enable_glow": self.enable_glow,
+            "dodge_burn_mode": self.dodge_burn_mode.value,
+            "glow_intensity": self.glow_intensity,
+            "blur_sigma": self.blur_sigma,
+            "desaturate_method": self.desaturate_method.value,
+            "enable_blur": self.enable_blur,
+            "blur_radius": self.blur_radius,
+            "grain_style": self.grain_style.value,
+            "cas_amount": self.cas_amount,
+            "gamma": self.gamma,
+            "tint_mode": self.tint_mode.value,
+            "blur_type": self.blur_type.value,
+            "enable_vignette": self.enable_vignette,
+            "dissolve_image_url": f"data:image/png;base64,{dissolve_image_url_base64}",
+            "red_shift": self.red_shift,
+            "enable_desaturate": self.enable_desaturate,
+            "grain_intensity": self.grain_intensity,
+            "dodge_burn_intensity": self.dodge_burn_intensity,
+            "smart_sharpen_strength": self.smart_sharpen_strength,
+            "red_direction": self.red_direction.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "vertex_x": self.vertex_x,
+            "tint_strength": self.tint_strength,
+            "enable_dissolve": self.enable_dissolve,
+            "enable_parabolize": self.enable_parabolize,
+            "enable_grain": self.enable_grain,
+            "solarize_threshold": self.solarize_threshold,
+            "enable_sharpen": self.enable_sharpen,
+            "enable_dodge_burn": self.enable_dodge_burn,
+            "glow_radius": self.glow_radius,
+            "sharpen_alpha": self.sharpen_alpha,
+            "enable_color_correction": self.enable_color_correction,
+            "contrast": self.contrast,
+            "enable_solarize": self.enable_solarize,
+            "noise_radius": self.noise_radius,
+            "grain_scale": self.grain_scale,
+            "temperature": self.temperature,
+            "brightness": self.brightness,
+            "blue_direction": self.blue_direction.value,
+            "dissolve_factor": self.dissolve_factor,
+            "sharpen_mode": self.sharpen_mode.value,
+            "vignette_strength": self.vignette_strength,
+            "sharpen_radius": self.sharpen_radius,
+            "parabolize_coeff": self.parabolize_coeff,
+            "saturation": self.saturation,
+            "enable_tint": self.enable_tint,
+            "green_shift": self.green_shift,
+            "preserve_edges": self.preserve_edges,
+            "desaturate_factor": self.desaturate_factor,
+            "smart_sharpen_ratio": self.smart_sharpen_ratio,
+            "enable_chromatic": self.enable_chromatic,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/post-processing",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Flowedit(FALNode):
+    """
+    The model provides you high quality image editing capabilities.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    src_guidance_scale: int = Field(
+        default=1.5, description="Guidance scale for the source."
+    )
+    n_min: int = Field(
+        default=0, description="Minimum step for improved style edits"
+    )
+    n_max: int = Field(
+        default=23, description="Control the strength of the edit"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+    source_prompt: str = Field(
+        default="", description="Prompt of the image to be used."
+    )
+    tar_guidance_scale: int = Field(
+        default=5.5, description="Guidance scale for target."
+    )
+    target_prompt: str = Field(
+        default="", description="Prompt of the image to be made."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation. If set none, a random seed will be used."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="Steps for which the model should run."
+    )
+    n_avg: int = Field(
+        default=1, description="Average step count"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "src_guidance_scale": self.src_guidance_scale,
+            "n_min": self.n_min,
+            "n_max": self.n_max,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "source_prompt": self.source_prompt,
+            "tar_guidance_scale": self.tar_guidance_scale,
+            "target_prompt": self.target_prompt,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "n_avg": self.n_avg,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flowedit",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BenV2Image(FALNode):
+    """
+    A fast and high quality model for image background removal.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for background removal"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ben/v2/image",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxControlLoraCannyImageToImage(FALNode):
+    """
+    FLUX Control LoRA Canny is a high-performance endpoint that uses a control image using a Canny edge map to transfer structure to the generated image and another initial image to guide color.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    control_lora_strength: float = Field(
+        default=1, description="The strength of the control lora."
+    )
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for inpainting. or img2img"
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    control_lora_image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        control_lora_image_url_base64 = await context.image_to_base64(self.control_lora_image_url)
+        arguments = {
+            "control_lora_strength": self.control_lora_strength,
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "loras": self.loras,
+            "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
+            "num_images": self.num_images,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-control-lora-canny/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxControlLoraDepthImageToImage(FALNode):
+    """
+    FLUX Control LoRA Depth is a high-performance endpoint that uses a control image using a depth map to transfer structure to the generated image and another initial image to guide color.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    control_lora_strength: float = Field(
+        default=1, description="The strength of the control lora."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for inpainting. or img2img"
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    control_lora_image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        control_lora_image_url_base64 = await context.image_to_base64(self.control_lora_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "control_lora_strength": self.control_lora_strength,
+            "image_size": self.image_size,
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_images": self.num_images,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-control-lora-depth/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramUpscale(FALNode):
+    """
+    Ideogram Upscale enhances the resolution of the reference image by up to 2X and might enhance the reference image too. Optionally refine outputs with a prompt for guided improvements.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to upscale the image with"
+    )
+    detail: int = Field(
+        default=50, description="The detail of the upscaled image"
+    )
+    resemblance: int = Field(
+        default=50, description="The resemblance of the upscaled image to the original image"
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt with MagicPrompt functionality."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to upscale"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "detail": self.detail,
+            "resemblance": self.resemblance,
+            "expand_prompt": self.expand_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/upscale",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class KlingV15KolorsVirtualTryOn(FALNode):
+    """
+    Kling Kolors Virtual TryOn v1.5 is a high quality image based Try-On endpoint which can be used for commercial try on.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    garment_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url to the garment image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If true, the function will return the image in the response."
+    )
+    human_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url for the human image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        garment_image_url_base64 = await context.image_to_base64(self.garment_image_url)
+        human_image_url_base64 = await context.image_to_base64(self.human_image_url)
+        arguments = {
+            "garment_image_url": f"data:image/png;base64,{garment_image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "human_image_url": f"data:image/png;base64,{human_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling/v1-5/kolors-virtual-try-on",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxLoraCanny(FALNode):
+    """
+    Utilize Flux.1 [dev] Controlnet to generate high-quality images with precise control over composition, style, and structure through advanced edge detection and guidance mechanisms.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for canny input"
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    guidance_scale: float = Field(
+        default=30, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "loras": self.loras,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-lora-canny",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxProV1FillFinetuned(FALNode):
+    """
+    FLUX.1 [pro] Fill Fine-tuned is a high-performance endpoint for the FLUX.1 [pro] model with a fine-tuned LoRA that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to fill the masked part of the image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    finetune_strength: float = Field(
+        default=0.0, description="Controls finetune influence. Increase this value if your target concept isn't showing up strongly enough. The optimal setting depends on your finetune and prompt"
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    finetune_id: str = Field(
+        default="", description="References your specific model"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    mask_url: ImageRef = Field(
+        default=ImageRef(), description="The mask URL to inpaint the image. Needs to match the dimensions of the input image."
+    )
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "finetune_strength": self.finetune_strength,
+            "output_format": self.output_format.value,
+            "finetune_id": self.finetune_id,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "seed": self.seed,
+            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "enhance_prompt": self.enhance_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-pro/v1/fill-finetuned",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class MoondreamNextDetection(FALNode):
+    """
+    MoonDreamNext Detection is a multimodal vision-language model for gaze detection, bbox detection, point detection, and more.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class TaskType(Enum):
+        """
+        Type of detection to perform
+        """
+        BBOX_DETECTION = "bbox_detection"
+        POINT_DETECTION = "point_detection"
+        GAZE_DETECTION = "gaze_detection"
+
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image URL to be processed"
+    )
+    detection_prompt: str = Field(
+        default="", description="Text description of what to detect"
+    )
+    task_type: TaskType = Field(
+        default="", description="Type of detection to perform"
+    )
+    show_visualization: bool = Field(
+        default=True, description="Whether to show visualization for detection"
+    )
+    combine_points: bool = Field(
+        default=False, description="Whether to combine points into a single point for point detection. This has no effect for bbox detection or gaze detection."
+    )
+    use_ensemble: bool = Field(
+        default=False, description="Whether to use ensemble for gaze detection"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "detection_prompt": self.detection_prompt,
+            "task_type": self.task_type.value,
+            "show_visualization": self.show_visualization,
+            "combine_points": self.combine_points,
+            "use_ensemble": self.use_ensemble,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream-next/detection",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BriaEraser(FALNode):
+    """
+    Bria Eraser enables precise removal of unwanted objects from images while maintaining high-quality outputs. Trained exclusively on licensed data for safe and risk-free commercial use. Access the model's source code and weights: https://bria.ai/contact-us
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class MaskType(Enum):
+        """
+        You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'.
+        """
+        MANUAL = "manual"
+        AUTOMATIC = "automatic"
+
+
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    preserve_alpha: bool = Field(
+        default=False, description="If set to true, attempts to preserve the alpha channel of the input image."
+    )
+    mask_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the binary mask image that represents the area that will be cleaned."
+    )
+    mask_type: MaskType = Field(
+        default=MaskType.MANUAL, description="You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input Image to erase from"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "preserve_alpha": self.preserve_alpha,
+            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_type": self.mask_type.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bria/eraser",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BriaExpand(FALNode):
+    """
+    Bria Expand expands images beyond their borders in high quality. Trained exclusively on licensed data for safe and risk-free commercial use. Access the model's source code and weights: https://bria.ai/contact-us
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The desired aspect ratio of the final image. Will be used over original_image_size and original_image_location if provided.
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_2 = "3:2"
+        RATIO_3_4 = "3:4"
+        RATIO_4_3 = "4:3"
+        RATIO_4_5 = "4:5"
+        RATIO_5_4 = "5:4"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
+
+    prompt: str = Field(
+        default="", description="Text on which you wish to base the image expansion. This parameter is optional. Bria currently supports prompts in English only, excluding special characters."
+    )
+    aspect_ratio: AspectRatio | None = Field(
+        default=None, description="The desired aspect ratio of the final image. Will be used over original_image_size and original_image_location if provided."
+    )
+    original_image_location: list[int] = Field(
+        default=[], description="The desired location of the original image, inside the full canvas. Provide the location of the upper left corner of the original image. The location can also be outside the canvas (the original image will be cropped). Will be ignored if aspect_ratio is provided."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the input image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    original_image_size: list[int] = Field(
+        default=[], description="The desired size of the original image, inside the full canvas. Ensure that the ratio of input image foreground or main subject to the canvas area is greater than 15% to achieve optimal results. Will be ignored if aspect_ratio is provided."
+    )
+    canvas_size: list[int] = Field(
+        default=[], description="The desired size of the final image, after the expansion. should have an area of less than 5000x5000 pixels."
+    )
+    seed: int = Field(
+        default=-1, description="You can choose whether you want your generated expension to be random or predictable. You can recreate the same result in the future by using the seed value of a result from the response. You can exclude this parameter if you are not interested in recreating your results. This parameter is optional."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt you would like to use to generate images."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "original_image_location": self.original_image_location,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "original_image_size": self.original_image_size,
+            "canvas_size": self.canvas_size,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bria/expand",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BriaGenfill(FALNode):
+    """
+    Bria GenFill enables high-quality object addition or visual transformation. Trained exclusively on licensed data for safe and risk-free commercial use. Access the model's source code and weights: https://bria.ai/contact-us
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt you would like to use to generate images."
+    )
+    num_images: int = Field(
+        default=1, description="Number of Images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input Image to erase from"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    mask_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the binary mask image that represents the area that will be cleaned."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt you would like to use to generate images."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bria/genfill",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BriaProductShot(FALNode):
+    """
+    Place any product in any scenery with just a prompt or reference image while maintaining high integrity of the product. Trained exclusively on licensed data for safe and risk-free commercial use and optimized for eCommerce.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ManualPlacementSelection(Enum):
+        """
+        If you've selected placement_type=manual_placement, you should use this parameter to specify which placements/positions you would like to use from the list. You can select more than one placement in one request.
+        """
+        UPPER_LEFT = "upper_left"
+        UPPER_RIGHT = "upper_right"
+        BOTTOM_LEFT = "bottom_left"
+        BOTTOM_RIGHT = "bottom_right"
+        RIGHT_CENTER = "right_center"
+        LEFT_CENTER = "left_center"
+        UPPER_CENTER = "upper_center"
+        BOTTOM_CENTER = "bottom_center"
+        CENTER_VERTICAL = "center_vertical"
+        CENTER_HORIZONTAL = "center_horizontal"
+
+    class PlacementType(Enum):
+        """
+        This parameter allows you to control the positioning of the product in the image. Choosing 'original' will preserve the original position of the product in the image. Choosing 'automatic' will generate results with the 10 recommended positions for the product. Choosing 'manual_placement' will allow you to select predefined positions (using the parameter 'manual_placement_selection'). Selecting 'manual_padding' will allow you to control the position and size of the image by defining the desired padding in pixels around the product.
+        """
+        ORIGINAL = "original"
+        AUTOMATIC = "automatic"
+        MANUAL_PLACEMENT = "manual_placement"
+        MANUAL_PADDING = "manual_padding"
+
+
+    ref_image_url: ImageRef = Field(
+        default="", description="The URL of the reference image to be used for generating the new scene or background for the product shot. Use \"\" to leave empty.Either ref_image_url or scene_description has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp."
+    )
+    manual_placement_selection: ManualPlacementSelection = Field(
+        default=ManualPlacementSelection.BOTTOM_CENTER, description="If you've selected placement_type=manual_placement, you should use this parameter to specify which placements/positions you would like to use from the list. You can select more than one placement in one request."
+    )
+    num_results: int = Field(
+        default=1, description="The number of lifestyle product shots you would like to generate. You will get num_results x 10 results when placement_type=automatic and according to the number of required placements x num_results if placement_type=manual_placement."
+    )
+    padding_values: list[int] = Field(
+        default=[], description="The desired padding in pixels around the product, when using placement_type=manual_padding. The order of the values is [left, right, top, bottom]. For optimal results, the total number of pixels, including padding, should be around 1,000,000. It is recommended to first use the product cutout API, get the cutout and understand the size of the result, and then define the required padding and use the cutout as an input for this API."
+    )
+    shot_size: list[int] = Field(
+        default=[], description="The desired size of the final product shot. For optimal results, the total number of pixels should be around 1,000,000. This parameter is only relevant when placement_type=automatic or placement_type=manual_placement."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    placement_type: PlacementType = Field(
+        default=PlacementType.MANUAL_PLACEMENT, description="This parameter allows you to control the positioning of the product in the image. Choosing 'original' will preserve the original position of the product in the image. Choosing 'automatic' will generate results with the 10 recommended positions for the product. Choosing 'manual_placement' will allow you to select predefined positions (using the parameter 'manual_placement_selection'). Selecting 'manual_padding' will allow you to control the position and size of the image by defining the desired padding in pixels around the product."
+    )
+    original_quality: bool = Field(
+        default=False, description="This flag is only relevant when placement_type=original. If true, the output image retains the original input image's size; otherwise, the image is scaled to 1 megapixel (1MP) while preserving its aspect ratio."
+    )
+    fast: bool = Field(
+        default=True, description="Whether to use the fast model"
+    )
+    optimize_description: bool = Field(
+        default=True, description="Whether to optimize the scene description"
+    )
+    scene_description: str = Field(
+        default="", description="Text description of the new scene or background for the provided product shot. Bria currently supports prompts in English only, excluding special characters."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the product shot to be placed in a lifestyle shot. If both image_url and image_file are provided, image_url will be used. Accepted formats are jpeg, jpg, png, webp. Maximum file size 12MB."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        ref_image_url_base64 = await context.image_to_base64(self.ref_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "ref_image_url": f"data:image/png;base64,{ref_image_url_base64}",
+            "manual_placement_selection": self.manual_placement_selection.value,
+            "num_results": self.num_results,
+            "padding_values": self.padding_values,
+            "shot_size": self.shot_size,
+            "sync_mode": self.sync_mode,
+            "placement_type": self.placement_type.value,
+            "original_quality": self.original_quality,
+            "fast": self.fast,
+            "optimize_description": self.optimize_description,
+            "scene_description": self.scene_description,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bria/product-shot",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BriaBackgroundRemove(FALNode):
+    """
+    Bria RMBG 2.0 enables seamless removal of backgrounds from images, ideal for professional editing tasks. Trained exclusively on licensed data for safe and risk-free commercial use. Model weights for commercial use are available here: https://share-eu1.hsforms.com/2GLpEVQqJTI2Lj7AMYwgfIwf4e04
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input Image to erase from"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bria/background/remove",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BriaBackgroundReplace(FALNode):
+    """
+    Bria Background Replace allows for efficient swapping of backgrounds in images via text prompts or reference image, delivering realistic and polished results. Trained exclusively on licensed data for safe and risk-free commercial use 
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt you would like to use to generate images."
+    )
+    num_images: int = Field(
+        default=1, description="Number of Images to generate."
+    )
+    ref_image_url: ImageRef = Field(
+        default="", description="The URL of the reference image to be used for generating the new background. Use \"\" to leave empty. Either ref_image_url or bg_prompt has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp."
+    )
+    refine_prompt: bool = Field(
+        default=True, description="Whether to refine prompt"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input Image to erase from"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    fast: bool = Field(
+        default=True, description="Whether to use the fast model"
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt you would like to use to generate images."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        ref_image_url_base64 = await context.image_to_base64(self.ref_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "ref_image_url": f"data:image/png;base64,{ref_image_url_base64}",
+            "refine_prompt": self.refine_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "fast": self.fast,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/bria/background/replace",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxLoraFill(FALNode):
+    """
+    FLUX.1 [dev] Fill is a high-performance endpoint for the FLUX.1 [pro] model that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    resize_to_original: bool = Field(
+        default=False, description="Resizes the image back to the original size. Use when you wish to preserve the exact image size as the originally provided image."
+    )
+    paste_back: bool = Field(
+        default=True, description="Specifies whether to paste-back the original image onto to the non-inpainted areas of the output"
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    guidance_scale: float = Field(
+        default=30, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. This is always set to 1 for streaming output."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for fill operation"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    fill_image: str = Field(
+        default="", description="Use an image fill input to fill in particular images into the masked area."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    mask_url: str = Field(
+        default="", description="The mask to area to Inpaint in."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "resize_to_original": self.resize_to_original,
+            "paste_back": self.paste_back,
+            "image_size": self.image_size,
+            "loras": self.loras,
+            "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
+            "num_images": self.num_images,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "fill_image": self.fill_image,
+            "num_inference_steps": self.num_inference_steps,
+            "mask_url": self.mask_url,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-lora-fill",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class CatVton(FALNode):
+    """
+    Image based high quality Virtual Try-On
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ClothType(Enum):
+        """
+        Type of the Cloth to be tried on.
+        Options:
+        upper: Upper body cloth
+        lower: Lower body cloth
+        overall: Full body cloth
+        inner: Inner cloth, like T-shirt inside a jacket
+        outer: Outer cloth, like a jacket over a T-shirt
+        """
+        UPPER = "upper"
+        LOWER = "lower"
+        OVERALL = "overall"
+        INNER = "inner"
+        OUTER = "outer"
+
+
+    garment_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url to the garment image."
+    )
+    image_size: str = Field(
+        default="portrait_4_3", description="The size of the generated image."
+    )
+    human_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url for the human image."
+    )
+    cloth_type: ClothType = Field(
+        default="", description="Type of the Cloth to be tried on. Options: upper: Upper body cloth lower: Lower body cloth overall: Full body cloth inner: Inner cloth, like T-shirt inside a jacket outer: Outer cloth, like a jacket over a T-shirt"
+    )
+    guidance_scale: float = Field(
+        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same input given to the same version of the model will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        garment_image_url_base64 = await context.image_to_base64(self.garment_image_url)
+        human_image_url_base64 = await context.image_to_base64(self.human_image_url)
+        arguments = {
+            "garment_image_url": f"data:image/png;base64,{garment_image_url_base64}",
+            "image_size": self.image_size,
+            "human_image_url": f"data:image/png;base64,{human_image_url_base64}",
+            "cloth_type": self.cloth_type.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/cat-vton",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LeffaPoseTransfer(FALNode):
+    """
+    Leffa Pose Transfer is an endpoint for changing pose of an image with a reference image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    pose_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url for the human image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    guidance_scale: float = Field(
+        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your input when generating the image."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same input given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    person_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url to the garment image."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        pose_image_url_base64 = await context.image_to_base64(self.pose_image_url)
+        person_image_url_base64 = await context.image_to_base64(self.person_image_url)
+        arguments = {
+            "pose_image_url": f"data:image/png;base64,{pose_image_url_base64}",
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+            "person_image_url": f"data:image/png;base64,{person_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/leffa/pose-transfer",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LeffaVirtualTryon(FALNode):
+    """
+    Leffa Virtual TryOn is a high quality image based Try-On endpoint which can be used for commercial try on.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class GarmentType(Enum):
+        """
+        The type of the garment used for virtual try-on.
+        """
+        UPPER_BODY = "upper_body"
+        LOWER_BODY = "lower_body"
+        DRESSES = "dresses"
+
+
+    garment_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url to the garment image."
+    )
+    human_image_url: ImageRef = Field(
+        default=ImageRef(), description="Url for the human image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    garment_type: GarmentType = Field(
+        default="", description="The type of the garment used for virtual try-on."
+    )
+    guidance_scale: float = Field(
+        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your input when generating the image."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same input given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        garment_image_url_base64 = await context.image_to_base64(self.garment_image_url)
+        human_image_url_base64 = await context.image_to_base64(self.human_image_url)
+        arguments = {
+            "garment_image_url": f"data:image/png;base64,{garment_image_url_base64}",
+            "human_image_url": f"data:image/png;base64,{human_image_url_base64}",
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "garment_type": self.garment_type.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/leffa/virtual-tryon",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramV2TurboEdit(FALNode):
+    """
+    Edit images faster with Ideogram V2 Turbo. Quick modifications and adjustments while preserving the high-quality standards and realistic outputs of Ideogram.
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Style(Enum):
+        """
+        The style of the generated image
+        """
+        AUTO = "auto"
+        GENERAL = "general"
+        REALISTIC = "realistic"
+        DESIGN = "design"
+        RENDER_3D = "render_3D"
+        ANIME = "anime"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to fill the masked part of the image."
+    )
+    style: Style = Field(
+        default=Style.AUTO, description="The style of the generated image"
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Whether to expand the prompt with MagicPrompt functionality."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+    mask_url: ImageRef = Field(
+        default=ImageRef(), description="The mask URL to inpaint the image. Needs to match the dimensions of the input image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        arguments = {
+            "prompt": self.prompt,
+            "style": self.style.value,
+            "expand_prompt": self.expand_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v2/turbo/edit",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IdeogramV2TurboRemix(FALNode):
+    """
+    Rapidly create image variations with Ideogram V2 Turbo Remix. Fast and efficient reimagining of existing images while maintaining creative control through prompt guidance.
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image
+        """
+        RATIO_10_16 = "10:16"
+        RATIO_16_10 = "16:10"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_1_1 = "1:1"
+        RATIO_1_3 = "1:3"
+        RATIO_3_1 = "3:1"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+
+    class Style(Enum):
+        """
+        The style of the generated image
+        """
+        AUTO = "auto"
+        GENERAL = "general"
+        REALISTIC = "realistic"
+        DESIGN = "design"
+        RENDER_3D = "render_3D"
+        ANIME = "anime"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to remix the image with"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    )
+    style: Style = Field(
+        default=Style.AUTO, description="The style of the generated image"
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Whether to expand the prompt with MagicPrompt functionality."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to remix"
+    )
+    strength: float = Field(
+        default=0.8, description="Strength of the input image in the remix"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    seed: str = Field(
+        default="", description="Seed for the random number generator"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "style": self.style.value,
+            "expand_prompt": self.expand_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ideogram/v2/turbo/remix",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxProV11Redux(FALNode):
+    """
+    FLUX1.1 [pro] Redux is a high-performance endpoint for the FLUX1.1 [pro] model that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="landscape_4_3", description="The size of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enhance_prompt": self.enhance_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-pro/v1.1/redux",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxLoraDepth(FALNode):
+    """
+    Generate high-quality images from depth maps using Flux.1 [dev] depth estimation model. The model produces accurate depth representations for scene understanding and 3D visualization.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. This is always set to 1 for streaming output."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for depth input"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "loras": self.loras,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-lora-depth",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxProV11UltraRedux(FALNode):
+    """
+    FLUX1.1 [pro] ultra Redux is a high-performance endpoint for the FLUX1.1 [pro] model that enables rapid transformation of existing images, delivering high-quality style transfers and image modifications with the core FLUX capabilities.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    aspect_ratio: str = Field(
+        default="16:9", description="The aspect ratio of the generated image."
+    )
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    )
+    image_prompt_strength: float = Field(
+        default=0.1, description="The strength of the image prompt, between 0 and 1."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    raw: bool = Field(
+        default=False, description="Generate less processed, more natural-looking images."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio,
+            "enhance_prompt": self.enhance_prompt,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "image_prompt_strength": self.image_prompt_strength,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+            "raw": self.raw,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-pro/v1.1-ultra/redux",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IclightV2(FALNode):
+    """
+    An endpoint for re-lighting photos and changing their backgrounds per a given description
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class InitialLatent(Enum):
+        """
+        Provide lighting conditions for the model
+        """
+        NONE = "None"
+        LEFT = "Left"
+        RIGHT = "Right"
+        TOP = "Top"
+        BOTTOM = "Bottom"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    initial_latent: InitialLatent = Field(
+        default=InitialLatent.NONE, description="Provide lighting conditions for the model"
+    )
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    background_threshold: float = Field(
+        default=0.67, description="Threshold for the background removal algorithm. A high threshold will produce sharper masks. Note: This parameter is currently deprecated and has no effect on the output."
+    )
+    mask_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of mask to be used for ic-light conditioning image"
+    )
+    guidance_scale: float = Field(
+        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    lowres_denoise: float = Field(
+        default=0.98, description="Strength for low-resolution pass."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative Prompt for the image"
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    hr_downscale: float = Field(
+        default=0.5
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be used for relighting"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    highres_denoise: float = Field(
+        default=0.95, description="Strength for high-resolution pass. Only used if enable_hr_fix is True."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enable_hr_fix: bool = Field(
+        default=False, description="Use HR fix"
+    )
+    cfg: float = Field(
+        default=1, description="The real classifier-free-guidance scale for the generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "initial_latent": self.initial_latent.value,
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "background_threshold": self.background_threshold,
+            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "guidance_scale": self.guidance_scale,
+            "lowres_denoise": self.lowres_denoise,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "num_images": self.num_images,
+            "output_format": self.output_format.value,
+            "hr_downscale": self.hr_downscale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "highres_denoise": self.highres_denoise,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_hr_fix": self.enable_hr_fix,
+            "cfg": self.cfg,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/iclight-v2",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxDifferentialDiffusion(FALNode):
+    """
+    FLUX.1 Differential Diffusion is a rapid endpoint that enables swift, granular control over image transformations through change maps, delivering fast and precise region-specific modifications while maintaining FLUX.1 [dev]'s high-quality output.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use as initial image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for image-to-image. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    change_map_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of change map."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        change_map_image_url_base64 = await context.image_to_base64(self.change_map_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "strength": self.strength,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "change_map_image_url": f"data:image/png;base64,{change_map_image_url_base64}",
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-differential-diffusion",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxPulid(FALNode):
+    """
+    An endpoint for personalized image generation using Flux as per given description.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class MaxSequenceLength(Enum):
+        """
+        The maximum sequence length for the model.
+        """
+        VALUE_128 = "128"
+        VALUE_256 = "256"
+        VALUE_512 = "512"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    id_weight: float = Field(
+        default=1, description="The weight of the ID loss."
+    )
+    image_size: str = Field(
+        default="landscape_4_3", description="The size of the generated image."
+    )
+    start_step: int = Field(
+        default=0, description="The number of steps to start the CFG from."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for inpainting."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    max_sequence_length: MaxSequenceLength = Field(
+        default=MaxSequenceLength.VALUE_128, description="The maximum sequence length for the model."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    guidance_scale: float = Field(
+        default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=20, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    negative_prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    true_cfg: float = Field(
+        default=1, description="The weight of the CFG loss."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "id_weight": self.id_weight,
+            "image_size": self.image_size,
+            "start_step": self.start_step,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "enable_safety_checker": self.enable_safety_checker,
+            "max_sequence_length": self.max_sequence_length.value,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+            "true_cfg": self.true_cfg,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-pulid",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class BirefnetV2(FALNode):
+    """
+    bilateral reference framework (BiRefNet) for high-resolution dichotomous image segmentation (DIS)
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OperatingResolution(Enum):
+        """
+        The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model.
+        """
+        VALUE_1024X1024 = "1024x1024"
+        VALUE_2048X2048 = "2048x2048"
+        VALUE_2304X2304 = "2304x2304"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image
+        """
+        WEBP = "webp"
+        PNG = "png"
+        GIF = "gif"
+
+    class Model(Enum):
+        """
+        Model to use for background removal.
+        The 'General Use (Light)' model is the original model used in the BiRefNet repository.
+        The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images.
+        The 'General Use (Heavy)' model is a slower but more accurate model.
+        The 'Matting' model is a model trained specifically for matting images.
+        The 'Portrait' model is a model trained specifically for portrait images.
+        The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304.
+        The 'General Use (Light)' model is recommended for most use cases.
+        The corresponding models are as follows:
+        - 'General Use (Light)': BiRefNet
+        - 'General Use (Light 2K)': BiRefNet_lite-2K
+        - 'General Use (Heavy)': BiRefNet_lite
+        - 'Matting': BiRefNet-matting
+        - 'Portrait': BiRefNet-portrait
+        - 'General Use (Dynamic)': BiRefNet_dynamic
+        """
+        GENERAL_USE_LIGHT = "General Use (Light)"
+        GENERAL_USE_LIGHT_2K = "General Use (Light 2K)"
+        GENERAL_USE_HEAVY = "General Use (Heavy)"
+        MATTING = "Matting"
+        PORTRAIT = "Portrait"
+        GENERAL_USE_DYNAMIC = "General Use (Dynamic)"
+
+
+    operating_resolution: OperatingResolution = Field(
+        default=OperatingResolution.VALUE_1024X1024, description="The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the output image"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to remove background from"
+    )
+    model: Model = Field(
+        default=Model.GENERAL_USE_LIGHT, description="Model to use for background removal. The 'General Use (Light)' model is the original model used in the BiRefNet repository. The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images. The 'General Use (Heavy)' model is a slower but more accurate model. The 'Matting' model is a model trained specifically for matting images. The 'Portrait' model is a model trained specifically for portrait images. The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304. The 'General Use (Light)' model is recommended for most use cases. The corresponding models are as follows: - 'General Use (Light)': BiRefNet - 'General Use (Light 2K)': BiRefNet_lite-2K - 'General Use (Heavy)': BiRefNet_lite - 'Matting': BiRefNet-matting - 'Portrait': BiRefNet-portrait - 'General Use (Dynamic)': BiRefNet_dynamic"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    output_mask: bool = Field(
+        default=False, description="Whether to output the mask used to remove the background"
+    )
+    refine_foreground: bool = Field(
+        default=True, description="Whether to refine the foreground using the estimated mask"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "operating_resolution": self.operating_resolution.value,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "model": self.model.value,
+            "sync_mode": self.sync_mode,
+            "output_mask": self.output_mask,
+            "refine_foreground": self.refine_foreground,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/birefnet/v2",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LivePortraitImage(FALNode):
+    """
+    Transfer expression from a video to a portrait.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        Output format
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    smile: float = Field(
+        default=0, description="Amount to smile"
+    )
+    eyebrow: float = Field(
+        default=0, description="Amount to raise or lower eyebrows"
+    )
+    rotate_roll: float = Field(
+        default=0, description="Amount to rotate the face in roll"
+    )
+    wink: float = Field(
+        default=0, description="Amount to wink"
+    )
+    rotate_pitch: float = Field(
+        default=0, description="Amount to rotate the face in pitch"
+    )
+    blink: float = Field(
+        default=0, description="Amount to blink the eyes"
+    )
+    scale: float = Field(
+        default=2.3, description="Scaling factor for the face crop."
+    )
+    eee: float = Field(
+        default=0, description="Amount to shape mouth in 'eee' position"
+    )
+    pupil_x: float = Field(
+        default=0, description="Amount to move pupils horizontally"
+    )
+    dsize: int = Field(
+        default=512, description="Size of the output image."
+    )
+    flag_pasteback: bool = Field(
+        default=True, description="Whether to paste-back/stitch the animated face cropping from the face-cropping space to the original image space."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="Whether to enable the safety checker. If enabled, the model will check if the input image contains a face before processing it. The safety checker will process the input image"
+    )
+    vy_ratio: float = Field(
+        default=-0.125, description="Vertical offset ratio for face crop. Positive values move up, negative values move down."
+    )
+    vx_ratio: float = Field(
+        default=0, description="Horizontal offset ratio for face crop."
+    )
+    pupil_y: float = Field(
+        default=0, description="Amount to move pupils vertically"
+    )
+    rotate_yaw: float = Field(
+        default=0, description="Amount to rotate the face in yaw"
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="Output format"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be animated"
+    )
+    woo: float = Field(
+        default=0, description="Amount to shape mouth in 'woo' position"
+    )
+    aaa: float = Field(
+        default=0, description="Amount to open mouth in 'aaa' shape"
+    )
+    flag_do_rot: bool = Field(
+        default=True, description="Whether to conduct the rotation when flag_do_crop is True."
+    )
+    flag_do_crop: bool = Field(
+        default=True, description="Whether to crop the source portrait to the face-cropping space."
+    )
+    flag_lip_zero: bool = Field(
+        default=True, description="Whether to set the lip to closed state before animation. Only takes effect when flag_eye_retargeting and flag_lip_retargeting are False."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "smile": self.smile,
+            "eyebrow": self.eyebrow,
+            "rotate_roll": self.rotate_roll,
+            "wink": self.wink,
+            "rotate_pitch": self.rotate_pitch,
+            "blink": self.blink,
+            "scale": self.scale,
+            "eee": self.eee,
+            "pupil_x": self.pupil_x,
+            "dsize": self.dsize,
+            "flag_pasteback": self.flag_pasteback,
+            "enable_safety_checker": self.enable_safety_checker,
+            "vy_ratio": self.vy_ratio,
+            "vx_ratio": self.vx_ratio,
+            "pupil_y": self.pupil_y,
+            "rotate_yaw": self.rotate_yaw,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "woo": self.woo,
+            "aaa": self.aaa,
+            "flag_do_rot": self.flag_do_rot,
+            "flag_do_crop": self.flag_do_crop,
+            "flag_lip_zero": self.flag_lip_zero,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/live-portrait/image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxGeneralRfInversion(FALNode):
+    """
+    A general purpose endpoint for the FLUX.1 [dev] model, implementing the RF-Inversion pipeline. This can be used to edit a reference image based on a prompt.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Scheduler(Enum):
+        """
+        Scheduler for the denoising process.
+        """
+        EULER = "euler"
+        DPMPP_2M = "dpmpp_2m"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SigmaSchedule(Enum):
+        """
+        Sigmas schedule for the denoising process.
+        """
+        SGM_UNIFORM = "sgm_uniform"
+
+    class ReverseGuidanceSchedule(Enum):
+        """
+        Scheduler for applying reverse guidance.
+        """
+        CONSTANT = "constant"
+        LINEAR_INCREASE = "linear_increase"
+        LINEAR_DECREASE = "linear_decrease"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to edit the image with"
+    )
+    nag_end: float = Field(
+        default=0.25, description="The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    control_loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    controller_guidance_reverse: float = Field(
+        default=0.75, description="The controller guidance (eta) used in the denoising process.Using values closer to 1 will result in an image closer to input."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    reverse_guidance_start: int = Field(
+        default=0, description="Timestep to start guidance during reverse process."
+    )
+    easycontrols: list[str] = Field(
+        default=[], description="EasyControl Inputs to use for image generation."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    scheduler: Scheduler = Field(
+        default=Scheduler.EULER, description="Scheduler for the denoising process."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    use_cfg_zero: bool = Field(
+        default=False, description="Uses CFG-zero init sampling as in https://arxiv.org/abs/2503.18886."
+    )
+    reference_strength: float = Field(
+        default=0.65, description="Strength of reference_only generation. Only used if a reference image is provided."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    sigma_schedule: SigmaSchedule | None = Field(
+        default=None, description="Sigmas schedule for the denoising process."
+    )
+    reference_end: float = Field(
+        default=1, description="The percentage of the total timesteps when the reference guidance is to be ended."
+    )
+    controller_guidance_forward: float = Field(
+        default=0.6, description="The controller guidance (gamma) used in the creation of structured noise."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to be edited"
+    )
+    fill_image: str = Field(
+        default="", description="Use an image input to influence the generation. Can be used to fill images in masked areas."
+    )
+    nag_scale: float = Field(
+        default=3, description="The scale for NAG. Higher values will result in a image that is more distant to the negative prompt."
+    )
+    reverse_guidance_schedule: ReverseGuidanceSchedule = Field(
+        default=ReverseGuidanceSchedule.CONSTANT, description="Scheduler for applying reverse guidance."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of Image for Reference-Only"
+    )
+    reverse_guidance_end: int = Field(
+        default=8, description="Timestep to stop guidance during reverse process."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    controlnet_unions: list[str] = Field(
+        default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt."
+    )
+    nag_tau: float = Field(
+        default=2.5, description="The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. This is always set to 1 for streaming output."
+    )
+    use_beta_schedule: bool = Field(
+        default=False, description="Specifies whether beta sigmas ought to be used."
+    )
+    nag_alpha: float = Field(
+        default=0.25, description="The alpha value for NAG. This value is used as a final weighting factor for steering the normalized guidance (positive and negative prompts) in the direction of the positive prompt. Higher values will result in less steering on the normalized guidance where lower values will result in considering the positive prompt guidance more."
+    )
+    base_shift: float = Field(
+        default=0.5, description="Base shift for the scheduled timesteps"
+    )
+    max_shift: float = Field(
+        default=1.15, description="Max shift for the scheduled timesteps"
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    reference_start: float = Field(
+        default=0, description="The percentage of the total timesteps when the reference guidance is to bestarted."
+    )
+    controlnets: list[str] = Field(
+        default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "nag_end": self.nag_end,
+            "image_size": self.image_size,
+            "control_loras": self.control_loras,
+            "controller_guidance_reverse": self.controller_guidance_reverse,
+            "loras": self.loras,
+            "reverse_guidance_start": self.reverse_guidance_start,
+            "easycontrols": self.easycontrols,
+            "guidance_scale": self.guidance_scale,
+            "scheduler": self.scheduler.value,
+            "output_format": self.output_format.value,
+            "use_cfg_zero": self.use_cfg_zero,
+            "reference_strength": self.reference_strength,
+            "sync_mode": self.sync_mode,
+            "sigma_schedule": self.sigma_schedule.value if self.sigma_schedule else None,
+            "reference_end": self.reference_end,
+            "controller_guidance_forward": self.controller_guidance_forward,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "fill_image": self.fill_image,
+            "nag_scale": self.nag_scale,
+            "reverse_guidance_schedule": self.reverse_guidance_schedule.value,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "reverse_guidance_end": self.reverse_guidance_end,
+            "enable_safety_checker": self.enable_safety_checker,
+            "controlnet_unions": self.controlnet_unions,
+            "negative_prompt": self.negative_prompt,
+            "nag_tau": self.nag_tau,
+            "num_images": self.num_images,
+            "use_beta_schedule": self.use_beta_schedule,
+            "nag_alpha": self.nag_alpha,
+            "base_shift": self.base_shift,
+            "max_shift": self.max_shift,
+            "num_inference_steps": self.num_inference_steps,
+            "reference_start": self.reference_start,
+            "controlnets": self.controlnets,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-general/rf-inversion",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsHed(FALNode):
+    """
+    Holistically-Nested Edge Detection (HED) preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    safe: bool = Field(
+        default=False, description="Whether to use the safe version of the HED detector"
+    )
+    scribble: bool = Field(
+        default=False, description="Whether to use the scribble version of the HED detector"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "safe": self.safe,
+            "scribble": self.scribble,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/hed",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsDepthAnythingV2(FALNode):
+    """
+    Depth Anything v2 preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/depth-anything/v2",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsScribble(FALNode):
+    """
+    Scribble preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Model(Enum):
+        """
+        The model to use for the Scribble detector
+        """
+        HED = "HED"
+        PIDI = "PiDi"
+
+
+    model: Model = Field(
+        default=Model.HED, description="The model to use for the Scribble detector"
+    )
+    safe: bool = Field(
+        default=False, description="Whether to use the safe version of the Scribble detector"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "model": self.model.value,
+            "safe": self.safe,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/scribble",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsMlsd(FALNode):
+    """
+    M-LSD line segment detection preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    distance_threshold: float = Field(
+        default=0.1, description="Distance threshold for the MLSD detector"
+    )
+    score_threshold: float = Field(
+        default=0.1, description="Score threshold for the MLSD detector"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "distance_threshold": self.distance_threshold,
+            "score_threshold": self.score_threshold,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/mlsd",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsSam(FALNode):
+    """
+    Segment Anything Model (SAM) preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/sam",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsMidas(FALNode):
+    """
+    MiDaS depth estimation preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    a: float = Field(
+        default=6.283185307179586, description="A parameter for the MiDaS detector"
+    )
+    background_threshold: float = Field(
+        default=0.1, description="Background threshold for the MiDaS detector"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "a": self.a,
+            "background_threshold": self.background_threshold,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/midas",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsTeed(FALNode):
+    """
+    TEED (Temporal Edge Enhancement Detection) preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/teed",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsLineart(FALNode):
+    """
+    Line art preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    coarse: bool = Field(
+        default=False, description="Whether to use the coarse model"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "coarse": self.coarse,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/lineart",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsZoe(FALNode):
+    """
+    ZoeDepth preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/zoe",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImagePreprocessorsPidi(FALNode):
+    """
+    PIDI (Pidinet) preprocessor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    safe: bool = Field(
+        default=False, description="Whether to use the safe version of the Pidi detector"
+    )
+    apply_filter: bool = Field(
+        default=False, description="Whether to apply the filter to the image."
+    )
+    scribble: bool = Field(
+        default=False, description="Whether to use the scribble version of the Pidi detector"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to process"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "safe": self.safe,
+            "apply_filter": self.apply_filter,
+            "scribble": self.scribble,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/image-preprocessors/pidi",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Sam2Image(FALNode):
+    """
+    SAM 2 is a model for segmenting images and videos in real-time.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
+
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    prompts: list[str] = Field(
+        default=[], description="List of prompts to segment the image"
+    )
+    box_prompts: list[str] = Field(
+        default=[], description="Coordinates for boxes"
+    )
+    apply_mask: bool = Field(
+        default=False, description="Apply the mask on the image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be segmented"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "output_format": self.output_format.value,
+            "prompts": self.prompts,
+            "box_prompts": self.box_prompts,
+            "apply_mask": self.apply_mask,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sam2/image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxGeneralInpainting(FALNode):
+    """
+    FLUX General Inpainting is a versatile endpoint that enables precise image editing and completion, supporting multiple AI extensions including LoRA, ControlNet, and IP-Adapter for enhanced control over inpainting results and sophisticated image modifications.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Scheduler(Enum):
+        """
+        Scheduler for the denoising process.
+        """
+        EULER = "euler"
+        DPMPP_2M = "dpmpp_2m"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SigmaSchedule(Enum):
+        """
+        Sigmas schedule for the denoising process.
+        """
+        SGM_UNIFORM = "sgm_uniform"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    nag_end: float = Field(
+        default=0.25, description="The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    control_loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    scheduler: Scheduler = Field(
+        default=Scheduler.EULER, description="Scheduler for the denoising process."
+    )
+    easycontrols: list[str] = Field(
+        default=[], description="EasyControl Inputs to use for image generation."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    real_cfg_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    use_cfg_zero: bool = Field(
+        default=False, description="Uses CFG-zero init sampling as in https://arxiv.org/abs/2503.18886."
+    )
+    fill_image: str = Field(
+        default="", description="Use an image input to influence the generation. Can be used to fill images in masked areas."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    sigma_schedule: SigmaSchedule | None = Field(
+        default=None, description="Sigmas schedule for the denoising process."
+    )
+    reference_end: float = Field(
+        default=1, description="The percentage of the total timesteps when the reference guidance is to be ended."
+    )
+    reference_strength: float = Field(
+        default=0.65, description="Strength of reference_only generation. Only used if a reference image is provided."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    mask_url: str = Field(
+        default="", description="The mask to area to Inpaint in."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for inpainting. or img2img"
+    )
+    nag_scale: float = Field(
+        default=3, description="The scale for NAG. Higher values will result in a image that is more distant to the negative prompt."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of Image for Reference-Only"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    controlnet_unions: list[str] = Field(
+        default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt."
+    )
+    nag_tau: float = Field(
+        default=2.5, description="The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. This is always set to 1 for streaming output."
+    )
+    use_beta_schedule: bool = Field(
+        default=False, description="Specifies whether beta sigmas ought to be used."
+    )
+    ip_adapters: list[str] = Field(
+        default=[], description="IP-Adapter to use for image generation."
+    )
+    base_shift: float = Field(
+        default=0.5, description="Base shift for the scheduled timesteps"
+    )
+    nag_alpha: float = Field(
+        default=0.25, description="The alpha value for NAG. This value is used as a final weighting factor for steering the normalized guidance (positive and negative prompts) in the direction of the positive prompt. Higher values will result in less steering on the normalized guidance where lower values will result in considering the positive prompt guidance more."
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    max_shift: float = Field(
+        default=1.15, description="Max shift for the scheduled timesteps"
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    controlnets: list[str] = Field(
+        default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
+    )
+    reference_start: float = Field(
+        default=0, description="The percentage of the total timesteps when the reference guidance is to bestarted."
+    )
+    use_real_cfg: bool = Field(
+        default=False, description="Uses classical CFG as in SD1.5, SDXL, etc. Increases generation times and price when set to be true. If using XLabs IP-Adapter v1, this will be turned on!."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "nag_end": self.nag_end,
+            "image_size": self.image_size,
+            "control_loras": self.control_loras,
+            "loras": self.loras,
+            "scheduler": self.scheduler.value,
+            "easycontrols": self.easycontrols,
+            "guidance_scale": self.guidance_scale,
+            "real_cfg_scale": self.real_cfg_scale,
+            "output_format": self.output_format.value,
+            "use_cfg_zero": self.use_cfg_zero,
+            "fill_image": self.fill_image,
+            "sync_mode": self.sync_mode,
+            "sigma_schedule": self.sigma_schedule.value if self.sigma_schedule else None,
+            "reference_end": self.reference_end,
+            "reference_strength": self.reference_strength,
+            "seed": self.seed,
+            "mask_url": self.mask_url,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "nag_scale": self.nag_scale,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "enable_safety_checker": self.enable_safety_checker,
+            "controlnet_unions": self.controlnet_unions,
+            "negative_prompt": self.negative_prompt,
+            "nag_tau": self.nag_tau,
+            "num_images": self.num_images,
+            "use_beta_schedule": self.use_beta_schedule,
+            "ip_adapters": self.ip_adapters,
+            "base_shift": self.base_shift,
+            "nag_alpha": self.nag_alpha,
+            "strength": self.strength,
+            "max_shift": self.max_shift,
+            "num_inference_steps": self.num_inference_steps,
+            "controlnets": self.controlnets,
+            "reference_start": self.reference_start,
+            "use_real_cfg": self.use_real_cfg,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-general/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxGeneralImageToImage(FALNode):
+    """
+    FLUX General Image-to-Image is a versatile endpoint that transforms existing images with support for LoRA, ControlNet, and IP-Adapter extensions, enabling precise control over style transfer, modifications, and artistic variations through multiple guidance methods.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Scheduler(Enum):
+        """
+        Scheduler for the denoising process.
+        """
+        EULER = "euler"
+        DPMPP_2M = "dpmpp_2m"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SigmaSchedule(Enum):
+        """
+        Sigmas schedule for the denoising process.
+        """
+        SGM_UNIFORM = "sgm_uniform"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    nag_end: float = Field(
+        default=0.25, description="The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    control_loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    scheduler: Scheduler = Field(
+        default=Scheduler.EULER, description="Scheduler for the denoising process."
+    )
+    easycontrols: list[str] = Field(
+        default=[], description="EasyControl Inputs to use for image generation."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    real_cfg_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    use_cfg_zero: bool = Field(
+        default=False, description="Uses CFG-zero init sampling as in https://arxiv.org/abs/2503.18886."
+    )
+    fill_image: str = Field(
+        default="", description="Use an image input to influence the generation. Can be used to fill images in masked areas."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    sigma_schedule: SigmaSchedule | None = Field(
+        default=None, description="Sigmas schedule for the denoising process."
+    )
+    reference_end: float = Field(
+        default=1, description="The percentage of the total timesteps when the reference guidance is to be ended."
+    )
+    reference_strength: float = Field(
+        default=0.65, description="Strength of reference_only generation. Only used if a reference image is provided."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for inpainting. or img2img"
+    )
+    nag_scale: float = Field(
+        default=3, description="The scale for NAG. Higher values will result in a image that is more distant to the negative prompt."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of Image for Reference-Only"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    controlnet_unions: list[str] = Field(
+        default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt."
+    )
+    nag_tau: float = Field(
+        default=2.5, description="The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. This is always set to 1 for streaming output."
+    )
+    use_beta_schedule: bool = Field(
+        default=False, description="Specifies whether beta sigmas ought to be used."
+    )
+    ip_adapters: list[str] = Field(
+        default=[], description="IP-Adapter to use for image generation."
+    )
+    base_shift: float = Field(
+        default=0.5, description="Base shift for the scheduled timesteps"
+    )
+    nag_alpha: float = Field(
+        default=0.25, description="The alpha value for NAG. This value is used as a final weighting factor for steering the normalized guidance (positive and negative prompts) in the direction of the positive prompt. Higher values will result in less steering on the normalized guidance where lower values will result in considering the positive prompt guidance more."
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    max_shift: float = Field(
+        default=1.15, description="Max shift for the scheduled timesteps"
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    controlnets: list[str] = Field(
+        default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
+    )
+    reference_start: float = Field(
+        default=0, description="The percentage of the total timesteps when the reference guidance is to bestarted."
+    )
+    use_real_cfg: bool = Field(
+        default=False, description="Uses classical CFG as in SD1.5, SDXL, etc. Increases generation times and price when set to be true. If using XLabs IP-Adapter v1, this will be turned on!."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "nag_end": self.nag_end,
+            "image_size": self.image_size,
+            "control_loras": self.control_loras,
+            "loras": self.loras,
+            "scheduler": self.scheduler.value,
+            "easycontrols": self.easycontrols,
+            "guidance_scale": self.guidance_scale,
+            "real_cfg_scale": self.real_cfg_scale,
+            "output_format": self.output_format.value,
+            "use_cfg_zero": self.use_cfg_zero,
+            "fill_image": self.fill_image,
+            "sync_mode": self.sync_mode,
+            "sigma_schedule": self.sigma_schedule.value if self.sigma_schedule else None,
+            "reference_end": self.reference_end,
+            "reference_strength": self.reference_strength,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "nag_scale": self.nag_scale,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "enable_safety_checker": self.enable_safety_checker,
+            "controlnet_unions": self.controlnet_unions,
+            "negative_prompt": self.negative_prompt,
+            "nag_tau": self.nag_tau,
+            "num_images": self.num_images,
+            "use_beta_schedule": self.use_beta_schedule,
+            "ip_adapters": self.ip_adapters,
+            "base_shift": self.base_shift,
+            "nag_alpha": self.nag_alpha,
+            "strength": self.strength,
+            "max_shift": self.max_shift,
+            "num_inference_steps": self.num_inference_steps,
+            "controlnets": self.controlnets,
+            "reference_start": self.reference_start,
+            "use_real_cfg": self.use_real_cfg,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-general/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxGeneralDifferentialDiffusion(FALNode):
+    """
+    A specialized FLUX endpoint combining differential diffusion control with LoRA, ControlNet, and IP-Adapter support, enabling precise, region-specific image transformations through customizable change maps.
+    flux, editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Scheduler(Enum):
+        """
+        Scheduler for the denoising process.
+        """
+        EULER = "euler"
+        DPMPP_2M = "dpmpp_2m"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SigmaSchedule(Enum):
+        """
+        Sigmas schedule for the denoising process.
+        """
+        SGM_UNIFORM = "sgm_uniform"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    nag_end: float = Field(
+        default=0.25, description="The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    control_loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    scheduler: Scheduler = Field(
+        default=Scheduler.EULER, description="Scheduler for the denoising process."
+    )
+    easycontrols: list[str] = Field(
+        default=[], description="EasyControl Inputs to use for image generation."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    real_cfg_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    use_cfg_zero: bool = Field(
+        default=False, description="Uses CFG-zero init sampling as in https://arxiv.org/abs/2503.18886."
+    )
+    fill_image: str = Field(
+        default="", description="Use an image input to influence the generation. Can be used to fill images in masked areas."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    sigma_schedule: SigmaSchedule | None = Field(
+        default=None, description="Sigmas schedule for the denoising process."
+    )
+    reference_end: float = Field(
+        default=1, description="The percentage of the total timesteps when the reference guidance is to be ended."
+    )
+    reference_strength: float = Field(
+        default=0.65, description="Strength of reference_only generation. Only used if a reference image is provided."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use as initial image."
+    )
+    nag_scale: float = Field(
+        default=3, description="The scale for NAG. Higher values will result in a image that is more distant to the negative prompt."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of Image for Reference-Only"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    controlnet_unions: list[str] = Field(
+        default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt."
+    )
+    nag_tau: float = Field(
+        default=2.5, description="The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value."
+    )
+    change_map_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of change map."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. This is always set to 1 for streaming output."
+    )
+    use_beta_schedule: bool = Field(
+        default=False, description="Specifies whether beta sigmas ought to be used."
+    )
+    ip_adapters: list[str] = Field(
+        default=[], description="IP-Adapter to use for image generation."
+    )
+    base_shift: float = Field(
+        default=0.5, description="Base shift for the scheduled timesteps"
+    )
+    nag_alpha: float = Field(
+        default=0.25, description="The alpha value for NAG. This value is used as a final weighting factor for steering the normalized guidance (positive and negative prompts) in the direction of the positive prompt. Higher values will result in less steering on the normalized guidance where lower values will result in considering the positive prompt guidance more."
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for differential diffusion. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    max_shift: float = Field(
+        default=1.15, description="Max shift for the scheduled timesteps"
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    controlnets: list[str] = Field(
+        default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
+    )
+    reference_start: float = Field(
+        default=0, description="The percentage of the total timesteps when the reference guidance is to bestarted."
+    )
+    use_real_cfg: bool = Field(
+        default=False, description="Uses classical CFG as in SD1.5, SDXL, etc. Increases generation times and price when set to be true. If using XLabs IP-Adapter v1, this will be turned on!."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        change_map_image_url_base64 = await context.image_to_base64(self.change_map_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "nag_end": self.nag_end,
+            "image_size": self.image_size,
+            "control_loras": self.control_loras,
+            "loras": self.loras,
+            "scheduler": self.scheduler.value,
+            "easycontrols": self.easycontrols,
+            "guidance_scale": self.guidance_scale,
+            "real_cfg_scale": self.real_cfg_scale,
+            "output_format": self.output_format.value,
+            "use_cfg_zero": self.use_cfg_zero,
+            "fill_image": self.fill_image,
+            "sync_mode": self.sync_mode,
+            "sigma_schedule": self.sigma_schedule.value if self.sigma_schedule else None,
+            "reference_end": self.reference_end,
+            "reference_strength": self.reference_strength,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "nag_scale": self.nag_scale,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "enable_safety_checker": self.enable_safety_checker,
+            "controlnet_unions": self.controlnet_unions,
+            "negative_prompt": self.negative_prompt,
+            "nag_tau": self.nag_tau,
+            "change_map_image_url": f"data:image/png;base64,{change_map_image_url_base64}",
+            "num_images": self.num_images,
+            "use_beta_schedule": self.use_beta_schedule,
+            "ip_adapters": self.ip_adapters,
+            "base_shift": self.base_shift,
+            "nag_alpha": self.nag_alpha,
+            "strength": self.strength,
+            "max_shift": self.max_shift,
+            "num_inference_steps": self.num_inference_steps,
+            "controlnets": self.controlnets,
+            "reference_start": self.reference_start,
+            "use_real_cfg": self.use_real_cfg,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-general/differential-diffusion",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FluxLoraImageToImage(FALNode):
+    """
+    FLUX LoRA Image-to-Image is a high-performance endpoint that transforms existing images using FLUX models, leveraging LoRA adaptations to enable rapid and precise image style transfer, modifications, and artistic variations.
+    flux, editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. This is always set to 1 for streaming output."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for inpainting. or img2img"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    strength: float = Field(
+        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "strength": self.strength,
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/flux-lora/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class SdxlControlnetUnionInpainting(FALNode):
+    """
+    An efficent SDXL multi-controlnet inpainting model.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    depth_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the depth image."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
+    )
+    normal_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    teed_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The list of LoRA weights to use."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    canny_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    segmentation_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the segmentation image."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    mask_url: str = Field(
+        default="", description="The URL of the mask to use for inpainting."
+    )
+    segmentation_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    openpose_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    canny_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the canny image."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    depth_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    normal_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the normal image."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    teed_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the teed image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    controlnet_conditioning_scale: float = Field(
+        default=0.5, description="The scale of the controlnet conditioning."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    openpose_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the openpose image."
+    )
+    num_inference_steps: int = Field(
+        default=35, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        normal_image_url_base64 = await context.image_to_base64(self.normal_image_url)
+        teed_image_url_base64 = await context.image_to_base64(self.teed_image_url)
+        canny_image_url_base64 = await context.image_to_base64(self.canny_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        segmentation_image_url_base64 = await context.image_to_base64(self.segmentation_image_url)
+        openpose_image_url_base64 = await context.image_to_base64(self.openpose_image_url)
+        depth_image_url_base64 = await context.image_to_base64(self.depth_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "depth_preprocess": self.depth_preprocess,
+            "image_size": self.image_size,
+            "normal_image_url": f"data:image/png;base64,{normal_image_url_base64}",
+            "embeddings": self.embeddings,
+            "teed_image_url": f"data:image/png;base64,{teed_image_url_base64}",
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "canny_image_url": f"data:image/png;base64,{canny_image_url_base64}",
+            "segmentation_preprocess": self.segmentation_preprocess,
+            "format": self.format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "request_id": self.request_id,
+            "seed": self.seed,
+            "mask_url": self.mask_url,
+            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_url_base64}",
+            "openpose_image_url": f"data:image/png;base64,{openpose_image_url_base64}",
+            "canny_preprocess": self.canny_preprocess,
+            "expand_prompt": self.expand_prompt,
+            "depth_image_url": f"data:image/png;base64,{depth_image_url_base64}",
+            "normal_preprocess": self.normal_preprocess,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "teed_preprocess": self.teed_preprocess,
+            "num_images": self.num_images,
+            "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
+            "strength": self.strength,
+            "safety_checker_version": self.safety_checker_version.value,
+            "openpose_preprocess": self.openpose_preprocess,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sdxl-controlnet-union/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class SdxlControlnetUnionImageToImage(FALNode):
+    """
+    An efficent SDXL multi-controlnet image-to-image model.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    depth_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the depth image."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
+    )
+    normal_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    teed_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    loras: list[str] = Field(
+        default=[], description="The list of LoRA weights to use."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    canny_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    segmentation_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the segmentation image."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    segmentation_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    openpose_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    canny_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the canny image."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    depth_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    normal_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the normal image."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    preserve_aspect_ratio: bool = Field(
+        default=False, description="If set to true, the aspect ratio of the generated image will be preserved even if the image size is too large. However, if the image is not a multiple of 32 in width or height, it will be resized to the nearest multiple of 32. By default, this snapping to the nearest multiple of 32 will not preserve the aspect ratio. Set crop_output to True, to crop the output to the proper aspect ratio after generating."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    crop_output: bool = Field(
+        default=False, description="If set to true, the output cropped to the proper aspect ratio after generating."
+    )
+    teed_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the teed image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    controlnet_conditioning_scale: float = Field(
+        default=0.5, description="The scale of the controlnet conditioning."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    openpose_preprocess: bool = Field(
+        default=True, description="Whether to preprocess the openpose image."
+    )
+    num_inference_steps: int = Field(
+        default=35, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        normal_image_url_base64 = await context.image_to_base64(self.normal_image_url)
+        teed_image_url_base64 = await context.image_to_base64(self.teed_image_url)
+        canny_image_url_base64 = await context.image_to_base64(self.canny_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        segmentation_image_url_base64 = await context.image_to_base64(self.segmentation_image_url)
+        openpose_image_url_base64 = await context.image_to_base64(self.openpose_image_url)
+        depth_image_url_base64 = await context.image_to_base64(self.depth_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "depth_preprocess": self.depth_preprocess,
+            "image_size": self.image_size,
+            "normal_image_url": f"data:image/png;base64,{normal_image_url_base64}",
+            "embeddings": self.embeddings,
+            "teed_image_url": f"data:image/png;base64,{teed_image_url_base64}",
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "canny_image_url": f"data:image/png;base64,{canny_image_url_base64}",
+            "segmentation_preprocess": self.segmentation_preprocess,
+            "format": self.format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "request_id": self.request_id,
+            "seed": self.seed,
+            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_url_base64}",
+            "openpose_image_url": f"data:image/png;base64,{openpose_image_url_base64}",
+            "canny_preprocess": self.canny_preprocess,
+            "expand_prompt": self.expand_prompt,
+            "depth_image_url": f"data:image/png;base64,{depth_image_url_base64}",
+            "normal_preprocess": self.normal_preprocess,
+            "enable_safety_checker": self.enable_safety_checker,
+            "preserve_aspect_ratio": self.preserve_aspect_ratio,
+            "negative_prompt": self.negative_prompt,
+            "crop_output": self.crop_output,
+            "teed_preprocess": self.teed_preprocess,
+            "num_images": self.num_images,
+            "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
+            "strength": self.strength,
+            "safety_checker_version": self.safety_checker_version.value,
+            "openpose_preprocess": self.openpose_preprocess,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sdxl-controlnet-union/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Era3d(FALNode):
+    """
+    A powerful image to novel multiview model with normals.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    cfg: float = Field(
+        default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    background_removal: bool = Field(
+        default=True, description="Background removal"
+    )
+    steps: int = Field(
+        default=40, description="Number of steps to run the model for"
+    )
+    crop_size: int = Field(
+        default=400, description="Size of the image to crop to"
+    )
+    seed: int = Field(
+        default=-1, description="Seed for random number generation"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to remove background from"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "cfg": self.cfg,
+            "background_removal": self.background_removal,
+            "steps": self.steps,
+            "crop_size": self.crop_size,
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/era-3d",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeDenseRegionCaption(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/dense-region-caption",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeReferringExpressionSegmentation(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    text_input: str = Field(
+        default="", description="Text input for the task"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "text_input": self.text_input,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/referring-expression-segmentation",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeObjectDetection(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/object-detection",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeOpenVocabularyDetection(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    text_input: str = Field(
+        default="", description="Text input for the task"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "text_input": self.text_input,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/open-vocabulary-detection",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeCaptionToPhraseGrounding(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    text_input: str = Field(
+        default="", description="Text input for the task"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "text_input": self.text_input,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/caption-to-phrase-grounding",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeRegionProposal(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/region-proposal",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeOcrWithRegion(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/ocr-with-region",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Florence2LargeRegionToSegmentation(FALNode):
+    """
+    Florence-2 is an advanced vision foundation model that uses a prompt-based approach to handle a wide range of vision and vision-language tasks
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    region: str = Field(
+        default="", description="The user input coordinates"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be processed."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "region": self.region,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/florence-2-large/region-to-segmentation",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class StableDiffusionV3MediumImageToImage(FALNode):
+    """
+    Stable Diffusion 3 Medium (Image to Image) is a Multimodal Diffusion Transformer (MMDiT) model that improves image quality, typography, prompt understanding, and efficiency.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt_expansion: bool = Field(
+        default=False, description="If set to true, prompt will be upsampled with more details."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image. Defaults to the conditioning image's size."
+    )
+    prompt: str = Field(
+        default="", description="The prompt to generate an image from."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image URL to generate an image from."
+    )
+    strength: float = Field(
+        default=0.9, description="The strength of the image-to-image transformation."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to generate an image from."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt_expansion": self.prompt_expansion,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+            "enable_safety_checker": self.enable_safety_checker,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/stable-diffusion-v3-medium/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Dwpose(FALNode):
+    """
+    Predict poses from images.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class DrawMode(Enum):
+        """
+        Mode of drawing the pose on the image. Options are: 'full-pose', 'body-pose', 'face-pose', 'hand-pose', 'face-hand-mask', 'face-mask', 'hand-mask'.
+        """
+        FULL_POSE = "full-pose"
+        BODY_POSE = "body-pose"
+        FACE_POSE = "face-pose"
+        HAND_POSE = "hand-pose"
+        FACE_HAND_MASK = "face-hand-mask"
+        FACE_MASK = "face-mask"
+        HAND_MASK = "hand-mask"
+
+
+    draw_mode: DrawMode = Field(
+        default=DrawMode.BODY_POSE, description="Mode of drawing the pose on the image. Options are: 'full-pose', 'body-pose', 'face-pose', 'hand-pose', 'face-hand-mask', 'face-mask', 'hand-mask'."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "draw_mode": self.draw_mode.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/dwpose",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Sd15DepthControlnet(FALNode):
+    """
+    SD 1.5 ControlNet
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    loras: list[str] = Field(
+        default=[], description="The list of LoRA weights to use."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    controlnet_conditioning_scale: float = Field(
+        default=0.5, description="The scale of the controlnet conditioning."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    control_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    num_inference_steps: int = Field(
+        default=35, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    enable_deep_cache: bool = Field(
+        default=False, description="If set to true, DeepCache will be enabled. TBD"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "num_images": self.num_images,
+            "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
+            "sync_mode": self.sync_mode,
+            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "enable_deep_cache": self.enable_deep_cache,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sd15-depth-controlnet",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class OmniZero(FALNode):
+    """
+    Any pose, any style, any identity
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="Prompt to guide the image generation."
+    )
+    identity_image_url: ImageRef = Field(
+        default=ImageRef(), description="Identity image url."
+    )
+    identity_strength: float = Field(
+        default=1, description="Identity strength."
+    )
+    number_of_images: int = Field(
+        default=1, description="Number of images."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale."
+    )
+    image_strength: float = Field(
+        default=0.75, description="Image strength."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to guide the image generation."
+    )
+    composition_image_url: ImageRef = Field(
+        default=ImageRef(), description="Composition image url."
+    )
+    depth_strength: float = Field(
+        default=0.5, description="Depth strength."
+    )
+    composition_strength: float = Field(
+        default=1, description="Composition strength."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image url."
+    )
+    style_image_url: ImageRef = Field(
+        default=ImageRef(), description="Style image url."
+    )
+    face_strength: float = Field(
+        default=1, description="Face strength."
+    )
+    style_strength: float = Field(
+        default=1, description="Style strength."
+    )
+    seed: int = Field(
+        default=42, description="Seed."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        identity_image_url_base64 = await context.image_to_base64(self.identity_image_url)
+        composition_image_url_base64 = await context.image_to_base64(self.composition_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        style_image_url_base64 = await context.image_to_base64(self.style_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "identity_image_url": f"data:image/png;base64,{identity_image_url_base64}",
+            "identity_strength": self.identity_strength,
+            "number_of_images": self.number_of_images,
+            "guidance_scale": self.guidance_scale,
+            "image_strength": self.image_strength,
+            "negative_prompt": self.negative_prompt,
+            "composition_image_url": f"data:image/png;base64,{composition_image_url_base64}",
+            "depth_strength": self.depth_strength,
+            "composition_strength": self.composition_strength,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "style_image_url": f"data:image/png;base64,{style_image_url_base64}",
+            "face_strength": self.face_strength,
+            "style_strength": self.style_strength,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/omni-zero",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class IpAdapterFaceId(FALNode):
+    """
+    High quality zero-shot personalization
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ModelType(Enum):
+        """
+        The model type to use. 1_5 is the default and is recommended for most use cases.
+        """
+        VALUE_1_5_V1 = "1_5-v1"
+        VALUE_1_5_V1_PLUS = "1_5-v1-plus"
+        VALUE_1_5_V2_PLUS = "1_5-v2-plus"
+        SDXL_V1 = "SDXL-v1"
+        SDXL_V2_PLUS = "SDXL-v2-plus"
+        VALUE_1_5_AURAFACE_V1 = "1_5-auraface-v1"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    face_image_url: ImageRef = Field(
+        default=ImageRef(), description="An image of a face to match. If an image with a size of 640x640 is not provided, it will be scaled and cropped to that size."
+    )
+    width: int = Field(
+        default=512, description="The width of the generated image."
+    )
+    face_id_det_size: int = Field(
+        default=640, description="The size of the face detection model. The higher the number the more accurate the detection will be but it will also take longer to run. The higher the number the more likely it will fail to find a face as well. Lower it if you are having trouble finding a face in the image."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    negative_prompt: str = Field(
+        default="blurry, low resolution, bad, ugly, low quality, pixelated, interpolated, compression artifacts, noisey, grainy", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    height: int = Field(
+        default=512, description="The height of the generated image."
+    )
+    num_samples: int = Field(
+        default=4, description="The number of samples for face id. The more samples the better the image will be but it will also take longer to generate. Default is 4."
+    )
+    base_sdxl_model_repo: str = Field(
+        default="SG161222/RealVisXL_V3.0", description="The URL to the base SDXL model. Default is SG161222/RealVisXL_V3.0"
+    )
+    base_1_5_model_repo: str = Field(
+        default="SG161222/Realistic_Vision_V4.0_noVAE", description="The URL to the base 1.5 model. Default is SG161222/Realistic_Vision_V4.0_noVAE"
+    )
+    num_inference_steps: int = Field(
+        default=50, description="The number of inference steps to use for generating the image. The more steps the better the image will be but it will also take longer to generate."
+    )
+    model_type: ModelType = Field(
+        default=ModelType.VALUE_1_5_V1, description="The model type to use. 1_5 is the default and is recommended for most use cases."
+    )
+    face_images_data_url: ImageRef = Field(
+        default=ImageRef(), description="URL to zip archive with images of faces. The images embedding will be averaged to create a more accurate face id."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        face_image_url_base64 = await context.image_to_base64(self.face_image_url)
+        face_images_data_url_base64 = await context.image_to_base64(self.face_images_data_url)
+        arguments = {
+            "prompt": self.prompt,
+            "face_image_url": f"data:image/png;base64,{face_image_url_base64}",
+            "width": self.width,
+            "face_id_det_size": self.face_id_det_size,
+            "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "height": self.height,
+            "num_samples": self.num_samples,
+            "base_sdxl_model_repo": self.base_sdxl_model_repo,
+            "base_1_5_model_repo": self.base_1_5_model_repo,
+            "num_inference_steps": self.num_inference_steps,
+            "model_type": self.model_type.value,
+            "face_images_data_url": f"data:image/png;base64,{face_images_data_url_base64}",
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ip-adapter-face-id",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LoraInpaint(FALNode):
+    """
+    Run Any Stable Diffusion model with customizable LoRA weights.
+    editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Scheduler(Enum):
+        """
+        Scheduler / sampler to use for the image denoising process.
+        """
+        DPM_PLUS_PLUS_2M = "DPM++ 2M"
+        DPM_PLUS_PLUS_2M_KARRAS = "DPM++ 2M Karras"
+        DPM_PLUS_PLUS_2M_SDE = "DPM++ 2M SDE"
+        DPM_PLUS_PLUS_2M_SDE_KARRAS = "DPM++ 2M SDE Karras"
+        EULER = "Euler"
+        EULER_A = "Euler A"
+        EULER_TRAILING_TIMESTEPS = "Euler (trailing timesteps)"
+        LCM = "LCM"
+        LCM_TRAILING_TIMESTEPS = "LCM (trailing timesteps)"
+        DDIM = "DDIM"
+        TCD = "TCD"
+
+    class PredictionType(Enum):
+        """
+        The type of prediction to use for the image generation.
+        The `epsilon` is the default.
+        """
+        V_PREDICTION = "v_prediction"
+        EPSILON = "epsilon"
+
+    class ImageFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    noise_strength: float = Field(
+        default=0.5, description="The amount of noise to add to noise image for image. Only used if the image_url is provided. 1.0 is complete noise and 0 is no noise."
+    )
+    tile_height: int = Field(
+        default=4096, description="The size of the tiles to be used for the image generation."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
+    )
+    ic_light_model_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the IC Light model to use for the image generation."
+    )
+    image_encoder_weight_name: str = Field(
+        default="pytorch_model.bin", description="The weight name of the image encoder model to use for the image generation."
+    )
+    ip_adapter: list[str] = Field(
+        default=[], description="The IP adapter to use for the image generation."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    scheduler: Scheduler | None = Field(
+        default=None, description="Scheduler / sampler to use for the image denoising process."
+    )
+    sigmas: str = Field(
+        default="", description="Optionally override the sigmas to use for the denoising process. Only works with schedulers which support the `sigmas` argument in their `set_sigmas` method. Defaults to not overriding, in which case the scheduler automatically sets the sigmas based on the `num_inference_steps` parameter. If set to a custom sigma schedule, the `num_inference_steps` parameter will be ignored. Cannot be set if `timesteps` is set."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    tile_stride_width: int = Field(
+        default=2048, description="The stride of the tiles to be used for the image generation."
+    )
+    debug_per_pass_latents: bool = Field(
+        default=False, description="If set to true, the latents will be saved for debugging per pass."
+    )
+    timesteps: str = Field(
+        default="", description="Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method. Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter. If set to a custom timestep schedule, the `num_inference_steps` parameter will be ignored. Cannot be set if `sigmas` is set."
+    )
+    model_name: str = Field(
+        default="", description="URL or HuggingFace ID of the base model to generate the image."
+    )
+    prompt_weighting: bool = Field(
+        default=False, description="If set to true, the prompt weighting syntax will be used. Additionally, this will lift the 77 token limit by averaging embeddings."
+    )
+    variant: str = Field(
+        default="", description="The variant of the model to use for huggingface models, e.g. 'fp16'."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for image to image/inpainting."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    mask_url: ImageRef = Field(
+        default=ImageRef(), description="URL of black-and-white image to use as mask during inpainting."
+    )
+    image_encoder_subfolder: str = Field(
+        default="", description="The subfolder of the image encoder model to use for the image generation."
+    )
+    ic_light_model_background_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the IC Light model background image to use for the image generation. Make sure to use a background compatible with the model."
+    )
+    rescale_betas_snr_zero: bool = Field(
+        default=False, description="Whether to set the rescale_betas_snr_zero option or not for the sampler"
+    )
+    tile_width: int = Field(
+        default=4096, description="The size of the tiles to be used for the image generation."
+    )
+    controlnet_guess_mode: bool = Field(
+        default=False, description="If set to true, the controlnet will be applied to only the conditional predictions."
+    )
+    prediction_type: PredictionType = Field(
+        default=PredictionType.EPSILON, description="The type of prediction to use for the image generation. The `epsilon` is the default."
+    )
+    eta: float = Field(
+        default=0, description="The eta value to be used for the image generation."
+    )
+    image_encoder_path: str = Field(
+        default="", description="The path to the image encoder model to use for the image generation."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    image_format: ImageFormat = Field(
+        default=ImageFormat.PNG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate in one request. Note that the higher the batch size, the longer it will take to generate the images."
+    )
+    debug_latents: bool = Field(
+        default=False, description="If set to true, the latents will be saved for debugging."
+    )
+    ic_light_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the IC Light model image to use for the image generation."
+    )
+    unet_name: str = Field(
+        default="", description="URL or HuggingFace ID of the custom U-Net model to use for the image generation."
+    )
+    clip_skip: int = Field(
+        default=0, description="Skips part of the image generation process, leading to slightly different results. This means the image renders faster, too."
+    )
+    tile_stride_height: int = Field(
+        default=2048, description="The stride of the tiles to be used for the image generation."
+    )
+    controlnets: list[str] = Field(
+        default=[], description="The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        ic_light_model_url_base64 = await context.image_to_base64(self.ic_light_model_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        ic_light_model_background_image_url_base64 = await context.image_to_base64(self.ic_light_model_background_image_url)
+        ic_light_image_url_base64 = await context.image_to_base64(self.ic_light_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "noise_strength": self.noise_strength,
+            "tile_height": self.tile_height,
+            "embeddings": self.embeddings,
+            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_url_base64}",
+            "image_encoder_weight_name": self.image_encoder_weight_name,
+            "ip_adapter": self.ip_adapter,
+            "loras": self.loras,
+            "scheduler": self.scheduler.value if self.scheduler else None,
+            "sigmas": self.sigmas,
+            "guidance_scale": self.guidance_scale,
+            "tile_stride_width": self.tile_stride_width,
+            "debug_per_pass_latents": self.debug_per_pass_latents,
+            "timesteps": self.timesteps,
+            "model_name": self.model_name,
+            "prompt_weighting": self.prompt_weighting,
+            "variant": self.variant,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "seed": self.seed,
+            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "image_encoder_subfolder": self.image_encoder_subfolder,
+            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_url_base64}",
+            "rescale_betas_snr_zero": self.rescale_betas_snr_zero,
+            "tile_width": self.tile_width,
+            "controlnet_guess_mode": self.controlnet_guess_mode,
+            "prediction_type": self.prediction_type.value,
+            "eta": self.eta,
+            "image_encoder_path": self.image_encoder_path,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "image_format": self.image_format.value,
+            "num_images": self.num_images,
+            "debug_latents": self.debug_latents,
+            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_url_base64}",
+            "unet_name": self.unet_name,
+            "clip_skip": self.clip_skip,
+            "tile_stride_height": self.tile_stride_height,
+            "controlnets": self.controlnets,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/lora/inpaint",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LoraImageToImage(FALNode):
+    """
+    Run Any Stable Diffusion model with customizable LoRA weights.
+    editing, transformation, image-to-image, img2img, lora
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Scheduler(Enum):
+        """
+        Scheduler / sampler to use for the image denoising process.
+        """
+        DPM_PLUS_PLUS_2M = "DPM++ 2M"
+        DPM_PLUS_PLUS_2M_KARRAS = "DPM++ 2M Karras"
+        DPM_PLUS_PLUS_2M_SDE = "DPM++ 2M SDE"
+        DPM_PLUS_PLUS_2M_SDE_KARRAS = "DPM++ 2M SDE Karras"
+        EULER = "Euler"
+        EULER_A = "Euler A"
+        EULER_TRAILING_TIMESTEPS = "Euler (trailing timesteps)"
+        LCM = "LCM"
+        LCM_TRAILING_TIMESTEPS = "LCM (trailing timesteps)"
+        DDIM = "DDIM"
+        TCD = "TCD"
+
+    class PredictionType(Enum):
+        """
+        The type of prediction to use for the image generation.
+        The `epsilon` is the default.
+        """
+        V_PREDICTION = "v_prediction"
+        EPSILON = "epsilon"
+
+    class ImageFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    noise_strength: float = Field(
+        default=0.5, description="The amount of noise to add to noise image for image. Only used if the image_url is provided. 1.0 is complete noise and 0 is no noise."
+    )
+    tile_height: int = Field(
+        default=4096, description="The size of the tiles to be used for the image generation."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
+    )
+    ic_light_model_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the IC Light model to use for the image generation."
+    )
+    image_encoder_weight_name: str = Field(
+        default="pytorch_model.bin", description="The weight name of the image encoder model to use for the image generation."
+    )
+    ip_adapter: list[str] = Field(
+        default=[], description="The IP adapter to use for the image generation."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    scheduler: Scheduler | None = Field(
+        default=None, description="Scheduler / sampler to use for the image denoising process."
+    )
+    sigmas: str = Field(
+        default="", description="Optionally override the sigmas to use for the denoising process. Only works with schedulers which support the `sigmas` argument in their `set_sigmas` method. Defaults to not overriding, in which case the scheduler automatically sets the sigmas based on the `num_inference_steps` parameter. If set to a custom sigma schedule, the `num_inference_steps` parameter will be ignored. Cannot be set if `timesteps` is set."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    tile_stride_width: int = Field(
+        default=2048, description="The stride of the tiles to be used for the image generation."
+    )
+    debug_per_pass_latents: bool = Field(
+        default=False, description="If set to true, the latents will be saved for debugging per pass."
+    )
+    timesteps: str = Field(
+        default="", description="Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method. Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter. If set to a custom timestep schedule, the `num_inference_steps` parameter will be ignored. Cannot be set if `sigmas` is set."
+    )
+    model_name: str = Field(
+        default="", description="URL or HuggingFace ID of the base model to generate the image."
+    )
+    prompt_weighting: bool = Field(
+        default=False, description="If set to true, the prompt weighting syntax will be used. Additionally, this will lift the 77 token limit by averaging embeddings."
+    )
+    variant: str = Field(
+        default="", description="The variant of the model to use for huggingface models, e.g. 'fp16'."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of image to use for image to image/inpainting."
+    )
+    controlnet_guess_mode: bool = Field(
+        default=False, description="If set to true, the controlnet will be applied to only the conditional predictions."
+    )
+    image_encoder_subfolder: str = Field(
+        default="", description="The subfolder of the image encoder model to use for the image generation."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    ic_light_model_background_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the IC Light model background image to use for the image generation. Make sure to use a background compatible with the model."
+    )
+    rescale_betas_snr_zero: bool = Field(
+        default=False, description="Whether to set the rescale_betas_snr_zero option or not for the sampler"
+    )
+    tile_width: int = Field(
+        default=4096, description="The size of the tiles to be used for the image generation."
+    )
+    prediction_type: PredictionType = Field(
+        default=PredictionType.EPSILON, description="The type of prediction to use for the image generation. The `epsilon` is the default."
+    )
+    eta: float = Field(
+        default=0, description="The eta value to be used for the image generation."
+    )
+    image_encoder_path: str = Field(
+        default="", description="The path to the image encoder model to use for the image generation."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    image_format: ImageFormat = Field(
+        default=ImageFormat.PNG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate in one request. Note that the higher the batch size, the longer it will take to generate the images."
+    )
+    debug_latents: bool = Field(
+        default=False, description="If set to true, the latents will be saved for debugging."
+    )
+    ic_light_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the IC Light model image to use for the image generation."
+    )
+    unet_name: str = Field(
+        default="", description="URL or HuggingFace ID of the custom U-Net model to use for the image generation."
+    )
+    clip_skip: int = Field(
+        default=0, description="Skips part of the image generation process, leading to slightly different results. This means the image renders faster, too."
+    )
+    tile_stride_height: int = Field(
+        default=2048, description="The stride of the tiles to be used for the image generation."
+    )
+    controlnets: list[str] = Field(
+        default=[], description="The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        ic_light_model_url_base64 = await context.image_to_base64(self.ic_light_model_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        ic_light_model_background_image_url_base64 = await context.image_to_base64(self.ic_light_model_background_image_url)
+        ic_light_image_url_base64 = await context.image_to_base64(self.ic_light_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "noise_strength": self.noise_strength,
+            "tile_height": self.tile_height,
+            "embeddings": self.embeddings,
+            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_url_base64}",
+            "image_encoder_weight_name": self.image_encoder_weight_name,
+            "ip_adapter": self.ip_adapter,
+            "loras": self.loras,
+            "scheduler": self.scheduler.value if self.scheduler else None,
+            "sigmas": self.sigmas,
+            "guidance_scale": self.guidance_scale,
+            "tile_stride_width": self.tile_stride_width,
+            "debug_per_pass_latents": self.debug_per_pass_latents,
+            "timesteps": self.timesteps,
+            "model_name": self.model_name,
+            "prompt_weighting": self.prompt_weighting,
+            "variant": self.variant,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "controlnet_guess_mode": self.controlnet_guess_mode,
+            "image_encoder_subfolder": self.image_encoder_subfolder,
+            "seed": self.seed,
+            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_url_base64}",
+            "rescale_betas_snr_zero": self.rescale_betas_snr_zero,
+            "tile_width": self.tile_width,
+            "prediction_type": self.prediction_type.value,
+            "eta": self.eta,
+            "image_encoder_path": self.image_encoder_path,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "image_format": self.image_format.value,
+            "num_images": self.num_images,
+            "debug_latents": self.debug_latents,
+            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_url_base64}",
+            "unet_name": self.unet_name,
+            "clip_skip": self.clip_skip,
+            "tile_stride_height": self.tile_stride_height,
+            "controlnets": self.controlnets,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/lora/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastSdxlImageToImage(FALNode):
+    """
+    Run SDXL at the speed of light
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    loras: list[str] = Field(
+        default=[], description="The list of LoRA weights to use."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    preserve_aspect_ratio: bool = Field(
+        default=False, description="If set to true, the aspect ratio of the generated image will be preserved even if the image size is too large. However, if the image is not a multiple of 32 in width or height, it will be resized to the nearest multiple of 32. By default, this snapping to the nearest multiple of 32 will not preserve the aspect ratio. Set crop_output to True, to crop the output to the proper aspect ratio after generating."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    crop_output: bool = Field(
+        default=False, description="If set to true, the output cropped to the proper aspect ratio after generating."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "embeddings": self.embeddings,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
+            "preserve_aspect_ratio": self.preserve_aspect_ratio,
+            "negative_prompt": self.negative_prompt,
+            "crop_output": self.crop_output,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-sdxl/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastSdxlInpainting(FALNode):
+    """
+    Run SDXL at the speed of light
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    loras: list[str] = Field(
+        default=[], description="The list of LoRA weights to use."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="The number of inference steps to perform."
+    )
+    mask_url: str = Field(
+        default="", description="The URL of the mask to use for inpainting."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "embeddings": self.embeddings,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "num_inference_steps": self.num_inference_steps,
+            "mask_url": self.mask_url,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-sdxl/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FaceToSticker(FALNode):
+    """
+    Create stickers from faces.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to false, the safety checker will be disabled."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    ip_adapter_weight: float = Field(
+        default=0.2, description="The weight of the IP adapter."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the video."
+    )
+    upscale_steps: int = Field(
+        default=10, description="The number of steps to use for upscaling. Only used if `upscale` is `true`."
+    )
+    instant_id_strength: float = Field(
+        default=0.7, description="The strength of the instant ID."
+    )
+    upscale: bool = Field(
+        default=False, description="Whether to upscale the image 2x."
+    )
+    guidance_scale: float = Field(
+        default=4.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=20, description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    ip_adapter_noise: float = Field(
+        default=0.5, description="The amount of noise to add to the IP adapter."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "enable_safety_checker": self.enable_safety_checker,
+            "image_size": self.image_size,
+            "ip_adapter_weight": self.ip_adapter_weight,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "upscale_steps": self.upscale_steps,
+            "instant_id_strength": self.instant_id_strength,
+            "upscale": self.upscale,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+            "ip_adapter_noise": self.ip_adapter_noise,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/face-to-sticker",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Photomaker(FALNode):
+    """
+    Customizing Realistic Human Photos via Stacked ID Embedding
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Style(Enum):
+        NO_STYLE = "(No style)"
+        CINEMATIC = "Cinematic"
+        DISNEY_CHARACTER = "Disney Character"
+        DIGITAL_ART = "Digital Art"
+        PHOTOGRAPHIC = "Photographic"
+        FANTASY_ART = "Fantasy art"
+        NEONPUNK = "Neonpunk"
+        ENHANCE = "Enhance"
+        COMIC_BOOK = "Comic book"
+        LOWPOLY = "Lowpoly"
+        LINE_ART = "Line art"
+
+    class BasePipeline(Enum):
+        """
+        The base pipeline to use for generating the image.
+        """
+        PHOTOMAKER = "photomaker"
+        PHOTOMAKER_STYLE = "photomaker-style"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate in one request. Note that the higher the batch size, the longer it will take to generate the images."
+    )
+    style_strength: int = Field(
+        default=20
+    )
+    style: Style = Field(
+        default=Style.PHOTOGRAPHIC
+    )
+    guidance_scale: float = Field(
+        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    image_archive_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image archive containing the images you want to use."
+    )
+    initial_image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional initial image for img2img"
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image."
+    )
+    initial_image_strength: float = Field(
+        default=0.5, description="How much noise to add to the latent image. O for no noise, 1 for maximum noise."
+    )
+    base_pipeline: BasePipeline = Field(
+        default=BasePipeline.PHOTOMAKER, description="The base pipeline to use for generating the image."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_archive_url_base64 = await context.image_to_base64(self.image_archive_url)
+        initial_image_url_base64 = await context.image_to_base64(self.initial_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "style_strength": self.style_strength,
+            "style": self.style.value,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "image_archive_url": f"data:image/png;base64,{image_archive_url_base64}",
+            "initial_image_url": f"data:image/png;base64,{initial_image_url_base64}",
+            "num_inference_steps": self.num_inference_steps,
+            "initial_image_strength": self.initial_image_strength,
+            "base_pipeline": self.base_pipeline.value,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/photomaker",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class CreativeUpscaler(FALNode):
+    """
+    Create creative upscaled images.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class ModelType(Enum):
+        """
+        The type of model to use for the upscaling. Default is SD_1_5
+        """
+        SD_1_5 = "SD_1_5"
+        SDXL = "SDXL"
+
+
+    shape_preservation: float = Field(
+        default=0.25, description="How much to preserve the shape of the original image"
+    )
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results. If no prompt is provide BLIP2 will be used to generate a prompt."
+    )
+    additional_embedding_url: str = Field(
+        default="", description="The URL to the additional embeddings to use for the upscaling. Default is None"
+    )
+    enable_safety_checks: bool = Field(
+        default=True, description="If set to true, the resulting image will be checked whether it includes any potentially unsafe content. If it does, it will be replaced with a black image."
+    )
+    additional_lora_url: str = Field(
+        default="", description="The URL to the additional LORA model to use for the upscaling. Default is None"
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    scale: float = Field(
+        default=2, description="The scale of the output image. The higher the scale, the bigger the output image will be."
+    )
+    negative_prompt: str = Field(
+        default="blurry, low resolution, bad, ugly, low quality, pixelated, interpolated, compression artifacts, noisey, grainy", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    skip_ccsr: bool = Field(
+        default=False, description="If set to true, the image will not be processed by the CCSR model before being processed by the creativity model."
+    )
+    additional_lora_scale: float = Field(
+        default=1, description="The scale of the additional LORA model to use for the upscaling. Default is 1.0"
+    )
+    detail: float = Field(
+        default=1, description="How much detail to add"
+    )
+    base_model_url: str = Field(
+        default="", description="The URL to the base model to use for the upscaling"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to upscale."
+    )
+    creativity: float = Field(
+        default=0.5, description="How much the output can deviate from the original"
+    )
+    override_size_limits: bool = Field(
+        default=False, description="Allow for large uploads that could take a very long time."
+    )
+    prompt_suffix: str = Field(
+        default=" high quality, highly detailed, high resolution, sharp", description="The suffix to add to the prompt. This is useful to add a common ending to all prompts such as 'high quality' etc or embedding tokens."
+    )
+    num_inference_steps: int = Field(
+        default=20, description="The number of inference steps to use for generating the image. The more steps the better the image will be but it will also take longer to generate."
+    )
+    model_type: ModelType = Field(
+        default=ModelType.SD_1_5, description="The type of model to use for the upscaling. Default is SD_1_5"
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "shape_preservation": self.shape_preservation,
+            "prompt": self.prompt,
+            "additional_embedding_url": self.additional_embedding_url,
+            "enable_safety_checks": self.enable_safety_checks,
+            "additional_lora_url": self.additional_lora_url,
+            "guidance_scale": self.guidance_scale,
+            "scale": self.scale,
+            "negative_prompt": self.negative_prompt,
+            "skip_ccsr": self.skip_ccsr,
+            "additional_lora_scale": self.additional_lora_scale,
+            "detail": self.detail,
+            "base_model_url": self.base_model_url,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "creativity": self.creativity,
+            "override_size_limits": self.override_size_limits,
+            "prompt_suffix": self.prompt_suffix,
+            "num_inference_steps": self.num_inference_steps,
+            "model_type": self.model_type.value,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/creative-upscaler",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class PlaygroundV25ImageToImage(FALNode):
+    """
+    State-of-the-art open-source model in aesthetic quality
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    guidance_rescale: float = Field(
+        default=0, description="The rescale factor for the CFG."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    guidance_scale: float = Field(
+        default=3, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    preserve_aspect_ratio: bool = Field(
+        default=False, description="If set to true, the aspect ratio of the generated image will be preserved even if the image size is too large. However, if the image is not a multiple of 32 in width or height, it will be resized to the nearest multiple of 32. By default, this snapping to the nearest multiple of 32 will not preserve the aspect ratio. Set crop_output to True, to crop the output to the proper aspect ratio after generating."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    crop_output: bool = Field(
+        default=False, description="If set to true, the output cropped to the proper aspect ratio after generating."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "embeddings": self.embeddings,
+            "expand_prompt": self.expand_prompt,
+            "guidance_rescale": self.guidance_rescale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
+            "preserve_aspect_ratio": self.preserve_aspect_ratio,
+            "negative_prompt": self.negative_prompt,
+            "crop_output": self.crop_output,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/playground-v25/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastLightningSdxlImageToImage(FALNode):
+    """
+    Run SDXL at the speed of light
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+    class NumInferenceSteps(Enum):
+        """
+        The number of inference steps to perform.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_4 = "4"
+        VALUE_8 = "8"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    guidance_rescale: float = Field(
+        default=0, description="The rescale factor for the CFG."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    preserve_aspect_ratio: bool = Field(
+        default=False, description="If set to true, the aspect ratio of the generated image will be preserved even if the image size is too large. However, if the image is not a multiple of 32 in width or height, it will be resized to the nearest multiple of 32. By default, this snapping to the nearest multiple of 32 will not preserve the aspect ratio. Set crop_output to True, to crop the output to the proper aspect ratio after generating."
+    )
+    crop_output: bool = Field(
+        default=False, description="If set to true, the output cropped to the proper aspect ratio after generating."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    num_inference_steps: NumInferenceSteps = Field(
+        default=4, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "embeddings": self.embeddings,
+            "expand_prompt": self.expand_prompt,
+            "guidance_rescale": self.guidance_rescale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "preserve_aspect_ratio": self.preserve_aspect_ratio,
+            "crop_output": self.crop_output,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "num_inference_steps": self.num_inference_steps.value,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-lightning-sdxl/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastLightningSdxlInpainting(FALNode):
+    """
+    Run SDXL at the speed of light
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+    class NumInferenceSteps(Enum):
+        """
+        The number of inference steps to perform.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_4 = "4"
+        VALUE_8 = "8"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    guidance_rescale: float = Field(
+        default=0, description="The rescale factor for the CFG."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    num_inference_steps: NumInferenceSteps = Field(
+        default=4, description="The number of inference steps to perform."
+    )
+    mask_url: str = Field(
+        default="", description="The URL of the mask to use for inpainting."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "embeddings": self.embeddings,
+            "expand_prompt": self.expand_prompt,
+            "guidance_rescale": self.guidance_rescale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "num_inference_steps": self.num_inference_steps.value,
+            "mask_url": self.mask_url,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-lightning-sdxl/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class PlaygroundV25Inpainting(FALNode):
+    """
+    State-of-the-art open-source model in aesthetic quality
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    embeddings: list[str] = Field(
+        default=[], description="The list of embeddings to use."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    guidance_rescale: float = Field(
+        default=0, description="The rescale factor for the CFG."
+    )
+    guidance_scale: float = Field(
+        default=3, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    mask_url: str = Field(
+        default="", description="The URL of the mask to use for inpainting."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "embeddings": self.embeddings,
+            "expand_prompt": self.expand_prompt,
+            "guidance_rescale": self.guidance_rescale,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "seed": self.seed,
+            "mask_url": self.mask_url,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/playground-v25/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastLcmDiffusionInpainting(FALNode):
+    """
+    Run SDXL at the speed of light
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+    class ModelName(Enum):
+        """
+        The name of the model to use.
+        """
+        STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0 = "stabilityai/stable-diffusion-xl-base-1.0"
+        RUNWAYML_STABLE_DIFFUSION_V1_5 = "runwayml/stable-diffusion-v1-5"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    guidance_rescale: float = Field(
+        default=0, description="The rescale factor for the CFG."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    guidance_scale: float = Field(
+        default=1.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    sync_mode: bool = Field(
+        default=True, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    num_inference_steps: int = Field(
+        default=6, description="The number of inference steps to perform."
+    )
+    mask_url: str = Field(
+        default="", description="The URL of the mask to use for inpainting."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    model_name: ModelName = Field(
+        default=ModelName.STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0, description="The name of the model to use."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "expand_prompt": self.expand_prompt,
+            "guidance_rescale": self.guidance_rescale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "num_inference_steps": self.num_inference_steps,
+            "mask_url": self.mask_url,
+            "seed": self.seed,
+            "model_name": self.model_name.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-lcm-diffusion/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastLcmDiffusionImageToImage(FALNode):
+    """
+    Run SDXL at the speed of light
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Format(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class ModelName(Enum):
+        """
+        The name of the model to use.
+        """
+        STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0 = "stabilityai/stable-diffusion-xl-base-1.0"
+        RUNWAYML_STABLE_DIFFUSION_V1_5 = "runwayml/stable-diffusion-v1-5"
+
+    class SafetyCheckerVersion(Enum):
+        """
+        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+        """
+        V1 = "v1"
+        V2 = "v2"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    guidance_rescale: float = Field(
+        default=0, description="The rescale factor for the CFG."
+    )
+    guidance_scale: float = Field(
+        default=1.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
+    preserve_aspect_ratio: bool = Field(
+        default=False, description="If set to true, the aspect ratio of the generated image will be preserved even if the image size is too large. However, if the image is not a multiple of 32 in width or height, it will be resized to the nearest multiple of 32. By default, this snapping to the nearest multiple of 32 will not preserve the aspect ratio. Set crop_output to True, to crop the output to the proper aspect ratio after generating."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    crop_output: bool = Field(
+        default=False, description="If set to true, the output cropped to the proper aspect ratio after generating."
+    )
+    format: Format = Field(
+        default=Format.JPEG, description="The format of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    sync_mode: bool = Field(
+        default=True, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    model_name: ModelName = Field(
+        default=ModelName.STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0, description="The name of the model to use."
+    )
+    safety_checker_version: SafetyCheckerVersion = Field(
+        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    num_inference_steps: int = Field(
+        default=6, description="The number of inference steps to perform."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "expand_prompt": self.expand_prompt,
+            "guidance_rescale": self.guidance_rescale,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "preserve_aspect_ratio": self.preserve_aspect_ratio,
+            "negative_prompt": self.negative_prompt,
+            "crop_output": self.crop_output,
+            "format": self.format.value,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "sync_mode": self.sync_mode,
+            "model_name": self.model_name.value,
+            "safety_checker_version": self.safety_checker_version.value,
+            "request_id": self.request_id,
+            "num_inference_steps": self.num_inference_steps,
+            "strength": self.strength,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-lcm-diffusion/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Retoucher(FALNode):
+    """
+    Automatically retouches faces to smooth skin and remove blemishes.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    seed: int = Field(
+        default=-1, description="Seed for reproducibility. Different seeds will make slightly different results."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to be retouched."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "seed": self.seed,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/retoucher",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageutilsDepth(FALNode):
+    """
+    Create depth maps using Midas depth estimation.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    bg_th: float = Field(
+        default=0.1, description="bg_th"
+    )
+    a: float = Field(
+        default=6.283185307179586, description="a"
+    )
+    depth_and_normal: bool = Field(
+        default=False, description="depth_and_normal"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image url."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "bg_th": self.bg_th,
+            "a": self.a,
+            "depth_and_normal": self.depth_and_normal,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imageutils/depth",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageutilsMarigoldDepth(FALNode):
+    """
+    Create depth maps using Marigold depth estimation.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    ensemble_size: int = Field(
+        default=10, description="Number of predictions to average over. Defaults to `10`. The higher the number, the more accurate the result, but the slower the inference."
+    )
+    num_inference_steps: int = Field(
+        default=10, description="Number of denoising steps. Defaults to `10`. The higher the number, the more accurate the result, but the slower the inference."
+    )
+    processing_res: int = Field(
+        default=0, description="Maximum processing resolution. Defaults `0` which means it uses the size of the input image."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image url."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "ensemble_size": self.ensemble_size,
+            "num_inference_steps": self.num_inference_steps,
+            "processing_res": self.processing_res,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imageutils/marigold-depth",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Pulid(FALNode):
+    """
+    Tuning-free ID customization.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Mode(Enum):
+        """
+        Mode of generation
+        """
+        FIDELITY = "fidelity"
+        EXTREME_STYLE = "extreme style"
+
+
+    prompt: str = Field(
+        default="", description="Prompt to generate the face from"
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate"
+    )
+    image_size: str = Field(
+        default="", description="Size of the generated image"
+    )
+    id_scale: float = Field(
+        default=0.8, description="ID scale"
+    )
+    mode: Mode = Field(
+        default=Mode.FIDELITY, description="Mode of generation"
+    )
+    id_mix: bool = Field(
+        default=False, description="if you want to mix two ID image, please turn this on, otherwise, turn this off"
+    )
+    guidance_scale: float = Field(
+        default=1.2, description="Guidance scale"
+    )
+    num_inference_steps: int = Field(
+        default=4, description="Number of steps to take"
+    )
+    reference_images: list[str] = Field(
+        default=[], description="List of reference faces, ideally 4 images."
+    )
+    negative_prompt: str = Field(
+        default="flaws in the eyes, flaws in the face, flaws, lowres, non-HDRi, low quality, worst quality,artifacts noise, text, watermark, glitch, deformed, mutated, ugly, disfigured, hands, low resolution, partially rendered objects,  deformed or partially rendered eyes, deformed, deformed eyeballs, cross-eyed,blurry", description="Negative prompt to generate the face from"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducibility"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_size": self.image_size,
+            "id_scale": self.id_scale,
+            "mode": self.mode.value,
+            "id_mix": self.id_mix,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "reference_images": self.reference_images,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pulid",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastSdxlControlnetCannyImageToImage(FALNode):
+    """
+    Generate Images with ControlNet.
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    loras: list[str] = Field(
+        default=[], description="The list of LoRA weights to use."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    controlnet_conditioning_scale: float = Field(
+        default=0.5, description="The scale of the controlnet conditioning."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    control_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="The number of inference steps to perform."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "num_images": self.num_images,
+            "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-sdxl-controlnet-canny/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class FastSdxlControlnetCannyInpainting(FALNode):
+    """
+    Generate Images with ControlNet.
+    editing, transformation, image-to-image, img2img, fast
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_size: str = Field(
+        default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded with additional prompts."
+    )
+    loras: list[str] = Field(
+        default=[], description="The list of LoRA weights to use."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    controlnet_conditioning_scale: float = Field(
+        default=0.5, description="The scale of the controlnet conditioning."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
+    )
+    strength: float = Field(
+        default=0.95, description="determines how much the generated image resembles the initial image"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    control_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the control image."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    mask_url: str = Field(
+        default="", description="The URL of the mask to use for inpainting."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="The number of inference steps to perform."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_size": self.image_size,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "num_images": self.num_images,
+            "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "seed": self.seed,
+            "mask_url": self.mask_url,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/fast-sdxl-controlnet-canny/inpainting",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class LcmSd15I2i(FALNode):
+    """
+    Produce high-quality images with minimal inference steps. Optimized for 512x512 input image size.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate. The function will return a list of images with the same prompt and negative prompt but different seeds."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to use as a base."
+    )
+    strength: float = Field(
+        default=0.8, description="The strength of the image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    )
+    enable_safety_checks: bool = Field(
+        default=True, description="If set to true, the resulting image will be checked whether it includes any potentially unsafe content. If it does, it will be replaced with a black image."
+    )
+    guidance_scale: float = Field(
+        default=1, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    request_id: str = Field(
+        default="", description="An id bound to a request, can be used with response to identify the request itself."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    num_inference_steps: int = Field(
+        default=4, description="The number of inference steps to use for generating the image. The more steps the better the image will be but it will also take longer to generate."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "strength": self.strength,
+            "sync_mode": self.sync_mode,
+            "enable_safety_checks": self.enable_safety_checks,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "request_id": self.request_id,
+            "negative_prompt": self.negative_prompt,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/lcm-sd15-i2i",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Inpaint(FALNode):
+    """
+    Inpaint images with SD and SDXL
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image for img2img or inpaint mode"
+    )
+    model_name: str = Field(
+        default="", description="URL or HuggingFace ID of the base model to generate the image."
+    )
+    guidance_scale: float = Field(
+        default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image."
+    )
+    mask_url: str = Field(
+        default="", description="Input mask for inpaint mode. Black areas will be preserved, white areas will be inpainted."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    )
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "model_name": self.model_name,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "mask_url": self.mask_url,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/inpaint",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class Esrgan(FALNode):
+    """
+    Upscale images by a given factor.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    class Model(Enum):
+        """
+        Model to use for upscaling
+        """
+        REALESRGAN_X4PLUS = "RealESRGAN_x4plus"
+        REALESRGAN_X2PLUS = "RealESRGAN_x2plus"
+        REALESRGAN_X4PLUS_ANIME_6B = "RealESRGAN_x4plus_anime_6B"
+        REALESRGAN_X4_V3 = "RealESRGAN_x4_v3"
+        REALESRGAN_X4_WDN_V3 = "RealESRGAN_x4_wdn_v3"
+        REALESRGAN_X4_ANIME_V3 = "RealESRGAN_x4_anime_v3"
+
+    class OutputFormat(Enum):
+        """
+        Output image format (png or jpeg)
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+
+
+    model: Model = Field(
+        default=Model.REALESRGAN_X4PLUS, description="Model to use for upscaling"
+    )
+    face: bool = Field(
+        default=False, description="Upscaling a face"
+    )
+    scale: float = Field(
+        default=2, description="Rescaling factor"
+    )
+    tile: int = Field(
+        default=0, description="Tile size. Default is 0, that is no tile. When encountering the out-of-GPU-memory issue, please specify it, e.g., 400 or 200"
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="Output image format (png or jpeg)"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Url to input image"
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "model": self.model.value,
+            "face": self.face,
+            "scale": self.scale,
+            "tile": self.tile,
+            "output_format": self.output_format.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/esrgan",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt"]
+
+class ImageutilsRembg(FALNode):
+    """
+    Remove the background from an image.
+    editing, transformation, image-to-image, img2img
+
+    Use cases:
+    - Professional photo editing and enhancement
+    - Creative image transformations
+    - Batch image processing workflows
+    - Product photography refinement
+    - Automated image optimization
+    """
+
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    crop_to_bbox: bool = Field(
+        default=False, description="If set to true, the resulting image be cropped to a bounding box around the subject"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image url."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "crop_to_bbox": self.crop_to_bbox,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imageutils/rembg",
             arguments=arguments,
         )
         assert "images" in res

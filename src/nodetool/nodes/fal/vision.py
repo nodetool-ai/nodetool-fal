@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import Field
 from typing import Any
-from nodetool.metadata.types import ImageRef
+from nodetool.metadata.types import ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -715,6 +715,778 @@ class PerceptronIsaac01OpenaiV1ChatCompletions(FALNode):
         res = await self.submit_request(
             context=context,
             application="perceptron/isaac-01/openai/v1/chat/completions",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class PerceptronIsaac01(FALNode):
+    """
+    Isaac-01 is a multimodal vision-language model from Perceptron for various vision language tasks.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    class ResponseStyle(Enum):
+        """
+        Response style to be used for the image.
+        - text: Model will output text. Good for descriptions and captioning.
+        - box: Model will output a combination of text and bounding boxes. Good for
+        localization.
+        - point: Model will output a combination of text and points. Good for counting many
+        objects.
+        - polygon: Model will output a combination of text and polygons. Good for granular
+        segmentation.
+        """
+        TEXT = "text"
+        BOX = "box"
+        POINT = "point"
+        POLYGON = "polygon"
+
+
+    prompt: str = Field(
+        default="", description="Prompt to be used for the image"
+    )
+    response_style: ResponseStyle = Field(
+        default=ResponseStyle.TEXT, description="Response style to be used for the image. - text: Model will output text. Good for descriptions and captioning. - box: Model will output a combination of text and bounding boxes. Good for localization. - point: Model will output a combination of text and points. Good for counting many objects. - polygon: Model will output a combination of text and polygons. Good for granular segmentation."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image URL to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "response_style": self.response_style.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="perceptron/isaac-01",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class XAilabNsfw(FALNode):
+    """
+    Predict whether an image is NSFW or SFW.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    image_urls: list[str] = Field(
+        default=[], description="List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked."
+    )
+
+    async def process(self, context: ProcessingContext) -> Any:
+        arguments = {
+            "image_urls": self.image_urls,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/x-ailab/nsfw",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class VideoUnderstanding(FALNode):
+    """
+    A video understanding model to analyze video content and answer questions about what's happening in the video based on user prompts.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    detailed_analysis: bool = Field(
+        default=False, description="Whether to request a more detailed analysis of the video"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video to analyze"
+    )
+    prompt: str = Field(
+        default="", description="The question or prompt about the video content."
+    )
+
+    async def process(self, context: ProcessingContext) -> Any:
+        arguments = {
+            "detailed_analysis": self.detailed_analysis,
+            "video_url": self.video_url,
+            "prompt": self.prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/video-understanding",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Moondream2VisualQuery(FALNode):
+    """
+    Moondream2 is a highly efficient open-source vision language model that combines powerful image understanding capabilities with a remarkably small footprint.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    prompt: str = Field(
+        default="", description="Query to be asked in the image"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> Any:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream2/visual-query",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Moondream2(FALNode):
+    """
+    Moondream2 is a highly efficient open-source vision language model that combines powerful image understanding capabilities with a remarkably small footprint. 
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> Any:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream2",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Moondream2PointObjectDetection(FALNode):
+    """
+    Moondream2 is a highly efficient open-source vision language model that combines powerful image understanding capabilities with a remarkably small footprint.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    object: str = Field(
+        default="", description="Object to be detected in the image"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "object": self.object,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream2/point-object-detection",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Moondream2ObjectDetection(FALNode):
+    """
+    Moondream2 is a highly efficient open-source vision language model that combines powerful image understanding capabilities with a remarkably small footprint.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    object: str = Field(
+        default="", description="Object to be detected in the image"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "object": self.object,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream2/object-detection",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class GotOcrV2(FALNode):
+    """
+    GOT-OCR2 works on a wide range of tasks, including plain document OCR, scene text OCR, formatted document OCR, and even OCR for tables, charts, mathematical formulas, geometric shapes, molecular formulas and sheet music.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    do_format: bool = Field(
+        default=False, description="Generate the output in formatted mode."
+    )
+    multi_page: bool = Field(
+        default=False, description="Use provided images to generate a single output."
+    )
+    input_image_urls: list[str] = Field(
+        default=[], description="URL of images."
+    )
+
+    async def process(self, context: ProcessingContext) -> Any:
+        arguments = {
+            "do_format": self.do_format,
+            "multi_page": self.multi_page,
+            "input_image_urls": self.input_image_urls,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/got-ocr/v2",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class MoondreamNextBatch(FALNode):
+    """
+    MoonDreamNext Batch is a multimodal vision-language model for batch captioning.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    prompt: str = Field(
+        default="", description="Single prompt to apply to all images"
+    )
+    images_data_url: ImageRef = Field(
+        default=ImageRef(), description="List of image URLs to be processed (maximum 32 images)"
+    )
+    max_tokens: int = Field(
+        default=64, description="Maximum number of tokens to generate"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        images_data_url_base64 = await context.image_to_base64(self.images_data_url)
+        arguments = {
+            "prompt": self.prompt,
+            "images_data_url": f"data:image/png;base64,{images_data_url_base64}",
+            "max_tokens": self.max_tokens,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream-next/batch",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Sa2va4bVideo(FALNode):
+    """
+    Sa2VA is an MLLM capable of question answering, visual prompt understanding, and dense object segmentation at both image and video levels
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    prompt: str = Field(
+        default="", description="Prompt to be used for the chat completion"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the input video."
+    )
+    num_frames_to_sample: int = Field(
+        default=0, description="Number of frames to sample from the video. If not provided, all frames are sampled."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_frames_to_sample": self.num_frames_to_sample,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sa2va/4b/video",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Sa2va8bVideo(FALNode):
+    """
+    Sa2VA is an MLLM capable of question answering, visual prompt understanding, and dense object segmentation at both image and video levels
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    prompt: str = Field(
+        default="", description="Prompt to be used for the chat completion"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the input video."
+    )
+    num_frames_to_sample: int = Field(
+        default=0, description="Number of frames to sample from the video. If not provided, all frames are sampled."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_frames_to_sample": self.num_frames_to_sample,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sa2va/8b/video",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Sa2va4bImage(FALNode):
+    """
+    Sa2VA is an MLLM capable of question answering, visual prompt understanding, and dense object segmentation at both image and video levels
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    prompt: str = Field(
+        default="", description="Prompt to be used for the chat completion"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Url for the Input image."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sa2va/4b/image",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class Sa2va8bImage(FALNode):
+    """
+    Sa2VA is an MLLM capable of question answering, visual prompt understanding, and dense object segmentation at both image and video levels
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    prompt: str = Field(
+        default="", description="Prompt to be used for the chat completion"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Url for the Input image."
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sa2va/8b/image",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class MoondreamNext(FALNode):
+    """
+    MoonDreamNext is a multimodal vision-language model for captioning, gaze detection, bbox detection, point detection, and more.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    class TaskType(Enum):
+        """
+        Type of task to perform
+        """
+        CAPTION = "caption"
+        QUERY = "query"
+
+
+    prompt: str = Field(
+        default="", description="Prompt for query task"
+    )
+    task_type: TaskType = Field(
+        default=TaskType.CAPTION, description="Type of task to perform"
+    )
+    max_tokens: int = Field(
+        default=64, description="Maximum number of tokens to generate"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image URL to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> Any:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "task_type": self.task_type.value,
+            "max_tokens": self.max_tokens,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream-next",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class ImageutilsNsfw(FALNode):
+    """
+    Predict the probability of an image being NSFW.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Input image url."
+    )
+
+    async def process(self, context: ProcessingContext) -> Any:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/imageutils/nsfw",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class MoondreamBatched(FALNode):
+    """
+    Answer questions from the images.
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    class ModelId(Enum):
+        """
+        Model ID to use for inference
+        """
+        VIKHYATK_MOONDREAM2 = "vikhyatk/moondream2"
+        FAL_AI_MOONDREAM2_DOCCI = "fal-ai/moondream2-docci"
+
+
+    model_id: ModelId = Field(
+        default=ModelId.VIKHYATK_MOONDREAM2, description="Model ID to use for inference"
+    )
+    repetition_penalty: float = Field(
+        default=1, description="Repetition penalty for sampling"
+    )
+    inputs: list[str] = Field(
+        default=[], description="List of input prompts and image URLs"
+    )
+    max_tokens: int = Field(
+        default=64, description="Maximum number of new tokens to generate"
+    )
+    temperature: float = Field(
+        default=0.2, description="Temperature for sampling"
+    )
+    top_p: float = Field(
+        default=1, description="Top P for sampling"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        arguments = {
+            "model_id": self.model_id.value,
+            "repetition_penalty": self.repetition_penalty,
+            "inputs": self.inputs,
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/moondream/batched",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image"]
+
+class LlavaNext(FALNode):
+    """
+    Vision
+    vision, analysis, image-understanding, detection
+
+    Use cases:
+    - Image analysis and understanding
+    - Object detection and recognition
+    - Visual content moderation
+    - Automated image captioning
+    - Scene understanding
+    """
+
+    prompt: str = Field(
+        default="", description="Prompt to be used for the image"
+    )
+    top_p: float = Field(
+        default=1, description="Top P for sampling"
+    )
+    max_tokens: int = Field(
+        default=64, description="Maximum number of tokens to generate"
+    )
+    temperature: float = Field(
+        default=0.2, description="Temperature for sampling"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be processed"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "top_p": self.top_p,
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/llava-next",
             arguments=arguments,
         )
         return res

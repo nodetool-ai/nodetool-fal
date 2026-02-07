@@ -1147,7 +1147,7 @@ class BeatovenMusicGeneration(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-class MinimaxMusicV1_5(FALNode):
+class MinimaxMusicV15(FALNode):
     """
     MiniMax (Hailuo AI) Music v1.5
     audio, generation, text-to-audio, tts, professional
@@ -1325,6 +1325,911 @@ class SonautoV2Inpaint(FALNode):
         res = await self.submit_request(
             context=context,
             application="sonauto/v2/inpaint",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class SonautoV2TextToMusic(FALNode):
+    """
+    Create full songs in any style
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class OutputFormat(Enum):
+        FLAC = "flac"
+        MP3 = "mp3"
+        WAV = "wav"
+        OGG = "ogg"
+        M4A = "m4a"
+
+
+    prompt: str = Field(
+        default="", description="A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics."
+    )
+    lyrics_prompt: str = Field(
+        default="", description="The lyrics sung in the generated song. An empty string will generate an instrumental track."
+    )
+    tags: str = Field(
+        default="", description="Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer."
+    )
+    prompt_strength: float = Field(
+        default=2, description="Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)"
+    )
+    output_bit_rate: str = Field(
+        default="", description="The bit rate to use for mp3 and m4a formats. Not available for other formats."
+    )
+    num_songs: int = Field(
+        default=1, description="Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.WAV
+    )
+    bpm: str = Field(
+        default="auto", description="The beats per minute of the song. This can be set to an integer or the literal string \"auto\" to pick a suitable bpm based on the tags. Set bpm to null to not condition the model on bpm information."
+    )
+    balance_strength: float = Field(
+        default=0.7, description="Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7."
+    )
+    seed: str = Field(
+        default="", description="The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "lyrics_prompt": self.lyrics_prompt,
+            "tags": self.tags,
+            "prompt_strength": self.prompt_strength,
+            "output_bit_rate": self.output_bit_rate,
+            "num_songs": self.num_songs,
+            "output_format": self.output_format.value,
+            "bpm": self.bpm,
+            "balance_strength": self.balance_strength,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="sonauto/v2/text-to-music",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class Lyria2(FALNode):
+    """
+    Lyria 2 is Google's latest music generation model, you can generate any type of music with this model.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt describing the music you want to generate"
+    )
+    seed: int = Field(
+        default=-1, description="A seed for deterministic generation. If provided, the model will attempt to produce the same audio given the same prompt and other parameters."
+    )
+    negative_prompt: str = Field(
+        default="low quality", description="A description of what to exclude from the generated audio"
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/lyria2",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class CassetteaiSoundEffectsGenerator(FALNode):
+    """
+    Create stunningly realistic sound effects in seconds - CassetteAI's Sound Effects Model generates high-quality SFX up to 30 seconds long in just 1 second of processing time
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate SFX."
+    )
+    duration: int = Field(
+        default=0, description="The duration of the generated SFX in seconds."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="cassetteai/sound-effects-generator",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class CassetteaiMusicGenerator(FALNode):
+    """
+    CassetteAI’s model generates a 30-second sample in under 2 seconds and a full 3-minute track in under 10 seconds. At 44.1 kHz stereo audio, expect a level of professional consistency with no breaks, no squeaks, and no random interruptions in your creations.  
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate music from."
+    )
+    duration: int = Field(
+        default=0, description="The duration of the generated music in seconds."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="cassetteai/music-generator",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroHindi(FALNode):
+    """
+    A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        HF_ALPHA = "hf_alpha"
+        HF_BETA = "hf_beta"
+        HM_OMEGA = "hm_omega"
+        HM_PSI = "hm_psi"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/hindi",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroBritishEnglish(FALNode):
+    """
+    A high-quality British English text-to-speech model offering natural and expressive voice synthesis.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        BF_ALICE = "bf_alice"
+        BF_EMMA = "bf_emma"
+        BF_ISABELLA = "bf_isabella"
+        BF_LILY = "bf_lily"
+        BM_DANIEL = "bm_daniel"
+        BM_FABLE = "bm_fable"
+        BM_GEORGE = "bm_george"
+        BM_LEWIS = "bm_lewis"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/british-english",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroAmericanEnglish(FALNode):
+    """
+    Kokoro is a lightweight text-to-speech model that delivers comparable quality to larger models while being significantly faster and more cost-efficient.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        AF_HEART = "af_heart"
+        AF_ALLOY = "af_alloy"
+        AF_AOEDE = "af_aoede"
+        AF_BELLA = "af_bella"
+        AF_JESSICA = "af_jessica"
+        AF_KORE = "af_kore"
+        AF_NICOLE = "af_nicole"
+        AF_NOVA = "af_nova"
+        AF_RIVER = "af_river"
+        AF_SARAH = "af_sarah"
+        AF_SKY = "af_sky"
+        AM_ADAM = "am_adam"
+        AM_ECHO = "am_echo"
+        AM_ERIC = "am_eric"
+        AM_FENRIR = "am_fenrir"
+        AM_LIAM = "am_liam"
+        AM_MICHAEL = "am_michael"
+        AM_ONYX = "am_onyx"
+        AM_PUCK = "am_puck"
+        AM_SANTA = "am_santa"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default=Voice.AF_HEART, description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/american-english",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class Zonos(FALNode):
+    """
+    Clone voice of any person and speak anything in their voice using zonos' voice cloning.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    prompt: str = Field(
+        default="", description="The content generated using cloned voice."
+    )
+    reference_audio_url: AudioRef = Field(
+        default=AudioRef(), description="The reference audio."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "reference_audio_url": self.reference_audio_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/zonos",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroItalian(FALNode):
+    """
+    A high-quality Italian text-to-speech model delivering smooth and expressive speech synthesis.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        IF_SARA = "if_sara"
+        IM_NICOLA = "im_nicola"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/italian",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroBrazilianPortuguese(FALNode):
+    """
+    A natural and expressive Brazilian Portuguese text-to-speech model optimized for clarity and fluency.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        PF_DORA = "pf_dora"
+        PM_ALEX = "pm_alex"
+        PM_SANTA = "pm_santa"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/brazilian-portuguese",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroFrench(FALNode):
+    """
+    An expressive and natural French text-to-speech model for both European and Canadian French.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        FF_SIWIS = "ff_siwis"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/french",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroJapanese(FALNode):
+    """
+    A fast and natural-sounding Japanese text-to-speech model optimized for smooth pronunciation.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        JF_ALPHA = "jf_alpha"
+        JF_GONGITSUNE = "jf_gongitsune"
+        JF_NEZUMI = "jf_nezumi"
+        JF_TEBUKURO = "jf_tebukuro"
+        JM_KUMO = "jm_kumo"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/japanese",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroMandarinChinese(FALNode):
+    """
+    A highly efficient Mandarin Chinese text-to-speech model that captures natural tones and prosody.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        ZF_XIAOBEI = "zf_xiaobei"
+        ZF_XIAONI = "zf_xiaoni"
+        ZF_XIAOXIAO = "zf_xiaoxiao"
+        ZF_XIAOYI = "zf_xiaoyi"
+        ZM_YUNJIAN = "zm_yunjian"
+        ZM_YUNXI = "zm_yunxi"
+        ZM_YUNXIA = "zm_yunxia"
+        ZM_YUNYANG = "zm_yunyang"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/mandarin-chinese",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class KokoroSpanish(FALNode):
+    """
+    A natural-sounding Spanish text-to-speech model optimized for Latin American and European Spanish.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        EF_DORA = "ef_dora"
+        EM_ALEX = "em_alex"
+        EM_SANTA = "em_santa"
+
+
+    prompt: str = Field(
+        default=""
+    )
+    voice: Voice = Field(
+        default="", description="Voice ID for the desired voice."
+    )
+    speed: float = Field(
+        default=1, description="Speed of the generated audio. Default is 1.0."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "voice": self.voice.value,
+            "speed": self.speed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kokoro/spanish",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class Yue(FALNode):
+    """
+    YuE is a groundbreaking series of open-source foundation models designed for music generation, specifically for transforming lyrics into full songs.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    lyrics: str = Field(
+        default="", description="The prompt to generate an image from. Must have two sections. Sections start with either [chorus] or a [verse]."
+    )
+    genres: str = Field(
+        default="", description="The genres (separated by a space ' ') to guide the music generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "lyrics": self.lyrics,
+            "genres": self.genres,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/yue",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class MmaudioV2TextToAudio(FALNode):
+    """
+    MMAudio generates synchronized audio given text inputs. It can generate sounds described by a prompt.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate the audio for."
+    )
+    num_steps: int = Field(
+        default=25, description="The number of steps to generate the audio for."
+    )
+    duration: float = Field(
+        default=8, description="The duration of the audio to generate."
+    )
+    cfg_strength: float = Field(
+        default=4.5, description="The strength of Classifier Free Guidance."
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    mask_away_clip: bool = Field(
+        default=False, description="Whether to mask away the clip."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to generate the audio for."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_steps": self.num_steps,
+            "duration": self.duration,
+            "cfg_strength": self.cfg_strength,
+            "seed": self.seed,
+            "mask_away_clip": self.mask_away_clip,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/mmaudio-v2/text-to-audio",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["text"]
+
+class MinimaxMusic(FALNode):
+    """
+    Generate music from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality, diverse musical compositions.
+    audio, generation, text-to-audio, sound
+
+    Use cases:
+    - Sound effect generation
+    - Music composition
+    - Audio content creation
+    - Background music generation
+    - Podcast audio production
+    """
+
+    prompt: str = Field(
+        default="", description="Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters."
+    )
+    reference_audio_url: AudioRef = Field(
+        default=AudioRef(), description="Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "reference_audio_url": self.reference_audio_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/minimax-music",
             arguments=arguments,
         )
         assert "audio" in res

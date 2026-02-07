@@ -387,6 +387,7 @@ class SchemaParser:
 
     def _to_enum_value(self, value: str) -> str:
         """Convert a string value to a valid Python enum name."""
+        import re as _re
         # Examples:
         # "16:9" -> "RATIO_16_9"
         # "square_hd" -> "SQUARE_HD"
@@ -396,25 +397,41 @@ class SchemaParser:
         # "(No style)" -> "NO_STYLE"
         # "realistic_image/b_and_w" -> "REALISTIC_IMAGE__B_AND_W"
         # "X264 (.mp4)" -> "X264__MP4"
+        # "DPM++ 2M" -> "DPM_PLUS_PLUS_2M"
+        # "Who's Arrested?" -> "WHOS_ARRESTED"
         
-        # Remove parentheses and other special characters
-        value = value.replace("(", "").replace(")", "").replace(",", "_")
-        
-        # Handle ratios
-        if ":" in value:
+        # Handle ratios early (before removing colons)
+        if ":" in value and _re.match(r'^\d+:\d+$', value.strip()):
             value = value.replace(":", "_")
             return f"RATIO_{value}".upper()
         
         # Handle numeric values
-        if value.isdigit():
-            return f"VALUE_{value}"
+        if value.strip().isdigit():
+            return f"VALUE_{value.strip()}"
         
-        # Replace spaces, hyphens, slashes, dots, and parentheses with underscores
+        # Replace ++ with _PLUS_PLUS, + with _PLUS
+        value = value.replace("++", "_PLUS_PLUS_").replace("+", "_PLUS_")
+        
+        # Remove/replace special characters
+        value = value.replace("(", "").replace(")", "").replace(",", "_")
+        value = value.replace("'", "").replace("'", "").replace("\"", "")
+        value = value.replace("!", "").replace("?", "").replace("&", "_AND_")
+        value = value.replace(":", "_").replace(";", "_").replace("#", "_")
+        value = value.replace("@", "_AT_").replace("$", "_")
+        value = value.replace("~", "_").replace("`", "").replace("^", "_")
+        value = value.replace("{", "").replace("}", "").replace("[", "").replace("]", "")
+        value = value.replace("\\", "_").replace("|", "_").replace("=", "_")
+        value = value.replace("<", "_").replace(">", "_")
+        
+        # Replace spaces, hyphens, slashes, dots with underscores
         # Use double underscore for slashes to make them stand out
-        value = value.replace("/", "__").replace(" ", "_").replace("-", "_").replace(".", "_").replace("(", "").replace(")", "")
+        value = value.replace("/", "__").replace(" ", "_").replace("-", "_").replace(".", "_")
         
         # Convert to uppercase
         result = value.upper()
+        
+        # Collapse multiple underscores and strip leading/trailing underscores
+        result = _re.sub(r'_+', '_', result).strip('_')
         
         # If starts with a digit, prefix with an appropriate word
         if result and result[0].isdigit():
@@ -428,6 +445,16 @@ class SchemaParser:
                 else:
                     result = f"VALUE_{result}"
             else:
+                result = f"VALUE_{result}"
+        
+        # Final safety: ensure result is a valid identifier
+        if not result or not result.isidentifier():
+            # Replace any remaining invalid characters
+            result = _re.sub(r'[^A-Za-z0-9_]', '_', result)
+            result = _re.sub(r'_+', '_', result).strip('_')
+            if not result:
+                result = "VALUE_UNKNOWN"
+            if result[0].isdigit():
                 result = f"VALUE_{result}"
         
         return result

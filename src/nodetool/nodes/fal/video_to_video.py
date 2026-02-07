@@ -378,10 +378,10 @@ class BiRefNetV2Video(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class OperatingResolution(Enum):
         """
@@ -430,7 +430,7 @@ class BiRefNetV2Video(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     operating_resolution: OperatingResolution = Field(
         default=OperatingResolution.VALUE_1024X1024, description="The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model."
@@ -1025,10 +1025,10 @@ class Ltx219BDistilledVideoToVideoLora(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -1124,7 +1124,7 @@ class Ltx219BDistilledVideoToVideoLora(FALNode):
         default=1, description="Video conditioning strength. Lower values represent more freedom given to the model to change the video content."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="An optional URL of an image to use as the first frame of the video."
@@ -1253,10 +1253,10 @@ class Ltx219BDistilledVideoToVideo(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -1349,7 +1349,7 @@ class Ltx219BDistilledVideoToVideo(FALNode):
         default=1, description="Video conditioning strength. Lower values represent more freedom given to the model to change the video content."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="An optional URL of an image to use as the first frame of the video."
@@ -1477,10 +1477,10 @@ class Ltx219BVideoToVideoLora(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -1579,7 +1579,7 @@ class Ltx219BVideoToVideoLora(FALNode):
         default=1, description="Video conditioning strength. Lower values represent more freedom given to the model to change the video content."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="An optional URL of an image to use as the first frame of the video."
@@ -1713,10 +1713,10 @@ class Ltx219BVideoToVideo(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -1812,7 +1812,7 @@ class Ltx219BVideoToVideo(FALNode):
         default=1, description="Video conditioning strength. Lower values represent more freedom given to the model to change the video content."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="An optional URL of an image to use as the first frame of the video."
@@ -1982,10 +1982,10 @@ class Ltx219BDistilledExtendVideoLora(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -2043,7 +2043,7 @@ class Ltx219BDistilledExtendVideoLora(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -2176,10 +2176,10 @@ class Ltx219BDistilledExtendVideo(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -2234,7 +2234,7 @@ class Ltx219BDistilledExtendVideo(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -2329,10 +2329,10 @@ class Ltx219BExtendVideoLora(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -2415,7 +2415,7 @@ class Ltx219BExtendVideoLora(FALNode):
         default=1, description="Video conditioning strength. Lower values represent more freedom given to the model to change the video content."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     video_quality: VideoQuality = Field(
         default=VideoQuality.HIGH, description="The quality of the generated video."
@@ -2568,10 +2568,10 @@ class Ltx219BExtendVideo(FALNode):
         """
         The output type of the generated video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class VideoQuality(Enum):
         """
@@ -2629,7 +2629,7 @@ class Ltx219BExtendVideo(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker."
@@ -3072,7 +3072,7 @@ class LightxRecamera(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-class KlingVideoV2_6StandardMotionControl(FALNode):
+class KlingVideoV26StandardMotionControl(FALNode):
     """
     Kling Video v2.6 Motion Control [Standard]
     video, editing, video-to-video, vid2vid
@@ -3135,7 +3135,7 @@ class KlingVideoV2_6StandardMotionControl(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-class KlingVideoV2_6ProMotionControl(FALNode):
+class KlingVideoV26ProMotionControl(FALNode):
     """
     Kling Video v2.6 Motion Control [Pro]
     video, editing, video-to-video, vid2vid, professional
@@ -3368,7 +3368,7 @@ class ClarityaiCrystalVideoUpscaler(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-class WanV2_6ReferenceToVideo(FALNode):
+class WanV26ReferenceToVideo(FALNode):
     """
     Wan v2.6 Reference to Video
     video, editing, video-to-video, vid2vid
@@ -3466,7 +3466,7 @@ class WanV2_6ReferenceToVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-class Veo3_1FastExtendVideo(FALNode):
+class Veo31FastExtendVideo(FALNode):
     """
     Veo 3.1 Fast
     video, editing, video-to-video, vid2vid, fast
@@ -3556,7 +3556,7 @@ class Veo3_1FastExtendVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-class Veo3_1ExtendVideo(FALNode):
+class Veo31ExtendVideo(FALNode):
     """
     Veo 3.1
     video, editing, video-to-video, vid2vid
@@ -3920,7 +3920,7 @@ class SteadyDancer(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-class OneToAllAnimation1_3B(FALNode):
+class OneToAllAnimation13B(FALNode):
     """
     One To All Animation
     video, editing, video-to-video, vid2vid
@@ -4788,7 +4788,7 @@ class Editto(FALNode):
         Sampler to use for video generation.
         """
         UNIPC = "unipc"
-        DPMPP = "dpmPP"
+        DPM_PLUS_PLUS = "dpm++"
         EULER = "euler"
 
     class VideoWriteMode(Enum):
@@ -4966,10 +4966,10 @@ class FlashvsrUpscaleVideo(FALNode):
         """
         The format of the output video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class OutputWriteMode(Enum):
         """
@@ -4999,7 +4999,7 @@ class FlashvsrUpscaleVideo(FALNode):
         default=70, description="Quality level for tile blending (0-100). Controls overlap between tiles to prevent grid artifacts. Higher values provide better quality with more overlap. Recommended: 70-85 for high-res videos, 50-70 for faster processing."
     )
     output_format: OutputFormat = Field(
-        default=OutputFormat.X264__MP4, description="The format of the output video."
+        default=OutputFormat.X264_MP4, description="The format of the output video."
     )
     color_fix: bool = Field(
         default=True, description="Color correction enabled."
@@ -5392,7 +5392,7 @@ class VideoAsPrompt(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-class MireloAiSfxV1_5VideoToVideo(FALNode):
+class MireloAiSfxV15VideoToVideo(FALNode):
     """
     Mirelo SFX V1.5
     video, editing, video-to-video, vid2vid
@@ -5573,7 +5573,7 @@ class WanVaceAppsLongReframe(FALNode):
         Sampler to use for video generation.
         """
         UNIPC = "unipc"
-        DPMPP = "dpmPP"
+        DPM_PLUS_PLUS = "dpm++"
         EULER = "euler"
 
     class VideoWriteMode(Enum):
@@ -5846,10 +5846,10 @@ class SeedvrUpscaleVideo(FALNode):
         """
         The format of the output video.
         """
-        X264__MP4 = "X264 (.mp4)"
-        VP9__WEBM = "VP9 (.webm)"
-        PRORES4444__MOV = "PRORES4444 (.mov)"
-        GIF__GIF = "GIF (.gif)"
+        X264_MP4 = "X264 (.mp4)"
+        VP9_WEBM = "VP9 (.webm)"
+        PRORES4444_MOV = "PRORES4444 (.mov)"
+        GIF_GIF = "GIF (.gif)"
 
     class OutputWriteMode(Enum):
         """
@@ -5888,7 +5888,7 @@ class SeedvrUpscaleVideo(FALNode):
         default=0.1, description="The noise scale to use for the generation process."
     )
     output_format: OutputFormat = Field(
-        default=OutputFormat.X264__MP4, description="The format of the output video."
+        default=OutputFormat.X264_MP4, description="The format of the output video."
     )
     output_write_mode: OutputWriteMode = Field(
         default=OutputWriteMode.BALANCED, description="The write mode of the output video."
@@ -6043,6 +6043,6488 @@ class WanVaceAppsVideoEdit(FALNode):
         res = await self.submit_request(
             context=context,
             application="fal-ai/wan-vace-apps/video-edit",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanV2214bAnimateReplace(FALNode):
+    """
+    Wan-Animate Replace is a model that can integrate animated characters into reference videos, replacing the original character while preserving the scene’s lighting and color tone for seamless environmental integration.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p, 580p, or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the output video. Higher quality means better visual quality but larger file size.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_480P, description="Resolution of the generated video (480p, 580p, or 720p)."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video."
+    )
+    shift: float = Field(
+        default=5, description="Shift value for the video. Must be between 1.0 and 10.0."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP archive containing per-frame images generated on GPU (lossless)."
+    )
+    enable_output_safety_checker: bool = Field(
+        default=False, description="If set to true, output video will be checked for safety after generation."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    )
+    guidance_scale: float = Field(
+        default=1, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
+    )
+    num_inference_steps: int = Field(
+        default=20, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    use_turbo: bool = Field(
+        default=False, description="If true, applies quality enhancement for faster generation with improved quality. When enabled, parameters are automatically optimized for best results."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, input data will be checked for safety before processing."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "video_write_mode": self.video_write_mode.value,
+            "resolution": self.resolution.value,
+            "video_url": self.video_url,
+            "shift": self.shift,
+            "return_frames_zip": self.return_frames_zip,
+            "enable_output_safety_checker": self.enable_output_safety_checker,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "video_quality": self.video_quality.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "use_turbo": self.use_turbo,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan/v2.2-14b/animate/replace",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanV2214bAnimateMove(FALNode):
+    """
+    Wan-Animate is a video model that generates high-fidelity character videos by replicating the expressions and movements of characters from reference videos.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p, 580p, or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the output video. Higher quality means better visual quality but larger file size.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_480P, description="Resolution of the generated video (480p, 580p, or 720p)."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video."
+    )
+    shift: float = Field(
+        default=5, description="Shift value for the video. Must be between 1.0 and 10.0."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP archive containing per-frame images generated on GPU (lossless)."
+    )
+    enable_output_safety_checker: bool = Field(
+        default=False, description="If set to true, output video will be checked for safety after generation."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    )
+    guidance_scale: float = Field(
+        default=1, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
+    )
+    num_inference_steps: int = Field(
+        default=20, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    use_turbo: bool = Field(
+        default=False, description="If true, applies quality enhancement for faster generation with improved quality. When enabled, parameters are automatically optimized for best results."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, input data will be checked for safety before processing."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "video_write_mode": self.video_write_mode.value,
+            "resolution": self.resolution.value,
+            "video_url": self.video_url,
+            "shift": self.shift,
+            "return_frames_zip": self.return_frames_zip,
+            "enable_output_safety_checker": self.enable_output_safety_checker,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "video_quality": self.video_quality.value,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "use_turbo": self.use_turbo,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan/v2.2-14b/animate/move",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class DecartLucyEditPro(FALNode):
+    """
+    Edit outfits, objects, faces, or restyle your video - all with maximum detail retention.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video
+        """
+        VALUE_720P = "720p"
+
+
+    sync_mode: bool = Field(
+        default=True, description="If set to true, the function will wait for the video to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the video directly in the response without going through the CDN."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video to edit"
+    )
+    prompt: str = Field(
+        default="", description="Text description of the desired video content"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video"
+    )
+    enhance_prompt: bool = Field(
+        default=True, description="Whether to enhance the prompt for better results."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "video_url": self.video_url,
+            "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "enhance_prompt": self.enhance_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="decart/lucy-edit/pro",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class DecartLucyEditDev(FALNode):
+    """
+    Edit outfits, objects, faces, or restyle your video - all with maximum detail retention.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    sync_mode: bool = Field(
+        default=True, description="If set to true, the function will wait for the video to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the video directly in the response without going through the CDN."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video to edit"
+    )
+    prompt: str = Field(
+        default="", description="Text description of the desired video content"
+    )
+    enhance_prompt: bool = Field(
+        default=True, description="Whether to enhance the prompt for better results."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "sync_mode": self.sync_mode,
+            "video_url": self.video_url,
+            "prompt": self.prompt,
+            "enhance_prompt": self.enhance_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="decart/lucy-edit/dev",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Wan22VaceFunA14bReframe(FALNode):
+    """
+    VACE Fun for Wan 2.2 A14B from Alibaba-PAI
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation. Optional for reframing."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. This video will be used as a reference for the reframe task."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    trim_borders: bool = Field(
+        default=True, description="Whether to trim borders from the video."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    zoom_factor: float = Field(
+        default=0, description="Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    match_input_num_frames: bool = Field(
+        default=True, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=True, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "guidance_scale": self.guidance_scale,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "trim_borders": self.trim_borders,
+            "sampler": self.sampler.value,
+            "transparency_mode": self.transparency_mode.value,
+            "sync_mode": self.sync_mode,
+            "video_quality": self.video_quality.value,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "shift": self.shift,
+            "acceleration": self.acceleration,
+            "zoom_factor": self.zoom_factor,
+            "frames_per_second": self.frames_per_second,
+            "match_input_num_frames": self.match_input_num_frames,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "resolution": self.resolution.value,
+            "return_frames_zip": self.return_frames_zip,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-22-vace-fun-a14b/reframe",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Wan22VaceFunA14bOutpainting(FALNode):
+    """
+    VACE Fun for Wan 2.2 A14B from Alibaba-PAI
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for outpainting."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="URLs to source reference image. If provided, the model will use this image as reference."
+    )
+    expand_ratio: float = Field(
+        default=0.25, description="Amount of expansion. This is a float value between 0 and 1, where 0.25 adds 25% to the original video size on the specified sides."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    expand_bottom: bool = Field(
+        default=False, description="Whether to expand the video to the bottom."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    expand_left: bool = Field(
+        default=False, description="Whether to expand the video to the left."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    expand_top: bool = Field(
+        default=False, description="Whether to expand the video to the top."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    expand_right: bool = Field(
+        default=False, description="Whether to expand the video to the right."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "expand_ratio": self.expand_ratio,
+            "transparency_mode": self.transparency_mode.value,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "guidance_scale": self.guidance_scale,
+            "sampler": self.sampler.value,
+            "expand_bottom": self.expand_bottom,
+            "sync_mode": self.sync_mode,
+            "video_quality": self.video_quality.value,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "expand_left": self.expand_left,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "expand_top": self.expand_top,
+            "shift": self.shift,
+            "seed": self.seed,
+            "acceleration": self.acceleration,
+            "frames_per_second": self.frames_per_second,
+            "match_input_num_frames": self.match_input_num_frames,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "expand_right": self.expand_right,
+            "resolution": self.resolution.value,
+            "return_frames_zip": self.return_frames_zip,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-22-vace-fun-a14b/outpainting",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Wan22VaceFunA14bInpainting(FALNode):
+    """
+    VACE Fun for Wan 2.2 A14B from Alibaba-PAI
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for inpainting."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="Urls to source reference image. If provided, the model will use this image as reference."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    mask_video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source mask file. Required for inpainting."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    mask_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL to the guiding mask file. If provided, the model will use this mask as a reference to create masked video using salient mask tracking. Will be ignored if mask_video_url is provided."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "guidance_scale": self.guidance_scale,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "transparency_mode": self.transparency_mode.value,
+            "sampler": self.sampler.value,
+            "sync_mode": self.sync_mode,
+            "video_quality": self.video_quality.value,
+            "mask_video_url": self.mask_video_url,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "shift": self.shift,
+            "preprocess": self.preprocess,
+            "acceleration": self.acceleration,
+            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "frames_per_second": self.frames_per_second,
+            "match_input_num_frames": self.match_input_num_frames,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "resolution": self.resolution.value,
+            "return_frames_zip": self.return_frames_zip,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-22-vace-fun-a14b/inpainting",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Wan22VaceFunA14bDepth(FALNode):
+    """
+    VACE Fun for Wan 2.2 A14B from Alibaba-PAI
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for depth task."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="URLs to source reference image. If provided, the model will use this image as reference."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "guidance_scale": self.guidance_scale,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "transparency_mode": self.transparency_mode.value,
+            "sampler": self.sampler.value,
+            "sync_mode": self.sync_mode,
+            "video_quality": self.video_quality.value,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "preprocess": self.preprocess,
+            "shift": self.shift,
+            "acceleration": self.acceleration,
+            "frames_per_second": self.frames_per_second,
+            "match_input_num_frames": self.match_input_num_frames,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "resolution": self.resolution.value,
+            "return_frames_zip": self.return_frames_zip,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-22-vace-fun-a14b/depth",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Wan22VaceFunA14bPose(FALNode):
+    """
+    VACE Fun for Wan 2.2 A14B from Alibaba-PAI
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation. For pose task, the prompt should describe the desired pose and action of the subject in the video."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for pose task."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="URLs to source reference image. If provided, the model will use this image as reference."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "guidance_scale": self.guidance_scale,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "transparency_mode": self.transparency_mode.value,
+            "sampler": self.sampler.value,
+            "sync_mode": self.sync_mode,
+            "video_quality": self.video_quality.value,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "preprocess": self.preprocess,
+            "shift": self.shift,
+            "acceleration": self.acceleration,
+            "frames_per_second": self.frames_per_second,
+            "match_input_num_frames": self.match_input_num_frames,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "resolution": self.resolution.value,
+            "return_frames_zip": self.return_frames_zip,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-22-vace-fun-a14b/pose",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class HunyuanVideoFoley(FALNode):
+    """
+    Use the capabilities of the hunyuan foley model to bring life to your videos by adding sound effect to them.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to generate audio for."
+    )
+    guidance_scale: float = Field(
+        default=4.5, description="Guidance scale for audio generation."
+    )
+    num_inference_steps: int = Field(
+        default=50, description="Number of inference steps for generation."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    negative_prompt: str = Field(
+        default="noisy, harsh", description="Negative prompt to avoid certain audio characteristics."
+    )
+    text_prompt: str = Field(
+        default="", description="Text description of the desired audio (optional)."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+            "text_prompt": self.text_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video-foley",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class SyncLipsyncV2Pro(FALNode):
+    """
+    Generate high-quality realistic lipsync animations from audio while preserving unique details like natural teeth and unique facial features using the state-of-the-art Sync Lipsync 2 Pro model.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class SyncMode(Enum):
+        """
+        Lipsync mode when audio and video durations are out of sync.
+        """
+        CUT_OFF = "cut_off"
+        LOOP = "loop"
+        BOUNCE = "bounce"
+        SILENCE = "silence"
+        REMAP = "remap"
+
+
+    sync_mode: SyncMode = Field(
+        default=SyncMode.CUT_OFF, description="Lipsync mode when audio and video durations are out of sync."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video"
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="URL of the input audio"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "sync_mode": self.sync_mode.value,
+            "video_url": self.video_url,
+            "audio_url": self.audio_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sync-lipsync/v2/pro",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanFunControl(FALNode):
+    """
+    Generate pose or depth controlled video using Alibaba-PAI's Wan 2.2 Fun
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class PreprocessType(Enum):
+        """
+        The type of preprocess to apply to the video. Only used when preprocess_video is True.
+        """
+        DEPTH = "depth"
+        POSE = "pose"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate the video."
+    )
+    shift: float = Field(
+        default=5, description="The shift for the scheduler."
+    )
+    preprocess_video: bool = Field(
+        default=False, description="Whether to preprocess the video. If True, the video will be preprocessed to depth or pose."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="The URL of the reference image to use as a reference for the video generation."
+    )
+    fps: int = Field(
+        default=16, description="The fps to generate. Only used when match_input_fps is False."
+    )
+    match_input_num_frames: bool = Field(
+        default=True, description="Whether to match the number of frames in the input video."
+    )
+    guidance_scale: float = Field(
+        default=6, description="The guidance scale."
+    )
+    preprocess_type: PreprocessType = Field(
+        default=PreprocessType.DEPTH, description="The type of preprocess to apply to the video. Only used when preprocess_video is True."
+    )
+    control_video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the control video to use as a reference for the video generation."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to generate the video."
+    )
+    num_frames: int = Field(
+        default=81, description="The number of frames to generate. Only used when match_input_num_frames is False."
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator."
+    )
+    num_inference_steps: int = Field(
+        default=27, description="The number of inference steps."
+    )
+    match_input_fps: bool = Field(
+        default=True, description="Whether to match the fps in the input video."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "shift": self.shift,
+            "preprocess_video": self.preprocess_video,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "fps": self.fps,
+            "match_input_num_frames": self.match_input_num_frames,
+            "guidance_scale": self.guidance_scale,
+            "preprocess_type": self.preprocess_type.value,
+            "control_video_url": self.control_video_url,
+            "negative_prompt": self.negative_prompt,
+            "num_frames": self.num_frames,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "match_input_fps": self.match_input_fps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-fun-control",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class BriaVideoIncreaseResolution(FALNode):
+    """
+    Upscale videos up to 8K output resolution. Trained on fully licensed and commercially safe data.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class OutputContainerAndCodec(Enum):
+        """
+        Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, mov_h265, mov_proresks, mkv_h265, mkv_h264, mkv_vp9, gif.
+        """
+        MP4_H265 = "mp4_h265"
+        MP4_H264 = "mp4_h264"
+        WEBM_VP9 = "webm_vp9"
+        MOV_H265 = "mov_h265"
+        MOV_PRORESKS = "mov_proresks"
+        MKV_H265 = "mkv_h265"
+        MKV_H264 = "mkv_h264"
+        MKV_VP9 = "mkv_vp9"
+        GIF = "gif"
+
+    class DesiredIncrease(Enum):
+        """
+        desired_increase factor. Options: 2x, 4x.
+        """
+        VALUE_2 = "2"
+        VALUE_4 = "4"
+
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="Input video to increase resolution. Size should be less than 14142x14142 and duration less than 30s."
+    )
+    output_container_and_codec: OutputContainerAndCodec = Field(
+        default=OutputContainerAndCodec.WEBM_VP9, description="Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, mov_h265, mov_proresks, mkv_h265, mkv_h264, mkv_vp9, gif."
+    )
+    desired_increase: DesiredIncrease = Field(
+        default=DesiredIncrease.VALUE_2, description="desired_increase factor. Options: 2x, 4x."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+            "output_container_and_codec": self.output_container_and_codec.value,
+            "desired_increase": self.desired_increase.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="bria/video/increase-resolution",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Infinitalk(FALNode):
+    """
+    Infinitalk model generates a talking avatar video from an image and audio file. The avatar lip-syncs to the provided audio with natural facial expressions.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the video to generate. Must be either 480p or 720p.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    )
+    acceleration: Acceleration = Field(
+        default=Acceleration.REGULAR, description="The acceleration level to use for generation."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="The URL of the audio file."
+    )
+    num_frames: int = Field(
+        default=145, description="Number of frames to generate. Must be between 41 to 721."
+    )
+    seed: int = Field(
+        default=42, description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "acceleration": self.acceleration.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio_url,
+            "num_frames": self.num_frames,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/infinitalk",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class MireloAiSfxV1VideoToVideo(FALNode):
+    """
+    Generate synced sounds for any video, and return it with its new sound track (like MMAudio) 
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    num_samples: str = Field(
+        default=2, description="The number of samples to generate from the model"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="A video url that can accessed from the API to process and add sound effects"
+    )
+    duration: str = Field(
+        default=10, description="The duration of the generated audio in seconds"
+    )
+    seed: str = Field(
+        default=2105, description="The seed to use for the generation. If not provided, a random seed will be used"
+    )
+    text_prompt: str = Field(
+        default="", description="Additional description to guide the model"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "num_samples": self.num_samples,
+            "video_url": self.video_url,
+            "duration": self.duration,
+            "seed": self.seed,
+            "text_prompt": self.text_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="mirelo-ai/sfx-v1/video-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class MoonvalleyMareyPoseTransfer(FALNode):
+    """
+    Ideal for matching human movement. Your input video determines human poses, gestures, and body movements that will appear in the generated video.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate a video from"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to use as the control video."
+    )
+    seed: str = Field(
+        default=-1, description="Seed for random number generation. Use -1 for random seed each run."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional reference image URL to use for pose control or as a starting frame"
+    )
+    negative_prompt: str = Field(
+        default="<synthetic> <scene cut> low-poly, flat shader, bad rigging, stiff animation, uncanny eyes, low-quality textures, looping glitch, cheap effect, overbloom, bloom spam, default lighting, game asset, stiff face, ugly specular, AI artifacts", description="Negative prompt used to guide the model away from undesirable features."
+    )
+    first_frame_image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional first frame image URL to use as the first frame of the generated video"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        first_frame_image_url_base64 = await context.image_to_base64(self.first_frame_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "seed": self.seed,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "negative_prompt": self.negative_prompt,
+            "first_frame_image_url": f"data:image/png;base64,{first_frame_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="moonvalley/marey/pose-transfer",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class MoonvalleyMareyMotionTransfer(FALNode):
+    """
+    Pull motion from a reference video and apply it to new subjects or scenes.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    prompt: str = Field(
+        default="", description="The prompt to generate a video from"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to use as the control video."
+    )
+    seed: str = Field(
+        default=-1, description="Seed for random number generation. Use -1 for random seed each run."
+    )
+    reference_image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional reference image URL to use for pose control or as a starting frame"
+    )
+    negative_prompt: str = Field(
+        default="<synthetic> <scene cut> low-poly, flat shader, bad rigging, stiff animation, uncanny eyes, low-quality textures, looping glitch, cheap effect, overbloom, bloom spam, default lighting, game asset, stiff face, ugly specular, AI artifacts", description="Negative prompt used to guide the model away from undesirable features."
+    )
+    first_frame_image_url: ImageRef = Field(
+        default="https://video-editor-files-prod.s3.us-east-2.amazonaws.com/users/1e4d46df-0702-4491-95ce-763592f33f34/uploaded-images/9b9dce1c-abd0-46c0-bac9-9454f8893b06/original", description="Optional first frame image URL to use as the first frame of the generated video"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        first_frame_image_url_base64 = await context.image_to_base64(self.first_frame_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "seed": self.seed,
+            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "negative_prompt": self.negative_prompt,
+            "first_frame_image_url": f"data:image/png;base64,{first_frame_image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="moonvalley/marey/motion-transfer",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class FfmpegApiMergeVideos(FALNode):
+    """
+    Use ffmpeg capabilities to merge 2 or more videos.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    target_fps: str = Field(
+        default="", description="Target FPS for the output video. If not provided, uses the lowest FPS from input videos."
+    )
+    video_urls: list[str] = Field(
+        default=[], description="List of video URLs to merge in order"
+    )
+    resolution: str = Field(
+        default="", description="Resolution of the final video. Width and height must be between 512 and 2048."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "target_fps": self.target_fps,
+            "video_urls": self.video_urls,
+            "resolution": self.resolution,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ffmpeg-api/merge-videos",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanV22A14bVideoToVideo(FALNode):
+    """
+    Wan-2.2 video-to-video is a video model that generates high-quality videos with high visual quality and motion diversity from text prompts and source videos.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p, 580p, or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the output video. Higher quality means better visual quality but larger file size.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. If None, no interpolation is applied.
+        """
+        NONE = "none"
+        FILM = "film"
+        RIFE = "rife"
+
+
+    shift: float = Field(
+        default=5, description="Shift value for the video. Must be between 1.0 and 10.0."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video."
+    )
+    num_interpolated_frames: int = Field(
+        default=1, description="Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4."
+    )
+    acceleration: Acceleration = Field(
+        default=Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    )
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    resample_fps: bool = Field(
+        default=False, description="If true, the video will be resampled to the passed frames per second. If false, the video will not be resampled."
+    )
+    frames_per_second: int = Field(
+        default=16, description="Frames per second of the generated video. Must be between 4 to 60. When using interpolation and `adjust_fps_for_interpolation` is set to true (default true,) the final FPS will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If `adjust_fps_for_interpolation` is set to false, this value will be used as-is."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 17 to 161 (inclusive)."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, input data will be checked for safety before processing."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input video."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)."
+    )
+    enable_output_safety_checker: bool = Field(
+        default=False, description="If set to true, output video will be checked for safety after generation."
+    )
+    guidance_scale_2: float = Field(
+        default=4, description="Guidance scale for the second stage of the model. This is used to control the adherence to the prompt in the second stage of the model."
+    )
+    strength: float = Field(
+        default=0.9, description="Strength of the video transformation. A value of 1.0 means the output will be completely based on the prompt, while a value of 0.0 means the output will be identical to the input video."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    )
+    adjust_fps_for_interpolation: bool = Field(
+        default=True, description="If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. If None, no interpolation is applied."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
+    )
+    num_inference_steps: int = Field(
+        default=27, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "shift": self.shift,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "acceleration": self.acceleration.value,
+            "prompt": self.prompt,
+            "resample_fps": self.resample_fps,
+            "frames_per_second": self.frames_per_second,
+            "guidance_scale": self.guidance_scale,
+            "num_frames": self.num_frames,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "enable_output_safety_checker": self.enable_output_safety_checker,
+            "guidance_scale_2": self.guidance_scale_2,
+            "strength": self.strength,
+            "video_quality": self.video_quality.value,
+            "adjust_fps_for_interpolation": self.adjust_fps_for_interpolation,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan/v2.2-a14b/video-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Ltxv13b098DistilledExtend(FALNode):
+    """
+    Extend videos using LTX Video-0.9.8 13B Distilled and custom LoRA
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        AUTO = "auto"
+
+
+    second_pass_skip_initial_steps: int = Field(
+        default=5, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
+    )
+    first_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the first pass."
+    )
+    frame_rate: int = Field(
+        default=24, description="The frame rate of the video."
+    )
+    reverse_video: bool = Field(
+        default=False, description="Whether to reverse the video."
+    )
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt using a language model."
+    )
+    temporal_adain_factor: float = Field(
+        default=0.5, description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution."
+    )
+    loras: list[str] = Field(
+        default=[], description="LoRA weights to use for generation"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames in the video."
+    )
+    second_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the second pass."
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Video to be extended."
+    )
+    enable_detail_pass: bool = Field(
+        default=False, description="Whether to use a detail pass. If True, the model will perform a second pass to refine the video and enhance details. This incurs a 2.0x cost multiplier on the base price."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    )
+    tone_map_compression_ratio: float = Field(
+        default=0, description="The compression ratio for tone mapping. This is used to compress the dynamic range of the video to improve visual quality. A value of 0.0 means no compression, while a value of 1.0 means maximum compression."
+    )
+    constant_rate_factor: int = Field(
+        default=29, description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
+            "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
+            "frame_rate": self.frame_rate,
+            "reverse_video": self.reverse_video,
+            "prompt": self.prompt,
+            "expand_prompt": self.expand_prompt,
+            "temporal_adain_factor": self.temporal_adain_factor,
+            "loras": self.loras,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_frames": self.num_frames,
+            "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+            "video": self.video,
+            "enable_detail_pass": self.enable_detail_pass,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "tone_map_compression_ratio": self.tone_map_compression_ratio,
+            "constant_rate_factor": self.constant_rate_factor,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltxv-13b-098-distilled/extend",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class RifeVideo(FALNode):
+    """
+    Interpolate videos with RIFE - Real-Time Intermediate Flow Estimation
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to use for interpolation."
+    )
+    use_scene_detection: bool = Field(
+        default=False, description="If True, the input video will be split into scenes before interpolation. This removes smear frames between scenes, but can result in false positives if the scene detection is not accurate. If False, the entire video will be treated as a single scene."
+    )
+    loop: bool = Field(
+        default=False, description="If True, the final frame will be looped back to the first frame to create a seamless loop. If False, the final frame will not loop back."
+    )
+    num_frames: int = Field(
+        default=1, description="The number of frames to generate between the input video frames."
+    )
+    use_calculated_fps: bool = Field(
+        default=True, description="If True, the function will use the calculated FPS of the input video multiplied by the number of frames to determine the output FPS. If False, the passed FPS will be used."
+    )
+    fps: int = Field(
+        default=8, description="Frames per second for the output video. Only applicable if use_calculated_fps is False."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+            "use_scene_detection": self.use_scene_detection,
+            "loop": self.loop,
+            "num_frames": self.num_frames,
+            "use_calculated_fps": self.use_calculated_fps,
+            "fps": self.fps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/rife/video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class FilmVideo(FALNode):
+    """
+    Interpolate videos with FILM - Frame Interpolation for Large Motion
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the output video. Only applicable if output_type is 'video'.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the output video. Only applicable if output_type is 'video'.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Only applicable if output_type is 'video'."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to use for interpolation."
+    )
+    use_calculated_fps: bool = Field(
+        default=True, description="If True, the function will use the calculated FPS of the input video multiplied by the number of frames to determine the output FPS. If False, the passed FPS will be used."
+    )
+    loop: bool = Field(
+        default=False, description="If True, the final frame will be looped back to the first frame to create a seamless loop. If False, the final frame will not loop back."
+    )
+    fps: int = Field(
+        default=8, description="Frames per second for the output video. Only applicable if use_calculated_fps is False."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the output video. Only applicable if output_type is 'video'."
+    )
+    use_scene_detection: bool = Field(
+        default=False, description="If True, the input video will be split into scenes before interpolation. This removes smear frames between scenes, but can result in false positives if the scene detection is not accurate. If False, the entire video will be treated as a single scene."
+    )
+    num_frames: int = Field(
+        default=1, description="The number of frames to generate between the input video frames."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_write_mode": self.video_write_mode.value,
+            "video_url": self.video_url,
+            "use_calculated_fps": self.use_calculated_fps,
+            "loop": self.loop,
+            "fps": self.fps,
+            "sync_mode": self.sync_mode,
+            "video_quality": self.video_quality.value,
+            "use_scene_detection": self.use_scene_detection,
+            "num_frames": self.num_frames,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/film/video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LumaDreamMachineRay2FlashModify(FALNode):
+    """
+    Ray2 Flash Modify is a video generative model capable of restyling or retexturing the entire shot, from turning live-action into CG or stylized animation, to changing wardrobe, props, or the overall aesthetic and swap environments or time periods, giving you control over background, location, or even weather.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Mode(Enum):
+        """
+        Amount of modification to apply to the video, adhere_1 is the least amount of modification, reimagine_3 is the most
+        """
+        ADHERE_1 = "adhere_1"
+        ADHERE_2 = "adhere_2"
+        ADHERE_3 = "adhere_3"
+        FLEX_1 = "flex_1"
+        FLEX_2 = "flex_2"
+        FLEX_3 = "flex_3"
+        REIMAGINE_1 = "reimagine_1"
+        REIMAGINE_2 = "reimagine_2"
+        REIMAGINE_3 = "reimagine_3"
+
+
+    prompt: str = Field(
+        default="", description="Instruction for modifying the video"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video to modify"
+    )
+    mode: Mode = Field(
+        default=Mode.FLEX_1, description="Amount of modification to apply to the video, adhere_1 is the least amount of modification, reimagine_3 is the most"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional URL of the first frame image for modification"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "mode": self.mode.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2-flash/modify",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Ltxv13b098DistilledMulticonditioning(FALNode):
+    """
+    Generate long videos from prompts, images, and videos using LTX Video-0.9.8 13B Distilled and custom LoRA
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        AUTO = "auto"
+
+
+    second_pass_skip_initial_steps: int = Field(
+        default=5, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
+    )
+    first_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the first pass."
+    )
+    frame_rate: int = Field(
+        default=24, description="The frame rate of the video."
+    )
+    reverse_video: bool = Field(
+        default=False, description="Whether to reverse the video."
+    )
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt using a language model."
+    )
+    temporal_adain_factor: float = Field(
+        default=0.5, description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution."
+    )
+    loras: list[str] = Field(
+        default=[], description="LoRA weights to use for generation"
+    )
+    images: list[str] = Field(
+        default=[], description="URL of images to use as conditioning"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames in the video."
+    )
+    second_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the second pass."
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+    enable_detail_pass: bool = Field(
+        default=False, description="Whether to use a detail pass. If True, the model will perform a second pass to refine the video and enhance details. This incurs a 2.0x cost multiplier on the base price."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    )
+    tone_map_compression_ratio: float = Field(
+        default=0, description="The compression ratio for tone mapping. This is used to compress the dynamic range of the video to improve visual quality. A value of 0.0 means no compression, while a value of 1.0 means maximum compression."
+    )
+    videos: list[str] = Field(
+        default=[], description="Videos to use as conditioning"
+    )
+    constant_rate_factor: int = Field(
+        default=29, description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
+            "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
+            "frame_rate": self.frame_rate,
+            "reverse_video": self.reverse_video,
+            "prompt": self.prompt,
+            "expand_prompt": self.expand_prompt,
+            "temporal_adain_factor": self.temporal_adain_factor,
+            "loras": self.loras,
+            "images": self.images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_frames": self.num_frames,
+            "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+            "enable_detail_pass": self.enable_detail_pass,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "tone_map_compression_ratio": self.tone_map_compression_ratio,
+            "videos": self.videos,
+            "constant_rate_factor": self.constant_rate_factor,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltxv-13b-098-distilled/multiconditioning",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class PixverseSoundEffects(FALNode):
+    """
+    Add immersive sound effects and background music to your videos using PixVerse sound effects  generation
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    prompt: str = Field(
+        default="", description="Description of the sound effect to generate. If empty, a random sound effect will be generated"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video to add sound effects to"
+    )
+    original_sound_switch: bool = Field(
+        default=False, description="Whether to keep the original audio from the video"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "original_sound_switch": self.original_sound_switch,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/sound-effects",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class ThinksoundAudio(FALNode):
+    """
+    Generate realistic audio from a video with an optional text prompt
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    prompt: str = Field(
+        default="", description="A prompt to guide the audio generation. If not provided, it will be extracted from the video."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to generate the audio for."
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    num_inference_steps: int = Field(
+        default=24, description="The number of inference steps for audio generation."
+    )
+    cfg_scale: float = Field(
+        default=5, description="The classifier-free guidance scale for audio generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> AudioRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/thinksound/audio",
+            arguments=arguments,
+        )
+        assert "audio" in res
+        return AudioRef(uri=res["audio"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Thinksound(FALNode):
+    """
+    Generate realistic audio for a video with an optional text prompt and combine
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    prompt: str = Field(
+        default="", description="A prompt to guide the audio generation. If not provided, it will be extracted from the video."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to generate the audio for."
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    num_inference_steps: int = Field(
+        default=24, description="The number of inference steps for audio generation."
+    )
+    cfg_scale: float = Field(
+        default=5, description="The classifier-free guidance scale for audio generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/thinksound",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class PixverseExtendFast(FALNode):
+    """
+    PixVerse Extend model is a video extending tool for your videos using with high-quality video extending techniques 
+    video, editing, video-to-video, vid2vid, fast
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video. Fast mode doesn't support 1080p
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+
+    class Style(Enum):
+        """
+        The style of the extended video
+        """
+        ANIME = "anime"
+        ANIMATION_3D = "3d_animation"
+        CLAY = "clay"
+        COMIC = "comic"
+        CYBERPUNK = "cyberpunk"
+
+    class Model(Enum):
+        """
+        The model version to use for generation
+        """
+        V3_5 = "v3.5"
+        V4 = "v4"
+        V4_5 = "v4.5"
+        V5 = "v5"
+        V5_5 = "v5.5"
+        V5_6 = "v5.6"
+
+
+    prompt: str = Field(
+        default="", description="Prompt describing how to extend the video"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="The resolution of the generated video. Fast mode doesn't support 1080p"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video to extend"
+    )
+    style: Style | None = Field(
+        default=None, description="The style of the extended video"
+    )
+    model: Model = Field(
+        default=Model.V4_5, description="The model version to use for generation"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to be used for the generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "video_url": self.video_url,
+            "style": self.style.value if self.style else None,
+            "model": self.model.value,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/extend/fast",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class PixverseExtend(FALNode):
+    """
+    PixVerse Extend model is a video extending tool for your videos using with high-quality video extending techniques 
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds. 1080p videos are limited to 5 seconds
+        """
+        VALUE_5 = "5"
+        VALUE_8 = "8"
+
+    class Style(Enum):
+        """
+        The style of the extended video
+        """
+        ANIME = "anime"
+        ANIMATION_3D = "3d_animation"
+        CLAY = "clay"
+        COMIC = "comic"
+        CYBERPUNK = "cyberpunk"
+
+    class Model(Enum):
+        """
+        The model version to use for generation
+        """
+        V3_5 = "v3.5"
+        V4 = "v4"
+        V4_5 = "v4.5"
+        V5 = "v5"
+        V5_5 = "v5.5"
+        V5_6 = "v5.6"
+
+
+    prompt: str = Field(
+        default="", description="Prompt describing how to extend the video"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds. 1080p videos are limited to 5 seconds"
+    )
+    style: Style | None = Field(
+        default=None, description="The style of the extended video"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video to extend"
+    )
+    model: Model = Field(
+        default=Model.V4_5, description="The model version to use for generation"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to be used for the generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "duration": self.duration.value,
+            "style": self.style.value if self.style else None,
+            "video_url": self.video_url,
+            "model": self.model.value,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/extend",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class PixverseLipsync(FALNode):
+    """
+    Generate realistic lipsync animations from audio using advanced algorithms for high-quality synchronization with PixVerse Lipsync model
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class VoiceId(Enum):
+        """
+        Voice to use for TTS when audio_url is not provided
+        """
+        EMILY = "Emily"
+        JAMES = "James"
+        ISABELLA = "Isabella"
+        LIAM = "Liam"
+        CHLOE = "Chloe"
+        ADRIAN = "Adrian"
+        HARPER = "Harper"
+        AVA = "Ava"
+        SOPHIA = "Sophia"
+        JULIA = "Julia"
+        MASON = "Mason"
+        JACK = "Jack"
+        OLIVER = "Oliver"
+        ETHAN = "Ethan"
+        AUTO = "Auto"
+
+
+    text: str = Field(
+        default="", description="Text content for TTS when audio_url is not provided"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video"
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="URL of the input audio. If not provided, TTS will be used."
+    )
+    voice_id: VoiceId = Field(
+        default=VoiceId.AUTO, description="Voice to use for TTS when audio_url is not provided"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "text": self.text,
+            "video_url": self.video_url,
+            "audio_url": self.audio_url,
+            "voice_id": self.voice_id.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pixverse/lipsync",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LumaDreamMachineRay2Modify(FALNode):
+    """
+    Ray2 Modify is a video generative model capable of restyling or retexturing the entire shot, from turning live-action into CG or stylized animation, to changing wardrobe, props, or the overall aesthetic and swap environments or time periods, giving you control over background, location, or even weather.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Mode(Enum):
+        """
+        Amount of modification to apply to the video, adhere_1 is the least amount of modification, reimagine_3 is the most
+        """
+        ADHERE_1 = "adhere_1"
+        ADHERE_2 = "adhere_2"
+        ADHERE_3 = "adhere_3"
+        FLEX_1 = "flex_1"
+        FLEX_2 = "flex_2"
+        FLEX_3 = "flex_3"
+        REIMAGINE_1 = "reimagine_1"
+        REIMAGINE_2 = "reimagine_2"
+        REIMAGINE_3 = "reimagine_3"
+
+
+    prompt: str = Field(
+        default="", description="Instruction for modifying the video"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video to modify"
+    )
+    mode: Mode = Field(
+        default=Mode.FLEX_1, description="Amount of modification to apply to the video, adhere_1 is the least amount of modification, reimagine_3 is the most"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional URL of the first frame image for modification"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "mode": self.mode.value,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2/modify",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace14bReframe(FALNode):
+    """
+    VACE is a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation. Optional for reframing."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. This video will be used as a reference for the reframe task."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    trim_borders: bool = Field(
+        default=True, description="Whether to trim borders from the video."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    zoom_factor: float = Field(
+        default=0, description="Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom."
+    )
+    match_input_num_frames: bool = Field(
+        default=True, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=True, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "transparency_mode": self.transparency_mode.value,
+            "num_frames": self.num_frames,
+            "trim_borders": self.trim_borders,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "sampler": self.sampler.value,
+            "guidance_scale": self.guidance_scale,
+            "video_quality": self.video_quality.value,
+            "sync_mode": self.sync_mode,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "shift": self.shift,
+            "acceleration": self.acceleration,
+            "zoom_factor": self.zoom_factor,
+            "match_input_num_frames": self.match_input_num_frames,
+            "frames_per_second": self.frames_per_second,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "return_frames_zip": self.return_frames_zip,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace-14b/reframe",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace14bOutpainting(FALNode):
+    """
+    VACE is a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for outpainting."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="URLs to source reference image. If provided, the model will use this image as reference."
+    )
+    expand_ratio: float = Field(
+        default=0.25, description="Amount of expansion. This is a float value between 0 and 1, where 0.25 adds 25% to the original video size on the specified sides."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    expand_bottom: bool = Field(
+        default=False, description="Whether to expand the video to the bottom."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    expand_top: bool = Field(
+        default=False, description="Whether to expand the video to the top."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    expand_left: bool = Field(
+        default=False, description="Whether to expand the video to the left."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    expand_right: bool = Field(
+        default=False, description="Whether to expand the video to the right."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "expand_ratio": self.expand_ratio,
+            "transparency_mode": self.transparency_mode.value,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "expand_bottom": self.expand_bottom,
+            "sampler": self.sampler.value,
+            "guidance_scale": self.guidance_scale,
+            "video_quality": self.video_quality.value,
+            "sync_mode": self.sync_mode,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "expand_top": self.expand_top,
+            "shift": self.shift,
+            "expand_left": self.expand_left,
+            "acceleration": self.acceleration,
+            "match_input_num_frames": self.match_input_num_frames,
+            "frames_per_second": self.frames_per_second,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "return_frames_zip": self.return_frames_zip,
+            "resolution": self.resolution.value,
+            "expand_right": self.expand_right,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace-14b/outpainting",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace14bInpainting(FALNode):
+    """
+    VACE is a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for inpainting."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="Urls to source reference image. If provided, the model will use this image as reference."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    mask_video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source mask file. Required for inpainting."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    mask_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL to the guiding mask file. If provided, the model will use this mask as a reference to create masked video using salient mask tracking. Will be ignored if mask_video_url is provided."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "transparency_mode": self.transparency_mode.value,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "guidance_scale": self.guidance_scale,
+            "sampler": self.sampler.value,
+            "video_quality": self.video_quality.value,
+            "sync_mode": self.sync_mode,
+            "mask_video_url": self.mask_video_url,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "shift": self.shift,
+            "preprocess": self.preprocess,
+            "acceleration": self.acceleration,
+            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "match_input_num_frames": self.match_input_num_frames,
+            "frames_per_second": self.frames_per_second,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "return_frames_zip": self.return_frames_zip,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace-14b/inpainting",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace14bPose(FALNode):
+    """
+    VACE is a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation. For pose task, the prompt should describe the desired pose and action of the subject in the video."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for pose task."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="URLs to source reference image. If provided, the model will use this image as reference."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "transparency_mode": self.transparency_mode.value,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "guidance_scale": self.guidance_scale,
+            "sampler": self.sampler.value,
+            "video_quality": self.video_quality.value,
+            "sync_mode": self.sync_mode,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "preprocess": self.preprocess,
+            "shift": self.shift,
+            "acceleration": self.acceleration,
+            "match_input_num_frames": self.match_input_num_frames,
+            "frames_per_second": self.frames_per_second,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "return_frames_zip": self.return_frames_zip,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace-14b/pose",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace14bDepth(FALNode):
+    """
+    VACE is a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. Required for depth task."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="URLs to source reference image. If provided, the model will use this image as reference."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "transparency_mode": self.transparency_mode.value,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "guidance_scale": self.guidance_scale,
+            "sampler": self.sampler.value,
+            "video_quality": self.video_quality.value,
+            "sync_mode": self.sync_mode,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "preprocess": self.preprocess,
+            "shift": self.shift,
+            "acceleration": self.acceleration,
+            "match_input_num_frames": self.match_input_num_frames,
+            "frames_per_second": self.frames_per_second,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "return_frames_zip": self.return_frames_zip,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace-14b/depth",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class DwposeVideo(FALNode):
+    """
+    Predict poses from videos.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class DrawMode(Enum):
+        """
+        Mode of drawing the pose on the video. Options are: 'full-pose', 'body-pose', 'face-pose', 'hand-pose', 'face-hand-mask', 'face-mask', 'hand-mask'.
+        """
+        FULL_POSE = "full-pose"
+        BODY_POSE = "body-pose"
+        FACE_POSE = "face-pose"
+        HAND_POSE = "hand-pose"
+        FACE_HAND_MASK = "face-hand-mask"
+        FACE_MASK = "face-mask"
+        HAND_MASK = "hand-mask"
+
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of video to be used for pose estimation"
+    )
+    draw_mode: DrawMode = Field(
+        default=DrawMode.BODY_POSE, description="Mode of drawing the pose on the video. Options are: 'full-pose', 'body-pose', 'face-pose', 'hand-pose', 'face-hand-mask', 'face-mask', 'hand-mask'."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+            "draw_mode": self.draw_mode.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/dwpose/video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class FfmpegApiMergeAudioVideo(FALNode):
+    """
+    Merge videos with standalone audio files or audio from video files.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    start_offset: float = Field(
+        default=0, description="Offset in seconds for when the audio should start relative to the video"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video file to use as the video track"
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="URL of the audio file to use as the audio track"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "start_offset": self.start_offset,
+            "video_url": self.video_url,
+            "audio_url": self.audio_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ffmpeg-api/merge-audio-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace13b(FALNode):
+    """
+    Vace a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Task(Enum):
+        """
+        Task type for the model.
+        """
+        DEPTH = "depth"
+        INPAINTING = "inpainting"
+        POSE = "pose"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p,580p, or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video (16:9 or 9:16).
+        """
+        AUTO = "auto"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
+
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. If provided, the model will use this video as a reference."
+    )
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    mask_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL to the guiding mask file. If provided, the model will use this mask as a reference to create masked video. If provided mask video url will be ignored."
+    )
+    task: Task = Field(
+        default=Task.DEPTH, description="Task type for the model."
+    )
+    frames_per_second: int = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 24."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="Urls to source reference image. If provided, the model will use this image as reference."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 100 (inclusive). Works only with only reference images as input if source video or mask video is provided output len would be same as source up to 241 frames"
+    )
+    negative_prompt: str = Field(
+        default="bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p,580p, or 720p)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video (16:9 or 9:16)."
+    )
+    mask_video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source mask file. If provided, the model will use this mask as a reference."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        arguments = {
+            "shift": self.shift,
+            "video_url": self.video_url,
+            "prompt": self.prompt,
+            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "task": self.task.value,
+            "frames_per_second": self.frames_per_second,
+            "ref_image_urls": self.ref_image_urls,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_frames": self.num_frames,
+            "negative_prompt": self.negative_prompt,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "mask_video_url": self.mask_video_url,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "preprocess": self.preprocess,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace-1-3b",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LumaDreamMachineRay2FlashReframe(FALNode):
+    """
+    Adjust and enhance videos with Ray-2 Reframe. This advanced tool seamlessly reframes videos to your desired aspect ratio, intelligently inpainting missing regions to ensure realistic visuals and coherent motion, delivering exceptional quality and creative flexibility.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the reframed video
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_21_9 = "21:9"
+        RATIO_9_21 = "9:21"
+
+
+    prompt: str = Field(
+        default="", description="Optional prompt for reframing"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default="", description="The aspect ratio of the reframed video"
+    )
+    y_start: int = Field(
+        default=0, description="Start Y coordinate for reframing"
+    )
+    x_end: int = Field(
+        default=0, description="End X coordinate for reframing"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video to reframe"
+    )
+    y_end: int = Field(
+        default=0, description="End Y coordinate for reframing"
+    )
+    x_start: int = Field(
+        default=0, description="Start X coordinate for reframing"
+    )
+    grid_position_y: int = Field(
+        default=0, description="Y position of the grid for reframing"
+    )
+    grid_position_x: int = Field(
+        default=0, description="X position of the grid for reframing"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional URL of the first frame image for reframing"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "y_start": self.y_start,
+            "x_end": self.x_end,
+            "video_url": self.video_url,
+            "y_end": self.y_end,
+            "x_start": self.x_start,
+            "grid_position_y": self.grid_position_y,
+            "grid_position_x": self.grid_position_x,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2-flash/reframe",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LumaDreamMachineRay2Reframe(FALNode):
+    """
+    Adjust and enhance videos with Ray-2 Reframe. This advanced tool seamlessly reframes videos to your desired aspect ratio, intelligently inpainting missing regions to ensure realistic visuals and coherent motion, delivering exceptional quality and creative flexibility.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the reframed video
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_21_9 = "21:9"
+        RATIO_9_21 = "9:21"
+
+
+    prompt: str = Field(
+        default="", description="Optional prompt for reframing"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default="", description="The aspect ratio of the reframed video"
+    )
+    y_start: int = Field(
+        default=0, description="Start Y coordinate for reframing"
+    )
+    x_end: int = Field(
+        default=0, description="End X coordinate for reframing"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video to reframe"
+    )
+    y_end: int = Field(
+        default=0, description="End Y coordinate for reframing"
+    )
+    x_start: int = Field(
+        default=0, description="Start X coordinate for reframing"
+    )
+    grid_position_y: int = Field(
+        default=0, description="Y position of the grid for reframing"
+    )
+    grid_position_x: int = Field(
+        default=0, description="X position of the grid for reframing"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Optional URL of the first frame image for reframing"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "y_start": self.y_start,
+            "x_end": self.x_end,
+            "video_url": self.video_url,
+            "y_end": self.y_end,
+            "x_start": self.x_start,
+            "grid_position_y": self.grid_position_y,
+            "grid_position_x": self.grid_position_x,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/luma-dream-machine/ray-2/reframe",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class VeedLipsync(FALNode):
+    """
+    Generate realistic lipsync from any audio using VEED's latest model
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    video_url: VideoRef = Field(
+        default=VideoRef()
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef()
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+            "audio_url": self.audio_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="veed/lipsync",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace14b(FALNode):
+    """
+    VACE is a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPM_PLUS_PLUS = "dpm++"
+        EULER = "euler"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
+    class Task(Enum):
+        """
+        Task type for the model.
+        """
+        DEPTH = "depth"
+        POSE = "pose"
+        INPAINTING = "inpainting"
+        OUTPAINTING = "outpainting"
+        REFRAME = "reframe"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. If provided, the model will use this video as a reference."
+    )
+    num_interpolated_frames: int = Field(
+        default=0, description="Number of frames to interpolate between the original frames. A value of 0 means no interpolation."
+    )
+    temporal_downsample_factor: int = Field(
+        default=0, description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied."
+    )
+    first_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the first frame of the video. If provided, the model will use this frame as a reference."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="URLs to source reference image. If provided, the model will use this image as reference."
+    )
+    transparency_mode: TransparencyMode = Field(
+        default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 241 (inclusive)."
+    )
+    auto_downsample_min_fps: float = Field(
+        default=15, description="The minimum frames per second to downsample the video to. This is used to help determine the auto downsample factor to try and find the lowest detail-preserving downsample factor. The default value is appropriate for most videos, if you are using a video with very fast motion, you may need to increase this value. If your video has a very low amount of motion, you could decrease this value to allow for higher downsampling and thus longer sequences."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
+    )
+    sampler: Sampler = Field(
+        default=Sampler.UNIPC, description="Sampler to use for video generation."
+    )
+    video_quality: VideoQuality = Field(
+        default=VideoQuality.HIGH, description="The quality of the generated video."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    mask_video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source mask file. If provided, the model will use this mask as a reference."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    interpolator_model: InterpolatorModel = Field(
+        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
+    )
+    enable_auto_downsample: bool = Field(
+        default=False, description="If true, the model will automatically temporally downsample the video to an appropriate frame length for the model, then will interpolate it back to the original frame length."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+    acceleration: str = Field(
+        default="regular", description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    )
+    mask_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL to the guiding mask file. If provided, the model will use this mask as a reference to create masked video. If provided mask video url will be ignored."
+    )
+    task: Task = Field(
+        default=Task.DEPTH, description="Task type for the model."
+    )
+    match_input_num_frames: bool = Field(
+        default=False, description="If true, the number of frames in the generated video will match the number of frames in the input video. If false, the number of frames will be determined by the num_frames parameter."
+    )
+    frames_per_second: str = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 30. Ignored if match_input_frames_per_second is true."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    negative_prompt: str = Field(
+        default="letterboxing, borders, black bars, bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    video_write_mode: VideoWriteMode = Field(
+        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the generated video."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
+    )
+    match_input_frames_per_second: bool = Field(
+        default=False, description="If true, the frames per second of the generated video will match the input video. If false, the frames per second will be determined by the frames_per_second parameter."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    last_frame_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the last frame of the video. If provided, the model will use this frame as a reference."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "num_interpolated_frames": self.num_interpolated_frames,
+            "temporal_downsample_factor": self.temporal_downsample_factor,
+            "first_frame_url": self.first_frame_url,
+            "ref_image_urls": self.ref_image_urls,
+            "transparency_mode": self.transparency_mode.value,
+            "num_frames": self.num_frames,
+            "auto_downsample_min_fps": self.auto_downsample_min_fps,
+            "guidance_scale": self.guidance_scale,
+            "sampler": self.sampler.value,
+            "video_quality": self.video_quality.value,
+            "sync_mode": self.sync_mode,
+            "mask_video_url": self.mask_video_url,
+            "seed": self.seed,
+            "interpolator_model": self.interpolator_model.value,
+            "enable_auto_downsample": self.enable_auto_downsample,
+            "preprocess": self.preprocess,
+            "shift": self.shift,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "acceleration": self.acceleration,
+            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "task": self.task.value,
+            "match_input_num_frames": self.match_input_num_frames,
+            "frames_per_second": self.frames_per_second,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "video_write_mode": self.video_write_mode.value,
+            "return_frames_zip": self.return_frames_zip,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "match_input_frames_per_second": self.match_input_frames_per_second,
+            "num_inference_steps": self.num_inference_steps,
+            "last_frame_url": self.last_frame_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace-14b",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LtxVideo13bDistilledExtend(FALNode):
+    """
+    Extend videos using LTX Video-0.9.7 13B Distilled and custom LoRA
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        AUTO = "auto"
+
+
+    second_pass_skip_initial_steps: int = Field(
+        default=5, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
+    )
+    first_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the first pass."
+    )
+    frame_rate: int = Field(
+        default=30, description="The frame rate of the video."
+    )
+    reverse_video: bool = Field(
+        default=False, description="Whether to reverse the video."
+    )
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt using a language model."
+    )
+    loras: list[str] = Field(
+        default=[], description="LoRA weights to use for generation"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames in the video."
+    )
+    second_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the second pass."
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Video to be extended."
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    )
+    constant_rate_factor: int = Field(
+        default=35, description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality."
+    )
+    first_pass_skip_final_steps: int = Field(
+        default=1, description="Number of inference steps to skip in the final steps of the first pass. By skipping some steps at the end, the first pass can focus on larger changes instead of smaller details."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
+            "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
+            "frame_rate": self.frame_rate,
+            "reverse_video": self.reverse_video,
+            "prompt": self.prompt,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_frames": self.num_frames,
+            "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
+            "video": self.video,
+            "negative_prompt": self.negative_prompt,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "constant_rate_factor": self.constant_rate_factor,
+            "first_pass_skip_final_steps": self.first_pass_skip_final_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-video-13b-distilled/extend",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LtxVideo13bDistilledMulticonditioning(FALNode):
+    """
+    Generate videos from prompts, images, and videos using LTX Video-0.9.7 13B Distilled and custom LoRA
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        AUTO = "auto"
+
+
+    second_pass_skip_initial_steps: int = Field(
+        default=5, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
+    )
+    first_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the first pass."
+    )
+    frame_rate: int = Field(
+        default=30, description="The frame rate of the video."
+    )
+    reverse_video: bool = Field(
+        default=False, description="Whether to reverse the video."
+    )
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt using a language model."
+    )
+    loras: list[str] = Field(
+        default=[], description="LoRA weights to use for generation"
+    )
+    images: list[str] = Field(
+        default=[], description="URL of images to use as conditioning"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames in the video."
+    )
+    second_pass_num_inference_steps: int = Field(
+        default=8, description="Number of inference steps during the second pass."
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    )
+    constant_rate_factor: int = Field(
+        default=35, description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality."
+    )
+    videos: list[str] = Field(
+        default=[], description="Videos to use as conditioning"
+    )
+    first_pass_skip_final_steps: int = Field(
+        default=1, description="Number of inference steps to skip in the final steps of the first pass. By skipping some steps at the end, the first pass can focus on larger changes instead of smaller details."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
+            "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
+            "frame_rate": self.frame_rate,
+            "reverse_video": self.reverse_video,
+            "prompt": self.prompt,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "images": self.images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_frames": self.num_frames,
+            "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "constant_rate_factor": self.constant_rate_factor,
+            "videos": self.videos,
+            "first_pass_skip_final_steps": self.first_pass_skip_final_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-video-13b-distilled/multiconditioning",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LtxVideo13bDevMulticonditioning(FALNode):
+    """
+    Generate videos from prompts, images, and videos using LTX Video-0.9.7 13B and custom LoRA
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        AUTO = "auto"
+
+
+    second_pass_skip_initial_steps: int = Field(
+        default=17, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
+    )
+    first_pass_num_inference_steps: int = Field(
+        default=30, description="Number of inference steps during the first pass."
+    )
+    frame_rate: int = Field(
+        default=30, description="The frame rate of the video."
+    )
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    reverse_video: bool = Field(
+        default=False, description="Whether to reverse the video."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt using a language model."
+    )
+    loras: list[str] = Field(
+        default=[], description="LoRA weights to use for generation"
+    )
+    images: list[str] = Field(
+        default=[], description="URL of images to use as conditioning"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames in the video."
+    )
+    second_pass_num_inference_steps: int = Field(
+        default=30, description="Number of inference steps during the second pass."
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    )
+    videos: list[str] = Field(
+        default=[], description="Videos to use as conditioning"
+    )
+    constant_rate_factor: int = Field(
+        default=35, description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality."
+    )
+    first_pass_skip_final_steps: int = Field(
+        default=3, description="Number of inference steps to skip in the final steps of the first pass. By skipping some steps at the end, the first pass can focus on larger changes instead of smaller details."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
+            "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
+            "frame_rate": self.frame_rate,
+            "prompt": self.prompt,
+            "reverse_video": self.reverse_video,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "images": self.images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_frames": self.num_frames,
+            "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "videos": self.videos,
+            "constant_rate_factor": self.constant_rate_factor,
+            "first_pass_skip_final_steps": self.first_pass_skip_final_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-video-13b-dev/multiconditioning",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LtxVideo13bDevExtend(FALNode):
+    """
+    Extend videos using LTX Video-0.9.7 13B and custom LoRA
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        AUTO = "auto"
+
+
+    second_pass_skip_initial_steps: int = Field(
+        default=17, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
+    )
+    first_pass_num_inference_steps: int = Field(
+        default=30, description="Number of inference steps during the first pass."
+    )
+    frame_rate: int = Field(
+        default=30, description="The frame rate of the video."
+    )
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    reverse_video: bool = Field(
+        default=False, description="Whether to reverse the video."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt using a language model."
+    )
+    loras: list[str] = Field(
+        default=[], description="LoRA weights to use for generation"
+    )
+    second_pass_num_inference_steps: int = Field(
+        default=30, description="Number of inference steps during the second pass."
+    )
+    num_frames: int = Field(
+        default=121, description="The number of frames in the video."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Video to be extended."
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    )
+    constant_rate_factor: int = Field(
+        default=35, description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality."
+    )
+    first_pass_skip_final_steps: int = Field(
+        default=3, description="Number of inference steps to skip in the final steps of the first pass. By skipping some steps at the end, the first pass can focus on larger changes instead of smaller details."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
+            "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
+            "frame_rate": self.frame_rate,
+            "prompt": self.prompt,
+            "reverse_video": self.reverse_video,
+            "expand_prompt": self.expand_prompt,
+            "loras": self.loras,
+            "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
+            "num_frames": self.num_frames,
+            "enable_safety_checker": self.enable_safety_checker,
+            "video": self.video,
+            "negative_prompt": self.negative_prompt,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "constant_rate_factor": self.constant_rate_factor,
+            "first_pass_skip_final_steps": self.first_pass_skip_final_steps,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-video-13b-dev/extend",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LtxVideoLoraMulticonditioning(FALNode):
+    """
+    Generate videos from prompts, images, and videos using LTX Video-0.9.7 and custom LoRA
+    video, editing, video-to-video, vid2vid, lora
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+        AUTO = "auto"
+
+    class Resolution(Enum):
+        """
+        The resolution of the video.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+
+    number_of_steps: int = Field(
+        default=30, description="The number of inference steps to use."
+    )
+    prompt: str = Field(
+        default="", description="The prompt to generate the video from."
+    )
+    reverse_video: bool = Field(
+        default=False, description="Whether to reverse the video."
+    )
+    frame_rate: int = Field(
+        default=25, description="The frame rate of the video."
+    )
+    expand_prompt: bool = Field(
+        default=False, description="Whether to expand the prompt using the LLM."
+    )
+    number_of_frames: int = Field(
+        default=89, description="The number of frames in the video."
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRA weights to use for generation."
+    )
+    images: list[str] = Field(
+        default=[], description="The image conditions to use for generation."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="Whether to enable the safety checker."
+    )
+    negative_prompt: str = Field(
+        default="blurry, low quality, low resolution, inconsistent motion, jittery, distorted", description="The negative prompt to use."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="The resolution of the video."
+    )
+    videos: list[str] = Field(
+        default=[], description="The video conditions to use for generation."
+    )
+    seed: int = Field(
+        default=-1, description="The seed to use for generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "number_of_steps": self.number_of_steps,
+            "prompt": self.prompt,
+            "reverse_video": self.reverse_video,
+            "frame_rate": self.frame_rate,
+            "expand_prompt": self.expand_prompt,
+            "number_of_frames": self.number_of_frames,
+            "loras": self.loras,
+            "images": self.images,
+            "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "videos": self.videos,
+            "seed": self.seed,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-video-lora/multiconditioning",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class WanVace(FALNode):
+    """
+    Vace a video generation model that uses a source image, mask, and video to create prompted videos with controllable sources.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Task(Enum):
+        """
+        Task type for the model.
+        """
+        DEPTH = "depth"
+        INPAINTING = "inpainting"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video (16:9 or 9:16).
+        """
+        AUTO = "auto"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p,580p, or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+
+    shift: float = Field(
+        default=5, description="Shift parameter for video generation."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source video file. If provided, the model will use this video as a reference."
+    )
+    prompt: str = Field(
+        default="", description="The text prompt to guide video generation."
+    )
+    ref_image_urls: list[str] = Field(
+        default=[], description="Urls to source reference image. If provided, the model will use this image as reference."
+    )
+    task: Task = Field(
+        default=Task.DEPTH, description="Task type for the model."
+    )
+    frames_per_second: int = Field(
+        default=16, description="Frames per second of the generated video. Must be between 5 to 24."
+    )
+    mask_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL to the guiding mask file. If provided, the model will use this mask as a reference to create masked video. If provided mask video url will be ignored."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    num_frames: int = Field(
+        default=81, description="Number of frames to generate. Must be between 81 to 100 (inclusive). Works only with only reference images as input if source video or mask video is provided output len would be same as source up to 241 frames"
+    )
+    negative_prompt: str = Field(
+        default="bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video (16:9 or 9:16)."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p,580p, or 720p)."
+    )
+    mask_video_url: VideoRef = Field(
+        default=VideoRef(), description="URL to the source mask file. If provided, the model will use this mask as a reference."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    preprocess: bool = Field(
+        default=False, description="Whether to preprocess the input video."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        arguments = {
+            "shift": self.shift,
+            "video_url": self.video_url,
+            "prompt": self.prompt,
+            "ref_image_urls": self.ref_image_urls,
+            "task": self.task.value,
+            "frames_per_second": self.frames_per_second,
+            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "enable_safety_checker": self.enable_safety_checker,
+            "num_frames": self.num_frames,
+            "negative_prompt": self.negative_prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "mask_video_url": self.mask_video_url,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "preprocess": self.preprocess,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/wan-vace",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class CassetteaiVideoSoundEffectsGenerator(FALNode):
+    """
+    Add sound effects to your videos
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="A video file to analyze & re-sound with generated SFX."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="cassetteai/video-sound-effects-generator",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class SyncLipsyncV2(FALNode):
+    """
+    Generate realistic lipsync animations from audio using advanced algorithms for high-quality synchronization with Sync Lipsync 2.0 model
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Model(Enum):
+        """
+        The model to use for lipsyncing. `lipsync-2-pro` will cost roughly 1.67 times as much as `lipsync-2` for the same duration.
+        """
+        LIPSYNC_2 = "lipsync-2"
+        LIPSYNC_2_PRO = "lipsync-2-pro"
+
+    class SyncMode(Enum):
+        """
+        Lipsync mode when audio and video durations are out of sync.
+        """
+        CUT_OFF = "cut_off"
+        LOOP = "loop"
+        BOUNCE = "bounce"
+        SILENCE = "silence"
+        REMAP = "remap"
+
+
+    model: Model = Field(
+        default=Model.LIPSYNC_2, description="The model to use for lipsyncing. `lipsync-2-pro` will cost roughly 1.67 times as much as `lipsync-2` for the same duration."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video"
+    )
+    sync_mode: SyncMode = Field(
+        default=SyncMode.CUT_OFF, description="Lipsync mode when audio and video durations are out of sync."
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="URL of the input audio"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "model": self.model.value,
+            "video_url": self.video_url,
+            "sync_mode": self.sync_mode.value,
+            "audio_url": self.audio_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sync-lipsync/v2",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Latentsync(FALNode):
+    """
+    LatentSync is a video-to-video model that generates lip sync animations from audio using advanced algorithms for high-quality synchronization.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class LoopMode(Enum):
+        """
+        Video loop mode when audio is longer than video. Options: pingpong, loop
+        """
+        PINGPONG = "pingpong"
+        LOOP = "loop"
+
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to generate the lip sync for."
+    )
+    guidance_scale: float = Field(
+        default=1, description="Guidance scale for the model inference"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation. If None, a random seed will be used."
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="The URL of the audio to generate the lip sync for."
+    )
+    loop_mode: LoopMode | None = Field(
+        default=None, description="Video loop mode when audio is longer than video. Options: pingpong, loop"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "audio_url": self.audio_url,
+            "loop_mode": self.loop_mode.value if self.loop_mode else None,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/latentsync",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class PikaV2Pikadditions(FALNode):
+    """
+    Pikadditions is a powerful video-to-video AI model that allows you to add anyone or anything to any video with seamless integration.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    prompt: str = Field(
+        default="", description="Text prompt describing what to add"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video"
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator"
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt to guide the model"
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to add"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video_url,
+            "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/pika/v2/pikadditions",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LtxVideoV095Extend(FALNode):
+    """
+    Generate videos from prompts and videos using LTX Video-0.9.5
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video (16:9 or 9:16).
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video (16:9 or 9:16)."
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Whether to expand the prompt using the model's own capabilities."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+    num_inference_steps: int = Field(
+        default=40, description="Number of inference steps"
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Video to be extended."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "expand_prompt": self.expand_prompt,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+            "video": self.video,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-video-v095/extend",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class LtxVideoV095Multiconditioning(FALNode):
+    """
+    Generate videos from prompts,images, and videos using LTX Video-0.9.5
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p or 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video (16:9 or 9:16).
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt to guide generation"
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video (16:9 or 9:16)."
+    )
+    expand_prompt: bool = Field(
+        default=True, description="Whether to expand the prompt using the model's own capabilities."
+    )
+    images: list[str] = Field(
+        default=[], description="URL of images to use as conditioning"
+    )
+    videos: list[str] = Field(
+        default=[], description="Videos to use as conditioning"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed for generation"
+    )
+    num_inference_steps: int = Field(
+        default=40, description="Number of inference steps"
+    )
+    negative_prompt: str = Field(
+        default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "expand_prompt": self.expand_prompt,
+            "images": self.images,
+            "videos": self.videos,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ltx-video-v095/multiconditioning",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class TopazUpscaleVideo(FALNode):
+    """
+    Professional-grade video upscaling using Topaz technology. Enhance your videos with high-quality upscaling.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    H264_output: bool = Field(
+        default=False, description="Whether to use H264 codec for output video. Default is H265."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video to upscale"
+    )
+    upscale_factor: float = Field(
+        default=2, description="Factor to upscale the video by (e.g. 2.0 doubles width and height)"
+    )
+    target_fps: int = Field(
+        default=0, description="Target FPS for frame interpolation. If set, frame interpolation will be enabled."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "H264_output": self.H264_output,
+            "video_url": self.video_url,
+            "upscale_factor": self.upscale_factor,
+            "target_fps": self.target_fps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/topaz/upscale/video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class HunyuanVideoLoraVideoToVideo(FALNode):
+    """
+    Hunyuan Video is an Open video generation model with high visual quality, motion diversity, text-video alignment, and generation stability. Use this endpoint to generate videos from videos.
+    video, editing, video-to-video, vid2vid, lora
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video to generate.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the video to generate.
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class NumFrames(Enum):
+        """
+        The number of frames to generate.
+        """
+        VALUE_129 = "129"
+        VALUE_85 = "85"
+
+
+    prompt: str = Field(
+        default="", description="The prompt to generate the video from."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="The resolution of the video to generate."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video"
+    )
+    loras: list[str] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    strength: float = Field(
+        default=0.75, description="Strength of video-to-video"
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    seed: int = Field(
+        default=-1, description="The seed to use for generating the video."
+    )
+    num_frames: NumFrames = Field(
+        default=129, description="The number of frames to generate."
+    )
+    pro_mode: bool = Field(
+        default=False, description="By default, generations are done with 35 steps. Pro mode does 55 steps which results in higher quality videos but will take more time and cost 2x more billing units."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "video_url": self.video_url,
+            "loras": self.loras,
+            "strength": self.strength,
+            "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "num_frames": self.num_frames.value,
+            "pro_mode": self.pro_mode,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/hunyuan-video-lora/video-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class FfmpegApiCompose(FALNode):
+    """
+    Compose videos from multiple media sources using FFmpeg API.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    tracks: list[str] = Field(
+        default=[], description="List of tracks to be combined into the final media"
+    )
+
+    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        arguments = {
+            "tracks": self.tracks,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/ffmpeg-api/compose",
+            arguments=arguments,
+        )
+        return res
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class SyncLipsync(FALNode):
+    """
+    Generate realistic lipsync animations from audio using advanced algorithms for high-quality synchronization.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Model(Enum):
+        """
+        The model to use for lipsyncing
+        """
+        LIPSYNC_1_8_0 = "lipsync-1.8.0"
+        LIPSYNC_1_7_1 = "lipsync-1.7.1"
+        LIPSYNC_1_9_0_BETA = "lipsync-1.9.0-beta"
+
+    class SyncMode(Enum):
+        """
+        Lipsync mode when audio and video durations are out of sync.
+        """
+        CUT_OFF = "cut_off"
+        LOOP = "loop"
+        BOUNCE = "bounce"
+        SILENCE = "silence"
+        REMAP = "remap"
+
+
+    model: Model = Field(
+        default=Model.LIPSYNC_1_9_0_BETA, description="The model to use for lipsyncing"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video"
+    )
+    sync_mode: SyncMode = Field(
+        default=SyncMode.CUT_OFF, description="Lipsync mode when audio and video durations are out of sync."
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="URL of the input audio"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "model": self.model.value,
+            "video_url": self.video_url,
+            "sync_mode": self.sync_mode.value,
+            "audio_url": self.audio_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sync-lipsync",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Dubbing(FALNode):
+    """
+    This endpoint delivers seamlessly localized videos by generating lip-synced dubs in multiple languages, ensuring natural and immersive multilingual experiences
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class TargetLanguage(Enum):
+        """
+        Target language to dub the video to
+        """
+        HINDI = "hindi"
+        TURKISH = "turkish"
+        ENGLISH = "english"
+
+
+    do_lipsync: bool = Field(
+        default=True, description="Whether to lip sync the audio to the video"
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="Input video URL to be dubbed."
+    )
+    target_language: TargetLanguage = Field(
+        default=TargetLanguage.HINDI, description="Target language to dub the video to"
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "do_lipsync": self.do_lipsync,
+            "video_url": self.video_url,
+            "target_language": self.target_language.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/dubbing",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Controlnext(FALNode):
+    """
+    Animate a reference image with a driving video using ControlNeXt.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    controlnext_cond_scale: float = Field(
+        default=1, description="Condition scale for ControlNeXt."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video."
+    )
+    fps: int = Field(
+        default=7, description="Frames per second for the output video."
+    )
+    max_frame_num: int = Field(
+        default=240, description="Maximum number of frames to process."
+    )
+    width: int = Field(
+        default=576, description="Width of the output video."
+    )
+    overlap: int = Field(
+        default=6, description="Number of overlapping frames between batches."
+    )
+    guidance_scale: float = Field(
+        default=3, description="Guidance scale for the diffusion process."
+    )
+    batch_frames: int = Field(
+        default=24, description="Number of frames to process in each batch."
+    )
+    height: int = Field(
+        default=1024, description="Height of the output video."
+    )
+    sample_stride: int = Field(
+        default=2, description="Stride for sampling frames from the input video."
+    )
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the reference image."
+    )
+    decode_chunk_size: int = Field(
+        default=2, description="Chunk size for decoding frames."
+    )
+    motion_bucket_id: float = Field(
+        default=127, description="Motion bucket ID for the pipeline."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="Number of inference steps."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_url_base64 = await context.image_to_base64(self.image_url)
+        arguments = {
+            "controlnext_cond_scale": self.controlnext_cond_scale,
+            "video_url": self.video_url,
+            "fps": self.fps,
+            "max_frame_num": self.max_frame_num,
+            "width": self.width,
+            "overlap": self.overlap,
+            "guidance_scale": self.guidance_scale,
+            "batch_frames": self.batch_frames,
+            "height": self.height,
+            "sample_stride": self.sample_stride,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "decode_chunk_size": self.decode_chunk_size,
+            "motion_bucket_id": self.motion_bucket_id,
+            "num_inference_steps": self.num_inference_steps,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/controlnext",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video"]
+
+class Sam2Video(FALNode):
+    """
+    SAM 2 is a model for segmenting images and videos in real-time.
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="The URL of the video to be segmented."
+    )
+    prompts: list[str] = Field(
+        default=[], description="List of prompts to segment the video"
+    )
+    boundingbox_zip: bool = Field(
+        default=False, description="Return per-frame bounding box overlays as a zip archive."
+    )
+    box_prompts: list[str] = Field(
+        default=[], description="Coordinates for boxes"
+    )
+    apply_mask: bool = Field(
+        default=False, description="Apply the mask on the video."
+    )
+    mask_url: str = Field(
+        default="", description="The URL of the mask to be applied initially."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "video_url": self.video_url,
+            "prompts": self.prompts,
+            "boundingbox_zip": self.boundingbox_zip,
+            "box_prompts": self.box_prompts,
+            "apply_mask": self.apply_mask,
+            "mask_url": self.mask_url,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/sam2/video",
             arguments=arguments,
         )
         assert "video" in res
