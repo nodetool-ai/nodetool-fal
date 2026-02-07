@@ -288,58 +288,28 @@ async def main():
     
     # Generate module
     if args.module:
-        # Define endpoints for each module
-        module_endpoints = {
-            "image_to_video": [
-                "fal-ai/pixverse/v5.6/image-to-video",
-                "fal-ai/luma-dream-machine/image-to-video",
-            ],
-            "text_to_image": [
-                "fal-ai/flux/dev",
-                "fal-ai/flux/schnell",
-                "fal-ai/flux-pro/v1.1",
-                "fal-ai/flux-pro/v1.1-ultra",
-                "fal-ai/flux-lora",
-                "fal-ai/ideogram/v2",
-                "fal-ai/ideogram/v2/turbo",
-                "fal-ai/recraft-v3",
-                "fal-ai/stable-diffusion-v35-large",
-                "fal-ai/flux-pro/new",
-                "fal-ai/flux-2/turbo",
-                "fal-ai/flux-2/flash",
-                "fal-ai/ideogram/v3",
-                "fal-ai/omnigen-v1",
-                "fal-ai/sana",
-            ],
-            "image_to_image": [
-                "fal-ai/flux/schnell/redux",
-                "fal-ai/flux/dev/redux",
-                "fal-ai/flux-pro/v1/redux",
-                "fal-ai/ideogram/v2/edit",
-                "fal-ai/ideogram/v2/remix",
-                "fal-ai/ideogram/v3/edit",
-                "fal-ai/flux-pro/v1/fill",
-                "fal-ai/flux-pro/v1/canny",
-                "fal-ai/flux-pro/v1/depth",
-                "bria/eraser",
-                "bria/replace-background",
-                "fal-ai/clarity-upscaler",
-                "fal-ai/recraft/v3/image-to-image",
-                "fal-ai/kolors/image-to-image",
-                "fal-ai/birefnet",
-                "fal-ai/codeformer",
-            ],
-            # Add more modules here
-        }
+        # Load endpoints dynamically from config modules
+        # This allows us to keep the generate script in sync with configs
+        config_path = Path(__file__).parent / "configs" / f"{args.module}.py"
+        config_module = load_config_module(config_path)
         
-        if args.module not in module_endpoints:
-            print(f"ERROR: Unknown module '{args.module}'")
-            print(f"Available modules: {', '.join(module_endpoints.keys())}")
+        if not config_module or not hasattr(config_module, "CONFIGS"):
+            print(f"ERROR: No config found for module '{args.module}'")
+            print(f"Available modules: Check codegen/configs/ directory")
             sys.exit(1)
+        
+        # Get all endpoint IDs from the config
+        endpoints = list(config_module.CONFIGS.keys())
+        
+        if not endpoints:
+            print(f"ERROR: No endpoints configured in module '{args.module}'")
+            sys.exit(1)
+        
+        print(f"Loaded {len(endpoints)} endpoints from {args.module} config")
         
         await generate_module(
             args.module,
-            module_endpoints[args.module],
+            endpoints,
             args.output_dir,
             use_cache=not args.no_cache
         )

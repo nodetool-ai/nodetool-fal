@@ -1,0 +1,436 @@
+"""
+Configuration for text_to_video module.
+
+This config file defines overrides and customizations for text-to-video nodes.
+"""
+
+from typing import Any
+
+
+# Map of endpoint_id to config overrides
+CONFIGS: dict[str, dict[str, Any]] = {
+    "fal-ai/hunyuan-video": {
+        "class_name": "HunyuanVideo",
+        "docstring": "Hunyuan Video is Tencent's advanced text-to-video model for high-quality video generation.",
+        "tags": ["video", "generation", "hunyuan", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate cinematic videos from text descriptions",
+            "Create marketing videos from product descriptions",
+            "Produce educational video content",
+            "Generate creative video concepts",
+            "Create animated scenes from stories"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/cogvideox-5b": {
+        "class_name": "CogVideoX5B",
+        "docstring": "CogVideoX-5B is a powerful open-source text-to-video generation model with 5 billion parameters.",
+        "tags": ["video", "generation", "cogvideo", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate detailed videos from text prompts",
+            "Create animated storytelling content",
+            "Produce concept videos for pitches",
+            "Generate video storyboards",
+            "Create educational demonstrations"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/fast-animatediff/text-to-video": {
+        "class_name": "AnimateDiffTextToVideo",
+        "docstring": "AnimateDiff generates smooth animations from text prompts using diffusion models.",
+        "tags": ["video", "generation", "animatediff", "animation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Animate ideas from text descriptions",
+            "Create animated content quickly",
+            "Generate motion graphics from prompts",
+            "Produce animated concept art",
+            "Create video loops and sequences"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/fast-animatediff/turbo/text-to-video": {
+        "class_name": "AnimateDiffTurboTextToVideo",
+        "docstring": "AnimateDiff Turbo generates animations at lightning speed with reduced steps.",
+        "tags": ["video", "generation", "animatediff", "turbo", "fast", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Rapidly prototype video animations",
+            "Create quick video previews",
+            "Generate animations with minimal latency",
+            "Iterate on video concepts quickly",
+            "Produce real-time animation effects"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/animatediff-sparsectrl-lcm": {
+        "class_name": "AnimateDiffSparseCtrlLCM",
+        "docstring": "AnimateDiff SparseCtrl LCM animates drawings with latent consistency models for fast generation.",
+        "tags": ["video", "generation", "animatediff", "sparsectrl", "lcm", "animation", "text-to-video"],
+        "use_cases": [
+            "Animate hand-drawn sketches",
+            "Bring drawings to life",
+            "Create animated illustrations",
+            "Generate animations from concept art",
+            "Produce animation from sparse frames"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "veed/avatars/text-to-video": {
+        "class_name": "VeedAvatarsTextToVideo",
+        "docstring": "VEED Avatars generates talking avatar videos from text using realistic AI-powered characters.",
+        "tags": ["video", "generation", "avatar", "talking-head", "veed", "text-to-video"],
+        "use_cases": [
+            "Create talking avatar presentations",
+            "Generate spokesperson videos",
+            "Produce educational talking head videos",
+            "Create personalized video messages",
+            "Generate multilingual avatar content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "argil/avatars/text-to-video": {
+        "class_name": "ArgilAvatarsTextToVideo",
+        "docstring": "Argil Avatars creates realistic talking avatar videos from text descriptions.",
+        "tags": ["video", "generation", "avatar", "talking-head", "argil", "text-to-video"],
+        "use_cases": [
+            "Generate avatar spokesperson videos",
+            "Create virtual presenter content",
+            "Produce automated video announcements",
+            "Generate character-based narratives",
+            "Create social media avatar videos"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/bytedance/seedance/v1.5/pro/text-to-video": {
+        "class_name": "SeeDanceV15ProTextToVideo",
+        "docstring": "SeeDance v1.5 Pro from ByteDance generates high-quality dance videos from text prompts.",
+        "tags": ["video", "generation", "dance", "seedance", "bytedance", "text-to-video"],
+        "use_cases": [
+            "Generate dance choreography videos",
+            "Create dance performance visualizations",
+            "Produce music video concepts",
+            "Generate dance training content",
+            "Create dance animation prototypes"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/bytedance/seedance/v1/pro/fast/text-to-video": {
+        "class_name": "SeeDanceV1ProFastTextToVideo",
+        "docstring": "SeeDance v1 Pro Fast generates dance videos quickly from text with reduced generation time.",
+        "tags": ["video", "generation", "dance", "seedance", "fast", "bytedance", "text-to-video"],
+        "use_cases": [
+            "Rapidly prototype dance videos",
+            "Create quick dance previews",
+            "Generate dance concepts efficiently",
+            "Iterate on choreography ideas",
+            "Produce dance storyboards"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "veed/fabric-1.0/text": {
+        "class_name": "VeedFabric10Text",
+        "docstring": "VEED Fabric 1.0 generates video content from text using advanced video synthesis.",
+        "tags": ["video", "generation", "fabric", "veed", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate marketing videos from text",
+            "Create explainer video content",
+            "Produce video ads from copy",
+            "Generate social media videos",
+            "Create branded video content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/ltx-video": {
+        "class_name": "LTXVideo",
+        "docstring": "LTX Video generates high-quality videos from text prompts with advanced temporal consistency.",
+        "tags": ["video", "generation", "ltx", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate temporally consistent videos",
+            "Create smooth video sequences",
+            "Produce high-quality video content",
+            "Generate professional video clips",
+            "Create cinematic video scenes"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/kling-video/v1/standard/text-to-video": {
+        "class_name": "KlingVideoV1StandardTextToVideo",
+        "docstring": "Kling Video v1 Standard generates videos from text with balanced quality and speed.",
+        "tags": ["video", "generation", "kling", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate standard quality videos",
+            "Create video content efficiently",
+            "Produce videos for web use",
+            "Generate video previews",
+            "Create video concepts"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/kling-video/v1/pro/text-to-video": {
+        "class_name": "KlingVideoV1ProTextToVideo",
+        "docstring": "Kling Video v1 Pro generates high-quality professional videos from text prompts.",
+        "tags": ["video", "generation", "kling", "pro", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate professional grade videos",
+            "Create high-quality marketing content",
+            "Produce cinematic video sequences",
+            "Generate detailed video scenes",
+            "Create premium video content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/mochi-v1": {
+        "class_name": "MochiV1",
+        "docstring": "Mochi v1 generates creative videos from text with unique artistic style.",
+        "tags": ["video", "generation", "mochi", "artistic", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate artistic video content",
+            "Create stylized animations",
+            "Produce creative video art",
+            "Generate experimental videos",
+            "Create unique visual content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/runway-gen3/turbo/text-to-video": {
+        "class_name": "RunwayGen3TurboTextToVideo",
+        "docstring": "Runway Gen-3 Turbo generates videos quickly from text with high quality output.",
+        "tags": ["video", "generation", "runway", "gen3", "turbo", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate videos rapidly from text",
+            "Create quick video prototypes",
+            "Produce fast video iterations",
+            "Generate real-time video content",
+            "Create efficient video workflows"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/stable-video": {
+        "class_name": "StableVideo",
+        "docstring": "Stable Video generates consistent and stable video sequences from text prompts.",
+        "tags": ["video", "generation", "stable", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate stable video sequences",
+            "Create consistent video content",
+            "Produce reliable video outputs",
+            "Generate predictable video scenes",
+            "Create controlled video generation"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/t2v-turbo": {
+        "class_name": "T2VTurbo",
+        "docstring": "T2V Turbo generates videos from text at high speed with optimized performance.",
+        "tags": ["video", "generation", "turbo", "fast", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate videos with minimal latency",
+            "Create rapid video prototypes",
+            "Produce quick video previews",
+            "Generate real-time video content",
+            "Create efficient video workflows"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/wan-cinematic": {
+        "class_name": "WanCinematic",
+        "docstring": "Wan Cinematic generates cinematic quality videos from text with professional aesthetics.",
+        "tags": ["video", "generation", "cinematic", "professional", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate cinematic video sequences",
+            "Create film-quality content",
+            "Produce professional video clips",
+            "Generate movie-like scenes",
+            "Create dramatic video content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/minimax-video/v1": {
+        "class_name": "MinimaxVideoV1",
+        "docstring": "Minimax Video v1 generates videos from text with efficient resource usage.",
+        "tags": ["video", "generation", "minimax", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate videos efficiently",
+            "Create video content with minimal resources",
+            "Produce lightweight video outputs",
+            "Generate scalable video content",
+            "Create optimized video workflows"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/minimax-video/v1/turbo": {
+        "class_name": "MinimaxVideoV1Turbo",
+        "docstring": "Minimax Video v1 Turbo generates videos from text at maximum speed.",
+        "tags": ["video", "generation", "minimax", "turbo", "fast", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate videos at maximum speed",
+            "Create rapid video iterations",
+            "Produce instant video previews",
+            "Generate real-time video responses",
+            "Create ultra-fast video workflows"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/pyramidflow": {
+        "class_name": "PyramidFlow",
+        "docstring": "PyramidFlow generates videos with hierarchical processing for smooth motion.",
+        "tags": ["video", "generation", "pyramid", "flow", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate smooth motion videos",
+            "Create fluid video animations",
+            "Produce high-quality motion sequences",
+            "Generate temporally coherent videos",
+            "Create professional motion graphics"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/luma-dream-machine": {
+        "class_name": "LumaDreamMachineTextToVideo",
+        "docstring": "Luma Dream Machine generates creative videos from text with dreamlike aesthetics.",
+        "tags": ["video", "generation", "luma", "dream-machine", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate dreamlike video content",
+            "Create surreal video sequences",
+            "Produce artistic video interpretations",
+            "Generate creative video concepts",
+            "Create imaginative video art"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/luma-photon": {
+        "class_name": "LumaPhoton",
+        "docstring": "Luma Photon generates photorealistic videos from text with high visual fidelity.",
+        "tags": ["video", "generation", "luma", "photon", "photorealistic", "text-to-video"],
+        "use_cases": [
+            "Generate photorealistic video content",
+            "Create realistic video simulations",
+            "Produce lifelike video scenes",
+            "Generate high-fidelity video outputs",
+            "Create realistic visual content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/luma-photon-flash": {
+        "class_name": "LumaPhotonFlash",
+        "docstring": "Luma Photon Flash generates photorealistic videos quickly with optimized speed.",
+        "tags": ["video", "generation", "luma", "photon", "flash", "fast", "text-to-video"],
+        "use_cases": [
+            "Generate photorealistic videos rapidly",
+            "Create realistic video previews",
+            "Produce fast photorealistic content",
+            "Generate quick realistic sequences",
+            "Create efficient realistic workflows"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/luma-ray2": {
+        "class_name": "LumaRay2",
+        "docstring": "Luma Ray2 generates advanced video content with improved ray tracing techniques.",
+        "tags": ["video", "generation", "luma", "ray2", "advanced", "text-to-video"],
+        "use_cases": [
+            "Generate ray-traced video content",
+            "Create advanced lighting effects",
+            "Produce high-quality rendered videos",
+            "Generate realistic lighting sequences",
+            "Create professional visual effects"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/luma-ray2/turbo": {
+        "class_name": "LumaRay2Turbo",
+        "docstring": "Luma Ray2 Turbo generates ray-traced videos with optimized rendering speed.",
+        "tags": ["video", "generation", "luma", "ray2", "turbo", "fast", "text-to-video"],
+        "use_cases": [
+            "Generate ray-traced videos quickly",
+            "Create fast rendered previews",
+            "Produce efficient visual effects",
+            "Generate rapid lighting iterations",
+            "Create optimized rendering workflows"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/qihoo-t2v": {
+        "class_name": "QihooT2V",
+        "docstring": "Qihoo T2V generates videos from text with Chinese language optimization.",
+        "tags": ["video", "generation", "qihoo", "chinese", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate videos from Chinese text",
+            "Create multilingual video content",
+            "Produce localized video scenes",
+            "Generate culturally relevant videos",
+            "Create international video content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/wan-show-1": {
+        "class_name": "WanShow1",
+        "docstring": "Wan Show 1 generates presentation-style videos from text for showcasing ideas.",
+        "tags": ["video", "generation", "presentation", "showcase", "text-to-video"],
+        "use_cases": [
+            "Generate presentation videos",
+            "Create showcase content",
+            "Produce pitch videos",
+            "Generate demo videos",
+            "Create educational presentations"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/luma-photon/v2": {
+        "class_name": "LumaPhotonV2",
+        "docstring": "Luma Photon v2 generates photorealistic videos with improved quality and detail.",
+        "tags": ["video", "generation", "luma", "photon", "v2", "photorealistic", "text-to-video"],
+        "use_cases": [
+            "Generate high-quality photorealistic videos",
+            "Create detailed realistic scenes",
+            "Produce cinematic realistic content",
+            "Generate professional video outputs",
+            "Create premium photorealistic sequences"
+        ],
+        "basic_fields": ["prompt"]
+    },
+    
+    "fal-ai/luma-dream-machine/v1.6": {
+        "class_name": "LumaDreamMachineV16",
+        "docstring": "Luma Dream Machine v1.6 generates creative videos with enhanced dream-like effects.",
+        "tags": ["video", "generation", "luma", "dream-machine", "v1.6", "text-to-video"],
+        "use_cases": [
+            "Generate enhanced dreamlike videos",
+            "Create surreal video art",
+            "Produce creative visual content",
+            "Generate artistic video sequences",
+            "Create imaginative video effects"
+        ],
+        "basic_fields": ["prompt"]
+    },
+}
+
+
+def get_config(endpoint_id: str) -> dict[str, Any]:
+    """Get config for an endpoint."""
+    return CONFIGS.get(endpoint_id, {})
