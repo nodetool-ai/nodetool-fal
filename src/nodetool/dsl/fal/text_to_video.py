@@ -212,11 +212,11 @@ class KlingTextToVideoV2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.
         - Produce text-driven motion graphics
     """
 
-    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingDuration
+    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingDuration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the desired video')
-    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
+    duration: nodetool.nodes.fal.text_to_video.KlingDuration = Field(default=nodetool.nodes.fal.text_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
     aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description='Negative prompt to be used for the generation')
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='Classifier Free Guidance scale (0.0 to 1.0)')
@@ -319,7 +319,6 @@ from pydantic import Field
 from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_video
 from nodetool.workflows.base_node import BaseNode
-import nodetool.nodes.fal.image_to_video
 
 class KlingVideoV2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
@@ -335,11 +334,11 @@ class KlingVideoV2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
         - Enhance presentations with video content
     """
 
-    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingDuration
+    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingDuration
 
     image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to transform into a video')
     prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the desired video motion and style')
-    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
+    duration: nodetool.nodes.fal.text_to_video.KlingDuration = Field(default=nodetool.nodes.fal.text_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description='Negative prompt to be used for the generation')
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='Classifier Free Guidance scale (0.0 to 1.0)')
 
@@ -373,11 +372,11 @@ class KlingVideoV21TextToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[
         - Generate concept previews
     """
 
-    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingDuration
+    KlingDuration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingDuration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the desired video')
-    duration: nodetool.nodes.fal.image_to_video.KlingDuration = Field(default=nodetool.nodes.fal.image_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
+    duration: nodetool.nodes.fal.text_to_video.KlingDuration = Field(default=nodetool.nodes.fal.text_to_video.KlingDuration.FIVE_SECONDS, description='The duration of the generated video')
     aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
 
     @classmethod
@@ -446,13 +445,13 @@ class LumaRay2FlashTextToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
-    LumaRay2Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LumaRay2Resolution
-    LumaRay2Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LumaRay2Duration
+    LumaRay2Resolution: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.LumaRay2Resolution
+    LumaRay2Duration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.LumaRay2Duration
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the desired video')
     aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
-    resolution: nodetool.nodes.fal.image_to_video.LumaRay2Resolution = Field(default=nodetool.nodes.fal.image_to_video.LumaRay2Resolution.RES_540P, description='The resolution of the generated video')
-    duration: nodetool.nodes.fal.image_to_video.LumaRay2Duration = Field(default=nodetool.nodes.fal.image_to_video.LumaRay2Duration.FIVE_SECONDS, description='The duration of the generated video')
+    resolution: nodetool.nodes.fal.text_to_video.LumaRay2Resolution = Field(default=nodetool.nodes.fal.text_to_video.LumaRay2Resolution.RES_540P, description='The resolution of the generated video')
+    duration: nodetool.nodes.fal.text_to_video.LumaRay2Duration = Field(default=nodetool.nodes.fal.text_to_video.LumaRay2Duration.FIVE_SECONDS, description='The duration of the generated video')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
@@ -486,14 +485,14 @@ class LumaRay2TextToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
-    LumaRay2Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LumaRay2Resolution
-    LumaRay2Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.LumaRay2Duration
+    LumaRay2Resolution: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.LumaRay2Resolution
+    LumaRay2Duration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.LumaRay2Duration
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing the desired video')
     aspect_ratio: nodetool.nodes.fal.image_to_video.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
     loop: bool | OutputHandle[bool] = connect_field(default=False, description='Whether the video should loop')
-    resolution: nodetool.nodes.fal.image_to_video.LumaRay2Resolution = Field(default=nodetool.nodes.fal.image_to_video.LumaRay2Resolution.RES_540P, description='The resolution of the generated video')
-    duration: nodetool.nodes.fal.image_to_video.LumaRay2Duration = Field(default=nodetool.nodes.fal.image_to_video.LumaRay2Duration.FIVE_SECONDS, description='The duration of the generated video')
+    resolution: nodetool.nodes.fal.text_to_video.LumaRay2Resolution = Field(default=nodetool.nodes.fal.text_to_video.LumaRay2Resolution.RES_540P, description='The resolution of the generated video')
+    duration: nodetool.nodes.fal.text_to_video.LumaRay2Duration = Field(default=nodetool.nodes.fal.text_to_video.LumaRay2Duration.FIVE_SECONDS, description='The duration of the generated video')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
 
     @classmethod
@@ -819,13 +818,13 @@ class PixverseV56TextToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[ty
         - Create stylized video content with anime or cyberpunk themes
     """
 
-    PixverseV56AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio
+    PixverseV56AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio
     PixverseV56Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PixverseV56Resolution
     PixverseV56Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PixverseV56Duration
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the desired video')
-    aspect_ratio: nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
-    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.RES_720P, description='The resolution quality of the output video')
+    aspect_ratio: nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio = Field(default=nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.VALUE_720P, description='The resolution quality of the output video')
     duration: nodetool.nodes.fal.image_to_video.PixverseV56Duration = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56Duration.FIVE_SECONDS, description='The duration of the generated video in seconds')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated video')
     style: nodetool.nodes.fal.image_to_video.PixverseV56Style | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56Style] | None = connect_field(default=None, description='Optional visual style for the video')
@@ -862,14 +861,14 @@ class PixverseV56Transition(SingleOutputGraphNode[types.VideoRef], GraphNode[typ
         - Generate creative blending effects
     """
 
-    PixverseV56AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio
+    PixverseV56AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio
     PixverseV56Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.PixverseV56Resolution
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the transition style')
     first_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The starting image for the transition')
     end_image: nodetool.metadata.types.ImageRef | OutputHandle[nodetool.metadata.types.ImageRef] | None = connect_field(default=None, description='Optional ending image for the transition')
-    aspect_ratio: nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
-    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.RES_720P, description='The resolution quality of the output video')
+    aspect_ratio: nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio = Field(default=nodetool.nodes.fal.text_to_video.PixverseV56AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video')
+    resolution: nodetool.nodes.fal.image_to_video.PixverseV56Resolution = Field(default=nodetool.nodes.fal.image_to_video.PixverseV56Resolution.VALUE_720P, description='The resolution quality of the output video')
     duration: int | OutputHandle[int] = connect_field(default=5, description='Duration in seconds (5 or 8)')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated transition')
     style: nodetool.nodes.fal.image_to_video.PixverseV56Style | OutputHandle[nodetool.nodes.fal.image_to_video.PixverseV56Style] | None = connect_field(default=None, description='Optional visual style for the transition')

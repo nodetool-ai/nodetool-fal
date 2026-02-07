@@ -109,6 +109,22 @@ class LanguageBoost(Enum):
     AUTO = "auto"
 
 
+class MinimaxSpeech26HdOutputFormat(Enum):
+    """
+    Format of the output content (non-streaming only)
+    """
+    URL = "url"
+    HEX = "hex"
+
+
+class MinimaxSpeech26TurboOutputFormat(Enum):
+    """
+    Format of the output content (non-streaming only)
+    """
+    URL = "url"
+    HEX = "hex"
+
+
 
 
 class Qwen3TtsTextToSpeech17B(FALNode):
@@ -519,8 +535,8 @@ class MinimaxSpeech26Hd(FALNode):
     language_boost: LanguageBoost | None = Field(
         default=None, description="Enhance recognition of specified languages and dialects"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.HEX, description="Format of the output content (non-streaming only)"
+    output_format: MinimaxSpeech26HdOutputFormat = Field(
+        default=MinimaxSpeech26HdOutputFormat.HEX, description="Format of the output content (non-streaming only)"
     )
     pronunciation_dict: str = Field(
         default="", description="Custom pronunciation dictionary for text replacement"
@@ -582,8 +598,8 @@ class MinimaxSpeech26Turbo(FALNode):
     language_boost: LanguageBoost | None = Field(
         default=None, description="Enhance recognition of specified languages and dialects"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.HEX, description="Format of the output content (non-streaming only)"
+    output_format: MinimaxSpeech26TurboOutputFormat = Field(
+        default=MinimaxSpeech26TurboOutputFormat.HEX, description="Format of the output content (non-streaming only)"
     )
     pronunciation_dict: str = Field(
         default="", description="Custom pronunciation dictionary for text replacement"

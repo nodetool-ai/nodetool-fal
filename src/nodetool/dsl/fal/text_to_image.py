@@ -18,371 +18,31 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class AuraFlowV03(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class BytedanceSeedreamV45TextToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        AuraFlow v0.3 is an open-source flow-based text-to-image generation model that achieves state-of-the-art results on GenEval.
-        image, generation, flow-based, text-to-image, txt2img
+        ByteDance SeeDream v4.5 generates advanced images from text with cutting-edge AI technology.
+        image, generation, bytedance, seedream, v4.5, text-to-image
 
         Use cases:
-        - Generate high-quality images
-        - Create artistic visualizations
+        - Generate images with SeeDream v4.5
+        - Create cutting-edge visual content
+        - Produce advanced AI artwork
+        - Generate images with latest tech
+        - Create modern AI visuals
     """
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='Classifier free guidance scale')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to take')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to perform prompt expansion (recommended)')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for generating images')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt used to generate the image')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of separate model generations to be run with the prompt.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. Width and height must be between 1920 and 4096, or total number of pixels must be between 2560*1440 and 4096*4096.')
+    max_images: int | OutputHandle[int] = connect_field(default=1, description='If set to a number greater than one, enables multi-image generation. The model will potentially return up to `max_images` images every generation, and in total, `num_images` generations will be carried out. In total, the number of images generated will be between `num_images` and `max_images*num_images`.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed to control the stochasticity of image generation.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.AuraFlowV03
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class BriaV1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Bria's Text-to-Image model, trained exclusively on licensed data for safe and risk-free commercial use.
-        Features exceptional image quality and commercial licensing safety.
-    """
-
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to avoid certain elements in the generated image')
-    num_images: int | OutputHandle[int] = connect_field(default=4, description='How many images to generate. When using guidance, value is set to 1')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the image. Ignored when guidance is used')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of iterations for refining the generated image')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely the model should stick to your prompt (CFG scale)')
-    prompt_enhancement: bool | OutputHandle[bool] = connect_field(default=False, description='When true, enhances the prompt with more descriptive variations')
-    medium: str | OutputHandle[str] = connect_field(default='', description="Optional medium specification ('photography' or 'art')")
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.BriaV1
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class BriaV1Fast(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Bria's Text-to-Image model with perfect harmony of latency and quality.
-        Trained exclusively on licensed data for safe and risk-free commercial use.
-        Features faster inference times while maintaining high image quality.
-    """
-
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to avoid certain elements in the generated image')
-    num_images: int | OutputHandle[int] = connect_field(default=4, description='How many images to generate. When using guidance, value is set to 1')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the image. Ignored when guidance is used')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of iterations for refining the generated image')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely the model should stick to your prompt (CFG scale)')
-    prompt_enhancement: bool | OutputHandle[bool] = connect_field(default=False, description='When true, enhances the prompt with more descriptive variations')
-    medium: str | OutputHandle[str] = connect_field(default='', description="Optional medium specification ('photography' or 'art')")
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.BriaV1Fast
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class BriaV1HD(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Bria's Text-to-Image model for HD images. Trained exclusively on licensed data for safe and risk-free commercial use. Features exceptional image quality and commercial licensing safety.
-        image, generation, hd, text-to-image, txt2img
-
-        Use cases:
-        - Create commercial marketing materials
-        - Generate licensed artwork
-        - Produce high-definition visuals
-        - Design professional content
-        - Create legally safe visual assets
-    """
-
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to avoid certain elements in the generated image')
-    num_images: int | OutputHandle[int] = connect_field(default=4, description='How many images to generate. When using guidance, value is set to 1')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the image. Ignored when guidance is used')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of iterations for refining the generated image')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely the model should stick to your prompt (CFG scale)')
-    prompt_enhancement: bool | OutputHandle[bool] = connect_field(default=False, description='When true, enhances the prompt with more descriptive variations')
-    medium: str | OutputHandle[str] = connect_field(default='', description="Optional medium specification ('photography' or 'art')")
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for generating images')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.BriaV1HD
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class CogView4(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        CogView4 is a powerful text-to-image model with strong understanding and generation capabilities.
-        image, generation, cogview, text-to-image, txt2img, ai
-
-        Use cases:
-        - Generate creative images from descriptions
-        - Create concept art
-        - Design visual content
-        - Produce illustrations
-        - Create artistic images
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=7.0, description='How closely to follow the prompt')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.CogView4
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class DiffusionEdge(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Diffusion Edge is a diffusion-based high-quality edge detection model that generates
-        edge maps from input images.
-    """
-
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to detect edges from')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.DiffusionEdge
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class FastLCMDiffusion(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Fast Latent Consistency Models (v1.5/XL) Text to Image runs SDXL at the speed of light,
-        enabling rapid and high-quality image generation.
-    """
-
-    ModelNameFastLCM: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ModelNameFastLCM
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-    SafetyCheckerVersion: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.SafetyCheckerVersion
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    model_name: nodetool.nodes.fal.text_to_image.ModelNameFastLCM = Field(default=nodetool.nodes.fal.text_to_image.ModelNameFastLCM.SDXL_BASE, description='The name of the model to use')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=1.5, description='How closely the model should stick to your prompt')
-    sync_mode: bool | OutputHandle[bool] = connect_field(default=True, description='If true, wait for image generation and upload before returning')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    safety_checker_version: nodetool.nodes.fal.text_to_image.SafetyCheckerVersion = Field(default=nodetool.nodes.fal.text_to_image.SafetyCheckerVersion.V1, description='The version of the safety checker to use')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If true, the prompt will be expanded with additional prompts')
-    guidance_rescale: float | OutputHandle[float] = connect_field(default=0.0, description='The rescale factor for the CFG')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FastLCMDiffusion
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class FastLightningSDXL(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Stable Diffusion XL Lightning Text to Image runs SDXL at the speed of light, enabling
-        ultra-fast high-quality image generation.
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform (1, 2, 4, or 8)')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If true, the prompt will be expanded with additional prompts')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FastLightningSDXL
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class FastSDXL(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Fast SDXL is a high-performance text-to-image model that runs SDXL at exceptional speeds
-        while maintaining high-quality output.
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=25, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='How closely the model should stick to your prompt (CFG scale)')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If true, the prompt will be expanded with additional prompts')
-    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FastSDXL
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class FastSDXLControlNetCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Fast SDXL ControlNet Canny is a model that generates images using ControlNet with SDXL.
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The control image to use for generation')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='How closely the model should stick to your prompt')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=25, description='The number of inference steps to perform')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FastSDXLControlNetCanny
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class FastTurboDiffusion(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Fast Turbo Diffusion runs SDXL at exceptional speeds while maintaining high-quality output.
-        Supports both SDXL Turbo and SD Turbo models for ultra-fast image generation.
-    """
-
-    ModelNameEnum: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ModelNameEnum
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    model_name: nodetool.nodes.fal.text_to_image.ModelNameEnum = Field(default=nodetool.nodes.fal.text_to_image.ModelNameEnum.SDXL_TURBO, description='The name of the model to use')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=2, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=1.0, description='How closely the model should stick to your prompt')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If true, the prompt will be expanded with additional prompts')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FastTurboDiffusion
+        return nodetool.nodes.fal.text_to_image.BytedanceSeedreamV45TextToImage
 
     @classmethod
     def get_node_type(cls):
@@ -398,24 +58,29 @@ from nodetool.workflows.base_node import BaseNode
 class Flux2Flash(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX 2 Flash is an ultra-fast text-to-image model optimized for speed while maintaining quality.
-        image, generation, flux, ultra-fast, text-to-image, txt2img, flash
+        FLUX.2 Flash is an ultra-fast variant of FLUX.2 designed for instant image generation with minimal latency.
+        image, generation, flux, ultra-fast, flash, text-to-image, txt2img
 
         Use cases:
-        - Real-time image generation
-        - Interactive creative tools
-        - Rapid prototyping
-        - High-throughput applications
-        - Quick visual exploration
+        - Instant preview generation for user interfaces
+        - Real-time collaborative design tools
+        - Lightning-fast concept exploration
+        - High-speed batch processing
+        - Interactive gaming and entertainment applications
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Size preset for the generated image')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded for better results.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -432,27 +97,330 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class Flux2Klein4B(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX-2 Klein 4B generates images with the efficient 4-billion parameter model for balanced quality and speed.
+        image, generation, flux-2, klein, 4b, text-to-image
+
+        Use cases:
+        - Generate images with 4B model
+        - Create balanced quality-speed content
+        - Produce efficient visual artwork
+        - Generate images with good performance
+        - Create optimized visuals
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the image to generate.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Klein4B
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux2Klein4BBase(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX-2 Klein 4B Base provides foundation model generation with 4-billion parameters.
+        image, generation, flux-2, klein, 4b, base
+
+        Use cases:
+        - Generate with base 4B model
+        - Create foundation quality content
+        - Produce standard visual artwork
+        - Generate images with base model
+        - Create baseline visuals
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the image to generate.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Klein4BBase
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux2Klein4BBaseLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX-2 Klein 4B Base with LoRA enables custom-trained 4B models for specialized generation.
+        image, generation, flux-2, klein, 4b, base, lora
+
+        Use cases:
+        - Generate with custom 4B base model
+        - Create specialized foundation content
+        - Produce domain-specific visuals
+        - Generate with fine-tuned 4B model
+        - Create customized baseline visuals
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the image to generate.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Klein4BBaseLora
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux2Klein9B(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX-2 Klein 9B generates high-quality images with the powerful 9-billion parameter model.
+        image, generation, flux-2, klein, 9b, text-to-image
+
+        Use cases:
+        - Generate high-quality images with 9B model
+        - Create superior visual content
+        - Produce detailed artwork
+        - Generate images with powerful model
+        - Create premium quality visuals
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the image to generate.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Klein9B
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux2Klein9BBase(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX-2 Klein 9B Base provides foundation generation with the full 9-billion parameter model.
+        image, generation, flux-2, klein, 9b, base
+
+        Use cases:
+        - Generate with base 9B model
+        - Create high-quality foundation content
+        - Produce superior baseline artwork
+        - Generate images with powerful base
+        - Create premium baseline visuals
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the image to generate.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Klein9BBase
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux2Klein9BBaseLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX-2 Klein 9B Base with LoRA combines powerful generation with custom-trained models.
+        image, generation, flux-2, klein, 9b, base, lora
+
+        Use cases:
+        - Generate with custom 9B base model
+        - Create specialized high-quality content
+        - Produce custom superior visuals
+        - Generate with fine-tuned 9B model
+        - Create advanced customized visuals
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the image to generate.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Klein9BBaseLora
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux2Max(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX-2 Max generates maximum quality images with the most advanced FLUX-2 model for premium results.
+        image, generation, flux-2, max, premium, text-to-image
+
+        Use cases:
+        - Generate maximum quality images
+        - Create premium visual content
+        - Produce professional-grade artwork
+        - Generate images with best model
+        - Create superior quality visuals
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.SafetyTolerance
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    safety_tolerance: nodetool.nodes.fal.text_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.text_to_image.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.Flux2Max
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class Flux2Turbo(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX 2 Turbo is a fast text-to-image model delivering high-quality results with reduced generation time.
-        image, generation, flux, fast, text-to-image, txt2img, turbo
+        FLUX.2 Turbo is a blazing-fast image generation model optimized for speed without sacrificing quality, ideal for real-time applications.
+        image, generation, flux, fast, turbo, text-to-image, txt2img
 
         Use cases:
-        - Rapid image prototyping
-        - High-volume image generation
-        - Quick concept visualization
-        - Fast design iterations
-        - Real-time creative workflows
+        - Real-time image generation for interactive apps
+        - Rapid prototyping of visual concepts
+        - Generate multiple variations instantly
+        - Live visual effects and augmented reality
+        - High-throughput batch image processing
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Size preset for the generated image')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded for better results.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -472,19 +440,31 @@ from nodetool.workflows.base_node import BaseNode
 class FluxDev(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX.1 [dev] is a 12 billion parameter flow transformer that generates high-quality images from text.
-        It is suitable for personal and commercial use.
+        FLUX.1 [dev] is a powerful open-weight text-to-image model with 12 billion parameters. Optimized for prompt following and visual quality.
+        image, generation, flux, text-to-image, txt2img
+
+        Use cases:
+        - Generate high-quality images from text prompts
+        - Create detailed illustrations with precise control
+        - Produce professional artwork and designs
+        - Generate multiple variations from one prompt
+        - Create safe-for-work content with built-in safety checker
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Either a preset size or a custom {width, height} dictionary')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Size preset for the generated image')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How strictly to follow the prompt. Higher values are more literal')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='Number of denoising steps. More steps typically improve quality')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -501,105 +481,32 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class FluxDevImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        FLUX.1 [dev] Image-to-Image is a high-performance endpoint that enables rapid transformation
-        of existing images, delivering high-quality style transfers and image modifications with
-        the core FLUX capabilities.
-    """
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to transform')
-    strength: float | OutputHandle[float] = connect_field(default=0.95, description='The strength of the initial image. Higher strength values are better for this model')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FluxDevImageToImage
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class FluxGeneral(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        FLUX.1 [dev] with Controlnets and Loras is a versatile text-to-image model that supports multiple AI extensions including LoRA, ControlNet conditioning, and IP-Adapter integration, enabling comprehensive control over image generation through various guidance methods.
-        image, generation, controlnet, lora, ip-adapter, text-to-image, txt2img
-
-        Use cases:
-        - Create controlled image generations
-        - Apply multiple AI extensions
-        - Generate guided visual content
-        - Produce customized artwork
-        - Design with precise control
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt (CFG scale)')
-    real_cfg_scale: float | OutputHandle[float] = connect_field(default=3.5, description='Classical CFG scale as in SD1.5, SDXL, etc.')
-    use_real_cfg: bool | OutputHandle[bool] = connect_field(default=False, description='Uses classical CFG. Increases generation times and price when true')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    reference_strength: float | OutputHandle[float] = connect_field(default=0.65, description='Strength of reference_only generation. Only used if a reference image is provided')
-    reference_end: float | OutputHandle[float] = connect_field(default=1.0, description='The percentage of total timesteps when reference guidance should end')
-    base_shift: float | OutputHandle[float] = connect_field(default=0.5, description='Base shift for the scheduled timesteps')
-    max_shift: float | OutputHandle[float] = connect_field(default=1.15, description='Max shift for the scheduled timesteps')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FluxGeneral
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
 class FluxLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX.1 [dev] with LoRAs is a text-to-image model that supports LoRA adaptations, enabling rapid and high-quality image generation with pre-trained LoRA weights for personalization, specific styles, brand identities, and product-specific outputs.
-        image, generation, lora, personalization, style-transfer, text-to-image, txt2img
+        FLUX with LoRA support enables fine-tuned image generation using custom LoRA models for specific styles or subjects.
+        image, generation, flux, lora, fine-tuning, text-to-image, txt2img
 
         Use cases:
-        - Create brand-specific visuals
-        - Generate custom styled images
-        - Adapt existing styles to new content
-        - Produce personalized artwork
-        - Design consistent visual identities
+        - Generate images with custom artistic styles
+        - Create consistent characters across images
+        - Apply brand-specific visual styles
+        - Generate images with specialized subjects
+        - Combine multiple LoRA models for unique results
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Either a preset size or a custom {width, height} dictionary')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG scale to determine how closely the model follows the prompt')
-    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='List of LoRA weights to use for image generation')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='Size preset for the generated image')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA models to apply with their weights')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How strictly to follow the prompt')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='Number of denoising steps')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -616,64 +523,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class FluxLoraInpainting(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class FluxProNew(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX.1 [dev] Inpainting with LoRAs is a text-to-image model that supports inpainting and LoRA adaptations,
-        enabling rapid and high-quality image inpainting using pre-trained LoRA weights for personalization,
-        specific styles, brand identities, and product-specific outputs.
+        FLUX.1 Pro New is the latest version of the professional FLUX model with enhanced capabilities and improved output quality.
+        image, generation, flux, professional, text-to-image, txt2img
+
+        Use cases:
+        - Generate professional-grade marketing visuals
+        - Create high-quality product renders
+        - Produce detailed architectural visualizations
+        - Design premium brand assets
+        - Generate photorealistic commercial imagery
     """
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to inpaint')
-    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask indicating areas to inpaint (white=inpaint, black=keep)')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG scale to determine how closely the model follows the prompt')
-    strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting. 1.0 completely remakes the image while 0.0 preserves the original')
-    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='List of LoRA weights to use for image generation')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FluxLoraInpainting
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class FluxLoraTTI(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        FLUX.1 with LoRAs is a text-to-image model that supports LoRA adaptations,
-        enabling high-quality image generation with customizable LoRA weights for
-        personalization, specific styles, and brand identities.
-    """
-
-    LoraModel: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.LoraModel
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    model_name: nodetool.nodes.fal.text_to_image.LoraModel = Field(default=nodetool.nodes.fal.text_to_image.LoraModel.SDXL_BASE, description='The base model to use for generation')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='How closely the model should stick to your prompt')
-    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='List of LoRA weights to use for image generation')
-    prompt_weighting: bool | OutputHandle[bool] = connect_field(default=True, description='If true, prompt weighting syntax will be used and 77 token limit lifted')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Size preset for the generated image')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    safety_tolerance: nodetool.nodes.fal.text_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.text_to_image.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FluxLoraTTI
+        return nodetool.nodes.fal.text_to_image.FluxProNew
 
     @classmethod
     def get_node_type(cls):
@@ -689,18 +570,31 @@ from nodetool.workflows.base_node import BaseNode
 class FluxSchnell(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX.1 [schnell] is a 12 billion parameter flow transformer that generates high-quality images
-        from text in 1 to 4 steps, suitable for personal and commercial use.
+        FLUX.1 [schnell] is a fast distilled version of FLUX.1 optimized for speed. Can generate high-quality images in 1-4 steps.
+        image, generation, flux, fast, text-to-image, txt2img
+
+        Use cases:
+        - Generate images quickly for rapid iteration
+        - Create concept art with minimal latency
+        - Produce preview images before final generation
+        - Generate multiple variations efficiently
+        - Real-time image generation applications
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Either a preset size or a custom {width, height} dictionary')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Size preset for the generated image')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='Number of denoising steps (1-4 recommended for schnell)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -717,70 +611,32 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class FluxSubject(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        FLUX.1 Subject is a super fast endpoint for the FLUX.1 [schnell] model with subject input capabilities, enabling rapid and high-quality image generation for personalization, specific styles, brand identities, and product-specific outputs.
-        image, generation, subject-driven, personalization, fast, text-to-image, txt2img
-
-        Use cases:
-        - Create variations of existing subjects
-        - Generate personalized product images
-        - Design brand-specific visuals
-        - Produce custom character artwork
-        - Create subject-based illustrations
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image of the subject')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='Either a preset size or a custom {width, height} dictionary')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG scale to determine how closely the model follows the prompt')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FluxSubject
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
 class FluxV1Pro(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX1.1 [pro] is an enhanced version of FLUX.1 [pro], improved image generation capabilities, delivering superior composition, detail, and artistic fidelity compared to its predecessor.
-        image, generation, composition, detail, artistic, text-to-image, txt2img
+        FLUX.1 Pro is a state-of-the-art image generation model with superior prompt following and image quality.
+        image, generation, flux, pro, text-to-image, txt2img
 
         Use cases:
-        - Generate high-fidelity artwork
-        - Create detailed illustrations
-        - Design complex compositions
-        - Produce artistic renderings
-        - Generate professional visuals
+        - Generate professional-grade images for commercial use
+        - Create highly detailed artwork with complex prompts
+        - Produce marketing materials and brand assets
+        - Generate photorealistic images
+        - Create custom visual content with precise control
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='Either a preset size or a custom {width, height} dictionary. Max dimension 14142')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    seed: int | OutputHandle[int] | None = connect_field(default=None, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate (1-4)')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    safety_tolerance: str | OutputHandle[str] = connect_field(default='2', description='Safety tolerance level (1-6), 1 being strict, 6 being permissive')
-    output_format: str | OutputHandle[str] = connect_field(default='jpeg', description='Output format (jpeg or png)')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='Size preset for the generated image')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='Output image format (jpeg or png)')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    safety_tolerance: nodetool.nodes.fal.text_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.text_to_image.SafetyTolerance.VALUE_2, description='Safety checker tolerance level (1-6). Higher is more permissive')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -797,60 +653,35 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class FluxV1ProNew(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        FLUX.1 [pro] new is an accelerated version of FLUX.1 [pro], maintaining professional-grade
-        image quality while delivering significantly faster generation speeds.
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Either a preset size or a custom {width, height} dictionary')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG scale to determine how closely the model follows the prompt')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    safety_tolerance: int | OutputHandle[int] = connect_field(default=2, description='Safety tolerance level (1=strict, 6=permissive)')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.FluxV1ProNew
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
 class FluxV1ProUltra(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        FLUX1.1 [ultra] is the latest and most advanced version of FLUX.1 [pro],
-        featuring cutting-edge improvements in image generation, delivering unparalleled
-        composition, detail, and artistic fidelity.
+        FLUX.1 Pro Ultra delivers the highest quality image generation with enhanced detail and realism.
+        image, generation, flux, pro, ultra, text-to-image, txt2img
+
+        Use cases:
+        - Generate ultra-high quality photorealistic images
+        - Create professional photography-grade visuals
+        - Produce detailed product renders
+        - Generate premium marketing materials
+        - Create artistic masterpieces with fine details
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='Either a preset size or a custom {width, height} dictionary. Max dimension 14142')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate (1-4)')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    safety_tolerance: str | OutputHandle[str] = connect_field(default='2', description='Safety tolerance level (1-6), 1 being strict, 6 being permissive')
-    output_format: str | OutputHandle[str] = connect_field(default='jpeg', description='Output format (jpeg or png)')
-    raw: bool | OutputHandle[bool] = connect_field(default=False, description='Generate less processed, more natural-looking images')
-    aspect_ratio: str | OutputHandle[str] = connect_field(default='16:9', description='Aspect ratio of the generated image')
-    image_prompt_strength: float | OutputHandle[float] = connect_field(default=0.1, description='Strength of the image prompt')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='16:9', description='Aspect ratio for the generated image')
+    enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    safety_tolerance: nodetool.nodes.fal.text_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.text_to_image.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
+    image_prompt_strength: float | OutputHandle[float] = connect_field(default=0.1, description='Strength of image prompt influence (0-1)')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    raw: bool | OutputHandle[bool] = connect_field(default=False, description='Generate less processed, more natural results')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -867,70 +698,36 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class Fooocus(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class GlmImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Fooocus is a text-to-image model with default parameters and automated optimizations
-        for quality improvements.
-    """
-
-    PerformanceEnum: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.PerformanceEnum
-    RefinerModelEnum: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.RefinerModelEnum
-    ControlTypeEnum: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ControlTypeEnum
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    styles: list[str] | OutputHandle[list[str]] = connect_field(default=['Fooocus Enhance', 'Fooocus V2', 'Fooocus Sharp'], description='The styles to apply to the generated image')
-    performance: nodetool.nodes.fal.text_to_image.PerformanceEnum = Field(default=nodetool.nodes.fal.text_to_image.PerformanceEnum.EXTREME_SPEED, description='You can choose Speed or Quality')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=4.0, description='How closely the model should stick to your prompt')
-    sharpness: float | OutputHandle[float] = connect_field(default=2.0, description='Higher value means image and texture are sharper')
-    aspect_ratio: str | OutputHandle[str] = connect_field(default='1024x1024', description='The size of the generated image (must be multiples of 8)')
-    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='Up to 5 LoRAs that will be merged for generation')
-    refiner_model: nodetool.nodes.fal.text_to_image.RefinerModelEnum = Field(default=nodetool.nodes.fal.text_to_image.RefinerModelEnum.NONE, description='Refiner model to use (SDXL or SD 1.5)')
-    refiner_switch: float | OutputHandle[float] = connect_field(default=0.8, description='Switch point for refiner (0.4 for SD1.5 realistic, 0.667 for SD1.5 anime, 0.8 for XL)')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image for generation')
-    control_type: nodetool.nodes.fal.text_to_image.ControlTypeEnum = Field(default=nodetool.nodes.fal.text_to_image.ControlTypeEnum.PYRA_CANNY, description='The type of image control')
-    control_image_weight: float | OutputHandle[float] = connect_field(default=1.0, description='Strength of the control image influence')
-    control_image_stop_at: float | OutputHandle[float] = connect_field(default=1.0, description='When to stop applying control image influence')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If false, the safety checker will be disabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Fooocus
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class GPTImage1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        OpenAI's GPT Image 1 model for generating images from text prompts with high quality and creative outputs.
-        image, generation, openai, gpt, text-to-image, txt2img, creative
+        GLM Image generates images from text with advanced AI understanding and quality output.
+        image, generation, glm, ai, text-to-image
 
         Use cases:
-        - Generate creative illustrations
-        - Create concept art and designs
-        - Produce marketing visuals
-        - Design digital artwork
-        - Create custom graphics
+        - Generate images with GLM AI
+        - Create intelligent visual content
+        - Produce AI-powered artwork
+        - Generate images with understanding
+        - Create smart visuals from text
     """
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    size: str | OutputHandle[str] = connect_field(default='1024x1024', description='The size of the generated image (e.g., 1024x1024, 1792x1024, 1024x1792)')
-    quality: str | OutputHandle[str] = connect_field(default='auto', description='The quality of the generated image (auto, high, medium, low)')
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for image generation.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='Output image size.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='Output image format.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the image will be returned as a base64 data URI instead of a URL.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1.5, description='Classifier-free guidance scale. Higher values make the model follow the prompt more closely.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. The same seed with the same prompt will produce the same image.')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the prompt will be enhanced using an LLM for more detailed and higher quality results.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of diffusion denoising steps. More steps generally produce higher quality images.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable NSFW safety checking on the generated images.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.GPTImage1
+        return nodetool.nodes.fal.text_to_image.GlmImage
 
     @classmethod
     def get_node_type(cls):
@@ -943,28 +740,36 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class Gemini25FlashImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class GptImage15(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Google's Gemini 2.5 Flash model for fast high-quality image generation from text.
-        image, generation, google, gemini, text-to-image, txt2img, fast
+        GPT Image 1.5 generates images from text with GPT-powered language understanding and visual creation.
+        image, generation, gpt, language-ai, text-to-image
 
         Use cases:
-        - Generate images quickly
-        - Create visual content at scale
-        - Produce concept visualizations
-        - Design marketing materials
-        - Create educational illustrations
+        - Generate images with GPT understanding
+        - Create language-aware visual content
+        - Produce intelligent artwork
+        - Generate images with natural language
+        - Create GPT-powered visuals
     """
 
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
+    ImageSize: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSize
+    Background: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Background
+    Quality: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Quality
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for image generation')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSize = Field(default=nodetool.nodes.fal.text_to_image.ImageSize.VALUE_1024X1024, description='Aspect ratio for the generated image')
+    background: nodetool.nodes.fal.text_to_image.Background = Field(default=nodetool.nodes.fal.text_to_image.Background.AUTO, description='Background for the generated image')
+    quality: nodetool.nodes.fal.text_to_image.Quality = Field(default=nodetool.nodes.fal.text_to_image.Quality.HIGH, description='Quality for the generated image')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='Output format for the images')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Gemini25FlashImage
+        return nodetool.nodes.fal.text_to_image.GptImage15
 
     @classmethod
     def get_node_type(cls):
@@ -977,102 +782,34 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class HunyuanImageV3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class HunyuanImageV3InstructTextToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Hunyuan Image V3 is Tencent's advanced text-to-image model with exceptional detail and artistic quality.
-        image, generation, hunyuan, tencent, text-to-image, txt2img, artistic
+        Hunyuan Image v3 Instruct generates high-quality images from text with advanced instruction understanding.
+        image, generation, hunyuan, v3, instruct, text-to-image
 
         Use cases:
-        - Create detailed digital artwork
-        - Generate photorealistic images
-        - Produce high-quality illustrations
-        - Design creative visuals
-        - Create artistic compositions
+        - Generate images with detailed instructions
+        - Create artwork with precise text control
+        - Produce high-quality visual content
+        - Generate images with advanced understanding
+        - Create professional visuals from text
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely to follow the prompt')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='auto', description='The desired size of the generated image. If auto, image size will be determined by the model.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible results. If None, a random seed is used.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='Controls how much the model adheres to the prompt. Higher values mean stricter adherence.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.HunyuanImageV3
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class HunyuanImageV3Instruct(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Hunyuan Image V3 Instruct with internal reasoning capabilities for advanced text-to-image generation.
-        image, generation, hunyuan, tencent, instruct, reasoning, text-to-image, txt2img, advanced
-
-        Use cases:
-        - Generate highly detailed images with reasoning
-        - Create complex compositions with multiple elements
-        - Produce photorealistic images with fine control
-        - Generate artistic images with advanced understanding
-        - Create images with complex prompt interpretation
-    """
-
-    HunyuanImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.HunyuanImageSizePreset.AUTO, description='The desired size of the generated image. If auto, size is determined by the model')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely to follow the prompt (higher = stricter adherence)')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.HunyuanImageV3Instruct
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class HyperSDXL(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Hyper SDXL is a hyper-charged version of SDXL that delivers exceptional performance and creativity
-        while maintaining high-quality output and ultra-fast generation speeds.
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=1, description='The number of inference steps to perform (1, 2, or 4)')
-    sync_mode: bool | OutputHandle[bool] = connect_field(default=True, description='If true, wait for image generation and upload before returning')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If true, the prompt will be expanded with additional prompts')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.HyperSDXL
+        return nodetool.nodes.fal.text_to_image.HunyuanImageV3InstructTextToImage
 
     @classmethod
     def get_node_type(cls):
@@ -1100,14 +837,15 @@ class IdeogramV2(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
-    IdeogramStyle: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.IdeogramStyle
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Style
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image.')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality.')
-    style: nodetool.nodes.fal.text_to_image.IdeogramStyle = Field(default=nodetool.nodes.fal.text_to_image.IdeogramStyle.AUTO, description='The style of the generated image.')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='A negative prompt to avoid in the generated image.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for the random number generator.')
+    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
+    style: nodetool.nodes.fal.text_to_image.Style = Field(default=nodetool.nodes.fal.text_to_image.Style.AUTO, description='The style of the generated image')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    seed: str | OutputHandle[str] = connect_field(default='', description='Seed for reproducible results. Use -1 for random')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='A negative prompt to avoid in the generated image')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1127,19 +865,27 @@ from nodetool.workflows.base_node import BaseNode
 class IdeogramV2Turbo(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Accelerated image generation with Ideogram V2 Turbo. Create high-quality visuals, posters,
-        and logos with enhanced speed while maintaining Ideogram's signature quality.
+        Ideogram V2 Turbo offers faster image generation with the same exceptional quality and typography handling as V2.
+        image, generation, ai, typography, realistic, fast, text-to-image, txt2img
+
+        Use cases:
+        - Rapidly generate commercial designs
+        - Quick iteration on marketing materials
+        - Fast prototyping of visual concepts
+        - Real-time design exploration
+        - Efficient batch generation of branded content
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
-    IdeogramStyle: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.IdeogramStyle
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Style
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image.')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality.')
-    style: nodetool.nodes.fal.text_to_image.IdeogramStyle = Field(default=nodetool.nodes.fal.text_to_image.IdeogramStyle.AUTO, description='The style of the generated image.')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='A negative prompt to avoid in the generated image.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for the random number generator.')
+    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
+    style: nodetool.nodes.fal.text_to_image.Style = Field(default=nodetool.nodes.fal.text_to_image.Style.AUTO, description='The style of the generated image')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    seed: str | OutputHandle[str] = connect_field(default='', description='Seed for reproducible results. Use -1 for random')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='A negative prompt to avoid in the generated image')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1159,25 +905,32 @@ from nodetool.workflows.base_node import BaseNode
 class IdeogramV3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Ideogram V3 is the latest generation text-to-image model with enhanced typography and photorealistic outputs.
-        image, generation, typography, realistic, text-to-image, txt2img, ideogram
+        Ideogram V3 is the latest generation with enhanced text rendering, superior image quality, and expanded creative controls.
+        image, generation, ideogram, typography, text-rendering, text-to-image, txt2img
 
         Use cases:
-        - Create professional marketing materials with text
-        - Generate logos and brand assets
-        - Design posters and advertisements
-        - Produce photorealistic product images
-        - Create typography-heavy artwork
+        - Create professional graphics with embedded text
+        - Design social media posts with perfect typography
+        - Generate logos and brand identities
+        - Produce marketing materials with text overlays
+        - Create educational content with clear text
     """
 
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
-    IdeogramStyle: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.IdeogramStyle
+    RenderingSpeed: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.RenderingSpeed
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
-    style: nodetool.nodes.fal.text_to_image.IdeogramStyle = Field(default=nodetool.nodes.fal.text_to_image.IdeogramStyle.AUTO, description='The style of the generated image')
-    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='A negative prompt to avoid in the generated image')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The resolution of the generated image')
+    style: str | OutputHandle[str] = connect_field(default='', description='The style preset for the generated image')
+    style_preset: str | OutputHandle[str] = connect_field(default='', description='Style preset for generation. The chosen style preset will guide the generation.')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Automatically enhance the prompt for better results')
+    rendering_speed: nodetool.nodes.fal.text_to_image.RenderingSpeed = Field(default=nodetool.nodes.fal.text_to_image.RenderingSpeed.BALANCED, description='The rendering speed to use.')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
+    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Description of what to exclude from an image. Descriptions in the prompt take precedence to descriptions in the negative prompt.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1194,271 +947,37 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class IllusionDiffusion(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class LongcatImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Illusion Diffusion is a model that creates illusions conditioned on an input image.
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input image URL for conditioning the generation')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='How closely the model should stick to your prompt')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.IllusionDiffusion
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class Imagen3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Google Imagen 3 is a state-of-the-art text-to-image model with exceptional quality and understanding.
-        image, generation, google, imagen, text-to-image, txt2img, high-quality
+        Longcat Image generates creative and unique images from text with distinctive AI characteristics.
+        image, generation, longcat, creative, text-to-image
 
         Use cases:
-        - Generate photorealistic images
-        - Create professional marketing content
-        - Design visual assets
-        - Produce high-quality illustrations
-        - Create detailed artwork
+        - Generate creative images
+        - Create unique visual content
+        - Produce distinctive artwork
+        - Generate images with character
+        - Create artistic visuals
     """
 
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The guidance scale to use for the image generation.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Imagen3
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class Imagen4Preview(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Imagen 4 Preview is the next iteration of Google's Imagen series, offering
-        high quality text-to-image generation with strong prompt adherence and
-        improved realism.
-        image, generation, google, text-to-image, txt2img
-
-        Use cases:
-        - Generate photorealistic artwork and designs
-        - Create marketing and product visuals
-        - Produce concept art or storyboards
-        - Explore creative ideas with high fidelity
-        - Rapid prototyping of imagery
-    """
-
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Elements to avoid in the generated image')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely the model should follow the prompt')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Imagen4Preview
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class KlingImage3TextToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Generate high-quality images from text prompts using Kling Image 3.0.
-        Supports sharp outputs up to 2K resolution with strong prompt adherence.
-        image, generation, kling, v3, text-to-image, high-resolution
-
-        Use cases:
-        - Create high-resolution images from descriptions
-        - Generate 2K quality artwork
-        - Produce photorealistic images
-        - Create detailed visual content
-        - Generate images with strong prompt adherence
-    """
-
-    Kling3ImageAspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Kling3ImageAspectRatio
-    Kling3ImageResolution: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Kling3ImageResolution
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the desired image (max 2500 characters)')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.Kling3ImageAspectRatio = Field(default=nodetool.nodes.fal.text_to_image.Kling3ImageAspectRatio.RATIO_16_9, description='The aspect ratio of the generated image')
-    resolution: nodetool.nodes.fal.text_to_image.Kling3ImageResolution = Field(default=nodetool.nodes.fal.text_to_image.Kling3ImageResolution.RES_1K, description='Image generation resolution. 1K: standard, 2K: high-res')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate (1-9)')
-    elements: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='Optional elements for face/character control. Reference as @Element1, @Element2 in prompt')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.KlingImage3TextToImage
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class Kolors(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Kolors is an advanced text-to-image model with excellent color reproduction and artistic style.
-        image, generation, kolors, text-to-image, txt2img, artistic, color
-
-        Use cases:
-        - Create vibrant colorful artwork
-        - Generate stylized illustrations
-        - Design visually striking content
-        - Produce artistic images
-        - Create color-rich visuals
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=25, description='The number of inference steps')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely to follow the prompt')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Kolors
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class LCMDiffusion(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Latent Consistency Models (SDXL & SDv1.5) Text to Image produces high-quality images
-        with minimal inference steps.
-    """
-
-    ModelNameLCM: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ModelNameLCM
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    model: nodetool.nodes.fal.text_to_image.ModelNameLCM = Field(default=nodetool.nodes.fal.text_to_image.ModelNameLCM.SD_1_5, description='The model to use for generating the image')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=1.0, description='How closely the model should stick to your prompt')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.LCMDiffusion
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class LumaPhoton(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Luma Photon is a creative and personalizable text-to-image model that brings a step-function
-        change in the cost of high-quality image generation, optimized for creatives.
-    """
-
-    AspectRatioLuma: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatioLuma
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatioLuma = Field(default=nodetool.nodes.fal.text_to_image.AspectRatioLuma.RATIO_1_1, description='The aspect ratio of the generated image')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.LumaPhoton
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class LumaPhotonFlash(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Luma Photon Flash is the most creative, personalizable, and intelligent visual model for creatives,
-        bringing a step-function change in the cost of high-quality image generation with faster inference times.
-    """
-
-    AspectRatioLuma: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatioLuma
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatioLuma = Field(default=nodetool.nodes.fal.text_to_image.AspectRatioLuma.RATIO_1_1, description='The aspect ratio of the generated image')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.LumaPhotonFlash
+        return nodetool.nodes.fal.text_to_image.LongcatImage
 
     @classmethod
     def get_node_type(cls):
@@ -1474,29 +993,30 @@ from nodetool.workflows.base_node import BaseNode
 class OmniGenV1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        OmniGen is a unified image generation model that can generate a wide range of images from multi-modal prompts. It can be used for various tasks such as Image Editing, Personalized Image Generation, Virtual Try-On, Multi Person Generation and more!
-        image, generation, multi-modal, editing, personalization, text-to-image, txt2img
+        OmniGen V1 is a versatile unified model for multi-modal image generation and editing with text, supporting complex compositional tasks.
+        image, generation, multi-modal, editing, unified, text-to-image, txt2img
 
         Use cases:
-        - Edit and modify existing images
-        - Create personalized visual content
-        - Generate virtual try-on images
-        - Create multi-person compositions
-        - Combine multiple images creatively
+        - Generate images with multiple input modalities
+        - Edit existing images with text instructions
+        - Create complex compositional scenes
+        - Combine text and image inputs for generation
+        - Perform advanced image manipulations
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    input_image_1: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The first input image to use for generation')
-    input_image_2: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The second input image to use for generation')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.0, description='How closely the model should stick to your prompt')
-    img_guidance_scale: float | OutputHandle[float] = connect_field(default=1.6, description='How closely the model should stick to your input image')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate or edit an image')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
+    img_guidance_scale: float | OutputHandle[float] = connect_field(default=1.6, description='The Image Guidance scale is a measure of how close you want the model to stick to your input image when looking for a related image to show you.')
+    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URL of images to use while generating the image, Use <img><|image_1|></img> for the first image and so on.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='How strictly to follow the prompt and inputs')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Number of denoising steps for generation quality')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1513,25 +1033,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class PlaygroundV25(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class QwenImage2512(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Playground v2.5 is a state-of-the-art open-source model that excels in aesthetic quality
-        for text-to-image generation.
+        Qwen Image 2512 generates high-resolution images from text with excellent quality and detail.
+        image, generation, qwen, 2512, high-resolution, text-to-image
+
+        Use cases:
+        - Generate high-resolution images
+        - Create detailed visual content
+        - Produce quality artwork from text
+        - Generate images with fine details
+        - Create high-quality visuals
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='How closely the model should stick to your prompt')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The guidance scale to use for the image generation.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to generate an image from.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.PlaygroundV25
+        return nodetool.nodes.fal.text_to_image.QwenImage2512
 
     @classmethod
     def get_node_type(cls):
@@ -1544,29 +1077,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class QwenImageMax(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class QwenImage2512Lora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Qwen Image Max is Alibaba's advanced text-to-image model with exceptional quality and detail.
-        image, generation, qwen, alibaba, text-to-image, txt2img, high-quality
+        Qwen Image 2512 with LoRA support enables custom-trained models for specialized image generation.
+        image, generation, qwen, 2512, lora, custom
 
         Use cases:
-        - Generate detailed images
-        - Create professional visuals
-        - Design marketing content
-        - Produce high-quality artwork
-        - Create commercial graphics
+        - Generate images with custom models
+        - Create specialized visual content
+        - Produce domain-specific artwork
+        - Generate images with fine-tuned models
+        - Create customized visuals
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The guidance scale to use for the image generation.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to generate an image from.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.QwenImageMax
+        return nodetool.nodes.fal.text_to_image.QwenImage2512Lora
 
     @classmethod
     def get_node_type(cls):
@@ -1579,32 +1122,35 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class Recraft20B(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class QwenImageMaxTextToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Recraft 20B is a new and affordable text-to-image model that delivers state-of-the-art results.
-         image, generation, efficient, text-to-image, txt2img
+        Qwen Image Max generates premium quality images from text with superior detail and accuracy.
+        image, generation, qwen, max, premium, text-to-image
 
         Use cases:
-        - Generate cost-effective visuals
-        - Create high-quality images
-        - Produce professional artwork
-        - Design marketing materials
-        - Generate commercial content
+        - Generate premium quality images
+        - Create detailed artwork from text
+        - Produce high-fidelity visual content
+        - Generate professional-grade images
+        - Create superior quality visuals
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-    StylePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.StylePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='Either a preset size or a custom {width, height} dictionary')
-    style: nodetool.nodes.fal.text_to_image.StylePreset = Field(default=nodetool.nodes.fal.text_to_image.StylePreset.REALISTIC_IMAGE, description='The style of the generated images. Vector images cost 2X as much.')
-    colors: list[types.ColorRef] | OutputHandle[list[types.ColorRef]] = connect_field(default=[], description='An array of preferable colors')
-    style_id: str | OutputHandle[str] = connect_field(default='', description='The ID of the custom style reference (optional)')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the desired image. Supports Chinese and English. Max 800 characters.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Enable LLM prompt optimization for better results.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility (0-2147483647).')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable content moderation for input and output.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Content to avoid in the generated image. Max 500 characters.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Recraft20B
+        return nodetool.nodes.fal.text_to_image.QwenImageMaxTextToImage
 
     @classmethod
     def get_node_type(cls):
@@ -1620,18 +1166,25 @@ from nodetool.workflows.base_node import BaseNode
 class RecraftV3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Recraft V3 is a text-to-image model with the ability to generate long texts, vector art, images in brand style, and much more.
-        image, text
+        Recraft V3 is a powerful image generation model with exceptional control over style and colors, ideal for brand consistency and design work.
+        image, generation, design, branding, style, text-to-image, txt2img
+
+        Use cases:
+        - Create brand-consistent visual assets
+        - Generate designs with specific color palettes
+        - Produce stylized illustrations and artwork
+        - Design marketing materials with brand colors
+        - Create cohesive visual content series
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-    StylePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.StylePreset
+    RecraftV3Style: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.RecraftV3Style
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='Either a preset size or a custom {width, height} dictionary. Max dimension 14142')
-    style: nodetool.nodes.fal.text_to_image.StylePreset = Field(default=nodetool.nodes.fal.text_to_image.StylePreset.REALISTIC_IMAGE, description='The style of the generated images. Vector images cost 2X as much.')
-    colors: list[types.ColorRef] | OutputHandle[list[types.ColorRef]] = connect_field(default=[], description='An array of preferable colors')
-    style_id: str | OutputHandle[str] = connect_field(default='', description='The ID of the custom style reference (optional)')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='Size preset for the generated image')
+    style: nodetool.nodes.fal.text_to_image.RecraftV3Style = Field(default=nodetool.nodes.fal.text_to_image.RecraftV3Style.REALISTIC_IMAGE, description='Visual style preset for the generated image')
+    colors: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Specific color palette to use in the generation')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the safety checker will be enabled.')
+    style_id: str | OutputHandle[str] = connect_field(default='', description='Custom style ID for brand-specific styles')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1648,141 +1201,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class Reve(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class Sana(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Reve is a creative text-to-image model with unique artistic capabilities and style.
-        image, generation, reve, text-to-image, txt2img, artistic, creative
+        Sana is an efficient high-resolution image generation model that balances quality and speed for practical applications.
+        image, generation, efficient, high-resolution, text-to-image, txt2img
 
         Use cases:
-        - Create artistic illustrations
-        - Generate unique visual content
-        - Design creative artwork
-        - Produce stylized images
-        - Create imaginative visuals
+        - Generate high-resolution images efficiently
+        - Create detailed artwork with good performance
+        - Produce quality visuals with limited compute
+        - Generate images for web and mobile applications
+        - Balanced quality-speed image production
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    StyleName: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.StyleName
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely to follow the prompt')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='Size preset for the generated image')
+    style_name: nodetool.nodes.fal.text_to_image.StyleName = Field(default=nodetool.nodes.fal.text_to_image.StyleName.NO_STYLE, description='The style to generate the image in.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='How strictly to follow the prompt')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=18, description='Number of denoising steps')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Elements to avoid in the generated image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Reve
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class SanaV1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Sana can synthesize high-resolution, high-quality images with strong text-image alignment at a remarkably fast speed, with the ability to generate 4K images in less than a second.
-        image, generation, high-resolution, fast, text-alignment, text-to-image, txt2img
-
-        Use cases:
-        - Generate 4K quality images
-        - Create high-resolution artwork
-        - Produce rapid visual prototypes
-        - Design detailed illustrations
-        - Generate precise text-aligned visuals
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=18, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely the model should stick to your prompt')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.SanaV1
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class Seedream45(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        ByteDance Seedream V4.5 is a state-of-the-art text-to-image model with exceptional detail and artistic quality.
-        image, generation, bytedance, seedream, text-to-image, txt2img, artistic
-
-        Use cases:
-        - Create high-quality digital art
-        - Generate photorealistic images
-        - Design marketing visuals
-        - Produce detailed illustrations
-        - Create professional graphics
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely to follow the prompt')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Seedream45
-
-    @classmethod
-    def get_node_type(cls):
-        return cls.get_node_class().get_node_type()
-
-
-import typing
-from pydantic import Field
-from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
-import nodetool.nodes.fal.text_to_image
-from nodetool.workflows.base_node import BaseNode
-
-class StableCascade(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
-    """
-
-        Stable Cascade is a state-of-the-art text-to-image model that generates images on a smaller & cheaper
-        latent space while maintaining high quality output.
-    """
-
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    first_stage_steps: int | OutputHandle[int] = connect_field(default=20, description='Number of steps to run the first stage for')
-    second_stage_steps: int | OutputHandle[int] = connect_field(default=10, description='Number of steps to run the second stage for')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=4.0, description='How closely the model should stick to your prompt')
-    second_stage_guidance_scale: float | OutputHandle[float] = connect_field(default=4.0, description='Guidance scale for the second stage of generation')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-
-    @classmethod
-    def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.StableCascade
+        return nodetool.nodes.fal.text_to_image.Sana
 
     @classmethod
     def get_node_type(cls):
@@ -1798,19 +1249,32 @@ from nodetool.workflows.base_node import BaseNode
 class StableDiffusionV35Large(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Stable Diffusion 3.5 Large is a Multimodal Diffusion Transformer (MMDiT) text-to-image model that features
-        improved performance in image quality, typography, complex prompt understanding, and resource-efficiency.
+        Stable Diffusion 3.5 Large is a powerful open-weight model with excellent prompt adherence and diverse output capabilities.
+        image, generation, stable-diffusion, open-source, text-to-image, txt2img
+
+        Use cases:
+        - Generate diverse artistic styles
+        - Create high-quality illustrations
+        - Produce photorealistic images
+        - Generate concept art and designs
+        - Create custom visual content
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How closely the model should stick to your prompt')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. Defaults to landscape_4_3 if no controlnet has been passed, otherwise defaults to the size of the controlnet conditioning image.')
+    controlnet: str | OutputHandle[str] = connect_field(default='', description='ControlNet for inference.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    ip_adapter: str | OutputHandle[str] = connect_field(default='', description='IP-Adapter to use during inference.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Elements to avoid in the generated image')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1827,28 +1291,29 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class StableDiffusionV3Medium(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class ViduQ2TextToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Stable Diffusion 3 Medium (Text to Image) is a Multimodal Diffusion Transformer (MMDiT) model
-        that improves image quality, typography, prompt understanding, and efficiency.
+        Vidu Q2 generates quality images from text with optimized performance and consistent results.
+        image, generation, vidu, q2, optimized, text-to-image
+
+        Use cases:
+        - Generate optimized quality images
+        - Create consistent visual content
+        - Produce balanced artwork
+        - Generate images efficiently
+        - Create reliable visuals
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.AspectRatio
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to generate an image from')
-    prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, prompt will be upsampled with more details')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5.0, description='How closely the model should stick to your prompt (CFG scale)')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation, max 1500 characters')
+    aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_16_9, description='The aspect ratio of the output video')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.StableDiffusionV3Medium
+        return nodetool.nodes.fal.text_to_image.ViduQ2TextToImage
 
     @classmethod
     def get_node_type(cls):
@@ -1861,36 +1326,31 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_image
 from nodetool.workflows.base_node import BaseNode
 
-class Switti(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+class WanV26TextToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Switti is a scale-wise transformer for fast text-to-image generation that outperforms existing T2I AR models and competes with state-of-the-art T2I diffusion models while being faster than distilled diffusion models.
-        image, generation, fast, transformer, efficient, text-to-image, txt2img
+        Wan v2.6 generates high-quality images from text with advanced capabilities and consistent results.
+        image, generation, wan, v2.6, quality, text-to-image
 
         Use cases:
-        - Rapid image prototyping
-        - Real-time image generation
-        - Quick visual concept testing
-        - Fast artistic visualization
-        - Efficient batch image creation
+        - Generate quality images with Wan v2.6
+        - Create consistent visual content
+        - Produce reliable artwork from text
+        - Generate images with advanced model
+        - Create high-quality visuals
     """
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Use it to address details that you don't want in the image")
-    sampling_top_k: int | OutputHandle[int] = connect_field(default=400, description='The number of top-k tokens to sample from')
-    sampling_top_p: float | OutputHandle[float] = connect_field(default=0.95, description='The top-p probability to sample from')
-    more_smooth: bool | OutputHandle[bool] = connect_field(default=True, description='Smoothing with Gumbel softmax sampling')
-    more_diverse: bool | OutputHandle[bool] = connect_field(default=False, description='More diverse sampling')
-    smooth_start_si: int | OutputHandle[int] = connect_field(default=2, description='Smoothing starting scale')
-    turn_off_cfg_start_si: int | OutputHandle[int] = connect_field(default=8, description='Disable CFG starting scale')
-    last_scale_temp: float | OutputHandle[float] = connect_field(default=0.1, description='Temperature after disabling CFG')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and prompt will output the same image every time')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=6.0, description='How closely the model should stick to your prompt')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the desired image. Supports Chinese and English. Max 2000 characters.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description="Output image size. If not set: matches input image size (up to 1280*1280). Use presets like 'square_hd', 'landscape_16_9', or specify exact dimensions.")
+    max_images: int | OutputHandle[int] = connect_field(default=1, description='Maximum number of images to generate (1-5). Actual count may be less depending on model inference.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional reference image (0 or 1). When provided, can be used for style guidance. Resolution: 384-5000px each dimension. Max size: 10MB. Formats: JPEG, JPG, PNG (no alpha), BMP, WEBP.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable content moderation for input and output.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility (0-2147483647).')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Content to avoid in the generated image. Max 500 characters.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.text_to_image.Switti
+        return nodetool.nodes.fal.text_to_image.WanV26TextToImage
 
     @classmethod
     def get_node_type(cls):
@@ -1906,31 +1366,31 @@ from nodetool.workflows.base_node import BaseNode
 class ZImageBase(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Generate high-quality images using the Z-Image Base model. Provides detailed image generation with multiple acceleration and quality options.
-        image, generation, text-to-image, z-image, detailed, quality
+        Z-Image Base generates quality images from text with efficient processing and good results.
+        image, generation, z-image, base, efficient, text-to-image
 
         Use cases:
-        - Generate detailed images from text prompts
-        - Create high-quality artwork
-        - Produce professional illustrations
-        - Generate concept art
-        - Create visual content for projects
+        - Generate images efficiently
+        - Create quality artwork from text
+        - Produce visual content quickly
+        - Generate images with good performance
+        - Create efficient visuals
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
     OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
-    ZImageAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ZImageAcceleration
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image')
-    acceleration: nodetool.nodes.fal.text_to_image.ZImageAcceleration = Field(default=nodetool.nodes.fal.text_to_image.ZImageAcceleration.REGULAR, description='The acceleration level to use')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=4.0, description='The guidance scale to use for image generation')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use for image generation')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The guidance scale to use for the image generation.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use for the image generation.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1950,31 +1410,32 @@ from nodetool.workflows.base_node import BaseNode
 class ZImageBaseLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Generate high-quality images using the Z-Image Base model with LoRA support. Allows fine-tuned image generation with custom LoRA models.
-        image, generation, text-to-image, z-image, lora, fine-tuning
+        Z-Image Base with LoRA enables efficient custom-trained models for specialized generation tasks.
+        image, generation, z-image, base, lora, custom
 
         Use cases:
-        - Generate images with custom LoRA fine-tuning
-        - Create specialized style images
-        - Produce character-consistent artwork
-        - Generate images matching specific aesthetics
-        - Create brand-aligned visual content
+        - Generate images with custom efficient models
+        - Create specialized content quickly
+        - Produce domain-specific visuals
+        - Generate with fine-tuned base model
+        - Create efficient custom visuals
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
     OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
-    ZImageAcceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ZImageAcceleration
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed will output the same image every time')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the safety checker will be enabled')
-    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image')
-    acceleration: nodetool.nodes.fal.text_to_image.ZImageAcceleration = Field(default=nodetool.nodes.fal.text_to_image.ZImageAcceleration.REGULAR, description='The acceleration level to use')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=4.0, description='The guidance scale to use for image generation')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use for image generation')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The guidance scale to use for the image generation.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use for the image generation.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1994,27 +1455,78 @@ from nodetool.workflows.base_node import BaseNode
 class ZImageTurbo(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-        Z-Image Turbo is a fast text-to-image model optimized for quick generation with good quality.
-        image, generation, z-image, text-to-image, txt2img, fast, turbo
+        Z-Image Turbo generates images from text with maximum speed for rapid iteration and prototyping.
+        image, generation, z-image, turbo, fast, text-to-image
 
         Use cases:
-        - Rapid image generation
-        - Quick prototyping
-        - High-volume content creation
-        - Fast design iterations
-        - Real-time applications
+        - Generate images at maximum speed
+        - Create rapid prototypes from text
+        - Produce quick visual iterations
+        - Generate images for fast workflows
+        - Create instant visual content
     """
 
-    ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.ImageSizePreset
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from')
-    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='What to avoid in the generated image')
-    image_size: nodetool.nodes.fal.text_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD, description='The size of the generated image')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion. Note: this will increase the price by 0.0025 credits per request.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of inference steps to perform.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_image.ZImageTurbo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ZImageTurboLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Z-Image Turbo with LoRA combines maximum speed with custom models for fast specialized generation.
+        image, generation, z-image, turbo, lora, fast
+
+        Use cases:
+        - Generate custom images at turbo speed
+        - Create specialized content rapidly
+        - Produce quick domain-specific visuals
+        - Generate with fast fine-tuned models
+        - Create instant custom visuals
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.text_to_image.Acceleration = Field(default=nodetool.nodes.fal.text_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    output_format: nodetool.nodes.fal.text_to_image.OutputFormat = Field(default=nodetool.nodes.fal.text_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion. Note: this will increase the price by 0.0025 credits per request.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_image.ZImageTurboLora
 
     @classmethod
     def get_node_type(cls):

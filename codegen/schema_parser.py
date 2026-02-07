@@ -398,7 +398,7 @@ class SchemaParser:
         # "X264 (.mp4)" -> "X264__MP4"
         
         # Remove parentheses and other special characters
-        value = value.replace("(", "").replace(")", "")
+        value = value.replace("(", "").replace(")", "").replace(",", "_")
         
         # Handle ratios
         if ":" in value:

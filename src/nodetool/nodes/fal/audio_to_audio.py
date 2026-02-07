@@ -29,6 +29,7 @@ class OutputFormat(Enum):
     OPUS_48000_96 = "opus_48000_96"
     OPUS_48000_128 = "opus_48000_128"
     OPUS_48000_192 = "opus_48000_192"
+    WAV = "wav"
 
 
 class AudioFormat(Enum):
@@ -359,7 +360,7 @@ class Demucs(FALNode):
         default="", description="Length in seconds of each segment for processing. Smaller values use less memory but may reduce quality. Default is model-specific."
     )
     output_format: OutputFormat = Field(
-        default=OutputFormat.MP3, description="Output audio format for the separated stems"
+        default=OutputFormat.MP3_44100_128, description="Output audio format for the separated stems"
     )
     stems: str = Field(
         default="", description="Specific stems to extract. If None, extracts all available stems. Available stems depend on model: vocals, drums, bass, other, guitar, piano (for 6s model)"

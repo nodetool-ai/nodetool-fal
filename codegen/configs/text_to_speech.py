@@ -94,6 +94,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate superior audio quality speech",
             "Create broadcast-quality audio"
         ],
+        "enum_overrides": {
+            "OutputFormat": "MinimaxSpeech26HdOutputFormat"
+        },
         "basic_fields": ["text"]
     },
 
@@ -108,6 +111,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate speech with turbo speed",
             "Create efficient audio content"
         ],
+        "enum_overrides": {
+            "OutputFormat": "MinimaxSpeech26TurboOutputFormat"
+        },
         "basic_fields": ["text"]
     },
 }
