@@ -5,80 +5,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class Acceleration(Enum):
-    """
-    The acceleration level to use.
-    """
-    NONE = "none"
-    REGULAR = "regular"
-    HIGH = "high"
-    FULL = "full"
-
-
-class CameraLora(Enum):
-    """
-    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-    """
-    DOLLY_IN = "dolly_in"
-    DOLLY_OUT = "dolly_out"
-    DOLLY_LEFT = "dolly_left"
-    DOLLY_RIGHT = "dolly_right"
-    JIB_UP = "jib_up"
-    JIB_DOWN = "jib_down"
-    STATIC = "static"
-    NONE = "none"
-
-
-class VideoWriteMode(Enum):
-    """
-    The write mode of the generated video.
-    """
-    FAST = "fast"
-    BALANCED = "balanced"
-    SMALL = "small"
-
-
-class VideoOutputType(Enum):
-    """
-    The output type of the generated video.
-    """
-    X264__MP4 = "X264 (.mp4)"
-    VP9__WEBM = "VP9 (.webm)"
-    PRORES4444__MOV = "PRORES4444 (.mov)"
-    GIF__GIF = "GIF (.gif)"
-
-
-class VideoQuality(Enum):
-    """
-    The quality of the generated video.
-    """
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    MAXIMUM = "maximum"
-
-
-class Resolution(Enum):
-    """
-    Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-
-
-class AudioType(Enum):
-    """
-    How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2.
-    """
-    PARA = "para"
-    ADD = "add"
-
-
-
-
-
-
-
 class Ltx219BDistilledAudioToVideoLora(FALNode):
     """
     LTX-2 19B Distilled
@@ -91,6 +17,55 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
@@ -214,11 +189,6 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     def get_basic_fields(cls):
         return ["match_audio_length", "prompt", "acceleration", "use_multiscale", "fps"]
 
-
-
-
-
-
 class Ltx219BAudioToVideoLora(FALNode):
     """
     LTX-2 19B
@@ -231,6 +201,55 @@ class Ltx219BAudioToVideoLora(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
@@ -362,11 +381,6 @@ class Ltx219BAudioToVideoLora(FALNode):
     def get_basic_fields(cls):
         return ["match_audio_length", "prompt", "acceleration", "use_multiscale", "num_inference_steps"]
 
-
-
-
-
-
 class Ltx219BDistilledAudioToVideo(FALNode):
     """
     LTX-2 19B Distilled
@@ -379,6 +393,55 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
@@ -498,11 +561,6 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     def get_basic_fields(cls):
         return ["match_audio_length", "prompt", "acceleration", "use_multiscale", "fps"]
 
-
-
-
-
-
 class Ltx219BAudioToVideo(FALNode):
     """
     LTX-2 19B
@@ -515,6 +573,55 @@ class Ltx219BAudioToVideo(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
@@ -699,8 +806,6 @@ class ElevenlabsDubbing(FALNode):
     def get_basic_fields(cls):
         return ["video_url", "highest_resolution", "audio_url", "target_lang", "num_speakers"]
 
-
-
 class LongcatMultiAvatarImageAudioToVideo(FALNode):
     """
     Longcat Multi Avatar
@@ -713,6 +818,21 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AudioType(Enum):
+        """
+        How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2.
+        """
+        PARA = "para"
+        ADD = "add"
+
 
     prompt: str = Field(
         default="Two people are having a conversation with natural expressions and movements.", description="The prompt to guide the video generation."

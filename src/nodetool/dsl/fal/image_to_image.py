@@ -32,18 +32,18 @@ class AiBabyAndAgingGeneratorMulti(SingleOutputGraphNode[types.ImageRef], GraphN
         - Visualize multiple people at different ages
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    AgeGroup: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AgeGroup
-    Gender: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Gender
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.OutputFormat
+    AgeGroup: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.AgeGroup
+    Gender: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.Gender
 
     prompt: str | OutputHandle[str] = connect_field(default='a newborn baby, well dressed', description='Text prompt to guide the image generation')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image')
     father_weight: float | OutputHandle[float] = connect_field(default=0.5, description="Weight of the father's influence in multi mode generation")
     mother_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of mother images for multi mode')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
-    age_group: nodetool.nodes.fal.image_to_image.AgeGroup = Field(default=nodetool.nodes.fal.image_to_image.AgeGroup(''), description="Age group for the generated image. Choose from: 'baby' (0-12 months), 'toddler' (1-3 years), 'preschool' (3-5 years), 'gradeschooler' (6-12 years), 'teen' (13-19 years), 'adult' (20-40 years), 'mid' (40-60 years), 'senior' (60+ years).")
-    gender: nodetool.nodes.fal.image_to_image.Gender = Field(default=nodetool.nodes.fal.image_to_image.Gender(''), description="Gender for the generated image. Choose from: 'male' or 'female'.")
+    output_format: nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
+    age_group: nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.AgeGroup = Field(default=nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.AgeGroup(''), description="Age group for the generated image. Choose from: 'baby' (0-12 months), 'toddler' (1-3 years), 'preschool' (3-5 years), 'gradeschooler' (6-12 years), 'teen' (13-19 years), 'adult' (20-40 years), 'mid' (40-60 years), 'senior' (60+ years).")
+    gender: nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.Gender = Field(default=nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorMulti.Gender(''), description="Gender for the generated image. Choose from: 'male' or 'female'.")
     father_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of father images for multi mode')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. If None, a random seed will be used')
 
@@ -76,17 +76,17 @@ class AiBabyAndAgingGeneratorSingle(SingleOutputGraphNode[types.ImageRef], Graph
         - Visualize person at different ages
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    AgeGroup: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AgeGroup
-    Gender: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Gender
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.OutputFormat
+    AgeGroup: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.AgeGroup
+    Gender: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.Gender
 
     prompt: str | OutputHandle[str] = connect_field(default='a newborn baby, well dressed', description='Text prompt to guide the image generation')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image')
     id_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of ID images for single mode (or general reference images)')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
-    age_group: nodetool.nodes.fal.image_to_image.AgeGroup = Field(default=nodetool.nodes.fal.image_to_image.AgeGroup(''), description="Age group for the generated image. Choose from: 'baby' (0-12 months), 'toddler' (1-3 years), 'preschool' (3-5 years), 'gradeschooler' (6-12 years), 'teen' (13-19 years), 'adult' (20-40 years), 'mid' (40-60 years), 'senior' (60+ years).")
-    gender: nodetool.nodes.fal.image_to_image.Gender = Field(default=nodetool.nodes.fal.image_to_image.Gender(''), description="Gender for the generated image. Choose from: 'male' or 'female'.")
+    output_format: nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
+    age_group: nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.AgeGroup = Field(default=nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.AgeGroup(''), description="Age group for the generated image. Choose from: 'baby' (0-12 months), 'toddler' (1-3 years), 'preschool' (3-5 years), 'gradeschooler' (6-12 years), 'teen' (13-19 years), 'adult' (20-40 years), 'mid' (40-60 years), 'senior' (60+ years).")
+    gender: nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.Gender = Field(default=nodetool.nodes.fal.image_to_image.AiBabyAndAgingGeneratorSingle.Gender(''), description="Gender for the generated image. Choose from: 'male' or 'female'.")
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. If None, a random seed will be used')
 
     @classmethod
@@ -151,19 +151,19 @@ class AiHomeEdit(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]
         - Produce home editing results
     """
 
-    EditingType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.EditingType
-    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Style
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    ArchitectureType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ArchitectureType
-    ColorPalette: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ColorPalette
+    EditingType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeEdit.EditingType
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeEdit.Style
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeEdit.OutputFormat
+    ArchitectureType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeEdit.ArchitectureType
+    ColorPalette: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeEdit.ColorPalette
 
     input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to do architectural editing')
-    editing_type: nodetool.nodes.fal.image_to_image.EditingType = Field(default=nodetool.nodes.fal.image_to_image.EditingType(''), description='Type of editing. Structural editing only edits structural elements such as windows, walls etc. Virtual staging edits your furniture. Both do full editing including structural and furniture')
-    style: nodetool.nodes.fal.image_to_image.Style = Field(default=nodetool.nodes.fal.image_to_image.Style(''), description='Style for furniture and decor')
+    editing_type: nodetool.nodes.fal.image_to_image.AiHomeEdit.EditingType = Field(default=nodetool.nodes.fal.image_to_image.AiHomeEdit.EditingType(''), description='Type of editing. Structural editing only edits structural elements such as windows, walls etc. Virtual staging edits your furniture. Both do full editing including structural and furniture')
+    style: nodetool.nodes.fal.image_to_image.AiHomeEdit.Style = Field(default=nodetool.nodes.fal.image_to_image.AiHomeEdit.Style(''), description='Style for furniture and decor')
     additional_elements: str | OutputHandle[str] = connect_field(default='', description='Additional elements to include in the options above (e.g., plants, lighting)')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
-    architecture_type: nodetool.nodes.fal.image_to_image.ArchitectureType = Field(default=nodetool.nodes.fal.image_to_image.ArchitectureType(''), description='Type of architecture for appropriate furniture selection')
-    color_palette: nodetool.nodes.fal.image_to_image.ColorPalette = Field(default=nodetool.nodes.fal.image_to_image.ColorPalette(''), description='Color palette for furniture and decor')
+    output_format: nodetool.nodes.fal.image_to_image.AiHomeEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.AiHomeEdit.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
+    architecture_type: nodetool.nodes.fal.image_to_image.AiHomeEdit.ArchitectureType = Field(default=nodetool.nodes.fal.image_to_image.AiHomeEdit.ArchitectureType(''), description='Type of architecture for appropriate furniture selection')
+    color_palette: nodetool.nodes.fal.image_to_image.AiHomeEdit.ColorPalette = Field(default=nodetool.nodes.fal.image_to_image.AiHomeEdit.ColorPalette(''), description='Color palette for furniture and decor')
     custom_prompt: str | OutputHandle[str] = connect_field(default='', description='Custom prompt for architectural editing, it overrides above options when used')
 
     @classmethod
@@ -195,18 +195,18 @@ class AiHomeStyle(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any
         - Produce home styling transformations
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Style
-    ArchitectureType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ArchitectureType
-    ColorPalette: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ColorPalette
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeStyle.OutputFormat
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeStyle.Style
+    ArchitectureType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeStyle.ArchitectureType
+    ColorPalette: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AiHomeStyle.ColorPalette
 
     input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to do architectural styling')
     input_image_strength: float | OutputHandle[float] = connect_field(default=0.85, description='Strength of the input image')
     additional_elements: str | OutputHandle[str] = connect_field(default='', description='Additional elements to include in the options above (e.g., plants, lighting)')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
-    style: nodetool.nodes.fal.image_to_image.Style = Field(default=nodetool.nodes.fal.image_to_image.Style(''), description='Style for furniture and decor')
-    architecture_type: nodetool.nodes.fal.image_to_image.ArchitectureType = Field(default=nodetool.nodes.fal.image_to_image.ArchitectureType(''), description='Type of architecture for appropriate furniture selection')
-    color_palette: nodetool.nodes.fal.image_to_image.ColorPalette = Field(default=nodetool.nodes.fal.image_to_image.ColorPalette(''), description='Color palette for furniture and decor')
+    output_format: nodetool.nodes.fal.image_to_image.AiHomeStyle.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.AiHomeStyle.OutputFormat.JPEG, description="The format of the generated image. Choose from: 'jpeg' or 'png'.")
+    style: nodetool.nodes.fal.image_to_image.AiHomeStyle.Style = Field(default=nodetool.nodes.fal.image_to_image.AiHomeStyle.Style(''), description='Style for furniture and decor')
+    architecture_type: nodetool.nodes.fal.image_to_image.AiHomeStyle.ArchitectureType = Field(default=nodetool.nodes.fal.image_to_image.AiHomeStyle.ArchitectureType(''), description='Type of architecture for appropriate furniture selection')
+    color_palette: nodetool.nodes.fal.image_to_image.AiHomeStyle.ColorPalette = Field(default=nodetool.nodes.fal.image_to_image.AiHomeStyle.ColorPalette(''), description='Color palette for furniture and decor')
     style_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default='', description='URL of the style image, optional. If given, other parameters are ignored')
     custom_prompt: str | OutputHandle[str] = connect_field(default='', description='Custom prompt for architectural editing, it overrides above options when used')
     enhanced_rendering: str | OutputHandle[str] = connect_field(default=False, description='It gives better rendering quality with more processing time, additional cost is 0.01 USD per image')
@@ -240,14 +240,14 @@ class BiRefNet(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]])
         - Prepare images for background replacement
     """
 
-    OperatingResolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OperatingResolution
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    Model: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Model
+    OperatingResolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BiRefNet.OperatingResolution
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BiRefNet.OutputFormat
+    Model: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BiRefNet.Model
 
-    operating_resolution: nodetool.nodes.fal.image_to_image.OperatingResolution = Field(default=nodetool.nodes.fal.image_to_image.OperatingResolution.VALUE_1024X1024, description='The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the output image')
+    operating_resolution: nodetool.nodes.fal.image_to_image.BiRefNet.OperatingResolution = Field(default=nodetool.nodes.fal.image_to_image.BiRefNet.OperatingResolution.VALUE_1024X1024, description='The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images.')
+    output_format: nodetool.nodes.fal.image_to_image.BiRefNet.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.BiRefNet.OutputFormat.PNG, description='The format of the output image')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to remove background from')
-    model: nodetool.nodes.fal.image_to_image.Model = Field(default=nodetool.nodes.fal.image_to_image.Model.GENERAL_USE_LIGHT, description="Model to use for background removal. The 'General Use (Light)' model is the original model used in the BiRefNet repository. The 'General Use (Heavy)' model is a slower but more accurate model. The 'Portrait' model is a model trained specifically for portrait images. The 'General Use (Light)' model is recommended for most use cases. The corresponding models are as follows: - 'General Use (Light)': BiRefNet-DIS_ep580.pth - 'General Use (Heavy)': BiRefNet-massive-epoch_240.pth - 'Portrait': BiRefNet-portrait-TR_P3M_10k-epoch_120.pth")
+    model: nodetool.nodes.fal.image_to_image.BiRefNet.Model = Field(default=nodetool.nodes.fal.image_to_image.BiRefNet.Model.GENERAL_USE_LIGHT, description="Model to use for background removal. The 'General Use (Light)' model is the original model used in the BiRefNet repository. The 'General Use (Heavy)' model is a slower but more accurate model. The 'Portrait' model is a model trained specifically for portrait images. The 'General Use (Light)' model is recommended for most use cases. The corresponding models are as follows: - 'General Use (Light)': BiRefNet-DIS_ep580.pth - 'General Use (Heavy)': BiRefNet-massive-epoch_240.pth - 'Portrait': BiRefNet-portrait-TR_P3M_10k-epoch_120.pth")
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     output_mask: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to output the mask used to remove the background')
     refine_foreground: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to refine the foreground using the estimated mask')
@@ -317,12 +317,12 @@ class BriaEraser(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
         - Create clean product shots
     """
 
-    MaskType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.MaskType
+    MaskType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BriaEraser.MaskType
 
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     preserve_alpha: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, attempts to preserve the alpha channel of the input image.')
     mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the binary mask image that represents the area that will be cleaned.')
-    mask_type: nodetool.nodes.fal.image_to_image.MaskType = Field(default=nodetool.nodes.fal.image_to_image.MaskType.MANUAL, description="You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'.")
+    mask_type: nodetool.nodes.fal.image_to_image.BriaEraser.MaskType = Field(default=nodetool.nodes.fal.image_to_image.BriaEraser.MaskType.MANUAL, description="You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'.")
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Input Image to erase from')
 
     @classmethod
@@ -457,9 +457,9 @@ class BriaFiboEditColorize(SingleOutputGraphNode[types.ImageRef], GraphNode[type
         - Generate colored versions of grayscale images
     """
 
-    Color: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Color
+    Color: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BriaFiboEditColorize.Color
 
-    color: nodetool.nodes.fal.image_to_image.Color = Field(default=nodetool.nodes.fal.image_to_image.Color(''), description='Select the color palette or aesthetic for the output image')
+    color: nodetool.nodes.fal.image_to_image.BriaFiboEditColorize.Color = Field(default=nodetool.nodes.fal.image_to_image.BriaFiboEditColorize.Color(''), description='Select the color palette or aesthetic for the output image')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image.')
 
     @classmethod
@@ -523,9 +523,9 @@ class BriaFiboEditRelight(SingleOutputGraphNode[types.ImageRef], GraphNode[types
         - Transform lighting in images
     """
 
-    LightType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.LightType
+    LightType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BriaFiboEditRelight.LightType
 
-    light_type: nodetool.nodes.fal.image_to_image.LightType = Field(default=nodetool.nodes.fal.image_to_image.LightType(''), description='The quality/style/time of day.')
+    light_type: nodetool.nodes.fal.image_to_image.BriaFiboEditRelight.LightType = Field(default=nodetool.nodes.fal.image_to_image.BriaFiboEditRelight.LightType(''), description='The quality/style/time of day.')
     light_direction: str | OutputHandle[str] = connect_field(default='', description='Where the light comes from.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image.')
 
@@ -590,9 +590,9 @@ class BriaFiboEditReseason(SingleOutputGraphNode[types.ImageRef], GraphNode[type
         - Generate different season versions
     """
 
-    Season: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Season
+    Season: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BriaFiboEditReseason.Season
 
-    season: nodetool.nodes.fal.image_to_image.Season = Field(default=nodetool.nodes.fal.image_to_image.Season(''), description='The desired season.')
+    season: nodetool.nodes.fal.image_to_image.BriaFiboEditReseason.Season = Field(default=nodetool.nodes.fal.image_to_image.BriaFiboEditReseason.Season(''), description='The desired season.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image.')
 
     @classmethod
@@ -655,9 +655,9 @@ class BriaFiboEditRestyle(SingleOutputGraphNode[types.ImageRef], GraphNode[types
         - Produce style-transferred images
     """
 
-    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Style
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BriaFiboEditRestyle.Style
 
-    style: nodetool.nodes.fal.image_to_image.Style = Field(default=nodetool.nodes.fal.image_to_image.Style(''), description='Select the desired artistic style for the output image.')
+    style: nodetool.nodes.fal.image_to_image.BriaFiboEditRestyle.Style = Field(default=nodetool.nodes.fal.image_to_image.BriaFiboEditRestyle.Style(''), description='Select the desired artistic style for the output image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The source image.')
 
     @classmethod
@@ -738,6 +738,91 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class BriaReimagine(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Bria
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt you would like to use to generate images.')
+    num_results: int | OutputHandle[int] = connect_field(default=1, description='How many images you would like to generate. When using any Guidance Method, Value is set to 1.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    structure_ref_influence: float | OutputHandle[float] = connect_field(default=0.75, description='The influence of the structure reference on the generated image.')
+    fast: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use the fast model')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of iterations the model goes through to refine the generated image. This parameter is optional.')
+    structure_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default='', description='The URL of the structure reference image. Use "" to leave empty. Accepted formats are jpeg, jpg, png, webp.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BriaReimagine
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class BriaReimagine3_2(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Reimagine
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BriaReimagine3_2.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt for image generation.')
+    depth_preprocess: bool | OutputHandle[bool] = connect_field(default=True, description='Depth image preprocess.')
+    canny_preprocess: bool | OutputHandle[bool] = connect_field(default=True, description='Canny image preprocess.')
+    depth_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default='', description='Depth control image (file or URL).')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for text.')
+    canny_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default='', description='Canny edge control image (file or URL).')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='Logo,Watermark,Ugly,Morbid,Extra fingers,Poorly drawn hands,Mutation,Blurry,Extra limbs,Gross proportions,Missing arms,Mutated hands,Long neck,Duplicate,Mutilated,Mutilated hands,Poorly drawn face,Deformed,Bad anatomy,Cloned face,Malformed limbs,Missing legs,Too many fingers', description='Negative prompt for image generation.')
+    depth_scale: float | OutputHandle[float] = connect_field(default=0.5, description='Depth control strength (0.0 to 1.0).')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.BriaReimagine3_2.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.BriaReimagine3_2.AspectRatio.RATIO_1_1, description='Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If true, returns the image directly in the response (increases latency).')
+    prompt_enhancer: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to improve the prompt.')
+    truncate_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to truncate the prompt.')
+    seed: int | OutputHandle[int] = connect_field(default=5555, description='Random seed for reproducibility.')
+    canny_scale: float | OutputHandle[float] = connect_field(default=0.5, description='Canny edge control strength (0.0 to 1.0).')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BriaReimagine3_2
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class BytedanceSeedreamV45Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
@@ -764,6 +849,270 @@ class BytedanceSeedreamV45Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.BytedanceSeedreamV45Edit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class BytedanceSeedreamV4Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Bytedance Seedream v4 Edit
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    EnhancePromptMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.BytedanceSeedreamV4Edit.EnhancePromptMode
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt used to edit the image')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of separate model generations to be run with the prompt.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. The minimum total image area is 921600 pixels. Failing this, the image size will be adjusted to by scaling it up, while maintaining the aspect ratio.')
+    max_images: int | OutputHandle[int] = connect_field(default=1, description='If set to a number greater than one, enables multi-image generation. The model will potentially return up to `max_images` images every generation, and in total, `num_images` generations will be carried out. In total, the number of images generated will be between `num_images` and `max_images*num_images`. The total number of images (image inputs + image outputs) must not exceed 15')
+    enhance_prompt_mode: nodetool.nodes.fal.image_to_image.BytedanceSeedreamV4Edit.EnhancePromptMode = Field(default=nodetool.nodes.fal.image_to_image.BytedanceSeedreamV4Edit.EnhancePromptMode.STANDARD, description='The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed to control the stochasticity of image generation.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing. Presently, up to 10 image inputs are allowed. If over 10 images are sent, only the last 10 will be used.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.BytedanceSeedreamV4Edit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Calligrapher(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Calligrapher
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    use_context: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to prepend context reference to the input')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='How many images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='Target image size for generation')
+    auto_mask_generation: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to automatically generate mask from detected text')
+    reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional base64 reference image for style')
+    source_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Base64-encoded source image with drawn mask layers')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt to inpaint or customize')
+    mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Base64-encoded mask image (optional if using auto_mask_generation)')
+    source_text: str | OutputHandle[str] = connect_field(default='', description='Source text to replace (if empty, masks all detected text)')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Number of inference steps (1-100)')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility')
+    cfg_scale: float | OutputHandle[float] = connect_field(default=1, description='Guidance or strength scale for the model')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Calligrapher
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ChronoEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Chrono Edit
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEdit.Resolution
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEdit.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
+    resolution: nodetool.nodes.fal.image_to_image.ChronoEdit.Resolution = Field(default=nodetool.nodes.fal.image_to_image.ChronoEdit.Resolution.VALUE_480P, description='The resolution of the output image.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    output_format: nodetool.nodes.fal.image_to_image.ChronoEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ChronoEdit.OutputFormat.JPEG, description='The format of the output image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to edit.')
+    turbo_mode: bool | OutputHandle[bool] = connect_field(default=True, description='Enable turbo mode to use for faster inference.')
+    num_temporal_reasoning_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of temporal reasoning steps to perform.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return the image in sync mode.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The guidance scale for the inference.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of inference steps to perform.')
+    enable_temporal_reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable temporal reasoning.')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable prompt expansion.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the inference.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ChronoEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ChronoEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Chrono Edit Lora
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEditLora.Resolution
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEditLora.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional additional LoRAs to merge for this request (max 3).')
+    turbo_mode: bool | OutputHandle[bool] = connect_field(default=True, description='Enable turbo mode to use for faster inference.')
+    enable_temporal_reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable temporal reasoning.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The guidance scale for the inference.')
+    resolution: nodetool.nodes.fal.image_to_image.ChronoEditLora.Resolution = Field(default=nodetool.nodes.fal.image_to_image.ChronoEditLora.Resolution.VALUE_480P, description='The resolution of the output image.')
+    output_format: nodetool.nodes.fal.image_to_image.ChronoEditLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ChronoEditLora.OutputFormat.JPEG, description='The format of the output image.')
+    num_temporal_reasoning_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of temporal reasoning steps to perform.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return the image in sync mode.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to edit.')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable prompt expansion.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the inference.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ChronoEditLora
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ChronoEditLoraGalleryPaintbrush(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Chrono Edit Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryPaintbrush.Resolution
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryPaintbrush.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Describe how to transform the sketched regions.')
+    resolution: nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryPaintbrush.Resolution = Field(default=nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryPaintbrush.Resolution.VALUE_480P, description='The resolution of the output image.')
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA adapter.')
+    output_format: nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryPaintbrush.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryPaintbrush.OutputFormat.PNG, description='The format of the output image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to edit.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return the image in sync mode.')
+    turbo_mode: bool | OutputHandle[bool] = connect_field(default=True, description='Enable turbo mode to use faster inference.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional additional LoRAs to merge (max 3).')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='Classifier-free guidance scale.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='Number of denoising steps to run.')
+    mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional mask image where black areas indicate regions to sketch/paint.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the inference.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryPaintbrush
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ChronoEditLoraGalleryUpscaler(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Chrono Edit Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryUpscaler.OutputFormat
+
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA adapter.')
+    output_format: nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryUpscaler.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryUpscaler.OutputFormat.JPEG, description='The format of the output image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to upscale.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return the image in sync mode.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional additional LoRAs to merge (max 3).')
+    upscale_factor: float | OutputHandle[float] = connect_field(default=2, description='Target scale factor for the output resolution.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The guidance scale for the inference.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps for the upscaling pass.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the inference.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryUpscaler
 
     @classmethod
     def get_node_type(cls):
@@ -816,6 +1165,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class ClarityaiCrystalUpscaler(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Crystal Upscaler
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    creativity: float | OutputHandle[float] = connect_field(default=0, description='Creativity level for upscaling')
+    scale_factor: float | OutputHandle[float] = connect_field(default=2, description='Scale factor')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL to the input image')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ClarityaiCrystalUpscaler
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class CodeFormer(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
@@ -853,6 +1235,257 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class Dreamomni2Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        DreamOmni2
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Dreamomni2Edit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Emu3_5ImageEditImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Emu 3.5 Image
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.Resolution
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.AspectRatio
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
+    resolution: nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.Resolution = Field(default=nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.Resolution.VALUE_720P, description='The resolution of the output image.')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.AspectRatio.AUTO, description='The aspect ratio of the output image.')
+    output_format: nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage.OutputFormat.PNG, description='The format of the output image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to edit.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return the image in sync mode.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the inference.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Emu3_5ImageEditImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Film(SingleOutputGraphNode[nodetool.nodes.fal.image_to_image.Film.OutputType], GraphNode[nodetool.nodes.fal.image_to_image.Film.OutputType]):
+    """
+
+        FILM
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    VideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Film.VideoWriteMode
+    VideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Film.VideoQuality
+    ImageFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Film.ImageFormat
+    OutputType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Film.OutputType
+
+    video_write_mode: nodetool.nodes.fal.image_to_image.Film.VideoWriteMode = Field(default=nodetool.nodes.fal.image_to_image.Film.VideoWriteMode.BALANCED, description="The write mode of the output video. Only applicable if output_type is 'video'.")
+    num_frames: int | OutputHandle[int] = connect_field(default=1, description='The number of frames to generate between the input images.')
+    include_start: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include the start image in the output.')
+    video_quality: nodetool.nodes.fal.image_to_image.Film.VideoQuality = Field(default=nodetool.nodes.fal.image_to_image.Film.VideoQuality.HIGH, description="The quality of the output video. Only applicable if output_type is 'video'.")
+    include_end: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include the end image in the output.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    fps: int | OutputHandle[int] = connect_field(default=8, description="Frames per second for the output video. Only applicable if output_type is 'video'.")
+    start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the first image to use as the starting point for interpolation.')
+    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the second image to use as the ending point for interpolation.')
+    image_format: nodetool.nodes.fal.image_to_image.Film.ImageFormat = Field(default=nodetool.nodes.fal.image_to_image.Film.ImageFormat.JPEG, description="The format of the output images. Only applicable if output_type is 'images'.")
+    output_type: nodetool.nodes.fal.image_to_image.Film.OutputType = Field(default=nodetool.nodes.fal.image_to_image.Film.OutputType.IMAGES, description='The type of output to generate; either individual images or a video.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Film
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux1KreaImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 Krea [dev]
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux1KreaImageToImage.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux1KreaImageToImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux1KreaImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux1KreaImageToImage.Acceleration.REGULAR, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux1KreaImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux1KreaImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.95, description='The strength of the initial image. Higher strength values are better for this model.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Flux1KreaImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux1KreaRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 Krea [dev] Redux
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux1KreaRedux.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux1KreaRedux.OutputFormat
+
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux1KreaRedux.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux1KreaRedux.Acceleration.REGULAR, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux1KreaRedux.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux1KreaRedux.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Flux1KreaRedux
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux1SrpoImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 SRPO [dev]
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux1SrpoImageToImage.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux1SrpoImageToImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux1SrpoImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux1SrpoImageToImage.Acceleration.REGULAR, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux1SrpoImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux1SrpoImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.95, description='The strength of the initial image. Higher strength values are better for this model.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Flux1SrpoImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class Flux2FlashEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
@@ -867,12 +1500,12 @@ class Flux2FlashEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
         - Produce instant image modifications
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2FlashEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the image to generate. The width and height must be between 512 and 2048 pixels.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2FlashEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2FlashEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
@@ -909,15 +1542,15 @@ class Flux2FlexEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
         - Produce flexible image modifications
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SafetyTolerance
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2FlexEdit.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2FlexEdit.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The guidance scale to use for the generation.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image. If `auto`, the size will be determined by the model.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2FlexEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2FlexEdit.OutputFormat.JPEG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    safety_tolerance: nodetool.nodes.fal.image_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
+    safety_tolerance: nodetool.nodes.fal.image_to_image.Flux2FlexEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.Flux2FlexEdit.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to expand the prompt using the model's own knowledge.")
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing')
@@ -953,15 +1586,15 @@ class Flux2Klein4BBaseEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[type
         - Produce rapid image modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEdit.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, uses the input image size.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEdit.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEdit.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
@@ -998,15 +1631,15 @@ class Flux2Klein4BBaseEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[
         - Produce customized modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, uses the input image size.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.OutputFormat.PNG, description='The format of the generated image.')
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -1044,12 +1677,12 @@ class Flux2Klein4BEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
         - Produce quick image modifications
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein4BEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, uses the input image size.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2Klein4BEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein4BEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform.')
@@ -1085,15 +1718,15 @@ class Flux2Klein9BBaseEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[type
         - Produce professional image modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEdit.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, uses the input image size.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEdit.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEdit.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
@@ -1130,15 +1763,15 @@ class Flux2Klein9BBaseEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[
         - Produce advanced customized results
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, uses the input image size.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.OutputFormat.PNG, description='The format of the generated image.')
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -1176,12 +1809,12 @@ class Flux2Klein9BEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
         - Produce superior image modifications
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2Klein9BEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, uses the input image size.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2Klein9BEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein9BEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform.')
@@ -1217,15 +1850,15 @@ class Flux2LoraGalleryAddBackground(SingleOutputGraphNode[types.ImageRef], Graph
         - Produce integrated background images
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryAddBackground.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryAddBackground.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='Add Background forest', description="The prompt describing the background to add. Must start with 'Add Background' followed by your description.")
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the input image will be used.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryAddBackground.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryAddBackground.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
     lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The strength of the add background effect.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the output image')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryAddBackground.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryAddBackground.OutputFormat.PNG, description='The format of the output image')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
@@ -1236,6 +1869,51 @@ class Flux2LoraGalleryAddBackground(SingleOutputGraphNode[types.ImageRef], Graph
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.Flux2LoraGalleryAddBackground
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Flux2LoraGalleryApartmentStaging(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Flux 2 Lora Gallery
+        flux, editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryApartmentStaging.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryApartmentStaging.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description="The prompt to generate a furnished room. Use 'furnish this room' for best results.")
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryApartmentStaging.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryApartmentStaging.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The strength of the apartment staging effect.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryApartmentStaging.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryApartmentStaging.OutputFormat.PNG, description='The format of the output image')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the empty room image to furnish.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Flux2LoraGalleryApartmentStaging
 
     @classmethod
     def get_node_type(cls):
@@ -1262,15 +1940,15 @@ class Flux2LoraGalleryFaceToFullPortrait(SingleOutputGraphNode[types.ImageRef], 
         - Produce complete portrait compositions
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryFaceToFullPortrait.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryFaceToFullPortrait.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='Face to full portrait', description='The prompt describing the full portrait to generate from the face.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the input image will be used.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryFaceToFullPortrait.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryFaceToFullPortrait.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
     lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The strength of the face to full portrait effect.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the output image')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryFaceToFullPortrait.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryFaceToFullPortrait.OutputFormat.PNG, description='The format of the output image')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
@@ -1307,11 +1985,11 @@ class Flux2LoraGalleryMultipleAngles(SingleOutputGraphNode[types.ImageRef], Grap
         - Generate comprehensive views
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryMultipleAngles.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryMultipleAngles.OutputFormat
 
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the input image will be used.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='Acceleration level for image generation.')
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryMultipleAngles.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryMultipleAngles.Acceleration.REGULAR, description='Acceleration level for image generation.')
     horizontal_angle: float | OutputHandle[float] = connect_field(default=0, description='Horizontal rotation angle around the object in degrees. 0°=front view, 90°=right side, 180°=back view, 270°=left side, 360°=front view again.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
@@ -1320,7 +1998,7 @@ class Flux2LoraGalleryMultipleAngles(SingleOutputGraphNode[types.ImageRef], Grap
     vertical_angle: float | OutputHandle[float] = connect_field(default=0, description='Vertical camera angle in degrees. 0°=eye-level shot, 30°=elevated shot, 60°=high-angle shot (looking down from above).')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
     lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The strength of the multiple angles effect.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the output image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryMultipleAngles.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryMultipleAngles.OutputFormat.PNG, description='The format of the output image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the media will be returned as a data URI.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility.')
@@ -1354,15 +2032,15 @@ class Flux2LoraGalleryVirtualTryon(SingleOutputGraphNode[types.ImageRef], GraphN
         - Generate try-on images
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryVirtualTryon.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2LoraGalleryVirtualTryon.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate a virtual try-on image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the input image will be used.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    acceleration: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryVirtualTryon.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryVirtualTryon.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
     lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The strength of the virtual try-on effect.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the output image')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2LoraGalleryVirtualTryon.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2LoraGalleryVirtualTryon.OutputFormat.PNG, description='The format of the output image')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
@@ -1399,14 +2077,14 @@ class Flux2MaxEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
         - Produce highest quality modifications
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SafetyTolerance
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2MaxEdit.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2MaxEdit.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image. If `auto`, the size will be determined by the model.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2MaxEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2MaxEdit.OutputFormat.JPEG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    safety_tolerance: nodetool.nodes.fal.image_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
+    safety_tolerance: nodetool.nodes.fal.image_to_image.Flux2MaxEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.Flux2MaxEdit.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation.')
     image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing')
@@ -1440,12 +2118,12 @@ class Flux2TurboEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
         - Produce fast quality modifications
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Flux2TurboEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the image to generate. The width and height must be between 512 and 2048 pixels.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Flux2TurboEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2TurboEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
@@ -1483,13 +2161,13 @@ class FluxDevRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageSizePreset
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxDevRedux.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxDevRedux.OutputFormat
 
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate (1-4)')
     image_size: nodetool.nodes.fal.image_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.image_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='Output format (jpeg or png)')
+    acceleration: nodetool.nodes.fal.image_to_image.FluxDevRedux.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.FluxDevRedux.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxDevRedux.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxDevRedux.OutputFormat.JPEG, description='Output format (jpeg or png)')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
@@ -1500,6 +2178,229 @@ class FluxDevRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.FluxDevRedux
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class FluxKontextLoraInpaint(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Flux Kontext Lora
+        flux, editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for the image to image task.')
+    acceleration: nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
+    reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the reference image for inpainting.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to be inpainted.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.88, description='The strength of the initial image. Higher strength values are better for this model.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
+    mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the mask for inpainting.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class FluxKreaImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 Krea [dev]
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKreaImageToImage.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKreaImageToImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    acceleration: nodetool.nodes.fal.image_to_image.FluxKreaImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaImageToImage.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxKreaImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.95, description='The strength of the initial image. Higher strength values are better for this model.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FluxKreaImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class FluxKreaLoraImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 Krea [dev] with LoRAs
+        flux, editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKreaLoraImageToImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxKreaLoraImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaLoraImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for inpainting. or img2img')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FluxKreaLoraImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class FluxKreaLoraInpainting(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 Krea [dev] Inpainting with LoRAs
+        flux, editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKreaLoraInpainting.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxKreaLoraInpainting.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaLoraInpainting.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for inpainting. or img2img')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    mask_url: str | OutputHandle[str] = connect_field(default='', description='The mask to area to Inpaint in.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FluxKreaLoraInpainting
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class FluxKreaRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 Krea [dev] Redux
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKreaRedux.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxKreaRedux.OutputFormat
+
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.FluxKreaRedux.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaRedux.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxKreaRedux.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaRedux.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FluxKreaRedux
 
     @classmethod
     def get_node_type(cls):
@@ -1527,15 +2428,15 @@ class FluxProCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageSizePreset
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SafetyTolerance
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProCanny.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProCanny.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the desired output')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: nodetool.nodes.fal.image_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.image_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxProCanny.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProCanny.OutputFormat.JPEG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    safety_tolerance: nodetool.nodes.fal.image_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
+    safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProCanny.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProCanny.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How strictly to follow the prompt')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
     control_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The control image URL to generate the Canny edge map from.')
@@ -1572,15 +2473,15 @@ class FluxProDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageSizePreset
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SafetyTolerance
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProDepth.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProDepth.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the desired output')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: nodetool.nodes.fal.image_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.image_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxProDepth.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProDepth.OutputFormat.JPEG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    safety_tolerance: nodetool.nodes.fal.image_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
+    safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProDepth.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProDepth.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How strictly to follow the prompt')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform')
     control_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The control image URL to generate the depth map from.')
@@ -1616,15 +2517,15 @@ class FluxProFill(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRe
         - Create seamless image modifications
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SafetyTolerance
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProFill.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProFill.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt describing what to generate in the masked area')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxProFill.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProFill.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. Needs to match the dimensions of the mask.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    safety_tolerance: nodetool.nodes.fal.image_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.SafetyTolerance.VALUE_2, description='Safety tolerance level (1-6, higher is stricter)')
+    safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProFill.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProFill.SafetyTolerance.VALUE_2, description='Safety tolerance level (1-6, higher is stricter)')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
     mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask URL to inpaint the image. Needs to match the dimensions of the input image.')
     enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
@@ -1659,16 +2560,16 @@ class FluxProRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageSizePreset
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SafetyTolerance
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProRedux.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProRedux.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate (1-4)')
     image_size: nodetool.nodes.fal.image_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.image_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='Output format (jpeg or png)')
+    output_format: nodetool.nodes.fal.image_to_image.FluxProRedux.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProRedux.OutputFormat.JPEG, description='Output format (jpeg or png)')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. Needs to match the dimensions of the mask.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    safety_tolerance: nodetool.nodes.fal.image_to_image.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.SafetyTolerance.VALUE_2, description='Safety tolerance level (1-6, higher is stricter)')
+    safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProRedux.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProRedux.SafetyTolerance.VALUE_2, description='Safety tolerance level (1-6, higher is stricter)')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='How strictly to follow the image structure (1-20)')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform (1-50)')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
@@ -1704,13 +2605,13 @@ class FluxSchnellRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     """
 
     ImageSizePreset: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageSizePreset
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxSchnellRedux.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxSchnellRedux.OutputFormat
 
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate (1-4)')
     image_size: nodetool.nodes.fal.image_to_image.ImageSizePreset = Field(default=nodetool.nodes.fal.image_to_image.ImageSizePreset.LANDSCAPE_4_3, description='The size of the generated image')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.NONE, description="Acceleration speed: 'none', 'regular', or 'high'")
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='Output format (jpeg or png)')
+    acceleration: nodetool.nodes.fal.image_to_image.FluxSchnellRedux.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.FluxSchnellRedux.Acceleration.NONE, description="Acceleration speed: 'none', 'regular', or 'high'")
+    output_format: nodetool.nodes.fal.image_to_image.FluxSchnellRedux.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxSchnellRedux.OutputFormat.JPEG, description='Output format (jpeg or png)')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable safety checker to filter unsafe content')
@@ -1720,6 +2621,172 @@ class FluxSchnellRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.FluxSchnellRedux
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class FluxSrpoImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        FLUX.1 SRPO [dev]
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxSrpoImageToImage.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxSrpoImageToImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    acceleration: nodetool.nodes.fal.image_to_image.FluxSrpoImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.FluxSrpoImageToImage.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
+    output_format: nodetool.nodes.fal.image_to_image.FluxSrpoImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxSrpoImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to generate an image from.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.95, description='The strength of the initial image. Higher strength values are better for this model.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FluxSrpoImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class FluxVisionUpscaler(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Flux Vision Upscaler
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    guidance: float | OutputHandle[float] = connect_field(default=1, description='CFG/guidance scale (1-4). Controls how closely the model follows the prompt.')
+    creativity: float | OutputHandle[float] = connect_field(default=0.3, description='The creativity of the model. The higher the creativity, the more the model will deviate from the original. Refers to the denoise strength of the sampling.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to upscale.')
+    upscale_factor: float | OutputHandle[float] = connect_field(default=2, description='The upscale factor (1-4x).')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed to use for the upscale. If not provided, a random seed will be used.')
+    steps: int | OutputHandle[int] = connect_field(default=20, description='Number of inference steps (4-50).')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.FluxVisionUpscaler
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Gemini25FlashImageEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Gemini 2.5 Flash Image
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.AspectRatio
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for image editing.')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.AspectRatio.AUTO, description='The aspect ratio of the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    output_format: nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+    limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Gemini3ProImagePreviewEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Gemini 3 Pro Image Preview
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.Resolution
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.SafetyTolerance
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for image editing.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    enable_web_search: bool | OutputHandle[bool] = connect_field(default=False, description='Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image.')
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='auto', description='The aspect ratio of the generated image.')
+    resolution: nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.Resolution = Field(default=nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.Resolution.VALUE_1K, description='The resolution of the image to generate.')
+    output_format: nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    safety_tolerance: nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.SafetyTolerance.VALUE_4, description='The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+    limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit
 
     @classmethod
     def get_node_type(cls):
@@ -1746,13 +2813,13 @@ class GlmImageImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[type
         - Produce AI-powered transformations
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GlmImageImageToImage.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for image generation.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='Output image size.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable NSFW safety checking on the generated images.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='Output image format.')
+    output_format: nodetool.nodes.fal.image_to_image.GlmImageImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.GlmImageImageToImage.OutputFormat.JPEG, description='Output image format.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the image will be returned as a base64 data URI instead of a URL.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=1.5, description='Classifier-free guidance scale. Higher values make the model follow the prompt more closely.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. The same seed with the same prompt will produce the same image.')
@@ -1789,19 +2856,19 @@ class GptImage15Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
         - Produce GPT-powered modifications
     """
 
-    Background: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Background
-    ImageSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageSize
-    Quality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Quality
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    InputFidelity: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.InputFidelity
+    Background: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage15Edit.Background
+    ImageSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage15Edit.ImageSize
+    Quality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage15Edit.Quality
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage15Edit.OutputFormat
+    InputFidelity: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage15Edit.InputFidelity
 
-    background: nodetool.nodes.fal.image_to_image.Background = Field(default=nodetool.nodes.fal.image_to_image.Background.AUTO, description='Background for the generated image')
+    background: nodetool.nodes.fal.image_to_image.GptImage15Edit.Background = Field(default=nodetool.nodes.fal.image_to_image.GptImage15Edit.Background.AUTO, description='Background for the generated image')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
-    image_size: nodetool.nodes.fal.image_to_image.ImageSize = Field(default=nodetool.nodes.fal.image_to_image.ImageSize.AUTO, description='Aspect ratio for the generated image')
+    image_size: nodetool.nodes.fal.image_to_image.GptImage15Edit.ImageSize = Field(default=nodetool.nodes.fal.image_to_image.GptImage15Edit.ImageSize.AUTO, description='Aspect ratio for the generated image')
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for image generation')
-    quality: nodetool.nodes.fal.image_to_image.Quality = Field(default=nodetool.nodes.fal.image_to_image.Quality.HIGH, description='Quality for the generated image')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='Output format for the images')
-    input_fidelity: nodetool.nodes.fal.image_to_image.InputFidelity = Field(default=nodetool.nodes.fal.image_to_image.InputFidelity.HIGH, description='Input fidelity for the generated image')
+    quality: nodetool.nodes.fal.image_to_image.GptImage15Edit.Quality = Field(default=nodetool.nodes.fal.image_to_image.GptImage15Edit.Quality.HIGH, description='Quality for the generated image')
+    output_format: nodetool.nodes.fal.image_to_image.GptImage15Edit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.GptImage15Edit.OutputFormat.PNG, description='Output format for the images')
+    input_fidelity: nodetool.nodes.fal.image_to_image.GptImage15Edit.InputFidelity = Field(default=nodetool.nodes.fal.image_to_image.GptImage15Edit.InputFidelity.HIGH, description='Input fidelity for the generated image')
     mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the mask image to use for the generation. This indicates what part of the image to edit.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
@@ -1809,6 +2876,93 @@ class GptImage15Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.GptImage15Edit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class GptImage1MiniEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        GPT Image 1 Mini
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Background: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Background
+    ImageSize: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.ImageSize
+    Quality: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Quality
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.OutputFormat
+
+    background: nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Background = Field(default=nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Background.AUTO, description='Background for the generated image')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.ImageSize = Field(default=nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.ImageSize.AUTO, description='Aspect ratio for the generated image')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for image generation')
+    quality: nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Quality = Field(default=nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Quality.AUTO, description='Quality for the generated image')
+    output_format: nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.OutputFormat.PNG, description='Output format for the images')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.GptImage1MiniEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class HidreamE11(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Hidream E1 1
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.HidreamE11.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_guidance_scale: float | OutputHandle[float] = connect_field(default=2, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your initial image when looking for a related image to show you.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    output_format: nodetool.nodes.fal.image_to_image.HidreamE11.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.HidreamE11.OutputFormat.JPEG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of an input image to edit.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform.')
+    target_image_description: str | OutputHandle[str] = connect_field(default='', description='The description of the target image after your edits have been made. Leave this blank to allow the model to use its own imagination.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='low resolution, blur', description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).")
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.HidreamE11
 
     @classmethod
     def get_node_type(cls):
@@ -1835,12 +2989,12 @@ class HunyuanImageV3InstructEdit(SingleOutputGraphNode[types.ImageRef], GraphNod
         - Create variations with detailed text guidance
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.HunyuanImageV3InstructEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt to generate an image from.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The desired size of the generated image. If auto, image size will be determined by the model.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.HunyuanImageV3InstructEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.HunyuanImageV3InstructEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible results. If None, a random seed is used.')
@@ -1850,6 +3004,181 @@ class HunyuanImageV3InstructEdit(SingleOutputGraphNode[types.ImageRef], GraphNod
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.HunyuanImageV3InstructEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Hunyuan_World(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Hunyuan World
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for the panorama generation.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to convert to a panorama.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Hunyuan_World
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class IdeogramCharacter(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Ideogram V3 Character
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramCharacter.Style
+    RenderingSpeed: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramCharacter.RenderingSpeed
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to fill the masked part of the image.')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The resolution of the generated image')
+    style: nodetool.nodes.fal.image_to_image.IdeogramCharacter.Style = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacter.Style.AUTO, description='The style type to generate with. Cannot be used with style_codes.')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Determine if MagicPrompt should be used in generating the request or not.')
+    rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramCharacter.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacter.RenderingSpeed.BALANCED, description='The rendering speed to use.')
+    reference_mask_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format')
+    reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format')
+    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Description of what to exclude from an image. Descriptions in the prompt take precedence to descriptions in the negative prompt.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.IdeogramCharacter
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class IdeogramCharacterEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Ideogram V3 Character Edit
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.Style
+    RenderingSpeed: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.RenderingSpeed
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to fill the masked part of the image.')
+    style: nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.Style = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.Style.AUTO, description='The style type to generate with. Cannot be used with style_codes.')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Determine if MagicPrompt should be used in generating the request or not.')
+    rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.RenderingSpeed.BALANCED, description='The rendering speed to use.')
+    reference_mask_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format')
+    reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format')
+    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image.')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
+    mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask URL to inpaint the image. MUST have the exact same dimensions (width and height) as the input image.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class IdeogramCharacterRemix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Ideogram V3 Character Remix
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.Style
+    RenderingSpeed: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.RenderingSpeed
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to remix the image with')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The resolution of the generated image')
+    style: nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.Style = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.Style.AUTO, description='The style type to generate with. Cannot be used with style_codes.')
+    expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Determine if MagicPrompt should be used in generating the request or not.')
+    rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.RenderingSpeed.BALANCED, description='The rendering speed to use.')
+    reference_mask_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format')
+    reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format')
+    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Description of what to exclude from an image. Descriptions in the prompt take precedence to descriptions in the negative prompt.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to remix')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.8, description='Strength of the input image in the remix')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix
 
     @classmethod
     def get_node_type(cls):
@@ -1876,10 +3205,10 @@ class IdeogramV2Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
         - Replace or modify masked regions
     """
 
-    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Style
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramV2Edit.Style
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to fill the masked part of the image')
-    style: nodetool.nodes.fal.image_to_image.Style = Field(default=nodetool.nodes.fal.image_to_image.Style.AUTO, description='Style of generated image (auto, general, realistic, design, render_3D, anime)')
+    style: nodetool.nodes.fal.image_to_image.IdeogramV2Edit.Style = Field(default=nodetool.nodes.fal.image_to_image.IdeogramV2Edit.Style.AUTO, description='Style of generated image (auto, general, realistic, design, render_3D, anime)')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. Needs to match the dimensions of the mask.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
@@ -1915,12 +3244,12 @@ class IdeogramV2Remix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
         - Generate alternative interpretations
     """
 
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AspectRatio
-    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Style
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramV2Remix.AspectRatio
+    Style: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramV2Remix.Style
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to remix the image with')
-    aspect_ratio: nodetool.nodes.fal.image_to_image.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
-    style: nodetool.nodes.fal.image_to_image.Style = Field(default=nodetool.nodes.fal.image_to_image.Style.AUTO, description='Style of generated image (auto, general, realistic, design, render_3D, anime)')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.IdeogramV2Remix.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.IdeogramV2Remix.AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image')
+    style: nodetool.nodes.fal.image_to_image.IdeogramV2Remix.Style = Field(default=nodetool.nodes.fal.image_to_image.IdeogramV2Remix.Style.AUTO, description='Style of generated image (auto, general, realistic, design, render_3D, anime)')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to expand the prompt with MagicPrompt functionality')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to remix')
     strength: float | OutputHandle[float] = connect_field(default=0.8, description='Strength of the input image in the remix (0-1, higher = more variation)')
@@ -1956,13 +3285,13 @@ class IdeogramV3Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
         - Refine image details with advanced controls
     """
 
-    RenderingSpeed: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.RenderingSpeed
+    RenderingSpeed: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.IdeogramV3Edit.RenderingSpeed
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to fill the masked part of the image')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
     style_preset: str | OutputHandle[str] = connect_field(default='', description='Style preset for generation. The chosen style preset will guide the generation.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Determine if MagicPrompt should be used in generating the request or not.')
-    rendering_speed: nodetool.nodes.fal.image_to_image.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.RenderingSpeed.BALANCED, description='The rendering speed to use.')
+    rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramV3Edit.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramV3Edit.RenderingSpeed.BALANCED, description='The rendering speed to use.')
     style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
     color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image.')
@@ -1974,6 +3303,766 @@ class IdeogramV3Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.IdeogramV3Edit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Image2Pixel(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Image2Pixel
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    DetectMethod: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Image2Pixel.DetectMethod
+    DownscaleMethod: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Image2Pixel.DownscaleMethod
+    BackgroundMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Image2Pixel.BackgroundMode
+
+    cleanup_morph: bool | OutputHandle[bool] = connect_field(default=False, description='Apply morphological operations to remove noise.')
+    auto_color_detect: bool | OutputHandle[bool] = connect_field(default=False, description='Enable automatic detection of optimal number of colors.')
+    alpha_threshold: int | OutputHandle[int] = connect_field(default=128, description='Alpha binarization threshold (0-255).')
+    snap_grid: bool | OutputHandle[bool] = connect_field(default=True, description='Align output to the pixel grid.')
+    fixed_palette: list[str] | OutputHandle[list[str]] = connect_field(default=[], description="Optional fixed color palette as hex strings (e.g., ['#000000', '#ffffff']).")
+    scale: int | OutputHandle[int] = connect_field(default=0, description='Force a specific pixel scale. If None, auto-detect.')
+    cleanup_jaggy: bool | OutputHandle[bool] = connect_field(default=False, description='Remove isolated diagonal pixels (jaggy edge cleanup).')
+    trim_borders: bool | OutputHandle[bool] = connect_field(default=False, description='Trim borders of the image.')
+    background_tolerance: int | OutputHandle[int] = connect_field(default=0, description='Background tolerance (0-255).')
+    detect_method: nodetool.nodes.fal.image_to_image.Image2Pixel.DetectMethod = Field(default=nodetool.nodes.fal.image_to_image.Image2Pixel.DetectMethod.AUTO, description='Scale detection method to use.')
+    transparent_background: bool | OutputHandle[bool] = connect_field(default=False, description='Remove background of the image. This will check for contiguous color regions from the edges after correction and make them transparent.')
+    downscale_method: nodetool.nodes.fal.image_to_image.Image2Pixel.DownscaleMethod = Field(default=nodetool.nodes.fal.image_to_image.Image2Pixel.DownscaleMethod.DOMINANT, description='Downscaling method to produce the pixel-art output.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to process into improved pixel art')
+    background_mode: nodetool.nodes.fal.image_to_image.Image2Pixel.BackgroundMode = Field(default=nodetool.nodes.fal.image_to_image.Image2Pixel.BackgroundMode.CORNERS, description='Controls where to flood-fill from when removing the background.')
+    max_colors: int | OutputHandle[int] = connect_field(default=32, description='Maximum number of colors in the output palette. Set None to disable limit.')
+    dominant_color_threshold: float | OutputHandle[float] = connect_field(default=0.05, description='Dominant color threshold (0.0-1.0).')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Image2Pixel
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2AgeModify(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Age Modify
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Portrait image URL for age modification')
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 3:4 for portraits)')
+    preserve_identity: bool | OutputHandle[bool] = connect_field(default=True, description=None)
+    target_age: int | OutputHandle[int] = connect_field(default=30, description=None)
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2AgeModify
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2CityTeleport(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        City Teleport
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    PhotoShot: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2CityTeleport.PhotoShot
+    CameraAngle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2CityTeleport.CameraAngle
+
+    city_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional city background image URL. When provided, the person will be blended into this custom scene.')
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    city_name: str | OutputHandle[str] = connect_field(default='', description='City name (used when city_image_url is not provided)')
+    photo_shot: nodetool.nodes.fal.image_to_image.ImageAppsV2CityTeleport.PhotoShot = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2CityTeleport.PhotoShot.MEDIUM_SHOT, description='Type of photo shot')
+    camera_angle: nodetool.nodes.fal.image_to_image.ImageAppsV2CityTeleport.CameraAngle = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2CityTeleport.CameraAngle.EYE_LEVEL, description='Camera angle for the shot')
+    person_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Person photo URL')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2CityTeleport
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2ExpressionChange(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Expression Change
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    TargetExpression: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2ExpressionChange.TargetExpression
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 3:4 for portraits)')
+    target_expression: nodetool.nodes.fal.image_to_image.ImageAppsV2ExpressionChange.TargetExpression = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2ExpressionChange.TargetExpression.SMILE, description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Portrait image URL for expression change')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2ExpressionChange
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2HairChange(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Hair Change
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    TargetHairstyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2HairChange.TargetHairstyle
+    HairColor: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2HairChange.HairColor
+
+    target_hairstyle: nodetool.nodes.fal.image_to_image.ImageAppsV2HairChange.TargetHairstyle = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2HairChange.TargetHairstyle.LONG_HAIR, description=None)
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 3:4 for portraits)')
+    hair_color: nodetool.nodes.fal.image_to_image.ImageAppsV2HairChange.HairColor = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2HairChange.HairColor.NATURAL, description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Portrait image URL for hair change')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2HairChange
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2HeadshotPhoto(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Headshot Generator
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    BackgroundStyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2HeadshotPhoto.BackgroundStyle
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 3:4 for portraits)')
+    background_style: nodetool.nodes.fal.image_to_image.ImageAppsV2HeadshotPhoto.BackgroundStyle = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2HeadshotPhoto.BackgroundStyle.PROFESSIONAL, description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Portrait image URL to convert to professional headshot')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2HeadshotPhoto
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2MakeupApplication(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Makeup Changer
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Intensity: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2MakeupApplication.Intensity
+    MakeupStyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2MakeupApplication.MakeupStyle
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 3:4 for portraits)')
+    intensity: nodetool.nodes.fal.image_to_image.ImageAppsV2MakeupApplication.Intensity = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2MakeupApplication.Intensity.MEDIUM, description=None)
+    makeup_style: nodetool.nodes.fal.image_to_image.ImageAppsV2MakeupApplication.MakeupStyle = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2MakeupApplication.MakeupStyle.NATURAL, description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Portrait image URL for makeup application')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2MakeupApplication
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2ObjectRemoval(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Object Removal
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    object_to_remove: str | OutputHandle[str] = connect_field(default='', description='Object to remove')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL containing object to remove')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2ObjectRemoval
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2Outpaint(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Image Outpaint
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2Outpaint.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description="Optional prompt to guide the outpainting. If provided, it will be appended to the base outpaint instruction. Example: 'with a beautiful sunset in the background'")
+    expand_right: int | OutputHandle[int] = connect_field(default=0, description='Number of pixels to add as black margin on the right side (0-700).')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
+    zoom_out_percentage: float | OutputHandle[float] = connect_field(default=20, description='Percentage to zoom out the image. If set, the image will be scaled down by this percentage and black margins will be added to maintain original size. Example: 50 means the image will be 50% of original size with black margins filling the rest.')
+    output_format: nodetool.nodes.fal.image_to_image.ImageAppsV2Outpaint.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2Outpaint.OutputFormat.PNG, description='The format of the output image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL to outpaint')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the function will wait for the image to be generated and uploaded before returning the response. If False, the function will return immediately and the image will be generated asynchronously.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    expand_left: int | OutputHandle[int] = connect_field(default=0, description='Number of pixels to add as black margin on the left side (0-700).')
+    expand_bottom: int | OutputHandle[int] = connect_field(default=400, description='Number of pixels to add as black margin on the bottom side (0-700).')
+    expand_top: int | OutputHandle[int] = connect_field(default=0, description='Number of pixels to add as black margin on the top side (0-700).')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2Outpaint
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2Perspective(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Perspective Change
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    TargetPerspective: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2Perspective.TargetPerspective
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    target_perspective: nodetool.nodes.fal.image_to_image.ImageAppsV2Perspective.TargetPerspective = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2Perspective.TargetPerspective.FRONT, description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL for perspective change')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2Perspective
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2PhotoRestoration(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Photo Restoration
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    enhance_resolution: bool | OutputHandle[bool] = connect_field(default=True, description=None)
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 4:3 for classic photos)')
+    remove_scratches: bool | OutputHandle[bool] = connect_field(default=True, description=None)
+    fix_colors: bool | OutputHandle[bool] = connect_field(default=True, description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Old or damaged photo URL to restore')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2PhotoRestoration
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2PhotographyEffects(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Photography Effects
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    EffectType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2PhotographyEffects.EffectType
+
+    effect_type: nodetool.nodes.fal.image_to_image.ImageAppsV2PhotographyEffects.EffectType = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2PhotographyEffects.EffectType.FILM, description=None)
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL for photography effects')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2PhotographyEffects
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2PortraitEnhance(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Portrait Enhance
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 3:4 for portraits)')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Portrait image URL to enhance')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2PortraitEnhance
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2ProductHolding(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Product Holding
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    product_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL of the product to be held by the person')
+    person_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL of the person who will hold the product')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2ProductHolding
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2ProductPhotography(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Product Photography
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    product_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL of the product to create professional studio photography')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2ProductPhotography
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2Relighting(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Relighting
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    LightingStyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2Relighting.LightingStyle
+
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    lighting_style: nodetool.nodes.fal.image_to_image.ImageAppsV2Relighting.LightingStyle = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2Relighting.LightingStyle.NATURAL, description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL for relighting')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2Relighting
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2StyleTransfer(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Style Transfer
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    TargetStyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2StyleTransfer.TargetStyle
+
+    target_style: nodetool.nodes.fal.image_to_image.ImageAppsV2StyleTransfer.TargetStyle = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2StyleTransfer.TargetStyle.IMPRESSIONIST, description=None)
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    style_reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional reference image URL. When provided, the style will be inferred from this image instead of the selected preset style.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL for style transfer')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2StyleTransfer
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2TextureTransform(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Texture Transform
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    TargetTexture: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ImageAppsV2TextureTransform.TargetTexture
+
+    target_texture: nodetool.nodes.fal.image_to_image.ImageAppsV2TextureTransform.TargetTexture = Field(default=nodetool.nodes.fal.image_to_image.ImageAppsV2TextureTransform.TargetTexture.MARBLE, description=None)
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL for texture transformation')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2TextureTransform
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageAppsV2VirtualTryOn(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Virtual Try-on
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    preserve_pose: bool | OutputHandle[bool] = connect_field(default=True, description=None)
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='', description='Aspect ratio for 4K output (default: 3:4 for fashion)')
+    clothing_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Clothing photo URL')
+    person_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Person photo URL')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageAppsV2VirtualTryOn
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageEditingRealism(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Image Editing
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    lora_scale: float | OutputHandle[float] = connect_field(default=0.6, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to enhance with realism details.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps for sampling.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageEditingRealism
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ImageEditingRetouch(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Image Editing
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to retouch.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps for sampling.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ImageEditingRetouch
 
     @classmethod
     def get_node_type(cls):
@@ -2000,15 +4089,15 @@ class KlingImageO1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
         - Generate with balanced quality-speed
     """
 
-    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Resolution
-    KlingImageO1AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.KlingImageO1AspectRatio
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.KlingImageO1.Resolution
+    KlingImageO1AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.KlingImageO1.KlingImageO1AspectRatio
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.KlingImageO1.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for image generation. Reference images using @Image1, @Image2, etc. (or @Image if only one image). Max 2500 characters.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate (1-9).')
-    resolution: nodetool.nodes.fal.image_to_image.Resolution = Field(default=nodetool.nodes.fal.image_to_image.Resolution.VALUE_1K, description='Image generation resolution. 1K: standard, 2K: high-res.')
-    aspect_ratio: nodetool.nodes.fal.image_to_image.KlingImageO1AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.KlingImageO1AspectRatio.AUTO, description="Aspect ratio of generated images. 'auto' intelligently determines based on input content.")
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    resolution: nodetool.nodes.fal.image_to_image.KlingImageO1.Resolution = Field(default=nodetool.nodes.fal.image_to_image.KlingImageO1.Resolution.VALUE_1K, description='Image generation resolution. 1K: standard, 2K: high-res.')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.KlingImageO1.KlingImageO1AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.KlingImageO1.KlingImageO1AspectRatio.AUTO, description="Aspect ratio of generated images. 'auto' intelligently determines based on input content.")
+    output_format: nodetool.nodes.fal.image_to_image.KlingImageO1.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.KlingImageO1.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     elements: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Elements (characters/objects) to include in the image. Reference in prompt as @Element1, @Element2, etc. Maximum 10 total (elements + reference images).')
     image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of reference images. Reference images in prompt using @Image1, @Image2, etc. (1-indexed). Max 10 images.')
@@ -2042,16 +4131,16 @@ class KolorsImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.
         - Produce high-fidelity image transformations
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    Scheduler: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Scheduler
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.KolorsImageToImage.OutputFormat
+    Scheduler: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.KolorsImageToImage.Scheduler
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the desired transformation')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.KolorsImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.KolorsImageToImage.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for image to image')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN.')
-    scheduler: nodetool.nodes.fal.image_to_image.Scheduler = Field(default=nodetool.nodes.fal.image_to_image.Scheduler.EULERDISCRETESCHEDULER, description='The scheduler to use for the model.')
+    scheduler: nodetool.nodes.fal.image_to_image.KolorsImageToImage.Scheduler = Field(default=nodetool.nodes.fal.image_to_image.KolorsImageToImage.Scheduler.EULERDISCRETESCHEDULER, description='The scheduler to use for the model.')
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='Strength of the transformation (0-1, higher = more change)')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform.')
@@ -2088,13 +4177,13 @@ class LongcatImageEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
         - Produce artistic modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.LongcatImageEdit.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.LongcatImageEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image with.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.LongcatImageEdit.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.LongcatImageEdit.Acceleration.REGULAR, description='The acceleration level to use.')
+    output_format: nodetool.nodes.fal.image_to_image.LongcatImageEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.LongcatImageEdit.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -2105,6 +4194,554 @@ class LongcatImageEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.LongcatImageEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Lucidflux(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Lucidflux
+        flux, editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
+    guidance: float | OutputHandle[float] = connect_field(default=4, description='The guidance to use for the diffusion process.')
+    target_height: int | OutputHandle[int] = connect_field(default=1024, description='The height of the output image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
+    target_width: int | OutputHandle[int] = connect_field(default=1024, description='The width of the output image.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Number of inference steps for sampling. Higher values give better quality but take longer.')
+    seed: int | OutputHandle[int] = connect_field(default=42, description='Seed used for random number generation')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Lucidflux
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Moondream3PreviewSegment(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Moondream3 Preview [Segment]
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    spatial_references: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Spatial references to guide the segmentation. By feeding in references you can help the segmentation process. Must be either list of Point object with x and y members, or list of arrays containing either 2 floats (x,y) or 4 floats (x1,y1,x2,y2). **NOTE**: You can also use the [**point endpoint**](https://fal.ai/models/fal-ai/moondream3-preview/point) to get points for the objects, and pass them in here.')
+    settings: str | OutputHandle[str] = connect_field(default='', description='Sampling settings for the segmentation model')
+    object: str | OutputHandle[str] = connect_field(default='', description='Object to be segmented in the image')
+    preview: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to preview the output and return a binary mask of the image')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Moondream3PreviewSegment
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class NanoBananaEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Nano Banana
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.NanoBananaEdit.AspectRatio
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.NanoBananaEdit.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for image editing.')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.NanoBananaEdit.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.NanoBananaEdit.AspectRatio.AUTO, description='The aspect ratio of the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    output_format: nodetool.nodes.fal.image_to_image.NanoBananaEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.NanoBananaEdit.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+    limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.NanoBananaEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class NanoBananaProEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Nano Banana Pro
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.NanoBananaProEdit.Resolution
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.NanoBananaProEdit.OutputFormat
+    SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.NanoBananaProEdit.SafetyTolerance
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for image editing.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    enable_web_search: bool | OutputHandle[bool] = connect_field(default=False, description='Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image.')
+    aspect_ratio: str | OutputHandle[str] = connect_field(default='auto', description='The aspect ratio of the generated image.')
+    resolution: nodetool.nodes.fal.image_to_image.NanoBananaProEdit.Resolution = Field(default=nodetool.nodes.fal.image_to_image.NanoBananaProEdit.Resolution.VALUE_1K, description='The resolution of the image to generate.')
+    output_format: nodetool.nodes.fal.image_to_image.NanoBananaProEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.NanoBananaProEdit.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    safety_tolerance: nodetool.nodes.fal.image_to_image.NanoBananaProEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.NanoBananaProEdit.SafetyTolerance.VALUE_4, description='The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
+    limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.NanoBananaProEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Nextstep1(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Nextstep 1
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details")
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Nextstep1
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingColorTint(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    TintMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.PostProcessingColorTint.TintMode
+
+    tint_strength: float | OutputHandle[float] = connect_field(default=1, description='Tint strength')
+    tint_mode: nodetool.nodes.fal.image_to_image.PostProcessingColorTint.TintMode = Field(default=nodetool.nodes.fal.image_to_image.PostProcessingColorTint.TintMode.SEPIA, description='Tint color mode')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingColorTint
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingDesaturate(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    DesaturateMethod: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.PostProcessingDesaturate.DesaturateMethod
+
+    desaturate_method: nodetool.nodes.fal.image_to_image.PostProcessingDesaturate.DesaturateMethod = Field(default=nodetool.nodes.fal.image_to_image.PostProcessingDesaturate.DesaturateMethod.LUMINANCE_REC_709, description='Desaturation method')
+    desaturate_factor: float | OutputHandle[float] = connect_field(default=1, description='Desaturation factor')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingDesaturate
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingDissolve(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    dissolve_factor: float | OutputHandle[float] = connect_field(default=0.5, description='Dissolve blend factor')
+    dissolve_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of second image for dissolve')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingDissolve
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingDodgeBurn(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    DodgeBurnMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.PostProcessingDodgeBurn.DodgeBurnMode
+
+    dodge_burn_mode: nodetool.nodes.fal.image_to_image.PostProcessingDodgeBurn.DodgeBurnMode = Field(default=nodetool.nodes.fal.image_to_image.PostProcessingDodgeBurn.DodgeBurnMode.DODGE, description='Dodge and burn mode')
+    dodge_burn_intensity: float | OutputHandle[float] = connect_field(default=0.5, description='Dodge and burn intensity')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingDodgeBurn
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingGrain(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    GrainStyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.PostProcessingGrain.GrainStyle
+
+    grain_style: nodetool.nodes.fal.image_to_image.PostProcessingGrain.GrainStyle = Field(default=nodetool.nodes.fal.image_to_image.PostProcessingGrain.GrainStyle.MODERN, description='Style of film grain to apply')
+    grain_intensity: float | OutputHandle[float] = connect_field(default=0.4, description='Film grain intensity')
+    grain_scale: float | OutputHandle[float] = connect_field(default=10, description='Film grain scale')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingGrain
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingParabolize(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    parabolize_coeff: float | OutputHandle[float] = connect_field(default=1, description='Parabolize coefficient')
+    vertex_y: float | OutputHandle[float] = connect_field(default=0.5, description='Vertex Y position')
+    vertex_x: float | OutputHandle[float] = connect_field(default=0.5, description='Vertex X position')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingParabolize
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingSharpen(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    SharpenMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.PostProcessingSharpen.SharpenMode
+
+    sharpen_mode: nodetool.nodes.fal.image_to_image.PostProcessingSharpen.SharpenMode = Field(default=nodetool.nodes.fal.image_to_image.PostProcessingSharpen.SharpenMode.BASIC, description='Type of sharpening to apply')
+    sharpen_alpha: float | OutputHandle[float] = connect_field(default=1, description='Sharpen strength (for basic mode)')
+    noise_radius: int | OutputHandle[int] = connect_field(default=7, description='Noise radius for smart sharpen')
+    sharpen_radius: int | OutputHandle[int] = connect_field(default=1, description='Sharpen radius (for basic mode)')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+    smart_sharpen_strength: float | OutputHandle[float] = connect_field(default=5, description='Smart sharpen strength')
+    cas_amount: float | OutputHandle[float] = connect_field(default=0.8, description='CAS sharpening amount')
+    preserve_edges: float | OutputHandle[float] = connect_field(default=0.75, description='Edge preservation factor')
+    smart_sharpen_ratio: float | OutputHandle[float] = connect_field(default=0.5, description='Smart sharpen blend ratio')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingSharpen
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingSolarize(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    solarize_threshold: float | OutputHandle[float] = connect_field(default=0.5, description='Solarize threshold')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingSolarize
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class PostProcessingVignette(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Post Processing
+        editing, transformation, image-to-image, img2img, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    vignette_strength: float | OutputHandle[float] = connect_field(default=0.5, description='Vignette strength')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to process')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.PostProcessingVignette
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit
 
     @classmethod
     def get_node_type(cls):
@@ -2131,15 +4768,15 @@ class QwenImageEdit2509(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
         - Produce professional image changes
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
@@ -2176,15 +4813,15 @@ class QwenImageEdit2509Lora(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
         - Produce tailored image modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used to calculate the size of the output image.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.OutputFormat.PNG, description='The format of the generated image.')
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -2196,6 +4833,465 @@ class QwenImageEdit2509Lora(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryAddBackground(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryAddBackground.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryAddBackground.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Remove white background and add a realistic scene behind the object', description='Describe the background/scene you want to add behind the object. The model will remove the white background and add the specified environment.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryAddBackground.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryAddBackground.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryAddBackground.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryAddBackground.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit. Provide an image with a white or clean background.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryAddBackground
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryFaceToFullPortrait(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryFaceToFullPortrait.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryFaceToFullPortrait.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Photography. A portrait of the person in professional attire with natural lighting', description='Describe the full portrait you want to generate from the face. Include clothing, setting, pose, and style details.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryFaceToFullPortrait.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryFaceToFullPortrait.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryFaceToFullPortrait.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryFaceToFullPortrait.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the cropped face image. Provide a close-up face photo.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryFaceToFullPortrait
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryGroupPhoto(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryGroupPhoto.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryGroupPhoto.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Two people standing next to each other outside with a landscape background', description='Describe the group photo scene, setting, and style. The model will maintain character consistency and add vintage effects like grain, blur, and retro filters.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryGroupPhoto.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryGroupPhoto.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryGroupPhoto.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryGroupPhoto.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryGroupPhoto
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryIntegrateProduct(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryIntegrateProduct.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryIntegrateProduct.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Blend and integrate the product into the background', description='Describe how to blend and integrate the product/element into the background. The model will automatically correct perspective, lighting and shadows for natural integration.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryIntegrateProduct.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryIntegrateProduct.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryIntegrateProduct.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryIntegrateProduct.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with product to integrate into background.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryIntegrateProduct
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryLightingRestoration(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryLightingRestoration.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryLightingRestoration.OutputFormat
+
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryLightingRestoration.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryLightingRestoration.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryLightingRestoration.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryLightingRestoration.OutputFormat.PNG, description='The format of the output image')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to restore lighting for.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryLightingRestoration
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryMultipleAngles(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.OutputFormat
+
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    wide_angle_lens: bool | OutputHandle[bool] = connect_field(default=False, description='Enable wide-angle lens effect')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    vertical_angle: float | OutputHandle[float] = connect_field(default=0, description="Adjust vertical camera angle (-1=bird's-eye view/looking down, 0=neutral, 1=worm's-eye view/looking up)")
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    move_forward: float | OutputHandle[float] = connect_field(default=0, description='Move camera forward (0=no movement, 10=close-up)')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.OutputFormat.PNG, description='The format of the output image')
+    rotate_right_left: float | OutputHandle[float] = connect_field(default=0, description='Rotate camera left (positive) or right (negative) in degrees. Positive values rotate left, negative values rotate right.')
+    lora_scale: float | OutputHandle[float] = connect_field(default=1.25, description='The scale factor for the LoRA model. Controls the strength of the camera control effect.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryNextScene(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryNextScene.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryNextScene.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Next Scene: The camera moves forward revealing more of the scene', description="Describe the camera movement, framing change, or scene transition. Start with 'Next Scene:' for best results. Examples: camera movements (dolly, push-in, pull-back), framing changes (wide to close-up), new elements entering frame.")
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryNextScene.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryNextScene.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryNextScene.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryNextScene.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to create the next scene from.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryNextScene
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryRemoveElement(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveElement.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveElement.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Remove the specified element from the scene', description='Specify what element(s) to remove from the image (objects, people, text, etc.). The model will cleanly remove the element while maintaining consistency of the rest of the image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveElement.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveElement.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveElement.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveElement.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image containing elements to remove.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveElement
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryRemoveLighting(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveLighting.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveLighting.OutputFormat
+
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveLighting.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveLighting.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveLighting.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveLighting.OutputFormat.PNG, description='The format of the output image')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with lighting/shadows to remove.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryRemoveLighting
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEdit2509LoraGalleryShirtDesign(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit 2509 Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryShirtDesign.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryShirtDesign.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Put this design on their shirt', description="Describe what design to put on the shirt. The model will apply the design from your input image onto the person's shirt.")
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryShirtDesign.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryShirtDesign.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryShirtDesign.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryShirtDesign.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryShirtDesign
 
     @classmethod
     def get_node_type(cls):
@@ -2222,15 +5318,15 @@ class QwenImageEdit2511(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
         - Produce professional image modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2511.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2511.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image with.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2511.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2511.Acceleration.REGULAR, description='The acceleration level to use.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If None, uses the input image dimensions.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2511.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2511.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The guidance scale to use for the image generation.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
@@ -2267,15 +5363,15 @@ class QwenImageEdit2511Lora(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
         - Produce customized image modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image with.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.Acceleration.REGULAR, description='The acceleration level to use.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If None, uses the input image dimensions.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.OutputFormat.PNG, description='The format of the generated image.')
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The guidance scale to use for the image generation.')
@@ -2313,10 +5409,10 @@ class QwenImageEdit2511MultipleAngles(SingleOutputGraphNode[types.ImageRef], Gra
         - Transform images to show different sides
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2511MultipleAngles.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEdit2511MultipleAngles.OutputFormat
 
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='Acceleration level for image generation.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2511MultipleAngles.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2511MultipleAngles.Acceleration.REGULAR, description='Acceleration level for image generation.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the input image will be used.')
     horizontal_angle: float | OutputHandle[float] = connect_field(default=0, description='Horizontal rotation angle around the object in degrees. 0°=front view, 90°=right side, 180°=back view, 270°=left side, 360°=front view again.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale.')
@@ -2327,7 +5423,7 @@ class QwenImageEdit2511MultipleAngles(SingleOutputGraphNode[types.ImageRef], Gra
     vertical_angle: float | OutputHandle[float] = connect_field(default=0, description="Vertical camera angle in degrees. -30°=low-angle shot (looking up), 0°=eye-level, 30°=elevated, 60°=high-angle, 90°=bird's-eye view (looking down).")
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
     lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the camera control effect.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the output image')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2511MultipleAngles.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2511MultipleAngles.OutputFormat.PNG, description='The format of the output image')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI.')
     additional_prompt: str | OutputHandle[str] = connect_field(default='', description='Additional text to append to the automatically generated prompt.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility.')
@@ -2336,6 +5432,743 @@ class QwenImageEdit2511MultipleAngles(SingleOutputGraphNode[types.ImageRef], Gra
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.QwenImageEdit2511MultipleAngles
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditImageToImage.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditImageToImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditImageToImage.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditImageToImage.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.94, description='Strength of the image-to-image transformation. Lower values preserve more of the original image.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditInpaint(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditInpaint.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditInpaint.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditInpaint.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditInpaint.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditInpaint.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditInpaint.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.93, description='Strength of noising process for inpainting')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    mask_url: str | OutputHandle[str] = connect_field(default='', description='The URL of the mask for inpainting')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditInpaint
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Lora
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditLora.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditLora.Acceleration.NONE, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditLora.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditLora
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlus(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlus.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlus.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlus.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlus.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlus.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlus.OutputFormat.PNG, description='The format of the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlus
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used to calculate the size of the output image.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.OutputFormat.PNG, description='The format of the generated image.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryAddBackground(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryAddBackground.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryAddBackground.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Remove white background and add a realistic scene behind the object', description='Describe the background/scene you want to add behind the object. The model will remove the white background and add the specified environment.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryAddBackground.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryAddBackground.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryAddBackground.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryAddBackground.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit. Provide an image with a white or clean background.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryAddBackground
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryFaceToFullPortrait(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryFaceToFullPortrait.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryFaceToFullPortrait.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Photography. A portrait of the person in professional attire with natural lighting', description='Describe the full portrait you want to generate from the face. Include clothing, setting, pose, and style details.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryFaceToFullPortrait.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryFaceToFullPortrait.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryFaceToFullPortrait.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryFaceToFullPortrait.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the cropped face image. Provide a close-up face photo.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryFaceToFullPortrait
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryGroupPhoto(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryGroupPhoto.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryGroupPhoto.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Two people standing next to each other outside with a landscape background', description='Describe the group photo scene, setting, and style. The model will maintain character consistency and add vintage effects like grain, blur, and retro filters.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryGroupPhoto.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryGroupPhoto.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryGroupPhoto.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryGroupPhoto.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryGroupPhoto
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryIntegrateProduct(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora, professional
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryIntegrateProduct.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryIntegrateProduct.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Blend and integrate the product into the background', description='Describe how to blend and integrate the product/element into the background. The model will automatically correct perspective, lighting and shadows for natural integration.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryIntegrateProduct.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryIntegrateProduct.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryIntegrateProduct.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryIntegrateProduct.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with product to integrate into background.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryIntegrateProduct
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryLightingRestoration(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryLightingRestoration.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryLightingRestoration.OutputFormat
+
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryLightingRestoration.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryLightingRestoration.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryLightingRestoration.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryLightingRestoration.OutputFormat.PNG, description='The format of the output image')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to restore lighting for.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryLightingRestoration
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryMultipleAngles(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.OutputFormat
+
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    wide_angle_lens: bool | OutputHandle[bool] = connect_field(default=False, description='Enable wide-angle lens effect')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    vertical_angle: float | OutputHandle[float] = connect_field(default=0, description="Adjust vertical camera angle (-1=bird's-eye view/looking down, 0=neutral, 1=worm's-eye view/looking up)")
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    move_forward: float | OutputHandle[float] = connect_field(default=0, description='Move camera forward (0=no movement, 10=close-up)')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.OutputFormat.PNG, description='The format of the output image')
+    rotate_right_left: float | OutputHandle[float] = connect_field(default=0, description='Rotate camera left (positive) or right (negative) in degrees. Positive values rotate left, negative values rotate right.')
+    lora_scale: float | OutputHandle[float] = connect_field(default=1.25, description='The scale factor for the LoRA model. Controls the strength of the camera control effect.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryNextScene(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryNextScene.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryNextScene.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Next Scene: The camera moves forward revealing more of the scene', description="Describe the camera movement, framing change, or scene transition. Start with 'Next Scene:' for best results. Examples: camera movements (dolly, push-in, pull-back), framing changes (wide to close-up), new elements entering frame.")
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryNextScene.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryNextScene.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryNextScene.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryNextScene.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to create the next scene from.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryNextScene
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryRemoveElement(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveElement.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveElement.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Remove the specified element from the scene', description='Specify what element(s) to remove from the image (objects, people, text, etc.). The model will cleanly remove the element while maintaining consistency of the rest of the image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveElement.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveElement.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveElement.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveElement.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image containing elements to remove.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveElement
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryRemoveLighting(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveLighting.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveLighting.OutputFormat
+
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveLighting.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveLighting.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveLighting.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveLighting.OutputFormat.PNG, description='The format of the output image')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with lighting/shadows to remove.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryRemoveLighting
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageEditPlusLoraGalleryShirtDesign(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image Edit Plus Lora Gallery
+        editing, transformation, image-to-image, img2img, lora
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryShirtDesign.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryShirtDesign.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='Put this design on their shirt', description="Describe what design to put on the shirt. The model will apply the design from your input image onto the person's shirt.")
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryShirtDesign.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryShirtDesign.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
+    lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale factor for the LoRA model. Controls the strength of the LoRA effect.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryShirtDesign.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryShirtDesign.OutputFormat.PNG, description='The format of the output image')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryShirtDesign
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class QwenImageImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Qwen Image
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageImageToImage.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageImageToImage.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageImageToImage.Acceleration.NONE, description="Acceleration level for image generation. Options: 'none', 'regular', 'high'. Higher acceleration increases speed. 'regular' balances speed and quality. 'high' is recommended for images without text.")
+    image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. By default, we will use the provided image for determining the image_size.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    use_turbo: bool | OutputHandle[bool] = connect_field(default=False, description='Enable turbo mode for faster generation with high quality. When enabled, uses optimized settings (10 steps, CFG=1.2).')
+    negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageImageToImage.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The reference image to guide the generation.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    strength: float | OutputHandle[float] = connect_field(default=0.6, description='Denoising strength. 1.0 = fully remake; 0.0 = preserve original.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.QwenImageImageToImage
 
     @classmethod
     def get_node_type(cls):
@@ -2362,13 +6195,13 @@ class QwenImageLayered(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
         - Produce sophisticated image compositions
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageLayered.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageLayered.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='A caption for the input image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageLayered.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageLayered.Acceleration.REGULAR, description='The acceleration level to use.')
     num_layers: int | OutputHandle[int] = connect_field(default=4, description='The number of layers to generate.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageLayered.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageLayered.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the input image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -2406,13 +6239,13 @@ class QwenImageLayeredLora(SingleOutputGraphNode[types.ImageRef], GraphNode[type
         - Produce custom layer-based results
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='A caption for the input image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.Acceleration.REGULAR, description='The acceleration level to use.')
     num_layers: int | OutputHandle[int] = connect_field(default=4, description='The number of layers to generate.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the input image.')
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
@@ -2451,12 +6284,12 @@ class QwenImageMaxEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
         - Modify images with precise control
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.QwenImageMaxEdit.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the desired image. Supports Chinese and English. Max 800 characters.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If not provided, the size of the final input image will be used.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.QwenImageMaxEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageMaxEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Enable LLM prompt optimization for better results.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility (0-2147483647).')
@@ -2493,10 +6326,10 @@ class RecraftV3ImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
         - Produce style-coherent image transformations
     """
 
-    RecraftV3ImageToImageStyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.RecraftV3ImageToImageStyle
+    RecraftV3ImageToImageStyle: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.RecraftV3ImageToImage.RecraftV3ImageToImageStyle
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the desired transformation')
-    style: nodetool.nodes.fal.image_to_image.RecraftV3ImageToImageStyle = Field(default=nodetool.nodes.fal.image_to_image.RecraftV3ImageToImageStyle.REALISTIC_IMAGE, description='The artistic style to apply')
+    style: nodetool.nodes.fal.image_to_image.RecraftV3ImageToImage.RecraftV3ImageToImageStyle = Field(default=nodetool.nodes.fal.image_to_image.RecraftV3ImageToImage.RecraftV3ImageToImageStyle.REALISTIC_IMAGE, description='The artistic style to apply')
     style_id: str | OutputHandle[str] = connect_field(default='', description='The ID of the custom style reference (optional)')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to modify. Must be less than 5 MB in size, have resolution less than 16 MP and max dimension less than 4096 pixels.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
@@ -2507,6 +6340,328 @@ class RecraftV3ImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.RecraftV3ImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ReveEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Reve
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ReveEdit.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text description of how to edit the provided image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    output_format: nodetool.nodes.fal.image_to_image.ReveEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ReveEdit.OutputFormat.PNG, description='Output format for the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the reference image to edit. Must be publicly accessible or base64 data URI. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ReveEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ReveFastEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Reve
+        editing, transformation, image-to-image, img2img, fast
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ReveFastEdit.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text description of how to edit the provided image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    output_format: nodetool.nodes.fal.image_to_image.ReveFastEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ReveFastEdit.OutputFormat.PNG, description='Output format for the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the reference image to edit. Must be publicly accessible or base64 data URI. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ReveFastEdit
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ReveFastRemix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Reve
+        editing, transformation, image-to-image, img2img, fast
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ReveFastRemix.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text description of the desired image. May include XML img tags like <img>0</img> to refer to specific images by their index in the image_urls list.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.ReveFastRemix.AspectRatio | OutputHandle[nodetool.nodes.fal.image_to_image.ReveFastRemix.AspectRatio] | None = connect_field(default=None, description='The desired aspect ratio of the generated image. If not provided, will be smartly chosen by the model.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    output_format: nodetool.nodes.fal.image_to_image.ReveFastRemix.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ReveFastRemix.OutputFormat.PNG, description='Output format for the generated image.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ReveFastRemix
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ReveRemix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Reve
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ReveRemix.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text description of the desired image. May include XML img tags like <img>0</img> to refer to specific images by their index in the image_urls list.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.ReveRemix.AspectRatio | OutputHandle[nodetool.nodes.fal.image_to_image.ReveRemix.AspectRatio] | None = connect_field(default=None, description='The desired aspect ratio of the generated image. If not provided, will be smartly chosen by the model.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    output_format: nodetool.nodes.fal.image_to_image.ReveRemix.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ReveRemix.OutputFormat.PNG, description='Output format for the generated image.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ReveRemix
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Rife(SingleOutputGraphNode[nodetool.nodes.fal.image_to_image.Rife.OutputType], GraphNode[nodetool.nodes.fal.image_to_image.Rife.OutputType]):
+    """
+
+        RIFE
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Rife.OutputFormat
+    OutputType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Rife.OutputType
+
+    output_format: nodetool.nodes.fal.image_to_image.Rife.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Rife.OutputFormat.JPEG, description="The format of the output images. Only applicable if output_type is 'images'.")
+    fps: int | OutputHandle[int] = connect_field(default=8, description="Frames per second for the output video. Only applicable if output_type is 'video'.")
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    include_end: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include the end image in the output.')
+    include_start: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include the start image in the output.')
+    num_frames: int | OutputHandle[int] = connect_field(default=1, description='The number of frames to generate between the input images.')
+    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the second image to use as the ending point for interpolation.')
+    output_type: nodetool.nodes.fal.image_to_image.Rife.OutputType = Field(default=nodetool.nodes.fal.image_to_image.Rife.OutputType.IMAGES, description='The type of output to generate; either individual images or a video.')
+    start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the first image to use as the starting point for interpolation.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Rife
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Sam3Image(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Segment Anything Model 3
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Sam3Image.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='wheel', description='Text prompt for segmentation')
+    include_boxes: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include bounding boxes for each mask (when available).')
+    return_multiple_masks: bool | OutputHandle[bool] = connect_field(default=False, description='If True, upload and return multiple generated masks as defined by `max_masks`.')
+    output_format: nodetool.nodes.fal.image_to_image.Sam3Image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Sam3Image.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be segmented')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the media will be returned as a data URI.')
+    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of point prompts')
+    include_scores: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include mask confidence scores.')
+    max_masks: int | OutputHandle[int] = connect_field(default=3, description='Maximum number of masks to return when `return_multiple_masks` is enabled.')
+    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.')
+    apply_mask: bool | OutputHandle[bool] = connect_field(default=True, description='Apply the mask on the image.')
+    text_prompt: str | OutputHandle[str] = connect_field(default='', description="[DEPRECATED] Use 'prompt' instead. Kept for backward compatibility.")
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Sam3Image
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Sam3ImageRle(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Sam 3
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Sam3ImageRle.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='wheel', description='Text prompt for segmentation')
+    include_boxes: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include bounding boxes for each mask (when available).')
+    return_multiple_masks: bool | OutputHandle[bool] = connect_field(default=False, description='If True, upload and return multiple generated masks as defined by `max_masks`.')
+    output_format: nodetool.nodes.fal.image_to_image.Sam3ImageRle.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Sam3ImageRle.OutputFormat.PNG, description='The format of the generated image.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be segmented')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the media will be returned as a data URI.')
+    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of point prompts')
+    include_scores: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include mask confidence scores.')
+    max_masks: int | OutputHandle[int] = connect_field(default=3, description='Maximum number of masks to return when `return_multiple_masks` is enabled.')
+    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.')
+    apply_mask: bool | OutputHandle[bool] = connect_field(default=True, description='Apply the mask on the image.')
+    text_prompt: str | OutputHandle[str] = connect_field(default='', description="[DEPRECATED] Use 'prompt' instead. Kept for backward compatibility.")
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Sam3ImageRle
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class SeedvrUpscaleImage(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        SeedVR2
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    UpscaleMode: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.UpscaleMode
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.OutputFormat
+    TargetResolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.TargetResolution
+
+    upscale_mode: nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.UpscaleMode = Field(default=nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.UpscaleMode.FACTOR, description="The mode to use for the upscale. If 'target', the upscale factor will be calculated based on the target resolution. If 'factor', the upscale factor will be used directly.")
+    noise_scale: float | OutputHandle[float] = connect_field(default=0.1, description='The noise scale to use for the generation process.')
+    output_format: nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.OutputFormat.JPG, description='The format of the output image.')
+    target_resolution: nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.TargetResolution = Field(default=nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage.TargetResolution.VALUE_1080P, description='The target resolution to upscale to when `upscale_mode` is `target`.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to be processed')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    upscale_factor: float | OutputHandle[float] = connect_field(default=2, description='Upscaling factor to be used. Will multiply the dimensions with this factor when `upscale_mode` is `factor`.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The random seed used for the generation process.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.SeedvrUpscaleImage
 
     @classmethod
     def get_node_type(cls):
@@ -2533,12 +6688,12 @@ class StepxEdit2(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
         - Produce progressively refined results
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.StepxEdit2.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
     enable_reflection_mode: bool | OutputHandle[bool] = connect_field(default=True, description='Enable reflection mode. Reviews outputs, corrects unintended changes, and determines when editing is complete.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.JPEG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.StepxEdit2.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.StepxEdit2.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. Needs to match the dimensions of the mask.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=6, description='The true CFG scale. Controls how closely the model follows the prompt.')
@@ -2550,6 +6705,50 @@ class StepxEdit2(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.StepxEdit2
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Uso(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Uso
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Uso.OutputFormat
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for generation. Can be empty for pure style transfer.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate in parallel.')
+    image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.Uso.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Uso.OutputFormat.PNG, description='Output image format. PNG preserves transparency, JPEG is smaller.')
+    keep_size: bool | OutputHandle[bool] = connect_field(default=False, description='Preserve the layout and dimensions of the input content image. Useful for style transfer.')
+    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of image URLs in order: [content_image, style_image, extra_style_image].')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If true, wait for generation and upload before returning. Increases latency but provides immediate access to images.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='How closely to follow the prompt. Higher values stick closer to the prompt.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='Number of denoising steps. More steps can improve quality but increase generation time.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible generation. Use same seed for consistent results.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="What you don't want in the image. Use it to exclude unwanted elements, styles, or artifacts.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable NSFW content detection and filtering.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Uso
 
     @classmethod
     def get_node_type(cls):
@@ -2576,16 +6775,89 @@ class ViduQ2ReferenceToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
         - Produce style-transferred results
     """
 
-    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.AspectRatio
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ViduQ2ReferenceToImage.AspectRatio
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation, max 1500 characters')
-    aspect_ratio: nodetool.nodes.fal.image_to_image.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.AspectRatio.RATIO_16_9, description='The aspect ratio of the output video')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.ViduQ2ReferenceToImage.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.ViduQ2ReferenceToImage.AspectRatio.RATIO_16_9, description='The aspect ratio of the output video')
     reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URLs of the reference images to use for consistent subject appearance')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for generation')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.image_to_image.ViduQ2ReferenceToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class ViduReferenceToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Vidu
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ViduReferenceToImage.AspectRatio
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation, max 1500 characters')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.ViduReferenceToImage.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.ViduReferenceToImage.AspectRatio.RATIO_16_9, description='The aspect ratio of the output video')
+    reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URLs of the reference images to use for consistent subject appearance')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for generation')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.ViduReferenceToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
+class Wan25PreviewImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
+    """
+
+        Wan 2.5 Image to Image
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing how to edit the image. Max 2000 characters.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate. Values from 1 to 4.')
+    image_size: str | OutputHandle[str] = connect_field(default='square', description='The size of the generated image. Width and height must be between 384 and 1440 pixels.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. If None, a random seed is chosen.')
+    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URLs of images to edit. For single-image editing, provide 1 URL. For multi-reference generation, provide up to 2 URLs. If more than 2 URLs are provided, only the first 2 will be used.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt to describe content to avoid. Max 500 characters.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.Wan25PreviewImageToImage
 
     @classmethod
     def get_node_type(cls):
@@ -2636,6 +6908,56 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_image
 from nodetool.workflows.base_node import BaseNode
 
+class WanV2_2A14BImageToImage(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Wan
+        editing, transformation, image-to-image, img2img
+
+        Use cases:
+        - Professional photo editing and enhancement
+        - Creative image transformations
+        - Batch image processing workflows
+        - Product photography refinement
+        - Automated image optimization
+    """
+
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.Acceleration
+    ImageFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.ImageFormat
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.AspectRatio
+
+    shift: float | OutputHandle[float] = connect_field(default=2, description=None)
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt to guide image generation.')
+    image_size: str | OutputHandle[str] = connect_field(default='', description=None)
+    acceleration: nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='Classifier-free guidance scale.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, input data will be checked for safety before processing.')
+    image_format: nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.ImageFormat = Field(default=nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.ImageFormat.JPEG, description='The format of the output image.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for video generation.')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage.AspectRatio.AUTO, description="Aspect ratio of the generated image. If 'auto', the aspect ratio will be determined automatically based on the input image.")
+    enable_output_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, output video will be checked for safety after generation.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the input image.')
+    strength: float | OutputHandle[float] = connect_field(default=0.5, description='Denoising strength. 1.0 = fully remake; 0.0 = preserve original.')
+    guidance_scale_2: float | OutputHandle[float] = connect_field(default=4, description='Guidance scale for the second stage of the model. This is used to control the adherence to the prompt in the second stage of the model.')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. If None, a random seed is chosen.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=27, description='Number of inference steps for sampling. Higher values give better quality but take longer.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.image_to_image.WanV2_2A14BImageToImage
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.image_to_image
+from nodetool.workflows.base_node import BaseNode
+
 class ZImageTurboControlnet(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
@@ -2650,25 +6972,25 @@ class ZImageTurboControlnet(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
         - Produce speedy controlled outputs
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    Preprocess: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Preprocess
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.OutputFormat
+    Preprocess: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.Preprocess
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.Acceleration.REGULAR, description='The acceleration level to use.')
     control_end: float | OutputHandle[float] = connect_field(default=0.8, description='The end of the controlnet conditioning.')
     control_start: float | OutputHandle[float] = connect_field(default=0, description='The start of the controlnet conditioning.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for ControlNet generation.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     control_scale: float | OutputHandle[float] = connect_field(default=0.75, description='The scale of the controlnet conditioning.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion. Note: this will increase the price by 0.0025 credits per request.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of inference steps to perform.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    preprocess: nodetool.nodes.fal.image_to_image.Preprocess = Field(default=nodetool.nodes.fal.image_to_image.Preprocess.NONE, description='What kind of preprocessing to apply to the image, if any.')
+    preprocess: nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.Preprocess = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboControlnet.Preprocess.NONE, description='What kind of preprocessing to apply to the image, if any.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2699,26 +7021,26 @@ class ZImageTurboControlnetLora(SingleOutputGraphNode[types.ImageRef], GraphNode
         - Produce speedy fine-tuned controlled results
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
-    Preprocess: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Preprocess
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.OutputFormat
+    Preprocess: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Preprocess
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Acceleration.REGULAR, description='The acceleration level to use.')
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     control_end: float | OutputHandle[float] = connect_field(default=0.8, description='The end of the controlnet conditioning.')
     control_start: float | OutputHandle[float] = connect_field(default=0, description='The start of the controlnet conditioning.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for ControlNet generation.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     control_scale: float | OutputHandle[float] = connect_field(default=0.75, description='The scale of the controlnet conditioning.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion. Note: this will increase the price by 0.0025 credits per request.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of inference steps to perform.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    preprocess: nodetool.nodes.fal.image_to_image.Preprocess = Field(default=nodetool.nodes.fal.image_to_image.Preprocess.NONE, description='What kind of preprocessing to apply to the image, if any.')
+    preprocess: nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Preprocess = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Preprocess.NONE, description='What kind of preprocessing to apply to the image, if any.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2749,14 +7071,14 @@ class ZImageTurboImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[t
         - Produce quick image modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboImageToImage.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboImageToImage.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboImageToImage.Acceleration.REGULAR, description='The acceleration level to use.')
+    output_format: nodetool.nodes.fal.image_to_image.ZImageTurboImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboImageToImage.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Image-to-Image generation.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     strength: float | OutputHandle[float] = connect_field(default=0.6, description='The strength of the image-to-image conditioning.')
@@ -2794,14 +7116,14 @@ class ZImageTurboImageToImageLora(SingleOutputGraphNode[types.ImageRef], GraphNo
         - Produce fast fine-tuned modifications
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.Acceleration.REGULAR, description='The acceleration level to use.')
+    output_format: nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Image-to-Image generation.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
@@ -2840,18 +7162,18 @@ class ZImageTurboInpaint(SingleOutputGraphNode[types.ImageRef], GraphNode[types.
         - Produce rapid contextual fills
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboInpaint.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboInpaint.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboInpaint.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboInpaint.Acceleration.REGULAR, description='The acceleration level to use.')
     mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Mask for Inpaint generation.')
     control_end: float | OutputHandle[float] = connect_field(default=0.8, description='The end of the controlnet conditioning.')
     control_start: float | OutputHandle[float] = connect_field(default=0, description='The start of the controlnet conditioning.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.ZImageTurboInpaint.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboInpaint.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Inpaint generation.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the inpaint conditioning.')
@@ -2889,19 +7211,19 @@ class ZImageTurboInpaintLora(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
         - Produce rapid specialized inpainting
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
-    acceleration: nodetool.nodes.fal.image_to_image.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Acceleration.REGULAR, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.Acceleration.REGULAR, description='The acceleration level to use.')
     mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Mask for Inpaint generation.')
     loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     control_end: float | OutputHandle[float] = connect_field(default=0.8, description='The end of the controlnet conditioning.')
     control_start: float | OutputHandle[float] = connect_field(default=0, description='The start of the controlnet conditioning.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
-    output_format: nodetool.nodes.fal.image_to_image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.OutputFormat.PNG, description='The format of the generated image.')
+    output_format: nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Inpaint generation.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the inpaint conditioning.')

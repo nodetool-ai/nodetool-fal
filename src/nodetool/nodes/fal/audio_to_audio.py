@@ -6,68 +6,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class OutputFormat(Enum):
-    """
-    Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
-    """
-    MP3_22050_32 = "mp3_22050_32"
-    MP3_44100_32 = "mp3_44100_32"
-    MP3_44100_64 = "mp3_44100_64"
-    MP3_44100_96 = "mp3_44100_96"
-    MP3_44100_128 = "mp3_44100_128"
-    MP3_44100_192 = "mp3_44100_192"
-    PCM_8000 = "pcm_8000"
-    PCM_16000 = "pcm_16000"
-    PCM_22050 = "pcm_22050"
-    PCM_24000 = "pcm_24000"
-    PCM_44100 = "pcm_44100"
-    PCM_48000 = "pcm_48000"
-    ULAW_8000 = "ulaw_8000"
-    ALAW_8000 = "alaw_8000"
-    OPUS_48000_32 = "opus_48000_32"
-    OPUS_48000_64 = "opus_48000_64"
-    OPUS_48000_96 = "opus_48000_96"
-    OPUS_48000_128 = "opus_48000_128"
-    OPUS_48000_192 = "opus_48000_192"
-
-
-class AudioFormat(Enum):
-    """
-    The format for the output audio.
-    """
-    MP3 = "mp3"
-    AAC = "aac"
-    M4A = "m4a"
-    OGG = "ogg"
-    OPUS = "opus"
-    FLAC = "flac"
-    WAV = "wav"
-
-
-class Acceleration(Enum):
-    """
-    The acceleration level to use.
-    """
-    FAST = "fast"
-    BALANCED = "balanced"
-    QUALITY = "quality"
-
-
-class Model(Enum):
-    """
-    Demucs model to use for separation
-    """
-    HTDEMUCS = "htdemucs"
-    HTDEMUCS_FT = "htdemucs_ft"
-    HTDEMUCS_6S = "htdemucs_6s"
-    HDEMUCS_MMI = "hdemucs_mmi"
-    MDX = "mdx"
-    MDX_EXTRA = "mdx_extra"
-    MDX_Q = "mdx_q"
-    MDX_EXTRA_Q = "mdx_extra_q"
-
-
-
 class ElevenlabsVoiceChanger(FALNode):
     """
     ElevenLabs Voice Changer transforms voice characteristics in audio with AI-powered voice conversion.
@@ -80,6 +18,31 @@ class ElevenlabsVoiceChanger(FALNode):
     - Modify speaker identity
     - Generate voice-changed audio
     """
+
+    class OutputFormat(Enum):
+        """
+        Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
+        """
+        MP3_22050_32 = "mp3_22050_32"
+        MP3_44100_32 = "mp3_44100_32"
+        MP3_44100_64 = "mp3_44100_64"
+        MP3_44100_96 = "mp3_44100_96"
+        MP3_44100_128 = "mp3_44100_128"
+        MP3_44100_192 = "mp3_44100_192"
+        PCM_8000 = "pcm_8000"
+        PCM_16000 = "pcm_16000"
+        PCM_22050 = "pcm_22050"
+        PCM_24000 = "pcm_24000"
+        PCM_44100 = "pcm_44100"
+        PCM_48000 = "pcm_48000"
+        ULAW_8000 = "ulaw_8000"
+        ALAW_8000 = "alaw_8000"
+        OPUS_48000_32 = "opus_48000_32"
+        OPUS_48000_64 = "opus_48000_64"
+        OPUS_48000_96 = "opus_48000_96"
+        OPUS_48000_128 = "opus_48000_128"
+        OPUS_48000_192 = "opus_48000_192"
+
 
     voice: str = Field(
         default="Rachel", description="The voice to use for speech generation"
@@ -121,7 +84,6 @@ class ElevenlabsVoiceChanger(FALNode):
     def get_basic_fields(cls):
         return ["audio"]
 
-
 class NovaSr(FALNode):
     """
     Nova SR enhances audio quality through super-resolution processing for clearer and richer sound.
@@ -134,6 +96,19 @@ class NovaSr(FALNode):
     - Restore degraded audio
     - Generate high-quality audio
     """
+
+    class AudioFormat(Enum):
+        """
+        The format for the output audio.
+        """
+        MP3 = "mp3"
+        AAC = "aac"
+        M4A = "m4a"
+        OGG = "ogg"
+        OPUS = "opus"
+        FLAC = "flac"
+        WAV = "wav"
+
 
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -171,7 +146,6 @@ class NovaSr(FALNode):
     def get_basic_fields(cls):
         return ["audio"]
 
-
 class Deepfilternet3(FALNode):
     """
     DeepFilterNet3 removes noise and improves audio quality with advanced deep learning filtering.
@@ -184,6 +158,19 @@ class Deepfilternet3(FALNode):
     - Improve audio clarity
     - Generate clean audio
     """
+
+    class AudioFormat(Enum):
+        """
+        The format for the output audio.
+        """
+        MP3 = "mp3"
+        AAC = "aac"
+        M4A = "m4a"
+        OGG = "ogg"
+        OPUS = "opus"
+        FLAC = "flac"
+        WAV = "wav"
+
 
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -220,8 +207,6 @@ class Deepfilternet3(FALNode):
     def get_basic_fields(cls):
         return ["audio"]
 
-
-
 class SamAudioSeparate(FALNode):
     """
     SAM Audio Separate isolates and extracts different audio sources from mixed recordings.
@@ -234,6 +219,22 @@ class SamAudioSeparate(FALNode):
     - Remove background sounds
     - Generate separated audio tracks
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        QUALITY = "quality"
+
+    class OutputFormat(Enum):
+        """
+        Output audio format.
+        """
+        WAV = "wav"
+        MP3 = "mp3"
+
 
     prompt: str = Field(
         default="", description="Text prompt describing the sound to isolate."
@@ -278,8 +279,6 @@ class SamAudioSeparate(FALNode):
     def get_basic_fields(cls):
         return ["audio"]
 
-
-
 class SamAudioSpanSeparate(FALNode):
     """
     SAM Audio Span Separate isolates audio sources across time spans with precise temporal control.
@@ -292,6 +291,22 @@ class SamAudioSpanSeparate(FALNode):
     - Remove sounds in time ranges
     - Generate time-based separations
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        QUALITY = "quality"
+
+    class OutputFormat(Enum):
+        """
+        Output audio format.
+        """
+        WAV = "wav"
+        MP3 = "mp3"
+
 
     prompt: str = Field(
         default="", description="Text prompt describing the sound to isolate. Optional but recommended - helps the model identify what type of sound to extract from the span."
@@ -340,8 +355,6 @@ class SamAudioSpanSeparate(FALNode):
     def get_basic_fields(cls):
         return ["audio"]
 
-
-
 class Demucs(FALNode):
     """
     Demucs separates music into vocals, drums, bass, and other instruments with high quality.
@@ -354,6 +367,27 @@ class Demucs(FALNode):
     - Create karaoke tracks
     - Generate individual audio stems
     """
+
+    class OutputFormat(Enum):
+        """
+        Output audio format for the separated stems
+        """
+        WAV = "wav"
+        MP3 = "mp3"
+
+    class Model(Enum):
+        """
+        Demucs model to use for separation
+        """
+        HTDEMUCS = "htdemucs"
+        HTDEMUCS_FT = "htdemucs_ft"
+        HTDEMUCS_6S = "htdemucs_6s"
+        HDEMUCS_MMI = "hdemucs_mmi"
+        MDX = "mdx"
+        MDX_EXTRA = "mdx_extra"
+        MDX_Q = "mdx_q"
+        MDX_EXTRA_Q = "mdx_extra_q"
+
 
     segment_length: str = Field(
         default="", description="Length in seconds of each segment for processing. Smaller values use less memory but may reduce quality. Default is model-specific."

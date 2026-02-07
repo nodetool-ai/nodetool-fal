@@ -6,138 +6,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class Version(Enum):
-    """
-    Version of the model to use. All of the models are the Whisper large variant.
-    """
-    VALUE_3 = "3"
-
-
-class Language(Enum):
-    """
-    Language of the audio file. If set to null, the language will be
-    automatically detected. Defaults to null.
-    If translate is selected as the task, the audio will be translated to
-    English, regardless of the language selected.
-    """
-    AF = "af"
-    AM = "am"
-    AR = "ar"
-    AS = "as"
-    AZ = "az"
-    BA = "ba"
-    BE = "be"
-    BG = "bg"
-    BN = "bn"
-    BO = "bo"
-    BR = "br"
-    BS = "bs"
-    CA = "ca"
-    CS = "cs"
-    CY = "cy"
-    DA = "da"
-    DE = "de"
-    EL = "el"
-    EN = "en"
-    ES = "es"
-    ET = "et"
-    EU = "eu"
-    FA = "fa"
-    FI = "fi"
-    FO = "fo"
-    FR = "fr"
-    GL = "gl"
-    GU = "gu"
-    HA = "ha"
-    HAW = "haw"
-    HE = "he"
-    HI = "hi"
-    HR = "hr"
-    HT = "ht"
-    HU = "hu"
-    HY = "hy"
-    ID = "id"
-    IS = "is"
-    IT = "it"
-    JA = "ja"
-    JW = "jw"
-    KA = "ka"
-    KK = "kk"
-    KM = "km"
-    KN = "kn"
-    KO = "ko"
-    LA = "la"
-    LB = "lb"
-    LN = "ln"
-    LO = "lo"
-    LT = "lt"
-    LV = "lv"
-    MG = "mg"
-    MI = "mi"
-    MK = "mk"
-    ML = "ml"
-    MN = "mn"
-    MR = "mr"
-    MS = "ms"
-    MT = "mt"
-    MY = "my"
-    NE = "ne"
-    NL = "nl"
-    NN = "nn"
-    NO = "no"
-    OC = "oc"
-    PA = "pa"
-    PL = "pl"
-    PS = "ps"
-    PT = "pt"
-    RO = "ro"
-    RU = "ru"
-    SA = "sa"
-    SD = "sd"
-    SI = "si"
-    SK = "sk"
-    SL = "sl"
-    SN = "sn"
-    SO = "so"
-    SQ = "sq"
-    SR = "sr"
-    SU = "su"
-    SV = "sv"
-    SW = "sw"
-    TA = "ta"
-    TE = "te"
-    TG = "tg"
-    TH = "th"
-    TK = "tk"
-    TL = "tl"
-    TR = "tr"
-    TT = "tt"
-    UK = "uk"
-    UR = "ur"
-    UZ = "uz"
-    VI = "vi"
-    YI = "yi"
-    YO = "yo"
-    ZH = "zh"
-
-
-class Task(Enum):
-    """
-    Task to perform on the audio file. Either transcribe or translate.
-    """
-    TRANSCRIBE = "transcribe"
-    TRANSLATE = "translate"
-
-
-class ChunkLevel(Enum):
-    """
-    Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.
-    """
-    NONE = "none"
-    SEGMENT = "segment"
-    WORD = "word"
-
-
 class ElevenLabsSpeechToText(FALNode):
     """
     ElevenLabs Speech to Text transcribes audio to text with high accuracy.
@@ -434,10 +302,6 @@ class SpeechToTextTurboStream(FALNode):
     def get_basic_fields(cls):
         return ["audio_stream"]
 
-
-
-
-
 class Whisper(FALNode):
     """
     OpenAI's Whisper model for robust multilingual speech recognition.
@@ -450,6 +314,135 @@ class Whisper(FALNode):
     - Handle noisy audio
     - International audio processing
     """
+
+    class Version(Enum):
+        """
+        Version of the model to use. All of the models are the Whisper large variant.
+        """
+        VALUE_3 = "3"
+
+    class Language(Enum):
+        """
+        Language of the audio file. If set to null, the language will be
+        automatically detected. Defaults to null.
+        If translate is selected as the task, the audio will be translated to
+        English, regardless of the language selected.
+        """
+        AF = "af"
+        AM = "am"
+        AR = "ar"
+        AS = "as"
+        AZ = "az"
+        BA = "ba"
+        BE = "be"
+        BG = "bg"
+        BN = "bn"
+        BO = "bo"
+        BR = "br"
+        BS = "bs"
+        CA = "ca"
+        CS = "cs"
+        CY = "cy"
+        DA = "da"
+        DE = "de"
+        EL = "el"
+        EN = "en"
+        ES = "es"
+        ET = "et"
+        EU = "eu"
+        FA = "fa"
+        FI = "fi"
+        FO = "fo"
+        FR = "fr"
+        GL = "gl"
+        GU = "gu"
+        HA = "ha"
+        HAW = "haw"
+        HE = "he"
+        HI = "hi"
+        HR = "hr"
+        HT = "ht"
+        HU = "hu"
+        HY = "hy"
+        ID = "id"
+        IS = "is"
+        IT = "it"
+        JA = "ja"
+        JW = "jw"
+        KA = "ka"
+        KK = "kk"
+        KM = "km"
+        KN = "kn"
+        KO = "ko"
+        LA = "la"
+        LB = "lb"
+        LN = "ln"
+        LO = "lo"
+        LT = "lt"
+        LV = "lv"
+        MG = "mg"
+        MI = "mi"
+        MK = "mk"
+        ML = "ml"
+        MN = "mn"
+        MR = "mr"
+        MS = "ms"
+        MT = "mt"
+        MY = "my"
+        NE = "ne"
+        NL = "nl"
+        NN = "nn"
+        NO = "no"
+        OC = "oc"
+        PA = "pa"
+        PL = "pl"
+        PS = "ps"
+        PT = "pt"
+        RO = "ro"
+        RU = "ru"
+        SA = "sa"
+        SD = "sd"
+        SI = "si"
+        SK = "sk"
+        SL = "sl"
+        SN = "sn"
+        SO = "so"
+        SQ = "sq"
+        SR = "sr"
+        SU = "su"
+        SV = "sv"
+        SW = "sw"
+        TA = "ta"
+        TE = "te"
+        TG = "tg"
+        TH = "th"
+        TK = "tk"
+        TL = "tl"
+        TR = "tr"
+        TT = "tt"
+        UK = "uk"
+        UR = "ur"
+        UZ = "uz"
+        VI = "vi"
+        YI = "yi"
+        YO = "yo"
+        ZH = "zh"
+
+    class Task(Enum):
+        """
+        Task to perform on the audio file. Either transcribe or translate.
+        """
+        TRANSCRIBE = "transcribe"
+        TRANSLATE = "translate"
+
+    class ChunkLevel(Enum):
+        """
+        Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.
+        """
+        NONE = "none"
+        SEGMENT = "segment"
+        WORD = "word"
+
 
     version: Version = Field(
         default=Version.VALUE_3, description="Version of the model to use. All of the models are the Whisper large variant."
@@ -506,7 +499,6 @@ class Whisper(FALNode):
     def get_basic_fields(cls):
         return ["audio"]
 
-
 class Wizper(FALNode):
     """
     Wizper provides fast and accurate speech-to-text transcription.
@@ -519,6 +511,14 @@ class Wizper(FALNode):
     - Rapid text extraction
     - Speedy speech-to-text
     """
+
+    class Task(Enum):
+        """
+        Task to perform on the audio file. Either transcribe or translate.
+        """
+        TRANSCRIBE = "transcribe"
+        TRANSLATE = "translate"
+
 
     language: str = Field(
         default="en", description="Language of the audio file. If translate is selected as the task, the audio will be translated to English, regardless of the language selected. If `None` is passed, the language will be automatically detected. This will also increase the inference time."

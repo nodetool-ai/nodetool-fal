@@ -16,242 +16,6 @@ class ImageSizePreset(str, Enum):
     LANDSCAPE_16_9 = "landscape_16_9"
 
 
-class Acceleration(Enum):
-    """
-    The speed of the generation. The higher the speed, the faster the generation.
-    """
-    NONE = "none"
-    REGULAR = "regular"
-    HIGH = "high"
-
-
-class OutputFormat(Enum):
-    """
-    The format of the generated image.
-    """
-    JPEG = "jpeg"
-    PNG = "png"
-
-
-class SafetyTolerance(Enum):
-    """
-    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-    """
-    VALUE_1 = "1"
-    VALUE_2 = "2"
-    VALUE_3 = "3"
-    VALUE_4 = "4"
-    VALUE_5 = "5"
-    VALUE_6 = "6"
-
-
-class AspectRatio(Enum):
-    """
-    The aspect ratio of the generated image
-    """
-    RATIO_10_16 = "10:16"
-    RATIO_16_10 = "16:10"
-    RATIO_9_16 = "9:16"
-    RATIO_16_9 = "16:9"
-    RATIO_4_3 = "4:3"
-    RATIO_3_4 = "3:4"
-    RATIO_1_1 = "1:1"
-    RATIO_1_3 = "1:3"
-    RATIO_3_1 = "3:1"
-    RATIO_3_2 = "3:2"
-    RATIO_2_3 = "2:3"
-
-
-class Style(Enum):
-    """
-    The style of the generated image
-    """
-    AUTO = "auto"
-    GENERAL = "general"
-    REALISTIC = "realistic"
-    DESIGN = "design"
-    RENDER_3D = "render_3D"
-    ANIME = "anime"
-
-
-class RecraftV3Style(Enum):
-    """
-    The style of the generated images. Vector images cost 2X as much.
-    """
-    ANY = "any"
-    REALISTIC_IMAGE = "realistic_image"
-    DIGITAL_ILLUSTRATION = "digital_illustration"
-    VECTOR_ILLUSTRATION = "vector_illustration"
-    REALISTIC_IMAGE__B_AND_W = "realistic_image/b_and_w"
-    REALISTIC_IMAGE__HARD_FLASH = "realistic_image/hard_flash"
-    REALISTIC_IMAGE__HDR = "realistic_image/hdr"
-    REALISTIC_IMAGE__NATURAL_LIGHT = "realistic_image/natural_light"
-    REALISTIC_IMAGE__STUDIO_PORTRAIT = "realistic_image/studio_portrait"
-    REALISTIC_IMAGE__ENTERPRISE = "realistic_image/enterprise"
-    REALISTIC_IMAGE__MOTION_BLUR = "realistic_image/motion_blur"
-    REALISTIC_IMAGE__EVENING_LIGHT = "realistic_image/evening_light"
-    REALISTIC_IMAGE__FADED_NOSTALGIA = "realistic_image/faded_nostalgia"
-    REALISTIC_IMAGE__FOREST_LIFE = "realistic_image/forest_life"
-    REALISTIC_IMAGE__MYSTIC_NATURALISM = "realistic_image/mystic_naturalism"
-    REALISTIC_IMAGE__NATURAL_TONES = "realistic_image/natural_tones"
-    REALISTIC_IMAGE__ORGANIC_CALM = "realistic_image/organic_calm"
-    REALISTIC_IMAGE__REAL_LIFE_GLOW = "realistic_image/real_life_glow"
-    REALISTIC_IMAGE__RETRO_REALISM = "realistic_image/retro_realism"
-    REALISTIC_IMAGE__RETRO_SNAPSHOT = "realistic_image/retro_snapshot"
-    REALISTIC_IMAGE__URBAN_DRAMA = "realistic_image/urban_drama"
-    REALISTIC_IMAGE__VILLAGE_REALISM = "realistic_image/village_realism"
-    REALISTIC_IMAGE__WARM_FOLK = "realistic_image/warm_folk"
-    DIGITAL_ILLUSTRATION__PIXEL_ART = "digital_illustration/pixel_art"
-    DIGITAL_ILLUSTRATION__HAND_DRAWN = "digital_illustration/hand_drawn"
-    DIGITAL_ILLUSTRATION__GRAIN = "digital_illustration/grain"
-    DIGITAL_ILLUSTRATION__INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
-    DIGITAL_ILLUSTRATION__2D_ART_POSTER = "digital_illustration/2d_art_poster"
-    DIGITAL_ILLUSTRATION__HANDMADE_3D = "digital_illustration/handmade_3d"
-    DIGITAL_ILLUSTRATION__HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
-    DIGITAL_ILLUSTRATION__ENGRAVING_COLOR = "digital_illustration/engraving_color"
-    DIGITAL_ILLUSTRATION__2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
-    DIGITAL_ILLUSTRATION__ANTIQUARIAN = "digital_illustration/antiquarian"
-    DIGITAL_ILLUSTRATION__BOLD_FANTASY = "digital_illustration/bold_fantasy"
-    DIGITAL_ILLUSTRATION__CHILD_BOOK = "digital_illustration/child_book"
-    DIGITAL_ILLUSTRATION__CHILD_BOOKS = "digital_illustration/child_books"
-    DIGITAL_ILLUSTRATION__COVER = "digital_illustration/cover"
-    DIGITAL_ILLUSTRATION__CROSSHATCH = "digital_illustration/crosshatch"
-    DIGITAL_ILLUSTRATION__DIGITAL_ENGRAVING = "digital_illustration/digital_engraving"
-    DIGITAL_ILLUSTRATION__EXPRESSIONISM = "digital_illustration/expressionism"
-    DIGITAL_ILLUSTRATION__FREEHAND_DETAILS = "digital_illustration/freehand_details"
-    DIGITAL_ILLUSTRATION__GRAIN_20 = "digital_illustration/grain_20"
-    DIGITAL_ILLUSTRATION__GRAPHIC_INTENSITY = "digital_illustration/graphic_intensity"
-    DIGITAL_ILLUSTRATION__HARD_COMICS = "digital_illustration/hard_comics"
-    DIGITAL_ILLUSTRATION__LONG_SHADOW = "digital_illustration/long_shadow"
-    DIGITAL_ILLUSTRATION__MODERN_FOLK = "digital_illustration/modern_folk"
-    DIGITAL_ILLUSTRATION__MULTICOLOR = "digital_illustration/multicolor"
-    DIGITAL_ILLUSTRATION__NEON_CALM = "digital_illustration/neon_calm"
-    DIGITAL_ILLUSTRATION__NOIR = "digital_illustration/noir"
-    DIGITAL_ILLUSTRATION__NOSTALGIC_PASTEL = "digital_illustration/nostalgic_pastel"
-    DIGITAL_ILLUSTRATION__OUTLINE_DETAILS = "digital_illustration/outline_details"
-    DIGITAL_ILLUSTRATION__PASTEL_GRADIENT = "digital_illustration/pastel_gradient"
-    DIGITAL_ILLUSTRATION__PASTEL_SKETCH = "digital_illustration/pastel_sketch"
-    DIGITAL_ILLUSTRATION__POP_ART = "digital_illustration/pop_art"
-    DIGITAL_ILLUSTRATION__POP_RENAISSANCE = "digital_illustration/pop_renaissance"
-    DIGITAL_ILLUSTRATION__STREET_ART = "digital_illustration/street_art"
-    DIGITAL_ILLUSTRATION__TABLET_SKETCH = "digital_illustration/tablet_sketch"
-    DIGITAL_ILLUSTRATION__URBAN_GLOW = "digital_illustration/urban_glow"
-    DIGITAL_ILLUSTRATION__URBAN_SKETCHING = "digital_illustration/urban_sketching"
-    DIGITAL_ILLUSTRATION__VANILLA_DREAMS = "digital_illustration/vanilla_dreams"
-    DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK = "digital_illustration/young_adult_book"
-    DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK_2 = "digital_illustration/young_adult_book_2"
-    VECTOR_ILLUSTRATION__BOLD_STROKE = "vector_illustration/bold_stroke"
-    VECTOR_ILLUSTRATION__CHEMISTRY = "vector_illustration/chemistry"
-    VECTOR_ILLUSTRATION__COLORED_STENCIL = "vector_illustration/colored_stencil"
-    VECTOR_ILLUSTRATION__CONTOUR_POP_ART = "vector_illustration/contour_pop_art"
-    VECTOR_ILLUSTRATION__COSMICS = "vector_illustration/cosmics"
-    VECTOR_ILLUSTRATION__CUTOUT = "vector_illustration/cutout"
-    VECTOR_ILLUSTRATION__DEPRESSIVE = "vector_illustration/depressive"
-    VECTOR_ILLUSTRATION__EDITORIAL = "vector_illustration/editorial"
-    VECTOR_ILLUSTRATION__EMOTIONAL_FLAT = "vector_illustration/emotional_flat"
-    VECTOR_ILLUSTRATION__INFOGRAPHICAL = "vector_illustration/infographical"
-    VECTOR_ILLUSTRATION__MARKER_OUTLINE = "vector_illustration/marker_outline"
-    VECTOR_ILLUSTRATION__MOSAIC = "vector_illustration/mosaic"
-    VECTOR_ILLUSTRATION__NAIVECTOR = "vector_illustration/naivector"
-    VECTOR_ILLUSTRATION__ROUNDISH_FLAT = "vector_illustration/roundish_flat"
-    VECTOR_ILLUSTRATION__SEGMENTED_COLORS = "vector_illustration/segmented_colors"
-    VECTOR_ILLUSTRATION__SHARP_CONTRAST = "vector_illustration/sharp_contrast"
-    VECTOR_ILLUSTRATION__THIN = "vector_illustration/thin"
-    VECTOR_ILLUSTRATION__VECTOR_PHOTO = "vector_illustration/vector_photo"
-    VECTOR_ILLUSTRATION__VIVID_SHAPES = "vector_illustration/vivid_shapes"
-    VECTOR_ILLUSTRATION__ENGRAVING = "vector_illustration/engraving"
-    VECTOR_ILLUSTRATION__LINE_ART = "vector_illustration/line_art"
-    VECTOR_ILLUSTRATION__LINE_CIRCUIT = "vector_illustration/line_circuit"
-    VECTOR_ILLUSTRATION__LINOCUT = "vector_illustration/linocut"
-
-
-class RenderingSpeed(Enum):
-    """
-    The rendering speed to use.
-    """
-    TURBO = "TURBO"
-    BALANCED = "BALANCED"
-    QUALITY = "QUALITY"
-
-
-class StyleName(Enum):
-    """
-    The style to generate the image in.
-    """
-    NO_STYLE = "(No style)"
-    CINEMATIC = "Cinematic"
-    PHOTOGRAPHIC = "Photographic"
-    ANIME = "Anime"
-    MANGA = "Manga"
-    DIGITAL_ART = "Digital Art"
-    PIXEL_ART = "Pixel art"
-    FANTASY_ART = "Fantasy art"
-    NEONPUNK = "Neonpunk"
-    MODEL_3D = "3D Model"
-
-
-class ImageSize(Enum):
-    """
-    Aspect ratio for the generated image
-    """
-    VALUE_1024X1024 = "1024x1024"
-    VALUE_1536X1024 = "1536x1024"
-    VALUE_1024X1536 = "1024x1536"
-
-
-class Background(Enum):
-    """
-    Background for the generated image
-    """
-    AUTO = "auto"
-    TRANSPARENT = "transparent"
-    OPAQUE = "opaque"
-
-
-class Quality(Enum):
-    """
-    Quality for the generated image
-    """
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-
-
-class Resolution(Enum):
-    """
-    The resolution of the image to generate.
-    """
-    VALUE_1K = "1K"
-    VALUE_2K = "2K"
-    VALUE_4K = "4K"
-
-
-class EnhancePromptMode(Enum):
-    """
-    The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate.
-    """
-    STANDARD = "standard"
-    FAST = "fast"
-
-
-class ImageFormat(Enum):
-    """
-    The format of the output image.
-    """
-    PNG = "png"
-    JPEG = "jpeg"
-
-
-class Scheduler(Enum):
-    """
-    The scheduler to use for the diffusion process.
-    """
-    EULER = "euler"
-    DPMSOLVER = "dpmsolver"
-
-
-
-
 class FluxDev(FALNode):
     """
     FLUX.1 [dev] is a powerful open-weight text-to-image model with 12 billion parameters. Optimized for prompt following and visual quality.
@@ -264,6 +28,22 @@ class FluxDev(FALNode):
     - Generate multiple variations from one prompt
     - Create safe-for-work content with built-in safety checker
     """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -326,8 +106,6 @@ class FluxDev(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_inference_steps"]
 
-
-
 class FluxSchnell(FALNode):
     """
     FLUX.1 [schnell] is a fast distilled version of FLUX.1 optimized for speed. Can generate high-quality images in 1-4 steps.
@@ -340,6 +118,22 @@ class FluxSchnell(FALNode):
     - Generate multiple variations efficiently
     - Real-time image generation applications
     """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -402,8 +196,6 @@ class FluxSchnell(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_inference_steps"]
 
-
-
 class FluxV1Pro(FALNode):
     """
     FLUX.1 Pro is a state-of-the-art image generation model with superior prompt following and image quality.
@@ -416,6 +208,25 @@ class FluxV1Pro(FALNode):
     - Generate photorealistic images
     - Create custom visual content with precise control
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -474,8 +285,6 @@ class FluxV1Pro(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "guidance_scale"]
 
-
-
 class FluxV1ProUltra(FALNode):
     """
     FLUX.1 Pro Ultra delivers the highest quality image generation with enhanced detail and realism.
@@ -488,6 +297,25 @@ class FluxV1ProUltra(FALNode):
     - Generate premium marketing materials
     - Create artistic masterpieces with fine details
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -559,7 +387,6 @@ class FluxV1ProUltra(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "aspect_ratio"]
 
-
 class FluxLora(FALNode):
     """
     FLUX with LoRA support enables fine-tuned image generation using custom LoRA models for specific styles or subjects.
@@ -572,6 +399,14 @@ class FluxLora(FALNode):
     - Generate images with specialized subjects
     - Combine multiple LoRA models for unique results
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -634,8 +469,6 @@ class FluxLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "loras", "image_size"]
 
-
-
 class IdeogramV2(FALNode):
     """
     Ideogram V2 is a state-of-the-art image generation model optimized for commercial and creative use, featuring exceptional typography handling and realistic outputs.
@@ -648,6 +481,34 @@ class IdeogramV2(FALNode):
     - Produce high-quality illustrations
     - Create brand assets and logos
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image
+        """
+        RATIO_10_16 = "10:16"
+        RATIO_16_10 = "16:10"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_1_1 = "1:1"
+        RATIO_1_3 = "1:3"
+        RATIO_3_1 = "3:1"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+
+    class Style(Enum):
+        """
+        The style of the generated image
+        """
+        AUTO = "auto"
+        GENERAL = "general"
+        REALISTIC = "realistic"
+        DESIGN = "design"
+        RENDER_3D = "render_3D"
+        ANIME = "anime"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -698,8 +559,6 @@ class IdeogramV2(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "aspect_ratio", "style"]
 
-
-
 class IdeogramV2Turbo(FALNode):
     """
     Ideogram V2 Turbo offers faster image generation with the same exceptional quality and typography handling as V2.
@@ -712,6 +571,34 @@ class IdeogramV2Turbo(FALNode):
     - Real-time design exploration
     - Efficient batch generation of branded content
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image
+        """
+        RATIO_10_16 = "10:16"
+        RATIO_16_10 = "16:10"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_1_1 = "1:1"
+        RATIO_1_3 = "1:3"
+        RATIO_3_1 = "3:1"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+
+    class Style(Enum):
+        """
+        The style of the generated image
+        """
+        AUTO = "auto"
+        GENERAL = "general"
+        REALISTIC = "realistic"
+        DESIGN = "design"
+        RENDER_3D = "render_3D"
+        ANIME = "anime"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -762,7 +649,6 @@ class IdeogramV2Turbo(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "aspect_ratio", "style"]
 
-
 class RecraftV3(FALNode):
     """
     Recraft V3 is a powerful image generation model with exceptional control over style and colors, ideal for brand consistency and design work.
@@ -775,6 +661,97 @@ class RecraftV3(FALNode):
     - Design marketing materials with brand colors
     - Create cohesive visual content series
     """
+
+    class RecraftV3Style(Enum):
+        """
+        The style of the generated images. Vector images cost 2X as much.
+        """
+        ANY = "any"
+        REALISTIC_IMAGE = "realistic_image"
+        DIGITAL_ILLUSTRATION = "digital_illustration"
+        VECTOR_ILLUSTRATION = "vector_illustration"
+        REALISTIC_IMAGE__B_AND_W = "realistic_image/b_and_w"
+        REALISTIC_IMAGE__HARD_FLASH = "realistic_image/hard_flash"
+        REALISTIC_IMAGE__HDR = "realistic_image/hdr"
+        REALISTIC_IMAGE__NATURAL_LIGHT = "realistic_image/natural_light"
+        REALISTIC_IMAGE__STUDIO_PORTRAIT = "realistic_image/studio_portrait"
+        REALISTIC_IMAGE__ENTERPRISE = "realistic_image/enterprise"
+        REALISTIC_IMAGE__MOTION_BLUR = "realistic_image/motion_blur"
+        REALISTIC_IMAGE__EVENING_LIGHT = "realistic_image/evening_light"
+        REALISTIC_IMAGE__FADED_NOSTALGIA = "realistic_image/faded_nostalgia"
+        REALISTIC_IMAGE__FOREST_LIFE = "realistic_image/forest_life"
+        REALISTIC_IMAGE__MYSTIC_NATURALISM = "realistic_image/mystic_naturalism"
+        REALISTIC_IMAGE__NATURAL_TONES = "realistic_image/natural_tones"
+        REALISTIC_IMAGE__ORGANIC_CALM = "realistic_image/organic_calm"
+        REALISTIC_IMAGE__REAL_LIFE_GLOW = "realistic_image/real_life_glow"
+        REALISTIC_IMAGE__RETRO_REALISM = "realistic_image/retro_realism"
+        REALISTIC_IMAGE__RETRO_SNAPSHOT = "realistic_image/retro_snapshot"
+        REALISTIC_IMAGE__URBAN_DRAMA = "realistic_image/urban_drama"
+        REALISTIC_IMAGE__VILLAGE_REALISM = "realistic_image/village_realism"
+        REALISTIC_IMAGE__WARM_FOLK = "realistic_image/warm_folk"
+        DIGITAL_ILLUSTRATION__PIXEL_ART = "digital_illustration/pixel_art"
+        DIGITAL_ILLUSTRATION__HAND_DRAWN = "digital_illustration/hand_drawn"
+        DIGITAL_ILLUSTRATION__GRAIN = "digital_illustration/grain"
+        DIGITAL_ILLUSTRATION__INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
+        DIGITAL_ILLUSTRATION__2D_ART_POSTER = "digital_illustration/2d_art_poster"
+        DIGITAL_ILLUSTRATION__HANDMADE_3D = "digital_illustration/handmade_3d"
+        DIGITAL_ILLUSTRATION__HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
+        DIGITAL_ILLUSTRATION__ENGRAVING_COLOR = "digital_illustration/engraving_color"
+        DIGITAL_ILLUSTRATION__2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
+        DIGITAL_ILLUSTRATION__ANTIQUARIAN = "digital_illustration/antiquarian"
+        DIGITAL_ILLUSTRATION__BOLD_FANTASY = "digital_illustration/bold_fantasy"
+        DIGITAL_ILLUSTRATION__CHILD_BOOK = "digital_illustration/child_book"
+        DIGITAL_ILLUSTRATION__CHILD_BOOKS = "digital_illustration/child_books"
+        DIGITAL_ILLUSTRATION__COVER = "digital_illustration/cover"
+        DIGITAL_ILLUSTRATION__CROSSHATCH = "digital_illustration/crosshatch"
+        DIGITAL_ILLUSTRATION__DIGITAL_ENGRAVING = "digital_illustration/digital_engraving"
+        DIGITAL_ILLUSTRATION__EXPRESSIONISM = "digital_illustration/expressionism"
+        DIGITAL_ILLUSTRATION__FREEHAND_DETAILS = "digital_illustration/freehand_details"
+        DIGITAL_ILLUSTRATION__GRAIN_20 = "digital_illustration/grain_20"
+        DIGITAL_ILLUSTRATION__GRAPHIC_INTENSITY = "digital_illustration/graphic_intensity"
+        DIGITAL_ILLUSTRATION__HARD_COMICS = "digital_illustration/hard_comics"
+        DIGITAL_ILLUSTRATION__LONG_SHADOW = "digital_illustration/long_shadow"
+        DIGITAL_ILLUSTRATION__MODERN_FOLK = "digital_illustration/modern_folk"
+        DIGITAL_ILLUSTRATION__MULTICOLOR = "digital_illustration/multicolor"
+        DIGITAL_ILLUSTRATION__NEON_CALM = "digital_illustration/neon_calm"
+        DIGITAL_ILLUSTRATION__NOIR = "digital_illustration/noir"
+        DIGITAL_ILLUSTRATION__NOSTALGIC_PASTEL = "digital_illustration/nostalgic_pastel"
+        DIGITAL_ILLUSTRATION__OUTLINE_DETAILS = "digital_illustration/outline_details"
+        DIGITAL_ILLUSTRATION__PASTEL_GRADIENT = "digital_illustration/pastel_gradient"
+        DIGITAL_ILLUSTRATION__PASTEL_SKETCH = "digital_illustration/pastel_sketch"
+        DIGITAL_ILLUSTRATION__POP_ART = "digital_illustration/pop_art"
+        DIGITAL_ILLUSTRATION__POP_RENAISSANCE = "digital_illustration/pop_renaissance"
+        DIGITAL_ILLUSTRATION__STREET_ART = "digital_illustration/street_art"
+        DIGITAL_ILLUSTRATION__TABLET_SKETCH = "digital_illustration/tablet_sketch"
+        DIGITAL_ILLUSTRATION__URBAN_GLOW = "digital_illustration/urban_glow"
+        DIGITAL_ILLUSTRATION__URBAN_SKETCHING = "digital_illustration/urban_sketching"
+        DIGITAL_ILLUSTRATION__VANILLA_DREAMS = "digital_illustration/vanilla_dreams"
+        DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK = "digital_illustration/young_adult_book"
+        DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK_2 = "digital_illustration/young_adult_book_2"
+        VECTOR_ILLUSTRATION__BOLD_STROKE = "vector_illustration/bold_stroke"
+        VECTOR_ILLUSTRATION__CHEMISTRY = "vector_illustration/chemistry"
+        VECTOR_ILLUSTRATION__COLORED_STENCIL = "vector_illustration/colored_stencil"
+        VECTOR_ILLUSTRATION__CONTOUR_POP_ART = "vector_illustration/contour_pop_art"
+        VECTOR_ILLUSTRATION__COSMICS = "vector_illustration/cosmics"
+        VECTOR_ILLUSTRATION__CUTOUT = "vector_illustration/cutout"
+        VECTOR_ILLUSTRATION__DEPRESSIVE = "vector_illustration/depressive"
+        VECTOR_ILLUSTRATION__EDITORIAL = "vector_illustration/editorial"
+        VECTOR_ILLUSTRATION__EMOTIONAL_FLAT = "vector_illustration/emotional_flat"
+        VECTOR_ILLUSTRATION__INFOGRAPHICAL = "vector_illustration/infographical"
+        VECTOR_ILLUSTRATION__MARKER_OUTLINE = "vector_illustration/marker_outline"
+        VECTOR_ILLUSTRATION__MOSAIC = "vector_illustration/mosaic"
+        VECTOR_ILLUSTRATION__NAIVECTOR = "vector_illustration/naivector"
+        VECTOR_ILLUSTRATION__ROUNDISH_FLAT = "vector_illustration/roundish_flat"
+        VECTOR_ILLUSTRATION__SEGMENTED_COLORS = "vector_illustration/segmented_colors"
+        VECTOR_ILLUSTRATION__SHARP_CONTRAST = "vector_illustration/sharp_contrast"
+        VECTOR_ILLUSTRATION__THIN = "vector_illustration/thin"
+        VECTOR_ILLUSTRATION__VECTOR_PHOTO = "vector_illustration/vector_photo"
+        VECTOR_ILLUSTRATION__VIVID_SHAPES = "vector_illustration/vivid_shapes"
+        VECTOR_ILLUSTRATION__ENGRAVING = "vector_illustration/engraving"
+        VECTOR_ILLUSTRATION__LINE_ART = "vector_illustration/line_art"
+        VECTOR_ILLUSTRATION__LINE_CIRCUIT = "vector_illustration/line_circuit"
+        VECTOR_ILLUSTRATION__LINOCUT = "vector_illustration/linocut"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -821,7 +798,6 @@ class RecraftV3(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "style", "colors"]
 
-
 class StableDiffusionV35Large(FALNode):
     """
     Stable Diffusion 3.5 Large is a powerful open-weight model with excellent prompt adherence and diverse output capabilities.
@@ -834,6 +810,14 @@ class StableDiffusionV35Large(FALNode):
     - Generate concept art and designs
     - Create custom visual content
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -908,8 +892,6 @@ class StableDiffusionV35Large(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "negative_prompt", "aspect_ratio"]
 
-
-
 class FluxProNew(FALNode):
     """
     FLUX.1 Pro New is the latest version of the professional FLUX model with enhanced capabilities and improved output quality.
@@ -922,6 +904,25 @@ class FluxProNew(FALNode):
     - Design premium brand assets
     - Generate photorealistic commercial imagery
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -984,7 +985,6 @@ class FluxProNew(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size"]
 
-
 class Flux2Turbo(FALNode):
     """
     FLUX.2 Turbo is a blazing-fast image generation model optimized for speed without sacrificing quality, ideal for real-time applications.
@@ -997,6 +997,15 @@ class Flux2Turbo(FALNode):
     - Live visual effects and augmented reality
     - High-throughput batch image processing
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -1055,7 +1064,6 @@ class Flux2Turbo(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_images"]
 
-
 class Flux2Flash(FALNode):
     """
     FLUX.2 Flash is an ultra-fast variant of FLUX.2 designed for instant image generation with minimal latency.
@@ -1068,6 +1076,15 @@ class Flux2Flash(FALNode):
     - High-speed batch processing
     - Interactive gaming and entertainment applications
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -1126,7 +1143,6 @@ class Flux2Flash(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size"]
 
-
 class IdeogramV3(FALNode):
     """
     Ideogram V3 is the latest generation with enhanced text rendering, superior image quality, and expanded creative controls.
@@ -1139,6 +1155,15 @@ class IdeogramV3(FALNode):
     - Produce marketing materials with text overlays
     - Create educational content with clear text
     """
+
+    class RenderingSpeed(Enum):
+        """
+        The rendering speed to use.
+        """
+        TURBO = "TURBO"
+        BALANCED = "BALANCED"
+        QUALITY = "QUALITY"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -1214,7 +1239,6 @@ class IdeogramV3(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "aspect_ratio", "style"]
 
-
 class OmniGenV1(FALNode):
     """
     OmniGen V1 is a versatile unified model for multi-modal image generation and editing with text, supporting complex compositional tasks.
@@ -1227,6 +1251,14 @@ class OmniGenV1(FALNode):
     - Combine text and image inputs for generation
     - Perform advanced image manipulations
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate or edit an image"
@@ -1293,8 +1325,6 @@ class OmniGenV1(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "guidance_scale", "num_inference_steps"]
 
-
-
 class Sana(FALNode):
     """
     Sana is an efficient high-resolution image generation model that balances quality and speed for practical applications.
@@ -1307,6 +1337,29 @@ class Sana(FALNode):
     - Generate images for web and mobile applications
     - Balanced quality-speed image production
     """
+
+    class StyleName(Enum):
+        """
+        The style to generate the image in.
+        """
+        NO_STYLE = "(No style)"
+        CINEMATIC = "Cinematic"
+        PHOTOGRAPHIC = "Photographic"
+        ANIME = "Anime"
+        MANGA = "Manga"
+        DIGITAL_ART = "Digital Art"
+        PIXEL_ART = "Pixel art"
+        FANTASY_ART = "Fantasy art"
+        NEONPUNK = "Neonpunk"
+        MODEL_3D = "3D Model"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -1373,7 +1426,6 @@ class Sana(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "guidance_scale"]
 
-
 class HunyuanImageV3InstructTextToImage(FALNode):
     """
     Hunyuan Image v3 Instruct generates high-quality images from text with advanced instruction understanding.
@@ -1386,6 +1438,14 @@ class HunyuanImageV3InstructTextToImage(FALNode):
     - Generate images with advanced understanding
     - Create professional visuals from text
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
@@ -1440,7 +1500,6 @@ class HunyuanImageV3InstructTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class QwenImageMaxTextToImage(FALNode):
     """
     Qwen Image Max generates premium quality images from text with superior detail and accuracy.
@@ -1453,6 +1512,15 @@ class QwenImageMaxTextToImage(FALNode):
     - Generate professional-grade images
     - Create superior quality visuals
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="Text prompt describing the desired image. Supports Chinese and English. Max 800 characters."
@@ -1511,8 +1579,6 @@ class QwenImageMaxTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class QwenImage2512(FALNode):
     """
     Qwen Image 2512 generates high-resolution images from text with excellent quality and detail.
@@ -1525,6 +1591,23 @@ class QwenImage2512(FALNode):
     - Generate images with fine details
     - Create high-quality visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -1591,8 +1674,6 @@ class QwenImage2512(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class QwenImage2512Lora(FALNode):
     """
     Qwen Image 2512 with LoRA support enables custom-trained models for specialized image generation.
@@ -1605,6 +1686,23 @@ class QwenImage2512Lora(FALNode):
     - Generate images with fine-tuned models
     - Create customized visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -1675,8 +1773,6 @@ class QwenImage2512Lora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class ZImageBase(FALNode):
     """
     Z-Image Base generates quality images from text with efficient processing and good results.
@@ -1689,6 +1785,23 @@ class ZImageBase(FALNode):
     - Generate images with good performance
     - Create efficient visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -1755,8 +1868,6 @@ class ZImageBase(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class ZImageBaseLora(FALNode):
     """
     Z-Image Base with LoRA enables efficient custom-trained models for specialized generation tasks.
@@ -1769,6 +1880,23 @@ class ZImageBaseLora(FALNode):
     - Generate with fine-tuned base model
     - Create efficient custom visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -1839,8 +1967,6 @@ class ZImageBaseLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class ZImageTurbo(FALNode):
     """
     Z-Image Turbo generates images from text with maximum speed for rapid iteration and prototyping.
@@ -1853,6 +1979,23 @@ class ZImageTurbo(FALNode):
     - Generate images for fast workflows
     - Create instant visual content
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -1915,8 +2058,6 @@ class ZImageTurbo(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class ZImageTurboLora(FALNode):
     """
     Z-Image Turbo with LoRA combines maximum speed with custom models for fast specialized generation.
@@ -1929,6 +2070,23 @@ class ZImageTurboLora(FALNode):
     - Generate with fast fine-tuned models
     - Create instant custom visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -1995,7 +2153,6 @@ class ZImageTurboLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class Flux2Klein4B(FALNode):
     """
     FLUX-2 Klein 4B generates images with the efficient 4-billion parameter model for balanced quality and speed.
@@ -2008,6 +2165,15 @@ class Flux2Klein4B(FALNode):
     - Generate images with good performance
     - Create optimized visuals
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2062,8 +2228,6 @@ class Flux2Klein4B(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2Klein4BBase(FALNode):
     """
     FLUX-2 Klein 4B Base provides foundation model generation with 4-billion parameters.
@@ -2076,6 +2240,23 @@ class Flux2Klein4BBase(FALNode):
     - Generate images with base model
     - Create baseline visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for image generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2142,8 +2323,6 @@ class Flux2Klein4BBase(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2Klein4BBaseLora(FALNode):
     """
     FLUX-2 Klein 4B Base with LoRA enables custom-trained 4B models for specialized generation.
@@ -2156,6 +2335,23 @@ class Flux2Klein4BBaseLora(FALNode):
     - Generate with fine-tuned 4B model
     - Create customized baseline visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for image generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2226,7 +2422,6 @@ class Flux2Klein4BBaseLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class Flux2Klein9B(FALNode):
     """
     FLUX-2 Klein 9B generates high-quality images with the powerful 9-billion parameter model.
@@ -2239,6 +2434,15 @@ class Flux2Klein9B(FALNode):
     - Generate images with powerful model
     - Create premium quality visuals
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2293,8 +2497,6 @@ class Flux2Klein9B(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2Klein9BBase(FALNode):
     """
     FLUX-2 Klein 9B Base provides foundation generation with the full 9-billion parameter model.
@@ -2307,6 +2509,23 @@ class Flux2Klein9BBase(FALNode):
     - Generate images with powerful base
     - Create premium baseline visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for image generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2373,8 +2592,6 @@ class Flux2Klein9BBase(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2Klein9BBaseLora(FALNode):
     """
     FLUX-2 Klein 9B Base with LoRA combines powerful generation with custom-trained models.
@@ -2387,6 +2604,23 @@ class Flux2Klein9BBaseLora(FALNode):
     - Generate with fine-tuned 9B model
     - Create advanced customized visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for image generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2457,8 +2691,6 @@ class Flux2Klein9BBaseLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2Max(FALNode):
     """
     FLUX-2 Max generates maximum quality images with the most advanced FLUX-2 model for premium results.
@@ -2471,6 +2703,24 @@ class Flux2Max(FALNode):
     - Generate images with best model
     - Create superior quality visuals
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2521,7 +2771,6 @@ class Flux2Max(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class GlmImage(FALNode):
     """
     GLM Image generates images from text with advanced AI understanding and quality output.
@@ -2534,6 +2783,14 @@ class GlmImage(FALNode):
     - Generate images with understanding
     - Create smart visuals from text
     """
+
+    class OutputFormat(Enum):
+        """
+        Output image format.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="Text prompt for image generation."
@@ -2596,10 +2853,6 @@ class GlmImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
-
-
 class GptImage15(FALNode):
     """
     GPT Image 1.5 generates images from text with GPT-powered language understanding and visual creation.
@@ -2612,6 +2865,39 @@ class GptImage15(FALNode):
     - Generate images with natural language
     - Create GPT-powered visuals
     """
+
+    class ImageSize(Enum):
+        """
+        Aspect ratio for the generated image
+        """
+        VALUE_1024X1024 = "1024x1024"
+        VALUE_1536X1024 = "1536x1024"
+        VALUE_1024X1536 = "1024x1536"
+
+    class Background(Enum):
+        """
+        Background for the generated image
+        """
+        AUTO = "auto"
+        TRANSPARENT = "transparent"
+        OPAQUE = "opaque"
+
+    class Quality(Enum):
+        """
+        Quality for the generated image
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        Output format for the images
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt for image generation"
@@ -2725,8 +3011,6 @@ class WanV26TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class LongcatImage(FALNode):
     """
     Longcat Image generates creative and unique images from text with distinctive AI characteristics.
@@ -2739,6 +3023,23 @@ class LongcatImage(FALNode):
     - Generate images with character
     - Create artistic visuals
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -2863,7 +3164,6 @@ class BytedanceSeedreamV45TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class ViduQ2TextToImage(FALNode):
     """
     Vidu Q2 generates quality images from text with optimized performance and consistent results.
@@ -2876,6 +3176,15 @@ class ViduQ2TextToImage(FALNode):
     - Generate images efficiently
     - Create reliable visuals
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the output video
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
 
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
@@ -2910,8 +3219,7 @@ class ViduQ2TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-class ImagineartImagineart15ProPreviewTextToImage(FALNode):
+class ImagineartImagineart1_5ProPreviewTextToImage(FALNode):
     """
     ImagineArt 1.5 Pro Preview
     generation, text-to-image, txt2img, ai-art, professional
@@ -2923,6 +3231,21 @@ class ImagineartImagineart15ProPreviewTextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class AspectRatio(Enum):
+        """
+        Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_3_1 = "3:1"
+        RATIO_1_3 = "1:3"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+
 
     prompt: str = Field(
         default="", description="Text prompt describing the desired image"
@@ -2957,7 +3280,6 @@ class ImagineartImagineart15ProPreviewTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class BriaFiboLiteGenerate(FALNode):
     """
     Fibo Lite
@@ -2970,6 +3292,21 @@ class BriaFiboLiteGenerate(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_2 = "3:2"
+        RATIO_3_4 = "3:4"
+        RATIO_4_3 = "4:3"
+        RATIO_4_5 = "4:5"
+        RATIO_5_4 = "5:4"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
 
     prompt: str = Field(
         default="", description="Prompt for image generation."
@@ -3021,8 +3358,6 @@ class BriaFiboLiteGenerate(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class OvisImage(FALNode):
     """
     Ovis Image
@@ -3035,6 +3370,23 @@ class OvisImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -3101,8 +3453,6 @@ class OvisImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2LoraGallerySepiaVintage(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3115,6 +3465,22 @@ class Flux2LoraGallerySepiaVintage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for image generation. 'regular' balances speed and quality.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate a sepia vintage photography style image."
@@ -3181,8 +3547,6 @@ class Flux2LoraGallerySepiaVintage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2LoraGallerySatelliteViewStyle(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3195,6 +3559,22 @@ class Flux2LoraGallerySatelliteViewStyle(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for image generation. 'regular' balances speed and quality.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate a satellite/aerial view style image."
@@ -3261,8 +3641,6 @@ class Flux2LoraGallerySatelliteViewStyle(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2LoraGalleryRealism(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3275,6 +3653,22 @@ class Flux2LoraGalleryRealism(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for image generation. 'regular' balances speed and quality.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate a realistic image with natural lighting and authentic details."
@@ -3341,8 +3735,6 @@ class Flux2LoraGalleryRealism(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2LoraGalleryHdrStyle(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3355,6 +3747,22 @@ class Flux2LoraGalleryHdrStyle(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for image generation. 'regular' balances speed and quality.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an HDR style image. The trigger word 'Hyp3rRe4list1c' will be automatically prepended."
@@ -3421,8 +3829,6 @@ class Flux2LoraGalleryHdrStyle(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2LoraGalleryDigitalComicArt(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3435,6 +3841,22 @@ class Flux2LoraGalleryDigitalComicArt(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for image generation. 'regular' balances speed and quality.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate a digital comic art style image. Use 'd1g1t4l' trigger word for best results."
@@ -3501,8 +3923,6 @@ class Flux2LoraGalleryDigitalComicArt(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2LoraGalleryBallpointPenSketch(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3515,6 +3935,22 @@ class Flux2LoraGalleryBallpointPenSketch(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for image generation. 'regular' balances speed and quality.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate a ballpoint pen sketch style image. Use 'b4llp01nt' trigger word for best results."
@@ -3581,8 +4017,6 @@ class Flux2LoraGalleryBallpointPenSketch(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux2Flex(FALNode):
     """
     Flux 2 Flex
@@ -3595,6 +4029,24 @@ class Flux2Flex(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -3657,9 +4109,6 @@ class Flux2Flex(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
-
 class Gemini3ProImagePreview(FALNode):
     """
     Gemini 3 Pro Image Preview
@@ -3672,6 +4121,34 @@ class Gemini3ProImagePreview(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Resolution(Enum):
+        """
+        The resolution of the image to generate.
+        """
+        VALUE_1K = "1K"
+        VALUE_2K = "2K"
+        VALUE_4K = "4K"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
 
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
@@ -3734,9 +4211,6 @@ class Gemini3ProImagePreview(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
-
 class NanoBananaPro(FALNode):
     """
     Nano Banana Pro
@@ -3749,6 +4223,34 @@ class NanoBananaPro(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Resolution(Enum):
+        """
+        The resolution of the image to generate.
+        """
+        VALUE_1K = "1K"
+        VALUE_2K = "2K"
+        VALUE_4K = "4K"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
 
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
@@ -3811,8 +4313,7 @@ class NanoBananaPro(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-class ImagineartImagineart15PreviewTextToImage(FALNode):
+class ImagineartImagineart1_5PreviewTextToImage(FALNode):
     """
     Imagineart 1.5 Preview
     generation, text-to-image, txt2img, ai-art
@@ -3824,6 +4325,21 @@ class ImagineartImagineart15PreviewTextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class AspectRatio(Enum):
+        """
+        Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_3_1 = "3:1"
+        RATIO_1_3 = "1:3"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+
 
     prompt: str = Field(
         default="", description="Text prompt describing the desired image"
@@ -3858,9 +4374,6 @@ class ImagineartImagineart15PreviewTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
-
 class Emu3_5ImageTextToImage(FALNode):
     """
     Emu 3.5 Image
@@ -3873,6 +4386,36 @@ class Emu3_5ImageTextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Resolution(Enum):
+        """
+        The resolution of the output image.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the output image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_3_2 = "3:2"
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        RATIO_9_21 = "9:21"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The prompt to create the image."
@@ -3923,7 +4466,6 @@ class Emu3_5ImageTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class BriaFiboGenerate(FALNode):
     """
     Fibo
@@ -3936,6 +4478,21 @@ class BriaFiboGenerate(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9
+        """
+        RATIO_1_1 = "1:1"
+        RATIO_2_3 = "2:3"
+        RATIO_3_2 = "3:2"
+        RATIO_3_4 = "3:4"
+        RATIO_4_3 = "4:3"
+        RATIO_4_5 = "4:5"
+        RATIO_5_4 = "5:4"
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
 
     prompt: str = Field(
         default="", description="Prompt for image generation."
@@ -3995,7 +4552,6 @@ class BriaFiboGenerate(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class Piflow(FALNode):
     """
     Piflow
@@ -4008,6 +4564,14 @@ class Piflow(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -4062,10 +4626,6 @@ class Piflow(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
-
-
 class GptImage1Mini(FALNode):
     """
     GPT Image 1 Mini
@@ -4078,6 +4638,41 @@ class GptImage1Mini(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Background(Enum):
+        """
+        Background for the generated image
+        """
+        AUTO = "auto"
+        TRANSPARENT = "transparent"
+        OPAQUE = "opaque"
+
+    class ImageSize(Enum):
+        """
+        Aspect ratio for the generated image
+        """
+        AUTO = "auto"
+        VALUE_1024X1024 = "1024x1024"
+        VALUE_1536X1024 = "1536x1024"
+        VALUE_1024X1536 = "1024x1536"
+
+    class Quality(Enum):
+        """
+        Quality for the generated image
+        """
+        AUTO = "auto"
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        Output format for the images
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     background: Background = Field(
         default=Background.AUTO, description="Background for the generated image"
@@ -4128,8 +4723,6 @@ class GptImage1Mini(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class ReveTextToImage(FALNode):
     """
     Reve
@@ -4142,6 +4735,27 @@ class ReveTextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class AspectRatio(Enum):
+        """
+        The desired aspect ratio of the generated image.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_1_1 = "1:1"
+
+    class OutputFormat(Enum):
+        """
+        Output format for the generated image.
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The text description of the desired image."
@@ -4184,7 +4798,6 @@ class ReveTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class HunyuanImageV3TextToImage(FALNode):
     """
     Hunyuan Image
@@ -4197,6 +4810,14 @@ class HunyuanImageV3TextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The text prompt for image-to-image."
@@ -4325,8 +4946,6 @@ class Wan25PreviewTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class FluxSrpo(FALNode):
     """
     FLUX.1 SRPO [dev]
@@ -4339,6 +4958,22 @@ class FluxSrpo(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -4401,8 +5036,6 @@ class FluxSrpo(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux1Srpo(FALNode):
     """
     FLUX.1 SRPO [dev]
@@ -4415,6 +5048,22 @@ class Flux1Srpo(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -4477,7 +5126,6 @@ class Flux1Srpo(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class HunyuanImageV2_1TextToImage(FALNode):
     """
     Hunyuan Image
@@ -4490,6 +5138,14 @@ class HunyuanImageV2_1TextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
@@ -4560,7 +5216,6 @@ class HunyuanImageV2_1TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class BytedanceSeedreamV4TextToImage(FALNode):
     """
     Bytedance Seedream v4
@@ -4574,6 +5229,14 @@ class BytedanceSeedreamV4TextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
+    class EnhancePromptMode(Enum):
+        """
+        The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate.
+        """
+        STANDARD = "standard"
+        FAST = "fast"
+
+
     prompt: str = Field(
         default="", description="The text prompt used to generate the image"
     )
@@ -4583,11 +5246,11 @@ class BytedanceSeedreamV4TextToImage(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image. Total pixels must be between 960x960 and 4096x4096."
     )
-    enhance_prompt_mode: EnhancePromptMode = Field(
-        default=EnhancePromptMode.STANDARD, description="The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate."
-    )
     max_images: int = Field(
         default=1, description="If set to a number greater than one, enables multi-image generation. The model will potentially return up to `max_images` images every generation, and in total, `num_images` generations will be carried out. In total, the number of images generated will be between `num_images` and `max_images*num_images`."
+    )
+    enhance_prompt_mode: EnhancePromptMode = Field(
+        default=EnhancePromptMode.STANDARD, description="The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -4604,8 +5267,8 @@ class BytedanceSeedreamV4TextToImage(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "enhance_prompt_mode": self.enhance_prompt_mode.value,
             "max_images": self.max_images,
+            "enhance_prompt_mode": self.enhance_prompt_mode.value,
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -4627,8 +5290,6 @@ class BytedanceSeedreamV4TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Gemini25FlashImage(FALNode):
     """
     Gemini 2.5 Flash Image
@@ -4641,6 +5302,30 @@ class Gemini25FlashImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_3_2 = "3:2"
+        RATIO_4_3 = "4:3"
+        RATIO_5_4 = "5:4"
+        RATIO_1_1 = "1:1"
+        RATIO_4_5 = "4:5"
+        RATIO_3_4 = "3:4"
+        RATIO_2_3 = "2:3"
+        RATIO_9_16 = "9:16"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
@@ -4687,8 +5372,6 @@ class Gemini25FlashImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class NanoBanana(FALNode):
     """
     Nano Banana
@@ -4701,6 +5384,30 @@ class NanoBanana(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image.
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_3_2 = "3:2"
+        RATIO_4_3 = "4:3"
+        RATIO_5_4 = "5:4"
+        RATIO_1_1 = "1:1"
+        RATIO_4_5 = "4:5"
+        RATIO_3_4 = "3:4"
+        RATIO_2_3 = "2:3"
+        RATIO_9_16 = "9:16"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
 
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
@@ -4805,8 +5512,6 @@ class BytedanceDreaminaV3_1TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class WanV2_2A14BTextToImageLora(FALNode):
     """
     Wan v2.2 A14B Text-to-Image A14B with LoRAs
@@ -4819,6 +5524,21 @@ class WanV2_2A14BTextToImageLora(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class ImageFormat(Enum):
+        """
+        The format of the output image.
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+
 
     shift: float = Field(
         default=2, description="Shift value for the image. Must be between 1.0 and 10.0."
@@ -4899,7 +5619,6 @@ class WanV2_2A14BTextToImageLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class WanV2_25BTextToImage(FALNode):
     """
     Wan
@@ -4912,6 +5631,14 @@ class WanV2_25BTextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class ImageFormat(Enum):
+        """
+        The format of the output image.
+        """
+        PNG = "png"
+        JPEG = "jpeg"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide image generation."
@@ -4976,7 +5703,6 @@ class WanV2_25BTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class WanV2_2A14BTextToImage(FALNode):
     """
     Wan
@@ -4989,6 +5715,14 @@ class WanV2_2A14BTextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide image generation."
@@ -5057,8 +5791,6 @@ class WanV2_2A14BTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class QwenImage(FALNode):
     """
     Qwen Image
@@ -5071,6 +5803,22 @@ class QwenImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for image generation. Options: 'none', 'regular', 'high'. Higher acceleration increases speed. 'regular' balances speed and quality. 'high' is recommended for images without text.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the image with"
@@ -5145,7 +5893,6 @@ class QwenImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class FluxKreaLoraStream(FALNode):
     """
     Flux Krea Lora
@@ -5158,6 +5905,14 @@ class FluxKreaLoraStream(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -5220,7 +5975,6 @@ class FluxKreaLoraStream(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class FluxKreaLora(FALNode):
     """
     FLUX.1 Krea [dev] with LoRAs
@@ -5233,6 +5987,14 @@ class FluxKreaLora(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -5295,8 +6057,6 @@ class FluxKreaLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class FluxKrea(FALNode):
     """
     FLUX.1 Krea [dev]
@@ -5309,6 +6069,22 @@ class FluxKrea(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -5371,8 +6147,6 @@ class FluxKrea(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class Flux1Krea(FALNode):
     """
     FLUX.1 Krea [dev]
@@ -5385,6 +6159,22 @@ class Flux1Krea(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -5511,8 +6301,6 @@ class SkyRaccoon(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class FluxKontextLoraTextToImage(FALNode):
     """
     Flux Kontext Lora
@@ -5525,6 +6313,22 @@ class FluxKontextLoraTextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Acceleration(Enum):
+        """
+        The speed of the generation. The higher the speed, the faster the generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the image with"
@@ -5591,8 +6395,6 @@ class FluxKontextLoraTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class OmnigenV2(FALNode):
     """
     Omnigen V2
@@ -5605,6 +6407,21 @@ class OmnigenV2(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
+
+    class Scheduler(Enum):
+        """
+        The scheduler to use for the diffusion process.
+        """
+        EULER = "euler"
+        DPMSOLVER = "dpmsolver"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate or edit an image. Use specific language like 'Add the bird from image 1 to the desk in image 2' for better results."
@@ -5712,14 +6529,14 @@ class BytedanceSeedreamV3TextToImage(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    guidance_scale: float = Field(
+        default=2.5, description="Controls how closely the output image aligns with the input prompt. Higher values mean stronger prompt correlation."
     )
     seed: int = Field(
         default=-1, description="Random seed to control the stochasticity of image generation."
     )
-    guidance_scale: float = Field(
-        default=2.5, description="Controls how closely the output image aligns with the input prompt. Higher values mean stronger prompt correlation."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -5728,9 +6545,9 @@ class BytedanceSeedreamV3TextToImage(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "sync_mode": self.sync_mode,
-            "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
             "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values

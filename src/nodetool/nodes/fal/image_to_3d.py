@@ -6,81 +6,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class PolygonType(Enum):
-    """
-    Polygon type. Only takes effect when GenerateType is LowPoly.
-    """
-    TRIANGLE = "triangle"
-    QUADRILATERAL = "quadrilateral"
-
-
-class GenerateType(Enum):
-    """
-    Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
-    """
-    NORMAL = "Normal"
-    LOWPOLY = "LowPoly"
-    GEOMETRY = "Geometry"
-
-
-class Topology(Enum):
-    """
-    Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-    """
-    QUAD = "quad"
-    TRIANGLE = "triangle"
-
-
-class SymmetryMode(Enum):
-    """
-    Controls symmetry behavior during model generation.
-    """
-    OFF = "off"
-    AUTO = "auto"
-    ON = "on"
-
-
-class QualityMeshOption(Enum):
-    """
-    Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.
-    """
-    VALUE_4K_QUAD = "4K Quad"
-    VALUE_8K_QUAD = "8K Quad"
-    VALUE_18K_QUAD = "18K Quad"
-    VALUE_50K_QUAD = "50K Quad"
-    VALUE_2K_TRIANGLE = "2K Triangle"
-    VALUE_20K_TRIANGLE = "20K Triangle"
-    VALUE_150K_TRIANGLE = "150K Triangle"
-    VALUE_500K_TRIANGLE = "500K Triangle"
-
-
-class GeometryFileFormat(Enum):
-    """
-    Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
-    """
-    GLB = "glb"
-    USDZ = "usdz"
-    FBX = "fbx"
-    OBJ = "obj"
-    STL = "stl"
-
-
-class Addons(Enum):
-    """
-    The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost **triple the billable units**.
-    """
-    HIGHPACK = "HighPack"
-
-
-class Material(Enum):
-    """
-    Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included.
-    """
-    PBR = "PBR"
-    SHADED = "Shaded"
-    ALL = "All"
-
-
 class Hunyuan3DV3SketchTo3D(FALNode):
     """
     Hunyuan3d V3
@@ -130,8 +55,6 @@ class Hunyuan3DV3SketchTo3D(FALNode):
     def get_basic_fields(cls):
         return ["input_image_url", "prompt", "face_count", "enable_pbr"]
 
-
-
 class Hunyuan3DV3ImageTo3D(FALNode):
     """
     Hunyuan3d V3
@@ -144,6 +67,22 @@ class Hunyuan3DV3ImageTo3D(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class PolygonType(Enum):
+        """
+        Polygon type. Only takes effect when GenerateType is LowPoly.
+        """
+        TRIANGLE = "triangle"
+        QUADRILATERAL = "quadrilateral"
+
+    class GenerateType(Enum):
+        """
+        Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
+        """
+        NORMAL = "Normal"
+        LOWPOLY = "LowPoly"
+        GEOMETRY = "Geometry"
+
 
     input_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
@@ -409,8 +348,6 @@ class BytedanceSeed3DImageTo3D(FALNode):
     def get_basic_fields(cls):
         return ["image_url"]
 
-
-
 class MeshyV5MultiImageTo3D(FALNode):
     """
     Meshy 5 Multi
@@ -423,6 +360,22 @@ class MeshyV5MultiImageTo3D(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class Topology(Enum):
+        """
+        Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+        """
+        QUAD = "quad"
+        TRIANGLE = "triangle"
+
+    class SymmetryMode(Enum):
+        """
+        Controls symmetry behavior during model generation.
+        """
+        OFF = "off"
+        AUTO = "auto"
+        ON = "on"
+
 
     enable_pbr: bool = Field(
         default=False, description="Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true."
@@ -488,8 +441,6 @@ class MeshyV5MultiImageTo3D(FALNode):
     def get_basic_fields(cls):
         return ["enable_pbr", "should_texture", "target_polycount", "is_a_t_pose", "texture_image_url"]
 
-
-
 class MeshyV6PreviewImageTo3D(FALNode):
     """
     Meshy 6 Preview
@@ -502,6 +453,22 @@ class MeshyV6PreviewImageTo3D(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class Topology(Enum):
+        """
+        Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+        """
+        QUAD = "quad"
+        TRIANGLE = "triangle"
+
+    class SymmetryMode(Enum):
+        """
+        Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
+        """
+        OFF = "off"
+        AUTO = "auto"
+        ON = "on"
+
 
     enable_pbr: bool = Field(
         default=False, description="Generate PBR Maps (metallic, roughness, normal) in addition to base color"
@@ -568,10 +535,6 @@ class MeshyV6PreviewImageTo3D(FALNode):
     def get_basic_fields(cls):
         return ["enable_pbr", "is_a_t_pose", "target_polycount", "should_texture", "texture_image_url"]
 
-
-
-
-
 class Hyper3DRodinV2(FALNode):
     """
     Hyper3d
@@ -584,6 +547,44 @@ class Hyper3DRodinV2(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class QualityMeshOption(Enum):
+        """
+        Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.
+        """
+        VALUE_4K_QUAD = "4K Quad"
+        VALUE_8K_QUAD = "8K Quad"
+        VALUE_18K_QUAD = "18K Quad"
+        VALUE_50K_QUAD = "50K Quad"
+        VALUE_2K_TRIANGLE = "2K Triangle"
+        VALUE_20K_TRIANGLE = "20K Triangle"
+        VALUE_150K_TRIANGLE = "150K Triangle"
+        VALUE_500K_TRIANGLE = "500K Triangle"
+
+    class GeometryFileFormat(Enum):
+        """
+        Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
+        """
+        GLB = "glb"
+        USDZ = "usdz"
+        FBX = "fbx"
+        OBJ = "obj"
+        STL = "stl"
+
+    class Addons(Enum):
+        """
+        The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost **triple the billable units**.
+        """
+        HIGHPACK = "HighPack"
+
+    class Material(Enum):
+        """
+        Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included.
+        """
+        PBR = "PBR"
+        SHADED = "Shaded"
+        ALL = "All"
+
 
     quality_mesh_option: QualityMeshOption = Field(
         default=QualityMeshOption.VALUE_500K_TRIANGLE, description="Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API."

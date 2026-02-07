@@ -18,30 +18,90 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-class AnyLLM(SingleOutputGraphNode[str], GraphNode[str]):
+class OpenRouter(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-        Use any large language model from a selected catalogue (powered by OpenRouter).
-        Supports various models including Claude 3, Gemini, Llama, and GPT-4.
-        llm, text, generation, ai, language
+        OpenRouter provides unified access to any LLM (Large Language Model) through a single API.
+        llm, chat, openrouter, multimodel, language-model
 
         Use cases:
-        - Generate natural language responses
-        - Create conversational AI interactions
-        - Process and analyze text content
-        - Generate creative writing
-        - Assist with problem-solving tasks
+        - Run any LLM through unified interface
+        - Switch between models seamlessly
+        - Access multiple LLM providers
+        - Flexible model selection
+        - Unified LLM API access
     """
 
-    ModelEnum: typing.ClassVar[type] = nodetool.nodes.fal.llm.ModelEnum
-
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to send to the language model')
-    system_prompt: str | OutputHandle[str] = connect_field(default='', description='Optional system prompt to provide context or instructions')
-    model: nodetool.nodes.fal.llm.ModelEnum = Field(default=nodetool.nodes.fal.llm.ModelEnum.GEMINI_FLASH, description='The language model to use for the completion')
+    model: str | OutputHandle[str] = connect_field(default='', description='Name of the model to use. Charged based on actual token usage.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to be used for the chat completion')
+    max_tokens: str | OutputHandle[str] = connect_field(default='', description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
+    temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
+    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
+    system_prompt: str | OutputHandle[str] = connect_field(default='', description='System prompt to provide context or instructions to the model')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.llm.AnyLLM
+        return nodetool.nodes.fal.llm.OpenRouter
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.llm
+from nodetool.workflows.base_node import BaseNode
+
+class OpenRouterChatCompletions(SingleOutputGraphNode[Any], GraphNode[Any]):
+    """
+
+        OpenRouter Chat Completions provides OpenAI-compatible interface for any LLM.
+        llm, chat, openai-compatible, openrouter, chat-completions
+
+        Use cases:
+        - OpenAI-compatible LLM access
+        - Drop-in replacement for OpenAI API
+        - Multi-model chat completions
+        - Standardized chat interface
+        - Universal LLM chat API
+    """
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.llm.OpenRouterChatCompletions
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.llm
+from nodetool.workflows.base_node import BaseNode
+
+class Qwen3Guard(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Qwen 3 Guard provides content safety and moderation using Qwen's LLM.
+        llm, safety, moderation, qwen, guard
+
+        Use cases:
+        - Content safety checking
+        - Moderation of text content
+        - Safety filtering for outputs
+        - Content policy enforcement
+        - Text safety analysis
+    """
+
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The input text to be classified')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.llm.Qwen3Guard
 
     @classmethod
     def get_node_type(cls):

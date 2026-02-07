@@ -5,124 +5,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class Scheduler(Enum):
-    """
-    Scheduler to use for the generation process.
-    """
-    EULER = "euler"
-    HEUN = "heun"
-
-
-class GuidanceType(Enum):
-    """
-    Type of CFG to use for the generation process.
-    """
-    CFG = "cfg"
-    APG = "apg"
-    CFG_STAR = "cfg_star"
-
-
-class MusicDuration(Enum):
-    """
-    The duration of the music to generate.
-    """
-    VALUE_95S = "95s"
-    VALUE_285S = "285s"
-
-
-class ApplyTextNormalization(Enum):
-    """
-    This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
-    """
-    AUTO = "auto"
-    ON = "on"
-    OFF = "off"
-
-
-class OutputFormat(Enum):
-    """
-    Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
-    """
-    MP3_22050_32 = "mp3_22050_32"
-    MP3_44100_32 = "mp3_44100_32"
-    MP3_44100_64 = "mp3_44100_64"
-    MP3_44100_96 = "mp3_44100_96"
-    MP3_44100_128 = "mp3_44100_128"
-    MP3_44100_192 = "mp3_44100_192"
-    PCM_8000 = "pcm_8000"
-    PCM_16000 = "pcm_16000"
-    PCM_22050 = "pcm_22050"
-    PCM_24000 = "pcm_24000"
-    PCM_44100 = "pcm_44100"
-    PCM_48000 = "pcm_48000"
-    ULAW_8000 = "ulaw_8000"
-    ALAW_8000 = "alaw_8000"
-    OPUS_48000_32 = "opus_48000_32"
-    OPUS_48000_64 = "opus_48000_64"
-    OPUS_48000_96 = "opus_48000_96"
-    OPUS_48000_128 = "opus_48000_128"
-    OPUS_48000_192 = "opus_48000_192"
-
-
-class ModelType(Enum):
-    """
-    The name of the model to be used for TTS.
-    """
-    F5_TTS = "F5-TTS"
-    E2_TTS = "E2-TTS"
-
-
-class Voice(Enum):
-    """
-    Voice ID for the desired voice.
-    """
-    AF_HEART = "af_heart"
-    AF_ALLOY = "af_alloy"
-    AF_AOEDE = "af_aoede"
-    AF_BELLA = "af_bella"
-    AF_JESSICA = "af_jessica"
-    AF_KORE = "af_kore"
-    AF_NICOLE = "af_nicole"
-    AF_NOVA = "af_nova"
-    AF_RIVER = "af_river"
-    AF_SARAH = "af_sarah"
-    AF_SKY = "af_sky"
-    AM_ADAM = "am_adam"
-    AM_ECHO = "am_echo"
-    AM_ERIC = "am_eric"
-    AM_FENRIR = "am_fenrir"
-    AM_LIAM = "am_liam"
-    AM_MICHAEL = "am_michael"
-    AM_ONYX = "am_onyx"
-    AM_PUCK = "am_puck"
-    AM_SANTA = "am_santa"
-
-
-class Language(Enum):
-    """
-    The language to use for generation. Defaults to English.
-    """
-    ENGLISH = "English"
-    SPANISH = "Spanish"
-    FRENCH = "French"
-    GERMAN = "German"
-    ITALIAN = "Italian"
-    PORTUGUESE = "Portuguese"
-    POLISH = "Polish"
-    TURKISH = "Turkish"
-    RUSSIAN = "Russian"
-    DUTCH = "Dutch"
-    CZECH = "Czech"
-    ARABIC = "Arabic"
-    CHINESE = "Chinese"
-    JAPANESE = "Japanese"
-    HUNGARIAN = "Hungarian"
-    KOREAN = "Korean"
-    HINDI = "Hindi"
-
-
-
-
 class ACEStepPromptToAudio(FALNode):
     """
     ACE-Step generates music from text prompts with high-quality audio synthesis.
@@ -135,6 +17,22 @@ class ACEStepPromptToAudio(FALNode):
     - Generate audio soundtracks
     - Create custom music compositions
     """
+
+    class Scheduler(Enum):
+        """
+        Scheduler to use for the generation process.
+        """
+        EULER = "euler"
+        HEUN = "heun"
+
+    class GuidanceType(Enum):
+        """
+        Type of CFG to use for the generation process.
+        """
+        CFG = "cfg"
+        APG = "apg"
+        CFG_STAR = "cfg_star"
+
 
     number_of_steps: int = Field(
         default=27, description="Number of steps to generate the audio."
@@ -212,8 +110,6 @@ class ACEStepPromptToAudio(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
-
 class ACEStep(FALNode):
     """
     ACE-Step generates music with lyrics from text using advanced audio synthesis.
@@ -226,6 +122,22 @@ class ACEStep(FALNode):
     - Generate lyrical content
     - Create vocal music compositions
     """
+
+    class Scheduler(Enum):
+        """
+        Scheduler to use for the generation process.
+        """
+        EULER = "euler"
+        HEUN = "heun"
+
+    class GuidanceType(Enum):
+        """
+        Type of CFG to use for the generation process.
+        """
+        CFG = "cfg"
+        APG = "apg"
+        CFG_STAR = "cfg_star"
+
 
     number_of_steps: int = Field(
         default=27, description="Number of steps to generate the audio."
@@ -344,8 +256,6 @@ class CSM1B(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
-
 class DiffRhythm(FALNode):
     """
     DiffRhythm generates rhythmic music and beats using diffusion models.
@@ -358,6 +268,23 @@ class DiffRhythm(FALNode):
     - Generate rhythm patterns
     - Create beat sequences
     """
+
+    class MusicDuration(Enum):
+        """
+        The duration of the music to generate.
+        """
+        VALUE_95S = "95s"
+        VALUE_285S = "285s"
+
+    class Scheduler(Enum):
+        """
+        The scheduler to use for the music generation.
+        """
+        EULER = "euler"
+        MIDPOINT = "midpoint"
+        RK4 = "rk4"
+        IMPLICIT_ADAMS = "implicit_adams"
+
 
     lyrics: str = Field(
         default="", description="The prompt to generate the song from. Must have two sections. Sections start with either [chorus] or a [verse]."
@@ -407,7 +334,6 @@ class DiffRhythm(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class ElevenLabsTTSMultilingualV2(FALNode):
     """
     ElevenLabs Multilingual TTS v2 generates natural speech in multiple languages.
@@ -420,6 +346,15 @@ class ElevenLabsTTSMultilingualV2(FALNode):
     - Generate international voice content
     - Create translated audio
     """
+
+    class ApplyTextNormalization(Enum):
+        """
+        This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+        """
+        AUTO = "auto"
+        ON = "on"
+        OFF = "off"
+
 
     text: str = Field(
         default="", description="The text to convert to speech"
@@ -542,7 +477,6 @@ class ElevenLabsTextToDialogueV3(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
 class ElevenLabsSoundEffectsV2(FALNode):
     """
     ElevenLabs Sound Effects v2 generates custom sound effects from text descriptions.
@@ -555,6 +489,31 @@ class ElevenLabsSoundEffectsV2(FALNode):
     - Generate environmental sounds
     - Create audio atmosphere
     """
+
+    class OutputFormat(Enum):
+        """
+        Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
+        """
+        MP3_22050_32 = "mp3_22050_32"
+        MP3_44100_32 = "mp3_44100_32"
+        MP3_44100_64 = "mp3_44100_64"
+        MP3_44100_96 = "mp3_44100_96"
+        MP3_44100_128 = "mp3_44100_128"
+        MP3_44100_192 = "mp3_44100_192"
+        PCM_8000 = "pcm_8000"
+        PCM_16000 = "pcm_16000"
+        PCM_22050 = "pcm_22050"
+        PCM_24000 = "pcm_24000"
+        PCM_44100 = "pcm_44100"
+        PCM_48000 = "pcm_48000"
+        ULAW_8000 = "ulaw_8000"
+        ALAW_8000 = "alaw_8000"
+        OPUS_48000_32 = "opus_48000_32"
+        OPUS_48000_64 = "opus_48000_64"
+        OPUS_48000_96 = "opus_48000_96"
+        OPUS_48000_128 = "opus_48000_128"
+        OPUS_48000_192 = "opus_48000_192"
+
 
     text: str = Field(
         default="", description="The text describing the sound effect to generate"
@@ -596,7 +555,6 @@ class ElevenLabsSoundEffectsV2(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class ElevenLabsTTSV3(FALNode):
     """
     ElevenLabs TTS v3 generates high-quality natural speech with advanced voice control.
@@ -609,6 +567,15 @@ class ElevenLabsTTSV3(FALNode):
     - Generate expressive speech
     - Create audiobook content
     """
+
+    class ApplyTextNormalization(Enum):
+        """
+        This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+        """
+        AUTO = "auto"
+        ON = "on"
+        OFF = "off"
+
 
     text: str = Field(
         default="", description="The text to convert to speech"
@@ -666,7 +633,6 @@ class ElevenLabsTTSV3(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
 class ElevenLabsMusic(FALNode):
     """
     ElevenLabs Music generates custom music compositions from text descriptions.
@@ -679,6 +645,31 @@ class ElevenLabsMusic(FALNode):
     - Generate mood music
     - Create cinematic soundtracks
     """
+
+    class OutputFormat(Enum):
+        """
+        Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.
+        """
+        MP3_22050_32 = "mp3_22050_32"
+        MP3_44100_32 = "mp3_44100_32"
+        MP3_44100_64 = "mp3_44100_64"
+        MP3_44100_96 = "mp3_44100_96"
+        MP3_44100_128 = "mp3_44100_128"
+        MP3_44100_192 = "mp3_44100_192"
+        PCM_8000 = "pcm_8000"
+        PCM_16000 = "pcm_16000"
+        PCM_22050 = "pcm_22050"
+        PCM_24000 = "pcm_24000"
+        PCM_44100 = "pcm_44100"
+        PCM_48000 = "pcm_48000"
+        ULAW_8000 = "ulaw_8000"
+        ALAW_8000 = "alaw_8000"
+        OPUS_48000_32 = "opus_48000_32"
+        OPUS_48000_64 = "opus_48000_64"
+        OPUS_48000_96 = "opus_48000_96"
+        OPUS_48000_128 = "opus_48000_128"
+        OPUS_48000_192 = "opus_48000_192"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the music to generate"
@@ -724,7 +715,6 @@ class ElevenLabsMusic(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class F5TTS(FALNode):
     """
     F5 TTS generates natural speech with fast inference and high quality.
@@ -737,6 +727,14 @@ class F5TTS(FALNode):
     - Efficient speech synthesis
     - Rapid audio production
     """
+
+    class ModelType(Enum):
+        """
+        The name of the model to be used for TTS.
+        """
+        F5_TTS = "F5-TTS"
+        E2_TTS = "E2-TTS"
+
 
     ref_text: str = Field(
         default="", description="The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text."
@@ -778,7 +776,6 @@ class F5TTS(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
 class Kokoro(FALNode):
     """
     Kokoro generates expressive and emotional speech with advanced prosody control.
@@ -791,6 +788,32 @@ class Kokoro(FALNode):
     - Generate character voices
     - Create emotive audio content
     """
+
+    class Voice(Enum):
+        """
+        Voice ID for the desired voice.
+        """
+        AF_HEART = "af_heart"
+        AF_ALLOY = "af_alloy"
+        AF_AOEDE = "af_aoede"
+        AF_BELLA = "af_bella"
+        AF_JESSICA = "af_jessica"
+        AF_KORE = "af_kore"
+        AF_NICOLE = "af_nicole"
+        AF_NOVA = "af_nova"
+        AF_RIVER = "af_river"
+        AF_SARAH = "af_sarah"
+        AF_SKY = "af_sky"
+        AM_ADAM = "am_adam"
+        AM_ECHO = "am_echo"
+        AM_ERIC = "am_eric"
+        AM_FENRIR = "am_fenrir"
+        AM_LIAM = "am_liam"
+        AM_MICHAEL = "am_michael"
+        AM_ONYX = "am_onyx"
+        AM_PUCK = "am_puck"
+        AM_SANTA = "am_santa"
+
 
     prompt: str = Field(
         default=""
@@ -873,7 +896,6 @@ class StableAudio(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
-
 class XTTS(FALNode):
     """
     XTTS generates expressive speech with voice cloning capabilities.
@@ -886,6 +908,29 @@ class XTTS(FALNode):
     - Generate custom voice audio
     - Create voice replications
     """
+
+    class Language(Enum):
+        """
+        The language to use for generation. Defaults to English.
+        """
+        ENGLISH = "English"
+        SPANISH = "Spanish"
+        FRENCH = "French"
+        GERMAN = "German"
+        ITALIAN = "Italian"
+        PORTUGUESE = "Portuguese"
+        POLISH = "Polish"
+        TURKISH = "Turkish"
+        RUSSIAN = "Russian"
+        DUTCH = "Dutch"
+        CZECH = "Czech"
+        ARABIC = "Arabic"
+        CHINESE = "Chinese"
+        JAPANESE = "Japanese"
+        HUNGARIAN = "Hungarian"
+        KOREAN = "Korean"
+        HINDI = "Hindi"
+
 
     prompt: str = Field(
         default="", description="The text prompt you would like to convert to speech."
@@ -1204,7 +1249,6 @@ class StableAudio25TextToAudio(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
 class SonautoV2Inpaint(FALNode):
     """
     Sonauto V2
@@ -1217,6 +1261,14 @@ class SonautoV2Inpaint(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class OutputFormat(Enum):
+        FLAC = "flac"
+        MP3 = "mp3"
+        WAV = "wav"
+        OGG = "ogg"
+        M4A = "m4a"
+
 
     lyrics_prompt: str = Field(
         default="", description="The lyrics sung in the generated song. An empty string will generate an instrumental track."

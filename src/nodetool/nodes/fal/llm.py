@@ -5,15 +5,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class Label(Enum):
-    """
-    The classification label
-    """
-    SAFE = "Safe"
-    UNSAFE = "Unsafe"
-    CONTROVERSIAL = "Controversial"
-
-
 class OpenRouter(FALNode):
     """
     OpenRouter provides unified access to any LLM (Large Language Model) through a single API.
@@ -102,7 +93,6 @@ class OpenRouterChatCompletions(FALNode):
     def get_basic_fields(cls):
         return ["messages", "model"]
 
-
 class Qwen3Guard(FALNode):
     """
     Qwen 3 Guard provides content safety and moderation using Qwen's LLM.
@@ -115,6 +105,15 @@ class Qwen3Guard(FALNode):
     - Content policy enforcement
     - Text safety analysis
     """
+
+    class Label(Enum):
+        """
+        The classification label
+        """
+        SAFE = "Safe"
+        UNSAFE = "Unsafe"
+        CONTROVERSIAL = "Controversial"
+
 
     prompt: str = Field(
         default="", description="The input text to be classified"

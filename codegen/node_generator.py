@@ -38,13 +38,7 @@ class NodeGenerator:
         lines.append("")
         lines.append("")
         
-        # Enums
-        for enum_def in spec.enums:
-            lines.extend(self._generate_enum(enum_def))
-            lines.append("")
-            lines.append("")
-        
-        # Node class
+        # Node class (enums are now nested inside the class)
         lines.extend(self._generate_class(spec))
         
         return "\n".join(lines)
@@ -180,25 +174,31 @@ class NodeGenerator:
         
         return imports
 
-    def _generate_enum(self, enum_def: EnumDef) -> list[str]:
-        """Generate enum definition."""
-        lines = [f"class {enum_def.name}(Enum):"]
+    def _generate_enum(self, enum_def: EnumDef, indent: int = 1) -> list[str]:
+        """Generate enum definition as nested class.
+        
+        Args:
+            enum_def: Enum definition
+            indent: Indentation level (1 for nested in class, 0 for module level)
+        """
+        ind = "    " * indent
+        lines = [f"{ind}class {enum_def.name}(Enum):"]
         
         if enum_def.description:
             # Handle multi-line descriptions properly
             # Strip leading/trailing whitespace from each line for clean output
             desc_lines = enum_def.description.strip().split('\n')
-            lines.append('    """')
+            lines.append(f'{ind}    """')
             for desc_line in desc_lines:
                 # Remove all leading whitespace and add consistent indentation
                 stripped = desc_line.strip()
                 if stripped:
-                    lines.append(f'    {stripped}')
+                    lines.append(f'{ind}    {stripped}')
                 # Skip completely empty lines in docstrings to avoid confusing the enum extractor
-            lines.append('    """')
+            lines.append(f'{ind}    """')
         
         for enum_name, value in enum_def.values:
-            lines.append(f'    {enum_name} = "{value}"')
+            lines.append(f'{ind}    {enum_name} = "{value}"')
         
         return lines
 
@@ -209,6 +209,13 @@ class NodeGenerator:
         # Docstring
         lines.extend(self._generate_docstring(spec))
         lines.append("")
+        
+        # Nested enums (if any)
+        if spec.enums:
+            for enum_def in spec.enums:
+                lines.extend(self._generate_enum(enum_def, indent=1))
+                lines.append("")
+            lines.append("")
         
         # Fields
         for field in spec.input_fields:

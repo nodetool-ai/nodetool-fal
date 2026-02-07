@@ -32,10 +32,10 @@ class Deepfilternet3(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, 
         - Generate clean audio
     """
 
-    AudioFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.AudioFormat
+    AudioFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.Deepfilternet3.AudioFormat
 
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    audio_format: nodetool.nodes.fal.audio_to_audio.AudioFormat = Field(default=nodetool.nodes.fal.audio_to_audio.AudioFormat.MP3, description='The format for the output audio.')
+    audio_format: nodetool.nodes.fal.audio_to_audio.Deepfilternet3.AudioFormat = Field(default=nodetool.nodes.fal.audio_to_audio.Deepfilternet3.AudioFormat.MP3, description='The format for the output audio.')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio to enhance.')
     bitrate: str | OutputHandle[str] = connect_field(default='192k', description='The bitrate of the output audio.')
 
@@ -68,14 +68,14 @@ class Demucs(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
         - Generate individual audio stems
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.OutputFormat
-    Model: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.Model
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.Demucs.OutputFormat
+    Model: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.Demucs.Model
 
     segment_length: str | OutputHandle[str] = connect_field(default='', description='Length in seconds of each segment for processing. Smaller values use less memory but may reduce quality. Default is model-specific.')
-    output_format: nodetool.nodes.fal.audio_to_audio.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.OutputFormat.MP3_44100_128, description='Output audio format for the separated stems')
+    output_format: nodetool.nodes.fal.audio_to_audio.Demucs.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.Demucs.OutputFormat.MP3, description='Output audio format for the separated stems')
     stems: str | OutputHandle[str] = connect_field(default='', description='Specific stems to extract. If None, extracts all available stems. Available stems depend on model: vocals, drums, bass, other, guitar, piano (for 6s model)')
     overlap: float | OutputHandle[float] = connect_field(default=0.25, description='Overlap between segments (0.0 to 1.0). Higher values may improve quality but increase processing time.')
-    model: nodetool.nodes.fal.audio_to_audio.Model = Field(default=nodetool.nodes.fal.audio_to_audio.Model.HTDEMUCS_6S, description='Demucs model to use for separation')
+    model: nodetool.nodes.fal.audio_to_audio.Demucs.Model = Field(default=nodetool.nodes.fal.audio_to_audio.Demucs.Model.HTDEMUCS_6S, description='Demucs model to use for separation')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to separate into stems')
     shifts: int | OutputHandle[int] = connect_field(default=1, description='Number of random shifts for equivariant stabilization. Higher values improve quality but increase processing time.')
 
@@ -108,17 +108,49 @@ class ElevenlabsVoiceChanger(SingleOutputGraphNode[types.AudioRef], GraphNode[ty
         - Generate voice-changed audio
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.OutputFormat
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.ElevenlabsVoiceChanger.OutputFormat
 
     voice: str | OutputHandle[str] = connect_field(default='Rachel', description='The voice to use for speech generation')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The input audio file')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility.')
-    output_format: nodetool.nodes.fal.audio_to_audio.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.OutputFormat.MP3_44100_128, description='Output format of the generated audio. Formatted as codec_sample_rate_bitrate.')
+    output_format: nodetool.nodes.fal.audio_to_audio.ElevenlabsVoiceChanger.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.ElevenlabsVoiceChanger.OutputFormat.MP3_44100_128, description='Output format of the generated audio. Formatted as codec_sample_rate_bitrate.')
     remove_background_noise: bool | OutputHandle[bool] = connect_field(default=False, description='If set, will remove the background noise from your audio input using our audio isolation model.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.audio_to_audio.ElevenlabsVoiceChanger
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.audio_to_audio
+from nodetool.workflows.base_node import BaseNode
+
+class FfmpegApiMergeAudios(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+    """
+
+        FFmpeg API Merge Audios combines multiple audio files into a single output.
+        audio, processing, audio-to-audio, merging, ffmpeg
+
+        Use cases:
+        - Combine multiple audio tracks
+        - Merge audio segments
+        - Create audio compilations
+        - Join split audio files
+        - Generate combined audio output
+    """
+
+    audio_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate.')
+    output_format: str | OutputHandle[str] = connect_field(default='', description='Output format of the combined audio. If not used, will be determined automatically using FFMPEG. Formatted as codec_sample_rate_bitrate.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.audio_to_audio.FfmpegApiMergeAudios
 
     @classmethod
     def get_node_type(cls):
@@ -145,12 +177,12 @@ class NovaSr(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
         - Generate high-quality audio
     """
 
-    AudioFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.AudioFormat
+    AudioFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.NovaSr.AudioFormat
 
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     bitrate: str | OutputHandle[str] = connect_field(default='192k', description='The bitrate of the output audio.')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio file to enhance.')
-    audio_format: nodetool.nodes.fal.audio_to_audio.AudioFormat = Field(default=nodetool.nodes.fal.audio_to_audio.AudioFormat.MP3, description='The format for the output audio.')
+    audio_format: nodetool.nodes.fal.audio_to_audio.NovaSr.AudioFormat = Field(default=nodetool.nodes.fal.audio_to_audio.NovaSr.AudioFormat.MP3, description='The format for the output audio.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -181,14 +213,14 @@ class SamAudioSeparate(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str
         - Generate separated audio tracks
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.SamAudioSeparate.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.SamAudioSeparate.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the sound to isolate.')
-    acceleration: nodetool.nodes.fal.audio_to_audio.Acceleration = Field(default=nodetool.nodes.fal.audio_to_audio.Acceleration.BALANCED, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.audio_to_audio.SamAudioSeparate.Acceleration = Field(default=nodetool.nodes.fal.audio_to_audio.SamAudioSeparate.Acceleration.BALANCED, description='The acceleration level to use.')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to process (WAV, MP3, FLAC supported)')
     predict_spans: bool | OutputHandle[bool] = connect_field(default=False, description='Automatically predict temporal spans where the target sound occurs.')
-    output_format: nodetool.nodes.fal.audio_to_audio.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.OutputFormat.WAV, description='Output audio format.')
+    output_format: nodetool.nodes.fal.audio_to_audio.SamAudioSeparate.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.SamAudioSeparate.OutputFormat.WAV, description='Output audio format.')
     reranking_candidates: int | OutputHandle[int] = connect_field(default=1, description='Number of candidates to generate and rank. Higher improves quality but increases latency and cost.')
 
     @classmethod
@@ -220,13 +252,13 @@ class SamAudioSpanSeparate(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict
         - Generate time-based separations
     """
 
-    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.Acceleration
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.OutputFormat
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the sound to isolate. Optional but recommended - helps the model identify what type of sound to extract from the span.')
-    acceleration: nodetool.nodes.fal.audio_to_audio.Acceleration = Field(default=nodetool.nodes.fal.audio_to_audio.Acceleration.BALANCED, description='The acceleration level to use.')
+    acceleration: nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.Acceleration = Field(default=nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.Acceleration.BALANCED, description='The acceleration level to use.')
     spans: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Time spans where the target sound occurs which should be isolated.')
-    output_format: nodetool.nodes.fal.audio_to_audio.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.OutputFormat.WAV, description='Output audio format.')
+    output_format: nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.OutputFormat.WAV, description='Output audio format.')
     trim_to_span: bool | OutputHandle[bool] = connect_field(default=False, description='Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to process.')
     reranking_candidates: int | OutputHandle[int] = connect_field(default=1, description='Number of candidates to generate and rank. Higher improves quality but increases latency and cost. Requires text prompt; ignored for span-only separation.')

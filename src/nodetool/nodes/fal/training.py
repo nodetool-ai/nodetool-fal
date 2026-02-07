@@ -6,14 +6,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class OutputLoraFormat(Enum):
-    """
-    Dictates the naming scheme for the output weights
-    """
-    FAL = "fal"
-    COMFY = "comfy"
-
-
 class ZImageBaseTrainer(FALNode):
     """
     Z-Image Trainer
@@ -112,7 +104,6 @@ class ZImageTurboTrainerV2(FALNode):
     def get_basic_fields(cls):
         return ["steps", "image_data_url", "learning_rate", "default_caption"]
 
-
 class Flux2Klein9BBaseTrainerEdit(FALNode):
     """
     Flux 2 Klein 9B Base Trainer
@@ -125,6 +116,14 @@ class Flux2Klein9BBaseTrainerEdit(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class OutputLoraFormat(Enum):
+        """
+        Dictates the naming scheme for the output weights
+        """
+        FAL = "fal"
+        COMFY = "comfy"
+
 
     steps: int = Field(
         default=1000, description="Total number of training steps."
@@ -166,7 +165,6 @@ class Flux2Klein9BBaseTrainerEdit(FALNode):
     def get_basic_fields(cls):
         return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
 
-
 class Flux2Klein9BBaseTrainer(FALNode):
     """
     Flux 2 Klein 9B Base Trainer
@@ -179,6 +177,14 @@ class Flux2Klein9BBaseTrainer(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class OutputLoraFormat(Enum):
+        """
+        Dictates the naming scheme for the output weights
+        """
+        FAL = "fal"
+        COMFY = "comfy"
+
 
     steps: int = Field(
         default=1000, description="Total number of training steps."
@@ -220,7 +226,6 @@ class Flux2Klein9BBaseTrainer(FALNode):
     def get_basic_fields(cls):
         return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
 
-
 class Flux2Klein4BBaseTrainer(FALNode):
     """
     Flux 2 Klein 4B Base Trainer
@@ -233,6 +238,14 @@ class Flux2Klein4BBaseTrainer(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class OutputLoraFormat(Enum):
+        """
+        Dictates the naming scheme for the output weights
+        """
+        FAL = "fal"
+        COMFY = "comfy"
+
 
     steps: int = Field(
         default=1000, description="Total number of training steps."
@@ -274,7 +287,6 @@ class Flux2Klein4BBaseTrainer(FALNode):
     def get_basic_fields(cls):
         return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
 
-
 class Flux2Klein4BBaseTrainerEdit(FALNode):
     """
     Flux 2 Klein 4B Base Trainer
@@ -287,6 +299,14 @@ class Flux2Klein4BBaseTrainerEdit(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class OutputLoraFormat(Enum):
+        """
+        Dictates the naming scheme for the output weights
+        """
+        FAL = "fal"
+        COMFY = "comfy"
+
 
     steps: int = Field(
         default=1000, description="Total number of training steps."
@@ -377,7 +397,6 @@ class QwenImage2512TrainerV2(FALNode):
     def get_basic_fields(cls):
         return ["steps", "image_data_url", "learning_rate", "default_caption"]
 
-
 class Flux2TrainerV2Edit(FALNode):
     """
     Flux 2 Trainer V2
@@ -390,6 +409,14 @@ class Flux2TrainerV2Edit(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class OutputLoraFormat(Enum):
+        """
+        Dictates the naming scheme for the output weights
+        """
+        FAL = "fal"
+        COMFY = "comfy"
+
 
     steps: int = Field(
         default=1000, description="Total number of training steps."
@@ -431,7 +458,6 @@ class Flux2TrainerV2Edit(FALNode):
     def get_basic_fields(cls):
         return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
 
-
 class Flux2TrainerV2(FALNode):
     """
     Flux 2 Trainer V2
@@ -444,6 +470,14 @@ class Flux2TrainerV2(FALNode):
     - Professional applications
     - Rapid prototyping
     """
+
+    class OutputLoraFormat(Enum):
+        """
+        Dictates the naming scheme for the output weights
+        """
+        FAL = "fal"
+        COMFY = "comfy"
+
 
     steps: int = Field(
         default=1000, description="Total number of training steps."

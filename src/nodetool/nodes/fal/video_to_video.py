@@ -6,464 +6,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class VideoWriteMode(Enum):
-    """
-    The write mode of the generated video.
-    """
-    FAST = "fast"
-    BALANCED = "balanced"
-    SMALL = "small"
-
-
-class VideoOutputType(Enum):
-    """
-    The output type of the generated video.
-    """
-    X264__MP4 = "X264 (.mp4)"
-    VP9__WEBM = "VP9 (.webm)"
-    PRORES4444__MOV = "PRORES4444 (.mov)"
-    GIF__GIF = "GIF (.gif)"
-
-
-class OperatingResolution(Enum):
-    """
-    The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model.
-    """
-    VALUE_1024X1024 = "1024x1024"
-    VALUE_2048X2048 = "2048x2048"
-    VALUE_2304X2304 = "2304x2304"
-
-
-class Model(Enum):
-    """
-    Model to use for background removal.
-    The 'General Use (Light)' model is the original model used in the BiRefNet repository.
-    The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images.
-    The 'General Use (Heavy)' model is a slower but more accurate model.
-    The 'Matting' model is a model trained specifically for matting images.
-    The 'Portrait' model is a model trained specifically for portrait images.
-    The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304.
-    The 'General Use (Light)' model is recommended for most use cases.
-    The corresponding models are as follows:
-    - 'General Use (Light)': BiRefNet
-    - 'General Use (Light 2K)': BiRefNet_lite-2K
-    - 'General Use (Heavy)': BiRefNet_lite
-    - 'Matting': BiRefNet-matting
-    - 'Portrait': BiRefNet-portrait
-    - 'General Use (Dynamic)': BiRefNet_dynamic
-    """
-    GENERAL_USE_LIGHT = "General Use (Light)"
-    GENERAL_USE_LIGHT_2K = "General Use (Light 2K)"
-    GENERAL_USE_HEAVY = "General Use (Heavy)"
-    MATTING = "Matting"
-    PORTRAIT = "Portrait"
-    GENERAL_USE_DYNAMIC = "General Use (Dynamic)"
-
-
-class VideoQuality(Enum):
-    """
-    The quality of the generated video.
-    """
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    MAXIMUM = "maximum"
-
-
-class OutputContainerAndCodec(Enum):
-    """
-    Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.
-    """
-    MP4_H265 = "mp4_h265"
-    MP4_H264 = "mp4_h264"
-    WEBM_VP9 = "webm_vp9"
-    GIF = "gif"
-    MOV_H264 = "mov_h264"
-    MOV_H265 = "mov_h265"
-    MOV_PRORESKS = "mov_proresks"
-    MKV_H264 = "mkv_h264"
-    MKV_H265 = "mkv_h265"
-    MKV_VP9 = "mkv_vp9"
-    MKV_MPEG4 = "mkv_mpeg4"
-
-
-class AspectRatio(Enum):
-    """
-    The aspect ratio of the video to generate.
-    """
-    RATIO_16_9 = "16:9"
-    RATIO_9_16 = "9:16"
-
-
-class Resolution(Enum):
-    """
-    The resolution of the video to generate.
-    """
-    VALUE_480P = "480p"
-    VALUE_580P = "580p"
-    VALUE_720P = "720p"
-
-
-class NumFrames(Enum):
-    """
-    The number of frames to generate.
-    """
-    VALUE_129 = "129"
-    VALUE_85 = "85"
-
-
-class ColorFixType(Enum):
-    """
-    Type of color correction for samples.
-    """
-    NONE = "none"
-    WAVELET = "wavelet"
-    ADAIN = "adain"
-
-
-class TileDiffusion(Enum):
-    """
-    If specified, a patch-based sampling strategy will be used for sampling.
-    """
-    NONE = "none"
-    MIX = "mix"
-    GAUSSIAN = "gaussian"
-
-
-class Acceleration(Enum):
-    """
-    The acceleration level to use.
-    """
-    NONE = "none"
-    REGULAR = "regular"
-    HIGH = "high"
-    FULL = "full"
-
-
-class CameraLora(Enum):
-    """
-    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-    """
-    DOLLY_IN = "dolly_in"
-    DOLLY_OUT = "dolly_out"
-    DOLLY_LEFT = "dolly_left"
-    DOLLY_RIGHT = "dolly_right"
-    JIB_UP = "jib_up"
-    JIB_DOWN = "jib_down"
-    STATIC = "static"
-    NONE = "none"
-
-
-class Preprocessor(Enum):
-    """
-    The preprocessor to use for the video. When a preprocessor is used and `ic_lora_type` is set to `match_preprocessor`, the IC-LoRA will be loaded based on the preprocessor type.
-    """
-    DEPTH = "depth"
-    CANNY = "canny"
-    POSE = "pose"
-    NONE = "none"
-
-
-class IcLora(Enum):
-    """
-    The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)
-    """
-    MATCH_PREPROCESSOR = "match_preprocessor"
-    CANNY = "canny"
-    DEPTH = "depth"
-    POSE = "pose"
-    DETAILER = "detailer"
-    NONE = "none"
-
-
-class ExtendDirection(Enum):
-    """
-    Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
-    """
-    FORWARD = "forward"
-    BACKWARD = "backward"
-
-
-class RelitCondType(Enum):
-    """
-    Relight condition type.
-    """
-    IC = "ic"
-    REF = "ref"
-    HDR = "hdr"
-    BG = "bg"
-
-
-class Camera(Enum):
-    """
-    Camera control mode.
-    """
-    TRAJ = "traj"
-    TARGET = "target"
-
-
-class Mode(Enum):
-    """
-    Camera motion mode.
-    """
-    GRADUAL = "gradual"
-    BULLET = "bullet"
-    DIRECT = "direct"
-    DOLLY_ZOOM = "dolly-zoom"
-
-
-class CharacterOrientation(Enum):
-    """
-    Controls whether the output character's orientation matches the reference image or video. 'video': orientation matches reference video - better for complex motions (max 30s). 'image': orientation matches reference image - better for following camera movements (max 10s).
-    """
-    IMAGE = "image"
-    VIDEO = "video"
-
-
-class Duration(Enum):
-    """
-    Duration of the generated video in seconds. R2V supports only 5 or 10 seconds (no 15s).
-    """
-    VALUE_5 = "5"
-    VALUE_10 = "10"
-
-
-class TargetResolution(Enum):
-    """
-    Target output resolution for the enhanced video. 720p (native, fast) or 1080p (upscaled, slower). Processing is always done at 720p, then upscaled if 1080p selected.
-    """
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class Emotion(Enum):
-    """
-    Emotion prompt for the generation. Currently supports single-word emotions only.
-    """
-    HAPPY = "happy"
-    ANGRY = "angry"
-    SAD = "sad"
-    NEUTRAL = "neutral"
-    DISGUSTED = "disgusted"
-    SURPRISED = "surprised"
-
-
-class LipsyncMode(Enum):
-    """
-    Lipsync mode when audio and video durations are out of sync.
-    """
-    CUT_OFF = "cut_off"
-    LOOP = "loop"
-    BOUNCE = "bounce"
-    SILENCE = "silence"
-    REMAP = "remap"
-
-
-class ModelMode(Enum):
-    """
-    Controls the edit region and movement scope for the model. Available options:
-    - `lips`: Only lipsync using react-1 (minimal facial changes).
-    - `face`: Lipsync + facial expressions without head movements.
-    - `head`: Lipsync + facial expressions + natural talking head movements.
-    """
-    LIPS = "lips"
-    FACE = "face"
-    HEAD = "head"
-
-
-class OutputCodec(Enum):
-    """
-    Single VP9 video with alpha channel or two videos (rgb and alpha) in H264 format. H264 is recommended for better RGB quality.
-    """
-    VP9 = "vp9"
-    H264 = "h264"
-
-
-class RetakeMode(Enum):
-    """
-    The retake mode to use for the retake
-    """
-    REPLACE_AUDIO = "replace_audio"
-    REPLACE_VIDEO = "replace_video"
-    REPLACE_AUDIO_AND_VIDEO = "replace_audio_and_video"
-
-
-class Sampler(Enum):
-    """
-    Sampler to use for video generation.
-    """
-    UNIPC = "unipc"
-    DPMPP = "dpmPP"
-    EULER = "euler"
-
-
-class OutputFormat(Enum):
-    """
-    The format of the output video.
-    """
-    X264__MP4 = "X264 (.mp4)"
-    VP9__WEBM = "VP9 (.webm)"
-    PRORES4444__MOV = "PRORES4444 (.mov)"
-    GIF__GIF = "GIF (.gif)"
-
-
-class OutputWriteMode(Enum):
-    """
-    The write mode of the output video.
-    """
-    FAST = "fast"
-    BALANCED = "balanced"
-    SMALL = "small"
-
-
-class OutputQuality(Enum):
-    """
-    The quality of the output video.
-    """
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    MAXIMUM = "maximum"
-
-
-class FontWeight(Enum):
-    """
-    Font weight (TikTok style typically uses bold or black)
-    """
-    NORMAL = "normal"
-    BOLD = "bold"
-    BLACK = "black"
-
-
-class FontColor(Enum):
-    """
-    Subtitle text color for non-active words
-    """
-    WHITE = "white"
-    BLACK = "black"
-    RED = "red"
-    GREEN = "green"
-    BLUE = "blue"
-    YELLOW = "yellow"
-    ORANGE = "orange"
-    PURPLE = "purple"
-    PINK = "pink"
-    BROWN = "brown"
-    GRAY = "gray"
-    CYAN = "cyan"
-    MAGENTA = "magenta"
-
-
-class StrokeColor(Enum):
-    """
-    Text stroke/outline color
-    """
-    BLACK = "black"
-    WHITE = "white"
-    RED = "red"
-    GREEN = "green"
-    BLUE = "blue"
-    YELLOW = "yellow"
-    ORANGE = "orange"
-    PURPLE = "purple"
-    PINK = "pink"
-    BROWN = "brown"
-    GRAY = "gray"
-    CYAN = "cyan"
-    MAGENTA = "magenta"
-
-
-class HighlightColor(Enum):
-    """
-    Color for the currently speaking word (karaoke-style highlight)
-    """
-    WHITE = "white"
-    BLACK = "black"
-    RED = "red"
-    GREEN = "green"
-    BLUE = "blue"
-    YELLOW = "yellow"
-    ORANGE = "orange"
-    PURPLE = "purple"
-    PINK = "pink"
-    BROWN = "brown"
-    GRAY = "gray"
-    CYAN = "cyan"
-    MAGENTA = "magenta"
-
-
-class Position(Enum):
-    """
-    Vertical position of subtitles
-    """
-    TOP = "top"
-    CENTER = "center"
-    BOTTOM = "bottom"
-
-
-class BackgroundColor(Enum):
-    """
-    Background color behind text ('none' or 'transparent' for no background)
-    """
-    BLACK = "black"
-    WHITE = "white"
-    RED = "red"
-    GREEN = "green"
-    BLUE = "blue"
-    YELLOW = "yellow"
-    ORANGE = "orange"
-    PURPLE = "purple"
-    PINK = "pink"
-    BROWN = "brown"
-    GRAY = "gray"
-    CYAN = "cyan"
-    MAGENTA = "magenta"
-    NONE = "none"
-    TRANSPARENT = "transparent"
-
-
-class TargetFps(Enum):
-    """
-    The target FPS of the video to upscale.
-    """
-    VALUE_30FPS = "30fps"
-    VALUE_60FPS = "60fps"
-
-
-class TransparencyMode(Enum):
-    """
-    The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
-    """
-    CONTENT_AWARE = "content_aware"
-    WHITE = "white"
-    BLACK = "black"
-
-
-class InterpolatorModel(Enum):
-    """
-    The model to use for frame interpolation. Options are 'rife' or 'film'.
-    """
-    RIFE = "rife"
-    FILM = "film"
-
-
-class UpscaleMode(Enum):
-    """
-    The mode to use for the upscale. If 'target', the upscale factor will be calculated based on the target resolution. If 'factor', the upscale factor will be used directly.
-    """
-    TARGET = "target"
-    FACTOR = "factor"
-
-
-class VideoType(Enum):
-    """
-    The type of video you're editing. Use 'general' for most videos, and 'human' for videos emphasizing human subjects and motions. The default value 'auto' means the model will guess based on the first frame of the video.
-    """
-    AUTO = "auto"
-    GENERAL = "general"
-    HUMAN = "human"
-
-
 class AMTInterpolation(FALNode):
     """
     AMT (Any-to-Many Temporal) Interpolation creates smooth transitions between video frames.
@@ -811,11 +353,6 @@ class BenV2Video(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
 class BiRefNetV2Video(FALNode):
     """
     BiRefNet v2 Video performs background removal from videos with high accuracy.
@@ -828,6 +365,66 @@ class BiRefNetV2Video(FALNode):
     - Generate video mattes
     - Prepare videos for compositing
     """
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class OperatingResolution(Enum):
+        """
+        The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model.
+        """
+        VALUE_1024X1024 = "1024x1024"
+        VALUE_2048X2048 = "2048x2048"
+        VALUE_2304X2304 = "2304x2304"
+
+    class Model(Enum):
+        """
+        Model to use for background removal.
+        The 'General Use (Light)' model is the original model used in the BiRefNet repository.
+        The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images.
+        The 'General Use (Heavy)' model is a slower but more accurate model.
+        The 'Matting' model is a model trained specifically for matting images.
+        The 'Portrait' model is a model trained specifically for portrait images.
+        The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304.
+        The 'General Use (Light)' model is recommended for most use cases.
+        The corresponding models are as follows:
+        - 'General Use (Light)': BiRefNet
+        - 'General Use (Light 2K)': BiRefNet_lite-2K
+        - 'General Use (Heavy)': BiRefNet_lite
+        - 'Matting': BiRefNet-matting
+        - 'Portrait': BiRefNet-portrait
+        - 'General Use (Dynamic)': BiRefNet_dynamic
+        """
+        GENERAL_USE_LIGHT = "General Use (Light)"
+        GENERAL_USE_LIGHT_2K = "General Use (Light 2K)"
+        GENERAL_USE_HEAVY = "General Use (Heavy)"
+        MATTING = "Matting"
+        PORTRAIT = "Portrait"
+        GENERAL_USE_DYNAMIC = "General Use (Dynamic)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     video_write_mode: VideoWriteMode = Field(
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
@@ -885,7 +482,6 @@ class BiRefNetV2Video(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class BriaVideoEraserMask(FALNode):
     """
     Bria Video Eraser removes objects from videos using mask-based selection.
@@ -898,6 +494,23 @@ class BriaVideoEraserMask(FALNode):
     - Remove watermarks from videos
     - Edit video content seamlessly
     """
+
+    class OutputContainerAndCodec(Enum):
+        """
+        Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.
+        """
+        MP4_H265 = "mp4_h265"
+        MP4_H264 = "mp4_h264"
+        WEBM_VP9 = "webm_vp9"
+        GIF = "gif"
+        MOV_H264 = "mov_h264"
+        MOV_H265 = "mov_h265"
+        MOV_PRORESKS = "mov_proresks"
+        MKV_H264 = "mkv_h264"
+        MKV_H265 = "mkv_h265"
+        MKV_VP9 = "mkv_vp9"
+        MKV_MPEG4 = "mkv_mpeg4"
+
 
     preserve_audio: bool = Field(
         default=True, description="If true, audio will be preserved in the output video."
@@ -939,7 +552,6 @@ class BriaVideoEraserMask(FALNode):
     def get_basic_fields(cls):
         return ["video", "mask"]
 
-
 class BriaVideoEraserKeypoints(FALNode):
     """
     Bria Video Eraser removes objects from videos using keypoint-based selection.
@@ -952,6 +564,23 @@ class BriaVideoEraserKeypoints(FALNode):
     - Precision video editing
     - Remove elements with point markers
     """
+
+    class OutputContainerAndCodec(Enum):
+        """
+        Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.
+        """
+        MP4_H265 = "mp4_h265"
+        MP4_H264 = "mp4_h264"
+        WEBM_VP9 = "webm_vp9"
+        GIF = "gif"
+        MOV_H264 = "mov_h264"
+        MOV_H265 = "mov_h265"
+        MOV_PRORESKS = "mov_proresks"
+        MKV_H264 = "mkv_h264"
+        MKV_H265 = "mkv_h265"
+        MKV_VP9 = "mkv_vp9"
+        MKV_MPEG4 = "mkv_mpeg4"
+
 
     preserve_audio: bool = Field(
         default=True, description="If true, audio will be preserved in the output video."
@@ -993,7 +622,6 @@ class BriaVideoEraserKeypoints(FALNode):
     def get_basic_fields(cls):
         return ["video", "keypoints"]
 
-
 class BriaVideoEraserPrompt(FALNode):
     """
     Bria Video Eraser removes objects from videos using text prompt descriptions.
@@ -1006,6 +634,23 @@ class BriaVideoEraserPrompt(FALNode):
     - Prompt-driven object removal
     - Semantic video editing
     """
+
+    class OutputContainerAndCodec(Enum):
+        """
+        Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.
+        """
+        MP4_H265 = "mp4_h265"
+        MP4_H264 = "mp4_h264"
+        WEBM_VP9 = "webm_vp9"
+        GIF = "gif"
+        MOV_H264 = "mov_h264"
+        MOV_H265 = "mov_h265"
+        MOV_PRORESKS = "mov_proresks"
+        MKV_H264 = "mkv_h264"
+        MKV_H265 = "mkv_h265"
+        MKV_VP9 = "mkv_vp9"
+        MKV_MPEG4 = "mkv_mpeg4"
+
 
     preserve_audio: bool = Field(
         default=True, description="If true, audio will be preserved in the output video."
@@ -1124,9 +769,6 @@ class CogVideoX5BVideoToVideo(FALNode):
     def get_basic_fields(cls):
         return ["video", "prompt"]
 
-
-
-
 class HunyuanVideoToVideo(FALNode):
     """
     Hunyuan Video transforms existing videos with advanced AI-powered effects.
@@ -1139,6 +781,29 @@ class HunyuanVideoToVideo(FALNode):
     - Generate video variations
     - Create enhanced video versions
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video to generate.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the video to generate.
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class NumFrames(Enum):
+        """
+        The number of frames to generate.
+        """
+        VALUE_129 = "129"
+        VALUE_85 = "85"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -1241,8 +906,6 @@ class VideoUpscaler(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
 class CCSR(FALNode):
     """
     CCSR (Controllable Color Style Restoration) restores and enhances video colors.
@@ -1255,6 +918,23 @@ class CCSR(FALNode):
     - Improve video color grading
     - Restore faded video footage
     """
+
+    class ColorFixType(Enum):
+        """
+        Type of color correction for samples.
+        """
+        NONE = "none"
+        WAVELET = "wavelet"
+        ADAIN = "adain"
+
+    class TileDiffusion(Enum):
+        """
+        If specified, a patch-based sampling strategy will be used for sampling.
+        """
+        NONE = "none"
+        MIX = "mix"
+        GAUSSIAN = "gaussian"
+
 
     color_fix_type: ColorFixType = Field(
         default=ColorFixType.ADAIN, description="Type of color correction for samples."
@@ -1328,13 +1008,6 @@ class CCSR(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
-
 class Ltx219BDistilledVideoToVideoLora(FALNode):
     """
     LTX-2 19B Distilled
@@ -1347,6 +1020,75 @@ class Ltx219BDistilledVideoToVideoLora(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class Preprocessor(Enum):
+        """
+        The preprocessor to use for the video. When a preprocessor is used and `ic_lora_type` is set to `match_preprocessor`, the IC-LoRA will be loaded based on the preprocessor type.
+        """
+        DEPTH = "depth"
+        CANNY = "canny"
+        POSE = "pose"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class IcLora(Enum):
+        """
+        The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)
+        """
+        MATCH_PREPROCESSOR = "match_preprocessor"
+        CANNY = "canny"
+        DEPTH = "depth"
+        POSE = "pose"
+        DETAILER = "detailer"
+        NONE = "none"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -1494,13 +1236,6 @@ class Ltx219BDistilledVideoToVideoLora(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
-
 class Ltx219BDistilledVideoToVideo(FALNode):
     """
     LTX-2 19B Distilled
@@ -1513,6 +1248,75 @@ class Ltx219BDistilledVideoToVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class Preprocessor(Enum):
+        """
+        The preprocessor to use for the video. When a preprocessor is used and `ic_lora_type` is set to `match_preprocessor`, the IC-LoRA will be loaded based on the preprocessor type.
+        """
+        DEPTH = "depth"
+        CANNY = "canny"
+        POSE = "pose"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class IcLora(Enum):
+        """
+        The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)
+        """
+        MATCH_PREPROCESSOR = "match_preprocessor"
+        CANNY = "canny"
+        DEPTH = "depth"
+        POSE = "pose"
+        DETAILER = "detailer"
+        NONE = "none"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -1656,13 +1460,6 @@ class Ltx219BDistilledVideoToVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
-
 class Ltx219BVideoToVideoLora(FALNode):
     """
     LTX-2 19B
@@ -1675,6 +1472,75 @@ class Ltx219BVideoToVideoLora(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class Preprocessor(Enum):
+        """
+        The preprocessor to use for the video. When a preprocessor is used and `ic_lora_type` is set to `match_preprocessor`, the IC-LoRA will be loaded based on the preprocessor type.
+        """
+        DEPTH = "depth"
+        CANNY = "canny"
+        POSE = "pose"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class IcLora(Enum):
+        """
+        The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)
+        """
+        MATCH_PREPROCESSOR = "match_preprocessor"
+        CANNY = "canny"
+        DEPTH = "depth"
+        POSE = "pose"
+        DETAILER = "detailer"
+        NONE = "none"
+
 
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -1830,13 +1696,6 @@ class Ltx219BVideoToVideoLora(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
-
 class Ltx219BVideoToVideo(FALNode):
     """
     LTX-2 19B
@@ -1849,6 +1708,75 @@ class Ltx219BVideoToVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class Preprocessor(Enum):
+        """
+        The preprocessor to use for the video. When a preprocessor is used and `ic_lora_type` is set to `match_preprocessor`, the IC-LoRA will be loaded based on the preprocessor type.
+        """
+        DEPTH = "depth"
+        CANNY = "canny"
+        POSE = "pose"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class IcLora(Enum):
+        """
+        The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)
+        """
+        MATCH_PREPROCESSOR = "match_preprocessor"
+        CANNY = "canny"
+        DEPTH = "depth"
+        POSE = "pose"
+        DETAILER = "detailer"
+        NONE = "none"
+
 
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -2000,12 +1928,6 @@ class Ltx219BVideoToVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
 class Ltx219BDistilledExtendVideoLora(FALNode):
     """
     LTX-2 19B Distilled
@@ -2018,6 +1940,62 @@ class Ltx219BDistilledExtendVideoLora(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class ExtendDirection(Enum):
+        """
+        Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -2144,12 +2122,6 @@ class Ltx219BDistilledExtendVideoLora(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
 class Ltx219BDistilledExtendVideo(FALNode):
     """
     LTX-2 19B Distilled
@@ -2162,6 +2134,62 @@ class Ltx219BDistilledExtendVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class ExtendDirection(Enum):
+        """
+        Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -2284,12 +2312,6 @@ class Ltx219BDistilledExtendVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
 class Ltx219BExtendVideoLora(FALNode):
     """
     LTX-2 19B
@@ -2302,6 +2324,62 @@ class Ltx219BExtendVideoLora(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class ExtendDirection(Enum):
+        """
+        Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
 
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -2436,12 +2514,6 @@ class Ltx219BExtendVideoLora(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
 class Ltx219BExtendVideo(FALNode):
     """
     LTX-2 19B
@@ -2454,6 +2526,62 @@ class Ltx219BExtendVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class ExtendDirection(Enum):
+        """
+        Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -2584,7 +2712,6 @@ class Ltx219BExtendVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class BriaVideoEraseKeypoints(FALNode):
     """
     Video
@@ -2597,6 +2724,23 @@ class BriaVideoEraseKeypoints(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class OutputContainerAndCodec(Enum):
+        """
+        Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.
+        """
+        MP4_H265 = "mp4_h265"
+        MP4_H264 = "mp4_h264"
+        WEBM_VP9 = "webm_vp9"
+        GIF = "gif"
+        MOV_H264 = "mov_h264"
+        MOV_H265 = "mov_h265"
+        MOV_PRORESKS = "mov_proresks"
+        MKV_H264 = "mkv_h264"
+        MKV_H265 = "mkv_h265"
+        MKV_VP9 = "mkv_vp9"
+        MKV_MPEG4 = "mkv_mpeg4"
+
 
     preserve_audio: bool = Field(
         default=True, description="If true, audio will be preserved in the output video."
@@ -2638,7 +2782,6 @@ class BriaVideoEraseKeypoints(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class BriaVideoErasePrompt(FALNode):
     """
     Video
@@ -2651,6 +2794,23 @@ class BriaVideoErasePrompt(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class OutputContainerAndCodec(Enum):
+        """
+        Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.
+        """
+        MP4_H265 = "mp4_h265"
+        MP4_H264 = "mp4_h264"
+        WEBM_VP9 = "webm_vp9"
+        GIF = "gif"
+        MOV_H264 = "mov_h264"
+        MOV_H265 = "mov_h265"
+        MOV_PRORESKS = "mov_proresks"
+        MKV_H264 = "mkv_h264"
+        MKV_H265 = "mkv_h265"
+        MKV_VP9 = "mkv_vp9"
+        MKV_MPEG4 = "mkv_mpeg4"
+
 
     preserve_audio: bool = Field(
         default=True, description="If true, audio will be preserved in the output video."
@@ -2692,7 +2852,6 @@ class BriaVideoErasePrompt(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class BriaVideoEraseMask(FALNode):
     """
     Video
@@ -2705,6 +2864,23 @@ class BriaVideoEraseMask(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class OutputContainerAndCodec(Enum):
+        """
+        Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.
+        """
+        MP4_H265 = "mp4_h265"
+        MP4_H264 = "mp4_h264"
+        WEBM_VP9 = "webm_vp9"
+        GIF = "gif"
+        MOV_H264 = "mov_h264"
+        MOV_H265 = "mov_h265"
+        MOV_PRORESKS = "mov_proresks"
+        MKV_H264 = "mkv_h264"
+        MKV_H265 = "mkv_h265"
+        MKV_VP9 = "mkv_vp9"
+        MKV_MPEG4 = "mkv_mpeg4"
+
 
     preserve_audio: bool = Field(
         default=True, description="If true, audio will be preserved in the output video."
@@ -2746,7 +2922,6 @@ class BriaVideoEraseMask(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class LightxRelight(FALNode):
     """
     Lightx
@@ -2759,6 +2934,16 @@ class LightxRelight(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class RelitCondType(Enum):
+        """
+        Relight condition type.
+        """
+        IC = "ic"
+        REF = "ref"
+        HDR = "hdr"
+        BG = "bg"
+
 
     prompt: str = Field(
         default="", description="Optional text prompt. If omitted, Light-X will auto-caption the video."
@@ -2809,8 +2994,6 @@ class LightxRelight(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
 class LightxRecamera(FALNode):
     """
     Lightx
@@ -2823,6 +3006,23 @@ class LightxRecamera(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Camera(Enum):
+        """
+        Camera control mode.
+        """
+        TRAJ = "traj"
+        TARGET = "target"
+
+    class Mode(Enum):
+        """
+        Camera motion mode.
+        """
+        GRADUAL = "gradual"
+        BULLET = "bullet"
+        DIRECT = "direct"
+        DOLLY_ZOOM = "dolly-zoom"
+
 
     prompt: str = Field(
         default="", description="Optional text prompt. If omitted, Light-X will auto-caption the video."
@@ -2872,7 +3072,6 @@ class LightxRecamera(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class KlingVideoV2_6StandardMotionControl(FALNode):
     """
     Kling Video v2.6 Motion Control [Standard]
@@ -2885,6 +3084,14 @@ class KlingVideoV2_6StandardMotionControl(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class CharacterOrientation(Enum):
+        """
+        Controls whether the output character's orientation matches the reference image or video. 'video': orientation matches reference video - better for complex motions (max 30s). 'image': orientation matches reference image - better for following camera movements (max 10s).
+        """
+        IMAGE = "image"
+        VIDEO = "video"
+
 
     prompt: str = Field(
         default=""
@@ -2928,7 +3135,6 @@ class KlingVideoV2_6StandardMotionControl(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class KlingVideoV2_6ProMotionControl(FALNode):
     """
     Kling Video v2.6 Motion Control [Pro]
@@ -2941,6 +3147,14 @@ class KlingVideoV2_6ProMotionControl(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class CharacterOrientation(Enum):
+        """
+        Controls whether the output character's orientation matches the reference image or video. 'video': orientation matches reference video - better for complex motions (max 30s). 'image': orientation matches reference image - better for following camera movements (max 10s).
+        """
+        IMAGE = "image"
+        VIDEO = "video"
+
 
     prompt: str = Field(
         default=""
@@ -2984,7 +3198,6 @@ class KlingVideoV2_6ProMotionControl(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class DecartLucyRestyle(FALNode):
     """
     Lucy Restyle
@@ -2997,6 +3210,13 @@ class DecartLucyRestyle(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video
+        """
+        VALUE_720P = "720p"
+
 
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the video to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the video directly in the response without going through the CDN."
@@ -3042,7 +3262,6 @@ class DecartLucyRestyle(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class Scail(FALNode):
     """
     Scail
@@ -3055,6 +3274,13 @@ class Scail(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Resolution(Enum):
+        """
+        Output resolution. Outputs 896x512 (landscape) or 512x896 (portrait) based on the input image aspect ratio.
+        """
+        VALUE_512P = "512p"
+
 
     prompt: str = Field(
         default="", description="The prompt to guide video generation."
@@ -3142,9 +3368,6 @@ class ClarityaiCrystalVideoUpscaler(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
 class WanV2_6ReferenceToVideo(FALNode):
     """
     Wan v2.6 Reference to Video
@@ -3157,6 +3380,31 @@ class WanV2_6ReferenceToVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Duration(Enum):
+        """
+        Duration of the generated video in seconds. R2V supports only 5 or 10 seconds (no 15s).
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
+    class Resolution(Enum):
+        """
+        Video resolution tier. R2V only supports 720p and 1080p (no 480p).
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+
 
     prompt: str = Field(
         default="", description="Use @Video1, @Video2, @Video3 to reference subjects from your videos. Works for people, animals, or objects. For multi-shot prompts: '[0-3s] Shot 1. [3-6s] Shot 2.' Max 800 characters."
@@ -3218,9 +3466,6 @@ class WanV2_6ReferenceToVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
 class Veo3_1FastExtendVideo(FALNode):
     """
     Veo 3.1 Fast
@@ -3233,6 +3478,27 @@ class Veo3_1FastExtendVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video.
+        """
+        VALUE_7S = "7s"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing how the video should be extended"
@@ -3290,9 +3556,6 @@ class Veo3_1FastExtendVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
 class Veo3_1ExtendVideo(FALNode):
     """
     Veo 3.1
@@ -3305,6 +3568,27 @@ class Veo3_1ExtendVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video.
+        """
+        VALUE_7S = "7s"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing how the video should be extended"
@@ -3362,8 +3646,6 @@ class Veo3_1ExtendVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
 class KlingVideoO1StandardVideoToVideoReference(FALNode):
     """
     Kling O1 Reference Video to Video [Standard]
@@ -3376,6 +3658,29 @@ class KlingVideoO1StandardVideoToVideoReference(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        Video duration in seconds.
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default="", description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
@@ -3478,9 +3783,6 @@ class KlingVideoO1StandardVideoToVideoEdit(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
 class SteadyDancer(FALNode):
     """
     Steady Dancer
@@ -3493,6 +3795,32 @@ class SteadyDancer(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration levels.
+        """
+        LIGHT = "light"
+        MODERATE = "moderate"
+        AGGRESSIVE = "aggressive"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video. If 'auto', will be determined from the reference image.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video. 576p is default, 720p for higher quality. 480p is lower quality.
+        """
+        VALUE_480P = "480p"
+        VALUE_576P = "576p"
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="A person dancing with smooth and natural movements.", description="Text prompt describing the desired animation."
@@ -3592,7 +3920,6 @@ class SteadyDancer(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class OneToAllAnimation1_3B(FALNode):
     """
     One To All Animation
@@ -3605,6 +3932,15 @@ class OneToAllAnimation1_3B(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Resolution(Enum):
+        """
+        The resolution of the video to generate.
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -3659,7 +3995,6 @@ class OneToAllAnimation1_3B(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class OneToAllAnimation14B(FALNode):
     """
     One To All Animation
@@ -3672,6 +4007,15 @@ class OneToAllAnimation14B(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Resolution(Enum):
+        """
+        The resolution of the video to generate.
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -3726,7 +4070,6 @@ class OneToAllAnimation14B(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class WanVisionEnhancer(FALNode):
     """
     Wan Vision Enhancer
@@ -3739,6 +4082,14 @@ class WanVisionEnhancer(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class TargetResolution(Enum):
+        """
+        Target output resolution for the enhanced video. 720p (native, fast) or 1080p (upscaled, slower). Processing is always done at 720p, then upscaled if 1080p selected.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
 
     prompt: str = Field(
         default="", description="Optional prompt to prepend to the VLM-generated description. Leave empty to use only the auto-generated description from the video."
@@ -3784,9 +4135,6 @@ class WanVisionEnhancer(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
 class SyncLipsyncReact1(FALNode):
     """
     Sync React-1
@@ -3799,6 +4147,39 @@ class SyncLipsyncReact1(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Emotion(Enum):
+        """
+        Emotion prompt for the generation. Currently supports single-word emotions only.
+        """
+        HAPPY = "happy"
+        ANGRY = "angry"
+        SAD = "sad"
+        NEUTRAL = "neutral"
+        DISGUSTED = "disgusted"
+        SURPRISED = "surprised"
+
+    class LipsyncMode(Enum):
+        """
+        Lipsync mode when audio and video durations are out of sync.
+        """
+        CUT_OFF = "cut_off"
+        LOOP = "loop"
+        BOUNCE = "bounce"
+        SILENCE = "silence"
+        REMAP = "remap"
+
+    class ModelMode(Enum):
+        """
+        Controls the edit region and movement scope for the model. Available options:
+        - `lips`: Only lipsync using react-1 (minimal facial changes).
+        - `face`: Lipsync + facial expressions without head movements.
+        - `head`: Lipsync + facial expressions + natural talking head movements.
+        """
+        LIPS = "lips"
+        FACE = "face"
+        HEAD = "head"
+
 
     emotion: Emotion = Field(
         default="", description="Emotion prompt for the generation. Currently supports single-word emotions only."
@@ -3844,7 +4225,6 @@ class SyncLipsyncReact1(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class VeedVideoBackgroundRemovalFast(FALNode):
     """
     Video Background Removal
@@ -3857,6 +4237,14 @@ class VeedVideoBackgroundRemovalFast(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class OutputCodec(Enum):
+        """
+        Single VP9 video with alpha channel or two videos (rgb and alpha) in H264 format. H264 is recommended for better RGB quality.
+        """
+        VP9 = "vp9"
+        H264 = "h264"
+
 
     video_url: VideoRef = Field(
         default=VideoRef()
@@ -3947,8 +4335,6 @@ class KlingVideoO1VideoToVideoEdit(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
 class KlingVideoO1VideoToVideoReference(FALNode):
     """
     Kling O1 Reference Video to Video [Pro]
@@ -3961,6 +4347,29 @@ class KlingVideoO1VideoToVideoReference(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        Video duration in seconds.
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default="", description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
@@ -4010,7 +4419,6 @@ class KlingVideoO1VideoToVideoReference(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class VeedVideoBackgroundRemoval(FALNode):
     """
     Video Background Removal
@@ -4023,6 +4431,14 @@ class VeedVideoBackgroundRemoval(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class OutputCodec(Enum):
+        """
+        Single VP9 video with alpha channel or two videos (rgb and alpha) in H264 format. H264 is recommended for better RGB quality.
+        """
+        VP9 = "vp9"
+        H264 = "h264"
+
 
     video_url: VideoRef = Field(
         default=VideoRef()
@@ -4060,7 +4476,6 @@ class VeedVideoBackgroundRemoval(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class VeedVideoBackgroundRemovalGreenScreen(FALNode):
     """
     Video Background Removal
@@ -4073,6 +4488,14 @@ class VeedVideoBackgroundRemovalGreenScreen(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class OutputCodec(Enum):
+        """
+        Single VP9 video with alpha channel or two videos (rgb and alpha) in H264 format. H264 is recommended for better RGB quality.
+        """
+        VP9 = "vp9"
+        H264 = "h264"
+
 
     video_url: VideoRef = Field(
         default=VideoRef()
@@ -4106,7 +4529,6 @@ class VeedVideoBackgroundRemovalGreenScreen(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
 class Ltx2RetakeVideo(FALNode):
     """
     LTX Video 2.0 Retake
@@ -4119,6 +4541,15 @@ class Ltx2RetakeVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class RetakeMode(Enum):
+        """
+        The retake mode to use for the retake
+        """
+        REPLACE_AUDIO = "replace_audio"
+        REPLACE_VIDEO = "replace_video"
+        REPLACE_AUDIO_AND_VIDEO = "replace_audio_and_video"
+
 
     prompt: str = Field(
         default="", description="The prompt to retake the video with"
@@ -4339,11 +4770,6 @@ class Sam3Video(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
 class Editto(FALNode):
     """
     Editto
@@ -4356,6 +4782,52 @@ class Editto(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPMPP = "dpmPP"
+        EULER = "euler"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
@@ -4469,10 +4941,6 @@ class Editto(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
 class FlashvsrUpscaleVideo(FALNode):
     """
     Flashvsr
@@ -4485,6 +4953,41 @@ class FlashvsrUpscaleVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration mode for VAE decoding. Options: regular (best quality), high (balanced), full (fastest). More accerleation means longer duration videos can be processed too.
+        """
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class OutputWriteMode(Enum):
+        """
+        The write mode of the output video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class OutputQuality(Enum):
+        """
+        The quality of the output video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     video_url: VideoRef = Field(
         default=VideoRef(), description="The input video to be upscaled"
@@ -4550,12 +5053,6 @@ class FlashvsrUpscaleVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
 class WorkflowUtilitiesAutoSubtitle(FALNode):
     """
     Workflow Utilities
@@ -4568,6 +5065,97 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class FontWeight(Enum):
+        """
+        Font weight (TikTok style typically uses bold or black)
+        """
+        NORMAL = "normal"
+        BOLD = "bold"
+        BLACK = "black"
+
+    class FontColor(Enum):
+        """
+        Subtitle text color for non-active words
+        """
+        WHITE = "white"
+        BLACK = "black"
+        RED = "red"
+        GREEN = "green"
+        BLUE = "blue"
+        YELLOW = "yellow"
+        ORANGE = "orange"
+        PURPLE = "purple"
+        PINK = "pink"
+        BROWN = "brown"
+        GRAY = "gray"
+        CYAN = "cyan"
+        MAGENTA = "magenta"
+
+    class StrokeColor(Enum):
+        """
+        Text stroke/outline color
+        """
+        BLACK = "black"
+        WHITE = "white"
+        RED = "red"
+        GREEN = "green"
+        BLUE = "blue"
+        YELLOW = "yellow"
+        ORANGE = "orange"
+        PURPLE = "purple"
+        PINK = "pink"
+        BROWN = "brown"
+        GRAY = "gray"
+        CYAN = "cyan"
+        MAGENTA = "magenta"
+
+    class HighlightColor(Enum):
+        """
+        Color for the currently speaking word (karaoke-style highlight)
+        """
+        WHITE = "white"
+        BLACK = "black"
+        RED = "red"
+        GREEN = "green"
+        BLUE = "blue"
+        YELLOW = "yellow"
+        ORANGE = "orange"
+        PURPLE = "purple"
+        PINK = "pink"
+        BROWN = "brown"
+        GRAY = "gray"
+        CYAN = "cyan"
+        MAGENTA = "magenta"
+
+    class Position(Enum):
+        """
+        Vertical position of subtitles
+        """
+        TOP = "top"
+        CENTER = "center"
+        BOTTOM = "bottom"
+
+    class BackgroundColor(Enum):
+        """
+        Background color behind text ('none' or 'transparent' for no background)
+        """
+        BLACK = "black"
+        WHITE = "white"
+        RED = "red"
+        GREEN = "green"
+        BLUE = "blue"
+        YELLOW = "yellow"
+        ORANGE = "orange"
+        PURPLE = "purple"
+        PINK = "pink"
+        BROWN = "brown"
+        GRAY = "gray"
+        CYAN = "cyan"
+        MAGENTA = "magenta"
+        NONE = "none"
+        TRANSPARENT = "transparent"
+
 
     font_weight: FontWeight = Field(
         default=FontWeight.BOLD, description="Font weight (TikTok style typically uses bold or black)"
@@ -4649,8 +5237,6 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
 class BytedanceUpscalerUpscaleVideo(FALNode):
     """
     Bytedance Upscaler
@@ -4663,6 +5249,22 @@ class BytedanceUpscalerUpscaleVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class TargetFps(Enum):
+        """
+        The target FPS of the video to upscale.
+        """
+        VALUE_30FPS = "30fps"
+        VALUE_60FPS = "60fps"
+
+    class TargetResolution(Enum):
+        """
+        The target resolution of the video to upscale.
+        """
+        VALUE_1080P = "1080p"
+        VALUE_2K = "2k"
+        VALUE_4K = "4k"
+
 
     target_fps: TargetFps = Field(
         default=TargetFps.VALUE_30FPS, description="The target FPS of the video to upscale."
@@ -4696,8 +5298,6 @@ class BytedanceUpscalerUpscaleVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
 class VideoAsPrompt(FALNode):
     """
     Video As Prompt
@@ -4710,6 +5310,22 @@ class VideoAsPrompt(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -4931,14 +5547,6 @@ class Sora2VideoToVideoRemix(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
-
-
-
 class WanVaceAppsLongReframe(FALNode):
     """
     Wan 2.1 VACE Long Reframe
@@ -4951,6 +5559,75 @@ class WanVaceAppsLongReframe(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.
+        """
+        NONE = "none"
+        LOW = "low"
+        REGULAR = "regular"
+
+    class Sampler(Enum):
+        """
+        Sampler to use for video generation.
+        """
+        UNIPC = "unipc"
+        DPMPP = "dpmPP"
+        EULER = "euler"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_1_1 = "1:1"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class TransparencyMode(Enum):
+        """
+        The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
+        """
+        CONTENT_AWARE = "content_aware"
+        WHITE = "white"
+        BLACK = "black"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolatorModel(Enum):
+        """
+        The model to use for frame interpolation. Options are 'rife' or 'film'.
+        """
+        RIFE = "rife"
+        FILM = "film"
+
 
     shift: float = Field(
         default=5, description="Shift parameter for video generation."
@@ -5068,8 +5745,6 @@ class WanVaceAppsLongReframe(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
 class InfinitalkVideoToVideo(FALNode):
     """
     Infinitalk
@@ -5082,6 +5757,22 @@ class InfinitalkVideoToVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Resolution(Enum):
+        """
+        Resolution of the video to generate. Must be either 480p or 720p.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
@@ -5131,11 +5822,6 @@ class InfinitalkVideoToVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
-
 class SeedvrUpscaleVideo(FALNode):
     """
     SeedVR2
@@ -5148,6 +5834,49 @@ class SeedvrUpscaleVideo(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class UpscaleMode(Enum):
+        """
+        The mode to use for the upscale. If 'target', the upscale factor will be calculated based on the target resolution. If 'factor', the upscale factor will be used directly.
+        """
+        TARGET = "target"
+        FACTOR = "factor"
+
+    class OutputFormat(Enum):
+        """
+        The format of the output video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class OutputWriteMode(Enum):
+        """
+        The write mode of the output video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class TargetResolution(Enum):
+        """
+        The target resolution to upscale to when `upscale_mode` is `target`.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+        VALUE_1440P = "1440p"
+        VALUE_2160P = "2160p"
+
+    class OutputQuality(Enum):
+        """
+        The quality of the output video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     upscale_mode: UpscaleMode = Field(
         default=UpscaleMode.FACTOR, description="The mode to use for the upscale. If 'target', the upscale factor will be calculated based on the target resolution. If 'factor', the upscale factor will be used directly."
@@ -5209,10 +5938,6 @@ class SeedvrUpscaleVideo(FALNode):
     def get_basic_fields(cls):
         return ["video"]
 
-
-
-
-
 class WanVaceAppsVideoEdit(FALNode):
     """
     Wan VACE Video Edit
@@ -5225,6 +5950,43 @@ class WanVaceAppsVideoEdit(FALNode):
     - Special effects generation
     - Content repurposing
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.
+        """
+        NONE = "none"
+        LOW = "low"
+        REGULAR = "regular"
+
+    class Resolution(Enum):
+        """
+        Resolution of the edited video.
+        """
+        AUTO = "auto"
+        VALUE_240P = "240p"
+        VALUE_360P = "360p"
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the edited video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class VideoType(Enum):
+        """
+        The type of video you're editing. Use 'general' for most videos, and 'human' for videos emphasizing human subjects and motions. The default value 'auto' means the model will guess based on the first frame of the video.
+        """
+        AUTO = "auto"
+        GENERAL = "general"
+        HUMAN = "human"
+
 
     prompt: str = Field(
         default="", description="Prompt to edit the video."

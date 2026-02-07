@@ -6,648 +6,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class PixverseV56Resolution(Enum):
-    """
-    The resolution of the generated video
-    """
-    VALUE_360P = "360p"
-    VALUE_540P = "540p"
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class PixverseV56Duration(Enum):
-    """
-    The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
-    """
-    FIVE_SECONDS = "5"
-    EIGHT_SECONDS = "8"
-    TEN_SECONDS = "10"
-
-
-class PixverseV56Style(Enum):
-    """
-    The style of the generated video
-    """
-    ANIME = "anime"
-    ANIMATION_3D = "3d_animation"
-    CLAY = "clay"
-    COMIC = "comic"
-    CYBERPUNK = "cyberpunk"
-
-
-class PixverseV56ThinkingType(Enum):
-    """
-    Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
-    """
-    ENABLED = "enabled"
-    DISABLED = "disabled"
-    AUTO = "auto"
-
-
-class AspectRatio(Enum):
-    """
-    The aspect ratio of the generated video
-    """
-    RATIO_16_9 = "16:9"
-    RATIO_9_16 = "9:16"
-    RATIO_4_3 = "4:3"
-    RATIO_3_4 = "3:4"
-    RATIO_21_9 = "21:9"
-    RATIO_9_21 = "9:21"
-
-
-class AIAvatarResolution(Enum):
-    """
-    Resolution of the video to generate. Must be either 480p or 720p.
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-
-
-class Acceleration(Enum):
-    """
-    The acceleration level to use for generation.
-    """
-    NONE = "none"
-    REGULAR = "regular"
-    HIGH = "high"
-
-
-class AIAvatarSingleTextResolution(Enum):
-    """
-    Resolution of the video to generate. Must be either 480p or 720p.
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-
-
-class Voice(Enum):
-    """
-    The voice to use for speech generation
-    """
-    ARIA = "Aria"
-    ROGER = "Roger"
-    SARAH = "Sarah"
-    LAURA = "Laura"
-    CHARLIE = "Charlie"
-    GEORGE = "George"
-    CALLUM = "Callum"
-    RIVER = "River"
-    LIAM = "Liam"
-    CHARLOTTE = "Charlotte"
-    ALICE = "Alice"
-    MATILDA = "Matilda"
-    WILL = "Will"
-    JESSICA = "Jessica"
-    ERIC = "Eric"
-    CHRIS = "Chris"
-    BRIAN = "Brian"
-    DANIEL = "Daniel"
-    LILY = "Lily"
-    BILL = "Bill"
-
-
-class AIAvatarMultiTextResolution(Enum):
-    """
-    Resolution of the video to generate. Must be either 480p or 720p.
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-
-
-class Voice2(Enum):
-    """
-    The second person's voice to use for speech generation
-    """
-    ARIA = "Aria"
-    ROGER = "Roger"
-    SARAH = "Sarah"
-    LAURA = "Laura"
-    CHARLIE = "Charlie"
-    GEORGE = "George"
-    CALLUM = "Callum"
-    RIVER = "River"
-    LIAM = "Liam"
-    CHARLOTTE = "Charlotte"
-    ALICE = "Alice"
-    MATILDA = "Matilda"
-    WILL = "Will"
-    JESSICA = "Jessica"
-    ERIC = "Eric"
-    CHRIS = "Chris"
-    BRIAN = "Brian"
-    DANIEL = "Daniel"
-    LILY = "Lily"
-    BILL = "Bill"
-
-
-class Voice1(Enum):
-    """
-    The first person's voice to use for speech generation
-    """
-    ARIA = "Aria"
-    ROGER = "Roger"
-    SARAH = "Sarah"
-    LAURA = "Laura"
-    CHARLIE = "Charlie"
-    GEORGE = "George"
-    CALLUM = "Callum"
-    RIVER = "River"
-    LIAM = "Liam"
-    CHARLOTTE = "Charlotte"
-    ALICE = "Alice"
-    MATILDA = "Matilda"
-    WILL = "Will"
-    JESSICA = "Jessica"
-    ERIC = "Eric"
-    CHRIS = "Chris"
-    BRIAN = "Brian"
-    DANIEL = "Daniel"
-    LILY = "Lily"
-    BILL = "Bill"
-
-
-class AIAvatarMultiResolution(Enum):
-    """
-    Resolution of the video to generate. Must be either 480p or 720p.
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-
-
-class SeeDanceV15ProResolution(Enum):
-    """
-    Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class SeeDanceV15ProDuration(Enum):
-    """
-    Duration of the video in seconds
-    """
-    VALUE_4 = "4"
-    VALUE_5 = "5"
-    VALUE_6 = "6"
-    VALUE_7 = "7"
-    VALUE_8 = "8"
-    VALUE_9 = "9"
-    VALUE_10 = "10"
-    VALUE_11 = "11"
-    VALUE_12 = "12"
-
-
-class SeeDanceV15ProAspectRatio(Enum):
-    """
-    The aspect ratio of the generated video
-    """
-    RATIO_21_9 = "21:9"
-    RATIO_16_9 = "16:9"
-    RATIO_4_3 = "4:3"
-    RATIO_1_1 = "1:1"
-    RATIO_3_4 = "3:4"
-    RATIO_9_16 = "9:16"
-
-
-class SeeDanceV1ProFastResolution(Enum):
-    """
-    Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class SeeDanceV1ProFastDuration(Enum):
-    """
-    Duration of the video in seconds
-    """
-    VALUE_2 = "2"
-    VALUE_3 = "3"
-    VALUE_4 = "4"
-    VALUE_5 = "5"
-    VALUE_6 = "6"
-    VALUE_7 = "7"
-    VALUE_8 = "8"
-    VALUE_9 = "9"
-    VALUE_10 = "10"
-    VALUE_11 = "11"
-    VALUE_12 = "12"
-
-
-class SeeDanceV1ProFastAspectRatio(Enum):
-    """
-    The aspect ratio of the generated video
-    """
-    RATIO_21_9 = "21:9"
-    RATIO_16_9 = "16:9"
-    RATIO_4_3 = "4:3"
-    RATIO_1_1 = "1:1"
-    RATIO_3_4 = "3:4"
-    RATIO_9_16 = "9:16"
-    AUTO = "auto"
-
-
-class SeeDanceV1LiteResolution(Enum):
-    """
-    Video resolution - 480p for faster generation, 720p for higher quality
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-
-
-class SeeDanceV1LiteDuration(Enum):
-    """
-    Duration of the video in seconds
-    """
-    VALUE_2 = "2"
-    VALUE_3 = "3"
-    VALUE_4 = "4"
-    VALUE_5 = "5"
-    VALUE_6 = "6"
-    VALUE_7 = "7"
-    VALUE_8 = "8"
-    VALUE_9 = "9"
-    VALUE_10 = "10"
-    VALUE_11 = "11"
-    VALUE_12 = "12"
-
-
-class SeeDanceV1LiteAspectRatio(Enum):
-    """
-    The aspect ratio of the generated video
-    """
-    RATIO_21_9 = "21:9"
-    RATIO_16_9 = "16:9"
-    RATIO_4_3 = "4:3"
-    RATIO_1_1 = "1:1"
-    RATIO_3_4 = "3:4"
-    RATIO_9_16 = "9:16"
-    AUTO = "auto"
-
-
-class OmniHumanV15Resolution(Enum):
-    """
-    The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio.
-    """
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class KlingVideoV1StandardDuration(Enum):
-    """
-    The duration of the generated video in seconds
-    """
-    VALUE_5 = "5"
-    VALUE_10 = "10"
-
-
-class PixverseV56TransitionResolution(Enum):
-    """
-    The resolution of the generated video
-    """
-    VALUE_360P = "360p"
-    VALUE_540P = "540p"
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class Style(Enum):
-    """
-    The style of the generated video
-    """
-    ANIME = "anime"
-    ANIMATION_3D = "3d_animation"
-    CLAY = "clay"
-    COMIC = "comic"
-    CYBERPUNK = "cyberpunk"
-
-
-class ThinkingType(Enum):
-    """
-    Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
-    """
-    ENABLED = "enabled"
-    DISABLED = "disabled"
-    AUTO = "auto"
-
-
-class PixverseV56TransitionDuration(Enum):
-    """
-    The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
-    """
-    VALUE_5 = "5"
-    VALUE_8 = "8"
-    VALUE_10 = "10"
-
-
-class ViduQ2ReferenceToVideoProResolution(Enum):
-    """
-    Output video resolution
-    """
-    VALUE_540P = "540p"
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class MovementAmplitude(Enum):
-    """
-    The movement amplitude of objects in the frame
-    """
-    AUTO = "auto"
-    SMALL = "small"
-    MEDIUM = "medium"
-    LARGE = "large"
-
-
-class WanV26FlashDuration(Enum):
-    """
-    Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
-    """
-    VALUE_5 = "5"
-    VALUE_10 = "10"
-    VALUE_15 = "15"
-
-
-class WanV26FlashResolution(Enum):
-    """
-    Video resolution. Valid values: 720p, 1080p
-    """
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class WanV26Duration(Enum):
-    """
-    Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
-    """
-    VALUE_5 = "5"
-    VALUE_10 = "10"
-    VALUE_15 = "15"
-
-
-class WanV26Resolution(Enum):
-    """
-    Video resolution. Valid values: 720p, 1080p
-    """
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class CameraLora(Enum):
-    """
-    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-    """
-    DOLLY_IN = "dolly_in"
-    DOLLY_OUT = "dolly_out"
-    DOLLY_LEFT = "dolly_left"
-    DOLLY_RIGHT = "dolly_right"
-    JIB_UP = "jib_up"
-    JIB_DOWN = "jib_down"
-    STATIC = "static"
-    NONE = "none"
-
-
-class VideoWriteMode(Enum):
-    """
-    The write mode of the generated video.
-    """
-    FAST = "fast"
-    BALANCED = "balanced"
-    SMALL = "small"
-
-
-class VideoOutputType(Enum):
-    """
-    The output type of the generated video.
-    """
-    X264__MP4 = "X264 (.mp4)"
-    VP9__WEBM = "VP9 (.webm)"
-    PRORES4444__MOV = "PRORES4444 (.mov)"
-    GIF__GIF = "GIF (.gif)"
-
-
-class VideoQuality(Enum):
-    """
-    The quality of the generated video.
-    """
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    MAXIMUM = "maximum"
-
-
-class InterpolationDirection(Enum):
-    """
-    The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
-    """
-    FORWARD = "forward"
-    BACKWARD = "backward"
-
-
-class Kandinsky5ProResolution(Enum):
-    """
-    Video resolution: 512p or 1024p.
-    """
-    VALUE_512P = "512P"
-    VALUE_1024P = "1024P"
-
-
-class Kandinsky5ProDuration(Enum):
-    """
-    Video duration.
-    """
-    VALUE_5S = "5s"
-
-
-class HunyuanVideoV15Resolution(Enum):
-    """
-    The resolution of the video.
-    """
-    VALUE_480P = "480p"
-
-
-class KlingVideoO1StandardDuration(Enum):
-    """
-    Video duration in seconds.
-    """
-    VALUE_3 = "3"
-    VALUE_4 = "4"
-    VALUE_5 = "5"
-    VALUE_6 = "6"
-    VALUE_7 = "7"
-    VALUE_8 = "8"
-    VALUE_9 = "9"
-    VALUE_10 = "10"
-
-
-class KlingVideoO1StandardReferenceToVideoDuration(Enum):
-    """
-    Video duration in seconds.
-    """
-    VALUE_3 = "3"
-    VALUE_4 = "4"
-    VALUE_5 = "5"
-    VALUE_6 = "6"
-    VALUE_7 = "7"
-    VALUE_8 = "8"
-    VALUE_9 = "9"
-    VALUE_10 = "10"
-
-
-class KlingVideoV26ProDuration(Enum):
-    """
-    The duration of the generated video in seconds
-    """
-    VALUE_5 = "5"
-    VALUE_10 = "10"
-
-
-class CreatifyAuroraResolution(Enum):
-    """
-    The resolution of the generated video.
-    """
-    VALUE_480P = "480p"
-    VALUE_720P = "720p"
-
-
-class Duration(Enum):
-    """
-    The duration of the generated video in seconds
-    """
-    VALUE_5 = "5"
-    VALUE_8 = "8"
-    VALUE_10 = "10"
-
-
-class Resolution(Enum):
-    """
-    The resolution of the generated video.
-    """
-    VALUE_360P = "360p"
-    VALUE_540P = "540p"
-    VALUE_720P = "720p"
-    VALUE_1080P = "1080p"
-
-
-class Effect(Enum):
-    """
-    The effect to apply to the video
-    """
-    KISS_ME_AI = "Kiss Me AI"
-    KISS = "Kiss"
-    MUSCLE_SURGE = "Muscle Surge"
-    WARMTH_OF_JESUS = "Warmth of Jesus"
-    ANYTHING__ROBOT = "Anything, Robot"
-    THE_TIGER_TOUCH = "The Tiger Touch"
-    HUG = "Hug"
-    HOLY_WINGS = "Holy Wings"
-    MICROWAVE = "Microwave"
-    ZOMBIE_MODE = "Zombie Mode"
-    SQUID_GAME = "Squid Game"
-    BABY_FACE = "Baby Face"
-    RATIO_BLACK_MYTH__WUKONG = "Black Myth: Wukong"
-    LONG_HAIR_MAGIC = "Long Hair Magic"
-    LEGGY_RUN = "Leggy Run"
-    FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
-    PUNCH_FACE = "Punch Face"
-    CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
-    THUNDER_GOD = "Thunder God"
-    EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
-    WHOS_ARRESTED = "Who's Arrested?"
-    BABY_ARRIVED = "Baby Arrived"
-    WEREWOLF_RAGE = "Werewolf Rage"
-    BALD_SWIPE = "Bald Swipe"
-    BOOM_DROP = "BOOM DROP"
-    HUGE_CUTIE = "Huge Cutie"
-    LIQUID_METAL = "Liquid Metal"
-    SHARKSNAP = "Sharksnap!"
-    DUST_ME_AWAY = "Dust Me Away"
-    FIGURINE_FACTOR_3D = "3D Figurine Factor"
-    BIKINI_UP = "Bikini Up"
-    MY_GIRLFRIENDS = "My Girlfriends"
-    MY_BOYFRIENDS = "My Boyfriends"
-    SUBJECT_3_FEVER = "Subject 3 Fever"
-    EARTH_ZOOM = "Earth Zoom"
-    POLE_DANCE = "Pole Dance"
-    VROOM_DANCE = "Vroom Dance"
-    GHOSTFACE_TERROR = "GhostFace Terror"
-    DRAGON_EVOKER = "Dragon Evoker"
-    SKELETAL_BAE = "Skeletal Bae"
-    SUMMONING_SUCCUBUS = "Summoning succubus"
-    HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
-    NAKED_EYE_AD_3D = "3D Naked-Eye AD"
-    PACKAGE_EXPLOSION = "Package Explosion"
-    DISHES_SERVED = "Dishes Served"
-    OCEAN_AD = "Ocean ad"
-    SUPERMARKET_AD = "Supermarket AD"
-    TREE_DOLL = "Tree doll"
-    COME_FEEL_MY_ABS = "Come Feel My Abs"
-    THE_BICEP_FLEX = "The Bicep Flex"
-    LONDON_ELITE_VIBE = "London Elite Vibe"
-    FLORA_NYMPH_GOWN = "Flora Nymph Gown"
-    CHRISTMAS_COSTUME = "Christmas Costume"
-    ITS_SNOWY = "It's Snowy"
-    REINDEER_CRUISER = "Reindeer Cruiser"
-    SNOW_GLOBE_MAKER = "Snow Globe Maker"
-    PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
-    ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
-    CAT_CHRISTMAS_BOX = "Cat Christmas Box"
-    STARLIGHT_GIFT_BOX = "Starlight Gift Box"
-    XMAS_POSTER = "Xmas Poster"
-    PET_CHRISTMAS_TREE = "Pet Christmas Tree"
-    CITY_SANTA_HAT = "City Santa Hat"
-    STOCKING_SWEETIE = "Stocking Sweetie"
-    CHRISTMAS_NIGHT = "Christmas Night"
-    XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
-    GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
-    GIANT_PRODUCT = "Giant Product"
-    TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
-    BEACH_AD = "Beach AD"
-    SHOAL_SURROUND = "Shoal Surround"
-    MECHANICAL_ASSEMBLY = "Mechanical Assembly"
-    LIGHTING_AD = "Lighting AD"
-    BILLBOARD_AD = "Billboard AD"
-    PRODUCT_CLOSE_UP = "Product close-up"
-    PARACHUTE_DELIVERY = "Parachute Delivery"
-    DREAMLIKE_CLOUD = "Dreamlike Cloud"
-    MACARON_MACHINE = "Macaron Machine"
-    POSTER_AD = "Poster AD"
-    TRUCK_AD = "Truck AD"
-    GRAFFITI_AD = "Graffiti AD"
-    FIGURINE_FACTORY_3D = "3D Figurine Factory"
-    THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
-    ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
-    I_QUIT = "I Quit"
-    HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
-    SMELL_THE_LENS = "Smell the Lens"
-    I_BELIEVE_I_CAN_FLY = "I believe I can fly"
-    STRIKOUT_DANCE = "Strikout Dance"
-    PIXEL_WORLD = "Pixel World"
-    MINT_IN_BOX = "Mint in Box"
-    HANDS_UP__HAND = "Hands up, Hand"
-    FLORA_NYMPH_GO = "Flora Nymph Go"
-    SOMBER_EMBRACE = "Somber Embrace"
-    BEAM_ME_UP = "Beam me up"
-    SUIT_SWAGGER = "Suit Swagger"
-
-
-class Mode(Enum):
-    """
-    The swap mode to use
-    """
-    PERSON = "person"
-    OBJECT = "object"
-    BACKGROUND = "background"
-
-
-
-
-
-
 class PixverseV56ImageToVideo(FALNode):
     """
     Generate high-quality videos from images with Pixverse v5.6.
@@ -660,6 +18,42 @@ class PixverseV56ImageToVideo(FALNode):
     - Produce high-resolution social media animations
     - Transform static images with various visual styles
     """
+
+    class PixverseV56Resolution(Enum):
+        """
+        The resolution of the generated video
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class PixverseV56Duration(Enum):
+        """
+        The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
+        """
+        FIVE_SECONDS = "5"
+        EIGHT_SECONDS = "8"
+        TEN_SECONDS = "10"
+
+    class PixverseV56Style(Enum):
+        """
+        The style of the generated video
+        """
+        ANIME = "anime"
+        ANIMATION_3D = "3d_animation"
+        CLAY = "clay"
+        COMIC = "comic"
+        CYBERPUNK = "cyberpunk"
+
+    class PixverseV56ThinkingType(Enum):
+        """
+        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+        """
+        ENABLED = "enabled"
+        DISABLED = "disabled"
+        AUTO = "auto"
+
 
     prompt: str = Field(
         default="", description="Text prompt describing the desired video motion"
@@ -718,7 +112,6 @@ class PixverseV56ImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt", "resolution"]
 
-
 class LumaDreamMachine(FALNode):
     """
     Generate video clips from your images using Luma Dream Machine v1.5. Supports various aspect ratios and optional end-frame blending.
@@ -731,6 +124,18 @@ class LumaDreamMachine(FALNode):
     - Create motion graphics
     - Produce video content
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_21_9 = "21:9"
+        RATIO_9_21 = "9:21"
+
 
     prompt: str = Field(
         default=""
@@ -819,8 +224,6 @@ class AMTFrameInterpolation(FALNode):
     def get_basic_fields(cls):
         return ["image"]
 
-
-
 class AIAvatar(FALNode):
     """
     MultiTalk generates talking avatar videos from images and audio files.
@@ -833,6 +236,22 @@ class AIAvatar(FALNode):
     - Produce avatar presentations
     - Create personalized video messages
     """
+
+    class AIAvatarResolution(Enum):
+        """
+        Resolution of the video to generate. Must be either 480p or 720p.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
@@ -883,9 +302,6 @@ class AIAvatar(FALNode):
     def get_basic_fields(cls):
         return ["image", "audio"]
 
-
-
-
 class AIAvatarSingleText(FALNode):
     """
     MultiTalk generates talking avatar videos from an image and text input.
@@ -898,6 +314,47 @@ class AIAvatarSingleText(FALNode):
     - Create virtual presenters
     - Generate automated spokesperson videos
     """
+
+    class AIAvatarSingleTextResolution(Enum):
+        """
+        Resolution of the video to generate. Must be either 480p or 720p.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class Voice(Enum):
+        """
+        The voice to use for speech generation
+        """
+        ARIA = "Aria"
+        ROGER = "Roger"
+        SARAH = "Sarah"
+        LAURA = "Laura"
+        CHARLIE = "Charlie"
+        GEORGE = "George"
+        CALLUM = "Callum"
+        RIVER = "River"
+        LIAM = "Liam"
+        CHARLOTTE = "Charlotte"
+        ALICE = "Alice"
+        MATILDA = "Matilda"
+        WILL = "Will"
+        JESSICA = "Jessica"
+        ERIC = "Eric"
+        CHRIS = "Chris"
+        BRIAN = "Brian"
+        DANIEL = "Daniel"
+        LILY = "Lily"
+        BILL = "Bill"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
@@ -952,10 +409,6 @@ class AIAvatarSingleText(FALNode):
     def get_basic_fields(cls):
         return ["image", "text"]
 
-
-
-
-
 class AIAvatarMultiText(FALNode):
     """
     MultiTalk generates multi-speaker avatar videos from images and text.
@@ -968,6 +421,72 @@ class AIAvatarMultiText(FALNode):
     - Create conversational content
     - Generate multi-character scenes
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
+    class AIAvatarMultiTextResolution(Enum):
+        """
+        Resolution of the video to generate. Must be either 480p or 720p.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class Voice2(Enum):
+        """
+        The second person's voice to use for speech generation
+        """
+        ARIA = "Aria"
+        ROGER = "Roger"
+        SARAH = "Sarah"
+        LAURA = "Laura"
+        CHARLIE = "Charlie"
+        GEORGE = "George"
+        CALLUM = "Callum"
+        RIVER = "River"
+        LIAM = "Liam"
+        CHARLOTTE = "Charlotte"
+        ALICE = "Alice"
+        MATILDA = "Matilda"
+        WILL = "Will"
+        JESSICA = "Jessica"
+        ERIC = "Eric"
+        CHRIS = "Chris"
+        BRIAN = "Brian"
+        DANIEL = "Daniel"
+        LILY = "Lily"
+        BILL = "Bill"
+
+    class Voice1(Enum):
+        """
+        The first person's voice to use for speech generation
+        """
+        ARIA = "Aria"
+        ROGER = "Roger"
+        SARAH = "Sarah"
+        LAURA = "Laura"
+        CHARLIE = "Charlie"
+        GEORGE = "George"
+        CALLUM = "Callum"
+        RIVER = "River"
+        LIAM = "Liam"
+        CHARLOTTE = "Charlotte"
+        ALICE = "Alice"
+        MATILDA = "Matilda"
+        WILL = "Will"
+        JESSICA = "Jessica"
+        ERIC = "Eric"
+        CHRIS = "Chris"
+        BRIAN = "Brian"
+        DANIEL = "Daniel"
+        LILY = "Lily"
+        BILL = "Bill"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
@@ -1030,8 +549,6 @@ class AIAvatarMultiText(FALNode):
     def get_basic_fields(cls):
         return ["images", "texts"]
 
-
-
 class AIAvatarMulti(FALNode):
     """
     MultiTalk generates multi-speaker avatar videos with audio synchronization.
@@ -1044,6 +561,22 @@ class AIAvatarMulti(FALNode):
     - Create interactive characters
     - Generate multi-avatar content
     """
+
+    class AIAvatarMultiResolution(Enum):
+        """
+        Resolution of the video to generate. Must be either 480p or 720p.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
@@ -1102,9 +635,6 @@ class AIAvatarMulti(FALNode):
     def get_basic_fields(cls):
         return ["images", "audio"]
 
-
-
-
 class SeeDanceV15ProImageToVideo(FALNode):
     """
     SeeDance v1.5 Pro generates high-quality dance videos from images.
@@ -1117,6 +647,40 @@ class SeeDanceV15ProImageToVideo(FALNode):
     - Produce music video content
     - Create dance training materials
     """
+
+    class SeeDanceV15ProResolution(Enum):
+        """
+        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class SeeDanceV15ProDuration(Enum):
+        """
+        Duration of the video in seconds
+        """
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+
+    class SeeDanceV15ProAspectRatio(Enum):
+        """
+        The aspect ratio of the generated video
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
@@ -1139,14 +703,14 @@ class SeeDanceV15ProImageToVideo(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="Random seed to control video generation. Use -1 for random."
+    camera_fixed: bool = Field(
+        default=False, description="Whether to fix the camera position"
     )
     end_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the image the video ends with. Defaults to None."
     )
-    camera_fixed: bool = Field(
-        default=False, description="Whether to fix the camera position"
+    seed: int = Field(
+        default=-1, description="Random seed to control video generation. Use -1 for random."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1160,9 +724,9 @@ class SeeDanceV15ProImageToVideo(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
             "camera_fixed": self.camera_fixed,
+            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -1180,9 +744,6 @@ class SeeDanceV15ProImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class SeeDanceV1ProFastImageToVideo(FALNode):
     """
     SeeDance v1 Pro Fast generates dance videos quickly from images.
@@ -1195,6 +756,43 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     - Create dance previews
     - Efficient dance video generation
     """
+
+    class SeeDanceV1ProFastResolution(Enum):
+        """
+        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class SeeDanceV1ProFastDuration(Enum):
+        """
+        Duration of the video in seconds
+        """
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+
+    class SeeDanceV1ProFastAspectRatio(Enum):
+        """
+        The aspect ratio of the generated video
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        AUTO = "auto"
+
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
@@ -1214,11 +812,11 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="Random seed to control video generation. Use -1 for random."
-    )
     camera_fixed: bool = Field(
         default=False, description="Whether to fix the camera position"
+    )
+    seed: int = Field(
+        default=-1, description="Random seed to control video generation. Use -1 for random."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1230,8 +828,8 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
             "camera_fixed": self.camera_fixed,
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -1249,9 +847,6 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class SeeDanceV1LiteReferenceToVideo(FALNode):
     """
     SeeDance v1 Lite generates lightweight dance videos using reference images.
@@ -1264,6 +859,42 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
     - Generate quick dance outputs
     - Create optimized dance videos
     """
+
+    class SeeDanceV1LiteResolution(Enum):
+        """
+        Video resolution - 480p for faster generation, 720p for higher quality
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
+    class SeeDanceV1LiteDuration(Enum):
+        """
+        Duration of the video in seconds
+        """
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+
+    class SeeDanceV1LiteAspectRatio(Enum):
+        """
+        The aspect ratio of the generated video
+        """
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        AUTO = "auto"
+
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
@@ -1280,14 +911,14 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
     reference_image_urls: list[str] = Field(
         default=[], description="Reference images to generate the video with."
     )
-    seed: int = Field(
-        default=-1, description="Random seed to control video generation. Use -1 for random."
-    )
     camera_fixed: bool = Field(
         default=False, description="Whether to fix the camera position"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
+    )
+    seed: int = Field(
+        default=-1, description="Random seed to control video generation. Use -1 for random."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1297,9 +928,9 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
             "reference_image_urls": self.reference_image_urls,
-            "seed": self.seed,
             "camera_fixed": self.camera_fixed,
             "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -1358,7 +989,6 @@ class ByteDanceVideoStylize(FALNode):
     def get_basic_fields(cls):
         return ["image", "style"]
 
-
 class OmniHumanV15(FALNode):
     """
     OmniHuman v1.5 generates realistic human videos from images.
@@ -1372,14 +1002,22 @@ class OmniHumanV15(FALNode):
     - Create realistic human content
     """
 
-    turbo_mode: bool = Field(
-        default=False, description="Generate a video at a faster rate with a slight quality trade-off."
+    class OmniHumanV15Resolution(Enum):
+        """
+        The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+
+    prompt: str = Field(
+        default="", description="The text prompt used to guide the video generation."
     )
     resolution: OmniHumanV15Resolution = Field(
         default=OmniHumanV15Resolution.VALUE_1080P, description="The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio."
     )
-    prompt: str = Field(
-        default="", description="The text prompt used to guide the video generation."
+    turbo_mode: bool = Field(
+        default=False, description="Generate a video at a faster rate with a slight quality trade-off."
     )
     audio_url: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio file to generate the video. Audio must be under 30s long for 1080p generation and under 60s long for 720p generation."
@@ -1391,9 +1029,9 @@ class OmniHumanV15(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
-            "turbo_mode": self.turbo_mode,
-            "resolution": self.resolution.value,
             "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "turbo_mode": self.turbo_mode,
             "audio_url": self.audio_url,
             "image_url": f"data:image/png;base64,{image_url_base64}",
         }
@@ -1599,7 +1237,6 @@ class LTXImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class KlingVideoV1StandardImageToVideo(FALNode):
     """
     Kling Video v1 Standard generates videos from images with balanced quality.
@@ -1612,6 +1249,14 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     - Generate videos for web use
     - Create moderate quality outputs
     """
+
+    class KlingVideoV1StandardDuration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default="", description="The prompt for the video"
@@ -1668,11 +1313,6 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
-
 class PixverseV56Transition(FALNode):
     """
     Pixverse v5.6 Transition creates smooth video transitions between two images with professional effects.
@@ -1685,6 +1325,52 @@ class PixverseV56Transition(FALNode):
     - Create transition animations
     - Generate video connecting two scenes
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+
+    class PixverseV56TransitionResolution(Enum):
+        """
+        The resolution of the generated video
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class Style(Enum):
+        """
+        The style of the generated video
+        """
+        ANIME = "anime"
+        ANIMATION_3D = "3d_animation"
+        CLAY = "clay"
+        COMIC = "comic"
+        CYBERPUNK = "cyberpunk"
+
+    class ThinkingType(Enum):
+        """
+        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+        """
+        ENABLED = "enabled"
+        DISABLED = "disabled"
+        AUTO = "auto"
+
+    class PixverseV56TransitionDuration(Enum):
+        """
+        The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
+        """
+        VALUE_5 = "5"
+        VALUE_8 = "8"
+        VALUE_10 = "10"
+
 
     first_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -1752,8 +1438,6 @@ class PixverseV56Transition(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class ViduQ2ReferenceToVideoPro(FALNode):
     """
     Vidu Q2 Reference-to-Video Pro generates professional quality videos using reference images for style and content.
@@ -1766,6 +1450,24 @@ class ViduQ2ReferenceToVideoPro(FALNode):
     - Generate videos matching examples
     - Create professional reference-based content
     """
+
+    class ViduQ2ReferenceToVideoProResolution(Enum):
+        """
+        Output video resolution
+        """
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class MovementAmplitude(Enum):
+        """
+        The movement amplitude of objects in the frame
+        """
+        AUTO = "auto"
+        SMALL = "small"
+        MEDIUM = "medium"
+        LARGE = "large"
+
 
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 2000 characters"
@@ -1823,8 +1525,6 @@ class ViduQ2ReferenceToVideoPro(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class WanV26ImageToVideoFlash(FALNode):
     """
     Wan v2.6 Flash generates videos from images with ultra-fast processing for rapid iteration.
@@ -1837,6 +1537,22 @@ class WanV26ImageToVideoFlash(FALNode):
     - Generate quick video iterations
     - Create fast video animations
     """
+
+    class WanV26FlashDuration(Enum):
+        """
+        Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+        VALUE_15 = "15"
+
+    class WanV26FlashResolution(Enum):
+        """
+        Video resolution. Valid values: 720p, 1080p
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the desired video motion. Max 800 characters."
@@ -1899,8 +1615,6 @@ class WanV26ImageToVideoFlash(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class WanV26ImageToVideo(FALNode):
     """
     Wan v2.6 generates high-quality videos from images with balanced quality and performance.
@@ -1913,6 +1627,22 @@ class WanV26ImageToVideo(FALNode):
     - Generate consistent videos
     - Create professional animations
     """
+
+    class WanV26Duration(Enum):
+        """
+        Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+        VALUE_15 = "15"
+
+    class WanV26Resolution(Enum):
+        """
+        Video resolution. Valid values: 720p, 1080p
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the desired video motion. Max 800 characters."
@@ -1975,12 +1705,6 @@ class WanV26ImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
-
-
 class Ltx219BImageToVideo(FALNode):
     """
     LTX-2 19B generates high-quality videos from images using the powerful 19-billion parameter model.
@@ -1993,6 +1717,62 @@ class Ltx219BImageToVideo(FALNode):
     - Generate videos with powerful AI
     - Create premium video animations
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolationDirection(Enum):
+        """
+        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
 
     prompt: str = Field(
         default="", description="The prompt used for the generation."
@@ -2112,12 +1892,6 @@ class Ltx219BImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
-
-
 class Ltx219BImageToVideoLora(FALNode):
     """
     LTX-2 19B with LoRA enables custom-trained 19B models for specialized video generation.
@@ -2130,6 +1904,62 @@ class Ltx219BImageToVideoLora(FALNode):
     - Generate with fine-tuned large model
     - Create customized video animations
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolationDirection(Enum):
+        """
+        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
 
     prompt: str = Field(
         default="", description="The prompt used for the generation."
@@ -2253,12 +2083,6 @@ class Ltx219BImageToVideoLora(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
-
-
 class Ltx219BDistilledImageToVideo(FALNode):
     """
     LTX-2 19B Distilled generates videos efficiently using knowledge distillation from the 19B model.
@@ -2271,6 +2095,62 @@ class Ltx219BDistilledImageToVideo(FALNode):
     - Generate videos with good performance
     - Create balanced quality-speed videos
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolationDirection(Enum):
+        """
+        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
 
     prompt: str = Field(
         default="", description="The prompt used for the generation."
@@ -2382,12 +2262,6 @@ class Ltx219BDistilledImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
-
-
 class Ltx219BDistilledImageToVideoLora(FALNode):
     """
     LTX-2 19B Distilled with LoRA combines efficient generation with custom-trained models.
@@ -2400,6 +2274,62 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     - Generate with optimized custom model
     - Create quick customized animations
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+        HIGH = "high"
+        FULL = "full"
+
+    class CameraLora(Enum):
+        """
+        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+        """
+        DOLLY_IN = "dolly_in"
+        DOLLY_OUT = "dolly_out"
+        DOLLY_LEFT = "dolly_left"
+        DOLLY_RIGHT = "dolly_right"
+        JIB_UP = "jib_up"
+        JIB_DOWN = "jib_down"
+        STATIC = "static"
+        NONE = "none"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
+    class InterpolationDirection(Enum):
+        """
+        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+        """
+        FORWARD = "forward"
+        BACKWARD = "backward"
+
 
     prompt: str = Field(
         default="", description="The prompt used for the generation."
@@ -2577,9 +2507,6 @@ class WanMove(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class Kandinsky5ProImageToVideo(FALNode):
     """
     Kandinsky5 Pro generates professional quality videos from images with artistic style and control.
@@ -2592,6 +2519,27 @@ class Kandinsky5ProImageToVideo(FALNode):
     - Generate videos with artistic flair
     - Create professional artistic videos
     """
+
+    class Kandinsky5ProResolution(Enum):
+        """
+        Video resolution: 512p or 1024p.
+        """
+        VALUE_512P = "512P"
+        VALUE_1024P = "1024P"
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for faster generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class Kandinsky5ProDuration(Enum):
+        """
+        Video duration.
+        """
+        VALUE_5S = "5s"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -2638,7 +2586,6 @@ class Kandinsky5ProImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class LiveAvatar(FALNode):
     """
     Live Avatar creates animated talking avatars from portrait images with realistic lip-sync and expressions.
@@ -2651,6 +2598,16 @@ class LiveAvatar(FALNode):
     - Produce speaking character videos
     - Create animated presenters
     """
+
+    class Acceleration(Enum):
+        """
+        Acceleration level for faster video decoding
+        """
+        NONE = "none"
+        LIGHT = "light"
+        REGULAR = "regular"
+        HIGH = "high"
+
 
     frames_per_clip: int = Field(
         default=48, description="Number of frames per clip. Must be a multiple of 4. Higher values = smoother but slower generation."
@@ -2709,8 +2666,6 @@ class LiveAvatar(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class HunyuanVideoV15ImageToVideo(FALNode):
     """
     Hunyuan Video v1.5 generates high-quality videos from images with advanced AI capabilities.
@@ -2723,6 +2678,20 @@ class HunyuanVideoV15ImageToVideo(FALNode):
     - Generate videos with AI excellence
     - Create cutting-edge video animations
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the video.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class HunyuanVideoV15Resolution(Enum):
+        """
+        The resolution of the video.
+        """
+        VALUE_480P = "480p"
+
 
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -2781,7 +2750,6 @@ class HunyuanVideoV15ImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class KlingVideoO1StandardImageToVideo(FALNode):
     """
     Kling Video O1 Standard generates videos with optimized standard quality from images.
@@ -2794,6 +2762,20 @@ class KlingVideoO1StandardImageToVideo(FALNode):
     - Generate balanced quality videos
     - Create standard tier animations
     """
+
+    class KlingVideoO1StandardDuration(Enum):
+        """
+        Video duration in seconds.
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default="", description="Use @Image1 to reference the start frame, @Image2 to reference the end frame."
@@ -2833,8 +2815,6 @@ class KlingVideoO1StandardImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class KlingVideoO1StandardReferenceToVideo(FALNode):
     """
     Kling Video O1 Standard generates videos using reference images for style consistency.
@@ -2847,6 +2827,28 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     - Generate videos matching examples
     - Create standardized reference videos
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class KlingVideoO1StandardReferenceToVideoDuration(Enum):
+        """
+        Video duration in seconds.
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default="", description="Take @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
@@ -2888,7 +2890,6 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class KlingVideoV26ProImageToVideo(FALNode):
     """
     Kling Video v2.6 Pro generates professional quality videos with latest model improvements.
@@ -2901,6 +2902,14 @@ class KlingVideoV26ProImageToVideo(FALNode):
     - Generate advanced videos
     - Create pro-tier animations
     """
+
+    class KlingVideoV26ProDuration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default=""
@@ -3044,7 +3053,6 @@ class KlingVideoAiAvatarV2Pro(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class CreatifyAurora(FALNode):
     """
     Creatify Aurora generates creative and visually stunning videos from images with unique effects.
@@ -3057,6 +3065,14 @@ class CreatifyAurora(FALNode):
     - Generate unique video effects
     - Create visually impressive videos
     """
+
+    class CreatifyAuroraResolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="", description="A text prompt to guide the video generation process."
@@ -3103,10 +3119,6 @@ class CreatifyAurora(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
 class PixverseV5_5Effects(FALNode):
     """
     Pixverse
@@ -3119,6 +3131,133 @@ class PixverseV5_5Effects(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_8 = "8"
+        VALUE_10 = "10"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class ThinkingType(Enum):
+        """
+        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+        """
+        ENABLED = "enabled"
+        DISABLED = "disabled"
+        AUTO = "auto"
+
+    class Effect(Enum):
+        """
+        The effect to apply to the video
+        """
+        KISS_ME_AI = "Kiss Me AI"
+        KISS = "Kiss"
+        MUSCLE_SURGE = "Muscle Surge"
+        WARMTH_OF_JESUS = "Warmth of Jesus"
+        ANYTHING__ROBOT = "Anything, Robot"
+        THE_TIGER_TOUCH = "The Tiger Touch"
+        HUG = "Hug"
+        HOLY_WINGS = "Holy Wings"
+        MICROWAVE = "Microwave"
+        ZOMBIE_MODE = "Zombie Mode"
+        SQUID_GAME = "Squid Game"
+        BABY_FACE = "Baby Face"
+        RATIO_BLACK_MYTH__WUKONG = "Black Myth: Wukong"
+        LONG_HAIR_MAGIC = "Long Hair Magic"
+        LEGGY_RUN = "Leggy Run"
+        FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
+        PUNCH_FACE = "Punch Face"
+        CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
+        THUNDER_GOD = "Thunder God"
+        EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
+        WHOS_ARRESTED = "Who's Arrested?"
+        BABY_ARRIVED = "Baby Arrived"
+        WEREWOLF_RAGE = "Werewolf Rage"
+        BALD_SWIPE = "Bald Swipe"
+        BOOM_DROP = "BOOM DROP"
+        HUGE_CUTIE = "Huge Cutie"
+        LIQUID_METAL = "Liquid Metal"
+        SHARKSNAP = "Sharksnap!"
+        DUST_ME_AWAY = "Dust Me Away"
+        FIGURINE_FACTOR_3D = "3D Figurine Factor"
+        BIKINI_UP = "Bikini Up"
+        MY_GIRLFRIENDS = "My Girlfriends"
+        MY_BOYFRIENDS = "My Boyfriends"
+        SUBJECT_3_FEVER = "Subject 3 Fever"
+        EARTH_ZOOM = "Earth Zoom"
+        POLE_DANCE = "Pole Dance"
+        VROOM_DANCE = "Vroom Dance"
+        GHOSTFACE_TERROR = "GhostFace Terror"
+        DRAGON_EVOKER = "Dragon Evoker"
+        SKELETAL_BAE = "Skeletal Bae"
+        SUMMONING_SUCCUBUS = "Summoning succubus"
+        HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
+        NAKED_EYE_AD_3D = "3D Naked-Eye AD"
+        PACKAGE_EXPLOSION = "Package Explosion"
+        DISHES_SERVED = "Dishes Served"
+        OCEAN_AD = "Ocean ad"
+        SUPERMARKET_AD = "Supermarket AD"
+        TREE_DOLL = "Tree doll"
+        COME_FEEL_MY_ABS = "Come Feel My Abs"
+        THE_BICEP_FLEX = "The Bicep Flex"
+        LONDON_ELITE_VIBE = "London Elite Vibe"
+        FLORA_NYMPH_GOWN = "Flora Nymph Gown"
+        CHRISTMAS_COSTUME = "Christmas Costume"
+        ITS_SNOWY = "It's Snowy"
+        REINDEER_CRUISER = "Reindeer Cruiser"
+        SNOW_GLOBE_MAKER = "Snow Globe Maker"
+        PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
+        ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
+        CAT_CHRISTMAS_BOX = "Cat Christmas Box"
+        STARLIGHT_GIFT_BOX = "Starlight Gift Box"
+        XMAS_POSTER = "Xmas Poster"
+        PET_CHRISTMAS_TREE = "Pet Christmas Tree"
+        CITY_SANTA_HAT = "City Santa Hat"
+        STOCKING_SWEETIE = "Stocking Sweetie"
+        CHRISTMAS_NIGHT = "Christmas Night"
+        XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
+        GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
+        GIANT_PRODUCT = "Giant Product"
+        TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
+        BEACH_AD = "Beach AD"
+        SHOAL_SURROUND = "Shoal Surround"
+        MECHANICAL_ASSEMBLY = "Mechanical Assembly"
+        LIGHTING_AD = "Lighting AD"
+        BILLBOARD_AD = "Billboard AD"
+        PRODUCT_CLOSE_UP = "Product close-up"
+        PARACHUTE_DELIVERY = "Parachute Delivery"
+        DREAMLIKE_CLOUD = "Dreamlike Cloud"
+        MACARON_MACHINE = "Macaron Machine"
+        POSTER_AD = "Poster AD"
+        TRUCK_AD = "Truck AD"
+        GRAFFITI_AD = "Graffiti AD"
+        FIGURINE_FACTORY_3D = "3D Figurine Factory"
+        THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
+        ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
+        I_QUIT = "I Quit"
+        HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
+        SMELL_THE_LENS = "Smell the Lens"
+        I_BELIEVE_I_CAN_FLY = "I believe I can fly"
+        STRIKOUT_DANCE = "Strikout Dance"
+        PIXEL_WORLD = "Pixel World"
+        MINT_IN_BOX = "Mint in Box"
+        HANDS_UP__HAND = "Hands up, Hand"
+        FLORA_NYMPH_GO = "Flora Nymph Go"
+        SOMBER_EMBRACE = "Somber Embrace"
+        BEAM_ME_UP = "Beam me up"
+        SUIT_SWAGGER = "Suit Swagger"
+
 
     negative_prompt: str = Field(
         default="", description="Negative prompt to be used for the generation"
@@ -3165,11 +3304,6 @@ class PixverseV5_5Effects(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
-
 class PixverseV5_5Transition(FALNode):
     """
     Pixverse
@@ -3182,6 +3316,52 @@ class PixverseV5_5Transition(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class Style(Enum):
+        """
+        The style of the generated video
+        """
+        ANIME = "anime"
+        ANIMATION_3D = "3d_animation"
+        CLAY = "clay"
+        COMIC = "comic"
+        CYBERPUNK = "cyberpunk"
+
+    class ThinkingType(Enum):
+        """
+        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+        """
+        ENABLED = "enabled"
+        DISABLED = "disabled"
+        AUTO = "auto"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds
+        """
+        VALUE_5 = "5"
+        VALUE_8 = "8"
+        VALUE_10 = "10"
+
 
     first_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -3249,10 +3429,6 @@ class PixverseV5_5Transition(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
 class PixverseV5_5ImageToVideo(FALNode):
     """
     Pixverse
@@ -3265,6 +3441,42 @@ class PixverseV5_5ImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds
+        """
+        VALUE_5 = "5"
+        VALUE_8 = "8"
+        VALUE_10 = "10"
+
+    class Style(Enum):
+        """
+        The style of the generated video
+        """
+        ANIME = "anime"
+        ANIMATION_3D = "3d_animation"
+        CLAY = "clay"
+        COMIC = "comic"
+        CYBERPUNK = "cyberpunk"
+
+    class ThinkingType(Enum):
+        """
+        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+        """
+        ENABLED = "enabled"
+        DISABLED = "disabled"
+        AUTO = "auto"
+
 
     prompt: str = Field(
         default=""
@@ -3327,7 +3539,6 @@ class PixverseV5_5ImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class KlingVideoO1ImageToVideo(FALNode):
     """
     Kling O1 First Frame Last Frame to Video [Pro]
@@ -3340,6 +3551,20 @@ class KlingVideoO1ImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds.
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default="", description="Use @Image1 to reference the start frame, @Image2 to reference the end frame."
@@ -3379,8 +3604,6 @@ class KlingVideoO1ImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class KlingVideoO1ReferenceToVideo(FALNode):
     """
     Kling O1 Reference Image to Video [Pro]
@@ -3393,6 +3616,28 @@ class KlingVideoO1ReferenceToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        Video duration in seconds.
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default="", description="Take @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
@@ -3434,8 +3679,6 @@ class KlingVideoO1ReferenceToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class BytedanceLynx(FALNode):
     """
     Lynx
@@ -3448,6 +3691,23 @@ class BytedanceLynx(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p, 580p, or 720p)
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video (16:9, 9:16, or 1:1)
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
 
     prompt: str = Field(
         default="", description="Text prompt to guide video generation"
@@ -3522,8 +3782,6 @@ class BytedanceLynx(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class PixverseSwap(FALNode):
     """
     Pixverse
@@ -3536,6 +3794,23 @@ class PixverseSwap(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Mode(Enum):
+        """
+        The swap mode to use
+        """
+        PERSON = "person"
+        OBJECT = "object"
+        BACKGROUND = "background"
+
+    class Resolution(Enum):
+        """
+        The output resolution (1080p not supported)
+        """
+        VALUE_360P = "360p"
+        VALUE_540P = "540p"
+        VALUE_720P = "720p"
+
 
     original_sound_switch: bool = Field(
         default=True, description="Whether to keep the original audio"
@@ -3582,7 +3857,6 @@ class PixverseSwap(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class PikaV2_2Pikaframes(FALNode):
     """
     Pika
@@ -3595,6 +3869,14 @@ class PikaV2_2Pikaframes(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
 
     prompt: str = Field(
         default="", description="Default prompt for all transitions. Individual transition prompts override this."
@@ -3640,10 +3922,6 @@ class PikaV2_2Pikaframes(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
 class LongcatVideoImageToVideo720P(FALNode):
     """
     LongCat Video
@@ -3656,6 +3934,40 @@ class LongcatVideoImageToVideo720P(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for the video generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     prompt: str = Field(
         default="First-person view from the cockpit of a Formula 1 car. The driver's gloved hands firmly grip the intricate, carbon-fiber steering wheel adorned with numerous colorful buttons and a vibrant digital display showing race data. Beyond the windshield, a sun-drenched racetrack stretches ahead, lined with cheering spectators in the grandstands. Several rival cars are visible in the distance, creating a dynamic sense of competition. The sky above is a clear, brilliant blue, reflecting the exhilarating atmosphere of a high-speed race. high resolution 4k", description="The prompt to guide the video generation."
@@ -3742,10 +4054,6 @@ class LongcatVideoImageToVideo720P(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
-
 class LongcatVideoImageToVideo480P(FALNode):
     """
     LongCat Video
@@ -3758,6 +4066,40 @@ class LongcatVideoImageToVideo480P(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Acceleration(Enum):
+        """
+        The acceleration level to use for the video generation.
+        """
+        NONE = "none"
+        REGULAR = "regular"
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     prompt: str = Field(
         default="First-person view from the cockpit of a Formula 1 car. The driver's gloved hands firmly grip the intricate, carbon-fiber steering wheel adorned with numerous colorful buttons and a vibrant digital display showing race data. Beyond the windshield, a sun-drenched racetrack stretches ahead, lined with cheering spectators in the grandstands. Several rival cars are visible in the distance, creating a dynamic sense of competition. The sky above is a clear, brilliant blue, reflecting the exhilarating atmosphere of a high-speed race. high resolution 4k", description="The prompt to guide the video generation."
@@ -3840,9 +4182,6 @@ class LongcatVideoImageToVideo480P(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class LongcatVideoDistilledImageToVideo720P(FALNode):
     """
     LongCat Video Distilled
@@ -3855,6 +4194,33 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     video_write_mode: VideoWriteMode = Field(
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
@@ -3929,9 +4295,6 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class LongcatVideoDistilledImageToVideo480P(FALNode):
     """
     LongCat Video Distilled
@@ -3944,6 +4307,33 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class VideoWriteMode(Enum):
+        """
+        The write mode of the generated video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
+    class VideoOutputType(Enum):
+        """
+        The output type of the generated video.
+        """
+        X264__MP4 = "X264 (.mp4)"
+        VP9__WEBM = "VP9 (.webm)"
+        PRORES4444__MOV = "PRORES4444 (.mov)"
+        GIF__GIF = "GIF (.gif)"
+
+    class VideoQuality(Enum):
+        """
+        The quality of the generated video.
+        """
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
+
 
     video_write_mode: VideoWriteMode = Field(
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
@@ -4014,7 +4404,6 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class MinimaxHailuo2_3FastStandardImageToVideo(FALNode):
     """
     MiniMax Hailuo 2.3 Fast [Standard] (Image to Video)
@@ -4027,6 +4416,14 @@ class MinimaxHailuo2_3FastStandardImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the video in seconds.
+        """
+        VALUE_6 = "6"
+        VALUE_10 = "10"
+
 
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
@@ -4065,7 +4462,6 @@ class MinimaxHailuo2_3FastStandardImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class MinimaxHailuo2_3StandardImageToVideo(FALNode):
     """
     MiniMax Hailuo 2.3 [Standard] (Image to Video)
@@ -4078,6 +4474,14 @@ class MinimaxHailuo2_3StandardImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the video in seconds.
+        """
+        VALUE_6 = "6"
+        VALUE_10 = "10"
+
 
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
@@ -4162,7 +4566,6 @@ class MinimaxHailuo2_3FastProImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class KlingVideoV2_5TurboStandardImageToVideo(FALNode):
     """
     Kling Video
@@ -4175,6 +4578,14 @@ class KlingVideoV2_5TurboStandardImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default=""
@@ -4217,9 +4628,6 @@ class KlingVideoV2_5TurboStandardImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class Veo3_1FastFirstLastFrameToVideo(FALNode):
     """
     Veo 3.1 Fast
@@ -4232,6 +4640,31 @@ class Veo3_1FastFirstLastFrameToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video.
+        """
+        VALUE_4S = "4s"
+        VALUE_6S = "6s"
+        VALUE_8S = "8s"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+        VALUE_4K = "4k"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
@@ -4293,9 +4726,6 @@ class Veo3_1FastFirstLastFrameToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class Veo3_1FirstLastFrameToVideo(FALNode):
     """
     Veo 3.1
@@ -4308,6 +4738,31 @@ class Veo3_1FirstLastFrameToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video.
+        """
+        VALUE_4S = "4s"
+        VALUE_6S = "6s"
+        VALUE_8S = "8s"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+        VALUE_4K = "4k"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
@@ -4369,9 +4824,6 @@ class Veo3_1FirstLastFrameToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class Veo3_1ReferenceToVideo(FALNode):
     """
     Veo 3.1
@@ -4384,6 +4836,28 @@ class Veo3_1ReferenceToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video.
+        """
+        VALUE_8S = "8s"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+        VALUE_4K = "4k"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
@@ -4433,9 +4907,6 @@ class Veo3_1ReferenceToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class Veo3_1FastImageToVideo(FALNode):
     """
     Veo 3.1 Fast
@@ -4448,6 +4919,31 @@ class Veo3_1FastImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video.
+        """
+        VALUE_4S = "4s"
+        VALUE_6S = "6s"
+        VALUE_8S = "8s"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video. Only 16:9 and 9:16 are supported.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+        VALUE_4K = "4k"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
@@ -4506,9 +5002,6 @@ class Veo3_1FastImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
-
 class Veo3_1ImageToVideo(FALNode):
     """
     Veo 3.1
@@ -4521,6 +5014,31 @@ class Veo3_1ImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Duration(Enum):
+        """
+        The duration of the generated video.
+        """
+        VALUE_4S = "4s"
+        VALUE_6S = "6s"
+        VALUE_8S = "8s"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video. Only 16:9 and 9:16 are supported.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+
+    class Resolution(Enum):
+        """
+        The resolution of the generated video.
+        """
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+        VALUE_4K = "4k"
+
 
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
@@ -4637,7 +5155,6 @@ class OviImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class VeedFabric1_0Fast(FALNode):
     """
     Fabric 1.0 Fast
@@ -4650,6 +5167,14 @@ class VeedFabric1_0Fast(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Resolution(Enum):
+        """
+        Resolution
+        """
+        VALUE_720P = "720p"
+        VALUE_480P = "480p"
+
 
     resolution: Resolution = Field(
         default="", description="Resolution"
@@ -4684,7 +5209,6 @@ class VeedFabric1_0Fast(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class VeedFabric1_0(FALNode):
     """
     Fabric 1.0
@@ -4697,6 +5221,14 @@ class VeedFabric1_0(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Resolution(Enum):
+        """
+        Resolution
+        """
+        VALUE_720P = "720p"
+        VALUE_480P = "480p"
+
 
     resolution: Resolution = Field(
         default="", description="Resolution"
@@ -4823,8 +5355,6 @@ class KlingVideoV1ProAiAvatar(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
-
 class DecartLucy14BImageToVideo(FALNode):
     """
     Decart Lucy 14b
@@ -4837,6 +5367,20 @@ class DecartLucy14BImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        RATIO_9_16 = "9:16"
+        RATIO_16_9 = "16:9"
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video
+        """
+        VALUE_720P = "720p"
+
 
     sync_mode: bool = Field(
         default=True, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
@@ -4879,7 +5423,6 @@ class DecartLucy14BImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-
 class WanAti(FALNode):
     """
     Wan Ati
@@ -4892,6 +5435,15 @@ class WanAti(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
+
+    class Resolution(Enum):
+        """
+        Resolution of the generated video (480p, 580p, 720p).
+        """
+        VALUE_480P = "480p"
+        VALUE_580P = "580p"
+        VALUE_720P = "720p"
+
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."

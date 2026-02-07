@@ -6,128 +6,6 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
-class Voice(Enum):
-    """
-    The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
-    """
-    VIVIAN = "Vivian"
-    SERENA = "Serena"
-    UNCLE_FU = "Uncle_Fu"
-    DYLAN = "Dylan"
-    ERIC = "Eric"
-    RYAN = "Ryan"
-    AIDEN = "Aiden"
-    ONO_ANNA = "Ono_Anna"
-    SOHEE = "Sohee"
-
-
-class Language(Enum):
-    """
-    The language of the voice.
-    """
-    AUTO = "Auto"
-    ENGLISH = "English"
-    CHINESE = "Chinese"
-    SPANISH = "Spanish"
-    FRENCH = "French"
-    GERMAN = "German"
-    ITALIAN = "Italian"
-    JAPANESE = "Japanese"
-    KOREAN = "Korean"
-    PORTUGUESE = "Portuguese"
-    RUSSIAN = "Russian"
-
-
-class Speaker(Enum):
-    """
-    Voice to use for speaking.
-    """
-    FRANK = "Frank"
-    WAYNE = "Wayne"
-    CARTER = "Carter"
-    EMMA = "Emma"
-    GRACE = "Grace"
-    MIKE = "Mike"
-
-
-class OutputFormat(Enum):
-    """
-    Output audio format for the generated speech
-    """
-    WAV = "wav"
-    MP3 = "mp3"
-
-
-class SampleRate(Enum):
-    """
-    Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.
-    """
-    VALUE_48_KHZ = "48 kHz"
-    VALUE_24_KHZ = "24 kHz"
-
-
-class LanguageBoost(Enum):
-    """
-    Enhance recognition of specified languages and dialects
-    """
-    CHINESE = "Chinese"
-    CHINESE_YUE = "Chinese,Yue"
-    ENGLISH = "English"
-    ARABIC = "Arabic"
-    RUSSIAN = "Russian"
-    SPANISH = "Spanish"
-    FRENCH = "French"
-    PORTUGUESE = "Portuguese"
-    GERMAN = "German"
-    TURKISH = "Turkish"
-    DUTCH = "Dutch"
-    UKRAINIAN = "Ukrainian"
-    VIETNAMESE = "Vietnamese"
-    INDONESIAN = "Indonesian"
-    JAPANESE = "Japanese"
-    ITALIAN = "Italian"
-    KOREAN = "Korean"
-    THAI = "Thai"
-    POLISH = "Polish"
-    ROMANIAN = "Romanian"
-    GREEK = "Greek"
-    CZECH = "Czech"
-    FINNISH = "Finnish"
-    HINDI = "Hindi"
-    BULGARIAN = "Bulgarian"
-    DANISH = "Danish"
-    HEBREW = "Hebrew"
-    MALAY = "Malay"
-    SLOVAK = "Slovak"
-    SWEDISH = "Swedish"
-    CROATIAN = "Croatian"
-    HUNGARIAN = "Hungarian"
-    NORWEGIAN = "Norwegian"
-    SLOVENIAN = "Slovenian"
-    CATALAN = "Catalan"
-    NYNORSK = "Nynorsk"
-    AFRIKAANS = "Afrikaans"
-    AUTO = "auto"
-
-
-class MinimaxSpeech26HdOutputFormat(Enum):
-    """
-    Format of the output content (non-streaming only)
-    """
-    URL = "url"
-    HEX = "hex"
-
-
-class MinimaxSpeech26TurboOutputFormat(Enum):
-    """
-    Format of the output content (non-streaming only)
-    """
-    URL = "url"
-    HEX = "hex"
-
-
-
-
 class Qwen3TtsTextToSpeech17B(FALNode):
     """
     Qwen-3 TTS 1.7B generates natural-sounding speech from text using the large 1.7-billion parameter model.
@@ -140,6 +18,37 @@ class Qwen3TtsTextToSpeech17B(FALNode):
     - Generate spoken content for applications
     - Create text-to-speech for accessibility
     """
+
+    class Voice(Enum):
+        """
+        The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
+        """
+        VIVIAN = "Vivian"
+        SERENA = "Serena"
+        UNCLE_FU = "Uncle_Fu"
+        DYLAN = "Dylan"
+        ERIC = "Eric"
+        RYAN = "Ryan"
+        AIDEN = "Aiden"
+        ONO_ANNA = "Ono_Anna"
+        SOHEE = "Sohee"
+
+    class Language(Enum):
+        """
+        The language of the voice.
+        """
+        AUTO = "Auto"
+        ENGLISH = "English"
+        CHINESE = "Chinese"
+        SPANISH = "Spanish"
+        FRENCH = "French"
+        GERMAN = "German"
+        ITALIAN = "Italian"
+        JAPANESE = "Japanese"
+        KOREAN = "Korean"
+        PORTUGUESE = "Portuguese"
+        RUSSIAN = "Russian"
+
 
     prompt: str = Field(
         default="", description="Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided."
@@ -221,8 +130,6 @@ class Qwen3TtsTextToSpeech17B(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
-
 class Qwen3TtsTextToSpeech06B(FALNode):
     """
     Qwen-3 TTS 0.6B generates speech from text efficiently using the compact 600-million parameter model.
@@ -235,6 +142,37 @@ class Qwen3TtsTextToSpeech06B(FALNode):
     - Generate spoken content with low latency
     - Create efficient text-to-speech
     """
+
+    class Voice(Enum):
+        """
+        The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
+        """
+        VIVIAN = "Vivian"
+        SERENA = "Serena"
+        UNCLE_FU = "Uncle_Fu"
+        DYLAN = "Dylan"
+        ERIC = "Eric"
+        RYAN = "Ryan"
+        AIDEN = "Aiden"
+        ONO_ANNA = "Ono_Anna"
+        SOHEE = "Sohee"
+
+    class Language(Enum):
+        """
+        The language of the voice.
+        """
+        AUTO = "Auto"
+        ENGLISH = "English"
+        CHINESE = "Chinese"
+        SPANISH = "Spanish"
+        FRENCH = "French"
+        GERMAN = "German"
+        ITALIAN = "Italian"
+        JAPANESE = "Japanese"
+        KOREAN = "Korean"
+        PORTUGUESE = "Portuguese"
+        RUSSIAN = "Russian"
+
 
     prompt: str = Field(
         default="", description="Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided."
@@ -316,7 +254,6 @@ class Qwen3TtsTextToSpeech06B(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
 class Qwen3TtsVoiceDesign17B(FALNode):
     """
     Qwen-3 TTS Voice Design 1.7B creates custom voice characteristics for personalized speech synthesis.
@@ -329,6 +266,23 @@ class Qwen3TtsVoiceDesign17B(FALNode):
     - Produce custom voice-overs
     - Create tailored speech synthesis
     """
+
+    class Language(Enum):
+        """
+        The language of the voice to be designed.
+        """
+        AUTO = "Auto"
+        ENGLISH = "English"
+        CHINESE = "Chinese"
+        SPANISH = "Spanish"
+        FRENCH = "French"
+        GERMAN = "German"
+        ITALIAN = "Italian"
+        JAPANESE = "Japanese"
+        KOREAN = "Korean"
+        PORTUGUESE = "Portuguese"
+        RUSSIAN = "Russian"
+
 
     repetition_penalty: float = Field(
         default=1.05, description="Penalty to reduce repeated tokens/codes."
@@ -398,7 +352,6 @@ class Qwen3TtsVoiceDesign17B(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
 class Vibevoice05B(FALNode):
     """
     VibeVoice 0.5B generates expressive and emotive speech from text with natural vocal characteristics.
@@ -411,6 +364,18 @@ class Vibevoice05B(FALNode):
     - Generate speech with personality
     - Create engaging audio content
     """
+
+    class Speaker(Enum):
+        """
+        Voice to use for speaking.
+        """
+        FRANK = "Frank"
+        WAYNE = "Wayne"
+        CARTER = "Carter"
+        EMMA = "Emma"
+        GRACE = "Grace"
+        MIKE = "Mike"
+
 
     script: str = Field(
         default="", description="The script to convert to speech."
@@ -448,8 +413,6 @@ class Vibevoice05B(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
-
 class Maya(FALNode):
     """
     Maya generates high-quality natural speech from text with advanced voice synthesis capabilities.
@@ -462,6 +425,21 @@ class Maya(FALNode):
     - Generate natural-sounding speech
     - Create professional audio content
     """
+
+    class OutputFormat(Enum):
+        """
+        Output audio format for the generated speech
+        """
+        WAV = "wav"
+        MP3 = "mp3"
+
+    class SampleRate(Enum):
+        """
+        Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.
+        """
+        VALUE_48_KHZ = "48 kHz"
+        VALUE_24_KHZ = "24 kHz"
+
 
     repetition_penalty: float = Field(
         default=1.1, description="Penalty for repeating tokens. Higher values reduce repetition artifacts."
@@ -515,8 +493,6 @@ class Maya(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
-
 class MinimaxSpeech26Hd(FALNode):
     """
     Minimax Speech 2.6 HD generates high-definition speech from text with superior audio quality.
@@ -529,6 +505,57 @@ class MinimaxSpeech26Hd(FALNode):
     - Generate superior audio quality speech
     - Create broadcast-quality audio
     """
+
+    class LanguageBoost(Enum):
+        """
+        Enhance recognition of specified languages and dialects
+        """
+        CHINESE = "Chinese"
+        CHINESE_YUE = "Chinese,Yue"
+        ENGLISH = "English"
+        ARABIC = "Arabic"
+        RUSSIAN = "Russian"
+        SPANISH = "Spanish"
+        FRENCH = "French"
+        PORTUGUESE = "Portuguese"
+        GERMAN = "German"
+        TURKISH = "Turkish"
+        DUTCH = "Dutch"
+        UKRAINIAN = "Ukrainian"
+        VIETNAMESE = "Vietnamese"
+        INDONESIAN = "Indonesian"
+        JAPANESE = "Japanese"
+        ITALIAN = "Italian"
+        KOREAN = "Korean"
+        THAI = "Thai"
+        POLISH = "Polish"
+        ROMANIAN = "Romanian"
+        GREEK = "Greek"
+        CZECH = "Czech"
+        FINNISH = "Finnish"
+        HINDI = "Hindi"
+        BULGARIAN = "Bulgarian"
+        DANISH = "Danish"
+        HEBREW = "Hebrew"
+        MALAY = "Malay"
+        SLOVAK = "Slovak"
+        SWEDISH = "Swedish"
+        CROATIAN = "Croatian"
+        HUNGARIAN = "Hungarian"
+        NORWEGIAN = "Norwegian"
+        SLOVENIAN = "Slovenian"
+        CATALAN = "Catalan"
+        NYNORSK = "Nynorsk"
+        AFRIKAANS = "Afrikaans"
+        AUTO = "auto"
+
+    class MinimaxSpeech26HdOutputFormat(Enum):
+        """
+        Format of the output content (non-streaming only)
+        """
+        URL = "url"
+        HEX = "hex"
+
 
     prompt: str = Field(
         default="", description="Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively."
@@ -578,8 +605,6 @@ class MinimaxSpeech26Hd(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
-
 class MinimaxSpeech26Turbo(FALNode):
     """
     Minimax Speech 2.6 Turbo generates speech from text with optimized speed and good quality.
@@ -592,6 +617,57 @@ class MinimaxSpeech26Turbo(FALNode):
     - Generate speech with turbo speed
     - Create efficient audio content
     """
+
+    class LanguageBoost(Enum):
+        """
+        Enhance recognition of specified languages and dialects
+        """
+        CHINESE = "Chinese"
+        CHINESE_YUE = "Chinese,Yue"
+        ENGLISH = "English"
+        ARABIC = "Arabic"
+        RUSSIAN = "Russian"
+        SPANISH = "Spanish"
+        FRENCH = "French"
+        PORTUGUESE = "Portuguese"
+        GERMAN = "German"
+        TURKISH = "Turkish"
+        DUTCH = "Dutch"
+        UKRAINIAN = "Ukrainian"
+        VIETNAMESE = "Vietnamese"
+        INDONESIAN = "Indonesian"
+        JAPANESE = "Japanese"
+        ITALIAN = "Italian"
+        KOREAN = "Korean"
+        THAI = "Thai"
+        POLISH = "Polish"
+        ROMANIAN = "Romanian"
+        GREEK = "Greek"
+        CZECH = "Czech"
+        FINNISH = "Finnish"
+        HINDI = "Hindi"
+        BULGARIAN = "Bulgarian"
+        DANISH = "Danish"
+        HEBREW = "Hebrew"
+        MALAY = "Malay"
+        SLOVAK = "Slovak"
+        SWEDISH = "Swedish"
+        CROATIAN = "Croatian"
+        HUNGARIAN = "Hungarian"
+        NORWEGIAN = "Norwegian"
+        SLOVENIAN = "Slovenian"
+        CATALAN = "Catalan"
+        NYNORSK = "Nynorsk"
+        AFRIKAANS = "Afrikaans"
+        AUTO = "auto"
+
+    class MinimaxSpeech26TurboOutputFormat(Enum):
+        """
+        Format of the output content (non-streaming only)
+        """
+        URL = "url"
+        HEX = "hex"
+
 
     prompt: str = Field(
         default="", description="Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively."
@@ -641,8 +717,6 @@ class MinimaxSpeech26Turbo(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
-
 class MayaBatch(FALNode):
     """
     Maya Batch TTS generates high-quality speech in batch mode for efficient processing.
@@ -655,6 +729,21 @@ class MayaBatch(FALNode):
     - Efficient audio content creation
     - Generate multiple speech files
     """
+
+    class OutputFormat(Enum):
+        """
+        Output audio format for all generated speech files
+        """
+        WAV = "wav"
+        MP3 = "mp3"
+
+    class SampleRate(Enum):
+        """
+        Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.
+        """
+        VALUE_48_KHZ = "48 kHz"
+        VALUE_24_KHZ = "24 kHz"
+
 
     repetition_penalty: float = Field(
         default=1.1, description="Repetition penalty for all generations."
@@ -707,8 +796,6 @@ class MayaBatch(FALNode):
     def get_basic_fields(cls):
         return ["text"]
 
-
-
 class MayaStream(FALNode):
     """
     Maya Stream TTS generates high-quality speech in streaming mode for real-time applications.
@@ -721,6 +808,22 @@ class MayaStream(FALNode):
     - Real-time audio synthesis
     - Generate streaming speech
     """
+
+    class OutputFormat(Enum):
+        """
+        Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).
+        """
+        MP3 = "mp3"
+        WAV = "wav"
+        PCM = "pcm"
+
+    class SampleRate(Enum):
+        """
+        Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).
+        """
+        VALUE_48_KHZ = "48 kHz"
+        VALUE_24_KHZ = "24 kHz"
+
 
     repetition_penalty: float = Field(
         default=1.1, description="Penalty for repeating tokens. Higher values reduce repetition artifacts."
