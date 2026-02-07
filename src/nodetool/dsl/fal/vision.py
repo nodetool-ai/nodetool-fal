@@ -18,31 +18,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class AudioUnderstanding(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Audio Understanding analyzes audio content and generates descriptions.
-    audio, understanding, analysis
+        Audio Understanding analyzes audio content and generates descriptions.
+        audio, understanding, analysis
 
-    Use cases:
-    - Analyze audio content
-    - Generate audio descriptions
-    - Understand sound scenes
-    - Create audio metadata
-    - Identify audio events
+        Use cases:
+        - Analyze audio content
+        - Generate audio descriptions
+        - Understand sound scenes
+        - Create audio metadata
+        - Identify audio events
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The audio to analyze",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="Describe what you hear in this audio.",
-        description="The question or prompt about the audio",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio to analyze')
+    prompt: str | OutputHandle[str] = connect_field(default='Describe what you hear in this audio.', description='The question or prompt about the audio')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -59,27 +50,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class Florence2Caption(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Florence 2 Caption generates detailed captions for images.
-    vision, caption, understanding, florence, image-to-text
+        Florence 2 Caption generates detailed captions for images.
+        vision, caption, understanding, florence, image-to-text
 
-    Use cases:
-    - Generate image descriptions
-    - Create alt text for images
-    - Analyze image content
-    - Produce accessibility content
-    - Create image metadata
+        Use cases:
+        - Generate image descriptions
+        - Create alt text for images
+        - Analyze image content
+        - Produce accessibility content
+        - Create image metadata
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to caption",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to caption')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -96,27 +81,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class Florence2DetailedCaption(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Florence 2 Detailed Caption generates comprehensive image descriptions.
-    vision, caption, understanding, florence, detailed
+        Florence 2 Detailed Caption generates comprehensive image descriptions.
+        vision, caption, understanding, florence, detailed
 
-    Use cases:
-    - Generate detailed image descriptions
-    - Create comprehensive alt text
-    - Analyze complex images
-    - Produce rich metadata
-    - Create detailed content descriptions
+        Use cases:
+        - Generate detailed image descriptions
+        - Create comprehensive alt text
+        - Analyze complex images
+        - Produce rich metadata
+        - Create detailed content descriptions
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to caption",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to caption')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -133,27 +112,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class Florence2OCR(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Florence 2 OCR extracts text from images.
-    vision, ocr, text-extraction, florence
+        Florence 2 OCR extracts text from images.
+        vision, ocr, text-extraction, florence
 
-    Use cases:
-    - Extract text from images
-    - Read documents
-    - Process screenshots
-    - Digitize printed text
-    - Extract labels and signs
+        Use cases:
+        - Extract text from images
+        - Read documents
+        - Process screenshots
+        - Digitize printed text
+        - Extract labels and signs
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to extract text from",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to extract text from')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -170,29 +143,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
-class Florence2ObjectDetection(
-    SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]
-):
+class Florence2ObjectDetection(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     """
 
-    Florence 2 Object Detection identifies and locates objects in images.
-    vision, object-detection, understanding, florence
+        Florence 2 Object Detection identifies and locates objects in images.
+        vision, object-detection, understanding, florence
 
-    Use cases:
-    - Detect objects in images
-    - Identify items in photos
-    - Analyze image content
-    - Create object inventories
-    - Enable visual search
+        Use cases:
+        - Detect objects in images
+        - Identify items in photos
+        - Analyze image content
+        - Create object inventories
+        - Enable visual search
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to analyze",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to analyze')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -209,27 +174,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class GotOCR(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    GOT-OCR V2 is an advanced OCR model for extracting text from images.
-    vision, ocr, text-extraction, got
+        GOT-OCR V2 is an advanced OCR model for extracting text from images.
+        vision, ocr, text-extraction, got
 
-    Use cases:
-    - Extract text from complex images
-    - Read handwritten text
-    - Process documents
-    - Digitize printed material
-    - Extract multilingual text
+        Use cases:
+        - Extract text from complex images
+        - Read handwritten text
+        - Process documents
+        - Digitize printed material
+        - Extract multilingual text
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to extract text from",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to extract text from')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -246,40 +205,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class LlavaNext(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    LLaVA-NeXT is an advanced vision-language model for image understanding.
-    vision, vlm, understanding, llava, multimodal
+        LLaVA-NeXT is an advanced vision-language model for image understanding.
+        vision, vlm, understanding, llava, multimodal
 
-    Use cases:
-    - Complex image analysis
-    - Visual question answering
-    - Image captioning
-    - Scene understanding
-    - Multi-turn visual conversations
+        Use cases:
+        - Complex image analysis
+        - Visual question answering
+        - Image captioning
+        - Scene understanding
+        - Multi-turn visual conversations
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to analyze",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="Describe this image in detail.",
-        description="The question or prompt about the image",
-    )
-    max_tokens: int | OutputHandle[int] = connect_field(
-        default=64, description="Maximum number of tokens to generate"
-    )
-    temperature: float | OutputHandle[float] = connect_field(
-        default=0.2, description="Temperature for sampling"
-    )
-    top_p: float | OutputHandle[float] = connect_field(
-        default=1.0, description="Top P for sampling"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to analyze')
+    prompt: str | OutputHandle[str] = connect_field(default='Describe this image in detail.', description='The question or prompt about the image')
+    max_tokens: int | OutputHandle[int] = connect_field(default=64, description='Maximum number of tokens to generate')
+    temperature: float | OutputHandle[float] = connect_field(default=0.2, description='Temperature for sampling')
+    top_p: float | OutputHandle[float] = connect_field(default=1.0, description='Top P for sampling')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -296,31 +240,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class Moondream2(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Moondream2 is a small but capable vision-language model for image understanding.
-    vision, vlm, understanding, moondream, image-to-text
+        Moondream2 is a small but capable vision-language model for image understanding.
+        vision, vlm, understanding, moondream, image-to-text
 
-    Use cases:
-    - Answer questions about images
-    - Analyze image content
-    - Generate descriptions
-    - Visual question answering
-    - Image understanding tasks
+        Use cases:
+        - Answer questions about images
+        - Analyze image content
+        - Generate descriptions
+        - Visual question answering
+        - Image understanding tasks
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to analyze",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="Describe this image.",
-        description="The question or prompt about the image",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to analyze')
+    prompt: str | OutputHandle[str] = connect_field(default='Describe this image.', description='The question or prompt about the image')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -337,25 +272,20 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class VideoPromptGenerator(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Video Prompt Generator creates detailed prompts for video generation from a concept or image.
-    vision, video, prompt, generation, tool
+        Video Prompt Generator creates detailed prompts for video generation from a concept or image.
+        vision, video, prompt, generation, tool
 
-    Use cases:
-    - Generate detailed video prompts from simple concepts
-    - Enhance video generation prompts
-    - Create prompts from reference images
+        Use cases:
+        - Generate detailed video prompts from simple concepts
+        - Enhance video generation prompts
+        - Create prompts from reference images
     """
 
-    input_concept: str | OutputHandle[str] = connect_field(
-        default="", description="Core concept or thematic input for the video prompt"
-    )
-    image: types.ImageRef | OutputHandle[types.ImageRef] | None = connect_field(
-        default=None, description="Optional reference image to analyze"
-    )
+    input_concept: str | OutputHandle[str] = connect_field(default='', description='Core concept or thematic input for the video prompt')
+    image: types.ImageRef | OutputHandle[types.ImageRef] | None = connect_field(default=None, description='Optional reference image to analyze')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -372,37 +302,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.vision
 from nodetool.workflows.base_node import BaseNode
 
-
 class VideoUnderstanding(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Video Understanding analyzes video content and generates descriptions.
-    vision, video, understanding, analysis
+        Video Understanding analyzes video content and generates descriptions.
+        vision, video, understanding, analysis
 
-    Use cases:
-    - Analyze video content
-    - Generate video summaries
-    - Extract video descriptions
-    - Understand video scenes
-    - Create video metadata
+        Use cases:
+        - Analyze video content
+        - Generate video summaries
+        - Extract video descriptions
+        - Understand video scenes
+        - Create video metadata
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The video to analyze",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="Describe what happens in this video.",
-        description="The question or prompt about the video",
-    )
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The video to analyze')
+    prompt: str | OutputHandle[str] = connect_field(default='Describe what happens in this video.', description='The question or prompt about the video')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -411,3 +326,5 @@ class VideoUnderstanding(SingleOutputGraphNode[str], GraphNode[str]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+
