@@ -57,7 +57,7 @@ class AspectRatio(Enum):
     RATIO_9_21 = "9:21"
 
 
-class Resolution(Enum):
+class AIAvatarResolution(Enum):
     """
     Resolution of the video to generate. Must be either 480p or 720p.
     """
@@ -72,6 +72,14 @@ class Acceleration(Enum):
     NONE = "none"
     REGULAR = "regular"
     HIGH = "high"
+
+
+class AIAvatarSingleTextResolution(Enum):
+    """
+    Resolution of the video to generate. Must be either 480p or 720p.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
 
 
 class Voice(Enum):
@@ -98,6 +106,14 @@ class Voice(Enum):
     DANIEL = "Daniel"
     LILY = "Lily"
     BILL = "Bill"
+
+
+class AIAvatarMultiTextResolution(Enum):
+    """
+    Resolution of the video to generate. Must be either 480p or 720p.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
 
 
 class Voice2(Enum):
@@ -152,7 +168,24 @@ class Voice1(Enum):
     BILL = "Bill"
 
 
-class Duration(Enum):
+class AIAvatarMultiResolution(Enum):
+    """
+    Resolution of the video to generate. Must be either 480p or 720p.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+
+class SeeDanceV15ProResolution(Enum):
+    """
+    Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+
+class SeeDanceV15ProDuration(Enum):
     """
     Duration of the video in seconds
     """
@@ -167,6 +200,18 @@ class Duration(Enum):
     VALUE_12 = "12"
 
 
+class SeeDanceV15ProAspectRatio(Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+
 class SeeDanceV1ProFastResolution(Enum):
     """
     Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
@@ -174,6 +219,23 @@ class SeeDanceV1ProFastResolution(Enum):
     VALUE_480P = "480p"
     VALUE_720P = "720p"
     VALUE_1080P = "1080p"
+
+
+class SeeDanceV1ProFastDuration(Enum):
+    """
+    Duration of the video in seconds
+    """
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
 
 
 class SeeDanceV1ProFastAspectRatio(Enum):
@@ -197,6 +259,23 @@ class SeeDanceV1LiteResolution(Enum):
     VALUE_720P = "720p"
 
 
+class SeeDanceV1LiteDuration(Enum):
+    """
+    Duration of the video in seconds
+    """
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+
+
 class SeeDanceV1LiteAspectRatio(Enum):
     """
     The aspect ratio of the generated video
@@ -208,6 +287,32 @@ class SeeDanceV1LiteAspectRatio(Enum):
     RATIO_3_4 = "3:4"
     RATIO_9_16 = "9:16"
     AUTO = "auto"
+
+
+class OmniHumanV15Resolution(Enum):
+    """
+    The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+
+class KlingVideoV1StandardDuration(Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
+
+class PixverseV56TransitionResolution(Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
 
 
 class Style(Enum):
@@ -230,6 +335,24 @@ class ThinkingType(Enum):
     AUTO = "auto"
 
 
+class PixverseV56TransitionDuration(Enum):
+    """
+    The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+    VALUE_10 = "10"
+
+
+class ViduQ2ReferenceToVideoProResolution(Enum):
+    """
+    Output video resolution
+    """
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+
 class MovementAmplitude(Enum):
     """
     The movement amplitude of objects in the frame
@@ -238,6 +361,40 @@ class MovementAmplitude(Enum):
     SMALL = "small"
     MEDIUM = "medium"
     LARGE = "large"
+
+
+class WanV26FlashDuration(Enum):
+    """
+    Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+    VALUE_15 = "15"
+
+
+class WanV26FlashResolution(Enum):
+    """
+    Video resolution. Valid values: 720p, 1080p
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+
+class WanV26Duration(Enum):
+    """
+    Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+    VALUE_15 = "15"
+
+
+class WanV26Resolution(Enum):
+    """
+    Video resolution. Valid values: 720p, 1080p
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
 
 
 class CameraLora(Enum):
@@ -289,6 +446,72 @@ class InterpolationDirection(Enum):
     """
     FORWARD = "forward"
     BACKWARD = "backward"
+
+
+class Kandinsky5ProResolution(Enum):
+    """
+    Video resolution: 512p or 1024p.
+    """
+    VALUE_512P = "512P"
+    VALUE_1024P = "1024P"
+
+
+class Kandinsky5ProDuration(Enum):
+    """
+    Video duration.
+    """
+    VALUE_5S = "5s"
+
+
+class HunyuanVideoV15Resolution(Enum):
+    """
+    The resolution of the video.
+    """
+    VALUE_480P = "480p"
+
+
+class KlingVideoO1StandardDuration(Enum):
+    """
+    Video duration in seconds.
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+
+
+class KlingVideoO1StandardReferenceToVideoDuration(Enum):
+    """
+    Video duration in seconds.
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+
+
+class KlingVideoV26ProDuration(Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
+
+class CreatifyAuroraResolution(Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
 
 
 
@@ -484,8 +707,8 @@ class AIAvatar(FALNode):
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarResolution = Field(
+        default=AIAvatarResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use for generation."
@@ -549,8 +772,8 @@ class AIAvatarSingleText(FALNode):
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarSingleTextResolution = Field(
+        default=AIAvatarSingleTextResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use for generation."
@@ -625,8 +848,8 @@ class AIAvatarMultiText(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use for generation."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarMultiTextResolution = Field(
+        default=AIAvatarMultiTextResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
     first_text_input: str = Field(
         default="", description="The text input to guide video generation."
@@ -695,8 +918,8 @@ class AIAvatarMulti(FALNode):
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarMultiResolution = Field(
+        default=AIAvatarMultiResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use for generation."
@@ -768,17 +991,17 @@ class SeeDanceV15ProImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
+    resolution: SeeDanceV15ProResolution = Field(
+        default=SeeDanceV15ProResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the video in seconds"
+    duration: SeeDanceV15ProDuration = Field(
+        default=SeeDanceV15ProDuration.VALUE_5, description="Duration of the video in seconds"
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: SeeDanceV15ProAspectRatio = Field(
+        default=SeeDanceV15ProAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
@@ -849,8 +1072,8 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     resolution: SeeDanceV1ProFastResolution = Field(
         default=SeeDanceV1ProFastResolution.VALUE_1080P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the video in seconds"
+    duration: SeeDanceV1ProFastDuration = Field(
+        default=SeeDanceV1ProFastDuration.VALUE_5, description="Duration of the video in seconds"
     )
     aspect_ratio: SeeDanceV1ProFastAspectRatio = Field(
         default=SeeDanceV1ProFastAspectRatio.AUTO, description="The aspect ratio of the generated video"
@@ -918,8 +1141,8 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
     resolution: SeeDanceV1LiteResolution = Field(
         default=SeeDanceV1LiteResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the video in seconds"
+    duration: SeeDanceV1LiteDuration = Field(
+        default=SeeDanceV1LiteDuration.VALUE_5, description="Duration of the video in seconds"
     )
     aspect_ratio: SeeDanceV1LiteAspectRatio = Field(
         default=SeeDanceV1LiteAspectRatio.AUTO, description="The aspect ratio of the generated video"
@@ -1022,8 +1245,8 @@ class OmniHumanV15(FALNode):
     turbo_mode: bool = Field(
         default=False, description="Generate a video at a faster rate with a slight quality trade-off."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1080P, description="The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio."
+    resolution: OmniHumanV15Resolution = Field(
+        default=OmniHumanV15Resolution.VALUE_1080P, description="The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio."
     )
     prompt: str = Field(
         default="", description="The text prompt used to guide the video generation."
@@ -1263,8 +1486,8 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="The prompt for the video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV1StandardDuration = Field(
+        default=KlingVideoV1StandardDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     tail_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
@@ -1339,8 +1562,8 @@ class PixverseV56Transition(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV56TransitionResolution = Field(
+        default=PixverseV56TransitionResolution.VALUE_720P, description="The resolution of the generated video"
     )
     style: Style | None = Field(
         default=None, description="The style of the generated video"
@@ -1351,8 +1574,8 @@ class PixverseV56Transition(FALNode):
     prompt: str = Field(
         default="", description="The prompt for the transition"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds"
+    duration: PixverseV56TransitionDuration = Field(
+        default=PixverseV56TransitionDuration.VALUE_5, description="The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds"
     )
     generate_audio_switch: bool = Field(
         default=False, description="Enable audio generation (BGM, SFX, dialogue)"
@@ -1417,8 +1640,8 @@ class ViduQ2ReferenceToVideoPro(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 2000 characters"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Output video resolution"
+    resolution: ViduQ2ReferenceToVideoProResolution = Field(
+        default=ViduQ2ReferenceToVideoProResolution.VALUE_720P, description="Output video resolution"
     )
     aspect_ratio: str = Field(
         default="16:9", description="Aspect ratio of the output video (e.g., auto, 16:9, 9:16, 1:1, or any W:H)"
@@ -1488,11 +1711,11 @@ class WanV26ImageToVideoFlash(FALNode):
     prompt: str = Field(
         default="", description="The text prompt describing the desired video motion. Max 800 characters."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
+    duration: WanV26FlashDuration = Field(
+        default=WanV26FlashDuration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
+    resolution: WanV26FlashResolution = Field(
+        default=WanV26FlashResolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -1564,11 +1787,11 @@ class WanV26ImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="The text prompt describing the desired video motion. Max 800 characters."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
+    duration: WanV26Duration = Field(
+        default=WanV26Duration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
+    resolution: WanV26Resolution = Field(
+        default=WanV26Resolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -2243,14 +2466,14 @@ class Kandinsky5ProImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_512P, description="Video resolution: 512p or 1024p."
+    resolution: Kandinsky5ProResolution = Field(
+        default=Kandinsky5ProResolution.VALUE_512P, description="Video resolution: 512p or 1024p."
     )
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="Acceleration level for faster generation."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5S, description="Video duration."
+    duration: Kandinsky5ProDuration = Field(
+        default=Kandinsky5ProDuration.VALUE_5S, description="Video duration."
     )
     num_inference_steps: int = Field(
         default=28
@@ -2377,8 +2600,8 @@ class HunyuanVideoV15ImageToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="The resolution of the video."
+    resolution: HunyuanVideoV15Resolution = Field(
+        default=HunyuanVideoV15Resolution.VALUE_480P, description="The resolution of the video."
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the reference image for image-to-video generation."
@@ -2445,8 +2668,8 @@ class KlingVideoO1StandardImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="Use @Image1 to reference the start frame, @Image2 to reference the end frame."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds."
+    duration: KlingVideoO1StandardDuration = Field(
+        default=KlingVideoO1StandardDuration.VALUE_5, description="Video duration in seconds."
     )
     start_image_url: ImageRef = Field(
         default=ImageRef(), description="Image to use as the first frame of the video. Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s"
@@ -2501,8 +2724,8 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds."
+    duration: KlingVideoO1StandardReferenceToVideoDuration = Field(
+        default=KlingVideoO1StandardReferenceToVideoDuration.VALUE_5, description="Video duration in seconds."
     )
     elements: list[str] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image)."
@@ -2552,8 +2775,8 @@ class KlingVideoV26ProImageToVideo(FALNode):
     prompt: str = Field(
         default=""
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV26ProDuration = Field(
+        default=KlingVideoV26ProDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     voice_ids: list[str] = Field(
         default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
@@ -2708,8 +2931,8 @@ class CreatifyAurora(FALNode):
     prompt: str = Field(
         default="", description="A text prompt to guide the video generation process."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: CreatifyAuroraResolution = Field(
+        default=CreatifyAuroraResolution.VALUE_720P, description="The resolution of the generated video."
     )
     guidance_scale: float = Field(
         default=1, description="Guidance scale to be used for text prompt adherence."

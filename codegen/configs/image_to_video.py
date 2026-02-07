@@ -113,6 +113,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Produce avatar presentations",
             "Create personalized video messages"
         ],
+        "enum_overrides": {
+            "Resolution": "AIAvatarResolution"
+        },
         "basic_fields": ["image", "audio"]
     },
     
@@ -127,6 +130,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Create virtual presenters",
             "Generate automated spokesperson videos"
         ],
+        "enum_overrides": {
+            "Resolution": "AIAvatarSingleTextResolution"
+        },
         "basic_fields": ["image", "text"]
     },
     
@@ -141,6 +147,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Create conversational content",
             "Generate multi-character scenes"
         ],
+        "enum_overrides": {
+            "Resolution": "AIAvatarMultiTextResolution"
+        },
         "basic_fields": ["images", "texts"]
     },
     
@@ -155,6 +164,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Create interactive characters",
             "Generate multi-avatar content"
         ],
+        "enum_overrides": {
+            "Resolution": "AIAvatarMultiResolution"
+        },
         "basic_fields": ["images", "audio"]
     },
     
@@ -169,6 +181,11 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Produce music video content",
             "Create dance training materials"
         ],
+        "enum_overrides": {
+            "Resolution": "SeeDanceV15ProResolution",
+            "AspectRatio": "SeeDanceV15ProAspectRatio",
+            "Duration": "SeeDanceV15ProDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
     
@@ -185,7 +202,8 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "enum_overrides": {
             "Resolution": "SeeDanceV1ProFastResolution",
-            "AspectRatio": "SeeDanceV1ProFastAspectRatio"
+            "AspectRatio": "SeeDanceV1ProFastAspectRatio",
+            "Duration": "SeeDanceV1ProFastDuration"
         },
         "basic_fields": ["image", "prompt"]
     },
@@ -203,7 +221,8 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "enum_overrides": {
             "Resolution": "SeeDanceV1LiteResolution",
-            "AspectRatio": "SeeDanceV1LiteAspectRatio"
+            "AspectRatio": "SeeDanceV1LiteAspectRatio",
+            "Duration": "SeeDanceV1LiteDuration"
         },
         "basic_fields": ["image", "reference"]
     },
@@ -219,6 +238,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Produce style-transferred videos",
             "Create visually unique content"
         ],
+        "enum_overrides": {
+            "Resolution": "ByteDanceVideoStylizeResolution"
+        },
         "basic_fields": ["image", "style"]
     },
     
@@ -233,6 +255,10 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate human performances",
             "Create realistic human content"
         ],
+        "enum_overrides": {
+            "Resolution": "OmniHumanV15Resolution",
+            "AspectRatio": "OmniHumanV15AspectRatio"
+        },
         "basic_fields": ["image", "prompt"]
     },
     
@@ -303,6 +329,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate videos for web use",
             "Create moderate quality outputs"
         ],
+        "enum_overrides": {
+            "Duration": "KlingVideoV1StandardDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
     
@@ -332,6 +361,10 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Create transition animations",
             "Generate video connecting two scenes"
         ],
+        "enum_overrides": {
+            "Resolution": "PixverseV56TransitionResolution",
+            "Duration": "PixverseV56TransitionDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -347,6 +380,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate videos matching examples",
             "Create professional reference-based content"
         ],
+        "enum_overrides": {
+            "Resolution": "ViduQ2ReferenceToVideoProResolution"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -362,6 +398,10 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate quick video iterations",
             "Create fast video animations"
         ],
+        "enum_overrides": {
+            "Resolution": "WanV26FlashResolution",
+            "Duration": "WanV26FlashDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -376,6 +416,10 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate consistent videos",
             "Create professional animations"
         ],
+        "enum_overrides": {
+            "Resolution": "WanV26Resolution",
+            "Duration": "WanV26Duration"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -463,6 +507,10 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate videos with artistic flair",
             "Create professional artistic videos"
         ],
+        "enum_overrides": {
+            "Resolution": "Kandinsky5ProResolution",
+            "Duration": "Kandinsky5ProDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -493,6 +541,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate videos with AI excellence",
             "Create cutting-edge video animations"
         ],
+        "enum_overrides": {
+            "Resolution": "HunyuanVideoV15Resolution"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -508,6 +559,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate balanced quality videos",
             "Create standard tier animations"
         ],
+        "enum_overrides": {
+            "Duration": "KlingVideoO1StandardDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -522,6 +576,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate videos matching examples",
             "Create standardized reference videos"
         ],
+        "enum_overrides": {
+            "Duration": "KlingVideoO1StandardReferenceToVideoDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -537,6 +594,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate advanced videos",
             "Create pro-tier animations"
         ],
+        "enum_overrides": {
+            "Duration": "KlingVideoV26ProDuration"
+        },
         "basic_fields": ["image", "prompt"]
     },
 
@@ -581,6 +641,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate unique video effects",
             "Create visually impressive videos"
         ],
+        "enum_overrides": {
+            "Resolution": "CreatifyAuroraResolution"
+        },
         "basic_fields": ["image", "prompt"]
     },
 }

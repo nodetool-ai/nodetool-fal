@@ -6,15 +6,40 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.nodes.fal.image_to_video import (
     AspectRatio,
-    KlingDuration,
-    PixverseV56AspectRatio,
     PixverseV56Resolution,
     PixverseV56Duration,
     PixverseV56Style,
     PixverseV56ThinkingType,
-    LumaRay2Resolution,
-    LumaRay2Duration,
 )
+
+
+class KlingDuration(Enum):
+    """Duration for Kling video generation"""
+    FIVE_SECONDS = "5"
+    TEN_SECONDS = "10"
+
+
+class LumaRay2Resolution(Enum):
+    """Resolution for Luma Ray 2 video generation"""
+    RES_540P = "540p"
+    RES_1080P = "1080p"
+
+
+class LumaRay2Duration(Enum):
+    """Duration for Luma Ray 2 video generation"""
+    FIVE_SECONDS = "5"
+    TEN_SECONDS = "10"
+
+
+class PixverseV56AspectRatio(Enum):
+    """Aspect ratio for Pixverse V5.6"""
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_21_9 = "21:9"
+    RATIO_9_21 = "9:21"
+
 
 
 class Veo3AspectRatio(Enum):
@@ -304,7 +329,7 @@ class PixverseV56TextToVideo(FALNode):
         description="The aspect ratio of the generated video",
     )
     resolution: PixverseV56Resolution = Field(
-        default=PixverseV56Resolution.RES_720P,
+        default=PixverseV56Resolution.VALUE_720P,
         description="The resolution quality of the output video",
     )
     duration: PixverseV56Duration = Field(
@@ -383,7 +408,7 @@ class PixverseV56Transition(FALNode):
         description="The aspect ratio of the generated video",
     )
     resolution: PixverseV56Resolution = Field(
-        default=PixverseV56Resolution.RES_720P,
+        default=PixverseV56Resolution.VALUE_720P,
         description="The resolution quality of the output video",
     )
     duration: int = Field(
