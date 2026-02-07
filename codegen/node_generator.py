@@ -11,6 +11,10 @@ from codegen.schema_parser import NodeSpec, FieldDef, EnumDef
 class NodeGenerator:
     """Generates Python code for FAL nodes."""
 
+    def __init__(self):
+        self._config_basic_fields = None
+        self._field_renames = {}
+
     def generate(self, spec: NodeSpec, config: Optional[dict] = None) -> str:
         """
         Generate Python code for a node.
@@ -55,12 +59,75 @@ class NodeGenerator:
             spec.use_cases = config["use_cases"]
         if "class_name" in config:
             spec.class_name = config["class_name"]
+        if "basic_fields" in config:
+            self._config_basic_fields = config["basic_fields"]
+        
+        # Track field renames for API parameter mapping
+        self._field_renames = {}
+        
+        # Enum overrides - apply first
+        enum_rename_map = {}
+        if "enum_overrides" in config:
+            for enum_def in spec.enums:
+                if enum_def.name in config["enum_overrides"]:
+                    old_name = enum_def.name
+                    new_name = config["enum_overrides"][old_name]
+                    enum_rename_map[old_name] = new_name
+                    enum_def.name = new_name
+        
+        # Enum value overrides
+        if "enum_value_overrides" in config:
+            for enum_def in spec.enums:
+                # Check if there's a value override for this enum
+                for orig_enum_name, value_map in config["enum_value_overrides"].items():
+                    # Check if this is the renamed enum
+                    if enum_rename_map.get(orig_enum_name) == enum_def.name or orig_enum_name == enum_def.name:
+                        enum_def.values = [
+                            (value_map.get(enum_name, enum_name), value)
+                            for enum_name, value in enum_def.values
+                        ]
+                        break
+        
+        # Update enum references and default values in fields
+        for field in spec.input_fields + spec.output_fields:
+            if field.enum_ref:
+                old_enum_ref = field.enum_ref
+                # Apply enum rename
+                if old_enum_ref in enum_rename_map:
+                    new_enum_ref = enum_rename_map[old_enum_ref]
+                    field.enum_ref = new_enum_ref
+                    
+                    # Update python_type
+                    if "|" in field.python_type:
+                        # Handle optional enums
+                        parts = field.python_type.split(" | ")
+                        parts[0] = new_enum_ref
+                        field.python_type = " | ".join(parts)
+                    else:
+                        field.python_type = new_enum_ref
+                    
+                    # Update default value if it references the enum
+                    if field.default_value.startswith(old_enum_ref + "."):
+                        enum_value = field.default_value.split(".")[1]
+                        # Check for enum value renames
+                        if "enum_value_overrides" in config and old_enum_ref in config["enum_value_overrides"]:
+                            value_map = config["enum_value_overrides"][old_enum_ref]
+                            enum_value = value_map.get(enum_value, enum_value)
+                        field.default_value = f"{new_enum_ref}.{enum_value}"
         
         # Field overrides
         if "field_overrides" in config:
             for field in spec.input_fields:
                 if field.name in config["field_overrides"]:
                     override = config["field_overrides"][field.name]
+                    
+                    # Handle field rename
+                    if "name" in override:
+                        original_name = field.name
+                        new_name = override["name"]
+                        self._field_renames[new_name] = original_name
+                        field.name = new_name
+                    
                     if "python_type" in override:
                         field.python_type = override["python_type"]
                     if "default_value" in override:
@@ -215,18 +282,20 @@ class NodeGenerator:
         lines.append("        arguments = {")
         
         for field in spec.input_fields:
+            # Get the API parameter name (use original name if field was renamed)
+            api_param_name = self._field_renames.get(field.name, field.name)
+            
             if field.name in image_fields:
-                # Use the field name as-is for image URLs (don't add _url suffix if already present)
-                arg_name = field.name if field.name.endswith("_url") or field.name.endswith("_image") else field.name
-                lines.append(f'            "{arg_name}": f"data:image/png;base64,{{{field.name}_base64}}",')
+                # Use the API parameter name for image URLs
+                lines.append(f'            "{api_param_name}": f"data:image/png;base64,{{{field.name}_base64}}",')
             elif field.enum_ref:
                 # Handle optional enums
                 if not field.required and field.default_value == "None":
-                    lines.append(f'            "{field.name}": self.{field.name}.value if self.{field.name} else None,')
+                    lines.append(f'            "{api_param_name}": self.{field.name}.value if self.{field.name} else None,')
                 else:
-                    lines.append(f'            "{field.name}": self.{field.name}.value,')
+                    lines.append(f'            "{api_param_name}": self.{field.name}.value,')
             else:
-                lines.append(f'            "{field.name}": self.{field.name},')
+                lines.append(f'            "{api_param_name}": self.{field.name},')
         
         lines.append("        }")
         lines.append("")
@@ -261,8 +330,13 @@ class NodeGenerator:
 
     def _generate_basic_fields_method(self, spec: NodeSpec) -> list[str]:
         """Generate get_basic_fields class method."""
-        # Select up to 5 most important fields
-        basic_fields = [f.name for f in spec.input_fields[:5]]
+        # Use config basic fields if available
+        if self._config_basic_fields:
+            basic_fields = self._config_basic_fields
+        else:
+            # Select up to 5 most important fields
+            basic_fields = [f.name for f in spec.input_fields[:5]]
+        
         fields_str = ", ".join(f'"{f}"' for f in basic_fields)
         
         return [

@@ -129,10 +129,28 @@ async def generate_module(
     print(f"\nWriting {len(generated_nodes)} nodes to {output_file}")
     
     with output_file.open("w") as f:
+        # Write imports once at the top
+        f.write("from enum import Enum\n")
+        f.write("from pydantic import Field\n")
+        f.write("from typing import Any\n")
+        f.write("from nodetool.metadata.types import ImageRef, VideoRef, AudioRef\n")
+        f.write("from nodetool.nodes.fal.fal_node import FALNode\n")
+        f.write("from nodetool.workflows.processing_context import ProcessingContext\n")
+        f.write("\n\n")
+        
         for i, (class_name, code) in enumerate(generated_nodes):
             if i > 0:
-                f.write("\n\n\n")
-            f.write(code)
+                f.write("\n\n")
+            # Remove imports from individual node code
+            lines = code.split("\n")
+            # Skip import lines
+            start_idx = 0
+            for idx, line in enumerate(lines):
+                if not line.strip() or line.startswith("from ") or line.startswith("import "):
+                    start_idx = idx + 1
+                else:
+                    break
+            f.write("\n".join(lines[start_idx:]))
     
     print(f"✓ Generated {len(generated_nodes)} nodes for {module_name}")
     
@@ -196,7 +214,7 @@ async def main():
         # Define endpoints for each module
         module_endpoints = {
             "image_to_video": [
-                "fal-ai/haiper-video-v2/image-to-video",
+                "fal-ai/pixverse/v5.6/image-to-video",
                 "fal-ai/luma-dream-machine/image-to-video",
             ],
             # Add more modules here

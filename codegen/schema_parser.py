@@ -131,23 +131,43 @@ class SchemaParser:
     def _extract_output_schema(self, schema: dict[str, Any]) -> dict[str, Any]:
         """Extract output schema from OpenAPI paths."""
         paths = schema.get("paths", {})
+        candidate_schema = {}
         
-        # Look for GET endpoint with /requests/{request_id}
+        # Look for GET endpoints
         for path, methods in paths.items():
-            if "/requests/{request_id}" in path:
-                get = methods.get("get")
-                if not get:
-                    continue
+            get = methods.get("get")
+            if not get:
+                continue
+            
+            responses = get.get("responses", {})
+            response_200 = responses.get("200") or responses.get(200)
+            if not response_200:
+                continue
                 
-                responses = get.get("responses", {})
-                response_200 = responses.get("200", {})
-                content = response_200.get("content", {}).get("application/json", {})
-                output_schema_ref = content.get("schema", {})
-                
-                if output_schema_ref:
-                    return self._resolve_ref(schema, output_schema_ref)
+            content = response_200.get("content", {}).get("application/json", {})
+            output_schema_ref = content.get("schema")
+            if not output_schema_ref:
+                continue
+            
+            resolved = self._resolve_ref(schema, output_schema_ref)
+            
+            # Prefer the /requests/{request_id} path (actual result, not queue status)
+            if path.endswith("/requests/{request_id}"):
+                return resolved
+            
+            # Otherwise save as candidate if it's not a queue status schema
+            if not self._is_queue_status_schema(resolved):
+                candidate_schema = resolved
         
-        return {}
+        return candidate_schema
+    
+    def _is_queue_status_schema(self, schema: dict[str, Any]) -> bool:
+        """Check if a schema is a queue status schema (not the actual output)."""
+        title = schema.get("title", "")
+        if title.lower() == "queuestatus":
+            return True
+        properties = schema.get("properties", {})
+        return "status" in properties and "request_id" in properties
 
     def _resolve_ref(self, schema: dict[str, Any], schema_obj: dict[str, Any]) -> dict[str, Any]:
         """Resolve $ref references in schema."""
@@ -189,6 +209,7 @@ class SchemaParser:
         for name, prop in properties.items():
             # Check for enum
             enum_ref = None
+            enum_name = None
             if "enum" in prop:
                 enum_name = self._generate_enum_name(name)
                 enum_def = EnumDef(
@@ -202,8 +223,8 @@ class SchemaParser:
             # Determine Python type (pass field name for better detection)
             python_type = self._json_type_to_python(prop, enum_ref, name)
             
-            # Determine default value
-            default_value = self._get_default_value(prop, python_type, name in required)
+            # Determine default value (pass enum_name for proper default generation)
+            default_value = self._get_default_value(prop, python_type, name in required, enum_name)
             
             fields.append(FieldDef(
                 name=name,
@@ -253,15 +274,20 @@ class SchemaParser:
         
         return "Any"
 
-    def _get_default_value(self, prop: dict[str, Any], python_type: str, required: bool) -> str:
+    def _get_default_value(self, prop: dict[str, Any], python_type: str, required: bool, enum_name: Optional[str] = None) -> str:
         """Get default value for a field."""
         if "default" in prop:
             default = prop["default"]
             if isinstance(default, str):
                 # For enum types, use the enum value
-                if python_type not in ["str", "ImageRef", "VideoRef", "AudioRef"]:
+                if enum_name:
+                    # Use enum name with correct value
+                    enum_value = self._to_enum_value(default)
+                    return f'{enum_name}.{enum_value}'
+                elif python_type not in ["str", "ImageRef", "VideoRef", "AudioRef"]:
                     # This is likely an enum, find the matching enum value
-                    return f'{python_type}.{self._to_enum_value(default)}'
+                    enum_value = self._to_enum_value(default)
+                    return f'{python_type}.{enum_value}'
                 return f'"{default}"'
             elif isinstance(default, bool):
                 return str(default)
@@ -303,6 +329,18 @@ class SchemaParser:
                 return "ImageRef"
             elif "audio" in prop_name.lower():
                 return "AudioRef"
+        
+        # Check if video is present (even with other properties)
+        if "video" in properties:
+            return "VideoRef"
+        
+        # Check if images is present
+        if "images" in properties:
+            return "ImageRef"
+        
+        # Check if audio is present
+        if "audio" in properties:
+            return "AudioRef"
         
         # Multiple outputs or dict
         if len(properties) > 1:

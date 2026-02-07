@@ -9,30 +9,70 @@ from typing import Any
 
 # Map of endpoint_id to config overrides
 CONFIGS: dict[str, dict[str, Any]] = {
-    "fal-ai/haiper-video-v2/image-to-video": {
-        "class_name": "HaiperImageToVideo",
-        "docstring": "Transform images into hyper-realistic videos with Haiper 2.0. Experience industry-leading resolution, fluid motion, and rapid generation for stunning AI videos.",
-        "tags": ["video", "generation", "hyper-realistic", "motion", "animation", "image-to-video", "img2vid"],
+    "fal-ai/pixverse/v5.6/image-to-video": {
+        "class_name": "PixverseV56ImageToVideo",
+        "docstring": "Generate high-quality videos from images with Pixverse v5.6.",
+        "tags": ["video", "generation", "pixverse", "v5.6", "image-to-video", "img2vid"],
         "use_cases": [
-            "Create cinematic animations",
-            "Generate dynamic video content",
-            "Transform static images into motion",
-            "Produce high-resolution videos",
-            "Create visual effects"
+            "Animate photos into professional video clips",
+            "Create dynamic product showcase videos",
+            "Generate stylized video content from artwork",
+            "Produce high-resolution social media animations",
+            "Transform static images with various visual styles"
         ],
         "field_overrides": {
-            "image": {
-                "python_type": "ImageRef",
-                "default_value": "ImageRef()",
+            "image_url": {
+                "name": "image",  # Rename field
                 "description": "The image to transform into a video"
             },
             "prompt": {
-                "description": "A description of the desired video motion and style"
+                "description": "Text prompt describing the desired video motion"
+            },
+            "resolution": {
+                "description": "The resolution quality of the output video"
             },
             "duration": {
                 "description": "The duration of the generated video in seconds"
+            },
+            "negative_prompt": {
+                "description": "What to avoid in the generated video"
+            },
+            "style": {
+                "description": "Optional visual style for the video"
+            },
+            "seed": {
+                "description": "Optional seed for reproducible generation"
+            },
+            "generate_audio_switch": {
+                "description": "Whether to generate audio for the video"
+            },
+            "thinking_type": {
+                "description": "Thinking mode for video generation"
             }
-        }
+        },
+        "enum_overrides": {
+            "Resolution": "PixverseV56Resolution",
+            "Duration": "PixverseV56Duration",
+            "Style": "PixverseV56Style",
+            "ThinkingType": "PixverseV56ThinkingType"
+        },
+        "enum_value_overrides": {
+            "Duration": {
+                "VALUE_5": "FIVE_SECONDS",
+                "VALUE_8": "EIGHT_SECONDS",
+                "VALUE_10": "TEN_SECONDS"
+            },
+            "Resolution": {
+                "360P": "RES_360P",
+                "540P": "RES_540P",
+                "720P": "RES_720P",
+                "1080P": "RES_1080P"
+            },
+            "Style": {
+                "3D_ANIMATION": "ANIMATION_3D"
+            }
+        },
+        "basic_fields": ["image", "prompt", "resolution"]
     },
     
     "fal-ai/luma-dream-machine/image-to-video": {
