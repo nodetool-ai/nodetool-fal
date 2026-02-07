@@ -18,25 +18,44 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-class ElevenLabsScribeV2(GraphNode[nodetool.nodes.fal.speech_to_text.ElevenLabsScribeV2.OutputType]):
+
+class ElevenLabsScribeV2(
+    GraphNode[nodetool.nodes.fal.speech_to_text.ElevenLabsScribeV2.OutputType]
+):
     """
 
-        ElevenLabs Scribe V2 is a state-of-the-art speech-to-text model with improved accuracy, word-level timestamps, and speaker identification.
-        speech, audio, transcription, scribe, elevenlabs, speech-to-text, audio-to-text, diarization
+    ElevenLabs Scribe V2 is a state-of-the-art speech-to-text model with improved accuracy, word-level timestamps, and speaker identification.
+    speech, audio, transcription, scribe, elevenlabs, speech-to-text, audio-to-text, diarization
 
-        Use cases:
-        - Transcribe audio with high accuracy
-        - Generate subtitles with word-level timestamps
-        - Identify different speakers in conversations
-        - Support for 99 languages with biasing via keyterms
-        - Tag audio events like laughter and applause
+    Use cases:
+    - Transcribe audio with high accuracy
+    - Generate subtitles with word-level timestamps
+    - Identify different speakers in conversations
+    - Support for 99 languages with biasing via keyterms
+    - Tag audio events like laughter and applause
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio file to transcribe')
-    language_code: str | OutputHandle[str] = connect_field(default='', description="Language code of the audio (e.g., 'eng', 'spa'). Auto-detected if empty")
-    tag_audio_events: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to tag audio events like laughter, applause, etc.')
-    diarize: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to annotate who is speaking')
-    keyterms: list[str] | OutputHandle[list[str]] = connect_field(default=PydanticUndefined, description='Words or phrases to bias the model towards transcribing (up to 100, max 50 chars each)')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The audio file to transcribe",
+    )
+    language_code: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Language code of the audio (e.g., 'eng', 'spa'). Auto-detected if empty",
+    )
+    tag_audio_events: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Whether to tag audio events like laughter, applause, etc.",
+    )
+    diarize: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to annotate who is speaking"
+    )
+    keyterms: list[str] | OutputHandle[list[str]] = connect_field(
+        default=PydanticUndefined,
+        description="Words or phrases to bias the model towards transcribing (up to 100, max 50 chars each)",
+    )
 
     @property
     def out(self) -> "ElevenLabsScribeV2Outputs":
@@ -50,22 +69,23 @@ class ElevenLabsScribeV2(GraphNode[nodetool.nodes.fal.speech_to_text.ElevenLabsS
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
 
+
 class ElevenLabsScribeV2Outputs(OutputsProxy):
     @property
     def text(self) -> OutputHandle[str]:
-        return typing.cast(OutputHandle[str], self['text'])
+        return typing.cast(OutputHandle[str], self["text"])
 
     @property
     def language_code(self) -> OutputHandle[str]:
-        return typing.cast(OutputHandle[str], self['language_code'])
+        return typing.cast(OutputHandle[str], self["language_code"])
 
     @property
     def language_probability(self) -> OutputHandle[float]:
-        return typing.cast(OutputHandle[float], self['language_probability'])
+        return typing.cast(OutputHandle[float], self["language_probability"])
 
     @property
     def words(self) -> OutputHandle[list[dict]]:
-        return typing.cast(OutputHandle[list[dict]], self['words'])
+        return typing.cast(OutputHandle[list[dict]], self["words"])
 
 
 import typing
@@ -74,32 +94,58 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
+
 class Whisper(GraphNode[nodetool.nodes.fal.speech_to_text.Whisper.OutputType]):
     """
 
-        Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.
-        speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text
+    Whisper is a model for speech transcription and translation that can transcribe audio in multiple languages and optionally translate to English.
+    speech, audio, transcription, translation, transcribe, translate, multilingual, speech-to-text, audio-to-text
 
-        Use cases:
-        - Transcribe spoken content to text
-        - Translate speech to English
-        - Generate subtitles and captions
-        - Create text records of audio content
-        - Analyze multilingual audio content
+    Use cases:
+    - Transcribe spoken content to text
+    - Translate speech to English
+    - Generate subtitles and captions
+    - Create text records of audio content
+    - Analyze multilingual audio content
     """
 
     TaskEnum: typing.ClassVar[type] = nodetool.nodes.fal.speech_to_text.TaskEnum
     LanguageEnum: typing.ClassVar[type] = nodetool.nodes.fal.speech_to_text.LanguageEnum
-    ChunkLevelEnum: typing.ClassVar[type] = nodetool.nodes.fal.speech_to_text.ChunkLevelEnum
+    ChunkLevelEnum: typing.ClassVar[type] = (
+        nodetool.nodes.fal.speech_to_text.ChunkLevelEnum
+    )
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio file to transcribe')
-    task: nodetool.nodes.fal.speech_to_text.TaskEnum = Field(default=nodetool.nodes.fal.speech_to_text.TaskEnum.TRANSCRIBE, description='Task to perform on the audio file')
-    language: nodetool.nodes.fal.speech_to_text.LanguageEnum = Field(default=nodetool.nodes.fal.speech_to_text.LanguageEnum.EN, description='Language of the audio file. If not set, will be auto-detected')
-    diarize: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to perform speaker diarization')
-    chunk_level: nodetool.nodes.fal.speech_to_text.ChunkLevelEnum = Field(default=nodetool.nodes.fal.speech_to_text.ChunkLevelEnum.SEGMENT, description='Level of detail for timestamp chunks')
-    num_speakers: int | OutputHandle[int] = connect_field(default=1, description='Number of speakers in the audio. If not set, will be auto-detected')
-    batch_size: int | OutputHandle[int] = connect_field(default=64, description='Batch size for processing')
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Optional prompt to guide the transcription')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The audio file to transcribe",
+    )
+    task: nodetool.nodes.fal.speech_to_text.TaskEnum = Field(
+        default=nodetool.nodes.fal.speech_to_text.TaskEnum.TRANSCRIBE,
+        description="Task to perform on the audio file",
+    )
+    language: nodetool.nodes.fal.speech_to_text.LanguageEnum = Field(
+        default=nodetool.nodes.fal.speech_to_text.LanguageEnum.EN,
+        description="Language of the audio file. If not set, will be auto-detected",
+    )
+    diarize: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Whether to perform speaker diarization"
+    )
+    chunk_level: nodetool.nodes.fal.speech_to_text.ChunkLevelEnum = Field(
+        default=nodetool.nodes.fal.speech_to_text.ChunkLevelEnum.SEGMENT,
+        description="Level of detail for timestamp chunks",
+    )
+    num_speakers: int | OutputHandle[int] = connect_field(
+        default=1,
+        description="Number of speakers in the audio. If not set, will be auto-detected",
+    )
+    batch_size: int | OutputHandle[int] = connect_field(
+        default=64, description="Batch size for processing"
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Optional prompt to guide the transcription"
+    )
 
     @property
     def out(self) -> "WhisperOutputs":
@@ -113,21 +159,20 @@ class Whisper(GraphNode[nodetool.nodes.fal.speech_to_text.Whisper.OutputType]):
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
 
+
 class WhisperOutputs(OutputsProxy):
     @property
     def text(self) -> OutputHandle[str]:
-        return typing.cast(OutputHandle[str], self['text'])
+        return typing.cast(OutputHandle[str], self["text"])
 
     @property
     def chunks(self) -> OutputHandle[list[dict]]:
-        return typing.cast(OutputHandle[list[dict]], self['chunks'])
+        return typing.cast(OutputHandle[list[dict]], self["chunks"])
 
     @property
     def inferred_languages(self) -> OutputHandle[list[str]]:
-        return typing.cast(OutputHandle[list[str]], self['inferred_languages'])
+        return typing.cast(OutputHandle[list[str]], self["inferred_languages"])
 
     @property
     def diarization_segments(self) -> OutputHandle[list[dict]]:
-        return typing.cast(OutputHandle[list[dict]], self['diarization_segments'])
-
-
+        return typing.cast(OutputHandle[list[dict]], self["diarization_segments"])
