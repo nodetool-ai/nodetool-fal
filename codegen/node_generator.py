@@ -129,7 +129,11 @@ class NodeGenerator:
                         field.name = new_name
                     
                     if "python_type" in override:
-                        field.python_type = override["python_type"]
+                        new_type = override["python_type"]
+                        field.python_type = new_type
+                        # If the new type looks like an enum (capitalized, no brackets), set enum_ref
+                        if new_type and new_type[0].isupper() and "[" not in new_type and " | " not in new_type:
+                            field.enum_ref = new_type
                     if "default_value" in override:
                         field.default_value = override["default_value"]
                     if "description" in override:
@@ -248,8 +252,10 @@ class NodeGenerator:
         params = [f"default={field.default_value}"]
         
         if field.description:
-            # Escape quotes in description
+            # Escape quotes and newlines in description
             desc = field.description.replace('"', '\\"')
+            # Replace newlines and extra whitespace with single space
+            desc = " ".join(desc.split())
             params.append(f'description="{desc}"')
         
         field_params = ", ".join(params)

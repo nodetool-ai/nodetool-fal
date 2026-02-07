@@ -246,16 +246,26 @@ class SchemaParser:
         json_type = prop.get("type", "string")
         
         if json_type == "string":
-            # Check for image URL patterns
-            desc_lower = prop.get("description", "").lower()
-            title_lower = prop.get("title", "").lower()
+            # Check for image URL patterns - be more selective
+            # Only treat as asset refs if field name ends with _url or is exactly image/video/audio
             name_lower = prop_name.lower()
             
-            if "image" in desc_lower or "image" in title_lower or ("image" in name_lower and "_url" in name_lower):
+            if name_lower.endswith("_url") or name_lower.endswith("_urls"):
+                desc_lower = prop.get("description", "").lower()
+                title_lower = prop.get("title", "").lower()
+                
+                if "image" in name_lower or "image" in desc_lower or "image" in title_lower:
+                    return "ImageRef"
+                elif "video" in name_lower or "video" in desc_lower or "video" in title_lower:
+                    return "VideoRef"
+                elif "audio" in name_lower or "audio" in desc_lower or "audio" in title_lower:
+                    return "AudioRef"
+            elif name_lower in ["image", "mask"]:
+                # Specific known image input fields
                 return "ImageRef"
-            elif "video" in desc_lower or "video" in title_lower or ("video" in name_lower and "_url" in name_lower):
+            elif name_lower in ["video"]:
                 return "VideoRef"
-            elif "audio" in desc_lower or "audio" in title_lower or ("audio" in name_lower and "_url" in name_lower):
+            elif name_lower in ["audio"]:
                 return "AudioRef"
             
             return "str"

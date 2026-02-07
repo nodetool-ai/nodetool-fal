@@ -141,6 +141,60 @@ async def generate_module(
     needs_video = "VideoRef" in all_code
     needs_audio = "AudioRef" in all_code
     
+    # Extract and deduplicate enums from all generated code
+    enums_seen = set()
+    enums_to_write = []
+    node_classes = []
+    
+    # Add shared enums from config if available
+    if config_module and hasattr(config_module, "SHARED_ENUMS"):
+        for enum_name, enum_def in config_module.SHARED_ENUMS.items():
+            enums_seen.add(enum_name)
+            lines = [f'class {enum_name}(str, Enum):']
+            if "description" in enum_def:
+                lines.append(f'    """{enum_def["description"]}"""')
+            for value_name, value_str in enum_def["values"]:
+                lines.append(f'    {value_name} = "{value_str}"')
+            enums_to_write.append("\n".join(lines))
+    
+    for class_name, code in generated_nodes:
+        lines = code.split("\n")
+        # Skip import lines and extract enums
+        enum_lines = []
+        class_lines = []
+        in_enum = False
+        current_enum_name = None
+        current_enum_lines = []
+        skip_imports = True
+        
+        for line in lines:
+            if skip_imports and (not line.strip() or line.startswith("from ") or line.startswith("import ")):
+                continue
+            skip_imports = False
+            
+            if line.startswith("class ") and "(Enum)" in line:
+                # Start of an enum
+                in_enum = True
+                current_enum_name = line.split("(")[0].replace("class ", "").strip()
+                current_enum_lines = [line]
+            elif in_enum:
+                current_enum_lines.append(line)
+                # Check if we reached the end of the enum (empty line or next class)
+                if not line.strip() or (line.startswith("class ") and "(Enum)" not in line and "(FALNode)" in line):
+                    if current_enum_name and current_enum_name not in enums_seen:
+                        enums_seen.add(current_enum_name)
+                        enums_to_write.append("\n".join(current_enum_lines[:-1]))  # Exclude the line that broke the loop
+                    in_enum = False
+                    current_enum_name = None
+                    current_enum_lines = []
+                    # If this is the start of a class, we need to process it
+                    if line.startswith("class ") and "(FALNode)" in line:
+                        class_lines.append(line)
+            else:
+                class_lines.append(line)
+        
+        node_classes.append("\n".join(class_lines))
+    
     with output_file.open("w") as f:
         # Write imports once at the top
         f.write("from enum import Enum\n")
@@ -164,19 +218,16 @@ async def generate_module(
         f.write("from nodetool.workflows.processing_context import ProcessingContext\n")
         f.write("\n\n")
         
-        for i, (class_name, code) in enumerate(generated_nodes):
+        # Write all unique enums
+        for enum_code in enums_to_write:
+            f.write(enum_code)
+            f.write("\n\n\n")
+        
+        # Write all node classes
+        for i, class_code in enumerate(node_classes):
             if i > 0:
                 f.write("\n\n")
-            # Remove imports from individual node code
-            lines = code.split("\n")
-            # Skip import lines
-            start_idx = 0
-            for idx, line in enumerate(lines):
-                if not line.strip() or line.startswith("from ") or line.startswith("import "):
-                    start_idx = idx + 1
-                else:
-                    break
-            f.write("\n".join(lines[start_idx:]))
+            f.write(class_code)
     
     print(f"✓ Generated {len(generated_nodes)} nodes for {module_name}")
     
@@ -242,6 +293,17 @@ async def main():
             "image_to_video": [
                 "fal-ai/pixverse/v5.6/image-to-video",
                 "fal-ai/luma-dream-machine/image-to-video",
+            ],
+            "text_to_image": [
+                "fal-ai/flux/dev",
+                "fal-ai/flux/schnell",
+                "fal-ai/flux-pro/v1.1",
+                "fal-ai/flux-pro/v1.1-ultra",
+                "fal-ai/flux-lora",
+                "fal-ai/ideogram/v2",
+                "fal-ai/ideogram/v2/turbo",
+                "fal-ai/recraft-v3",
+                "fal-ai/stable-diffusion-v35-large",
             ],
             # Add more modules here
         }
