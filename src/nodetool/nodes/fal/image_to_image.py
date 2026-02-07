@@ -22845,7 +22845,7 @@ class MoondreamNextDetection(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-class BriaEraser(FALNode):
+class BriaEraserV2(FALNode):
     """
     Bria Eraser enables precise removal of unwanted objects from images while maintaining high-quality outputs. Trained exclusively on licensed data for safe and risk-free commercial use. Access the model's source code and weights: https://bria.ai/contact-us
     editing, transformation, image-to-image, img2img
@@ -23209,7 +23209,7 @@ class BriaBackgroundRemove(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
-class BriaBackgroundReplace(FALNode):
+class BriaBackgroundReplaceV2(FALNode):
     """
     Bria Background Replace allows for efficient swapping of backgrounds in images via text prompts or reference image, delivering realistic and polished results. Trained exclusively on licensed data for safe and risk-free commercial use 
     editing, transformation, image-to-image, img2img

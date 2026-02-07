@@ -332,7 +332,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
     },
     
     "fal-ai/luma-photon-flash": {
-        "class_name": "LumaPhotonFlash",
+        "class_name": "LumaPhotonFlashVideo",
         "docstring": "Luma Photon Flash generates photorealistic videos quickly with optimized speed.",
         "tags": ["video", "generation", "luma", "photon", "flash", "fast", "text-to-video"],
         "use_cases": [

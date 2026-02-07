@@ -3889,7 +3889,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/bria/eraser": {
-        "class_name": "BriaEraser",
+        "class_name": "BriaEraserV2",
         "docstring": "Bria Eraser enables precise removal of unwanted objects from images while maintaining high-quality outputs. Trained exclusively on licensed data for safe and risk-free commercial use. Access the model's source code and weights: https://bria.ai/contact-us",
         "tags": ["editing", "transformation", "image-to-image", "img2img"],
         "use_cases": [
@@ -3949,7 +3949,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/bria/background/replace": {
-        "class_name": "BriaBackgroundReplace",
+        "class_name": "BriaBackgroundReplaceV2",
         "docstring": "Bria Background Replace allows for efficient swapping of backgrounds in images via text prompts or reference image, delivering realistic and polished results. Trained exclusively on licensed data for safe and risk-free commercial use ",
         "tags": ["editing", "transformation", "image-to-image", "img2img"],
         "use_cases": [
