@@ -186,11 +186,11 @@ class NodeGenerator:
         
         if enum_def.description:
             # Handle multi-line descriptions properly
-            # Strip leading/trailing whitespace and ensure proper indentation
+            # Strip leading/trailing whitespace from each line for clean output
             desc_lines = enum_def.description.strip().split('\n')
             lines.append('    """')
             for desc_line in desc_lines:
-                # Remove excessive leading whitespace but preserve some indentation
+                # Remove all leading whitespace and add consistent indentation
                 stripped = desc_line.strip()
                 if stripped:
                     lines.append(f'    {stripped}')
