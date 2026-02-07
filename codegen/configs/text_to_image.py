@@ -536,7 +536,312 @@ CONFIGS: dict[str, dict[str, Any]] = {
             }
         },
         "basic_fields": ["prompt", "image_size", "guidance_scale"]
-    }
+    },
+
+    # Hunyuan Image V3
+    "fal-ai/hunyuan-image/v3/instruct/text-to-image": {
+        "class_name": "HunyuanImageV3InstructTextToImage",
+        "docstring": "Hunyuan Image v3 Instruct generates high-quality images from text with advanced instruction understanding.",
+        "tags": ["image", "generation", "hunyuan", "v3", "instruct", "text-to-image"],
+        "use_cases": [
+            "Generate images with detailed instructions",
+            "Create artwork with precise text control",
+            "Produce high-quality visual content",
+            "Generate images with advanced understanding",
+            "Create professional visuals from text"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # Qwen Image Family
+    "fal-ai/qwen-image-max/text-to-image": {
+        "class_name": "QwenImageMaxTextToImage",
+        "docstring": "Qwen Image Max generates premium quality images from text with superior detail and accuracy.",
+        "tags": ["image", "generation", "qwen", "max", "premium", "text-to-image"],
+        "use_cases": [
+            "Generate premium quality images",
+            "Create detailed artwork from text",
+            "Produce high-fidelity visual content",
+            "Generate professional-grade images",
+            "Create superior quality visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/qwen-image-2512": {
+        "class_name": "QwenImage2512",
+        "docstring": "Qwen Image 2512 generates high-resolution images from text with excellent quality and detail.",
+        "tags": ["image", "generation", "qwen", "2512", "high-resolution", "text-to-image"],
+        "use_cases": [
+            "Generate high-resolution images",
+            "Create detailed visual content",
+            "Produce quality artwork from text",
+            "Generate images with fine details",
+            "Create high-quality visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/qwen-image-2512/lora": {
+        "class_name": "QwenImage2512Lora",
+        "docstring": "Qwen Image 2512 with LoRA support enables custom-trained models for specialized image generation.",
+        "tags": ["image", "generation", "qwen", "2512", "lora", "custom"],
+        "use_cases": [
+            "Generate images with custom models",
+            "Create specialized visual content",
+            "Produce domain-specific artwork",
+            "Generate images with fine-tuned models",
+            "Create customized visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # Z-Image Family
+    "fal-ai/z-image/base": {
+        "class_name": "ZImageBase",
+        "docstring": "Z-Image Base generates quality images from text with efficient processing and good results.",
+        "tags": ["image", "generation", "z-image", "base", "efficient", "text-to-image"],
+        "use_cases": [
+            "Generate images efficiently",
+            "Create quality artwork from text",
+            "Produce visual content quickly",
+            "Generate images with good performance",
+            "Create efficient visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/z-image/base/lora": {
+        "class_name": "ZImageBaseLora",
+        "docstring": "Z-Image Base with LoRA enables efficient custom-trained models for specialized generation tasks.",
+        "tags": ["image", "generation", "z-image", "base", "lora", "custom"],
+        "use_cases": [
+            "Generate images with custom efficient models",
+            "Create specialized content quickly",
+            "Produce domain-specific visuals",
+            "Generate with fine-tuned base model",
+            "Create efficient custom visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/z-image/turbo": {
+        "class_name": "ZImageTurbo",
+        "docstring": "Z-Image Turbo generates images from text with maximum speed for rapid iteration and prototyping.",
+        "tags": ["image", "generation", "z-image", "turbo", "fast", "text-to-image"],
+        "use_cases": [
+            "Generate images at maximum speed",
+            "Create rapid prototypes from text",
+            "Produce quick visual iterations",
+            "Generate images for fast workflows",
+            "Create instant visual content"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/z-image/turbo/lora": {
+        "class_name": "ZImageTurboLora",
+        "docstring": "Z-Image Turbo with LoRA combines maximum speed with custom models for fast specialized generation.",
+        "tags": ["image", "generation", "z-image", "turbo", "lora", "fast"],
+        "use_cases": [
+            "Generate custom images at turbo speed",
+            "Create specialized content rapidly",
+            "Produce quick domain-specific visuals",
+            "Generate with fast fine-tuned models",
+            "Create instant custom visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # FLUX-2 Klein Family
+    "fal-ai/flux-2/klein/4b": {
+        "class_name": "Flux2Klein4B",
+        "docstring": "FLUX-2 Klein 4B generates images with the efficient 4-billion parameter model for balanced quality and speed.",
+        "tags": ["image", "generation", "flux-2", "klein", "4b", "text-to-image"],
+        "use_cases": [
+            "Generate images with 4B model",
+            "Create balanced quality-speed content",
+            "Produce efficient visual artwork",
+            "Generate images with good performance",
+            "Create optimized visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/flux-2/klein/4b/base": {
+        "class_name": "Flux2Klein4BBase",
+        "docstring": "FLUX-2 Klein 4B Base provides foundation model generation with 4-billion parameters.",
+        "tags": ["image", "generation", "flux-2", "klein", "4b", "base"],
+        "use_cases": [
+            "Generate with base 4B model",
+            "Create foundation quality content",
+            "Produce standard visual artwork",
+            "Generate images with base model",
+            "Create baseline visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/flux-2/klein/4b/base/lora": {
+        "class_name": "Flux2Klein4BBaseLora",
+        "docstring": "FLUX-2 Klein 4B Base with LoRA enables custom-trained 4B models for specialized generation.",
+        "tags": ["image", "generation", "flux-2", "klein", "4b", "base", "lora"],
+        "use_cases": [
+            "Generate with custom 4B base model",
+            "Create specialized foundation content",
+            "Produce domain-specific visuals",
+            "Generate with fine-tuned 4B model",
+            "Create customized baseline visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/flux-2/klein/9b": {
+        "class_name": "Flux2Klein9B",
+        "docstring": "FLUX-2 Klein 9B generates high-quality images with the powerful 9-billion parameter model.",
+        "tags": ["image", "generation", "flux-2", "klein", "9b", "text-to-image"],
+        "use_cases": [
+            "Generate high-quality images with 9B model",
+            "Create superior visual content",
+            "Produce detailed artwork",
+            "Generate images with powerful model",
+            "Create premium quality visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/flux-2/klein/9b/base": {
+        "class_name": "Flux2Klein9BBase",
+        "docstring": "FLUX-2 Klein 9B Base provides foundation generation with the full 9-billion parameter model.",
+        "tags": ["image", "generation", "flux-2", "klein", "9b", "base"],
+        "use_cases": [
+            "Generate with base 9B model",
+            "Create high-quality foundation content",
+            "Produce superior baseline artwork",
+            "Generate images with powerful base",
+            "Create premium baseline visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    "fal-ai/flux-2/klein/9b/base/lora": {
+        "class_name": "Flux2Klein9BBaseLora",
+        "docstring": "FLUX-2 Klein 9B Base with LoRA combines powerful generation with custom-trained models.",
+        "tags": ["image", "generation", "flux-2", "klein", "9b", "base", "lora"],
+        "use_cases": [
+            "Generate with custom 9B base model",
+            "Create specialized high-quality content",
+            "Produce custom superior visuals",
+            "Generate with fine-tuned 9B model",
+            "Create advanced customized visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # FLUX-2 Max
+    "fal-ai/flux-2-max": {
+        "class_name": "Flux2Max",
+        "docstring": "FLUX-2 Max generates maximum quality images with the most advanced FLUX-2 model for premium results.",
+        "tags": ["image", "generation", "flux-2", "max", "premium", "text-to-image"],
+        "use_cases": [
+            "Generate maximum quality images",
+            "Create premium visual content",
+            "Produce professional-grade artwork",
+            "Generate images with best model",
+            "Create superior quality visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # GLM Image
+    "fal-ai/glm-image": {
+        "class_name": "GlmImage",
+        "docstring": "GLM Image generates images from text with advanced AI understanding and quality output.",
+        "tags": ["image", "generation", "glm", "ai", "text-to-image"],
+        "use_cases": [
+            "Generate images with GLM AI",
+            "Create intelligent visual content",
+            "Produce AI-powered artwork",
+            "Generate images with understanding",
+            "Create smart visuals from text"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # GPT Image
+    "fal-ai/gpt-image-1.5": {
+        "class_name": "GptImage15",
+        "docstring": "GPT Image 1.5 generates images from text with GPT-powered language understanding and visual creation.",
+        "tags": ["image", "generation", "gpt", "language-ai", "text-to-image"],
+        "use_cases": [
+            "Generate images with GPT understanding",
+            "Create language-aware visual content",
+            "Produce intelligent artwork",
+            "Generate images with natural language",
+            "Create GPT-powered visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # Wan
+    "wan/v2.6/text-to-image": {
+        "class_name": "WanV26TextToImage",
+        "docstring": "Wan v2.6 generates high-quality images from text with advanced capabilities and consistent results.",
+        "tags": ["image", "generation", "wan", "v2.6", "quality", "text-to-image"],
+        "use_cases": [
+            "Generate quality images with Wan v2.6",
+            "Create consistent visual content",
+            "Produce reliable artwork from text",
+            "Generate images with advanced model",
+            "Create high-quality visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # Longcat Image
+    "fal-ai/longcat-image": {
+        "class_name": "LongcatImage",
+        "docstring": "Longcat Image generates creative and unique images from text with distinctive AI characteristics.",
+        "tags": ["image", "generation", "longcat", "creative", "text-to-image"],
+        "use_cases": [
+            "Generate creative images",
+            "Create unique visual content",
+            "Produce distinctive artwork",
+            "Generate images with character",
+            "Create artistic visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # ByteDance SeeDream
+    "fal-ai/bytedance/seedream/v4.5/text-to-image": {
+        "class_name": "BytedanceSeedreamV45TextToImage",
+        "docstring": "ByteDance SeeDream v4.5 generates advanced images from text with cutting-edge AI technology.",
+        "tags": ["image", "generation", "bytedance", "seedream", "v4.5", "text-to-image"],
+        "use_cases": [
+            "Generate images with SeeDream v4.5",
+            "Create cutting-edge visual content",
+            "Produce advanced AI artwork",
+            "Generate images with latest tech",
+            "Create modern AI visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
+
+    # Vidu
+    "fal-ai/vidu/q2/text-to-image": {
+        "class_name": "ViduQ2TextToImage",
+        "docstring": "Vidu Q2 generates quality images from text with optimized performance and consistent results.",
+        "tags": ["image", "generation", "vidu", "q2", "optimized", "text-to-image"],
+        "use_cases": [
+            "Generate optimized quality images",
+            "Create consistent visual content",
+            "Produce balanced artwork",
+            "Generate images efficiently",
+            "Create reliable visuals"
+        ],
+        "basic_fields": ["prompt"]
+    },
 }
 
 
