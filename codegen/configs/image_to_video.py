@@ -183,6 +183,10 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Create dance previews",
             "Efficient dance video generation"
         ],
+        "enum_overrides": {
+            "Resolution": "SeeDanceV1ProFastResolution",
+            "AspectRatio": "SeeDanceV1ProFastAspectRatio"
+        },
         "basic_fields": ["image", "prompt"]
     },
     
@@ -197,6 +201,10 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate quick dance outputs",
             "Create optimized dance videos"
         ],
+        "enum_overrides": {
+            "Resolution": "SeeDanceV1LiteResolution",
+            "AspectRatio": "SeeDanceV1LiteAspectRatio"
+        },
         "basic_fields": ["image", "reference"]
     },
     

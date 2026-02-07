@@ -91,6 +91,97 @@ class MaskType(Enum):
     AUTOMATIC = "automatic"
 
 
+class RecraftV3ImageToImageStyle(Enum):
+    """
+    The style of the generated images. Vector images cost 2X as much.
+    """
+    ANY = "any"
+    REALISTIC_IMAGE = "realistic_image"
+    DIGITAL_ILLUSTRATION = "digital_illustration"
+    VECTOR_ILLUSTRATION = "vector_illustration"
+    REALISTIC_IMAGE__B_AND_W = "realistic_image/b_and_w"
+    REALISTIC_IMAGE__HARD_FLASH = "realistic_image/hard_flash"
+    REALISTIC_IMAGE__HDR = "realistic_image/hdr"
+    REALISTIC_IMAGE__NATURAL_LIGHT = "realistic_image/natural_light"
+    REALISTIC_IMAGE__STUDIO_PORTRAIT = "realistic_image/studio_portrait"
+    REALISTIC_IMAGE__ENTERPRISE = "realistic_image/enterprise"
+    REALISTIC_IMAGE__MOTION_BLUR = "realistic_image/motion_blur"
+    REALISTIC_IMAGE__EVENING_LIGHT = "realistic_image/evening_light"
+    REALISTIC_IMAGE__FADED_NOSTALGIA = "realistic_image/faded_nostalgia"
+    REALISTIC_IMAGE__FOREST_LIFE = "realistic_image/forest_life"
+    REALISTIC_IMAGE__MYSTIC_NATURALISM = "realistic_image/mystic_naturalism"
+    REALISTIC_IMAGE__NATURAL_TONES = "realistic_image/natural_tones"
+    REALISTIC_IMAGE__ORGANIC_CALM = "realistic_image/organic_calm"
+    REALISTIC_IMAGE__REAL_LIFE_GLOW = "realistic_image/real_life_glow"
+    REALISTIC_IMAGE__RETRO_REALISM = "realistic_image/retro_realism"
+    REALISTIC_IMAGE__RETRO_SNAPSHOT = "realistic_image/retro_snapshot"
+    REALISTIC_IMAGE__URBAN_DRAMA = "realistic_image/urban_drama"
+    REALISTIC_IMAGE__VILLAGE_REALISM = "realistic_image/village_realism"
+    REALISTIC_IMAGE__WARM_FOLK = "realistic_image/warm_folk"
+    DIGITAL_ILLUSTRATION__PIXEL_ART = "digital_illustration/pixel_art"
+    DIGITAL_ILLUSTRATION__HAND_DRAWN = "digital_illustration/hand_drawn"
+    DIGITAL_ILLUSTRATION__GRAIN = "digital_illustration/grain"
+    DIGITAL_ILLUSTRATION__INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
+    DIGITAL_ILLUSTRATION__2D_ART_POSTER = "digital_illustration/2d_art_poster"
+    DIGITAL_ILLUSTRATION__HANDMADE_3D = "digital_illustration/handmade_3d"
+    DIGITAL_ILLUSTRATION__HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
+    DIGITAL_ILLUSTRATION__ENGRAVING_COLOR = "digital_illustration/engraving_color"
+    DIGITAL_ILLUSTRATION__2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
+    DIGITAL_ILLUSTRATION__ANTIQUARIAN = "digital_illustration/antiquarian"
+    DIGITAL_ILLUSTRATION__BOLD_FANTASY = "digital_illustration/bold_fantasy"
+    DIGITAL_ILLUSTRATION__CHILD_BOOK = "digital_illustration/child_book"
+    DIGITAL_ILLUSTRATION__CHILD_BOOKS = "digital_illustration/child_books"
+    DIGITAL_ILLUSTRATION__COVER = "digital_illustration/cover"
+    DIGITAL_ILLUSTRATION__CROSSHATCH = "digital_illustration/crosshatch"
+    DIGITAL_ILLUSTRATION__DIGITAL_ENGRAVING = "digital_illustration/digital_engraving"
+    DIGITAL_ILLUSTRATION__EXPRESSIONISM = "digital_illustration/expressionism"
+    DIGITAL_ILLUSTRATION__FREEHAND_DETAILS = "digital_illustration/freehand_details"
+    DIGITAL_ILLUSTRATION__GRAIN_20 = "digital_illustration/grain_20"
+    DIGITAL_ILLUSTRATION__GRAPHIC_INTENSITY = "digital_illustration/graphic_intensity"
+    DIGITAL_ILLUSTRATION__HARD_COMICS = "digital_illustration/hard_comics"
+    DIGITAL_ILLUSTRATION__LONG_SHADOW = "digital_illustration/long_shadow"
+    DIGITAL_ILLUSTRATION__MODERN_FOLK = "digital_illustration/modern_folk"
+    DIGITAL_ILLUSTRATION__MULTICOLOR = "digital_illustration/multicolor"
+    DIGITAL_ILLUSTRATION__NEON_CALM = "digital_illustration/neon_calm"
+    DIGITAL_ILLUSTRATION__NOIR = "digital_illustration/noir"
+    DIGITAL_ILLUSTRATION__NOSTALGIC_PASTEL = "digital_illustration/nostalgic_pastel"
+    DIGITAL_ILLUSTRATION__OUTLINE_DETAILS = "digital_illustration/outline_details"
+    DIGITAL_ILLUSTRATION__PASTEL_GRADIENT = "digital_illustration/pastel_gradient"
+    DIGITAL_ILLUSTRATION__PASTEL_SKETCH = "digital_illustration/pastel_sketch"
+    DIGITAL_ILLUSTRATION__POP_ART = "digital_illustration/pop_art"
+    DIGITAL_ILLUSTRATION__POP_RENAISSANCE = "digital_illustration/pop_renaissance"
+    DIGITAL_ILLUSTRATION__STREET_ART = "digital_illustration/street_art"
+    DIGITAL_ILLUSTRATION__TABLET_SKETCH = "digital_illustration/tablet_sketch"
+    DIGITAL_ILLUSTRATION__URBAN_GLOW = "digital_illustration/urban_glow"
+    DIGITAL_ILLUSTRATION__URBAN_SKETCHING = "digital_illustration/urban_sketching"
+    DIGITAL_ILLUSTRATION__VANILLA_DREAMS = "digital_illustration/vanilla_dreams"
+    DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK = "digital_illustration/young_adult_book"
+    DIGITAL_ILLUSTRATION__YOUNG_ADULT_BOOK_2 = "digital_illustration/young_adult_book_2"
+    VECTOR_ILLUSTRATION__BOLD_STROKE = "vector_illustration/bold_stroke"
+    VECTOR_ILLUSTRATION__CHEMISTRY = "vector_illustration/chemistry"
+    VECTOR_ILLUSTRATION__COLORED_STENCIL = "vector_illustration/colored_stencil"
+    VECTOR_ILLUSTRATION__CONTOUR_POP_ART = "vector_illustration/contour_pop_art"
+    VECTOR_ILLUSTRATION__COSMICS = "vector_illustration/cosmics"
+    VECTOR_ILLUSTRATION__CUTOUT = "vector_illustration/cutout"
+    VECTOR_ILLUSTRATION__DEPRESSIVE = "vector_illustration/depressive"
+    VECTOR_ILLUSTRATION__EDITORIAL = "vector_illustration/editorial"
+    VECTOR_ILLUSTRATION__EMOTIONAL_FLAT = "vector_illustration/emotional_flat"
+    VECTOR_ILLUSTRATION__INFOGRAPHICAL = "vector_illustration/infographical"
+    VECTOR_ILLUSTRATION__MARKER_OUTLINE = "vector_illustration/marker_outline"
+    VECTOR_ILLUSTRATION__MOSAIC = "vector_illustration/mosaic"
+    VECTOR_ILLUSTRATION__NAIVECTOR = "vector_illustration/naivector"
+    VECTOR_ILLUSTRATION__ROUNDISH_FLAT = "vector_illustration/roundish_flat"
+    VECTOR_ILLUSTRATION__SEGMENTED_COLORS = "vector_illustration/segmented_colors"
+    VECTOR_ILLUSTRATION__SHARP_CONTRAST = "vector_illustration/sharp_contrast"
+    VECTOR_ILLUSTRATION__THIN = "vector_illustration/thin"
+    VECTOR_ILLUSTRATION__VECTOR_PHOTO = "vector_illustration/vector_photo"
+    VECTOR_ILLUSTRATION__VIVID_SHAPES = "vector_illustration/vivid_shapes"
+    VECTOR_ILLUSTRATION__ENGRAVING = "vector_illustration/engraving"
+    VECTOR_ILLUSTRATION__LINE_ART = "vector_illustration/line_art"
+    VECTOR_ILLUSTRATION__LINE_CIRCUIT = "vector_illustration/line_circuit"
+    VECTOR_ILLUSTRATION__LINOCUT = "vector_illustration/linocut"
+
+
 class Scheduler(Enum):
     """
     The scheduler to use for the model.
@@ -348,6 +439,21 @@ class Resolution(Enum):
     """
     VALUE_1K = "1K"
     VALUE_2K = "2K"
+
+
+class KlingImageO1AspectRatio(Enum):
+    """
+    Aspect ratio of generated images. 'auto' intelligently determines based on input content.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+    RATIO_21_9 = "21:9"
 
 
 
@@ -1243,8 +1349,8 @@ class RecraftV3ImageToImage(FALNode):
     prompt: str = Field(
         default="", description="The text prompt describing the desired transformation"
     )
-    style: Style = Field(
-        default=Style.REALISTIC_IMAGE, description="The artistic style to apply"
+    style: RecraftV3ImageToImageStyle = Field(
+        default=RecraftV3ImageToImageStyle.REALISTIC_IMAGE, description="The artistic style to apply"
     )
     style_id: str = Field(
         default="", description="The ID of the custom style reference (optional)"
@@ -5383,8 +5489,8 @@ class KlingImageO1(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_1K, description="Image generation resolution. 1K: standard, 2K: high-res."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="Aspect ratio of generated images. 'auto' intelligently determines based on input content."
+    aspect_ratio: KlingImageO1AspectRatio = Field(
+        default=KlingImageO1AspectRatio.AUTO, description="Aspect ratio of generated images. 'auto' intelligently determines based on input content."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."

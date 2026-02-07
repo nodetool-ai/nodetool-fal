@@ -496,6 +496,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate professional design alternatives",
             "Produce style-coherent image transformations"
         ],
+        "enum_overrides": {
+            "Style": "RecraftV3ImageToImageStyle"
+        },
         "field_overrides": {
             "prompt": {
                 "description": "The text prompt describing the desired transformation"
@@ -1362,6 +1365,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Produce advanced image generations",
             "Generate with balanced quality-speed"
         ],
+        "enum_overrides": {
+            "AspectRatio": "KlingImageO1AspectRatio"
+        },
         "basic_fields": ["image", "prompt"]
     },
 }

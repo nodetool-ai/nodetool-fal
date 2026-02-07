@@ -395,6 +395,7 @@ class SchemaParser:
         # "Digital Art" -> "DIGITAL_ART"
         # "(No style)" -> "NO_STYLE"
         # "realistic_image/b_and_w" -> "REALISTIC_IMAGE__B_AND_W"
+        # "X264 (.mp4)" -> "X264__MP4"
         
         # Remove parentheses and other special characters
         value = value.replace("(", "").replace(")", "")
@@ -408,9 +409,9 @@ class SchemaParser:
         if value.isdigit():
             return f"VALUE_{value}"
         
-        # Replace spaces, hyphens, and slashes with underscores
+        # Replace spaces, hyphens, slashes, dots, and parentheses with underscores
         # Use double underscore for slashes to make them stand out
-        value = value.replace("/", "__").replace(" ", "_").replace("-", "_")
+        value = value.replace("/", "__").replace(" ", "_").replace("-", "_").replace(".", "_").replace("(", "").replace(")", "")
         
         # Convert to uppercase
         result = value.upper()

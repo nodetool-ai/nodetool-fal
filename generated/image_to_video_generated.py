@@ -167,6 +167,49 @@ class Duration(Enum):
     VALUE_12 = "12"
 
 
+class SeeDanceV1ProFastResolution(Enum):
+    """
+    Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+
+class SeeDanceV1ProFastAspectRatio(Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    AUTO = "auto"
+
+
+class SeeDanceV1LiteResolution(Enum):
+    """
+    Video resolution - 480p for faster generation, 720p for higher quality
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+
+class SeeDanceV1LiteAspectRatio(Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    AUTO = "auto"
+
+
 class Style(Enum):
     """
     The style of the generated video
@@ -224,10 +267,10 @@ class VideoOutputType(Enum):
     """
     The output type of the generated video.
     """
-    X264_.MP4 = "X264 (.mp4)"
-    VP9_.WEBM = "VP9 (.webm)"
-    PRORES4444_.MOV = "PRORES4444 (.mov)"
-    GIF_.GIF = "GIF (.gif)"
+    X264__MP4 = "X264 (.mp4)"
+    VP9__WEBM = "VP9 (.webm)"
+    PRORES4444__MOV = "PRORES4444 (.mov)"
+    GIF__GIF = "GIF (.gif)"
 
 
 class VideoQuality(Enum):
@@ -803,14 +846,14 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1080P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
+    resolution: SeeDanceV1ProFastResolution = Field(
+        default=SeeDanceV1ProFastResolution.VALUE_1080P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
     )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Duration of the video in seconds"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video"
+    aspect_ratio: SeeDanceV1ProFastAspectRatio = Field(
+        default=SeeDanceV1ProFastAspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
@@ -872,14 +915,14 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
+    resolution: SeeDanceV1LiteResolution = Field(
+        default=SeeDanceV1LiteResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
     )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Duration of the video in seconds"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video"
+    aspect_ratio: SeeDanceV1LiteAspectRatio = Field(
+        default=SeeDanceV1LiteAspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
     reference_image_urls: list[str] = Field(
         default=[], description="Reference images to generate the video with."
@@ -1638,7 +1681,7 @@ class Ltx219BImageToVideo(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_.MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
     )
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker."
@@ -1778,7 +1821,7 @@ class Ltx219BImageToVideoLora(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_.MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
     )
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker."
@@ -1916,7 +1959,7 @@ class Ltx219BDistilledImageToVideo(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_.MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -2048,7 +2091,7 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
     video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_.MP4, description="The output type of the generated video."
+        default=VideoOutputType.X264__MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
