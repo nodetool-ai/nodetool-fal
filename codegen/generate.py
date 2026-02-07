@@ -311,6 +311,24 @@ async def main():
                 "fal-ai/omnigen-v1",
                 "fal-ai/sana",
             ],
+            "image_to_image": [
+                "fal-ai/flux/schnell/redux",
+                "fal-ai/flux/dev/redux",
+                "fal-ai/flux-pro/v1/redux",
+                "fal-ai/ideogram/v2/edit",
+                "fal-ai/ideogram/v2/remix",
+                "fal-ai/ideogram/v3/edit",
+                "fal-ai/flux-pro/v1/fill",
+                "fal-ai/flux-pro/v1/canny",
+                "fal-ai/flux-pro/v1/depth",
+                "bria/eraser",
+                "bria/replace-background",
+                "fal-ai/clarity-upscaler",
+                "fal-ai/recraft/v3/image-to-image",
+                "fal-ai/kolors/image-to-image",
+                "fal-ai/birefnet",
+                "fal-ai/codeformer",
+            ],
             # Add more modules here
         }
         
