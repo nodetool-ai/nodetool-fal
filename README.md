@@ -24,7 +24,7 @@ The package defines nodes grouped by modality. Each node is a subclass of `FALNo
 
 ### Dynamic Schema
 
-- **DynamicFalSchema** – call any fal.ai model by supplying a `llms.txt` URL, a fal.ai model URL, an endpoint id (e.g. `fal-ai/foo/bar`), or raw `llms.txt` content in the **model_info** field. The node fetches the OpenAPI schema from fal.ai, then **automatically fills all inputs and outputs** from that schema—you do not add inputs or outputs one by one.
+- **FalAI** – call any fal.ai model by supplying a `llms.txt` URL, a fal.ai model URL, an endpoint id (e.g. `fal-ai/foo/bar`), or raw `llms.txt` content in the **model_info** field. The node fetches the OpenAPI schema from fal.ai, then **automatically fills all inputs and outputs** from that schema—you do not add inputs or outputs one by one.
 
   **How it works**
 

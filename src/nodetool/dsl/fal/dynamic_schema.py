@@ -24,7 +24,7 @@ import nodetool.nodes.fal.dynamic_schema
 from nodetool.workflows.base_node import BaseNode
 
 
-class DynamicFalSchema(GraphNode[dict[str, Any]]):
+class FalAI(GraphNode[dict[str, Any]]):
     """
 
         Dynamic FAL schema-driven node for running any fal.ai endpoint.
@@ -42,7 +42,7 @@ class DynamicFalSchema(GraphNode[dict[str, Any]]):
     dynamic_properties dictionary.
 
     Example:
-        node = DynamicFalSchema(prop1=value1, prop2=value2)
+        node = FalAI(prop1=value1, prop2=value2)
     """
 
     model_info: str | OutputHandle[str] = connect_field(
@@ -57,7 +57,7 @@ class DynamicFalSchema(GraphNode[dict[str, Any]]):
         **kwargs: typing.Any,
     ) -> None:
         """
-        Initialize a DynamicFalSchema node.
+        Initialize a FalAI node.
 
         Extra keyword arguments beyond the defined fields will be treated as
         dynamic properties and automatically passed to the underlying BaseNode
@@ -81,7 +81,7 @@ class DynamicFalSchema(GraphNode[dict[str, Any]]):
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
-        return nodetool.nodes.fal.dynamic_schema.DynamicFalSchema
+        return nodetool.nodes.fal.dynamic_schema.FalAI
 
     @classmethod
     def get_node_type(cls):

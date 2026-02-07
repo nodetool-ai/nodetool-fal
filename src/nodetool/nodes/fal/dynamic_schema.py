@@ -43,9 +43,9 @@ class FalSchemaBundle:
     llm_info: str | None
 
 
-class DynamicFalSchema(FALNode):
+class FalAI(FALNode):
     """
-    Dynamic FAL schema-driven node for running any fal.ai endpoint.
+    Dynamic FAL node for running any fal.ai endpoint.
     fal, schema, dynamic, openapi, inference, runtime, model
 
     Use cases:
@@ -53,7 +53,6 @@ class DynamicFalSchema(FALNode):
     - Prototype workflows with experimental FAL models
     - Run custom endpoints by sharing model info (llms.txt)
     - Build flexible pipelines that depend on runtime model selection
-    - Explore model inputs/outputs directly from OpenAPI metadata
     """
 
     _is_dynamic = True
@@ -192,7 +191,10 @@ class DynamicFalSchema(FALNode):
         for name, prop_schema in schema_props.items():
             if name not in self._dynamic_properties:
                 self._dynamic_properties[name] = _default_value_for_input_property(
-                    bundle.openapi, prop_schema, required=(name in required)
+                    bundle.openapi,
+                    prop_schema,
+                    required=(name in required),
+                    prop_name=name,
                 )
 
     async def _build_arguments(
@@ -212,6 +214,11 @@ class DynamicFalSchema(FALNode):
         for name, prop_schema in schema_props.items():
             value = input_values.get(name)
             if value is None:
+                if name in required_props:
+                    raise ValueError(f"Missing required input: {name}")
+                continue
+            is_url_array = _is_url_or_image_array(openapi, name, prop_schema)
+            if value == [] and is_url_array:
                 if name in required_props:
                     raise ValueError(f"Missing required input: {name}")
                 continue
@@ -568,7 +575,7 @@ async def _coerce_input_value(
     schema: dict[str, Any],
     value: Any,
     context: ProcessingContext,
-    node: DynamicFalSchema,
+    node: FalAI,
 ) -> Any:
     resolved = _resolve_schema_ref(openapi, schema)
 
@@ -620,7 +627,7 @@ def _coerce_asset_ref(value: Any) -> AssetRef | None:
 async def _serialize_asset_ref(
     asset_ref: AssetRef,
     context: ProcessingContext,
-    node: DynamicFalSchema,
+    node: FalAI,
 ) -> str:
     if asset_ref.uri and asset_ref.uri.startswith(("http://", "https://", "data:")):
         return asset_ref.uri
@@ -727,11 +734,31 @@ def _infer_asset_type(name: str) -> str:
     return "asset"
 
 
+def _is_url_or_image_array(
+    openapi: dict[str, Any], name: str, prop_schema: dict[str, Any]
+) -> bool:
+    """True if this array property expects URLs/images (do not default to [] or send [])."""
+    resolved = _resolve_schema_ref(openapi, prop_schema)
+    if resolved.get("type") != "array":
+        return False
+    name_lower = name.lower()
+    if "url" in name_lower or "image" in name_lower or "video" in name_lower:
+        return True
+    items = resolved.get("items")
+    if not items:
+        return False
+    item = _resolve_schema_ref(openapi, items)
+    if item.get("format") == "uri" or item.get("format") == "url":
+        return True
+    return False
+
+
 def _default_value_for_input_property(
     openapi: dict[str, Any],
     prop_schema: dict[str, Any],
     *,
     required: bool = False,
+    prop_name: str | None = None,
 ) -> Any:
     """Return a default value for an input property from its JSON schema (for UI slots)."""
     resolved = _resolve_schema_ref(openapi, prop_schema)
@@ -745,6 +772,12 @@ def _default_value_for_input_property(
     if kind == "boolean":
         return False
     if kind == "array":
+        if (
+            required
+            and prop_name
+            and _is_url_or_image_array(openapi, prop_name, prop_schema)
+        ):
+            return None
         return []
     if kind == "object":
         return None
@@ -766,6 +799,13 @@ def _infer_output_type(
 ) -> TypeMetadata:
     resolved = _resolve_schema_ref(openapi, schema)
     if resolved.get("type") == "array":
+        # Map API string[] URL fields to nodetool list[image], list[video], etc.
+        if _is_url_or_image_array(openapi, name, schema):
+            asset_type = _infer_asset_type(name)
+            return TypeMetadata(
+                type="list",
+                type_args=[TypeMetadata(type=asset_type)],
+            )
         item_schema = resolved.get("items") or {}
         return TypeMetadata(
             type="list",
@@ -806,16 +846,51 @@ def _parse_pasted_openapi(raw: str) -> dict[str, Any] | None:
         return None
 
 
+def _build_input_types(
+    openapi: dict[str, Any], input_schema: dict[str, Any]
+) -> dict[str, tuple[TypeMetadata, str | None]]:
+    """Build (TypeMetadata, description) for each input from JSON schema."""
+    properties = input_schema.get("properties", {})
+    out: dict[str, tuple[TypeMetadata, str | None]] = {}
+    for name, prop_schema in properties.items():
+        resolved = _resolve_schema_ref(openapi, prop_schema)
+        meta = _infer_output_type(openapi, name, prop_schema)
+        desc = resolved.get("description")
+        out[name] = (meta, desc)
+    return out
+
+
 def _schema_bundle_to_resolve_result(bundle: FalSchemaBundle) -> dict[str, Any]:
     """Build the resolve_dynamic_schema return dict from a parsed bundle."""
     schema_props = bundle.input_schema.get("properties", {})
     required = set(bundle.input_schema.get("required", []))
     dynamic_properties = {
         name: _default_value_for_input_property(
-            bundle.openapi, prop_schema, required=(name in required)
+            bundle.openapi,
+            prop_schema,
+            required=(name in required),
+            prop_name=name,
         )
         for name, prop_schema in schema_props.items()
     }
+    input_type_tuples = _build_input_types(
+        bundle.openapi, bundle.input_schema
+    )
+    dynamic_inputs = {}
+    for name, (meta, desc) in input_type_tuples.items():
+        entry: dict[str, Any] = _type_metadata_to_dict(meta)
+        if desc is not None:
+            entry["description"] = desc
+        # Min/max for number inputs (JSON schema minimum/maximum)
+        prop_schema = schema_props.get(name)
+        if prop_schema is not None:
+            resolved_prop = _resolve_schema_ref(bundle.openapi, prop_schema)
+            if meta.type in ("int", "float"):
+                if "minimum" in resolved_prop:
+                    entry["min"] = resolved_prop["minimum"]
+                if "maximum" in resolved_prop:
+                    entry["max"] = resolved_prop["maximum"]
+        dynamic_inputs[name] = entry
     output_types = _build_output_types(
         bundle.openapi, bundle.output_schema
     )
@@ -828,6 +903,7 @@ def _schema_bundle_to_resolve_result(bundle: FalSchemaBundle) -> dict[str, Any]:
     return {
         "endpoint_id": bundle.endpoint_id,
         "dynamic_properties": dynamic_properties,
+        "dynamic_inputs": dynamic_inputs,
         "dynamic_outputs": dynamic_outputs,
         "fal_input_schema": bundle.input_schema,
         "fal_output_schema": bundle.output_schema,
@@ -838,13 +914,14 @@ async def resolve_dynamic_schema(model_info: str) -> dict[str, Any]:
     """
     Resolve the OpenAPI schema for a given model_info (pasted OpenAPI JSON, llms.txt,
     URL, or endpoint id) and return a payload the UI can use to populate the
-    DynamicFalSchema node without running it.
+    FalAI node without running it.
 
     Call this when the user pastes a URL or changes model_info so the node can show all
-    inputs and outputs immediately. Returns dict with:
+    inputs and outputs immediately.     Returns dict with:
       - endpoint_id: str
       - dynamic_properties: dict[str, Any]  (input name -> default value)
-      - dynamic_outputs: dict[str, dict]    (output name -> TypeMetadata-like dict)
+      - dynamic_inputs: dict[str, dict]    (input name -> TypeMetadata-like + description)
+      - dynamic_outputs: dict[str, dict]   (output name -> TypeMetadata-like dict)
       - fal_input_schema: dict (JSON schema)
       - fal_output_schema: dict (JSON schema)
     """
@@ -868,7 +945,7 @@ async def resolve_dynamic_schema(model_info: str) -> dict[str, Any]:
             "model_info must be pasted OpenAPI JSON, llms.txt, fal.ai URL, or endpoint id"
         )
 
-    cache_dir = DynamicFalSchema._cache_dir()
+    cache_dir = FalAI._cache_dir()
     cache_key = _cache_key_for_model_info(
         model_info_text, model_info_url, endpoint_hint
     )

@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from nodetool.metadata.types import VideoRef
 from nodetool.nodes.fal.dynamic_schema import (
-    DynamicFalSchema,
+    FalAI,
     _build_output_types,
     _map_output_values,
     _normalize_model_info,
@@ -155,7 +155,7 @@ def test_output_types_and_mapping():
 @pytest.mark.asyncio
 async def test_build_arguments_skips_none():
     bundle = _parse_openapi_schema(SCHEMA_EXAMPLE, llm_info=None)
-    node = DynamicFalSchema()
+    node = FalAI()
     arguments = await node._build_arguments(
         bundle.openapi,
         bundle.input_schema,
