@@ -312,6 +312,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Design marketing materials with brand colors",
             "Create cohesive visual content series"
         ],
+        "enum_overrides": {
+            "Style": "RecraftV3Style"
+        },
         "field_overrides": {
             "prompt": {
                 "description": "The prompt to generate an image from"

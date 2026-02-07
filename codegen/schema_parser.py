@@ -394,6 +394,7 @@ class SchemaParser:
         # "3D Model" -> "MODEL_3D"
         # "Digital Art" -> "DIGITAL_ART"
         # "(No style)" -> "NO_STYLE"
+        # "realistic_image/b_and_w" -> "REALISTIC_IMAGE__B_AND_W"
         
         # Remove parentheses and other special characters
         value = value.replace("(", "").replace(")", "")
@@ -407,8 +408,9 @@ class SchemaParser:
         if value.isdigit():
             return f"VALUE_{value}"
         
-        # Replace spaces and hyphens with underscores
-        value = value.replace(" ", "_").replace("-", "_")
+        # Replace spaces, hyphens, and slashes with underscores
+        # Use double underscore for slashes to make them stand out
+        value = value.replace("/", "__").replace(" ", "_").replace("-", "_")
         
         # Convert to uppercase
         result = value.upper()

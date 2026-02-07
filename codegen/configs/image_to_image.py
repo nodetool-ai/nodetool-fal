@@ -8,8 +8,19 @@ from typing import Any
 
 
 # Shared enums used across multiple nodes
-# Import ImageSizePreset from text_to_image module
-SHARED_ENUMS = {}
+SHARED_ENUMS = {
+    "ImageSizePreset": {
+        "values": [
+            ("SQUARE_HD", "square_hd"),
+            ("SQUARE", "square"),
+            ("PORTRAIT_4_3", "portrait_4_3"),
+            ("PORTRAIT_16_9", "portrait_16_9"),
+            ("LANDSCAPE_4_3", "landscape_4_3"),
+            ("LANDSCAPE_16_9", "landscape_16_9"),
+        ],
+        "description": "Preset sizes for image generation"
+    }
+}
 
 
 # Map of endpoint_id to config overrides

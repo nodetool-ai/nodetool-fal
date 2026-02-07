@@ -6,6 +6,16 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
+class ImageSizePreset(str, Enum):
+    """Preset sizes for image generation"""
+    SQUARE_HD = "square_hd"
+    SQUARE = "square"
+    PORTRAIT_4_3 = "portrait_4_3"
+    PORTRAIT_16_9 = "portrait_16_9"
+    LANDSCAPE_4_3 = "landscape_4_3"
+    LANDSCAPE_16_9 = "landscape_16_9"
+
+
 class Acceleration(Enum):
     """
     The speed of the generation. The higher the speed, the faster the generation.
