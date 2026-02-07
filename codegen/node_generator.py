@@ -185,7 +185,17 @@ class NodeGenerator:
         lines = [f"class {enum_def.name}(Enum):"]
         
         if enum_def.description:
-            lines.append(f'    """{enum_def.description}"""')
+            # Handle multi-line descriptions properly
+            # Strip leading/trailing whitespace and ensure proper indentation
+            desc_lines = enum_def.description.strip().split('\n')
+            lines.append('    """')
+            for desc_line in desc_lines:
+                # Remove excessive leading whitespace but preserve some indentation
+                stripped = desc_line.strip()
+                if stripped:
+                    lines.append(f'    {stripped}')
+                # Skip completely empty lines in docstrings to avoid confusing the enum extractor
+            lines.append('    """')
         
         for enum_name, value in enum_def.values:
             lines.append(f'    {enum_name} = "{value}"')
