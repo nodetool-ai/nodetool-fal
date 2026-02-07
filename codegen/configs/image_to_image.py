@@ -575,6 +575,784 @@ CONFIGS: dict[str, dict[str, Any]] = {
         },
         "basic_fields": ["image", "fidelity"]
     },
+
+    # Hunyuan Image Family
+    "fal-ai/hunyuan-image/v3/instruct/edit": {
+        "class_name": "HunyuanImageV3InstructEdit",
+        "docstring": "Hunyuan Image v3 Instruct Edit allows precise image editing through natural language instructions with advanced understanding.",
+        "tags": ["image", "editing", "hunyuan", "instruct", "ai-editing"],
+        "use_cases": [
+            "Edit images using natural language instructions",
+            "Modify specific elements in photos with text commands",
+            "Apply precise adjustments through conversational editing",
+            "Transform images with instruction-based control",
+            "Create variations with detailed text guidance"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Qwen Image Family - Max Edit
+    "fal-ai/qwen-image-max/edit": {
+        "class_name": "QwenImageMaxEdit",
+        "docstring": "Qwen Image Max Edit provides powerful image editing capabilities with advanced AI understanding and high-quality results.",
+        "tags": ["image", "editing", "qwen", "max", "ai-editing"],
+        "use_cases": [
+            "Edit images with advanced AI understanding",
+            "Apply complex modifications to photos",
+            "Transform images with high-quality results",
+            "Create professional edits with natural prompts",
+            "Modify images with precise control"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Qwen Image Family - 2511 Series
+    "fal-ai/qwen-image-edit-2511": {
+        "class_name": "QwenImageEdit2511",
+        "docstring": "Qwen Image Edit 2511 provides state-of-the-art image editing with latest AI advancements and improved quality.",
+        "tags": ["image", "editing", "qwen", "2511", "latest"],
+        "use_cases": [
+            "Edit images with latest Qwen technology",
+            "Apply advanced modifications to photos",
+            "Create high-quality edits with AI assistance",
+            "Transform images with cutting-edge models",
+            "Produce professional image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/qwen-image-edit-2511/lora": {
+        "class_name": "QwenImageEdit2511Lora",
+        "docstring": "Qwen Image Edit 2511 with LoRA support enables custom-trained models for specialized editing tasks.",
+        "tags": ["image", "editing", "qwen", "lora", "custom"],
+        "use_cases": [
+            "Edit images with custom-trained models",
+            "Apply specialized modifications using LoRA",
+            "Create domain-specific edits",
+            "Transform images with fine-tuned models",
+            "Produce customized image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/qwen-image-edit-2511-multiple-angles": {
+        "class_name": "QwenImageEdit2511MultipleAngles",
+        "docstring": "Qwen Image Edit 2511 Multiple Angles generates images from different viewpoints based on a single input image.",
+        "tags": ["image", "editing", "qwen", "multi-angle", "viewpoint"],
+        "use_cases": [
+            "Generate multiple viewpoints from single image",
+            "Create product views from different angles",
+            "Visualize objects from various perspectives",
+            "Produce multi-angle image sets",
+            "Transform images to show different sides"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Qwen Image Family - 2509 Series
+    "fal-ai/qwen-image-edit-2509": {
+        "class_name": "QwenImageEdit2509",
+        "docstring": "Qwen Image Edit 2509 provides powerful image editing with advanced AI capabilities and high-quality output.",
+        "tags": ["image", "editing", "qwen", "2509", "ai-editing"],
+        "use_cases": [
+            "Edit images with Qwen 2509 technology",
+            "Apply sophisticated modifications to photos",
+            "Create quality edits with AI assistance",
+            "Transform images with advanced models",
+            "Produce professional image changes"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/qwen-image-edit-2509-lora": {
+        "class_name": "QwenImageEdit2509Lora",
+        "docstring": "Qwen Image Edit 2509 with LoRA enables fine-tuned models for specialized image editing applications.",
+        "tags": ["image", "editing", "qwen", "lora", "fine-tuned"],
+        "use_cases": [
+            "Edit images with fine-tuned models",
+            "Apply custom modifications using LoRA",
+            "Create specialized edits for specific domains",
+            "Transform images with trained models",
+            "Produce tailored image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Qwen Image Layered
+    "fal-ai/qwen-image-layered": {
+        "class_name": "QwenImageLayered",
+        "docstring": "Qwen Image Layered provides layer-based image editing for complex compositions and precise control.",
+        "tags": ["image", "editing", "qwen", "layered", "composition"],
+        "use_cases": [
+            "Edit images with layer-based control",
+            "Create complex compositions",
+            "Apply modifications to specific layers",
+            "Build multi-layer image edits",
+            "Produce sophisticated image compositions"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/qwen-image-layered/lora": {
+        "class_name": "QwenImageLayeredLora",
+        "docstring": "Qwen Image Layered with LoRA combines layer-based editing with custom-trained models for specialized tasks.",
+        "tags": ["image", "editing", "qwen", "layered", "lora"],
+        "use_cases": [
+            "Edit layered images with custom models",
+            "Create specialized layer compositions",
+            "Apply fine-tuned modifications",
+            "Build complex edits with trained models",
+            "Produce custom layer-based results"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # FLUX-2 Klein Family - Base Edit
+    "fal-ai/flux-2/klein/4b/base/edit": {
+        "class_name": "Flux2Klein4BBaseEdit",
+        "docstring": "FLUX-2 Klein 4B Base Edit provides fast image editing with the 4-billion parameter model.",
+        "tags": ["image", "editing", "flux-2", "klein", "4b"],
+        "use_cases": [
+            "Edit images with FLUX-2 Klein 4B",
+            "Apply fast modifications to photos",
+            "Create quick edits with AI assistance",
+            "Transform images efficiently",
+            "Produce rapid image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2/klein/4b/base/edit/lora": {
+        "class_name": "Flux2Klein4BBaseEditLora",
+        "docstring": "FLUX-2 Klein 4B Base Edit with LoRA enables custom-trained models for specialized editing.",
+        "tags": ["image", "editing", "flux-2", "klein", "4b", "lora"],
+        "use_cases": [
+            "Edit images with custom FLUX-2 models",
+            "Apply specialized modifications using LoRA",
+            "Create domain-specific edits",
+            "Transform images with fine-tuned 4B model",
+            "Produce customized modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2/klein/9b/base/edit": {
+        "class_name": "Flux2Klein9BBaseEdit",
+        "docstring": "FLUX-2 Klein 9B Base Edit provides high-quality image editing with the 9-billion parameter model.",
+        "tags": ["image", "editing", "flux-2", "klein", "9b"],
+        "use_cases": [
+            "Edit images with FLUX-2 Klein 9B",
+            "Apply high-quality modifications to photos",
+            "Create advanced edits with powerful AI",
+            "Transform images with superior quality",
+            "Produce professional image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2/klein/9b/base/edit/lora": {
+        "class_name": "Flux2Klein9BBaseEditLora",
+        "docstring": "FLUX-2 Klein 9B Base Edit with LoRA combines powerful editing with custom-trained models.",
+        "tags": ["image", "editing", "flux-2", "klein", "9b", "lora"],
+        "use_cases": [
+            "Edit images with custom 9B models",
+            "Apply specialized high-quality modifications",
+            "Create professional custom edits",
+            "Transform images with fine-tuned powerful model",
+            "Produce advanced customized results"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # FLUX-2 Klein Family - Standard Edit
+    "fal-ai/flux-2/klein/4b/edit": {
+        "class_name": "Flux2Klein4BEdit",
+        "docstring": "FLUX-2 Klein 4B Edit provides efficient image editing with the streamlined 4-billion parameter model.",
+        "tags": ["image", "editing", "flux-2", "klein", "4b", "efficient"],
+        "use_cases": [
+            "Edit images efficiently with FLUX-2",
+            "Apply quick modifications to photos",
+            "Create fast edits for rapid workflows",
+            "Transform images with streamlined model",
+            "Produce quick image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2/klein/9b/edit": {
+        "class_name": "Flux2Klein9BEdit",
+        "docstring": "FLUX-2 Klein 9B Edit provides advanced image editing with the full 9-billion parameter model.",
+        "tags": ["image", "editing", "flux-2", "klein", "9b", "advanced"],
+        "use_cases": [
+            "Edit images with advanced FLUX-2 model",
+            "Apply sophisticated modifications",
+            "Create high-quality edits",
+            "Transform images with powerful AI",
+            "Produce superior image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # FLUX-2 Other Variants
+    "fal-ai/flux-2/flash/edit": {
+        "class_name": "Flux2FlashEdit",
+        "docstring": "FLUX-2 Flash Edit provides ultra-fast image editing for rapid iteration and quick modifications.",
+        "tags": ["image", "editing", "flux-2", "flash", "ultra-fast"],
+        "use_cases": [
+            "Edit images with ultra-fast processing",
+            "Apply instant modifications to photos",
+            "Create rapid edits for quick turnaround",
+            "Transform images at maximum speed",
+            "Produce instant image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2/turbo/edit": {
+        "class_name": "Flux2TurboEdit",
+        "docstring": "FLUX-2 Turbo Edit provides accelerated image editing with balanced quality and speed.",
+        "tags": ["image", "editing", "flux-2", "turbo", "fast"],
+        "use_cases": [
+            "Edit images with turbo speed",
+            "Apply fast modifications with good quality",
+            "Create quick edits efficiently",
+            "Transform images rapidly",
+            "Produce fast quality modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2-max/edit": {
+        "class_name": "Flux2MaxEdit",
+        "docstring": "FLUX-2 Max Edit provides maximum quality image editing with the most advanced FLUX-2 model.",
+        "tags": ["image", "editing", "flux-2", "max", "premium"],
+        "use_cases": [
+            "Edit images with maximum quality",
+            "Apply premium modifications to photos",
+            "Create professional-grade edits",
+            "Transform images with best quality",
+            "Produce highest quality modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2-flex/edit": {
+        "class_name": "Flux2FlexEdit",
+        "docstring": "FLUX-2 Flex Edit provides flexible image editing with customizable parameters and versatile control.",
+        "tags": ["image", "editing", "flux-2", "flex", "versatile"],
+        "use_cases": [
+            "Edit images with flexible controls",
+            "Apply customizable modifications",
+            "Create versatile edits",
+            "Transform images with adaptable settings",
+            "Produce flexible image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # FLUX-2 LoRA Gallery
+    "fal-ai/flux-2-lora-gallery/virtual-tryon": {
+        "class_name": "Flux2LoraGalleryVirtualTryon",
+        "docstring": "FLUX-2 LoRA Gallery Virtual Try-on enables realistic clothing and accessory visualization on people.",
+        "tags": ["image", "editing", "flux-2", "virtual-tryon", "fashion"],
+        "use_cases": [
+            "Visualize clothing on models",
+            "Try on accessories virtually",
+            "Create fashion previews",
+            "Test product appearances",
+            "Generate try-on images"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2-lora-gallery/multiple-angles": {
+        "class_name": "Flux2LoraGalleryMultipleAngles",
+        "docstring": "FLUX-2 LoRA Gallery Multiple Angles generates images from different viewpoints for comprehensive visualization.",
+        "tags": ["image", "editing", "flux-2", "multi-angle", "viewpoint"],
+        "use_cases": [
+            "Generate multiple product angles",
+            "Create viewpoint variations",
+            "Visualize objects from different sides",
+            "Produce multi-angle image sets",
+            "Generate comprehensive views"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2-lora-gallery/face-to-full-portrait": {
+        "class_name": "Flux2LoraGalleryFaceToFullPortrait",
+        "docstring": "FLUX-2 LoRA Gallery Face to Full Portrait expands face crops into complete portrait images.",
+        "tags": ["image", "editing", "flux-2", "portrait", "expansion"],
+        "use_cases": [
+            "Expand face crops to full portraits",
+            "Generate complete portrait from face",
+            "Create full-body images from headshots",
+            "Extend facial images to portraits",
+            "Produce complete portrait compositions"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/flux-2-lora-gallery/add-background": {
+        "class_name": "Flux2LoraGalleryAddBackground",
+        "docstring": "FLUX-2 LoRA Gallery Add Background places subjects in new environments with realistic integration.",
+        "tags": ["image", "editing", "flux-2", "background", "compositing"],
+        "use_cases": [
+            "Add backgrounds to cutout images",
+            "Place subjects in new environments",
+            "Create realistic background compositions",
+            "Generate contextual settings",
+            "Produce integrated background images"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Bria FIBO Edit Suite
+    "bria/fibo-edit/edit": {
+        "class_name": "BriaFiboEdit",
+        "docstring": "Bria FIBO Edit provides general-purpose image editing with AI-powered modifications and enhancements.",
+        "tags": ["image", "editing", "bria", "fibo", "general"],
+        "use_cases": [
+            "Edit images with general-purpose AI",
+            "Apply various modifications to photos",
+            "Create edited versions of images",
+            "Transform images with flexible edits",
+            "Produce AI-powered modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/add_object_by_text": {
+        "class_name": "BriaFiboEditAddObjectByText",
+        "docstring": "Bria FIBO Edit Add Object by Text inserts new objects into images using text descriptions.",
+        "tags": ["image", "editing", "bria", "fibo", "object-insertion"],
+        "use_cases": [
+            "Add objects to images with text",
+            "Insert elements using descriptions",
+            "Place new items in scenes",
+            "Augment images with additional objects",
+            "Generate object additions"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/erase_by_text": {
+        "class_name": "BriaFiboEditEraseByText",
+        "docstring": "Bria FIBO Edit Erase by Text removes objects from images using natural language descriptions.",
+        "tags": ["image", "editing", "bria", "fibo", "object-removal"],
+        "use_cases": [
+            "Remove objects using text descriptions",
+            "Erase unwanted elements from photos",
+            "Clean up images by describing what to remove",
+            "Delete specific items from scenes",
+            "Remove objects with natural language"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/replace_object_by_text": {
+        "class_name": "BriaFiboEditReplaceObjectByText",
+        "docstring": "Bria FIBO Edit Replace Object by Text replaces objects in images with new ones specified by text.",
+        "tags": ["image", "editing", "bria", "fibo", "object-replacement"],
+        "use_cases": [
+            "Replace objects using text descriptions",
+            "Swap elements in photos",
+            "Change specific items in scenes",
+            "Transform objects with text guidance",
+            "Substitute objects with new ones"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/blend": {
+        "class_name": "BriaFiboEditBlend",
+        "docstring": "Bria FIBO Edit Blend seamlessly combines multiple images or elements with natural transitions.",
+        "tags": ["image", "editing", "bria", "fibo", "blending"],
+        "use_cases": [
+            "Blend multiple images together",
+            "Create seamless compositions",
+            "Merge elements naturally",
+            "Combine images with smooth transitions",
+            "Generate blended composites"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/colorize": {
+        "class_name": "BriaFiboEditColorize",
+        "docstring": "Bria FIBO Edit Colorize adds realistic colors to grayscale or black-and-white images.",
+        "tags": ["image", "editing", "bria", "fibo", "colorization"],
+        "use_cases": [
+            "Colorize black and white photos",
+            "Add colors to grayscale images",
+            "Restore color in old photographs",
+            "Transform monochrome to color",
+            "Generate colored versions of grayscale images"
+        ],
+        "basic_fields": ["image"]
+    },
+
+    "bria/fibo-edit/restore": {
+        "class_name": "BriaFiboEditRestore",
+        "docstring": "Bria FIBO Edit Restore repairs and enhances damaged or degraded images with AI reconstruction.",
+        "tags": ["image", "editing", "bria", "fibo", "restoration"],
+        "use_cases": [
+            "Restore damaged photographs",
+            "Repair degraded images",
+            "Enhance old photo quality",
+            "Fix scratches and artifacts",
+            "Reconstruct missing image parts"
+        ],
+        "basic_fields": ["image"]
+    },
+
+    "bria/fibo-edit/restyle": {
+        "class_name": "BriaFiboEditRestyle",
+        "docstring": "Bria FIBO Edit Restyle transforms images with artistic style transfers and visual aesthetics.",
+        "tags": ["image", "editing", "bria", "fibo", "style-transfer"],
+        "use_cases": [
+            "Apply artistic styles to images",
+            "Transform photos with new aesthetics",
+            "Create stylized versions of images",
+            "Generate artistic variations",
+            "Produce style-transferred images"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/relight": {
+        "class_name": "BriaFiboEditRelight",
+        "docstring": "Bria FIBO Edit Relight adjusts lighting conditions in images for dramatic or natural effects.",
+        "tags": ["image", "editing", "bria", "fibo", "relighting"],
+        "use_cases": [
+            "Adjust lighting in photos",
+            "Change illumination conditions",
+            "Create dramatic lighting effects",
+            "Relight scenes for better ambiance",
+            "Transform lighting in images"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/reseason": {
+        "class_name": "BriaFiboEditReseason",
+        "docstring": "Bria FIBO Edit Reseason changes the seasonal appearance of outdoor scenes in images.",
+        "tags": ["image", "editing", "bria", "fibo", "seasonal"],
+        "use_cases": [
+            "Change seasons in outdoor photos",
+            "Transform summer to winter scenes",
+            "Modify seasonal appearance",
+            "Create seasonal variations",
+            "Generate different season versions"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/rewrite_text": {
+        "class_name": "BriaFiboEditRewriteText",
+        "docstring": "Bria FIBO Edit Rewrite Text modifies or replaces text content within images naturally.",
+        "tags": ["image", "editing", "bria", "fibo", "text-editing"],
+        "use_cases": [
+            "Change text in images",
+            "Replace written content in photos",
+            "Modify signs and labels",
+            "Update text naturally in scenes",
+            "Edit textual elements in images"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "bria/fibo-edit/sketch_to_colored_image": {
+        "class_name": "BriaFiboEditSketchToColoredImage",
+        "docstring": "Bria FIBO Edit Sketch to Colored Image transforms sketches and line art into full-color images.",
+        "tags": ["image", "editing", "bria", "fibo", "sketch-to-image"],
+        "use_cases": [
+            "Convert sketches to colored images",
+            "Transform line art to full color",
+            "Generate colored versions of drawings",
+            "Create realistic images from sketches",
+            "Produce colored artwork from outlines"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # GLM Image
+    "fal-ai/glm-image/image-to-image": {
+        "class_name": "GlmImageImageToImage",
+        "docstring": "GLM Image image-to-image transforms and modifies images using advanced AI understanding.",
+        "tags": ["image", "transformation", "glm", "ai-editing"],
+        "use_cases": [
+            "Transform images with GLM AI",
+            "Apply modifications using advanced understanding",
+            "Create variations with GLM model",
+            "Generate modified versions",
+            "Produce AI-powered transformations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # GPT Image
+    "fal-ai/gpt-image-1.5/edit": {
+        "class_name": "GptImage15Edit",
+        "docstring": "GPT Image 1.5 Edit provides intelligent image editing with GPT-powered understanding and control.",
+        "tags": ["image", "editing", "gpt", "intelligent", "ai-editing"],
+        "use_cases": [
+            "Edit images with GPT intelligence",
+            "Apply smart modifications to photos",
+            "Create intelligent edits",
+            "Transform images with language understanding",
+            "Produce GPT-powered modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Z-Image Turbo Family
+    "fal-ai/z-image/turbo/image-to-image": {
+        "class_name": "ZImageTurboImageToImage",
+        "docstring": "Z-Image Turbo image-to-image provides fast image transformations with quality output.",
+        "tags": ["image", "transformation", "z-image", "turbo", "fast"],
+        "use_cases": [
+            "Transform images quickly with Z-Image",
+            "Apply fast modifications to photos",
+            "Create rapid image variations",
+            "Generate speedy transformations",
+            "Produce quick image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/z-image/turbo/image-to-image/lora": {
+        "class_name": "ZImageTurboImageToImageLora",
+        "docstring": "Z-Image Turbo image-to-image with LoRA enables fast custom-trained model transformations.",
+        "tags": ["image", "transformation", "z-image", "turbo", "lora"],
+        "use_cases": [
+            "Transform images with custom Z-Image models",
+            "Apply fast specialized modifications",
+            "Create rapid custom edits",
+            "Generate quick customized transformations",
+            "Produce fast fine-tuned modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/z-image/turbo/inpaint": {
+        "class_name": "ZImageTurboInpaint",
+        "docstring": "Z-Image Turbo Inpaint fills masked regions in images quickly with contextually appropriate content.",
+        "tags": ["image", "inpainting", "z-image", "turbo", "fast"],
+        "use_cases": [
+            "Fill masked regions in images quickly",
+            "Remove unwanted objects fast",
+            "Repair image areas with turbo speed",
+            "Generate quick inpainting results",
+            "Produce rapid contextual fills"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/z-image/turbo/inpaint/lora": {
+        "class_name": "ZImageTurboInpaintLora",
+        "docstring": "Z-Image Turbo Inpaint with LoRA provides fast custom-trained inpainting for specialized tasks.",
+        "tags": ["image", "inpainting", "z-image", "turbo", "lora"],
+        "use_cases": [
+            "Inpaint with custom fast models",
+            "Fill regions using specialized training",
+            "Repair images with custom inpainting",
+            "Generate quick custom fills",
+            "Produce rapid specialized inpainting"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/z-image/turbo/controlnet": {
+        "class_name": "ZImageTurboControlnet",
+        "docstring": "Z-Image Turbo ControlNet provides fast controlled image generation with structural guidance.",
+        "tags": ["image", "controlnet", "z-image", "turbo", "controlled"],
+        "use_cases": [
+            "Generate images with fast structural control",
+            "Apply quick controlled modifications",
+            "Create rapid guided generations",
+            "Transform images with fast ControlNet",
+            "Produce speedy controlled outputs"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/z-image/turbo/controlnet/lora": {
+        "class_name": "ZImageTurboControlnetLora",
+        "docstring": "Z-Image Turbo ControlNet with LoRA combines fast controlled generation with custom models.",
+        "tags": ["image", "controlnet", "z-image", "turbo", "lora"],
+        "use_cases": [
+            "Generate with fast custom ControlNet",
+            "Apply quick specialized controlled generation",
+            "Create rapid custom guided outputs",
+            "Transform images with fast custom control",
+            "Produce speedy fine-tuned controlled results"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Face Swap
+    "half-moon-ai/ai-face-swap/faceswapimage": {
+        "class_name": "AiFaceSwapImage",
+        "docstring": "AI Face Swap replaces faces in images with source faces while maintaining natural appearance.",
+        "tags": ["image", "face-swap", "ai", "face-manipulation"],
+        "use_cases": [
+            "Swap faces between images",
+            "Replace faces in photos",
+            "Create face-swapped variations",
+            "Generate face replacement results",
+            "Produce face-substituted images"
+        ],
+        "basic_fields": ["image"]
+    },
+
+    # AI Home
+    "half-moon-ai/ai-home/style": {
+        "class_name": "AiHomeStyle",
+        "docstring": "AI Home Style transforms interior spaces with different design styles and aesthetics.",
+        "tags": ["image", "interior-design", "style-transfer", "home", "decoration"],
+        "use_cases": [
+            "Transform interior design styles",
+            "Apply different home aesthetics",
+            "Create styled room variations",
+            "Generate interior design options",
+            "Produce home styling transformations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "half-moon-ai/ai-home/edit": {
+        "class_name": "AiHomeEdit",
+        "docstring": "AI Home Edit modifies interior spaces with renovations, furniture changes, and design adjustments.",
+        "tags": ["image", "interior-design", "editing", "home", "renovation"],
+        "use_cases": [
+            "Edit interior spaces",
+            "Modify room furniture and decor",
+            "Create renovation visualizations",
+            "Generate design modification options",
+            "Produce home editing results"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # AI Baby and Aging
+    "half-moon-ai/ai-baby-and-aging-generator/single": {
+        "class_name": "AiBabyAndAgingGeneratorSingle",
+        "docstring": "AI Baby and Aging Generator Single shows age progression or regression for a single person.",
+        "tags": ["image", "aging", "age-progression", "face-manipulation"],
+        "use_cases": [
+            "Show age progression of person",
+            "Generate younger or older versions",
+            "Create aging visualizations",
+            "Produce age transformation results",
+            "Visualize person at different ages"
+        ],
+        "basic_fields": ["image"]
+    },
+
+    "half-moon-ai/ai-baby-and-aging-generator/multi": {
+        "class_name": "AiBabyAndAgingGeneratorMulti",
+        "docstring": "AI Baby and Aging Generator Multi shows age progression or regression for multiple people in one image.",
+        "tags": ["image", "aging", "age-progression", "multi-face"],
+        "use_cases": [
+            "Show age progression for multiple people",
+            "Generate family aging visualizations",
+            "Create multi-person aging results",
+            "Produce group age transformations",
+            "Visualize multiple people at different ages"
+        ],
+        "basic_fields": ["image"]
+    },
+
+    # Wan Image
+    "wan/v2.6/image-to-image": {
+        "class_name": "WanV26ImageToImage",
+        "docstring": "Wan v2.6 image-to-image provides high-quality image transformations with advanced AI capabilities.",
+        "tags": ["image", "transformation", "wan", "v2.6", "quality"],
+        "use_cases": [
+            "Transform images with Wan v2.6",
+            "Apply quality modifications to photos",
+            "Create high-quality variations",
+            "Generate advanced transformations",
+            "Produce quality image modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # StepX Edit
+    "fal-ai/stepx-edit2": {
+        "class_name": "StepxEdit2",
+        "docstring": "StepX Edit 2 provides multi-step image editing with progressive refinement and control.",
+        "tags": ["image", "editing", "stepx", "progressive", "refinement"],
+        "use_cases": [
+            "Edit images with progressive steps",
+            "Apply multi-stage modifications",
+            "Create refined edits gradually",
+            "Transform images with step control",
+            "Produce progressively refined results"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Longcat Image
+    "fal-ai/longcat-image/edit": {
+        "class_name": "LongcatImageEdit",
+        "docstring": "Longcat Image Edit transforms images with unique AI-powered modifications and creative control.",
+        "tags": ["image", "editing", "longcat", "creative"],
+        "use_cases": [
+            "Edit images with Longcat AI",
+            "Apply creative modifications",
+            "Create unique image variations",
+            "Transform images creatively",
+            "Produce artistic modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # ByteDance SeeDream
+    "fal-ai/bytedance/seedream/v4.5/edit": {
+        "class_name": "BytedanceSeedreamV45Edit",
+        "docstring": "ByteDance SeeDream v4.5 Edit provides advanced image editing with cutting-edge AI technology.",
+        "tags": ["image", "editing", "bytedance", "seedream", "v4.5"],
+        "use_cases": [
+            "Edit images with SeeDream v4.5",
+            "Apply advanced modifications",
+            "Create high-quality edits",
+            "Transform images with latest tech",
+            "Produce cutting-edge modifications"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Vidu
+    "fal-ai/vidu/q2/reference-to-image": {
+        "class_name": "ViduQ2ReferenceToImage",
+        "docstring": "Vidu Q2 Reference-to-Image generates images based on reference images with style and content transfer.",
+        "tags": ["image", "generation", "vidu", "reference", "style-transfer"],
+        "use_cases": [
+            "Generate images from references",
+            "Transfer style and content",
+            "Create reference-based variations",
+            "Transform using reference images",
+            "Produce style-transferred results"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Kling Image
+    "fal-ai/kling-image/o1": {
+        "class_name": "KlingImageO1",
+        "docstring": "Kling Image O1 provides advanced image generation and transformation with optimized quality.",
+        "tags": ["image", "generation", "kling", "o1", "optimized"],
+        "use_cases": [
+            "Generate images with Kling O1",
+            "Transform images with optimization",
+            "Create optimized quality results",
+            "Produce advanced image generations",
+            "Generate with balanced quality-speed"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
 }
 
 
