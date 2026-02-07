@@ -19,6 +19,7 @@ from nodetool.metadata.types import (
     BaseType,
     DocumentRef,
     ImageRef,
+    ImageSize,
     Model3DRef,
     VideoRef,
     asset_types,
@@ -57,6 +58,7 @@ class FalAI(FALNode):
 
     _is_dynamic = True
     _supports_dynamic_outputs = True
+    _dynamic_input_types: dict[str, TypeMetadata] = {}
 
     model_info: str = Field(
         default="",
@@ -67,6 +69,7 @@ class FalAI(FALNode):
 
     def __init__(self, **data: Any):
         super().__init__(**data)
+        self._dynamic_input_types = {}
         self._prime_schema_outputs()
 
     @classmethod
@@ -120,6 +123,13 @@ class FalAI(FALNode):
         if not outputs:
             return {"result": res}
         return outputs
+
+    def find_property(self, name: str):
+        from nodetool.workflows.property import Property
+
+        if name in self._dynamic_input_types:
+            return Property(name=name, type=self._dynamic_input_types[name])
+        return super().find_property(name)
 
     def find_output_instance(self, name: str):
         slot = super().find_output_instance(name)
@@ -188,7 +198,15 @@ class FalAI(FALNode):
         """Populate dynamic input slots from the OpenAPI input schema so the UI shows them without manual add. Preserves existing values."""
         schema_props = bundle.input_schema.get("properties", {})
         required = set(bundle.input_schema.get("required", []))
+        
+        # Reset dynamic input types
+        self._dynamic_input_types = {}
+        
         for name, prop_schema in schema_props.items():
+            # Infer and register strict input type
+            input_type = _infer_input_type(bundle.openapi, prop_schema)
+            self._dynamic_input_types[name] = input_type
+            
             if name not in self._dynamic_properties:
                 self._dynamic_properties[name] = _default_value_for_input_property(
                     bundle.openapi,
@@ -582,6 +600,13 @@ async def _coerce_input_value(
     asset_value = _coerce_asset_ref(value)
     if asset_value is not None:
         return await _serialize_asset_ref(asset_value, context, node)
+        
+    if isinstance(value, ImageSize):
+        # Convert ImageSize object to dict for FAL API
+        return {
+            "width": value.width,
+            "height": value.height,
+        }
 
     if resolved.get("type") == "array":
         item_schema = resolved.get("items") or {}
@@ -794,6 +819,91 @@ def _build_output_types(
     return output_types
 
 
+def _infer_input_type(
+    openapi: dict[str, Any], prop_schema: dict[str, Any]
+) -> TypeMetadata:
+    """Infer the strict Nodetool type for a dynamic input."""
+    resolved = _resolve_schema_ref(openapi, prop_schema)
+    kind = resolved.get("type")
+
+    # Detect ImageSize
+    if kind == "object" and _is_image_size_schema(resolved):
+        return TypeMetadata(type="image_size")
+
+    # Detect List[ImageRef], List[VideoRef], etc.
+    if kind == "array":
+        item_schema = resolved.get("items")
+        if item_schema:
+            resolved_item = _resolve_schema_ref(openapi, item_schema)
+            if _is_file_schema(resolved_item) or resolved_item.get("format") in ("uri", "url"):
+                 # It's a list of files/URLs. Assume ImageRef by default for strict typing if ambiguous, 
+                 # or analyze name? For now, we use a generic AssetRef or ImageRef if name implies it.
+                 # Actually, let's look at the property name or format.
+                 # If name contains "image", return list[ImageRef].
+                 # But we don't have the prop name here easily unless we pass it. 
+                 # Let's rely on _is_url_or_image_array logic if we can, but we need name.
+                 # Let's just return List[Any] if we can't be sure, OR default to List[ImageRef] 
+                 # if it looks like a URI list, because ImageRef is the most common use case 
+                 # and user can cast if needed? 
+                 # BETTER: Pass the name to this function. But I didn't in the call site...
+                 # Let's inspect the SCHEMA for keywords.
+                 if _schema_suggests_image(resolved):
+                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="image")])
+                 if _schema_suggests_video(resolved):
+                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="video")])
+                 if _schema_suggests_audio(resolved):
+                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="audio")])
+                 
+                 # Default to generic asset list if it's a list of URIs
+                 return TypeMetadata(type="list", type_args=[TypeMetadata(type="asset")])
+
+    # Detect ImageRef / VideoRef / AudioRef
+    if kind == "string" and resolved.get("format") in ("uri", "url"):
+         if _schema_suggests_image(resolved):
+             return TypeMetadata(type="image")
+         if _schema_suggests_video(resolved):
+             return TypeMetadata(type="video")
+         if _schema_suggests_audio(resolved):
+             return TypeMetadata(type="audio")
+         return TypeMetadata(type="asset")
+
+    # Standard types
+    if kind == "string":
+        return TypeMetadata(type="str")
+    if kind == "integer":
+        return TypeMetadata(type="int")
+    if kind == "number":
+        return TypeMetadata(type="float")
+    if kind == "boolean":
+        return TypeMetadata(type="bool")
+    
+    return TypeMetadata(type="any")
+
+
+def _is_image_size_schema(schema: dict[str, Any]) -> bool:
+    props = schema.get("properties", {})
+    return "width" in props and "height" in props
+
+
+def _schema_suggests_image(schema: dict[str, Any]) -> bool:
+    """Heuristic to guess if a schema represents an image."""
+    desc = schema.get("description", "").lower()
+    title = schema.get("title", "").lower()
+    return "image" in desc or "image" in title or "png" in desc or "jpg" in desc
+
+
+def _schema_suggests_video(schema: dict[str, Any]) -> bool:
+    desc = schema.get("description", "").lower()
+    title = schema.get("title", "").lower()
+    return "video" in desc or "video" in title or "mp4" in desc
+
+
+def _schema_suggests_audio(schema: dict[str, Any]) -> bool:
+    desc = schema.get("description", "").lower()
+    title = schema.get("title", "").lower()
+    return "audio" in desc or "audio" in title or "mp3" in desc
+
+
 def _infer_output_type(
     openapi: dict[str, Any], name: str, schema: dict[str, Any]
 ) -> TypeMetadata:
@@ -825,6 +935,8 @@ def _infer_output_type(
     if resolved.get("type") == "string":
         return TypeMetadata(type="str")
     if resolved.get("type") == "object":
+        if _is_image_size_schema(resolved):
+            return TypeMetadata(type="image_size")
         return TypeMetadata(type="dict")
     return TypeMetadata(type="any")
 
