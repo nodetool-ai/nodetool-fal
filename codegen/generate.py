@@ -128,12 +128,38 @@ async def generate_module(
     output_file = output_dir / f"{module_name}_generated.py"
     print(f"\nWriting {len(generated_nodes)} nodes to {output_file}")
     
+    # Determine which imports are actually needed by checking all generated code
+    all_code = "\n".join(code for _, code in generated_nodes)
+    # More precise detection - look for actual usage, not just string presence
+    needs_any = (
+        "-> Any" in all_code 
+        or ": Any" in all_code 
+        or "dict[str, Any]" in all_code
+        or "list[Any]" in all_code
+    )
+    needs_image = "ImageRef" in all_code
+    needs_video = "VideoRef" in all_code
+    needs_audio = "AudioRef" in all_code
+    
     with output_file.open("w") as f:
         # Write imports once at the top
         f.write("from enum import Enum\n")
         f.write("from pydantic import Field\n")
-        f.write("from typing import Any\n")
-        f.write("from nodetool.metadata.types import ImageRef, VideoRef, AudioRef\n")
+        if needs_any:
+            f.write("from typing import Any\n")
+        
+        # Build asset types import
+        asset_types = []
+        if needs_image:
+            asset_types.append("ImageRef")
+        if needs_video:
+            asset_types.append("VideoRef")
+        if needs_audio:
+            asset_types.append("AudioRef")
+        
+        if asset_types:
+            f.write(f"from nodetool.metadata.types import {', '.join(asset_types)}\n")
+        
         f.write("from nodetool.nodes.fal.fal_node import FALNode\n")
         f.write("from nodetool.workflows.processing_context import ProcessingContext\n")
         f.write("\n\n")

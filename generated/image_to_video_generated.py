@@ -1,7 +1,6 @@
 from enum import Enum
 from pydantic import Field
-from typing import Any
-from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
+from nodetool.metadata.types import ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
