@@ -18,35 +18,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-
 class AnyLLM(SingleOutputGraphNode[str], GraphNode[str]):
     """
 
-    Use any large language model from a selected catalogue (powered by OpenRouter).
-    Supports various models including Claude 3, Gemini, Llama, and GPT-4.
-    llm, text, generation, ai, language
+        Use any large language model from a selected catalogue (powered by OpenRouter).
+        Supports various models including Claude 3, Gemini, Llama, and GPT-4.
+        llm, text, generation, ai, language
 
-    Use cases:
-    - Generate natural language responses
-    - Create conversational AI interactions
-    - Process and analyze text content
-    - Generate creative writing
-    - Assist with problem-solving tasks
+        Use cases:
+        - Generate natural language responses
+        - Create conversational AI interactions
+        - Process and analyze text content
+        - Generate creative writing
+        - Assist with problem-solving tasks
     """
 
     ModelEnum: typing.ClassVar[type] = nodetool.nodes.fal.llm.ModelEnum
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to send to the language model"
-    )
-    system_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Optional system prompt to provide context or instructions",
-    )
-    model: nodetool.nodes.fal.llm.ModelEnum = Field(
-        default=nodetool.nodes.fal.llm.ModelEnum.GEMINI_FLASH,
-        description="The language model to use for the completion",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to send to the language model')
+    system_prompt: str | OutputHandle[str] = connect_field(default='', description='Optional system prompt to provide context or instructions')
+    model: nodetool.nodes.fal.llm.ModelEnum = Field(default=nodetool.nodes.fal.llm.ModelEnum.GEMINI_FLASH, description='The language model to use for the completion')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -55,3 +46,5 @@ class AnyLLM(SingleOutputGraphNode[str], GraphNode[str]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

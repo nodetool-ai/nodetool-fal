@@ -54,4 +54,5 @@ key.pem
 .aider*
 
 .codegpt.codegen_cache/
+.codegen_cache/
 generated/
