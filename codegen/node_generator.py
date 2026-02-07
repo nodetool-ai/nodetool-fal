@@ -1,0 +1,272 @@
+"""
+Node code generator.
+
+This module generates Python code for FAL nodes from node specifications.
+"""
+
+from typing import Optional
+from codegen.schema_parser import NodeSpec, FieldDef, EnumDef
+
+
+class NodeGenerator:
+    """Generates Python code for FAL nodes."""
+
+    def generate(self, spec: NodeSpec, config: Optional[dict] = None) -> str:
+        """
+        Generate Python code for a node.
+        
+        Args:
+            spec: Node specification
+            config: Optional configuration to override/customize generation
+            
+        Returns:
+            Generated Python code as string
+        """
+        config = config or {}
+        
+        # Apply config overrides
+        spec = self._apply_config(spec, config)
+        
+        lines = []
+        
+        # Imports
+        lines.extend(self._generate_imports(spec))
+        lines.append("")
+        lines.append("")
+        
+        # Enums
+        for enum_def in spec.enums:
+            lines.extend(self._generate_enum(enum_def))
+            lines.append("")
+            lines.append("")
+        
+        # Node class
+        lines.extend(self._generate_class(spec))
+        
+        return "\n".join(lines)
+
+    def _apply_config(self, spec: NodeSpec, config: dict) -> NodeSpec:
+        """Apply configuration overrides to spec."""
+        if "docstring" in config:
+            spec.docstring = config["docstring"]
+        if "tags" in config:
+            spec.tags = config["tags"]
+        if "use_cases" in config:
+            spec.use_cases = config["use_cases"]
+        if "class_name" in config:
+            spec.class_name = config["class_name"]
+        
+        # Field overrides
+        if "field_overrides" in config:
+            for field in spec.input_fields:
+                if field.name in config["field_overrides"]:
+                    override = config["field_overrides"][field.name]
+                    if "python_type" in override:
+                        field.python_type = override["python_type"]
+                    if "default_value" in override:
+                        field.default_value = override["default_value"]
+                    if "description" in override:
+                        field.description = override["description"]
+        
+        return spec
+
+    def _generate_imports(self, spec: NodeSpec) -> list[str]:
+        """Generate import statements."""
+        imports = [
+            "from pydantic import Field",
+            "from typing import Any",
+        ]
+        
+        # Add enum import if needed
+        if spec.enums:
+            imports.insert(0, "from enum import Enum")
+        
+        # Determine which asset types are needed
+        asset_types = set()
+        for field in spec.input_fields + spec.output_fields:
+            if "ImageRef" in field.python_type:
+                asset_types.add("ImageRef")
+            elif "VideoRef" in field.python_type:
+                asset_types.add("VideoRef")
+            elif "AudioRef" in field.python_type:
+                asset_types.add("AudioRef")
+        
+        # Add output type
+        if "ImageRef" in spec.output_type:
+            asset_types.add("ImageRef")
+        elif "VideoRef" in spec.output_type:
+            asset_types.add("VideoRef")
+        elif "AudioRef" in spec.output_type:
+            asset_types.add("AudioRef")
+        
+        if asset_types:
+            imports.append(f"from nodetool.metadata.types import {', '.join(sorted(asset_types))}")
+        
+        imports.extend([
+            "from nodetool.nodes.fal.fal_node import FALNode",
+            "from nodetool.workflows.processing_context import ProcessingContext",
+        ])
+        
+        return imports
+
+    def _generate_enum(self, enum_def: EnumDef) -> list[str]:
+        """Generate enum definition."""
+        lines = [f"class {enum_def.name}(Enum):"]
+        
+        if enum_def.description:
+            lines.append(f'    """{enum_def.description}"""')
+        
+        for enum_name, value in enum_def.values:
+            lines.append(f'    {enum_name} = "{value}"')
+        
+        return lines
+
+    def _generate_class(self, spec: NodeSpec) -> list[str]:
+        """Generate node class definition."""
+        lines = [f"class {spec.class_name}(FALNode):"]
+        
+        # Docstring
+        lines.extend(self._generate_docstring(spec))
+        lines.append("")
+        
+        # Fields
+        for field in spec.input_fields:
+            lines.extend(self._generate_field(field))
+        
+        lines.append("")
+        
+        # Process method
+        lines.extend(self._generate_process_method(spec))
+        
+        lines.append("")
+        
+        # get_basic_fields method
+        lines.extend(self._generate_basic_fields_method(spec))
+        
+        return lines
+
+    def _generate_docstring(self, spec: NodeSpec) -> list[str]:
+        """Generate docstring for node class."""
+        lines = ['    """']
+        
+        # Add description
+        if spec.docstring:
+            lines.append(f"    {spec.docstring}")
+        else:
+            lines.append(f"    {spec.class_name} node for {spec.endpoint_id}")
+        
+        # Add tags
+        if spec.tags:
+            lines.append(f"    {', '.join(spec.tags)}")
+        else:
+            lines.append("    fal, ai, generation")
+        
+        
+        # Add use cases
+        if spec.use_cases:
+            lines.append("")
+            lines.append("    Use cases:")
+            for use_case in spec.use_cases:
+                lines.append(f"    - {use_case}")
+        
+        lines.append('    """')
+        
+        return lines
+
+    def _generate_field(self, field: FieldDef) -> list[str]:
+        """Generate field definition."""
+        lines = []
+        
+        # Determine Field parameters
+        params = [f"default={field.default_value}"]
+        
+        if field.description:
+            # Escape quotes in description
+            desc = field.description.replace('"', '\\"')
+            params.append(f'description="{desc}"')
+        
+        field_params = ", ".join(params)
+        
+        # Handle optional enums
+        field_type = field.python_type
+        if field.enum_ref and not field.required and field.default_value == "None":
+            field_type = f"{field.python_type} | None"
+        
+        lines.append(f"    {field.name}: {field_type} = Field(")
+        lines.append(f"        {field_params}")
+        lines.append("    )")
+        
+        return lines
+
+    def _generate_process_method(self, spec: NodeSpec) -> list[str]:
+        """Generate async process method."""
+        lines = [
+            f"    async def process(self, context: ProcessingContext) -> {spec.output_type}:",
+        ]
+        
+        # Convert input images/videos/audio to required format
+        image_fields = []
+        for field in spec.input_fields:
+            if "ImageRef" in field.python_type:
+                lines.append(f"        {field.name}_base64 = await context.image_to_base64(self.{field.name})")
+                image_fields.append(field.name)
+        
+        # Build arguments dict
+        lines.append("        arguments = {")
+        
+        for field in spec.input_fields:
+            if field.name in image_fields:
+                # Use the field name as-is for image URLs (don't add _url suffix if already present)
+                arg_name = field.name if field.name.endswith("_url") or field.name.endswith("_image") else field.name
+                lines.append(f'            "{arg_name}": f"data:image/png;base64,{{{field.name}_base64}}",')
+            elif field.enum_ref:
+                # Handle optional enums
+                if not field.required and field.default_value == "None":
+                    lines.append(f'            "{field.name}": self.{field.name}.value if self.{field.name} else None,')
+                else:
+                    lines.append(f'            "{field.name}": self.{field.name}.value,')
+            else:
+                lines.append(f'            "{field.name}": self.{field.name},')
+        
+        lines.append("        }")
+        lines.append("")
+        
+        # Filter out None values
+        lines.append("        # Remove None values")
+        lines.append("        arguments = {k: v for k, v in arguments.items() if v is not None}")
+        lines.append("")
+        
+        # Submit request
+        lines.append("        res = await self.submit_request(")
+        lines.append("            context=context,")
+        lines.append(f'            application="{spec.endpoint_id}",')
+        lines.append("            arguments=arguments,")
+        lines.append("        )")
+        
+        # Return output
+        if spec.output_type == "VideoRef":
+            lines.append('        assert "video" in res')
+            lines.append('        return VideoRef(uri=res["video"]["url"])')
+        elif spec.output_type == "ImageRef":
+            lines.append('        assert "images" in res')
+            lines.append('        assert len(res["images"]) > 0')
+            lines.append('        return ImageRef(uri=res["images"][0]["url"])')
+        elif spec.output_type == "AudioRef":
+            lines.append('        assert "audio" in res')
+            lines.append('        return AudioRef(uri=res["audio"]["url"])')
+        else:
+            lines.append("        return res")
+        
+        return lines
+
+    def _generate_basic_fields_method(self, spec: NodeSpec) -> list[str]:
+        """Generate get_basic_fields class method."""
+        # Select up to 5 most important fields
+        basic_fields = [f.name for f in spec.input_fields[:5]]
+        fields_str = ", ".join(f'"{f}"' for f in basic_fields)
+        
+        return [
+            "    @classmethod",
+            "    def get_basic_fields(cls):",
+            f"        return [{fields_str}]",
+        ]
