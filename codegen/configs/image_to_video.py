@@ -646,6 +646,449 @@ CONFIGS: dict[str, dict[str, Any]] = {
         },
         "basic_fields": ["image", "prompt"]
     },
+
+    "fal-ai/pixverse/v5.5/effects": {
+        "class_name": "PixverseV5.5Effects",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pixverse/v5.5/transition": {
+        "class_name": "PixverseV5.5Transition",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pixverse/v5.5/image-to-video": {
+        "class_name": "PixverseV5.5ImageToVideo",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/image-to-video": {
+        "class_name": "KlingVideoO1ImageToVideo",
+        "docstring": "Kling O1 First Frame Last Frame to Video [Pro]",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/reference-to-video": {
+        "class_name": "KlingVideoO1ReferenceToVideo",
+        "docstring": "Kling O1 Reference Image to Video [Pro]",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/ltx-2/image-to-video/fast": {
+        "class_name": "Ltx2ImageToVideoFast",
+        "docstring": "LTX Video 2.0 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/ltx-2/image-to-video": {
+        "class_name": "Ltx2ImageToVideo",
+        "docstring": "LTX Video 2.0 Pro",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "bytedance/lynx": {
+        "class_name": "BytedanceLynx",
+        "docstring": "Lynx",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pixverse/swap": {
+        "class_name": "PixverseSwap",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pika/v2.2/pikaframes": {
+        "class_name": "PikaV2.2Pikaframes",
+        "docstring": "Pika",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/image-to-video/720p": {
+        "class_name": "LongcatVideoImageToVideo720P",
+        "docstring": "LongCat Video",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/image-to-video/480p": {
+        "class_name": "LongcatVideoImageToVideo480P",
+        "docstring": "LongCat Video",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/distilled/image-to-video/720p": {
+        "class_name": "LongcatVideoDistilledImageToVideo720P",
+        "docstring": "LongCat Video Distilled",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/distilled/image-to-video/480p": {
+        "class_name": "LongcatVideoDistilledImageToVideo480P",
+        "docstring": "LongCat Video Distilled",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3-fast/standard/image-to-video": {
+        "class_name": "MinimaxHailuo2.3FastStandardImageToVideo",
+        "docstring": "MiniMax Hailuo 2.3 Fast [Standard] (Image to Video)",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3/standard/image-to-video": {
+        "class_name": "MinimaxHailuo2.3StandardImageToVideo",
+        "docstring": "MiniMax Hailuo 2.3 [Standard] (Image to Video)",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3-fast/pro/image-to-video": {
+        "class_name": "MinimaxHailuo2.3FastProImageToVideo",
+        "docstring": "MiniMax Hailuo 2.3 Fast [Pro] (Image to Video)",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/vidu/q2/image-to-video/turbo": {
+        "class_name": "ViduQ2ImageToVideoTurbo",
+        "docstring": "Vidu",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/vidu/q2/image-to-video/pro": {
+        "class_name": "ViduQ2ImageToVideoPro",
+        "docstring": "Vidu",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/v2.5-turbo/standard/image-to-video": {
+        "class_name": "KlingVideoV2.5TurboStandardImageToVideo",
+        "docstring": "Kling Video",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/fast/first-last-frame-to-video": {
+        "class_name": "Veo3.1FastFirstLastFrameToVideo",
+        "docstring": "Veo 3.1 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/first-last-frame-to-video": {
+        "class_name": "Veo3.1FirstLastFrameToVideo",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/reference-to-video": {
+        "class_name": "Veo3.1ReferenceToVideo",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/fast/image-to-video": {
+        "class_name": "Veo3.1FastImageToVideo",
+        "docstring": "Veo 3.1 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/image-to-video": {
+        "class_name": "Veo3.1ImageToVideo",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/sora-2/image-to-video/pro": {
+        "class_name": "Sora2ImageToVideoPro",
+        "docstring": "Sora 2",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/sora-2/image-to-video": {
+        "class_name": "Sora2ImageToVideo",
+        "docstring": "Sora 2",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/ovi/image-to-video": {
+        "class_name": "OviImageToVideo",
+        "docstring": "Ovi",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "veed/fabric-1.0/fast": {
+        "class_name": "VeedFabric1.0Fast",
+        "docstring": "Fabric 1.0 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "veed/fabric-1.0": {
+        "class_name": "VeedFabric1.0",
+        "docstring": "Fabric 1.0",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/v1/standard/ai-avatar": {
+        "class_name": "KlingVideoV1StandardAiAvatar",
+        "docstring": "Kling AI Avatar",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/v1/pro/ai-avatar": {
+        "class_name": "KlingVideoV1ProAiAvatar",
+        "docstring": "Kling AI Avatar Pro",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "decart/lucy-14b/image-to-video": {
+        "class_name": "DecartLucy14BImageToVideo",
+        "docstring": "Decart Lucy 14b",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/wan-ati": {
+        "class_name": "WanAti",
+        "docstring": "Wan Ati",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
 }
 
 

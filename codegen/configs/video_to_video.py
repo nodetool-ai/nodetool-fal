@@ -428,6 +428,657 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["video"]
     },
+
+    "fal-ai/ltx-2-19b/distilled/video-to-video/lora": {
+        "class_name": "Ltx219BDistilledVideoToVideoLora",
+        "docstring": "LTX-2 19B Distilled",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "lora"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/distilled/video-to-video": {
+        "class_name": "Ltx219BDistilledVideoToVideo",
+        "docstring": "LTX-2 19B Distilled",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/video-to-video/lora": {
+        "class_name": "Ltx219BVideoToVideoLora",
+        "docstring": "LTX-2 19B",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "lora"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/video-to-video": {
+        "class_name": "Ltx219BVideoToVideo",
+        "docstring": "LTX-2 19B",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/distilled/extend-video/lora": {
+        "class_name": "Ltx219BDistilledExtendVideoLora",
+        "docstring": "LTX-2 19B Distilled",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "lora"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/distilled/extend-video": {
+        "class_name": "Ltx219BDistilledExtendVideo",
+        "docstring": "LTX-2 19B Distilled",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/extend-video/lora": {
+        "class_name": "Ltx219BExtendVideoLora",
+        "docstring": "LTX-2 19B",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "lora"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/extend-video": {
+        "class_name": "Ltx219BExtendVideo",
+        "docstring": "LTX-2 19B",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "bria/video/erase/keypoints": {
+        "class_name": "BriaVideoEraseKeypoints",
+        "docstring": "Video",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "bria/video/erase/prompt": {
+        "class_name": "BriaVideoErasePrompt",
+        "docstring": "Video",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "professional"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "bria/video/erase/mask": {
+        "class_name": "BriaVideoEraseMask",
+        "docstring": "Video",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/lightx/relight": {
+        "class_name": "LightxRelight",
+        "docstring": "Lightx",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/lightx/recamera": {
+        "class_name": "LightxRecamera",
+        "docstring": "Lightx",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/kling-video/v2.6/standard/motion-control": {
+        "class_name": "KlingVideoV2.6StandardMotionControl",
+        "docstring": "Kling Video v2.6 Motion Control [Standard]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/kling-video/v2.6/pro/motion-control": {
+        "class_name": "KlingVideoV2.6ProMotionControl",
+        "docstring": "Kling Video v2.6 Motion Control [Pro]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "professional"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "decart/lucy-restyle": {
+        "class_name": "DecartLucyRestyle",
+        "docstring": "Lucy Restyle",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/scail": {
+        "class_name": "Scail",
+        "docstring": "Scail",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "clarityai/crystal-video-upscaler": {
+        "class_name": "ClarityaiCrystalVideoUpscaler",
+        "docstring": "Crystal Upscaler [Video]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "wan/v2.6/reference-to-video": {
+        "class_name": "WanV2.6ReferenceToVideo",
+        "docstring": "Wan v2.6 Reference to Video",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/veo3.1/fast/extend-video": {
+        "class_name": "Veo3.1FastExtendVideo",
+        "docstring": "Veo 3.1 Fast",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "fast"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/veo3.1/extend-video": {
+        "class_name": "Veo3.1ExtendVideo",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/standard/video-to-video/reference": {
+        "class_name": "KlingVideoO1StandardVideoToVideoReference",
+        "docstring": "Kling O1 Reference Video to Video [Standard]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/standard/video-to-video/edit": {
+        "class_name": "KlingVideoO1StandardVideoToVideoEdit",
+        "docstring": "Kling O1 Edit Video [Standard]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/steady-dancer": {
+        "class_name": "SteadyDancer",
+        "docstring": "Steady Dancer",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/one-to-all-animation/1.3b": {
+        "class_name": "OneToAllAnimation1.3B",
+        "docstring": "One To All Animation",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/one-to-all-animation/14b": {
+        "class_name": "OneToAllAnimation14B",
+        "docstring": "One To All Animation",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/wan-vision-enhancer": {
+        "class_name": "WanVisionEnhancer",
+        "docstring": "Wan Vision Enhancer",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/sync-lipsync/react-1": {
+        "class_name": "SyncLipsyncReact1",
+        "docstring": "Sync React-1",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "veed/video-background-removal/fast": {
+        "class_name": "VeedVideoBackgroundRemovalFast",
+        "docstring": "Video Background Removal",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "fast"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/video-to-video/edit": {
+        "class_name": "KlingVideoO1VideoToVideoEdit",
+        "docstring": "Kling O1 Edit Video [Pro]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/video-to-video/reference": {
+        "class_name": "KlingVideoO1VideoToVideoReference",
+        "docstring": "Kling O1 Reference Video to Video [Pro]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "veed/video-background-removal": {
+        "class_name": "VeedVideoBackgroundRemoval",
+        "docstring": "Video Background Removal",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "veed/video-background-removal/green-screen": {
+        "class_name": "VeedVideoBackgroundRemovalGreenScreen",
+        "docstring": "Video Background Removal",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/ltx-2/retake-video": {
+        "class_name": "Ltx2RetakeVideo",
+        "docstring": "LTX Video 2.0 Retake",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "decart/lucy-edit/fast": {
+        "class_name": "DecartLucyEditFast",
+        "docstring": "Lucy Edit [Fast]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "fast"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/sam-3/video-rle": {
+        "class_name": "Sam3VideoRle",
+        "docstring": "Sam 3",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/sam-3/video": {
+        "class_name": "Sam3Video",
+        "docstring": "Sam 3",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/editto": {
+        "class_name": "Editto",
+        "docstring": "Editto",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/flashvsr/upscale/video": {
+        "class_name": "FlashvsrUpscaleVideo",
+        "docstring": "Flashvsr",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/workflow-utilities/auto-subtitle": {
+        "class_name": "WorkflowUtilitiesAutoSubtitle",
+        "docstring": "Workflow Utilities",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/bytedance-upscaler/upscale/video": {
+        "class_name": "BytedanceUpscalerUpscaleVideo",
+        "docstring": "Bytedance Upscaler",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/video-as-prompt": {
+        "class_name": "VideoAsPrompt",
+        "docstring": "Video As Prompt",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "professional"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/vidu/q2/video-extension/pro": {
+        "class_name": "ViduQ2VideoExtensionPro",
+        "docstring": "Vidu",
+        "tags": ["video", "editing", "video-to-video", "vid2vid", "professional"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "mirelo-ai/sfx-v1.5/video-to-video": {
+        "class_name": "MireloAiSfxV1.5VideoToVideo",
+        "docstring": "Mirelo SFX V1.5",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/krea-wan-14b/video-to-video": {
+        "class_name": "KreaWan14BVideoToVideo",
+        "docstring": "Krea Wan 14B",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/sora-2/video-to-video/remix": {
+        "class_name": "Sora2VideoToVideoRemix",
+        "docstring": "Sora 2",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/wan-vace-apps/long-reframe": {
+        "class_name": "WanVaceAppsLongReframe",
+        "docstring": "Wan 2.1 VACE Long Reframe",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/infinitalk/video-to-video": {
+        "class_name": "InfinitalkVideoToVideo",
+        "docstring": "Infinitalk",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/seedvr/upscale/video": {
+        "class_name": "SeedvrUpscaleVideo",
+        "docstring": "SeedVR2",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
+    "fal-ai/wan-vace-apps/video-edit": {
+        "class_name": "WanVaceAppsVideoEdit",
+        "docstring": "Wan VACE Video Edit",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+    },
 }
 
 

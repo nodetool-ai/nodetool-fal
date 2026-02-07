@@ -116,6 +116,81 @@ CONFIGS: dict[str, dict[str, Any]] = {
         },
         "basic_fields": ["text"]
     },
+
+    # Maya Batch
+    "fal-ai/maya/batch": {
+        "class_name": "MayaBatch",
+        "docstring": "Maya Batch TTS generates high-quality speech in batch mode for efficient processing.",
+        "tags": ["speech", "synthesis", "text-to-speech", "tts", "batch", "maya"],
+        "use_cases": [
+            "Generate speech for multiple texts",
+            "Batch process narration",
+            "Create bulk voice-overs",
+            "Efficient audio content creation",
+            "Generate multiple speech files"
+        ],
+        "basic_fields": ["text"]
+    },
+
+    # Maya Stream
+    "fal-ai/maya/stream": {
+        "class_name": "MayaStream",
+        "docstring": "Maya Stream TTS generates high-quality speech in streaming mode for real-time applications.",
+        "tags": ["speech", "synthesis", "text-to-speech", "tts", "streaming", "maya"],
+        "use_cases": [
+            "Generate speech in real-time",
+            "Stream narration dynamically",
+            "Create live voice-overs",
+            "Real-time audio synthesis",
+            "Generate streaming speech"
+        ],
+        "basic_fields": ["text"]
+    },
+
+    # Index TTS 2
+    "fal-ai/index-tts-2/text-to-speech": {
+        "class_name": "IndexTts2TextToSpeech",
+        "docstring": "Index TTS 2 generates natural-sounding speech from text with advanced neural synthesis.",
+        "tags": ["speech", "synthesis", "text-to-speech", "tts", "neural"],
+        "use_cases": [
+            "Generate natural speech from text",
+            "Create voice narration",
+            "Produce audio books",
+            "Generate voice-overs",
+            "Create speech content"
+        ],
+        "basic_fields": ["text"]
+    },
+
+    # IndoVoice
+    "fal-ai/indo-voice": {
+        "class_name": "IndoVoice",
+        "docstring": "IndoVoice TTS generates Indonesian language speech with natural pronunciation and intonation.",
+        "tags": ["speech", "synthesis", "text-to-speech", "tts", "indonesian"],
+        "use_cases": [
+            "Generate Indonesian speech",
+            "Create Indonesian narration",
+            "Produce Indonesian voice-overs",
+            "Generate localized audio content",
+            "Create Indonesian audio books"
+        ],
+        "basic_fields": ["text"]
+    },
+
+    # CosyVoice Turbo
+    "fal-ai/cosyvoice-turbo": {
+        "class_name": "CosyvoiceTurbo",
+        "docstring": "CosyVoice Turbo generates high-quality speech with fast processing speed and natural voice.",
+        "tags": ["speech", "synthesis", "text-to-speech", "tts", "turbo", "fast"],
+        "use_cases": [
+            "Generate speech quickly",
+            "Create fast voice narration",
+            "Produce rapid audio content",
+            "Generate speech with turbo speed",
+            "Create efficient voice-overs"
+        ],
+        "basic_fields": ["text"]
+    },
 }
 
 

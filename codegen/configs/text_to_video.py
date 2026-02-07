@@ -428,6 +428,449 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["prompt"]
     },
+
+    "fal-ai/pixverse/v5.6/text-to-video": {
+        "class_name": "PixverseV5.6TextToVideo",
+        "docstring": "Pixverse",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/distilled/text-to-video/lora": {
+        "class_name": "Ltx219BDistilledTextToVideoLora",
+        "docstring": "LTX-2 19B Distilled",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "lora"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/distilled/text-to-video": {
+        "class_name": "Ltx219BDistilledTextToVideo",
+        "docstring": "LTX-2 19B Distilled",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/text-to-video/lora": {
+        "class_name": "Ltx219BTextToVideoLora",
+        "docstring": "LTX-2 19B",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "lora"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/ltx-2-19b/text-to-video": {
+        "class_name": "Ltx219BTextToVideo",
+        "docstring": "LTX-2 19B",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/kandinsky5-pro/text-to-video": {
+        "class_name": "Kandinsky5ProTextToVideo",
+        "docstring": "Kandinsky5 Pro",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "wan/v2.6/text-to-video": {
+        "class_name": "WanV2.6TextToVideo",
+        "docstring": "Wan v2.6 Text to Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/kling-video/v2.6/pro/text-to-video": {
+        "class_name": "KlingVideoV2.6ProTextToVideo",
+        "docstring": "Kling Video v2.6 Text to Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/pixverse/v5.5/text-to-video": {
+        "class_name": "PixverseV5.5TextToVideo",
+        "docstring": "Pixverse",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/ltx-2/text-to-video/fast": {
+        "class_name": "Ltx2TextToVideoFast",
+        "docstring": "LTX Video 2.0 Fast",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/ltx-2/text-to-video": {
+        "class_name": "Ltx2TextToVideo",
+        "docstring": "LTX Video 2.0 Pro",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/hunyuan-video-v1.5/text-to-video": {
+        "class_name": "HunyuanVideoV1.5TextToVideo",
+        "docstring": "Hunyuan Video V1.5",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/infinity-star/text-to-video": {
+        "class_name": "InfinityStarTextToVideo",
+        "docstring": "Infinity Star",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/sana-video": {
+        "class_name": "SanaVideo",
+        "docstring": "Sana Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/longcat-video/text-to-video/720p": {
+        "class_name": "LongcatVideoTextToVideo720P",
+        "docstring": "LongCat Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/longcat-video/text-to-video/480p": {
+        "class_name": "LongcatVideoTextToVideo480P",
+        "docstring": "LongCat Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/longcat-video/distilled/text-to-video/720p": {
+        "class_name": "LongcatVideoDistilledTextToVideo720P",
+        "docstring": "LongCat Video Distilled",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/longcat-video/distilled/text-to-video/480p": {
+        "class_name": "LongcatVideoDistilledTextToVideo480P",
+        "docstring": "LongCat Video Distilled",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3/standard/text-to-video": {
+        "class_name": "MinimaxHailuo2.3StandardTextToVideo",
+        "docstring": "MiniMax Hailuo 2.3 [Standard] (Text to Video)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3/pro/text-to-video": {
+        "class_name": "MinimaxHailuo2.3ProTextToVideo",
+        "docstring": "MiniMax Hailuo 2.3 [Pro] (Text to Video)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/vidu/q2/text-to-video": {
+        "class_name": "ViduQ2TextToVideo",
+        "docstring": "Vidu",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/krea-wan-14b/text-to-video": {
+        "class_name": "KreaWan14BTextToVideo",
+        "docstring": "Krea Wan 14b- Text to Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/wan-alpha": {
+        "class_name": "WanAlpha",
+        "docstring": "Wan Alpha",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/kandinsky5/text-to-video/distill": {
+        "class_name": "Kandinsky5TextToVideoDistill",
+        "docstring": "Kandinsky5",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/kandinsky5/text-to-video": {
+        "class_name": "Kandinsky5TextToVideo",
+        "docstring": "Kandinsky5",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/veo3.1/fast": {
+        "class_name": "Veo3.1Fast",
+        "docstring": "Veo 3.1 Fast",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/veo3.1": {
+        "class_name": "Veo3.1",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/sora-2/text-to-video/pro": {
+        "class_name": "Sora2TextToVideoPro",
+        "docstring": "Sora 2",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/sora-2/text-to-video": {
+        "class_name": "Sora2TextToVideo",
+        "docstring": "Sora 2",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/ovi": {
+        "class_name": "Ovi",
+        "docstring": "Ovi Text to Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/wan-25-preview/text-to-video": {
+        "class_name": "Wan25PreviewTextToVideo",
+        "docstring": "Wan 2.5 Text to Video",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/pixverse/v5/text-to-video": {
+        "class_name": "PixverseV5TextToVideo",
+        "docstring": "Pixverse",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "fal-ai/infinitalk/single-text": {
+        "class_name": "InfinitalkSingleText",
+        "docstring": "Infinitalk",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
+    "moonvalley/marey/t2v": {
+        "class_name": "MoonvalleyMareyT2V",
+        "docstring": "Marey Realism V1.5",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production"
+
+        ],
+    },
 }
 
 

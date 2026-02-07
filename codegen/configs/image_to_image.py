@@ -1370,6 +1370,1372 @@ CONFIGS: dict[str, dict[str, Any]] = {
         },
         "basic_fields": ["image", "prompt"]
     },
+
+    "fal-ai/qwen-image-edit-2509-lora-gallery/shirt-design": {
+        "class_name": "QwenImageEdit2509LoraGalleryShirtDesign",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/remove-lighting": {
+        "class_name": "QwenImageEdit2509LoraGalleryRemoveLighting",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/remove-element": {
+        "class_name": "QwenImageEdit2509LoraGalleryRemoveElement",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/lighting-restoration": {
+        "class_name": "QwenImageEdit2509LoraGalleryLightingRestoration",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/integrate-product": {
+        "class_name": "QwenImageEdit2509LoraGalleryIntegrateProduct",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/group-photo": {
+        "class_name": "QwenImageEdit2509LoraGalleryGroupPhoto",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/face-to-full-portrait": {
+        "class_name": "QwenImageEdit2509LoraGalleryFaceToFullPortrait",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/add-background": {
+        "class_name": "QwenImageEdit2509LoraGalleryAddBackground",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/next-scene": {
+        "class_name": "QwenImageEdit2509LoraGalleryNextScene",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-2509-lora-gallery/multiple-angles": {
+        "class_name": "QwenImageEdit2509LoraGalleryMultipleAngles",
+        "docstring": "Qwen Image Edit 2509 Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/lighting-restoration": {
+        "class_name": "QwenImageEditPlusLoraGalleryLightingRestoration",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/moondream3-preview/segment": {
+        "class_name": "Moondream3PreviewSegment",
+        "docstring": "Moondream3 Preview [Segment]",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-2-lora-gallery/apartment-staging": {
+        "class_name": "Flux2LoraGalleryApartmentStaging",
+        "docstring": "Flux 2 Lora Gallery",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "clarityai/crystal-upscaler": {
+        "class_name": "ClarityaiCrystalUpscaler",
+        "docstring": "Crystal Upscaler",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/chrono-edit-lora": {
+        "class_name": "ChronoEditLora",
+        "docstring": "Chrono Edit Lora",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/chrono-edit-lora-gallery/paintbrush": {
+        "class_name": "ChronoEditLoraGalleryPaintbrush",
+        "docstring": "Chrono Edit Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/chrono-edit-lora-gallery/upscaler": {
+        "class_name": "ChronoEditLoraGalleryUpscaler",
+        "docstring": "Chrono Edit Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/sam-3/image-rle": {
+        "class_name": "Sam3ImageRle",
+        "docstring": "Sam 3",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/sam-3/image": {
+        "class_name": "Sam3Image",
+        "docstring": "Segment Anything Model 3",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/gemini-3-pro-image-preview/edit": {
+        "class_name": "Gemini3ProImagePreviewEdit",
+        "docstring": "Gemini 3 Pro Image Preview",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/nano-banana-pro/edit": {
+        "class_name": "NanoBananaProEdit",
+        "docstring": "Nano Banana Pro",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/multiple-angles": {
+        "class_name": "QwenImageEditPlusLoraGalleryMultipleAngles",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/shirt-design": {
+        "class_name": "QwenImageEditPlusLoraGalleryShirtDesign",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/remove-lighting": {
+        "class_name": "QwenImageEditPlusLoraGalleryRemoveLighting",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/remove-element": {
+        "class_name": "QwenImageEditPlusLoraGalleryRemoveElement",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/next-scene": {
+        "class_name": "QwenImageEditPlusLoraGalleryNextScene",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/integrate-product": {
+        "class_name": "QwenImageEditPlusLoraGalleryIntegrateProduct",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/group-photo": {
+        "class_name": "QwenImageEditPlusLoraGalleryGroupPhoto",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/face-to-full-portrait": {
+        "class_name": "QwenImageEditPlusLoraGalleryFaceToFullPortrait",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora-gallery/add-background": {
+        "class_name": "QwenImageEditPlusLoraGalleryAddBackground",
+        "docstring": "Qwen Image Edit Plus Lora Gallery",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/reve/fast/remix": {
+        "class_name": "ReveFastRemix",
+        "docstring": "Reve",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "fast"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/reve/fast/edit": {
+        "class_name": "ReveFastEdit",
+        "docstring": "Reve",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "fast"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/outpaint": {
+        "class_name": "ImageAppsV2Outpaint",
+        "docstring": "Image Outpaint",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-vision-upscaler": {
+        "class_name": "FluxVisionUpscaler",
+        "docstring": "Flux Vision Upscaler",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/emu-3.5-image/edit-image": {
+        "class_name": "Emu3.5ImageEditImage",
+        "docstring": "Emu 3.5 Image",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/chrono-edit": {
+        "class_name": "ChronoEdit",
+        "docstring": "Chrono Edit",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/gpt-image-1-mini/edit": {
+        "class_name": "GptImage1MiniEdit",
+        "docstring": "GPT Image 1 Mini",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/reve/remix": {
+        "class_name": "ReveRemix",
+        "docstring": "Reve",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/reve/edit": {
+        "class_name": "ReveEdit",
+        "docstring": "Reve",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image2pixel": {
+        "class_name": "Image2Pixel",
+        "docstring": "Image2Pixel",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/dreamomni2/edit": {
+        "class_name": "Dreamomni2Edit",
+        "docstring": "DreamOmni2",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus-lora": {
+        "class_name": "QwenImageEditPlusLora",
+        "docstring": "Qwen Image Edit Plus Lora",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/lucidflux": {
+        "class_name": "Lucidflux",
+        "docstring": "Lucidflux",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit/image-to-image": {
+        "class_name": "QwenImageEditImageToImage",
+        "docstring": "Qwen Image Edit",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/wan-25-preview/image-to-image": {
+        "class_name": "Wan25PreviewImageToImage",
+        "docstring": "Wan 2.5 Image to Image",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-plus": {
+        "class_name": "QwenImageEditPlus",
+        "docstring": "Qwen Image Edit Plus",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/seedvr/upscale/image": {
+        "class_name": "SeedvrUpscaleImage",
+        "docstring": "SeedVR2",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/product-holding": {
+        "class_name": "ImageAppsV2ProductHolding",
+        "docstring": "Product Holding",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/product-photography": {
+        "class_name": "ImageAppsV2ProductPhotography",
+        "docstring": "Product Photography",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/virtual-try-on": {
+        "class_name": "ImageAppsV2VirtualTryOn",
+        "docstring": "Virtual Try-on",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/texture-transform": {
+        "class_name": "ImageAppsV2TextureTransform",
+        "docstring": "Texture Transform",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/relighting": {
+        "class_name": "ImageAppsV2Relighting",
+        "docstring": "Relighting",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/style-transfer": {
+        "class_name": "ImageAppsV2StyleTransfer",
+        "docstring": "Style Transfer",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/photo-restoration": {
+        "class_name": "ImageAppsV2PhotoRestoration",
+        "docstring": "Photo Restoration",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/portrait-enhance": {
+        "class_name": "ImageAppsV2PortraitEnhance",
+        "docstring": "Portrait Enhance",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/photography-effects": {
+        "class_name": "ImageAppsV2PhotographyEffects",
+        "docstring": "Photography Effects",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/perspective": {
+        "class_name": "ImageAppsV2Perspective",
+        "docstring": "Perspective Change",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/object-removal": {
+        "class_name": "ImageAppsV2ObjectRemoval",
+        "docstring": "Object Removal",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/headshot-photo": {
+        "class_name": "ImageAppsV2HeadshotPhoto",
+        "docstring": "Headshot Generator",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/hair-change": {
+        "class_name": "ImageAppsV2HairChange",
+        "docstring": "Hair Change",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/expression-change": {
+        "class_name": "ImageAppsV2ExpressionChange",
+        "docstring": "Expression Change",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/city-teleport": {
+        "class_name": "ImageAppsV2CityTeleport",
+        "docstring": "City Teleport",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/age-modify": {
+        "class_name": "ImageAppsV2AgeModify",
+        "docstring": "Age Modify",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-apps-v2/makeup-application": {
+        "class_name": "ImageAppsV2MakeupApplication",
+        "docstring": "Makeup Changer",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit/inpaint": {
+        "class_name": "QwenImageEditInpaint",
+        "docstring": "Qwen Image Edit",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux/srpo/image-to-image": {
+        "class_name": "FluxSrpoImageToImage",
+        "docstring": "FLUX.1 SRPO [dev]",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-1/srpo/image-to-image": {
+        "class_name": "Flux1SrpoImageToImage",
+        "docstring": "FLUX.1 SRPO [dev]",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit-lora": {
+        "class_name": "QwenImageEditLora",
+        "docstring": "Qwen Image Edit Lora",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/vidu/reference-to-image": {
+        "class_name": "ViduReferenceToImage",
+        "docstring": "Vidu",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/bytedance/seedream/v4/edit": {
+        "class_name": "BytedanceSeedreamV4Edit",
+        "docstring": "Bytedance Seedream v4 Edit",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/image-to-image": {
+        "class_name": "WanV2.2A14BImageToImage",
+        "docstring": "Wan",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/uso": {
+        "class_name": "Uso",
+        "docstring": "Uso",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/gemini-25-flash-image/edit": {
+        "class_name": "Gemini25FlashImageEdit",
+        "docstring": "Gemini 2.5 Flash Image",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image/image-to-image": {
+        "class_name": "QwenImageImageToImage",
+        "docstring": "Qwen Image",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "bria/reimagine/3.2": {
+        "class_name": "BriaReimagine3.2",
+        "docstring": "Reimagine",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/nano-banana/edit": {
+        "class_name": "NanoBananaEdit",
+        "docstring": "Nano Banana",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/nextstep-1": {
+        "class_name": "Nextstep1",
+        "docstring": "Nextstep 1",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/qwen-image-edit": {
+        "class_name": "QwenImageEdit",
+        "docstring": "Qwen Image Edit",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/ideogram/character/edit": {
+        "class_name": "IdeogramCharacterEdit",
+        "docstring": "Ideogram V3 Character Edit",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/ideogram/character": {
+        "class_name": "IdeogramCharacter",
+        "docstring": "Ideogram V3 Character",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/ideogram/character/remix": {
+        "class_name": "IdeogramCharacterRemix",
+        "docstring": "Ideogram V3 Character Remix",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-krea-lora/inpainting": {
+        "class_name": "FluxKreaLoraInpainting",
+        "docstring": "FLUX.1 Krea [dev] Inpainting with LoRAs",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-krea-lora/image-to-image": {
+        "class_name": "FluxKreaLoraImageToImage",
+        "docstring": "FLUX.1 Krea [dev] with LoRAs",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux/krea/image-to-image": {
+        "class_name": "FluxKreaImageToImage",
+        "docstring": "FLUX.1 Krea [dev]",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux/krea/redux": {
+        "class_name": "FluxKreaRedux",
+        "docstring": "FLUX.1 Krea [dev] Redux",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-1/krea/image-to-image": {
+        "class_name": "Flux1KreaImageToImage",
+        "docstring": "FLUX.1 Krea [dev]",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-1/krea/redux": {
+        "class_name": "Flux1KreaRedux",
+        "docstring": "FLUX.1 Krea [dev] Redux",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/flux-kontext-lora/inpaint": {
+        "class_name": "FluxKontextLoraInpaint",
+        "docstring": "Flux Kontext Lora",
+        "tags": ["flux", "editing", "transformation", "image-to-image", "img2img", "lora"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/hunyuan_world": {
+        "class_name": "Hunyuan_World",
+        "docstring": "Hunyuan World",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-editing/retouch": {
+        "class_name": "ImageEditingRetouch",
+        "docstring": "Image Editing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/hidream-e1-1": {
+        "class_name": "HidreamE11",
+        "docstring": "Hidream E1 1",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/rife": {
+        "class_name": "Rife",
+        "docstring": "RIFE",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/film": {
+        "class_name": "Film",
+        "docstring": "FILM",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/calligrapher": {
+        "class_name": "Calligrapher",
+        "docstring": "Calligrapher",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/bria/reimagine": {
+        "class_name": "BriaReimagine",
+        "docstring": "Bria",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/image-editing/realism": {
+        "class_name": "ImageEditingRealism",
+        "docstring": "Image Editing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/vignette": {
+        "class_name": "PostProcessingVignette",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/solarize": {
+        "class_name": "PostProcessingSolarize",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/sharpen": {
+        "class_name": "PostProcessingSharpen",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/parabolize": {
+        "class_name": "PostProcessingParabolize",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/grain": {
+        "class_name": "PostProcessingGrain",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/dodge-burn": {
+        "class_name": "PostProcessingDodgeBurn",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/dissolve": {
+        "class_name": "PostProcessingDissolve",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/desaturate": {
+        "class_name": "PostProcessingDesaturate",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
+    "fal-ai/post-processing/color-tint": {
+        "class_name": "PostProcessingColorTint",
+        "docstring": "Post Processing",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "professional"],
+        "use_cases": [
+            "Professional photo editing and enhancement",
+            "Creative image transformations",
+            "Batch image processing workflows",
+            "Product photography refinement",
+            "Automated image optimization"
+
+        ],
+    },
 }
 
 

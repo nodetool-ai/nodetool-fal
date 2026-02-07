@@ -288,6 +288,85 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["audio"]
     },
+
+    "fal-ai/minimax-music/v2": {
+        "class_name": "MinimaxMusicV2",
+        "docstring": "Minimax Music",
+        "tags": ["audio", "generation", "text-to-audio", "tts", "professional"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "beatoven/sound-effect-generation": {
+        "class_name": "BeatovenSoundEffectGeneration",
+        "docstring": "Sound Effect Generation",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "beatoven/music-generation": {
+        "class_name": "BeatovenMusicGeneration",
+        "docstring": "Music Generation",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/minimax-music/v1.5": {
+        "class_name": "MinimaxMusicV1.5",
+        "docstring": "MiniMax (Hailuo AI) Music v1.5",
+        "tags": ["audio", "generation", "text-to-audio", "tts", "professional"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/stable-audio-25/text-to-audio": {
+        "class_name": "StableAudio25TextToAudio",
+        "docstring": "Stable Audio 2.5",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "sonauto/v2/inpaint": {
+        "class_name": "SonautoV2Inpaint",
+        "docstring": "Sonauto V2",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
 }
 
 

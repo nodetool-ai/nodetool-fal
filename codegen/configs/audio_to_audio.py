@@ -112,6 +112,21 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["audio", "prompt"]
     },
+
+    # FFmpeg API Merge Audios
+    "fal-ai/ffmpeg-api/merge-audios": {
+        "class_name": "FfmpegApiMergeAudios",
+        "docstring": "FFmpeg API Merge Audios combines multiple audio files into a single output.",
+        "tags": ["audio", "processing", "audio-to-audio", "merging", "ffmpeg"],
+        "use_cases": [
+            "Combine multiple audio tracks",
+            "Merge audio segments",
+            "Create audio compilations",
+            "Join split audio files",
+            "Generate combined audio output"
+        ],
+        "basic_fields": ["audio"]
+    },
 }
 
 

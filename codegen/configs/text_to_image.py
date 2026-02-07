@@ -845,6 +845,514 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["prompt"]
     },
+
+    "imagineart/imagineart-1.5-pro-preview/text-to-image": {
+        "class_name": "ImagineartImagineart1.5ProPreviewTextToImage",
+        "docstring": "ImagineArt 1.5 Pro Preview",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art", "professional"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "bria/fibo-lite/generate": {
+        "class_name": "BriaFiboLiteGenerate",
+        "docstring": "Fibo Lite",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/ovis-image": {
+        "class_name": "OvisImage",
+        "docstring": "Ovis Image",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-2-lora-gallery/sepia-vintage": {
+        "class_name": "Flux2LoraGallerySepiaVintage",
+        "docstring": "Flux 2 Lora Gallery",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-2-lora-gallery/satellite-view-style": {
+        "class_name": "Flux2LoraGallerySatelliteViewStyle",
+        "docstring": "Flux 2 Lora Gallery",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-2-lora-gallery/realism": {
+        "class_name": "Flux2LoraGalleryRealism",
+        "docstring": "Flux 2 Lora Gallery",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-2-lora-gallery/hdr-style": {
+        "class_name": "Flux2LoraGalleryHdrStyle",
+        "docstring": "Flux 2 Lora Gallery",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-2-lora-gallery/digital-comic-art": {
+        "class_name": "Flux2LoraGalleryDigitalComicArt",
+        "docstring": "Flux 2 Lora Gallery",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-2-lora-gallery/ballpoint-pen-sketch": {
+        "class_name": "Flux2LoraGalleryBallpointPenSketch",
+        "docstring": "Flux 2 Lora Gallery",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-2-flex": {
+        "class_name": "Flux2Flex",
+        "docstring": "Flux 2 Flex",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/gemini-3-pro-image-preview": {
+        "class_name": "Gemini3ProImagePreview",
+        "docstring": "Gemini 3 Pro Image Preview",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art", "professional"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/nano-banana-pro": {
+        "class_name": "NanoBananaPro",
+        "docstring": "Nano Banana Pro",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art", "professional"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "imagineart/imagineart-1.5-preview/text-to-image": {
+        "class_name": "ImagineartImagineart1.5PreviewTextToImage",
+        "docstring": "Imagineart 1.5 Preview",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/emu-3.5-image/text-to-image": {
+        "class_name": "Emu3.5ImageTextToImage",
+        "docstring": "Emu 3.5 Image",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "bria/fibo/generate": {
+        "class_name": "BriaFiboGenerate",
+        "docstring": "Fibo",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/piflow": {
+        "class_name": "Piflow",
+        "docstring": "Piflow",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/gpt-image-1-mini": {
+        "class_name": "GptImage1Mini",
+        "docstring": "GPT Image 1 Mini",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/reve/text-to-image": {
+        "class_name": "ReveTextToImage",
+        "docstring": "Reve",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/hunyuan-image/v3/text-to-image": {
+        "class_name": "HunyuanImageV3TextToImage",
+        "docstring": "Hunyuan Image",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/wan-25-preview/text-to-image": {
+        "class_name": "Wan25PreviewTextToImage",
+        "docstring": "Wan 2.5 Text to Image",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux/srpo": {
+        "class_name": "FluxSrpo",
+        "docstring": "FLUX.1 SRPO [dev]",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-1/srpo": {
+        "class_name": "Flux1Srpo",
+        "docstring": "FLUX.1 SRPO [dev]",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/hunyuan-image/v2.1/text-to-image": {
+        "class_name": "HunyuanImageV2.1TextToImage",
+        "docstring": "Hunyuan Image",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/bytedance/seedream/v4/text-to-image": {
+        "class_name": "BytedanceSeedreamV4TextToImage",
+        "docstring": "Bytedance Seedream v4",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/gemini-25-flash-image": {
+        "class_name": "Gemini25FlashImage",
+        "docstring": "Gemini 2.5 Flash Image",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/nano-banana": {
+        "class_name": "NanoBanana",
+        "docstring": "Nano Banana",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/bytedance/dreamina/v3.1/text-to-image": {
+        "class_name": "BytedanceDreaminaV3.1TextToImage",
+        "docstring": "Bytedance",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/text-to-image/lora": {
+        "class_name": "WanV2.2A14BTextToImageLora",
+        "docstring": "Wan v2.2 A14B Text-to-Image A14B with LoRAs",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/wan/v2.2-5b/text-to-image": {
+        "class_name": "WanV2.25BTextToImage",
+        "docstring": "Wan",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/text-to-image": {
+        "class_name": "WanV2.2A14BTextToImage",
+        "docstring": "Wan",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/qwen-image": {
+        "class_name": "QwenImage",
+        "docstring": "Qwen Image",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-krea-lora/stream": {
+        "class_name": "FluxKreaLoraStream",
+        "docstring": "Flux Krea Lora",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-krea-lora": {
+        "class_name": "FluxKreaLora",
+        "docstring": "FLUX.1 Krea [dev] with LoRAs",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux/krea": {
+        "class_name": "FluxKrea",
+        "docstring": "FLUX.1 Krea [dev]",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-1/krea": {
+        "class_name": "Flux1Krea",
+        "docstring": "FLUX.1 Krea [dev]",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/sky-raccoon": {
+        "class_name": "SkyRaccoon",
+        "docstring": "Sky Raccoon",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/flux-kontext-lora/text-to-image": {
+        "class_name": "FluxKontextLoraTextToImage",
+        "docstring": "Flux Kontext Lora",
+        "tags": ["flux", "generation", "text-to-image", "txt2img", "ai-art", "lora"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/omnigen-v2": {
+        "class_name": "OmnigenV2",
+        "docstring": "Omnigen V2",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
+    "fal-ai/bytedance/seedream/v3/text-to-image": {
+        "class_name": "BytedanceSeedreamV3TextToImage",
+        "docstring": "Bytedance",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art"],
+        "use_cases": [
+            "AI-powered art generation",
+            "Marketing and advertising visuals",
+            "Concept art and ideation",
+            "Social media content creation",
+            "Rapid prototyping and mockups"
+
+        ],
+    },
 }
 
 

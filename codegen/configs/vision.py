@@ -288,6 +288,98 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["image", "prompt"]
     },
+
+    "fal-ai/sam-3/image/embed": {
+        "class_name": "Sam3ImageEmbed",
+        "docstring": "Sam 3",
+        "tags": ["vision", "analysis", "image-understanding", "detection"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "openrouter/router/vision": {
+        "class_name": "OpenrouterRouterVision",
+        "docstring": "OpenRouter [Vision]",
+        "tags": ["vision", "analysis", "image-understanding", "detection"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/moondream3-preview/detect": {
+        "class_name": "Moondream3PreviewDetect",
+        "docstring": "Moondream3 Preview [Detect]",
+        "tags": ["vision", "analysis", "image-understanding", "detection"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/moondream3-preview/point": {
+        "class_name": "Moondream3PreviewPoint",
+        "docstring": "Moondream3 Preview [Point]",
+        "tags": ["vision", "analysis", "image-understanding", "detection"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/moondream3-preview/query": {
+        "class_name": "Moondream3PreviewQuery",
+        "docstring": "Moondream 3 Preview [Query]",
+        "tags": ["vision", "analysis", "image-understanding", "detection"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/moondream3-preview/caption": {
+        "class_name": "Moondream3PreviewCaption",
+        "docstring": "Moondream3 Preview [Caption]",
+        "tags": ["vision", "analysis", "image-understanding", "detection"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "perceptron/isaac-01/openai/v1/chat/completions": {
+        "class_name": "PerceptronIsaac01OpenaiV1ChatCompletions",
+        "docstring": "Isaac 0.1 [OpenAI Compatible Endpoint]",
+        "tags": ["vision", "analysis", "image-understanding", "detection"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
 }
 
 
