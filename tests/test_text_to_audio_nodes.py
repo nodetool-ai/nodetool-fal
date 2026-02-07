@@ -9,7 +9,6 @@ from nodetool.nodes.fal.text_to_audio import (
     ElevenLabsSoundEffects,
 )
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.metadata.types import AudioRef
 
 
 class TestTextToAudioNodeImports:
