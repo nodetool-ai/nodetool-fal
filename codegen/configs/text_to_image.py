@@ -355,6 +355,187 @@ CONFIGS: dict[str, dict[str, Any]] = {
             }
         },
         "basic_fields": ["prompt", "negative_prompt", "aspect_ratio"]
+    },
+    
+    "fal-ai/flux-pro/new": {
+        "class_name": "FluxProNew",
+        "docstring": "FLUX.1 Pro New is the latest version of the professional FLUX model with enhanced capabilities and improved output quality.",
+        "tags": ["image", "generation", "flux", "professional", "text-to-image", "txt2img"],
+        "use_cases": [
+            "Generate professional-grade marketing visuals",
+            "Create high-quality product renders",
+            "Produce detailed architectural visualizations",
+            "Design premium brand assets",
+            "Generate photorealistic commercial imagery"
+        ],
+        "field_overrides": {
+            "prompt": {
+                "description": "The prompt to generate an image from"
+            },
+            "image_size": {
+                "python_type": "ImageSizePreset",
+                "default_value": "ImageSizePreset.LANDSCAPE_4_3",
+                "description": "Size preset for the generated image"
+            },
+            "seed": {
+                "python_type": "int",
+                "default_value": "-1",
+                "description": "Seed for reproducible results. Use -1 for random"
+            }
+        },
+        "basic_fields": ["prompt", "image_size"]
+    },
+    
+    "fal-ai/flux-2/turbo": {
+        "class_name": "Flux2Turbo",
+        "docstring": "FLUX.2 Turbo is a blazing-fast image generation model optimized for speed without sacrificing quality, ideal for real-time applications.",
+        "tags": ["image", "generation", "flux", "fast", "turbo", "text-to-image", "txt2img"],
+        "use_cases": [
+            "Real-time image generation for interactive apps",
+            "Rapid prototyping of visual concepts",
+            "Generate multiple variations instantly",
+            "Live visual effects and augmented reality",
+            "High-throughput batch image processing"
+        ],
+        "field_overrides": {
+            "prompt": {
+                "description": "The prompt to generate an image from"
+            },
+            "image_size": {
+                "python_type": "ImageSizePreset",
+                "default_value": "ImageSizePreset.LANDSCAPE_4_3",
+                "description": "Size preset for the generated image"
+            },
+            "num_images": {
+                "description": "Number of images to generate"
+            },
+            "seed": {
+                "python_type": "int",
+                "default_value": "-1",
+                "description": "Seed for reproducible results. Use -1 for random"
+            }
+        },
+        "basic_fields": ["prompt", "image_size", "num_images"]
+    },
+    
+    "fal-ai/flux-2/flash": {
+        "class_name": "Flux2Flash",
+        "docstring": "FLUX.2 Flash is an ultra-fast variant of FLUX.2 designed for instant image generation with minimal latency.",
+        "tags": ["image", "generation", "flux", "ultra-fast", "flash", "text-to-image", "txt2img"],
+        "use_cases": [
+            "Instant preview generation for user interfaces",
+            "Real-time collaborative design tools",
+            "Lightning-fast concept exploration",
+            "High-speed batch processing",
+            "Interactive gaming and entertainment applications"
+        ],
+        "field_overrides": {
+            "prompt": {
+                "description": "The prompt to generate an image from"
+            },
+            "image_size": {
+                "python_type": "ImageSizePreset",
+                "default_value": "ImageSizePreset.LANDSCAPE_4_3",
+                "description": "Size preset for the generated image"
+            },
+            "seed": {
+                "python_type": "int",
+                "default_value": "-1",
+                "description": "Seed for reproducible results. Use -1 for random"
+            }
+        },
+        "basic_fields": ["prompt", "image_size"]
+    },
+    
+    "fal-ai/ideogram/v3": {
+        "class_name": "IdeogramV3",
+        "docstring": "Ideogram V3 is the latest generation with enhanced text rendering, superior image quality, and expanded creative controls.",
+        "tags": ["image", "generation", "ideogram", "typography", "text-rendering", "text-to-image", "txt2img"],
+        "use_cases": [
+            "Create professional graphics with embedded text",
+            "Design social media posts with perfect typography",
+            "Generate logos and brand identities",
+            "Produce marketing materials with text overlays",
+            "Create educational content with clear text"
+        ],
+        "field_overrides": {
+            "prompt": {
+                "description": "The prompt to generate an image from"
+            },
+            "aspect_ratio": {
+                "description": "The aspect ratio of the generated image"
+            },
+            "style": {
+                "description": "The style preset for the generated image"
+            },
+            "expand_prompt": {
+                "description": "Automatically enhance the prompt for better results"
+            }
+        },
+        "basic_fields": ["prompt", "aspect_ratio", "style"]
+    },
+    
+    "fal-ai/omnigen-v1": {
+        "class_name": "OmniGenV1",
+        "docstring": "OmniGen V1 is a versatile unified model for multi-modal image generation and editing with text, supporting complex compositional tasks.",
+        "tags": ["image", "generation", "multi-modal", "editing", "unified", "text-to-image", "txt2img"],
+        "use_cases": [
+            "Generate images with multiple input modalities",
+            "Edit existing images with text instructions",
+            "Create complex compositional scenes",
+            "Combine text and image inputs for generation",
+            "Perform advanced image manipulations"
+        ],
+        "field_overrides": {
+            "prompt": {
+                "description": "The prompt to generate or edit an image"
+            },
+            "guidance_scale": {
+                "description": "How strictly to follow the prompt and inputs"
+            },
+            "num_inference_steps": {
+                "description": "Number of denoising steps for generation quality"
+            },
+            "seed": {
+                "python_type": "int",
+                "default_value": "-1",
+                "description": "Seed for reproducible results. Use -1 for random"
+            }
+        },
+        "basic_fields": ["prompt", "guidance_scale", "num_inference_steps"]
+    },
+    
+    "fal-ai/sana": {
+        "class_name": "Sana",
+        "docstring": "Sana is an efficient high-resolution image generation model that balances quality and speed for practical applications.",
+        "tags": ["image", "generation", "efficient", "high-resolution", "text-to-image", "txt2img"],
+        "use_cases": [
+            "Generate high-resolution images efficiently",
+            "Create detailed artwork with good performance",
+            "Produce quality visuals with limited compute",
+            "Generate images for web and mobile applications",
+            "Balanced quality-speed image production"
+        ],
+        "field_overrides": {
+            "prompt": {
+                "description": "The prompt to generate an image from"
+            },
+            "negative_prompt": {
+                "description": "Elements to avoid in the generated image"
+            },
+            "image_size": {
+                "python_type": "ImageSizePreset",
+                "default_value": "ImageSizePreset.LANDSCAPE_4_3",
+                "description": "Size preset for the generated image"
+            },
+            "guidance_scale": {
+                "description": "How strictly to follow the prompt"
+            },
+            "num_inference_steps": {
+                "description": "Number of denoising steps"
+            }
+        },
+        "basic_fields": ["prompt", "image_size", "guidance_scale"]
     }
 }
 

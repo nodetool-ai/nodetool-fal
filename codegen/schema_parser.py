@@ -391,7 +391,14 @@ class SchemaParser:
         # "16:9" -> "RATIO_16_9"
         # "square_hd" -> "SQUARE_HD"
         # "5" -> "DURATION_5"
+        # "3D Model" -> "MODEL_3D"
+        # "Digital Art" -> "DIGITAL_ART"
+        # "(No style)" -> "NO_STYLE"
         
+        # Remove parentheses and other special characters
+        value = value.replace("(", "").replace(")", "")
+        
+        # Handle ratios
         if ":" in value:
             value = value.replace(":", "_")
             return f"RATIO_{value}".upper()
@@ -400,4 +407,24 @@ class SchemaParser:
         if value.isdigit():
             return f"VALUE_{value}"
         
-        return value.replace("-", "_").upper()
+        # Replace spaces and hyphens with underscores
+        value = value.replace(" ", "_").replace("-", "_")
+        
+        # Convert to uppercase
+        result = value.upper()
+        
+        # If starts with a digit, prefix with an appropriate word
+        if result and result[0].isdigit():
+            # Try to extract meaningful prefix from the rest of the string
+            if "D" in result and result.index("D") < 3:
+                # Like "3D" -> move to end: "MODEL_3D" or "ART_3D"
+                parts = result.split("_")
+                if len(parts) > 1:
+                    # Move first part to end
+                    result = "_".join(parts[1:] + [parts[0]])
+                else:
+                    result = f"VALUE_{result}"
+            else:
+                result = f"VALUE_{result}"
+        
+        return result

@@ -304,6 +304,12 @@ async def main():
                 "fal-ai/ideogram/v2/turbo",
                 "fal-ai/recraft-v3",
                 "fal-ai/stable-diffusion-v35-large",
+                "fal-ai/flux-pro/new",
+                "fal-ai/flux-2/turbo",
+                "fal-ai/flux-2/flash",
+                "fal-ai/ideogram/v3",
+                "fal-ai/omnigen-v1",
+                "fal-ai/sana",
             ],
             # Add more modules here
         }
