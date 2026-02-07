@@ -311,6 +311,270 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["image", "prompt"]
     },
+
+    # Pixverse v5.6
+    "fal-ai/pixverse/v5.6/transition": {
+        "class_name": "PixverseV56Transition",
+        "docstring": "Pixverse v5.6 Transition creates smooth video transitions between two images with professional effects.",
+        "tags": ["video", "transition", "pixverse", "v5.6", "effects"],
+        "use_cases": [
+            "Create smooth transitions between images",
+            "Generate professional video effects",
+            "Produce seamless image morphing",
+            "Create transition animations",
+            "Generate video connecting two scenes"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Vidu Q2
+    "fal-ai/vidu/q2/reference-to-video/pro": {
+        "class_name": "ViduQ2ReferenceToVideoPro",
+        "docstring": "Vidu Q2 Reference-to-Video Pro generates professional quality videos using reference images for style and content.",
+        "tags": ["video", "generation", "vidu", "q2", "pro", "reference"],
+        "use_cases": [
+            "Generate pro videos from references",
+            "Create style-consistent animations",
+            "Produce reference-guided videos",
+            "Generate videos matching examples",
+            "Create professional reference-based content"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Wan v2.6 Flash
+    "wan/v2.6/image-to-video/flash": {
+        "class_name": "WanV26ImageToVideoFlash",
+        "docstring": "Wan v2.6 Flash generates videos from images with ultra-fast processing for rapid iteration.",
+        "tags": ["video", "generation", "wan", "v2.6", "flash", "fast"],
+        "use_cases": [
+            "Generate videos at maximum speed",
+            "Create rapid video prototypes",
+            "Produce instant video previews",
+            "Generate quick video iterations",
+            "Create fast video animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "wan/v2.6/image-to-video": {
+        "class_name": "WanV26ImageToVideo",
+        "docstring": "Wan v2.6 generates high-quality videos from images with balanced quality and performance.",
+        "tags": ["video", "generation", "wan", "v2.6", "image-to-video"],
+        "use_cases": [
+            "Generate quality videos from images",
+            "Create balanced video animations",
+            "Produce reliable video content",
+            "Generate consistent videos",
+            "Create professional animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # LTX-2 19B Family
+    "fal-ai/ltx-2-19b/image-to-video": {
+        "class_name": "Ltx219BImageToVideo",
+        "docstring": "LTX-2 19B generates high-quality videos from images using the powerful 19-billion parameter model.",
+        "tags": ["video", "generation", "ltx-2", "19b", "large-model"],
+        "use_cases": [
+            "Generate high-quality videos with large model",
+            "Create detailed video animations",
+            "Produce superior video content",
+            "Generate videos with powerful AI",
+            "Create premium video animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/ltx-2-19b/image-to-video/lora": {
+        "class_name": "Ltx219BImageToVideoLora",
+        "docstring": "LTX-2 19B with LoRA enables custom-trained 19B models for specialized video generation.",
+        "tags": ["video", "generation", "ltx-2", "19b", "lora", "custom"],
+        "use_cases": [
+            "Generate videos with custom 19B model",
+            "Create specialized video content",
+            "Produce domain-specific animations",
+            "Generate with fine-tuned large model",
+            "Create customized video animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/ltx-2-19b/distilled/image-to-video": {
+        "class_name": "Ltx219BDistilledImageToVideo",
+        "docstring": "LTX-2 19B Distilled generates videos efficiently using knowledge distillation from the 19B model.",
+        "tags": ["video", "generation", "ltx-2", "19b", "distilled", "efficient"],
+        "use_cases": [
+            "Generate videos efficiently with distilled model",
+            "Create fast quality video animations",
+            "Produce optimized video content",
+            "Generate videos with good performance",
+            "Create balanced quality-speed videos"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/ltx-2-19b/distilled/image-to-video/lora": {
+        "class_name": "Ltx219BDistilledImageToVideoLora",
+        "docstring": "LTX-2 19B Distilled with LoRA combines efficient generation with custom-trained models.",
+        "tags": ["video", "generation", "ltx-2", "19b", "distilled", "lora"],
+        "use_cases": [
+            "Generate videos with custom distilled model",
+            "Create efficient specialized content",
+            "Produce fast domain-specific videos",
+            "Generate with optimized custom model",
+            "Create quick customized animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Wan Move
+    "fal-ai/wan-move": {
+        "class_name": "WanMove",
+        "docstring": "Wan Move generates videos with natural motion and movement from static images.",
+        "tags": ["video", "generation", "wan", "motion", "animation"],
+        "use_cases": [
+            "Add natural motion to images",
+            "Create animated movements",
+            "Produce dynamic video content",
+            "Generate moving scenes from stills",
+            "Create motion animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Kandinsky5 Pro
+    "fal-ai/kandinsky5-pro/image-to-video": {
+        "class_name": "Kandinsky5ProImageToVideo",
+        "docstring": "Kandinsky5 Pro generates professional quality videos from images with artistic style and control.",
+        "tags": ["video", "generation", "kandinsky", "pro", "artistic"],
+        "use_cases": [
+            "Generate artistic videos from images",
+            "Create stylized video animations",
+            "Produce creative video content",
+            "Generate videos with artistic flair",
+            "Create professional artistic videos"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Live Avatar
+    "fal-ai/live-avatar": {
+        "class_name": "LiveAvatar",
+        "docstring": "Live Avatar creates animated talking avatars from portrait images with realistic lip-sync and expressions.",
+        "tags": ["video", "avatar", "talking-head", "animation", "portrait"],
+        "use_cases": [
+            "Create talking avatar videos",
+            "Animate portrait images",
+            "Generate lip-synced avatars",
+            "Produce speaking character videos",
+            "Create animated presenters"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Hunyuan Video v1.5
+    "fal-ai/hunyuan-video-v1.5/image-to-video": {
+        "class_name": "HunyuanVideoV15ImageToVideo",
+        "docstring": "Hunyuan Video v1.5 generates high-quality videos from images with advanced AI capabilities.",
+        "tags": ["video", "generation", "hunyuan", "v1.5", "advanced"],
+        "use_cases": [
+            "Generate advanced quality videos",
+            "Create sophisticated animations",
+            "Produce high-fidelity video content",
+            "Generate videos with AI excellence",
+            "Create cutting-edge video animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Kling Video O1
+    "fal-ai/kling-video/o1/standard/image-to-video": {
+        "class_name": "KlingVideoO1StandardImageToVideo",
+        "docstring": "Kling Video O1 Standard generates videos with optimized standard quality from images.",
+        "tags": ["video", "generation", "kling", "o1", "standard"],
+        "use_cases": [
+            "Generate standard O1 quality videos",
+            "Create optimized video animations",
+            "Produce efficient video content",
+            "Generate balanced quality videos",
+            "Create standard tier animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/kling-video/o1/standard/reference-to-video": {
+        "class_name": "KlingVideoO1StandardReferenceToVideo",
+        "docstring": "Kling Video O1 Standard generates videos using reference images for style consistency.",
+        "tags": ["video", "generation", "kling", "o1", "standard", "reference"],
+        "use_cases": [
+            "Generate videos from reference images",
+            "Create style-consistent animations",
+            "Produce reference-guided content",
+            "Generate videos matching examples",
+            "Create standardized reference videos"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Kling Video v2.6 Pro
+    "fal-ai/kling-video/v2.6/pro/image-to-video": {
+        "class_name": "KlingVideoV26ProImageToVideo",
+        "docstring": "Kling Video v2.6 Pro generates professional quality videos with latest model improvements.",
+        "tags": ["video", "generation", "kling", "v2.6", "pro"],
+        "use_cases": [
+            "Generate professional v2.6 videos",
+            "Create latest quality animations",
+            "Produce premium video content",
+            "Generate advanced videos",
+            "Create pro-tier animations"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Kling Video AI Avatar v2
+    "fal-ai/kling-video/ai-avatar/v2/standard": {
+        "class_name": "KlingVideoAiAvatarV2Standard",
+        "docstring": "Kling Video AI Avatar v2 Standard creates animated talking avatars with standard quality.",
+        "tags": ["video", "avatar", "kling", "v2", "standard", "talking-head"],
+        "use_cases": [
+            "Create standard quality talking avatars",
+            "Animate portraits with speech",
+            "Generate avatar presentations",
+            "Produce speaking character videos",
+            "Create AI-driven avatars"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/kling-video/ai-avatar/v2/pro": {
+        "class_name": "KlingVideoAiAvatarV2Pro",
+        "docstring": "Kling Video AI Avatar v2 Pro creates professional quality animated talking avatars with enhanced realism.",
+        "tags": ["video", "avatar", "kling", "v2", "pro", "talking-head"],
+        "use_cases": [
+            "Create professional talking avatars",
+            "Animate portraits with high quality",
+            "Generate realistic avatar videos",
+            "Produce premium speaking characters",
+            "Create pro-grade AI avatars"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
+
+    # Creatify Aurora
+    "fal-ai/creatify/aurora": {
+        "class_name": "CreatifyAurora",
+        "docstring": "Creatify Aurora generates creative and visually stunning videos from images with unique effects.",
+        "tags": ["video", "generation", "creatify", "aurora", "creative", "effects"],
+        "use_cases": [
+            "Generate creative visual effects videos",
+            "Create stunning video animations",
+            "Produce artistic video content",
+            "Generate unique video effects",
+            "Create visually impressive videos"
+        ],
+        "basic_fields": ["image", "prompt"]
+    },
 }
 
 
