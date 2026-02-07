@@ -70,7 +70,7 @@ class LanguageBoost(Enum):
     Enhance recognition of specified languages and dialects
     """
     CHINESE = "Chinese"
-    CHINESE,YUE = "Chinese,Yue"
+    CHINESE_YUE = "Chinese,Yue"
     ENGLISH = "English"
     ARABIC = "Arabic"
     RUSSIAN = "Russian"
