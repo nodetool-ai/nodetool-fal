@@ -8,10 +8,10 @@
   "repo_id": "",
   "nodes": [
     {
-      "title": "Dynamic Fal Schema",
-      "description": "Dynamic FAL schema-driven node for running any fal.ai endpoint.\n    fal, schema, dynamic, openapi, inference, runtime, model\n\n    Use cases:\n    - Call new fal.ai endpoints without adding new Python nodes\n    - Prototype workflows with experimental FAL models\n    - Run custom endpoints by sharing model info (llms.txt)\n    - Build flexible pipelines that depend on runtime model selection\n    - Explore model inputs/outputs directly from OpenAPI metadata",
+      "title": "Fal AI",
+      "description": "Dynamic FAL node for running any fal.ai endpoint.\n    fal, schema, dynamic, openapi, inference, runtime, model\n\n    Use cases:\n    - Call new fal.ai endpoints without adding new Python nodes\n    - Prototype workflows with experimental FAL models\n    - Run custom endpoints by sharing model info (llms.txt)\n    - Build flexible pipelines that depend on runtime model selection",
       "namespace": "fal.dynamic_schema",
-      "node_type": "fal.dynamic_schema.DynamicFalSchema",
+      "node_type": "fal.dynamic_schema.FalAI",
       "properties": [
         {
           "name": "model_info",
