@@ -1023,12 +1023,17 @@ def _schema_bundle_to_resolve_result(bundle: FalSchemaBundle) -> dict[str, Any]:
         entry: dict[str, Any] = _type_metadata_to_dict(meta)
         if desc is not None:
             entry["description"] = desc
-        # Min/max for number inputs (JSON schema minimum/maximum)
+        
+        # Include metadata if available
         prop_schema = schema_props.get(name)
         if prop_schema is not None:
             resolved_prop = _resolve_schema_ref(bundle.openapi, prop_schema)
+            if "default" in resolved_prop:
+                entry["default"] = resolved_prop["default"]
+            
             if "enum" in resolved_prop:
                 entry["values"] = resolved_prop["enum"]
+            
             if meta.type in ("int", "float"):
                 if "minimum" in resolved_prop:
                     entry["min"] = resolved_prop["minimum"]
