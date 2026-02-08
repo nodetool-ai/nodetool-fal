@@ -852,6 +852,10 @@ def _infer_input_type(
     resolved = _resolve_schema_ref(openapi, prop_schema)
     kind = resolved.get("type")
 
+    # Detect Enum
+    if "enum" in resolved:
+        return TypeMetadata(type="enum", values=resolved["enum"])
+
     # Detect ImageSize
     if kind == "object" and _is_image_size_schema(resolved):
         return TypeMetadata(type="image_size")
@@ -992,7 +996,7 @@ def _build_input_types(
     out: dict[str, tuple[TypeMetadata, str | None]] = {}
     for name, prop_schema in properties.items():
         resolved = _resolve_schema_ref(openapi, prop_schema)
-        meta = _infer_output_type(openapi, name, prop_schema)
+        meta = _infer_input_type(openapi, prop_schema)
         desc = resolved.get("description")
         out[name] = (meta, desc)
     return out
@@ -1023,6 +1027,8 @@ def _schema_bundle_to_resolve_result(bundle: FalSchemaBundle) -> dict[str, Any]:
         prop_schema = schema_props.get(name)
         if prop_schema is not None:
             resolved_prop = _resolve_schema_ref(bundle.openapi, prop_schema)
+            if "enum" in resolved_prop:
+                entry["values"] = resolved_prop["enum"]
             if meta.type in ("int", "float"):
                 if "minimum" in resolved_prop:
                     entry["min"] = resolved_prop["minimum"]
@@ -1132,7 +1138,16 @@ async def resolve_dynamic_schema(model_info: str) -> dict[str, Any]:
 
 def _type_metadata_to_dict(meta: TypeMetadata) -> dict[str, Any]:
     """Serialize TypeMetadata for JSON (e.g. API response)."""
-    out: dict[str, Any] = {"type": meta.type, "type_args": [], "optional": getattr(meta, "optional", False)}
+    out: dict[str, Any] = {
+        "type": meta.type,
+        "type_args": [],
+        "optional": getattr(meta, "optional", False),
+    }
+    if getattr(meta, "values", None):
+        out["values"] = meta.values
+    if getattr(meta, "type_name", None):
+        out["type_name"] = meta.type_name
+
     if getattr(meta, "type_args", None):
         out["type_args"] = [
             _type_metadata_to_dict(a) if isinstance(a, TypeMetadata) else a
