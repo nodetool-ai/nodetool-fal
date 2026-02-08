@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, quote, urlparse
 
+
 import httpx
 from pydantic import Field
 
@@ -253,7 +254,12 @@ class FalAI(FALNode):
 
 
 async def _fetch_openapi(openapi_url: str) -> dict[str, Any]:
-    url = _normalize_openapi_url(openapi_url) if _is_openapi_url(openapi_url) else openapi_url
+    _validate_fal_url(openapi_url)
+    url = (
+        _normalize_openapi_url(openapi_url)
+        if _is_openapi_url(openapi_url)
+        else openapi_url
+    )
     timeout = httpx.Timeout(20.0)
     async with httpx.AsyncClient(timeout=timeout) as client:
         schema_resp = await client.get(url)
@@ -262,6 +268,7 @@ async def _fetch_openapi(openapi_url: str) -> dict[str, Any]:
 
 
 async def _fetch_model_info(model_info_url: str) -> str:
+    _validate_fal_url(model_info_url)
     timeout = httpx.Timeout(20.0)
     async with httpx.AsyncClient(timeout=timeout) as client:
         resp = await client.get(model_info_url)
@@ -269,9 +276,26 @@ async def _fetch_model_info(model_info_url: str) -> str:
         return resp.text
 
 
+def _validate_fal_url(url: str) -> None:
+    """Ensure the URL points to a trusted fal.ai domain to mitigate SSRF."""
+    parsed = urlparse(url)
+    domain = (parsed.netloc or "").lower()
+    # Allow fal.ai and fal.run (used for endpoints)
+    if not (domain.endswith(".fal.ai") or domain == "fal.ai" or 
+            domain.endswith(".fal.run") or domain == "fal.run"):
+        raise ValueError(
+            f"Invalid domain for FAL schema resolution: {domain or 'unknown'}. "
+            "Only *.fal.ai or *.fal.run domains are permitted."
+        )
+
+
 def _sanitize_endpoint_id(value: str) -> str:
-    """Strip trailing punctuation and whitespace that can cause 404s (e.g. pasted '...base/edit)' )."""
-    return value.strip().rstrip(")\\]}>.,;:").strip()
+    """Strip trailing punctuation and strictly validate endpoint ID format to prevent traversal."""
+    clean = value.strip().rstrip(")\\]}>.,;:").strip()
+    # Permit alphanumeric, hyphens, underscores, and forward slashes (for 'fal-ai/model-name')
+    if not re.match(r"^[a-zA-Z0-9\-_/]+$", clean):
+        raise ValueError(f"Invalid characters in endpoint ID: {clean}")
+    return clean
 
 
 def _normalize_model_info(
@@ -301,8 +325,10 @@ def _cache_key_for_model_info(
     model_info_url: str | None,
     endpoint_hint: str | None,
 ) -> str | None:
+    """Return a unique, safe cache key by hashing the input info."""
+    # We always hash to prevent path traversal risks from un-sanitized strings being used as filenames.
     if endpoint_hint:
-        return endpoint_hint
+        return hashlib.sha256(endpoint_hint.encode("utf-8")).hexdigest()
     if model_info_url:
         return hashlib.sha256(model_info_url.encode("utf-8")).hexdigest()
     if model_info_text:
