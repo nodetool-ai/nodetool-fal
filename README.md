@@ -22,6 +22,21 @@ All nodes expect a valid `FAL_API_KEY` in the workflow environment. The key is e
 
 The package defines nodes grouped by modality. Each node is a subclass of `FALNode` which provides the common logic for calling a FAL endpoint.
 
+### Dynamic Schema
+
+- **FalAI** – call any fal.ai model by supplying a `llms.txt` URL, a fal.ai model URL, an endpoint id (e.g. `fal-ai/foo/bar`), or raw `llms.txt` content in the **model_info** field. The node fetches the OpenAPI schema from fal.ai, then **automatically fills all inputs and outputs** from that schema—you do not add inputs or outputs one by one.
+
+  **How it works**
+
+  - **model_info** accepts: a fal.ai llms.txt URL (e.g. `https://fal.ai/models/fal-ai/foo/llms.txt`), a model page URL (resolved to llms.txt), an endpoint id, or pasted llms.txt text.
+  - Schema is resolved from the URL/content, then cached under `~/.cache/nodetool/fal_schema/` (or `NODETOOL_FAL_SCHEMA_CACHE`).
+  - When the schema is available (from cache or after the first run), the node’s **dynamic inputs and outputs** are set from the OpenAPI schema so all parameters and result fields appear as slots.
+
+  **If pasting a URL does nothing**
+
+  - The first time you use a URL there is no cache, so the schema is only loaded when the node **runs**. After one successful run, reopening the workflow will show all inputs/outputs from cache.
+  - To show inputs/outputs **before** running, the UI can call the async helper `resolve_dynamic_schema(model_info)` (from `nodetool.nodes.fal.dynamic_schema`) and apply the returned `dynamic_properties` and `dynamic_outputs` to the node. Backends can expose this as an API (e.g. when `model_info` changes) so pasting a URL immediately updates the node’s slots.
+
 ### Large Language Model
 
 - **AnyLLM** – interface to multiple LLMs (Claude 3, Gemini, Llama, GPT‑4 and others) allowing you to select the model via the `model` field.

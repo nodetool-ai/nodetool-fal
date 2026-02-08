@@ -286,9 +286,6 @@ class CogView4(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef])
     guidance_scale: float | OutputHandle[float] = connect_field(
         default=7.0, description="How closely to follow the prompt"
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1557,9 +1554,6 @@ class GPTImage1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
         default="auto",
         description="The quality of the generated image (auto, high, medium, low)",
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1601,9 +1595,6 @@ class Gemini25FlashImage(
     aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(
         default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1,
         description="The aspect ratio of the generated image",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
     )
 
     @classmethod
@@ -1655,9 +1646,6 @@ class HunyuanImageV3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     )
     guidance_scale: float | OutputHandle[float] = connect_field(
         default=5.0, description="How closely to follow the prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
     )
 
     @classmethod
@@ -1933,9 +1921,6 @@ class IdeogramV3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="", description="A negative prompt to avoid in the generated image"
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2034,9 +2019,6 @@ class Imagen3(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     aspect_ratio: nodetool.nodes.fal.text_to_image.AspectRatio = Field(
         default=nodetool.nodes.fal.text_to_image.AspectRatio.RATIO_1_1,
         description="The aspect ratio of the generated image",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
     )
 
     @classmethod
@@ -2168,9 +2150,6 @@ class KlingImage3TextToImage(
     elements: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="Optional elements for face/character control. Reference as @Element1, @Element2 in prompt",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
     )
 
     @classmethod
@@ -2523,9 +2502,6 @@ class QwenImageMax(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
         default=nodetool.nodes.fal.text_to_image.ImageSizePreset.SQUARE_HD,
         description="The size of the generated image",
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2676,9 +2652,6 @@ class Reve(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     guidance_scale: float | OutputHandle[float] = connect_field(
         default=3.5, description="How closely to follow the prompt"
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
-    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2788,9 +2761,6 @@ class Seedream45(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef
     )
     guidance_scale: float | OutputHandle[float] = connect_field(
         default=5.0, description="How closely to follow the prompt"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
     )
 
     @classmethod
@@ -3225,9 +3195,6 @@ class ZImageTurbo(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRe
     )
     num_inference_steps: int | OutputHandle[int] = connect_field(
         default=4, description="The number of inference steps"
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="Seed for reproducible generation"
     )
 
     @classmethod

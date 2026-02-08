@@ -8,6 +8,28 @@
   "repo_id": "",
   "nodes": [
     {
+      "title": "Fal AI",
+      "description": "Dynamic FAL node for running any fal.ai endpoint.\n    fal, schema, dynamic, openapi, inference, runtime, model\n\n    Use cases:\n    - Call new fal.ai endpoints without adding new Python nodes\n    - Prototype workflows with experimental FAL models\n    - Run custom endpoints by sharing model info (llms.txt)\n    - Build flexible pipelines that depend on runtime model selection",
+      "namespace": "fal.dynamic_schema",
+      "node_type": "fal.dynamic_schema.FalAI",
+      "properties": [
+        {
+          "name": "model_info",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Model Info",
+          "description": "Paste the full llms.txt from the fal.ai model page (e.g. fal.ai/models/... \u2192 copy all)."
+        }
+      ],
+      "basic_fields": [
+        "model_info"
+      ],
+      "is_dynamic": true,
+      "supports_dynamic_outputs": true
+    },
+    {
       "title": "Bi Ref Net",
       "description": "BiRefNet is a high-quality background removal model using bilateral reference.\n    image, background-removal, segmentation, matting\n\n    Use cases:\n    - Remove backgrounds from photos\n    - Create product images with transparent backgrounds\n    - Extract subjects from images\n    - Prepare images for compositing\n    - Create stickers and cutouts",
       "namespace": "fal.image_to_image",

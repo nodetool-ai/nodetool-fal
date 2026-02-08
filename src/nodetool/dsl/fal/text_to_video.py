@@ -177,9 +177,6 @@ class KlingO3ProTextToVideo(
     Kling3AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.Kling3AspectRatio
     )
-    Kling3ShotType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.Kling3ShotType
-    )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt describing the desired video"
@@ -197,11 +194,7 @@ class KlingO3ProTextToVideo(
     )
     voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
-    )
-    shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
-        default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
 
     @classmethod
@@ -242,9 +235,6 @@ class KlingO3TextToVideo(
     Kling3AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.Kling3AspectRatio
     )
-    Kling3ShotType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.Kling3ShotType
-    )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt describing the desired video"
@@ -262,11 +252,7 @@ class KlingO3TextToVideo(
     )
     voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
-    )
-    shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
-        default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
 
     @classmethod
@@ -385,7 +371,7 @@ class KlingV3ProTextToVideo(
     )
     voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
         default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
@@ -458,7 +444,7 @@ class KlingV3TextToVideo(
     )
     voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     shot_type: nodetool.nodes.fal.text_to_video.Kling3ShotType = Field(
         default=nodetool.nodes.fal.text_to_video.Kling3ShotType.CUSTOMIZE,
@@ -1330,6 +1316,9 @@ class Sora2TextToVideo(
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+    Sora2Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Sora2Duration
+    )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt describing the desired video"
@@ -1338,8 +1327,9 @@ class Sora2TextToVideo(
         default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    duration: int | OutputHandle[int] = connect_field(
-        default=5, description="Duration of the video in seconds"
+    duration: nodetool.nodes.fal.text_to_video.Sora2Duration = Field(
+        default=nodetool.nodes.fal.text_to_video.Sora2Duration._4s,
+        description="Duration of the video in seconds",
     )
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="Seed for reproducible generation"

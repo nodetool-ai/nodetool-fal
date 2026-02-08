@@ -366,11 +366,8 @@ class KlingO3ImageToVideo(
     Kling3Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.image_to_video.Kling3Duration
     )
-    Kling3AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.Kling3AspectRatio
-    )
 
-    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -389,18 +386,8 @@ class KlingO3ImageToVideo(
         default=nodetool.nodes.fal.image_to_video.Kling3Duration.FIVE_SECONDS,
         description="The duration of the generated video in seconds (3-15)",
     )
-    aspect_ratio: nodetool.nodes.fal.image_to_video.Kling3AspectRatio = Field(
-        default=nodetool.nodes.fal.image_to_video.Kling3AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
-    )
     generate_audio: bool | OutputHandle[bool] = connect_field(
         default=True, description="Generate native audio for the video"
-    )
-    reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
-        connect_field(
-            default=[],
-            description="Reference images for character/element consistency. Reference as @Element1, @Element2 in prompt",
-        )
     )
 
     @classmethod
@@ -441,9 +428,6 @@ class KlingO3ProReferenceToVideo(
     Kling3AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.image_to_video.Kling3AspectRatio
     )
-    Kling3ShotType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.Kling3ShotType
-    )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="A description of the desired video motion and style"
@@ -482,10 +466,6 @@ class KlingO3ProReferenceToVideo(
     )
     generate_audio: bool | OutputHandle[bool] = connect_field(
         default=True, description="Generate native audio for the video"
-    )
-    shot_type: nodetool.nodes.fal.image_to_video.Kling3ShotType = Field(
-        default=nodetool.nodes.fal.image_to_video.Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
     )
 
     @classmethod
@@ -526,9 +506,6 @@ class KlingO3ReferenceToVideo(
     Kling3AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.image_to_video.Kling3AspectRatio
     )
-    Kling3ShotType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.image_to_video.Kling3ShotType
-    )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="A description of the desired video motion and style"
@@ -567,10 +544,6 @@ class KlingO3ReferenceToVideo(
     )
     generate_audio: bool | OutputHandle[bool] = connect_field(
         default=True, description="Generate native audio for the video"
-    )
-    shot_type: nodetool.nodes.fal.image_to_video.Kling3ShotType = Field(
-        default=nodetool.nodes.fal.image_to_video.Kling3ShotType.CUSTOMIZE,
-        description="Shot type for multi-shot generation",
     )
 
     @classmethod
@@ -641,7 +614,7 @@ class KlingV3ImageToVideo(
     )
     voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
         connect_field(
@@ -725,7 +698,7 @@ class KlingV3ProImageToVideo(
     )
     voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
-        description="Voice IDs for audio. Reference in prompt with <<<<<<voice_1>>>>>> (max 2 voices)",
+        description="Voice IDs for audio. Reference in prompt with <<<voice_1>>> (max 2 voices)",
     )
     reference_images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = (
         connect_field(
@@ -2111,6 +2084,9 @@ class Sora2ImageToVideo(
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.AspectRatio
+    Sora2Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.image_to_video.Sora2Duration
+    )
 
     image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
@@ -2125,8 +2101,9 @@ class Sora2ImageToVideo(
         default=nodetool.nodes.fal.image_to_video.AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    duration: int | OutputHandle[int] = connect_field(
-        default=5, description="Duration of the video in seconds"
+    duration: nodetool.nodes.fal.image_to_video.Sora2Duration = Field(
+        default=nodetool.nodes.fal.image_to_video.Sora2Duration._4s,
+        description="Duration of the video in seconds",
     )
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="Seed for reproducible generation"

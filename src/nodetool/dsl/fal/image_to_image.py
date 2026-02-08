@@ -969,7 +969,7 @@ class FluxLoraCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
         nodetool.nodes.fal.text_to_image.ImageSizePreset
     )
 
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -986,13 +986,14 @@ class FluxLoraCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
         default=28, description="The number of inference steps to perform"
     )
     guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
+        default=30,
+        description="The CFG scale - how closely the model should stick to your prompt (20-40)",
     )
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="The same seed will output the same image every time"
     )
-    lora_scale: float | OutputHandle[float] = connect_field(
-        default=0.6, description="The strength of the LoRA adaptation"
+    num_images: int | OutputHandle[int] = connect_field(
+        default=1, description="The number of images to generate (1-4)"
     )
 
     @classmethod
@@ -1029,7 +1030,7 @@ class FluxLoraDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
         nodetool.nodes.fal.text_to_image.ImageSizePreset
     )
 
-    control_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1046,13 +1047,14 @@ class FluxLoraDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
         default=28, description="The number of inference steps to perform"
     )
     guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5, description="How closely the model should stick to your prompt"
+        default=3.5,
+        description="The CFG scale - how closely the model should stick to your prompt (0-35)",
     )
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="The same seed will output the same image every time"
     )
-    lora_scale: float | OutputHandle[float] = connect_field(
-        default=0.6, description="The strength of the LoRA adaptation"
+    num_images: int | OutputHandle[int] = connect_field(
+        default=1, description="The number of images to generate (1-4)"
     )
 
     @classmethod
