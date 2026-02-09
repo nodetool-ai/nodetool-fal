@@ -20,6 +20,8 @@ class Param:
     description: str
     default_raw: str | None
     options: list[str]
+    # True when type is list<SomeCompoundType> / array of X; scaffold cannot build payload
+    compound_list: bool = False
 
 
 @dataclass
@@ -147,6 +149,14 @@ def parse_params(section: str) -> list[Param]:
             description_line = f"Input for {name}"
 
         field_name = map_field_name(name, schema_type, description_line)
+        # list<ObjectType> (not list<string>) = compound list; we emit field + TODO, no auto-assign
+        _is_list = re.match(r"list\s*<", schema_type) or re.search(
+            r"array\s+of\s+\w+", schema_type, re.IGNORECASE
+        )
+        _simple_inner = any(
+            s in schema_type.lower() for s in ("string", "integer", "number", "boolean")
+        )
+        compound_list = bool(_is_list) and not _simple_inner
 
         params.append(
             Param(
@@ -157,6 +167,7 @@ def parse_params(section: str) -> list[Param]:
                 description=description_line,
                 default_raw=default_raw,
                 options=options,
+                compound_list=compound_list,
             )
         )
     return params
@@ -196,7 +207,7 @@ def infer_field_type(param: Param) -> tuple[str, bool]:
     elif "boolean" in param.schema_type:
         base = "bool"
     elif "list" in param.schema_type or "array" in param.schema_type:
-        base = "list"
+        base = "list[dict[str, Any]]" if getattr(param, "compound_list", False) else "list"
     else:
         base = "str"
 
@@ -248,7 +259,7 @@ def field_default(param: Param, base_type: str, optional: bool) -> str:
         return "0"
     if base_type == "float":
         return "0.0"
-    if base_type == "list":
+    if base_type == "list" or base_type.startswith("list["):
         return "[]"
     return "None"
 
@@ -292,6 +303,13 @@ def render_class(spec: ModelSpec, source_url: str) -> str:
         base_type = full_type.replace(" | None", "")
         default = field_default(p, base_type, optional)
         desc = p.description or f"Input for {p.original_name}"
+        # Override type for known compound lists so node has usable inputs
+        if getattr(p, "compound_list", False) and p.original_name == "elements":
+            full_type = "list[ImageRef]"
+            default = "[]"
+        elif getattr(p, "compound_list", False) and p.original_name == "multi_prompt":
+            full_type = "list[dict[str, Any]]"
+            default = "[]"
 
         field_rows.append(
             f"    {p.field_name}: {full_type} = Field(default={default}, description={desc!r})"
@@ -319,6 +337,36 @@ def render_class(spec: ModelSpec, source_url: str) -> str:
                 )
             continue
 
+        # Compound list: generate working code for known shapes, else TODO
+        if getattr(p, "compound_list", False):
+            if p.original_name == "multi_prompt":
+                post_rows.extend(
+                    [
+                        "        if self.multi_prompt:",
+                        '            arguments["multi_prompt"] = [{"prompt": str(d.get("prompt", "")), "duration": str(d.get("duration", "5"))} for d in self.multi_prompt]',
+                        '            arguments["shot_type"] = "customize"',
+                    ]
+                )
+                continue
+            if p.original_name == "elements":
+                post_rows.extend(
+                    [
+                        "        if self.elements:",
+                        "            elements_urls = []",
+                        "            for ref in self.elements:",
+                        "                if ref.uri:",
+                        "                    b = await context.image_to_base64(ref)",
+                        "                    elements_urls.append(f\"data:image/png;base64,{b}\")",
+                        "            if elements_urls:",
+                        "                arguments[\"elements\"] = [{\"frontal_image_url\": u, \"reference_image_urls\": [u]} for u in elements_urls]",
+                    ]
+                )
+                continue
+            post_rows.append(
+                f"        # TODO: build {p.original_name!r} from node fields; see OpenAPI schema for shape"
+            )
+            continue
+
         value_expr = (
             f"self.{p.field_name}.value"
             if p.options and not base_type.endswith("None")
@@ -328,9 +376,15 @@ def render_class(spec: ModelSpec, source_url: str) -> str:
             value_expr = f"self.{p.field_name}.value"
 
         if optional:
+            # For list params, only send when non-empty to avoid sending []
+            guard = (
+                f"self.{p.field_name}"
+                if base_type == "list" or base_type.startswith("list[")
+                else f"self.{p.field_name} is not None"
+            )
             post_rows.extend(
                 [
-                    f"        if self.{p.field_name} is not None:",
+                    f"        if {guard}:",
                     f"            arguments[{p.original_name!r}] = {value_expr}",
                 ]
             )
