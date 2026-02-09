@@ -2462,6 +2462,84 @@ class KlingO3ImageToVideo(FALNode):
         return ["image", "prompt", "duration"]
 
 
+class KlingO3ProImageToVideo(FALNode):
+    """
+    Generate a video by taking a start frame and an end frame, animating the transition between them while following text-driven style and scene guidance (Kling O3 Pro).
+    video, generation, kling, o3, pro, image-to-video, start-end-frame, img2vid
+
+    Use cases:
+    - Animate between start and end keyframes
+    - Create guided transitions with text prompts
+    - Generate videos with optional end-frame constraint
+    - Multi-shot video with multi_prompt
+    - Style and scene-driven motion
+    """
+
+    image: ImageRef = Field(
+        default=ImageRef(), description="URL of the start frame image"
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="Optional end frame image"
+    )
+    prompt: str = Field(
+        default="",
+        description="Text prompt for video generation. Either prompt or multi_prompt must be provided.",
+    )
+    duration: Kling3Duration = Field(
+        default=Kling3Duration.FIVE_SECONDS,
+        description="Video duration in seconds (3-15)",
+    )
+    generate_audio: bool = Field(
+        default=False,
+        description="Whether to generate native audio for the video",
+    )
+    multi_prompt: list[dict[str, str]] = Field(
+        default=[],
+        description="List of prompts for multi-shot video. Each item: {prompt, duration?}.",
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        if not (self.prompt or self.multi_prompt):
+            raise ValueError(
+                "Either prompt or multi_prompt must be provided. "
+                "Provide a text prompt or at least one multi-shot prompt."
+            )
+        if self.prompt and self.multi_prompt:
+            raise ValueError(
+                "Provide either prompt or multi_prompt, not both."
+            )
+        image_base64 = await context.image_to_base64(self.image)
+        arguments = {
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "duration": self.duration.value,
+        }
+        if self.prompt:
+            arguments["prompt"] = self.prompt
+        if self.generate_audio:
+            arguments["generate_audio"] = self.generate_audio
+        if self.end_image and self.end_image.uri:
+            end_image_base64 = await context.image_to_base64(self.end_image)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_base64}"
+        if self.multi_prompt:
+            arguments["multi_prompt"] = [
+                {"prompt": str(d.get("prompt", "")), "duration": str(d.get("duration", "5"))}
+                for d in self.multi_prompt
+            ]
+            arguments["shot_type"] = "customize"
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+
 class KlingO3ReferenceToVideo(FALNode):
     """
     Generate videos with character consistency using Kling Video O3 reference-to-video with reusable character elements.
