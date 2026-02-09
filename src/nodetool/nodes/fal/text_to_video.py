@@ -4,6 +4,7 @@ from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
+from nodetool.nodes.fal.image_to_video import KlingV3MultiPromptElement
 
 
 class HunyuanVideo(FALNode):
@@ -8839,9 +8840,16 @@ class KlingVideoV3StandardTextToVideo(FALNode):
         VALUE_14 = "14"
         VALUE_15 = "15"
 
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation
+        """
+        CUSTOMIZE = "customize"
+        INTELLIGENT = "intelligent"
+
 
     prompt: str = Field(
-        default="", description="Text prompt for video generation."
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
@@ -8852,6 +8860,15 @@ class KlingVideoV3StandardTextToVideo(FALNode):
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video."
     )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation"
+    )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
     )
@@ -8860,7 +8877,7 @@ class KlingVideoV3StandardTextToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments = {
+        arguments: dict[str, Any] = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
@@ -8868,6 +8885,16 @@ class KlingVideoV3StandardTextToVideo(FALNode):
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
+
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
+
+        if self.multi_prompt:
+            arguments["multi_prompt"] = [
+                {"prompt": mp.prompt, "duration": mp.duration}
+                for mp in self.multi_prompt
+            ]
+            arguments["shot_type"] = self.shot_type.value
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -8923,9 +8950,16 @@ class KlingVideoV3ProTextToVideo(FALNode):
         VALUE_14 = "14"
         VALUE_15 = "15"
 
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation
+        """
+        CUSTOMIZE = "customize"
+        INTELLIGENT = "intelligent"
+
 
     prompt: str = Field(
-        default="", description="Text prompt for video generation."
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
@@ -8936,6 +8970,15 @@ class KlingVideoV3ProTextToVideo(FALNode):
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video."
     )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation"
+    )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
     )
@@ -8944,7 +8987,7 @@ class KlingVideoV3ProTextToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        arguments = {
+        arguments: dict[str, Any] = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
@@ -8952,6 +8995,16 @@ class KlingVideoV3ProTextToVideo(FALNode):
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
+
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
+
+        if self.multi_prompt:
+            arguments["multi_prompt"] = [
+                {"prompt": mp.prompt, "duration": mp.duration}
+                for mp in self.multi_prompt
+            ]
+            arguments["shot_type"] = self.shot_type.value
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}

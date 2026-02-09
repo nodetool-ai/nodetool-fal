@@ -53815,7 +53815,7 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "Text prompt for video generation."
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
         },
         {
           "name": "aspect_ratio",
@@ -53867,6 +53867,48 @@
           "description": "Whether to generate native audio for the video."
         },
         {
+          "name": "voice_ids",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Voice Ids",
+          "description": "Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize",
+              "intelligent"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation"
+        },
+        {
           "name": "negative_prompt",
           "type": {
             "type": "str"
@@ -53911,7 +53953,7 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "Text prompt for video generation."
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
         },
         {
           "name": "aspect_ratio",
@@ -53961,6 +54003,48 @@
           "default": true,
           "title": "Generate Audio",
           "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "voice_ids",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Voice Ids",
+          "description": "Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize",
+              "intelligent"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation"
         },
         {
           "name": "negative_prompt",
@@ -109461,7 +109545,7 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "Text prompt for video generation."
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
         },
         {
           "name": "aspect_ratio",
@@ -109511,6 +109595,61 @@
           "default": true,
           "title": "Generate Audio",
           "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "voice_ids",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Voice Ids",
+          "description": "Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_combo_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation. Required when multi_prompt is provided."
         },
         {
           "name": "start_image_url",
@@ -109587,7 +109726,7 @@
           },
           "default": "",
           "title": "Prompt",
-          "description": "Text prompt for video generation."
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
         },
         {
           "name": "aspect_ratio",
@@ -109637,6 +109776,61 @@
           "default": true,
           "title": "Generate Audio",
           "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "voice_ids",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Voice Ids",
+          "description": "Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_combo_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation. Required when multi_prompt is provided."
         },
         {
           "name": "start_image_url",

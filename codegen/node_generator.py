@@ -11,6 +11,12 @@ from codegen.schema_parser import NodeSpec, FieldDef, EnumDef
 class NodeGenerator:
     """Generates Python code for FAL nodes."""
 
+    # Known BaseType subclass names that map to specific types
+    KNOWN_BASE_TYPES = {
+        "KlingV3MultiPromptElement",
+        "KlingV3ComboElementInput",
+    }
+
     def __init__(self):
         self._config_basic_fields = None
         self._field_renames = {}
@@ -146,8 +152,11 @@ class NodeGenerator:
         if spec.enums:
             imports.insert(0, "from enum import Enum")
         
-        # Determine which asset types are needed
+        # Determine which asset types and BaseType subclasses are needed
         asset_types = set()
+        base_type_classes = set()
+        needs_base_type = False
+        
         for field in spec.input_fields + spec.output_fields:
             if "ImageRef" in field.python_type:
                 asset_types.add("ImageRef")
@@ -155,6 +164,11 @@ class NodeGenerator:
                 asset_types.add("VideoRef")
             elif "AudioRef" in field.python_type:
                 asset_types.add("AudioRef")
+            # Detect BaseType subclass references (e.g., list[KlingV3MultiPromptElement])
+            for bt_name in self.KNOWN_BASE_TYPES:
+                if bt_name in field.python_type:
+                    base_type_classes.add(bt_name)
+                    needs_base_type = True
         
         # Add output type
         if "ImageRef" in spec.output_type:
@@ -164,8 +178,12 @@ class NodeGenerator:
         elif "AudioRef" in spec.output_type:
             asset_types.add("AudioRef")
         
-        if asset_types:
-            imports.append(f"from nodetool.metadata.types import {', '.join(sorted(asset_types))}")
+        # Build nodetool.metadata.types import
+        metadata_types = sorted(asset_types)
+        if needs_base_type:
+            metadata_types = ["BaseType"] + metadata_types
+        if metadata_types:
+            imports.append(f"from nodetool.metadata.types import {', '.join(metadata_types)}")
         
         imports.extend([
             "from nodetool.nodes.fal.fal_node import FALNode",
@@ -288,6 +306,13 @@ class NodeGenerator:
         
         return lines
 
+    def _is_base_type_list(self, field: FieldDef) -> bool:
+        """Check if a field is a list of BaseType subclass instances."""
+        for bt_name in self.KNOWN_BASE_TYPES:
+            if bt_name in field.python_type:
+                return True
+        return False
+
     def _generate_process_method(self, spec: NodeSpec) -> list[str]:
         """Generate async process method."""
         lines = [
@@ -317,6 +342,9 @@ class NodeGenerator:
                     lines.append(f'            "{api_param_name}": self.{field.name}.value if self.{field.name} else None,')
                 else:
                     lines.append(f'            "{api_param_name}": self.{field.name}.value,')
+            elif self._is_base_type_list(field):
+                # Serialize BaseType list items, excluding the internal 'type' field
+                lines.append(f'            "{api_param_name}": [item.model_dump(exclude={{"type"}}) for item in self.{field.name}],')
             else:
                 lines.append(f'            "{api_param_name}": self.{field.name},')
         

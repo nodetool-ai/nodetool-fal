@@ -1163,11 +1163,15 @@ class KlingVideoV3ProTextToVideo(SingleOutputGraphNode[types.VideoRef], GraphNod
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.AspectRatio
     Duration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.Duration
+    ShotType: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.ShotType
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.')
     aspect_ratio: nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.AspectRatio = Field(default=nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
     duration: nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.Duration = Field(default=nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
     generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video.')
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task).')
+    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots.')
+    shot_type: nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.ShotType = Field(default=nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
 
@@ -1202,11 +1206,15 @@ class KlingVideoV3StandardTextToVideo(SingleOutputGraphNode[types.VideoRef], Gra
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.AspectRatio
     Duration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.Duration
+    ShotType: typing.ClassVar[type] = nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.ShotType
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.')
     aspect_ratio: nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.AspectRatio = Field(default=nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
     duration: nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.Duration = Field(default=nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
     generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video.')
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task).')
+    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots.')
+    shot_type: nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.ShotType = Field(default=nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
 

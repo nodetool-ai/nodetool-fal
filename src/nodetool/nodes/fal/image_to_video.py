@@ -1,9 +1,24 @@
 from enum import Enum
 from pydantic import Field
-from typing import Any
-from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
+from typing import Any, Literal
+from nodetool.metadata.types import BaseType, ImageRef, VideoRef, AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
+
+
+class KlingV3MultiPromptElement(BaseType):
+    """A single shot element for Kling V3 multi-shot video generation."""
+    type: Literal["kling_v3_multi_prompt_element"] = "kling_v3_multi_prompt_element"
+    prompt: str = Field(default="", description="The prompt for this shot.")
+    duration: str = Field(default="5", description="The duration of this shot in seconds (3-15).")
+
+
+class KlingV3ComboElementInput(BaseType):
+    """An element (character/object) for Kling V3 video generation. Can be an image set or a video reference."""
+    type: Literal["kling_v3_combo_element_input"] = "kling_v3_combo_element_input"
+    frontal_image_url: str = Field(default="", description="The frontal image URL of the element (main view).")
+    reference_image_urls: list[str] = Field(default=[], description="Additional reference image URLs from different angles. 1-3 images supported.")
+    video_url: str = Field(default="", description="The video URL of the element. A request can only have one element with a video.")
 
 
 class PixverseV56ImageToVideo(FALNode):
@@ -11674,9 +11689,15 @@ class KlingVideoV3StandardImageToVideo(FALNode):
         VALUE_14 = "14"
         VALUE_15 = "15"
 
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation. Required when multi_prompt is provided.
+        """
+        CUSTOMIZE = "customize"
+
 
     prompt: str = Field(
-        default="", description="Text prompt for video generation."
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
@@ -11686,6 +11707,18 @@ class KlingVideoV3StandardImageToVideo(FALNode):
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video."
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
+    )
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
     )
     start_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
@@ -11702,7 +11735,7 @@ class KlingVideoV3StandardImageToVideo(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        arguments = {
+        arguments: dict[str, Any] = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
@@ -11715,6 +11748,31 @@ class KlingVideoV3StandardImageToVideo(FALNode):
         if self.end_image_url is not None and self.end_image_url.uri:
             end_image_url_base64 = await context.image_to_base64(self.end_image_url)
             arguments["end_image_url"] = f"data:image/png;base64,{end_image_url_base64}"
+
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
+
+        if self.multi_prompt:
+            arguments["multi_prompt"] = [
+                {"prompt": mp.prompt, "duration": mp.duration}
+                for mp in self.multi_prompt
+            ]
+            arguments["shot_type"] = self.shot_type.value
+
+        if self.elements:
+            element_list = []
+            for elem in self.elements:
+                entry: dict[str, Any] = {}
+                if elem.frontal_image_url:
+                    entry["frontal_image_url"] = elem.frontal_image_url
+                if elem.reference_image_urls:
+                    entry["reference_image_urls"] = elem.reference_image_urls
+                if elem.video_url:
+                    entry["video_url"] = elem.video_url
+                if entry:
+                    element_list.append(entry)
+            if element_list:
+                arguments["elements"] = element_list
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -11770,9 +11828,15 @@ class KlingVideoV3ProImageToVideo(FALNode):
         VALUE_14 = "14"
         VALUE_15 = "15"
 
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation. Required when multi_prompt is provided.
+        """
+        CUSTOMIZE = "customize"
+
 
     prompt: str = Field(
-        default="", description="Text prompt for video generation."
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
@@ -11782,6 +11846,18 @@ class KlingVideoV3ProImageToVideo(FALNode):
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video."
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
+    )
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
     )
     start_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
@@ -11798,7 +11874,7 @@ class KlingVideoV3ProImageToVideo(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        arguments = {
+        arguments: dict[str, Any] = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
@@ -11811,6 +11887,31 @@ class KlingVideoV3ProImageToVideo(FALNode):
         if self.end_image_url is not None and self.end_image_url.uri:
             end_image_url_base64 = await context.image_to_base64(self.end_image_url)
             arguments["end_image_url"] = f"data:image/png;base64,{end_image_url_base64}"
+
+        if self.voice_ids:
+            arguments["voice_ids"] = self.voice_ids
+
+        if self.multi_prompt:
+            arguments["multi_prompt"] = [
+                {"prompt": mp.prompt, "duration": mp.duration}
+                for mp in self.multi_prompt
+            ]
+            arguments["shot_type"] = self.shot_type.value
+
+        if self.elements:
+            element_list = []
+            for elem in self.elements:
+                entry: dict[str, Any] = {}
+                if elem.frontal_image_url:
+                    entry["frontal_image_url"] = elem.frontal_image_url
+                if elem.reference_image_urls:
+                    entry["reference_image_urls"] = elem.reference_image_urls
+                if elem.video_url:
+                    entry["video_url"] = elem.video_url
+                if entry:
+                    element_list.append(entry)
+            if element_list:
+                arguments["elements"] = element_list
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}

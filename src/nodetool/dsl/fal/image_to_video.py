@@ -1571,11 +1571,16 @@ class KlingVideoV3ProImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNo
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.AspectRatio
     Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.Duration
+    ShotType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.')
     aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
     duration: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
     generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video.')
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task).')
+    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.')
+    elements: list[types.KlingV3ComboElementInput] | OutputHandle[list[types.KlingV3ComboElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc.')
+    shot_type: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation. Required when multi_prompt is provided.')
     start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the video')
     end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the end of the video')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
@@ -1612,11 +1617,16 @@ class KlingVideoV3StandardImageToVideo(SingleOutputGraphNode[types.VideoRef], Gr
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.AspectRatio
     Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.Duration
+    ShotType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.')
     aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
     duration: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
     generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video.')
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task).')
+    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.')
+    elements: list[types.KlingV3ComboElementInput] | OutputHandle[list[types.KlingV3ComboElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc.')
+    shot_type: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation. Required when multi_prompt is provided.')
     start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the video')
     end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the end of the video')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
