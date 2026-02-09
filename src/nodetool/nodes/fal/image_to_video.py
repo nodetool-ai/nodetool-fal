@@ -11760,17 +11760,10 @@ class KlingVideoV3StandardImageToVideo(FALNode):
             arguments["shot_type"] = self.shot_type.value
 
         if self.elements:
-            element_list = []
-            for elem in self.elements:
-                entry: dict[str, Any] = {}
-                if elem.frontal_image_url:
-                    entry["frontal_image_url"] = elem.frontal_image_url
-                if elem.reference_image_urls:
-                    entry["reference_image_urls"] = elem.reference_image_urls
-                if elem.video_url:
-                    entry["video_url"] = elem.video_url
-                if entry:
-                    element_list.append(entry)
+            element_list = [
+                elem.model_dump(exclude={"type"}, exclude_defaults=True)
+                for elem in self.elements
+            ]
             if element_list:
                 arguments["elements"] = element_list
 
@@ -11899,17 +11892,10 @@ class KlingVideoV3ProImageToVideo(FALNode):
             arguments["shot_type"] = self.shot_type.value
 
         if self.elements:
-            element_list = []
-            for elem in self.elements:
-                entry: dict[str, Any] = {}
-                if elem.frontal_image_url:
-                    entry["frontal_image_url"] = elem.frontal_image_url
-                if elem.reference_image_urls:
-                    entry["reference_image_urls"] = elem.reference_image_urls
-                if elem.video_url:
-                    entry["video_url"] = elem.video_url
-                if entry:
-                    element_list.append(entry)
+            element_list = [
+                elem.model_dump(exclude={"type"}, exclude_defaults=True)
+                for elem in self.elements
+            ]
             if element_list:
                 arguments["elements"] = element_list
 
