@@ -4300,6 +4300,122 @@
       ]
     },
     {
+      "title": "Kling O3 Pro Image To Video",
+      "description": "Generate a video by taking a start frame and an end frame, animating the transition between them while following text-driven style and scene guidance (Kling O3 Pro).\n    video, generation, kling, o3, pro, image-to-video, start-end-frame, img2vid\n\n    Use cases:\n    - Animate between start and end keyframes\n    - Create guided transitions with text prompts\n    - Generate videos with optional end-frame constraint\n    - Multi-shot video with multi_prompt\n    - Style and scene-driven motion",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.KlingO3ProImageToVideo",
+      "properties": [
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "URL of the start frame image"
+        },
+        {
+          "name": "end_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "End Image",
+          "description": "Optional end frame image"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.Kling3Duration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15)"
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Generate Audio",
+          "description": "Whether to generate native audio for the video"
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "dict",
+                "type_args": [
+                  {
+                    "type": "str"
+                  },
+                  {
+                    "type": "str"
+                  }
+                ]
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video. Each item: {prompt, duration?}."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ]
+    },
+    {
       "title": "Kling O3 Pro Reference To Video",
       "description": "Generate premium videos with character consistency using Kling Video O3 Pro reference-to-video with enhanced quality.\n    video, generation, kling, o3, pro, reference-to-video, character-consistency, premium\n\n    Use cases:\n    - Create high-quality videos with consistent characters\n    - Generate professional story sequences\n    - Produce premium branded content\n    - Create broadcast-quality serialized content\n    - Generate professional character-driven narratives",
       "namespace": "fal.image_to_video",
