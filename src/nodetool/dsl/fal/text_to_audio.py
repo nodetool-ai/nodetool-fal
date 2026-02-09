@@ -18,79 +18,37 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class ACEStep(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    ACE-Step generates music with lyrics from text using advanced audio synthesis.
-    audio, generation, music, lyrics, ace-step, text-to-audio
+        ACE-Step generates music with lyrics from text using advanced audio synthesis.
+        audio, generation, music, lyrics, ace-step, text-to-audio
 
-    Use cases:
-    - Generate songs with lyrics
-    - Create music with vocal tracks
-    - Produce complete songs from text
-    - Generate lyrical content
-    - Create vocal music compositions
+        Use cases:
+        - Generate songs with lyrics
+        - Create music with vocal tracks
+        - Produce complete songs from text
+        - Generate lyrical content
+        - Create vocal music compositions
     """
 
-    Scheduler: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ACEStep.Scheduler
-    )
-    GuidanceType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ACEStep.GuidanceType
-    )
+    Scheduler: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ACEStep.Scheduler
+    GuidanceType: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ACEStep.GuidanceType
 
-    number_of_steps: int | OutputHandle[int] = connect_field(
-        default=27, description="Number of steps to generate the audio."
-    )
-    duration: float | OutputHandle[float] = connect_field(
-        default=60, description="The duration of the generated audio in seconds."
-    )
-    tags: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Comma-separated list of genre tags to control the style of the generated audio.",
-    )
-    minimum_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3,
-        description="Minimum guidance scale for the generation after the decay.",
-    )
-    lyrics: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
-    )
-    tag_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=5, description="Tag guidance scale for the generation."
-    )
-    scheduler: nodetool.nodes.fal.text_to_audio.ACEStep.Scheduler = Field(
-        default=nodetool.nodes.fal.text_to_audio.ACEStep.Scheduler.EULER,
-        description="Scheduler to use for the generation process.",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=15, description="Guidance scale for the generation."
-    )
-    guidance_type: nodetool.nodes.fal.text_to_audio.ACEStep.GuidanceType = Field(
-        default=nodetool.nodes.fal.text_to_audio.ACEStep.GuidanceType.APG,
-        description="Type of CFG to use for the generation process.",
-    )
-    lyric_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=1.5, description="Lyric guidance scale for the generation."
-    )
-    guidance_interval: float | OutputHandle[float] = connect_field(
-        default=0.5,
-        description="Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
-    )
-    guidance_interval_decay: float | OutputHandle[float] = connect_field(
-        default=0,
-        description="Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1,
-        description="Random seed for reproducibility. If not provided, a random seed will be used.",
-    )
-    granularity_scale: int | OutputHandle[int] = connect_field(
-        default=10,
-        description="Granularity scale for the generation process. Higher values can reduce artifacts.",
-    )
+    number_of_steps: int | OutputHandle[int] = connect_field(default=27, description='Number of steps to generate the audio.')
+    duration: float | OutputHandle[float] = connect_field(default=60, description='The duration of the generated audio in seconds.')
+    tags: str | OutputHandle[str] = connect_field(default='', description='Comma-separated list of genre tags to control the style of the generated audio.')
+    minimum_guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='Minimum guidance scale for the generation after the decay.')
+    lyrics: str | OutputHandle[str] = connect_field(default='', description='Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.')
+    tag_guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Tag guidance scale for the generation.')
+    scheduler: nodetool.nodes.fal.text_to_audio.ACEStep.Scheduler = Field(default=nodetool.nodes.fal.text_to_audio.ACEStep.Scheduler.EULER, description='Scheduler to use for the generation process.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=15, description='Guidance scale for the generation.')
+    guidance_type: nodetool.nodes.fal.text_to_audio.ACEStep.GuidanceType = Field(default=nodetool.nodes.fal.text_to_audio.ACEStep.GuidanceType.APG, description='Type of CFG to use for the generation process.')
+    lyric_guidance_scale: float | OutputHandle[float] = connect_field(default=1.5, description='Lyric guidance scale for the generation.')
+    guidance_interval: float | OutputHandle[float] = connect_field(default=0.5, description='Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)')
+    guidance_interval_decay: float | OutputHandle[float] = connect_field(default=0, description='Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. If not provided, a random seed will be used.')
+    granularity_scale: int | OutputHandle[int] = connect_field(default=10, description='Granularity scale for the generation process. Higher values can reduce artifacts.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -107,83 +65,37 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class ACEStepPromptToAudio(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class ACEStepPromptToAudio(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    ACE-Step generates music from text prompts with high-quality audio synthesis.
-    audio, generation, music, ace-step, text-to-audio
+        ACE-Step generates music from text prompts with high-quality audio synthesis.
+        audio, generation, music, ace-step, text-to-audio
 
-    Use cases:
-    - Generate music from text descriptions
-    - Create background music for videos
-    - Produce royalty-free music
-    - Generate audio soundtracks
-    - Create custom music compositions
+        Use cases:
+        - Generate music from text descriptions
+        - Create background music for videos
+        - Produce royalty-free music
+        - Generate audio soundtracks
+        - Create custom music compositions
     """
 
-    Scheduler: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.Scheduler
-    )
-    GuidanceType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.GuidanceType
-    )
+    Scheduler: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.Scheduler
+    GuidanceType: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.GuidanceType
 
-    number_of_steps: int | OutputHandle[int] = connect_field(
-        default=27, description="Number of steps to generate the audio."
-    )
-    duration: float | OutputHandle[float] = connect_field(
-        default=60, description="The duration of the generated audio in seconds."
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Prompt to control the style of the generated audio. This will be used to generate tags and lyrics.",
-    )
-    minimum_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3,
-        description="Minimum guidance scale for the generation after the decay.",
-    )
-    tag_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=5, description="Tag guidance scale for the generation."
-    )
-    scheduler: nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.Scheduler = Field(
-        default=nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.Scheduler.EULER,
-        description="Scheduler to use for the generation process.",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=15, description="Guidance scale for the generation."
-    )
-    guidance_type: (
-        nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.GuidanceType
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.GuidanceType.APG,
-        description="Type of CFG to use for the generation process.",
-    )
-    instrumental: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Whether to generate an instrumental version of the audio.",
-    )
-    lyric_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=1.5, description="Lyric guidance scale for the generation."
-    )
-    guidance_interval: float | OutputHandle[float] = connect_field(
-        default=0.5,
-        description="Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
-    )
-    guidance_interval_decay: float | OutputHandle[float] = connect_field(
-        default=0,
-        description="Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1,
-        description="Random seed for reproducibility. If not provided, a random seed will be used.",
-    )
-    granularity_scale: int | OutputHandle[int] = connect_field(
-        default=10,
-        description="Granularity scale for the generation process. Higher values can reduce artifacts.",
-    )
+    number_of_steps: int | OutputHandle[int] = connect_field(default=27, description='Number of steps to generate the audio.')
+    duration: float | OutputHandle[float] = connect_field(default=60, description='The duration of the generated audio in seconds.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to control the style of the generated audio. This will be used to generate tags and lyrics.')
+    minimum_guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='Minimum guidance scale for the generation after the decay.')
+    tag_guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Tag guidance scale for the generation.')
+    scheduler: nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.Scheduler = Field(default=nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.Scheduler.EULER, description='Scheduler to use for the generation process.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=15, description='Guidance scale for the generation.')
+    guidance_type: nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.GuidanceType = Field(default=nodetool.nodes.fal.text_to_audio.ACEStepPromptToAudio.GuidanceType.APG, description='Type of CFG to use for the generation process.')
+    instrumental: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to generate an instrumental version of the audio.')
+    lyric_guidance_scale: float | OutputHandle[float] = connect_field(default=1.5, description='Lyric guidance scale for the generation.')
+    guidance_interval: float | OutputHandle[float] = connect_field(default=0.5, description='Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)')
+    guidance_interval_decay: float | OutputHandle[float] = connect_field(default=0, description='Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. If not provided, a random seed will be used.')
+    granularity_scale: int | OutputHandle[int] = connect_field(default=10, description='Granularity scale for the generation process. Higher values can reduce artifacts.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -200,45 +112,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class BeatovenMusicGeneration(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class BeatovenMusicGeneration(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Music Generation
-    audio, generation, text-to-audio, tts
+        Music Generation
+        audio, generation, text-to-audio, tts
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Describe the music you want to generate"
-    )
-    duration: float | OutputHandle[float] = connect_field(
-        default=90, description="Length of the generated music in seconds"
-    )
-    refinement: int | OutputHandle[int] = connect_field(
-        default=100,
-        description="Refinement level - higher values may improve quality but take longer",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Random seed for reproducible results - leave empty for random generation",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Describe what you want to avoid in the music (instruments, styles, moods). Leave blank for none.",
-    )
-    creativity: float | OutputHandle[float] = connect_field(
-        default=16,
-        description="Creativity level - higher values allow more creative interpretation of the prompt",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Describe the music you want to generate')
+    duration: float | OutputHandle[float] = connect_field(default=90, description='Length of the generated music in seconds')
+    refinement: int | OutputHandle[int] = connect_field(default=100, description='Refinement level - higher values may improve quality but take longer')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducible results - leave empty for random generation')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Describe what you want to avoid in the music (instruments, styles, moods). Leave blank for none.')
+    creativity: float | OutputHandle[float] = connect_field(default=16, description='Creativity level - higher values allow more creative interpretation of the prompt')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -255,45 +148,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class BeatovenSoundEffectGeneration(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class BeatovenSoundEffectGeneration(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Sound Effect Generation
-    audio, generation, text-to-audio, tts
+        Sound Effect Generation
+        audio, generation, text-to-audio, tts
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Describe the sound effect you want to generate"
-    )
-    duration: float | OutputHandle[float] = connect_field(
-        default=5, description="Length of the generated sound effect in seconds"
-    )
-    refinement: int | OutputHandle[int] = connect_field(
-        default=40,
-        description="Refinement level - Higher values may improve quality but take longer",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Random seed for reproducible results - leave empty for random generation",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Describe the types of sounds you don't want to generate in the output, avoid double-negatives, compare with positive prompts",
-    )
-    creativity: float | OutputHandle[float] = connect_field(
-        default=16,
-        description="Creativity level - higher values allow more creative interpretation of the prompt",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Describe the sound effect you want to generate')
+    duration: float | OutputHandle[float] = connect_field(default=5, description='Length of the generated sound effect in seconds')
+    refinement: int | OutputHandle[int] = connect_field(default=40, description='Refinement level - Higher values may improve quality but take longer')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducible results - leave empty for random generation')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description="Describe the types of sounds you don't want to generate in the output, avoid double-negatives, compare with positive prompts")
+    creativity: float | OutputHandle[float] = connect_field(default=16, description='Creativity level - higher values allow more creative interpretation of the prompt')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -310,27 +184,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class CSM1B(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    CSM (Conversational Speech Model) generates natural conversational speech from text.
-    audio, speech, tts, conversational, text-to-speech
+        CSM (Conversational Speech Model) generates natural conversational speech from text.
+        audio, speech, tts, conversational, text-to-speech
 
-    Use cases:
-    - Generate natural conversation audio
-    - Create dialogue for characters
-    - Produce conversational voice content
-    - Generate realistic speech
-    - Create interactive voice responses
+        Use cases:
+        - Generate natural conversation audio
+        - Create dialogue for characters
+        - Produce conversational voice content
+        - Generate realistic speech
+        - Create interactive voice responses
     """
 
-    scene: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The text to generate an audio from."
-    )
-    context: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The context to generate an audio from."
-    )
+    scene: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The text to generate an audio from.')
+    context: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The context to generate an audio from.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -347,29 +216,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class CassetteaiMusicGenerator(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class CassetteaiMusicGenerator(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    CassetteAI’s model generates a 30-second sample in under 2 seconds and a full 3-minute track in under 10 seconds. At 44.1 kHz stereo audio, expect a level of professional consistency with no breaks, no squeaks, and no random interruptions in your creations.
-    audio, generation, text-to-audio, sound
+        CassetteAI’s model generates a 30-second sample in under 2 seconds and a full 3-minute track in under 10 seconds. At 44.1 kHz stereo audio, expect a level of professional consistency with no breaks, no squeaks, and no random interruptions in your creations.  
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate music from."
-    )
-    duration: int | OutputHandle[int] = connect_field(
-        default=0, description="The duration of the generated music in seconds."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate music from.')
+    duration: int | OutputHandle[int] = connect_field(default=0, description='The duration of the generated music in seconds.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -386,29 +248,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class CassetteaiSoundEffectsGenerator(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class CassetteaiSoundEffectsGenerator(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Create stunningly realistic sound effects in seconds - CassetteAI's Sound Effects Model generates high-quality SFX up to 30 seconds long in just 1 second of processing time
-    audio, generation, text-to-audio, sound
+        Create stunningly realistic sound effects in seconds - CassetteAI's Sound Effects Model generates high-quality SFX up to 30 seconds long in just 1 second of processing time
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate SFX."
-    )
-    duration: int | OutputHandle[int] = connect_field(
-        default=0, description="The duration of the generated SFX in seconds."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate SFX.')
+    duration: int | OutputHandle[int] = connect_field(default=0, description='The duration of the generated SFX in seconds.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -425,56 +280,30 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class DiffRhythm(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    DiffRhythm generates rhythmic music and beats using diffusion models.
-    audio, generation, rhythm, beats, music, text-to-audio
+        DiffRhythm generates rhythmic music and beats using diffusion models.
+        audio, generation, rhythm, beats, music, text-to-audio
 
-    Use cases:
-    - Generate rhythmic music
-    - Create drum beats
-    - Produce percussion tracks
-    - Generate rhythm patterns
-    - Create beat sequences
+        Use cases:
+        - Generate rhythmic music
+        - Create drum beats
+        - Produce percussion tracks
+        - Generate rhythm patterns
+        - Create beat sequences
     """
 
-    MusicDuration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.DiffRhythm.MusicDuration
-    )
-    Scheduler: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.DiffRhythm.Scheduler
-    )
+    MusicDuration: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.DiffRhythm.MusicDuration
+    Scheduler: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.DiffRhythm.Scheduler
 
-    lyrics: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The prompt to generate the song from. Must have two sections. Sections start with either [chorus] or a [verse].",
-    )
-    cfg_strength: float | OutputHandle[float] = connect_field(
-        default=4, description="The CFG strength to use for the music generation."
-    )
-    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the reference audio to use for the music generation.",
-    )
-    music_duration: nodetool.nodes.fal.text_to_audio.DiffRhythm.MusicDuration = Field(
-        default=nodetool.nodes.fal.text_to_audio.DiffRhythm.MusicDuration.VALUE_95S,
-        description="The duration of the music to generate.",
-    )
-    scheduler: nodetool.nodes.fal.text_to_audio.DiffRhythm.Scheduler = Field(
-        default=nodetool.nodes.fal.text_to_audio.DiffRhythm.Scheduler.EULER,
-        description="The scheduler to use for the music generation.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=32,
-        description="The number of inference steps to use for the music generation.",
-    )
-    style_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The style prompt to use for the music generation."
-    )
+    lyrics: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the song from. Must have two sections. Sections start with either [chorus] or a [verse].')
+    cfg_strength: float | OutputHandle[float] = connect_field(default=4, description='The CFG strength to use for the music generation.')
+    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the reference audio to use for the music generation.')
+    music_duration: nodetool.nodes.fal.text_to_audio.DiffRhythm.MusicDuration = Field(default=nodetool.nodes.fal.text_to_audio.DiffRhythm.MusicDuration.VALUE_95S, description='The duration of the music to generate.')
+    scheduler: nodetool.nodes.fal.text_to_audio.DiffRhythm.Scheduler = Field(default=nodetool.nodes.fal.text_to_audio.DiffRhythm.Scheduler.EULER, description='The scheduler to use for the music generation.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=32, description='The number of inference steps to use for the music generation.')
+    style_prompt: str | OutputHandle[str] = connect_field(default='', description='The style prompt to use for the music generation.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -491,49 +320,28 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class ElevenLabsMusic(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    ElevenLabs Music generates custom music compositions from text descriptions.
-    audio, music, generation, elevenlabs, text-to-audio
+        ElevenLabs Music generates custom music compositions from text descriptions.
+        audio, music, generation, elevenlabs, text-to-audio
 
-    Use cases:
-    - Generate custom music
-    - Create background scores
-    - Produce original compositions
-    - Generate mood music
-    - Create cinematic soundtracks
+        Use cases:
+        - Generate custom music
+        - Create background scores
+        - Produce original compositions
+        - Generate mood music
+        - Create cinematic soundtracks
     """
 
-    OutputFormat: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ElevenLabsMusic.OutputFormat
-    )
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ElevenLabsMusic.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The text prompt describing the music to generate"
-    )
-    composition_plan: str | OutputHandle[str] = connect_field(
-        default="", description="The composition plan for the music"
-    )
-    music_length_ms: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The length of the song to generate in milliseconds. Used only in conjunction with prompt. Must be between 3000ms and 600000ms. Optional - if not provided, the model will choose a length based on the prompt.",
-    )
-    output_format: nodetool.nodes.fal.text_to_audio.ElevenLabsMusic.OutputFormat = (
-        Field(
-            default=nodetool.nodes.fal.text_to_audio.ElevenLabsMusic.OutputFormat.MP3_44100_128,
-            description="Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
-        )
-    )
-    respect_sections_durations: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Controls how strictly section durations in the composition_plan are enforced. It will only have an effect if it is used with composition_plan. When set to true, the model will precisely respect each section's duration_ms from the plan. When set to false, the model may adjust individual section durations which will generally lead to better generation quality and improved latency, while always preserving the total song duration from the plan.",
-    )
-    force_instrumental: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If true, guarantees that the generated song will be instrumental. If false, the song may or may not be instrumental depending on the prompt. Can only be used with prompt.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the music to generate')
+    composition_plan: str | OutputHandle[str] = connect_field(default='', description='The composition plan for the music')
+    music_length_ms: str | OutputHandle[str] = connect_field(default='', description='The length of the song to generate in milliseconds. Used only in conjunction with prompt. Must be between 3000ms and 600000ms. Optional - if not provided, the model will choose a length based on the prompt.')
+    output_format: nodetool.nodes.fal.text_to_audio.ElevenLabsMusic.OutputFormat = Field(default=nodetool.nodes.fal.text_to_audio.ElevenLabsMusic.OutputFormat.MP3_44100_128, description='Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.')
+    respect_sections_durations: bool | OutputHandle[bool] = connect_field(default=True, description="Controls how strictly section durations in the composition_plan are enforced. It will only have an effect if it is used with composition_plan. When set to true, the model will precisely respect each section's duration_ms from the plan. When set to false, the model may adjust individual section durations which will generally lead to better generation quality and improved latency, while always preserving the total song duration from the plan.")
+    force_instrumental: bool | OutputHandle[bool] = connect_field(default=False, description='If true, guarantees that the generated song will be instrumental. If false, the song may or may not be instrumental depending on the prompt. Can only be used with prompt.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -550,48 +358,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class ElevenLabsSoundEffectsV2(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class ElevenLabsSoundEffectsV2(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    ElevenLabs Sound Effects v2 generates custom sound effects from text descriptions.
-    audio, sound-effects, sfx, elevenlabs, text-to-audio
+        ElevenLabs Sound Effects v2 generates custom sound effects from text descriptions.
+        audio, sound-effects, sfx, elevenlabs, text-to-audio
 
-    Use cases:
-    - Generate custom sound effects
-    - Create audio effects for videos
-    - Produce game sound effects
-    - Generate environmental sounds
-    - Create audio atmosphere
+        Use cases:
+        - Generate custom sound effects
+        - Create audio effects for videos
+        - Produce game sound effects
+        - Generate environmental sounds
+        - Create audio atmosphere
     """
 
-    OutputFormat: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ElevenLabsSoundEffectsV2.OutputFormat
-    )
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ElevenLabsSoundEffectsV2.OutputFormat
 
-    text: str | OutputHandle[str] = connect_field(
-        default="", description="The text describing the sound effect to generate"
-    )
-    loop: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Whether to create a sound effect that loops smoothly.",
-    )
-    prompt_influence: float | OutputHandle[float] = connect_field(
-        default=0.3,
-        description="How closely to follow the prompt (0-1). Higher values mean less variation.",
-    )
-    output_format: (
-        nodetool.nodes.fal.text_to_audio.ElevenLabsSoundEffectsV2.OutputFormat
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_audio.ElevenLabsSoundEffectsV2.OutputFormat.MP3_44100_128,
-        description="Output format of the generated audio. Formatted as codec_sample_rate_bitrate.",
-    )
-    duration_seconds: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Duration in seconds (0.5-22). If None, optimal duration will be determined from prompt.",
-    )
+    text: str | OutputHandle[str] = connect_field(default='', description='The text describing the sound effect to generate')
+    loop: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to create a sound effect that loops smoothly.')
+    prompt_influence: float | OutputHandle[float] = connect_field(default=0.3, description='How closely to follow the prompt (0-1). Higher values mean less variation.')
+    output_format: nodetool.nodes.fal.text_to_audio.ElevenLabsSoundEffectsV2.OutputFormat = Field(default=nodetool.nodes.fal.text_to_audio.ElevenLabsSoundEffectsV2.OutputFormat.MP3_44100_128, description='Output format of the generated audio. Formatted as codec_sample_rate_bitrate.')
+    duration_seconds: str | OutputHandle[str] = connect_field(default='', description='Duration in seconds (0.5-22). If None, optimal duration will be determined from prompt.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -608,68 +395,33 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class ElevenLabsTTSMultilingualV2(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class ElevenLabsTTSMultilingualV2(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    ElevenLabs Multilingual TTS v2 generates natural speech in multiple languages.
-    audio, tts, speech, multilingual, elevenlabs, text-to-speech
+        ElevenLabs Multilingual TTS v2 generates natural speech in multiple languages.
+        audio, tts, speech, multilingual, elevenlabs, text-to-speech
 
-    Use cases:
-    - Generate multilingual speech
-    - Create voiceovers in multiple languages
-    - Produce localized audio content
-    - Generate international voice content
-    - Create translated audio
+        Use cases:
+        - Generate multilingual speech
+        - Create voiceovers in multiple languages
+        - Produce localized audio content
+        - Generate international voice content
+        - Create translated audio
     """
 
-    ApplyTextNormalization: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ElevenLabsTTSMultilingualV2.ApplyTextNormalization
-    )
+    ApplyTextNormalization: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ElevenLabsTTSMultilingualV2.ApplyTextNormalization
 
-    text: str | OutputHandle[str] = connect_field(
-        default="", description="The text to convert to speech"
-    )
-    next_text: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
-    )
-    style: float | OutputHandle[float] = connect_field(
-        default=0, description="Style exaggeration (0-1)"
-    )
-    stability: float | OutputHandle[float] = connect_field(
-        default=0.5, description="Voice stability (0-1)"
-    )
-    timestamps: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Whether to return timestamps for each word in the generated speech",
-    )
-    similarity_boost: float | OutputHandle[float] = connect_field(
-        default=0.75, description="Similarity boost (0-1)"
-    )
-    voice: str | OutputHandle[str] = connect_field(
-        default="Rachel", description="The voice to use for speech generation"
-    )
-    language_code: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.",
-    )
-    apply_text_normalization: (
-        nodetool.nodes.fal.text_to_audio.ElevenLabsTTSMultilingualV2.ApplyTextNormalization
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_audio.ElevenLabsTTSMultilingualV2.ApplyTextNormalization.AUTO,
-        description="This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.",
-    )
-    previous_text: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
-    )
+    text: str | OutputHandle[str] = connect_field(default='', description='The text to convert to speech')
+    next_text: str | OutputHandle[str] = connect_field(default='', description="The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.")
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.')
+    style: float | OutputHandle[float] = connect_field(default=0, description='Style exaggeration (0-1)')
+    stability: float | OutputHandle[float] = connect_field(default=0.5, description='Voice stability (0-1)')
+    timestamps: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return timestamps for each word in the generated speech')
+    similarity_boost: float | OutputHandle[float] = connect_field(default=0.75, description='Similarity boost (0-1)')
+    voice: str | OutputHandle[str] = connect_field(default='Rachel', description='The voice to use for speech generation')
+    language_code: str | OutputHandle[str] = connect_field(default='', description='Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.')
+    apply_text_normalization: nodetool.nodes.fal.text_to_audio.ElevenLabsTTSMultilingualV2.ApplyTextNormalization = Field(default=nodetool.nodes.fal.text_to_audio.ElevenLabsTTSMultilingualV2.ApplyTextNormalization.AUTO, description="This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.")
+    previous_text: str | OutputHandle[str] = connect_field(default='', description="The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -686,58 +438,31 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class ElevenLabsTTSV3(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    ElevenLabs TTS v3 generates high-quality natural speech with advanced voice control.
-    audio, tts, speech, elevenlabs, text-to-speech
+        ElevenLabs TTS v3 generates high-quality natural speech with advanced voice control.
+        audio, tts, speech, elevenlabs, text-to-speech
 
-    Use cases:
-    - Generate high-quality voiceovers
-    - Create natural speech audio
-    - Produce professional narration
-    - Generate expressive speech
-    - Create audiobook content
+        Use cases:
+        - Generate high-quality voiceovers
+        - Create natural speech audio
+        - Produce professional narration
+        - Generate expressive speech
+        - Create audiobook content
     """
 
-    ApplyTextNormalization: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3.ApplyTextNormalization
-    )
+    ApplyTextNormalization: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3.ApplyTextNormalization
 
-    text: str | OutputHandle[str] = connect_field(
-        default="", description="The text to convert to speech"
-    )
-    stability: float | OutputHandle[float] = connect_field(
-        default=0.5, description="Voice stability (0-1)"
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
-    )
-    style: float | OutputHandle[float] = connect_field(
-        default=0, description="Style exaggeration (0-1)"
-    )
-    timestamps: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Whether to return timestamps for each word in the generated speech",
-    )
-    similarity_boost: float | OutputHandle[float] = connect_field(
-        default=0.75, description="Similarity boost (0-1)"
-    )
-    voice: str | OutputHandle[str] = connect_field(
-        default="Rachel", description="The voice to use for speech generation"
-    )
-    language_code: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Language code (ISO 639-1) used to enforce a language for the model.",
-    )
-    apply_text_normalization: (
-        nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3.ApplyTextNormalization
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3.ApplyTextNormalization.AUTO,
-        description="This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.",
-    )
+    text: str | OutputHandle[str] = connect_field(default='', description='The text to convert to speech')
+    stability: float | OutputHandle[float] = connect_field(default=0.5, description='Voice stability (0-1)')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.')
+    style: float | OutputHandle[float] = connect_field(default=0, description='Style exaggeration (0-1)')
+    timestamps: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return timestamps for each word in the generated speech')
+    similarity_boost: float | OutputHandle[float] = connect_field(default=0.75, description='Similarity boost (0-1)')
+    voice: str | OutputHandle[str] = connect_field(default='Rachel', description='The voice to use for speech generation')
+    language_code: str | OutputHandle[str] = connect_field(default='', description='Language code (ISO 639-1) used to enforce a language for the model.')
+    apply_text_normalization: nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3.ApplyTextNormalization = Field(default=nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3.ApplyTextNormalization.AUTO, description="This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -754,48 +479,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class ElevenLabsTextToDialogueV3(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class ElevenLabsTextToDialogueV3(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    ElevenLabs Text to Dialogue v3 generates conversational dialogue with multiple speakers.
-    audio, dialogue, conversation, elevenlabs, text-to-speech
+        ElevenLabs Text to Dialogue v3 generates conversational dialogue with multiple speakers.
+        audio, dialogue, conversation, elevenlabs, text-to-speech
 
-    Use cases:
-    - Generate multi-speaker dialogue
-    - Create conversational audio
-    - Produce podcast-style content
-    - Generate character conversations
-    - Create interactive dialogues
+        Use cases:
+        - Generate multi-speaker dialogue
+        - Create conversational audio
+        - Produce podcast-style content
+        - Generate character conversations
+        - Create interactive dialogues
     """
 
-    stability: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion. Must be one of 0.0, 0.5, 1.0, else it will be rounded to the nearest value.",
-    )
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.",
-    )
-    language_code: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="", description="Random seed for reproducibility."
-    )
-    use_speaker_boost: str | OutputHandle[str] = connect_field(
-        default="",
-        description="This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
-    )
-    pronunciation_dictionary_locators: list[str] | OutputHandle[list[str]] = (
-        connect_field(
-            default=[],
-            description="A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
-        )
-    )
+    stability: str | OutputHandle[str] = connect_field(default='', description='Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion. Must be one of 0.0, 0.5, 1.0, else it will be rounded to the nearest value.')
+    inputs: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.')
+    language_code: str | OutputHandle[str] = connect_field(default='', description='Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility.')
+    use_speaker_boost: str | OutputHandle[str] = connect_field(default='', description='This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.')
+    pronunciation_dictionary_locators: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -812,43 +515,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class F5TTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    F5 TTS generates natural speech with fast inference and high quality.
-    audio, tts, speech, fast, text-to-speech
+        F5 TTS generates natural speech with fast inference and high quality.
+        audio, tts, speech, fast, text-to-speech
 
-    Use cases:
-    - Fast speech generation
-    - Real-time TTS applications
-    - Quick voiceover creation
-    - Efficient speech synthesis
-    - Rapid audio production
+        Use cases:
+        - Fast speech generation
+        - Real-time TTS applications
+        - Quick voiceover creation
+        - Efficient speech synthesis
+        - Rapid audio production
     """
 
     ModelType: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.F5TTS.ModelType
 
-    ref_text: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.",
-    )
-    remove_silence: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to remove the silence from the audio file."
-    )
-    gen_text: str | OutputHandle[str] = connect_field(
-        default="", description="The text to be converted to speech."
-    )
-    model_type: nodetool.nodes.fal.text_to_audio.F5TTS.ModelType = Field(
-        default=nodetool.nodes.fal.text_to_audio.F5TTS.ModelType(""),
-        description="The name of the model to be used for TTS.",
-    )
-    ref_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the reference audio file.",
-    )
+    ref_text: str | OutputHandle[str] = connect_field(default='', description='The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.')
+    remove_silence: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to remove the silence from the audio file.')
+    gen_text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech.')
+    model_type: nodetool.nodes.fal.text_to_audio.F5TTS.ModelType = Field(default=nodetool.nodes.fal.text_to_audio.F5TTS.ModelType(''), description='The name of the model to be used for TTS.')
+    ref_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the reference audio file.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -865,31 +552,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class Kokoro(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Kokoro generates expressive and emotional speech with advanced prosody control.
-    audio, tts, speech, expressive, emotional, text-to-speech
+        Kokoro generates expressive and emotional speech with advanced prosody control.
+        audio, tts, speech, expressive, emotional, text-to-speech
 
-    Use cases:
-    - Generate expressive speech
-    - Create emotional voiceovers
-    - Produce dramatic narration
-    - Generate character voices
-    - Create emotive audio content
+        Use cases:
+        - Generate expressive speech
+        - Create emotional voiceovers
+        - Produce dramatic narration
+        - Generate character voices
+        - Create emotive audio content
     """
 
     Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.Kokoro.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.Kokoro.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.Kokoro.Voice.AF_HEART,
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.Kokoro.Voice = Field(default=nodetool.nodes.fal.text_to_audio.Kokoro.Voice.AF_HEART, description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -906,35 +587,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class KokoroAmericanEnglish(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class KokoroAmericanEnglish(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Kokoro is a lightweight text-to-speech model that delivers comparable quality to larger models while being significantly faster and more cost-efficient.
-    audio, generation, text-to-audio, sound
+        Kokoro is a lightweight text-to-speech model that delivers comparable quality to larger models while being significantly faster and more cost-efficient.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    Voice: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.KokoroAmericanEnglish.Voice
-    )
+    Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroAmericanEnglish.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroAmericanEnglish.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroAmericanEnglish.Voice.AF_HEART,
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroAmericanEnglish.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroAmericanEnglish.Voice.AF_HEART, description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -951,35 +622,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class KokoroBrazilianPortuguese(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class KokoroBrazilianPortuguese(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    A natural and expressive Brazilian Portuguese text-to-speech model optimized for clarity and fluency.
-    audio, generation, text-to-audio, sound
+        A natural and expressive Brazilian Portuguese text-to-speech model optimized for clarity and fluency.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    Voice: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.KokoroBrazilianPortuguese.Voice
-    )
+    Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroBrazilianPortuguese.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroBrazilianPortuguese.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroBrazilianPortuguese.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroBrazilianPortuguese.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroBrazilianPortuguese.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -996,35 +657,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class KokoroBritishEnglish(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class KokoroBritishEnglish(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    A high-quality British English text-to-speech model offering natural and expressive voice synthesis.
-    audio, generation, text-to-audio, sound
+        A high-quality British English text-to-speech model offering natural and expressive voice synthesis.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    Voice: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.KokoroBritishEnglish.Voice
-    )
+    Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroBritishEnglish.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroBritishEnglish.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroBritishEnglish.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroBritishEnglish.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroBritishEnglish.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1041,31 +692,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class KokoroFrench(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    An expressive and natural French text-to-speech model for both European and Canadian French.
-    audio, generation, text-to-audio, sound
+        An expressive and natural French text-to-speech model for both European and Canadian French.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
     Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroFrench.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroFrench.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroFrench.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroFrench.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroFrench.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1082,31 +727,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class KokoroHindi(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.
-    audio, generation, text-to-audio, sound
+        A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
     Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroHindi.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroHindi.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroHindi.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroHindi.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroHindi.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1123,31 +762,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class KokoroItalian(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    A high-quality Italian text-to-speech model delivering smooth and expressive speech synthesis.
-    audio, generation, text-to-audio, sound
+        A high-quality Italian text-to-speech model delivering smooth and expressive speech synthesis.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
     Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroItalian.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroItalian.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroItalian.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroItalian.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroItalian.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1164,31 +797,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class KokoroJapanese(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    A fast and natural-sounding Japanese text-to-speech model optimized for smooth pronunciation.
-    audio, generation, text-to-audio, sound
+        A fast and natural-sounding Japanese text-to-speech model optimized for smooth pronunciation.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
     Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroJapanese.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroJapanese.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroJapanese.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroJapanese.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroJapanese.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1205,35 +832,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class KokoroMandarinChinese(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class KokoroMandarinChinese(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    A highly efficient Mandarin Chinese text-to-speech model that captures natural tones and prosody.
-    audio, generation, text-to-audio, sound
+        A highly efficient Mandarin Chinese text-to-speech model that captures natural tones and prosody.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    Voice: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.KokoroMandarinChinese.Voice
-    )
+    Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroMandarinChinese.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroMandarinChinese.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroMandarinChinese.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroMandarinChinese.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroMandarinChinese.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1250,31 +867,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class KokoroSpanish(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    A natural-sounding Spanish text-to-speech model optimized for Latin American and European Spanish.
-    audio, generation, text-to-audio, sound
+        A natural-sounding Spanish text-to-speech model optimized for Latin American and European Spanish.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
     Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.KokoroSpanish.Voice
 
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    voice: nodetool.nodes.fal.text_to_audio.KokoroSpanish.Voice = Field(
-        default=nodetool.nodes.fal.text_to_audio.KokoroSpanish.Voice(""),
-        description="Voice ID for the desired voice.",
-    )
-    speed: float | OutputHandle[float] = connect_field(
-        default=1, description="Speed of the generated audio. Default is 1.0."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    voice: nodetool.nodes.fal.text_to_audio.KokoroSpanish.Voice = Field(default=nodetool.nodes.fal.text_to_audio.KokoroSpanish.Voice(''), description='Voice ID for the desired voice.')
+    speed: float | OutputHandle[float] = connect_field(default=1, description='Speed of the generated audio. Default is 1.0.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1291,33 +902,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class Lyria2(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Lyria 2 is Google's latest music generation model, you can generate any type of music with this model.
-    audio, generation, text-to-audio, sound
+        Lyria 2 is Google's latest music generation model, you can generate any type of music with this model.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The text prompt describing the music you want to generate",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1,
-        description="A seed for deterministic generation. If provided, the model will attempt to produce the same audio given the same prompt and other parameters.",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="low quality",
-        description="A description of what to exclude from the generated audio",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt describing the music you want to generate')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='A seed for deterministic generation. If provided, the model will attempt to produce the same audio given the same prompt and other parameters.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='low quality', description='A description of what to exclude from the generated audio')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1334,31 +935,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class MinimaxMusic(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Generate music from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality, diverse musical compositions.
-    audio, generation, text-to-audio, sound
+        Generate music from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality, diverse musical compositions.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters.",
-    )
-    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters.')
+    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1375,31 +967,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class MinimaxMusicV15(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    MiniMax (Hailuo AI) Music v1.5
-    audio, generation, text-to-audio, tts, professional
+        MiniMax (Hailuo AI) Music v1.5
+        audio, generation, text-to-audio, tts, professional
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Lyrics, supports [intro][verse][chorus][bridge][outro] sections. 10-600 characters.",
-    )
-    lyrics_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Control music generation. 10-3000 characters."
-    )
-    audio_setting: str | OutputHandle[str] = connect_field(
-        default="", description="Audio configuration settings"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Lyrics, supports [intro][verse][chorus][bridge][outro] sections. 10-600 characters.')
+    lyrics_prompt: str | OutputHandle[str] = connect_field(default='', description='Control music generation. 10-3000 characters.')
+    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1416,32 +1000,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class MinimaxMusicV2(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Minimax Music
-    audio, generation, text-to-audio, tts, professional
+        Minimax Music
+        audio, generation, text-to-audio, tts, professional
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="A description of the music, specifying style, mood, and scenario. 10-300 characters.",
-    )
-    lyrics_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Lyrics of the song. Use n to separate lines. You may add structure tags like [Intro], [Verse], [Chorus], [Bridge], [Outro] to enhance the arrangement. 10-3000 characters.",
-    )
-    audio_setting: str | OutputHandle[str] = connect_field(
-        default="", description="Audio configuration settings"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the music, specifying style, mood, and scenario. 10-300 characters.')
+    lyrics_prompt: str | OutputHandle[str] = connect_field(default='', description='Lyrics of the song. Use n to separate lines. You may add structure tags like [Intro], [Verse], [Chorus], [Bridge], [Outro] to enhance the arrangement. 10-3000 characters.')
+    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1458,44 +1033,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class MmaudioV2TextToAudio(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class MmaudioV2TextToAudio(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    MMAudio generates synchronized audio given text inputs. It can generate sounds described by a prompt.
-    audio, generation, text-to-audio, sound
+        MMAudio generates synchronized audio given text inputs. It can generate sounds described by a prompt.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate the audio for."
-    )
-    num_steps: int | OutputHandle[int] = connect_field(
-        default=25, description="The number of steps to generate the audio for."
-    )
-    duration: float | OutputHandle[float] = connect_field(
-        default=8, description="The duration of the audio to generate."
-    )
-    cfg_strength: float | OutputHandle[float] = connect_field(
-        default=4.5, description="The strength of Classifier Free Guidance."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The seed for the random number generator"
-    )
-    mask_away_clip: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Whether to mask away the clip."
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The negative prompt to generate the audio for."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the audio for.')
+    num_steps: int | OutputHandle[int] = connect_field(default=25, description='The number of steps to generate the audio for.')
+    duration: float | OutputHandle[float] = connect_field(default=8, description='The duration of the audio to generate.')
+    cfg_strength: float | OutputHandle[float] = connect_field(default=4.5, description='The strength of Classifier Free Guidance.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator')
+    mask_away_clip: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to mask away the clip.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to generate the audio for.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1512,74 +1070,33 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class SonautoV2Inpaint(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class SonautoV2Inpaint(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Sonauto V2
-    audio, generation, text-to-audio, tts
+        Sonauto V2
+        audio, generation, text-to-audio, tts
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    OutputFormat: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.SonautoV2Inpaint.OutputFormat
-    )
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.SonautoV2Inpaint.OutputFormat
 
-    lyrics_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The lyrics sung in the generated song. An empty string will generate an instrumental track.",
-    )
-    tags: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.",
-    )
-    prompt_strength: float | OutputHandle[float] = connect_field(
-        default=2,
-        description="Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
-    )
-    output_bit_rate: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The bit rate to use for mp3 and m4a formats. Not available for other formats.",
-    )
-    num_songs: int | OutputHandle[int] = connect_field(
-        default=1,
-        description="Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
-    )
-    output_format: nodetool.nodes.fal.text_to_audio.SonautoV2Inpaint.OutputFormat = (
-        Field(
-            default=nodetool.nodes.fal.text_to_audio.SonautoV2Inpaint.OutputFormat.WAV,
-            description=None,
-        )
-    )
-    selection_crop: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Crop to the selected region"
-    )
-    sections: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="List of sections to inpaint. Currently, only one section is supported so the list length must be 1.",
-    )
-    balance_strength: float | OutputHandle[float] = connect_field(
-        default=0.7,
-        description="Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the audio file to alter. Must be a valid publicly accessible URL.",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.",
-    )
+    lyrics_prompt: str | OutputHandle[str] = connect_field(default='', description='The lyrics sung in the generated song. An empty string will generate an instrumental track.')
+    tags: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.')
+    prompt_strength: float | OutputHandle[float] = connect_field(default=2, description='Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)')
+    output_bit_rate: str | OutputHandle[str] = connect_field(default='', description='The bit rate to use for mp3 and m4a formats. Not available for other formats.')
+    num_songs: int | OutputHandle[int] = connect_field(default=1, description='Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.')
+    output_format: nodetool.nodes.fal.text_to_audio.SonautoV2Inpaint.OutputFormat = Field(default=nodetool.nodes.fal.text_to_audio.SonautoV2Inpaint.OutputFormat.WAV, description=None)
+    selection_crop: bool | OutputHandle[bool] = connect_field(default=False, description='Crop to the selected region')
+    sections: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of sections to inpaint. Currently, only one section is supported so the list length must be 1.')
+    balance_strength: float | OutputHandle[float] = connect_field(default=0.7, description='Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.')
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio file to alter. Must be a valid publicly accessible URL.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1596,69 +1113,32 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class SonautoV2TextToMusic(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class SonautoV2TextToMusic(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Create full songs in any style
-    audio, generation, text-to-audio, sound
+        Create full songs in any style
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    OutputFormat: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_audio.SonautoV2TextToMusic.OutputFormat
-    )
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.SonautoV2TextToMusic.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.",
-    )
-    lyrics_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The lyrics sung in the generated song. An empty string will generate an instrumental track.",
-    )
-    tags: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.",
-    )
-    prompt_strength: float | OutputHandle[float] = connect_field(
-        default=2,
-        description="Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
-    )
-    output_bit_rate: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The bit rate to use for mp3 and m4a formats. Not available for other formats.",
-    )
-    num_songs: int | OutputHandle[int] = connect_field(
-        default=1,
-        description="Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
-    )
-    output_format: (
-        nodetool.nodes.fal.text_to_audio.SonautoV2TextToMusic.OutputFormat
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_audio.SonautoV2TextToMusic.OutputFormat.WAV,
-        description=None,
-    )
-    bpm: str | OutputHandle[str] = connect_field(
-        default="auto",
-        description='The beats per minute of the song. This can be set to an integer or the literal string "auto" to pick a suitable bpm based on the tags. Set bpm to null to not condition the model on bpm information.',
-    )
-    balance_strength: float | OutputHandle[float] = connect_field(
-        default=0.7,
-        description="Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.')
+    lyrics_prompt: str | OutputHandle[str] = connect_field(default='', description='The lyrics sung in the generated song. An empty string will generate an instrumental track.')
+    tags: str | OutputHandle[str] = connect_field(default='', description='Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.')
+    prompt_strength: float | OutputHandle[float] = connect_field(default=2, description='Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)')
+    output_bit_rate: str | OutputHandle[str] = connect_field(default='', description='The bit rate to use for mp3 and m4a formats. Not available for other formats.')
+    num_songs: int | OutputHandle[int] = connect_field(default=1, description='Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.')
+    output_format: nodetool.nodes.fal.text_to_audio.SonautoV2TextToMusic.OutputFormat = Field(default=nodetool.nodes.fal.text_to_audio.SonautoV2TextToMusic.OutputFormat.WAV, description=None)
+    bpm: str | OutputHandle[str] = connect_field(default='auto', description='The beats per minute of the song. This can be set to an integer or the literal string "auto" to pick a suitable bpm based on the tags. Set bpm to null to not condition the model on bpm information.')
+    balance_strength: float | OutputHandle[float] = connect_field(default=0.7, description='Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1675,33 +1155,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class StableAudio(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Stable Audio generates high-quality audio from text with consistent results.
-    audio, generation, stable, music, text-to-audio
+        Stable Audio generates high-quality audio from text with consistent results.
+        audio, generation, stable, music, text-to-audio
 
-    Use cases:
-    - Generate consistent audio
-    - Create reliable soundtracks
-    - Produce predictable audio
-    - Generate stable music
-    - Create dependable audio content
+        Use cases:
+        - Generate consistent audio
+        - Create reliable soundtracks
+        - Produce predictable audio
+        - Generate stable music
+        - Create dependable audio content
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate audio from"
-    )
-    steps: int | OutputHandle[int] = connect_field(
-        default=100, description="The number of steps to denoise the audio for"
-    )
-    seconds_total: int | OutputHandle[int] = connect_field(
-        default=30, description="The duration of the audio clip to generate"
-    )
-    seconds_start: int | OutputHandle[int] = connect_field(
-        default=0, description="The start point of the audio clip to generate"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate audio from')
+    steps: int | OutputHandle[int] = connect_field(default=100, description='The number of steps to denoise the audio for')
+    seconds_total: int | OutputHandle[int] = connect_field(default=30, description='The duration of the audio clip to generate')
+    seconds_start: int | OutputHandle[int] = connect_field(default=0, description='The start point of the audio clip to generate')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1718,40 +1189,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class StableAudio25TextToAudio(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class StableAudio25TextToAudio(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Stable Audio 2.5
-    audio, generation, text-to-audio, tts
+        Stable Audio 2.5
+        audio, generation, text-to-audio, tts
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate audio from"
-    )
-    sync_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-    )
-    seconds_total: int | OutputHandle[int] = connect_field(
-        default=190, description="The duration of the audio clip to generate"
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=8, description="The number of steps to denoise the audio for"
-    )
-    guidance_scale: int | OutputHandle[int] = connect_field(
-        default=1,
-        description="How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate audio from')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    seconds_total: int | OutputHandle[int] = connect_field(default=190, description='The duration of the audio clip to generate')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='The number of steps to denoise the audio for')
+    guidance_scale: int | OutputHandle[int] = connect_field(default=1, description='How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).')
     seed: int | OutputHandle[int] = connect_field(default=0, description=None)
 
     @classmethod
@@ -1769,57 +1225,31 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class XTTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    XTTS generates expressive speech with voice cloning capabilities.
-    audio, tts, speech, voice-cloning, expressive, text-to-speech
+        XTTS generates expressive speech with voice cloning capabilities.
+        audio, tts, speech, voice-cloning, expressive, text-to-speech
 
-    Use cases:
-    - Clone and generate voices
-    - Create personalized speech
-    - Produce voice-matched content
-    - Generate custom voice audio
-    - Create voice replications
+        Use cases:
+        - Clone and generate voices
+        - Create personalized speech
+        - Produce voice-matched content
+        - Generate custom voice audio
+        - Create voice replications
     """
 
     Language: typing.ClassVar[type] = nodetool.nodes.fal.text_to_audio.XTTS.Language
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The text prompt you would like to convert to speech."
-    )
-    repetition_penalty: float | OutputHandle[float] = connect_field(
-        default=5,
-        description="The repetition penalty to use for generation. Defaults to 5.0.",
-    )
-    language: nodetool.nodes.fal.text_to_audio.XTTS.Language = Field(
-        default=nodetool.nodes.fal.text_to_audio.XTTS.Language.ENGLISH,
-        description="The language to use for generation. Defaults to English.",
-    )
-    gpt_cond_len: int | OutputHandle[int] = connect_field(
-        default=30, description="The length of the GPT conditioning. Defaults to 30."
-    )
-    gpt_cond_chunk_len: int | OutputHandle[int] = connect_field(
-        default=4,
-        description="The length of the GPT conditioning chunks. Defaults to 4.",
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the voice file to match",
-    )
-    temperature: float | OutputHandle[float] = connect_field(
-        default=0.75,
-        description="The temperature to use for generation. Higher is more creative. Defaults to 0.75.",
-    )
-    sample_rate: int | OutputHandle[int] = connect_field(
-        default=24000, description="The sample rate of the audio. Defaults to 24000."
-    )
-    max_ref_length: int | OutputHandle[int] = connect_field(
-        default=60, description="The maximum length of the reference. Defaults to 60."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt you would like to convert to speech.')
+    repetition_penalty: float | OutputHandle[float] = connect_field(default=5, description='The repetition penalty to use for generation. Defaults to 5.0.')
+    language: nodetool.nodes.fal.text_to_audio.XTTS.Language = Field(default=nodetool.nodes.fal.text_to_audio.XTTS.Language.ENGLISH, description='The language to use for generation. Defaults to English.')
+    gpt_cond_len: int | OutputHandle[int] = connect_field(default=30, description='The length of the GPT conditioning. Defaults to 30.')
+    gpt_cond_chunk_len: int | OutputHandle[int] = connect_field(default=4, description='The length of the GPT conditioning chunks. Defaults to 4.')
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the voice file to match')
+    temperature: float | OutputHandle[float] = connect_field(default=0.75, description='The temperature to use for generation. Higher is more creative. Defaults to 0.75.')
+    sample_rate: int | OutputHandle[int] = connect_field(default=24000, description='The sample rate of the audio. Defaults to 24000.')
+    max_ref_length: int | OutputHandle[int] = connect_field(default=60, description='The maximum length of the reference. Defaults to 60.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1836,29 +1266,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class Yue(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    YuE is a groundbreaking series of open-source foundation models designed for music generation, specifically for transforming lyrics into full songs.
-    audio, generation, text-to-audio, sound
+        YuE is a groundbreaking series of open-source foundation models designed for music generation, specifically for transforming lyrics into full songs.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    lyrics: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The prompt to generate an image from. Must have two sections. Sections start with either [chorus] or a [verse].",
-    )
-    genres: str | OutputHandle[str] = connect_field(
-        default="",
-        description="The genres (separated by a space ' ') to guide the music generation.",
-    )
+    lyrics: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from. Must have two sections. Sections start with either [chorus] or a [verse].')
+    genres: str | OutputHandle[str] = connect_field(default='', description="The genres (separated by a space ' ') to guide the music generation.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1875,30 +1298,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
 class Zonos(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Clone voice of any person and speak anything in their voice using zonos' voice cloning.
-    audio, generation, text-to-audio, sound
+        Clone voice of any person and speak anything in their voice using zonos' voice cloning.
+        audio, generation, text-to-audio, sound
 
-    Use cases:
-    - Sound effect generation
-    - Music composition
-    - Audio content creation
-    - Background music generation
-    - Podcast audio production
+        Use cases:
+        - Sound effect generation
+        - Music composition
+        - Audio content creation
+        - Background music generation
+        - Podcast audio production
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The content generated using cloned voice."
-    )
-    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The reference audio.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The content generated using cloned voice.')
+    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The reference audio.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1907,3 +1322,5 @@ class Zonos(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

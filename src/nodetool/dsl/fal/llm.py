@@ -18,43 +18,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-
 class OpenRouter(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    OpenRouter provides unified access to any LLM (Large Language Model) through a single API.
-    llm, chat, openrouter, multimodel, language-model
+        OpenRouter provides unified access to any LLM (Large Language Model) through a single API.
+        llm, chat, openrouter, multimodel, language-model
 
-    Use cases:
-    - Run any LLM through unified interface
-    - Switch between models seamlessly
-    - Access multiple LLM providers
-    - Flexible model selection
-    - Unified LLM API access
+        Use cases:
+        - Run any LLM through unified interface
+        - Switch between models seamlessly
+        - Access multiple LLM providers
+        - Flexible model selection
+        - Unified LLM API access
     """
 
-    model: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Name of the model to use. Charged based on actual token usage.",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt to be used for the chat completion"
-    )
-    max_tokens: str | OutputHandle[str] = connect_field(
-        default="",
-        description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.",
-    )
-    temperature: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    )
-    reasoning: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
-    system_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="System prompt to provide context or instructions to the model",
-    )
+    model: str | OutputHandle[str] = connect_field(default='', description='Name of the model to use. Charged based on actual token usage.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to be used for the chat completion')
+    max_tokens: str | OutputHandle[str] = connect_field(default='', description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
+    temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
+    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
+    system_prompt: str | OutputHandle[str] = connect_field(default='', description='System prompt to provide context or instructions to the model')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -71,19 +54,18 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-
 class OpenRouterChatCompletions(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    OpenRouter Chat Completions provides OpenAI-compatible interface for any LLM.
-    llm, chat, openai-compatible, openrouter, chat-completions
+        OpenRouter Chat Completions provides OpenAI-compatible interface for any LLM.
+        llm, chat, openai-compatible, openrouter, chat-completions
 
-    Use cases:
-    - OpenAI-compatible LLM access
-    - Drop-in replacement for OpenAI API
-    - Multi-model chat completions
-    - Standardized chat interface
-    - Universal LLM chat API
+        Use cases:
+        - OpenAI-compatible LLM access
+        - Drop-in replacement for OpenAI API
+        - Multi-model chat completions
+        - Standardized chat interface
+        - Universal LLM chat API
     """
 
     @classmethod
@@ -101,19 +83,18 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-
 class OpenrouterRouterOpenaiV1Embeddings(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    The OpenRouter Embeddings API with fal, powered by OpenRouter, provides unified access to a wide range of large language models - including GPT, Claude, Gemini, and many others through a single API interface.
-    llm, language-model, text-generation, ai
+        The OpenRouter Embeddings API with fal, powered by OpenRouter, provides unified access to a wide range of large language models - including GPT, Claude, Gemini, and many others through a single API interface.
+        llm, language-model, text-generation, ai
 
-    Use cases:
-    - Text generation and completion
-    - Conversational AI
-    - Content summarization
-    - Code generation
-    - Creative writing assistance
+        Use cases:
+        - Text generation and completion
+        - Conversational AI
+        - Content summarization
+        - Code generation
+        - Creative writing assistance
     """
 
     @classmethod
@@ -131,19 +112,18 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-
 class OpenrouterRouterOpenaiV1Responses(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    The OpenRouter Responses API with fal, powered by OpenRouter, provides unified access to a wide range of large language models - including GPT, Claude, Gemini, and many others through a single API interface.
-    llm, language-model, text-generation, ai
+        The OpenRouter Responses API with fal, powered by OpenRouter, provides unified access to a wide range of large language models - including GPT, Claude, Gemini, and many others through a single API interface.
+        llm, language-model, text-generation, ai
 
-    Use cases:
-    - Text generation and completion
-    - Conversational AI
-    - Content summarization
-    - Code generation
-    - Creative writing assistance
+        Use cases:
+        - Text generation and completion
+        - Conversational AI
+        - Content summarization
+        - Code generation
+        - Creative writing assistance
     """
 
     @classmethod
@@ -161,24 +141,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-
 class Qwen3Guard(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Qwen 3 Guard provides content safety and moderation using Qwen's LLM.
-    llm, safety, moderation, qwen, guard
+        Qwen 3 Guard provides content safety and moderation using Qwen's LLM.
+        llm, safety, moderation, qwen, guard
 
-    Use cases:
-    - Content safety checking
-    - Moderation of text content
-    - Safety filtering for outputs
-    - Content policy enforcement
-    - Text safety analysis
+        Use cases:
+        - Content safety checking
+        - Moderation of text content
+        - Safety filtering for outputs
+        - Content policy enforcement
+        - Text safety analysis
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The input text to be classified"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The input text to be classified')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -195,79 +172,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.llm
 from nodetool.workflows.base_node import BaseNode
 
-
 class VideoPromptGenerator(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Generate video prompts using a variety of techniques including camera direction, style, pacing, special effects and more.
-    llm, language-model, text-generation, ai
+        Generate video prompts using a variety of techniques including camera direction, style, pacing, special effects and more.
+        llm, language-model, text-generation, ai
 
-    Use cases:
-    - Text generation and completion
-    - Conversational AI
-    - Content summarization
-    - Code generation
-    - Creative writing assistance
+        Use cases:
+        - Text generation and completion
+        - Conversational AI
+        - Content summarization
+        - Code generation
+        - Creative writing assistance
     """
 
     Style: typing.ClassVar[type] = nodetool.nodes.fal.llm.VideoPromptGenerator.Style
-    CameraDirection: typing.ClassVar[type] = (
-        nodetool.nodes.fal.llm.VideoPromptGenerator.CameraDirection
-    )
+    CameraDirection: typing.ClassVar[type] = nodetool.nodes.fal.llm.VideoPromptGenerator.CameraDirection
     Pacing: typing.ClassVar[type] = nodetool.nodes.fal.llm.VideoPromptGenerator.Pacing
-    SpecialEffects: typing.ClassVar[type] = (
-        nodetool.nodes.fal.llm.VideoPromptGenerator.SpecialEffects
-    )
+    SpecialEffects: typing.ClassVar[type] = nodetool.nodes.fal.llm.VideoPromptGenerator.SpecialEffects
     Model: typing.ClassVar[type] = nodetool.nodes.fal.llm.VideoPromptGenerator.Model
-    CameraStyle: typing.ClassVar[type] = (
-        nodetool.nodes.fal.llm.VideoPromptGenerator.CameraStyle
-    )
-    PromptLength: typing.ClassVar[type] = (
-        nodetool.nodes.fal.llm.VideoPromptGenerator.PromptLength
-    )
+    CameraStyle: typing.ClassVar[type] = nodetool.nodes.fal.llm.VideoPromptGenerator.CameraStyle
+    PromptLength: typing.ClassVar[type] = nodetool.nodes.fal.llm.VideoPromptGenerator.PromptLength
 
-    custom_elements: str | OutputHandle[str] = connect_field(
-        default="", description="Custom technical elements (optional)"
-    )
-    style: nodetool.nodes.fal.llm.VideoPromptGenerator.Style = Field(
-        default=nodetool.nodes.fal.llm.VideoPromptGenerator.Style.SIMPLE,
-        description="Style of the video prompt",
-    )
-    camera_direction: nodetool.nodes.fal.llm.VideoPromptGenerator.CameraDirection = (
-        Field(
-            default=nodetool.nodes.fal.llm.VideoPromptGenerator.CameraDirection.NONE,
-            description="Camera direction",
-        )
-    )
-    pacing: nodetool.nodes.fal.llm.VideoPromptGenerator.Pacing = Field(
-        default=nodetool.nodes.fal.llm.VideoPromptGenerator.Pacing.NONE,
-        description="Pacing rhythm",
-    )
-    special_effects: nodetool.nodes.fal.llm.VideoPromptGenerator.SpecialEffects = Field(
-        default=nodetool.nodes.fal.llm.VideoPromptGenerator.SpecialEffects.NONE,
-        description="Special effects approach",
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of an image to analyze and incorporate into the video prompt (optional)",
-    )
-    model: nodetool.nodes.fal.llm.VideoPromptGenerator.Model = Field(
-        default=nodetool.nodes.fal.llm.VideoPromptGenerator.Model.GOOGLE_GEMINI_2_0_FLASH_001,
-        description="Model to use",
-    )
-    camera_style: nodetool.nodes.fal.llm.VideoPromptGenerator.CameraStyle = Field(
-        default=nodetool.nodes.fal.llm.VideoPromptGenerator.CameraStyle.NONE,
-        description="Camera movement style",
-    )
-    input_concept: str | OutputHandle[str] = connect_field(
-        default="", description="Core concept or thematic input for the video prompt"
-    )
-    prompt_length: nodetool.nodes.fal.llm.VideoPromptGenerator.PromptLength = Field(
-        default=nodetool.nodes.fal.llm.VideoPromptGenerator.PromptLength.MEDIUM,
-        description="Length of the prompt",
-    )
+    custom_elements: str | OutputHandle[str] = connect_field(default='', description='Custom technical elements (optional)')
+    style: nodetool.nodes.fal.llm.VideoPromptGenerator.Style = Field(default=nodetool.nodes.fal.llm.VideoPromptGenerator.Style.SIMPLE, description='Style of the video prompt')
+    camera_direction: nodetool.nodes.fal.llm.VideoPromptGenerator.CameraDirection = Field(default=nodetool.nodes.fal.llm.VideoPromptGenerator.CameraDirection.NONE, description='Camera direction')
+    pacing: nodetool.nodes.fal.llm.VideoPromptGenerator.Pacing = Field(default=nodetool.nodes.fal.llm.VideoPromptGenerator.Pacing.NONE, description='Pacing rhythm')
+    special_effects: nodetool.nodes.fal.llm.VideoPromptGenerator.SpecialEffects = Field(default=nodetool.nodes.fal.llm.VideoPromptGenerator.SpecialEffects.NONE, description='Special effects approach')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of an image to analyze and incorporate into the video prompt (optional)')
+    model: nodetool.nodes.fal.llm.VideoPromptGenerator.Model = Field(default=nodetool.nodes.fal.llm.VideoPromptGenerator.Model.GOOGLE_GEMINI_2_0_FLASH_001, description='Model to use')
+    camera_style: nodetool.nodes.fal.llm.VideoPromptGenerator.CameraStyle = Field(default=nodetool.nodes.fal.llm.VideoPromptGenerator.CameraStyle.NONE, description='Camera movement style')
+    input_concept: str | OutputHandle[str] = connect_field(default='', description='Core concept or thematic input for the video prompt')
+    prompt_length: nodetool.nodes.fal.llm.VideoPromptGenerator.PromptLength = Field(default=nodetool.nodes.fal.llm.VideoPromptGenerator.PromptLength.MEDIUM, description='Length of the prompt')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -276,3 +212,5 @@ class VideoPromptGenerator(SingleOutputGraphNode[Any], GraphNode[Any]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

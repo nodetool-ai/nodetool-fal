@@ -1917,6 +1917,34 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Visual storytelling",
         ],
     },
+    # Kling Video V3 Standard Image-to-Video
+    "fal-ai/kling-video/v3/standard/image-to-video": {
+        "class_name": "KlingVideoV3StandardImageToVideo",
+        "docstring": "Kling Video V3 Standard generates videos from images with balanced quality and speed using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "standard", "image-to-video"],
+        "use_cases": [
+            "Animate static images into short video clips",
+            "Create engaging social media content from photos",
+            "Generate product demonstration videos",
+            "Produce marketing and promotional videos",
+            "Transform images into cinematic animations"
+        ],
+        "basic_fields": ["start_image_url", "prompt", "duration"]
+    },
+    # Kling Video V3 Pro Image-to-Video
+    "fal-ai/kling-video/v3/pro/image-to-video": {
+        "class_name": "KlingVideoV3ProImageToVideo",
+        "docstring": "Kling Video V3 Pro generates professional quality videos from images with enhanced visual fidelity using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "pro", "image-to-video"],
+        "use_cases": [
+            "Create professional-grade video animations from images",
+            "Generate cinematic video content with precise motion",
+            "Produce high-fidelity product showcase videos",
+            "Animate images with enhanced visual quality",
+            "Create premium video content for advertising"
+        ],
+        "basic_fields": ["start_image_url", "prompt", "duration"]
+    },
 }
 
 

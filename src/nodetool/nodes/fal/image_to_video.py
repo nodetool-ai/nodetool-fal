@@ -11634,3 +11634,195 @@ class FastSvdLcm(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV3StandardImageToVideo(FALNode):
+    """
+    Kling Video V3 Standard generates videos from images with balanced quality and speed using the latest V3 model.
+    video, generation, kling, v3, standard, image-to-video
+
+    Use cases:
+    - Animate static images into short video clips
+    - Create engaging social media content from photos
+    - Generate product demonstration videos
+    - Produce marketing and promotional videos
+    - Transform images into cinematic animations
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate native audio for the video."
+    )
+    start_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
+    )
+    end_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the end of the video"
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality"
+    )
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "duration": self.duration.value,
+            "generate_audio": self.generate_audio,
+            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        if self.end_image_url is not None and self.end_image_url.uri:
+            end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_url_base64}"
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image_url", "prompt", "duration"]
+
+class KlingVideoV3ProImageToVideo(FALNode):
+    """
+    Kling Video V3 Pro generates professional quality videos from images with enhanced visual fidelity using the latest V3 model.
+    video, generation, kling, v3, pro, image-to-video
+
+    Use cases:
+    - Create professional-grade video animations from images
+    - Generate cinematic video content with precise motion
+    - Produce high-fidelity product showcase videos
+    - Animate images with enhanced visual quality
+    - Create premium video content for advertising
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate native audio for the video."
+    )
+    start_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
+    )
+    end_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the end of the video"
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality"
+    )
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "duration": self.duration.value,
+            "generate_audio": self.generate_audio,
+            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        if self.end_image_url is not None and self.end_image_url.uri:
+            end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+            arguments["end_image_url"] = f"data:image/png;base64,{end_image_url_base64}"
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image_url", "prompt", "duration"]

@@ -18,57 +18,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
-class OpenrouterRouterVideo(
-    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
-):
+class OpenrouterRouterVideo(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Run any VLM (Video Language Model) with fal, powered by OpenRouter.
-    video, transcription, analysis, video-understanding
+        Run any VLM (Video Language Model) with fal, powered by OpenRouter.
+        video, transcription, analysis, video-understanding
 
-    Use cases:
-    - Video transcription
-    - Video content analysis
-    - Automated captioning
-    - Video understanding
-    - Content indexing
+        Use cases:
+        - Video transcription
+        - Video content analysis
+        - Automated captioning
+        - Video understanding
+        - Content indexing
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt to be used for the video processing"
-    )
-    video_urls: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.",
-    )
-    reasoning: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
-    system_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="System prompt to provide context or instructions to the model",
-    )
-    model: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Name of the model to use. Charged based on actual token usage.",
-    )
-    max_tokens: str | OutputHandle[str] = connect_field(
-        default="",
-        description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.",
-    )
-    temperature: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to be used for the video processing')
+    video_urls: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.')
+    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
+    system_prompt: str | OutputHandle[str] = connect_field(default='', description='System prompt to provide context or instructions to the model')
+    model: str | OutputHandle[str] = connect_field(default='', description='Name of the model to use. Charged based on actual token usage.')
+    max_tokens: str | OutputHandle[str] = connect_field(default='', description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
+    temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -85,57 +55,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
-class OpenrouterRouterVideoEnterprise(
-    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
-):
+class OpenrouterRouterVideoEnterprise(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Run any VLM (Video Language Model) with fal, powered by OpenRouter.
-    video, transcription, analysis, video-understanding
+        Run any VLM (Video Language Model) with fal, powered by OpenRouter.
+        video, transcription, analysis, video-understanding
 
-    Use cases:
-    - Video transcription
-    - Video content analysis
-    - Automated captioning
-    - Video understanding
-    - Content indexing
+        Use cases:
+        - Video transcription
+        - Video content analysis
+        - Automated captioning
+        - Video understanding
+        - Content indexing
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt to be used for the video processing"
-    )
-    video_urls: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.",
-    )
-    reasoning: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
-    system_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="System prompt to provide context or instructions to the model",
-    )
-    model: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Name of the model to use. Charged based on actual token usage.",
-    )
-    max_tokens: str | OutputHandle[str] = connect_field(
-        default="",
-        description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.",
-    )
-    temperature: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to be used for the video processing')
+    video_urls: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.')
+    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
+    system_prompt: str | OutputHandle[str] = connect_field(default='', description='System prompt to provide context or instructions to the model')
+    model: str | OutputHandle[str] = connect_field(default='', description='Name of the model to use. Charged based on actual token usage.')
+    max_tokens: str | OutputHandle[str] = connect_field(default='', description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
+    temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -144,3 +84,5 @@ class OpenrouterRouterVideoEnterprise(
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

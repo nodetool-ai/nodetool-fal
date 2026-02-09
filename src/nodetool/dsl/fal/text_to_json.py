@@ -18,45 +18,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_json
 from nodetool.workflows.base_node import BaseNode
 
-
-class BriaFiboEditEditStructured_instruction(
-    SingleOutputGraphNode[Any], GraphNode[Any]
-):
+class BriaFiboEditEditStructured_instruction(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Structured Instructions Generation endpoint for Fibo Edit, Bria's newest editing model.
-    text, analysis, json, extraction
+        Structured Instructions Generation endpoint for Fibo Edit, Bria's newest editing model.
+        text, analysis, json, extraction
 
-    Use cases:
-    - Text analysis to structured data
-    - Content extraction
-    - Data structuring
-    - Information extraction
-    - Text classification
+        Use cases:
+        - Text analysis to structured data
+        - Content extraction
+        - Data structuring
+        - Information extraction
+        - Text classification
     """
 
-    sync_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If true, returns the image directly in the response (increases latency).",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=5555, description="Random seed for reproducibility."
-    )
-    mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference image mask (file or URL). Optional.",
-    )
-    instruction: str | OutputHandle[str] = connect_field(
-        default="", description="Instruction for image editing."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference image (file or URL).",
-    )
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If true, returns the image directly in the response (increases latency).')
+    seed: int | OutputHandle[int] = connect_field(default=5555, description='Random seed for reproducibility.')
+    mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image mask (file or URL). Optional.')
+    instruction: str | OutputHandle[str] = connect_field(default='', description='Instruction for image editing.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image (file or URL).')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -73,36 +53,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_json
 from nodetool.workflows.base_node import BaseNode
 
-
 class BriaFiboGenerateStructured_prompt(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Structured Prompt Generation endpoint for Fibo, Bria's SOTA Open source model
-    text, analysis, json, extraction
+        Structured Prompt Generation endpoint for Fibo, Bria's SOTA Open source model
+        text, analysis, json, extraction
 
-    Use cases:
-    - Text analysis to structured data
-    - Content extraction
-    - Data structuring
-    - Information extraction
-    - Text classification
+        Use cases:
+        - Text analysis to structured data
+        - Content extraction
+        - Data structuring
+        - Information extraction
+        - Text classification
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt for image generation."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=5555, description="Random seed for reproducibility."
-    )
-    structured_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The structured prompt to generate an image from."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference image (file or URL).",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt for image generation.')
+    seed: int | OutputHandle[int] = connect_field(default=5555, description='Random seed for reproducibility.')
+    structured_prompt: str | OutputHandle[str] = connect_field(default='', description='The structured prompt to generate an image from.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image (file or URL).')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -119,36 +87,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_json
 from nodetool.workflows.base_node import BaseNode
 
-
 class BriaFiboLiteGenerateStructured_prompt(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Structured Prompt Generation endpoint for Fibo-Lite, Bria's SOTA Open source model
-    text, analysis, json, extraction
+        Structured Prompt Generation endpoint for Fibo-Lite, Bria's SOTA Open source model
+        text, analysis, json, extraction
 
-    Use cases:
-    - Text analysis to structured data
-    - Content extraction
-    - Data structuring
-    - Information extraction
-    - Text classification
+        Use cases:
+        - Text analysis to structured data
+        - Content extraction
+        - Data structuring
+        - Information extraction
+        - Text classification
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt for image generation."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=5555, description="Random seed for reproducibility."
-    )
-    structured_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The structured prompt to generate an image from."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference image (file or URL).",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt for image generation.')
+    seed: int | OutputHandle[int] = connect_field(default=5555, description='Random seed for reproducibility.')
+    structured_prompt: str | OutputHandle[str] = connect_field(default='', description='The structured prompt to generate an image from.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image (file or URL).')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -165,38 +121,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_json
 from nodetool.workflows.base_node import BaseNode
 
-
-class BriaFiboLiteGenerateStructured_promptLite(
-    SingleOutputGraphNode[Any], GraphNode[Any]
-):
+class BriaFiboLiteGenerateStructured_promptLite(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Structured Prompt Generation endpoint for Fibo-Lite, Bria's SOTA Open source model
-    text, analysis, json, extraction
+        Structured Prompt Generation endpoint for Fibo-Lite, Bria's SOTA Open source model
+        text, analysis, json, extraction
 
-    Use cases:
-    - Text analysis to structured data
-    - Content extraction
-    - Data structuring
-    - Information extraction
-    - Text classification
+        Use cases:
+        - Text analysis to structured data
+        - Content extraction
+        - Data structuring
+        - Information extraction
+        - Text classification
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt for image generation."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=5555, description="Random seed for reproducibility."
-    )
-    structured_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The structured prompt to generate an image from."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Reference image (file or URL).",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt for image generation.')
+    seed: int | OutputHandle[int] = connect_field(default=5555, description='Random seed for reproducibility.')
+    structured_prompt: str | OutputHandle[str] = connect_field(default='', description='The structured prompt to generate an image from.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Reference image (file or URL).')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -205,3 +147,5 @@ class BriaFiboLiteGenerateStructured_promptLite(
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

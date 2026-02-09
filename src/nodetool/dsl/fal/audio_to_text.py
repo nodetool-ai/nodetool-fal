@@ -18,35 +18,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class NemotronAsr(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Use the fast speed and pin point accuracy of nemotron to transcribe your texts.
-    speech, recognition, transcription, audio-analysis
+        Use the fast speed and pin point accuracy of nemotron to transcribe your texts.
+        speech, recognition, transcription, audio-analysis
 
-    Use cases:
-    - Speech recognition
-    - Audio transcription
-    - Speaker diarization
-    - Voice activity detection
-    - Meeting transcription
+        Use cases:
+        - Speech recognition
+        - Audio transcription
+        - Speaker diarization
+        - Voice activity detection
+        - Meeting transcription
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_text.NemotronAsr.Acceleration
-    )
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_text.NemotronAsr.Acceleration
 
-    acceleration: nodetool.nodes.fal.audio_to_text.NemotronAsr.Acceleration = Field(
-        default=nodetool.nodes.fal.audio_to_text.NemotronAsr.Acceleration.NONE,
-        description="Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).",
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the audio file.",
-    )
+    acceleration: nodetool.nodes.fal.audio_to_text.NemotronAsr.Acceleration = Field(default=nodetool.nodes.fal.audio_to_text.NemotronAsr.Acceleration.NONE, description="Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).")
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -63,37 +52,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class NemotronAsrStream(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Use the fast speed and pin point accuracy of nemotron to transcribe your texts.
-    speech, recognition, transcription, audio-analysis
+        Use the fast speed and pin point accuracy of nemotron to transcribe your texts.
+        speech, recognition, transcription, audio-analysis
 
-    Use cases:
-    - Speech recognition
-    - Audio transcription
-    - Speaker diarization
-    - Voice activity detection
-    - Meeting transcription
+        Use cases:
+        - Speech recognition
+        - Audio transcription
+        - Speaker diarization
+        - Voice activity detection
+        - Meeting transcription
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_text.NemotronAsrStream.Acceleration
-    )
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_text.NemotronAsrStream.Acceleration
 
-    acceleration: nodetool.nodes.fal.audio_to_text.NemotronAsrStream.Acceleration = (
-        Field(
-            default=nodetool.nodes.fal.audio_to_text.NemotronAsrStream.Acceleration.NONE,
-            description="Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).",
-        )
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the audio file.",
-    )
+    acceleration: nodetool.nodes.fal.audio_to_text.NemotronAsrStream.Acceleration = Field(default=nodetool.nodes.fal.audio_to_text.NemotronAsrStream.Acceleration.NONE, description="Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).")
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -110,27 +86,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class SileroVad(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Detect speech presence and timestamps with accuracy and speed using the ultra-lightweight Silero VAD model
-    speech, recognition, transcription, audio-analysis
+        Detect speech presence and timestamps with accuracy and speed using the ultra-lightweight Silero VAD model
+        speech, recognition, transcription, audio-analysis
 
-    Use cases:
-    - Speech recognition
-    - Audio transcription
-    - Speaker diarization
-    - Voice activity detection
-    - Meeting transcription
+        Use cases:
+        - Speech recognition
+        - Audio transcription
+        - Speaker diarization
+        - Voice activity detection
+        - Meeting transcription
     """
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the audio to get speech timestamps from.",
-    )
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio to get speech timestamps from.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -139,3 +109,5 @@ class SileroVad(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

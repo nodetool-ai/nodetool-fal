@@ -18,41 +18,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class ArgilAvatarsAudioToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class ArgilAvatarsAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    High-quality avatar videos that feel real, generated from your audio
-    video, generation, audio-to-video, visualization
+        High-quality avatar videos that feel real, generated from your audio
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Audio-driven video generation
-    - Music visualization
-    - Talking head animation
-    - Audio-synced content creation
-    - Podcast video generation
+        Use cases:
+        - Audio-driven video generation
+        - Music visualization
+        - Talking head animation
+        - Audio-synced content creation
+        - Podcast video generation
     """
 
-    Avatar: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.ArgilAvatarsAudioToVideo.Avatar
-    )
+    Avatar: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.ArgilAvatarsAudioToVideo.Avatar
 
-    avatar: nodetool.nodes.fal.audio_to_video.ArgilAvatarsAudioToVideo.Avatar = Field(
-        default=nodetool.nodes.fal.audio_to_video.ArgilAvatarsAudioToVideo.Avatar(""),
-        description=None,
-    )
-    remove_background: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Enabling the remove background feature will result in a 50% increase in the price.",
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description=None,
-    )
+    avatar: nodetool.nodes.fal.audio_to_video.ArgilAvatarsAudioToVideo.Avatar = Field(default=nodetool.nodes.fal.audio_to_video.ArgilAvatarsAudioToVideo.Avatar(''), description=None)
+    remove_background: bool | OutputHandle[bool] = connect_field(default=False, description='Enabling the remove background feature will result in a 50% increase in the price.')
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description=None)
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -69,58 +53,28 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class EchomimicV3(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    EchoMimic V3 generates a talking avatar model from a picture, audio and text prompt.
-    video, generation, audio-to-video, visualization
+        EchoMimic V3 generates a talking avatar model from a picture, audio and text prompt.
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Audio-driven video generation
-    - Music visualization
-    - Talking head animation
-    - Audio-synced content creation
-    - Podcast video generation
+        Use cases:
+        - Audio-driven video generation
+        - Music visualization
+        - Talking head animation
+        - Audio-synced content creation
+        - Podcast video generation
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to use for the video generation."
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The URL of the audio to use as a reference for the video generation.",
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image to use as a reference for the video generation.",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4.5, description="The guidance scale to use for the video generation."
-    )
-    audio_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=2.5,
-        description="The audio guidance scale to use for the video generation.",
-    )
-    num_frames_per_generation: int | OutputHandle[int] = connect_field(
-        default=121, description="The number of frames to generate at once."
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The negative prompt to use for the video generation."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The seed to use for the video generation."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for the video generation.')
+    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The URL of the audio to use as a reference for the video generation.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to use as a reference for the video generation.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The guidance scale to use for the video generation.')
+    audio_guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The audio guidance scale to use for the video generation.')
+    num_frames_per_generation: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate at once.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to use for the video generation.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the video generation.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -137,61 +91,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class ElevenlabsDubbing(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class ElevenlabsDubbing(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    ElevenLabs Dubbing
-    video, generation, audio-to-video, visualization
+        ElevenLabs Dubbing
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="URL of the video file to dub. Either audio_url or video_url must be provided. If both are provided, video_url takes priority.",
-    )
-    highest_resolution: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the highest resolution for dubbing."
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="URL of the audio file to dub. Either audio_url or video_url must be provided.",
-    )
-    target_lang: str | OutputHandle[str] = connect_field(
-        default="", description="Target language code for dubbing (ISO 639-1)"
-    )
-    num_speakers: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Number of speakers in the audio. If not provided, will be auto-detected.",
-    )
-    source_lang: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Source language code. If not provided, will be auto-detected.",
-    )
+    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='URL of the video file to dub. Either audio_url or video_url must be provided. If both are provided, video_url takes priority.')
+    highest_resolution: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use the highest resolution for dubbing.')
+    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='URL of the audio file to dub. Either audio_url or video_url must be provided.')
+    target_lang: str | OutputHandle[str] = connect_field(default='', description='Target language code for dubbing (ISO 639-1)')
+    num_speakers: str | OutputHandle[str] = connect_field(default='', description='Number of speakers in the audio. If not provided, will be auto-detected.')
+    source_lang: str | OutputHandle[str] = connect_field(default='', description='Source language code. If not provided, will be auto-detected.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -208,92 +127,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class LongcatMultiAvatarImageAudioToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class LongcatMultiAvatarImageAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Longcat Multi Avatar
-    video, generation, audio-to-video, visualization
+        Longcat Multi Avatar
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.Resolution
-    )
-    AudioType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.AudioType
-    )
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.Resolution
+    AudioType: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.AudioType
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="Two people are having a conversation with natural expressions and movements.",
-        description="The prompt to guide the video generation.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=30, description="The number of inference steps to use."
-    )
-    audio_url_person2: str | OutputHandle[str] = connect_field(
-        default="https://raw.githubusercontent.com/meituan-longcat/LongCat-Video/refs/heads/main/assets/avatar/multi/sing_woman.WAV",
-        description="The URL of the audio file for person 2 (right side).",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable safety checker."
-    )
-    bbox_person1: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Bounding box for person 1. If not provided, defaults to left half of image.",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="Close-up, Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
-        description="The negative prompt to avoid in the video generation.",
-    )
-    text_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4, description="The text guidance scale for classifier-free guidance."
-    )
-    resolution: (
-        nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.Resolution
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.Resolution.VALUE_480P,
-        description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.",
-    )
-    audio_type: (
-        nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.AudioType
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.AudioType.PARA,
-        description="How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2.",
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image containing two speakers.",
-    )
-    audio_url_person1: str | OutputHandle[str] = connect_field(
-        default="https://raw.githubusercontent.com/meituan-longcat/LongCat-Video/refs/heads/main/assets/avatar/multi/sing_man.WAV",
-        description="The URL of the audio file for person 1 (left side).",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The seed for the random number generator."
-    )
-    audio_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4,
-        description="The audio guidance scale. Higher values may lead to exaggerated mouth movements.",
-    )
-    bbox_person2: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Bounding box for person 2. If not provided, defaults to right half of image.",
-    )
-    num_segments: int | OutputHandle[int] = connect_field(
-        default=1,
-        description="Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='Two people are having a conversation with natural expressions and movements.', description='The prompt to guide the video generation.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to use.')
+    audio_url_person2: str | OutputHandle[str] = connect_field(default='https://raw.githubusercontent.com/meituan-longcat/LongCat-Video/refs/heads/main/assets/avatar/multi/sing_woman.WAV', description='The URL of the audio file for person 2 (right side).')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable safety checker.')
+    bbox_person1: str | OutputHandle[str] = connect_field(default='', description='Bounding box for person 1. If not provided, defaults to left half of image.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='Close-up, Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards', description='The negative prompt to avoid in the video generation.')
+    text_guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The text guidance scale for classifier-free guidance.')
+    resolution: nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.Resolution = Field(default=nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.Resolution.VALUE_480P, description='Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.')
+    audio_type: nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.AudioType = Field(default=nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.AudioType.PARA, description="How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2.")
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image containing two speakers.')
+    audio_url_person1: str | OutputHandle[str] = connect_field(default='https://raw.githubusercontent.com/meituan-longcat/LongCat-Video/refs/heads/main/assets/avatar/multi/sing_man.WAV', description='The URL of the audio file for person 1 (left side).')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator.')
+    audio_guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The audio guidance scale. Higher values may lead to exaggerated mouth movements.')
+    bbox_person2: str | OutputHandle[str] = connect_field(default='', description='Bounding box for person 2. If not provided, defaults to right half of image.')
+    num_segments: int | OutputHandle[int] = connect_field(default=1, description='Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -310,67 +175,32 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class LongcatSingleAvatarAudioToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class LongcatSingleAvatarAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    LongCat-Video-Avatar is an audio-driven video generation model that can generates super-realistic, lip-synchronized long video generation with natural dynamics and consistent identity.
-    video, generation, audio-to-video, visualization
+        LongCat-Video-Avatar is an audio-driven video generation model that can generates super-realistic, lip-synchronized long video generation with natural dynamics and consistent identity.
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Audio-driven video generation
-    - Music visualization
-    - Talking head animation
-    - Audio-synced content creation
-    - Podcast video generation
+        Use cases:
+        - Audio-driven video generation
+        - Music visualization
+        - Talking head animation
+        - Audio-synced content creation
+        - Podcast video generation
     """
 
-    Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarAudioToVideo.Resolution
-    )
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarAudioToVideo.Resolution
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="A person is talking naturally with natural expressions and movements.",
-        description="The prompt to guide the video generation.",
-    )
-    resolution: (
-        nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarAudioToVideo.Resolution
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarAudioToVideo.Resolution.VALUE_480P,
-        description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable safety checker."
-    )
-    audio_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4,
-        description="The audio guidance scale. Higher values may lead to exaggerated mouth movements.",
-    )
-    num_segments: int | OutputHandle[int] = connect_field(
-        default=1,
-        description="Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.",
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the audio file to drive the avatar.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=30, description="The number of inference steps to use."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The seed for the random number generator."
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="Close-up, Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
-        description="The negative prompt to avoid in the video generation.",
-    )
-    text_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4, description="The text guidance scale for classifier-free guidance."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='A person is talking naturally with natural expressions and movements.', description='The prompt to guide the video generation.')
+    resolution: nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarAudioToVideo.Resolution = Field(default=nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarAudioToVideo.Resolution.VALUE_480P, description='Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable safety checker.')
+    audio_guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The audio guidance scale. Higher values may lead to exaggerated mouth movements.')
+    num_segments: int | OutputHandle[int] = connect_field(default=1, description='Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.')
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio file to drive the avatar.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to use.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='Close-up, Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards', description='The negative prompt to avoid in the video generation.')
+    text_guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The text guidance scale for classifier-free guidance.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -387,72 +217,33 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class LongcatSingleAvatarImageAudioToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class LongcatSingleAvatarImageAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    LongCat-Video-Avatar is an audio-driven video generation model that can generates super-realistic, lip-synchronized long video generation with natural dynamics and consistent identity.
-    video, generation, audio-to-video, visualization
+        LongCat-Video-Avatar is an audio-driven video generation model that can generates super-realistic, lip-synchronized long video generation with natural dynamics and consistent identity.
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Audio-driven video generation
-    - Music visualization
-    - Talking head animation
-    - Audio-synced content creation
-    - Podcast video generation
+        Use cases:
+        - Audio-driven video generation
+        - Music visualization
+        - Talking head animation
+        - Audio-synced content creation
+        - Podcast video generation
     """
 
-    Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarImageAudioToVideo.Resolution
-    )
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarImageAudioToVideo.Resolution
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to guide the video generation."
-    )
-    resolution: (
-        nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarImageAudioToVideo.Resolution
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarImageAudioToVideo.Resolution.VALUE_480P,
-        description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable safety checker."
-    )
-    audio_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4,
-        description="The audio guidance scale. Higher values may lead to exaggerated mouth movements.",
-    )
-    num_segments: int | OutputHandle[int] = connect_field(
-        default=1,
-        description="Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.",
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image to animate.",
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the audio file to drive the avatar.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=30, description="The number of inference steps to use."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The seed for the random number generator."
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="Close-up, Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
-        description="The negative prompt to avoid in the video generation.",
-    )
-    text_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4, description="The text guidance scale for classifier-free guidance."
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to guide the video generation.')
+    resolution: nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarImageAudioToVideo.Resolution = Field(default=nodetool.nodes.fal.audio_to_video.LongcatSingleAvatarImageAudioToVideo.Resolution.VALUE_480P, description='Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable safety checker.')
+    audio_guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The audio guidance scale. Higher values may lead to exaggerated mouth movements.')
+    num_segments: int | OutputHandle[int] = connect_field(default=1, description='Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to animate.')
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio file to drive the avatar.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to use.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='Close-up, Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards', description='The negative prompt to avoid in the video generation.')
+    text_guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The text guidance scale for classifier-free guidance.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -469,157 +260,52 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class Ltx219BAudioToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class Ltx219BAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    LTX-2 19B
-    video, generation, audio-to-video, visualization
+        LTX-2 19B
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.Acceleration
-    )
-    CameraLora: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.CameraLora
-    )
-    VideoWriteMode: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoWriteMode
-    )
-    VideoOutputType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoOutputType
-    )
-    VideoQuality: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoQuality
-    )
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.Acceleration
+    CameraLora: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.CameraLora
+    VideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoWriteMode
+    VideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoOutputType
+    VideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoQuality
 
-    match_audio_length: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate the video from."
-    )
-    acceleration: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.Acceleration = (
-        Field(
-            default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.Acceleration.REGULAR,
-            description="The acceleration level to use.",
-        )
-    )
-    use_multiscale: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=40, description="The number of inference steps to use."
-    )
-    fps: float | OutputHandle[float] = connect_field(
-        default=25, description="The frames per second of the generated video."
-    )
-    camera_lora: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.CameraLora = (
-        Field(
-            default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.CameraLora.NONE,
-            description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-        )
-    )
-    video_size: str | OutputHandle[str] = connect_field(
-        default="landscape_4_3",
-        description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3, description="The guidance scale to use."
-    )
-    camera_lora_scale: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-    )
-    image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the image to use for the video generation.",
-    )
-    preprocess_audio: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to preprocess the audio before using it as conditioning.",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.",
-        description="The negative prompt to generate the video from.",
-    )
-    video_write_mode: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoWriteMode
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoWriteMode.BALANCED,
-        description="The write mode of the generated video.",
-    )
-    video_output_type: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoOutputType
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoOutputType.X264_MP4,
-        description="The output type of the generated video.",
-    )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image to use as the end of the video.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable the safety checker."
-    )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=121, description="The number of frames to generate."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Optional URL of an image to use as the first frame of the video.",
-    )
-    video_quality: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoQuality
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoQuality.HIGH,
-        description="The quality of the generated video.",
-    )
-    sync_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-    )
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable prompt expansion."
-    )
-    audio_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.",
-    )
-    end_image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the end image to use for the video generation.",
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The URL of the audio to generate the video from.",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="", description="The seed for the random number generator."
-    )
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from.')
+    acceleration: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.Acceleration = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.Acceleration.REGULAR, description='The acceleration level to use.')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to use.')
+    fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
+    camera_lora: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.CameraLora = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    video_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='The guidance scale to use.')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the image to use for the video generation.')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio before using it as conditioning.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.', description='The negative prompt to generate the video from.')
+    video_write_mode: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoWriteMode = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoWriteMode.BALANCED, description='The write mode of the generated video.')
+    video_output_type: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoOutputType = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoOutputType.X264_MP4, description='The output type of the generated video.')
+    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to use as the end of the video.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional URL of an image to use as the first frame of the video.')
+    video_quality: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoQuality = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoQuality.HIGH, description='The quality of the generated video.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable prompt expansion.')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1, description='Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.')
+    end_image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the end image to use for the video generation.')
+    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The URL of the audio to generate the video from.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -636,160 +322,53 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class Ltx219BAudioToVideoLora(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class Ltx219BAudioToVideoLora(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    LTX-2 19B
-    video, generation, audio-to-video, visualization, lora
+        LTX-2 19B
+        video, generation, audio-to-video, visualization, lora
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.Acceleration
-    )
-    CameraLora: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora
-    )
-    VideoWriteMode: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoWriteMode
-    )
-    VideoOutputType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoOutputType
-    )
-    VideoQuality: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoQuality
-    )
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.Acceleration
+    CameraLora: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora
+    VideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoWriteMode
+    VideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoOutputType
+    VideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoQuality
 
-    match_audio_length: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate the video from."
-    )
-    acceleration: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.Acceleration
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.Acceleration.REGULAR,
-        description="The acceleration level to use.",
-    )
-    use_multiscale: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=40, description="The number of inference steps to use."
-    )
-    fps: float | OutputHandle[float] = connect_field(
-        default=25, description="The frames per second of the generated video."
-    )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The LoRAs to use for the generation."
-    )
-    camera_lora: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora.NONE,
-        description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-    )
-    video_size: str | OutputHandle[str] = connect_field(
-        default="landscape_4_3",
-        description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3, description="The guidance scale to use."
-    )
-    camera_lora_scale: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-    )
-    image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the image to use for the video generation.",
-    )
-    preprocess_audio: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to preprocess the audio before using it as conditioning.",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.",
-        description="The negative prompt to generate the video from.",
-    )
-    video_write_mode: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoWriteMode
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoWriteMode.BALANCED,
-        description="The write mode of the generated video.",
-    )
-    video_output_type: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoOutputType
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoOutputType.X264_MP4,
-        description="The output type of the generated video.",
-    )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image to use as the end of the video.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable the safety checker."
-    )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=121, description="The number of frames to generate."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Optional URL of an image to use as the first frame of the video.",
-    )
-    sync_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-    )
-    video_quality: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoQuality
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoQuality.HIGH,
-        description="The quality of the generated video.",
-    )
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable prompt expansion."
-    )
-    audio_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.",
-    )
-    end_image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the end image to use for the video generation.",
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The URL of the audio to generate the video from.",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="", description="The seed for the random number generator."
-    )
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from.')
+    acceleration: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.Acceleration = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.Acceleration.REGULAR, description='The acceleration level to use.')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to use.')
+    fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the generation.')
+    camera_lora: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    video_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.")
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='The guidance scale to use.')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the image to use for the video generation.')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio before using it as conditioning.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.', description='The negative prompt to generate the video from.')
+    video_write_mode: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoWriteMode = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoWriteMode.BALANCED, description='The write mode of the generated video.')
+    video_output_type: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoOutputType = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoOutputType.X264_MP4, description='The output type of the generated video.')
+    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to use as the end of the video.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional URL of an image to use as the first frame of the video.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    video_quality: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoQuality = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoQuality.HIGH, description='The quality of the generated video.')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable prompt expansion.')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1, description='Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.')
+    end_image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the end image to use for the video generation.')
+    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The URL of the audio to generate the video from.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -806,151 +385,50 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class Ltx219BDistilledAudioToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class Ltx219BDistilledAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    LTX-2 19B Distilled
-    video, generation, audio-to-video, visualization
+        LTX-2 19B Distilled
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.Acceleration
-    )
-    CameraLora: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.CameraLora
-    )
-    VideoWriteMode: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoWriteMode
-    )
-    VideoOutputType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoOutputType
-    )
-    VideoQuality: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoQuality
-    )
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.Acceleration
+    CameraLora: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.CameraLora
+    VideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoWriteMode
+    VideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoOutputType
+    VideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoQuality
 
-    match_audio_length: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate the video from."
-    )
-    acceleration: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.Acceleration
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.Acceleration.NONE,
-        description="The acceleration level to use.",
-    )
-    use_multiscale: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
-    )
-    fps: float | OutputHandle[float] = connect_field(
-        default=25, description="The frames per second of the generated video."
-    )
-    camera_lora: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.CameraLora
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.CameraLora.NONE,
-        description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-    )
-    video_size: str | OutputHandle[str] = connect_field(
-        default="landscape_4_3",
-        description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable the safety checker."
-    )
-    camera_lora_scale: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-    )
-    image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the image to use for the video generation.",
-    )
-    preprocess_audio: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to preprocess the audio before using it as conditioning.",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.",
-        description="The negative prompt to generate the video from.",
-    )
-    video_write_mode: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoWriteMode
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoWriteMode.BALANCED,
-        description="The write mode of the generated video.",
-    )
-    video_output_type: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoOutputType
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoOutputType.X264_MP4,
-        description="The output type of the generated video.",
-    )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image to use as the end of the video.",
-    )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=121, description="The number of frames to generate."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Optional URL of an image to use as the first frame of the video.",
-    )
-    video_quality: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoQuality
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoQuality.HIGH,
-        description="The quality of the generated video.",
-    )
-    sync_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-    )
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable prompt expansion."
-    )
-    audio_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.",
-    )
-    end_image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the end image to use for the video generation.",
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The URL of the audio to generate the video from.",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="", description="The seed for the random number generator."
-    )
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from.')
+    acceleration: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.Acceleration = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.Acceleration.NONE, description='The acceleration level to use.')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.')
+    fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
+    camera_lora: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.CameraLora = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    video_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the image to use for the video generation.')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio before using it as conditioning.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.', description='The negative prompt to generate the video from.')
+    video_write_mode: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoWriteMode = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoWriteMode.BALANCED, description='The write mode of the generated video.')
+    video_output_type: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoOutputType = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoOutputType.X264_MP4, description='The output type of the generated video.')
+    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to use as the end of the video.')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional URL of an image to use as the first frame of the video.')
+    video_quality: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoQuality = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoQuality.HIGH, description='The quality of the generated video.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable prompt expansion.')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1, description='Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.')
+    end_image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the end image to use for the video generation.')
+    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The URL of the audio to generate the video from.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -967,154 +445,51 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class Ltx219BDistilledAudioToVideoLora(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class Ltx219BDistilledAudioToVideoLora(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    LTX-2 19B Distilled
-    video, generation, audio-to-video, visualization, lora
+        LTX-2 19B Distilled
+        video, generation, audio-to-video, visualization, lora
 
-    Use cases:
-    - Automated content generation
-    - Creative workflows
-    - Batch processing
-    - Professional applications
-    - Rapid prototyping
+        Use cases:
+        - Automated content generation
+        - Creative workflows
+        - Batch processing
+        - Professional applications
+        - Rapid prototyping
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration
-    )
-    CameraLora: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora
-    )
-    VideoWriteMode: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoWriteMode
-    )
-    VideoOutputType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoOutputType
-    )
-    VideoQuality: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoQuality
-    )
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration
+    CameraLora: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora
+    VideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoWriteMode
+    VideoOutputType: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoOutputType
+    VideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoQuality
 
-    match_audio_length: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to generate the video from."
-    )
-    acceleration: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration.NONE,
-        description="The acceleration level to use.",
-    )
-    use_multiscale: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
-    )
-    fps: float | OutputHandle[float] = connect_field(
-        default=25, description="The frames per second of the generated video."
-    )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The LoRAs to use for the generation."
-    )
-    camera_lora: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora.NONE,
-        description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-    )
-    video_size: str | OutputHandle[str] = connect_field(
-        default="landscape_4_3",
-        description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable the safety checker."
-    )
-    camera_lora_scale: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
-    )
-    image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the image to use for the video generation.",
-    )
-    preprocess_audio: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to preprocess the audio before using it as conditioning.",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.",
-        description="The negative prompt to generate the video from.",
-    )
-    video_write_mode: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoWriteMode
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoWriteMode.BALANCED,
-        description="The write mode of the generated video.",
-    )
-    video_output_type: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoOutputType
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoOutputType.X264_MP4,
-        description="The output type of the generated video.",
-    )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image to use as the end of the video.",
-    )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=121, description="The number of frames to generate."
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Optional URL of an image to use as the first frame of the video.",
-    )
-    sync_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-    )
-    video_quality: (
-        nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoQuality
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoQuality.HIGH,
-        description="The quality of the generated video.",
-    )
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to enable prompt expansion."
-    )
-    audio_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.",
-    )
-    end_image_strength: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="The strength of the end image to use for the video generation.",
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The URL of the audio to generate the video from.",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default="", description="The seed for the random number generator."
-    )
+    match_audio_length: bool | OutputHandle[bool] = connect_field(default=True, description='When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from.')
+    acceleration: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration.NONE, description='The acceleration level to use.')
+    use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.')
+    fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
+    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the generation.')
+    camera_lora: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    video_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.")
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
+    camera_lora_scale: float | OutputHandle[float] = connect_field(default=1, description='The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
+    image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the image to use for the video generation.')
+    preprocess_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the audio before using it as conditioning.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.', description='The negative prompt to generate the video from.')
+    video_write_mode: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoWriteMode = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoWriteMode.BALANCED, description='The write mode of the generated video.')
+    video_output_type: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoOutputType = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoOutputType.X264_MP4, description='The output type of the generated video.')
+    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to use as the end of the video.')
+    num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames to generate.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional URL of an image to use as the first frame of the video.')
+    sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    video_quality: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoQuality = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoQuality.HIGH, description='The quality of the generated video.')
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable prompt expansion.')
+    audio_strength: float | OutputHandle[float] = connect_field(default=1, description='Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.')
+    end_image_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the end image to use for the video generation.')
+    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The URL of the audio to generate the video from.')
+    seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1131,68 +506,31 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
 class StableAvatar(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Stable Avatar generates audio-driven video avatars up to five minutes long
-    video, generation, audio-to-video, visualization
+        Stable Avatar generates audio-driven video avatars up to five minutes long
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Audio-driven video generation
-    - Music visualization
-    - Talking head animation
-    - Audio-synced content creation
-    - Podcast video generation
+        Use cases:
+        - Audio-driven video generation
+        - Music visualization
+        - Talking head animation
+        - Audio-synced content creation
+        - Podcast video generation
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.StableAvatar.AspectRatio
-    )
+    AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.StableAvatar.AspectRatio
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The prompt to use for the video generation."
-    )
-    aspect_ratio: nodetool.nodes.fal.audio_to_video.StableAvatar.AspectRatio = Field(
-        default=nodetool.nodes.fal.audio_to_video.StableAvatar.AspectRatio.AUTO,
-        description="The aspect ratio of the video to generate. If 'auto', the aspect ratio will be determined by the reference image.",
-    )
-    perturbation: float | OutputHandle[float] = connect_field(
-        default=0.1,
-        description="The amount of perturbation to use for the video generation. 0.0 means no perturbation, 1.0 means full perturbation.",
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the image to use as a reference for the video generation.",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=5, description="The guidance scale to use for the video generation."
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1, description="The seed to use for the video generation."
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=50,
-        description="The number of inference steps to use for the video generation.",
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The URL of the audio to use as a reference for the video generation.",
-    )
-    audio_guidance_scale: float | OutputHandle[float] = connect_field(
-        default=4,
-        description="The audio guidance scale to use for the video generation.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for the video generation.')
+    aspect_ratio: nodetool.nodes.fal.audio_to_video.StableAvatar.AspectRatio = Field(default=nodetool.nodes.fal.audio_to_video.StableAvatar.AspectRatio.AUTO, description="The aspect ratio of the video to generate. If 'auto', the aspect ratio will be determined by the reference image.")
+    perturbation: float | OutputHandle[float] = connect_field(default=0.1, description='The amount of perturbation to use for the video generation. 0.0 means no perturbation, 1.0 means full perturbation.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to use as a reference for the video generation.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='The guidance scale to use for the video generation.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the video generation.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to use for the video generation.')
+    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The URL of the audio to use as a reference for the video generation.')
+    audio_guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The audio guidance scale to use for the video generation.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1209,41 +547,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class VeedAvatarsAudioToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class VeedAvatarsAudioToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate high-quality videos with UGC-like avatars from audio
-    video, generation, audio-to-video, visualization
+        Generate high-quality videos with UGC-like avatars from audio
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Audio-driven video generation
-    - Music visualization
-    - Talking head animation
-    - Audio-synced content creation
-    - Podcast video generation
+        Use cases:
+        - Audio-driven video generation
+        - Music visualization
+        - Talking head animation
+        - Audio-synced content creation
+        - Podcast video generation
     """
 
-    AvatarId: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.VeedAvatarsAudioToVideo.AvatarId
-    )
+    AvatarId: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.VeedAvatarsAudioToVideo.AvatarId
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description=None,
-    )
-    avatar_id: nodetool.nodes.fal.audio_to_video.VeedAvatarsAudioToVideo.AvatarId = (
-        Field(
-            default=nodetool.nodes.fal.audio_to_video.VeedAvatarsAudioToVideo.AvatarId(
-                ""
-            ),
-            description="The avatar to use for the video",
-        )
-    )
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description=None)
+    avatar_id: nodetool.nodes.fal.audio_to_video.VeedAvatarsAudioToVideo.AvatarId = Field(default=nodetool.nodes.fal.audio_to_video.VeedAvatarsAudioToVideo.AvatarId(''), description='The avatar to use for the video')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1260,101 +581,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.audio_to_video
 from nodetool.workflows.base_node import BaseNode
 
-
-class WanV2214bSpeechToVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class WanV2214bSpeechToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Wan-S2V is a video model that generates high-quality videos from static images and audio, with realistic facial expressions, body movements, and professional camera work for film and television applications
-    video, generation, audio-to-video, visualization
+        Wan-S2V is a video model that generates high-quality videos from static images and audio, with realistic facial expressions, body movements, and professional camera work for film and television applications
+        video, generation, audio-to-video, visualization
 
-    Use cases:
-    - Audio-driven video generation
-    - Music visualization
-    - Talking head animation
-    - Audio-synced content creation
-    - Podcast video generation
+        Use cases:
+        - Audio-driven video generation
+        - Music visualization
+        - Talking head animation
+        - Audio-synced content creation
+        - Podcast video generation
     """
 
-    VideoWriteMode: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoWriteMode
-    )
-    Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.Resolution
-    )
-    VideoQuality: typing.ClassVar[type] = (
-        nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoQuality
-    )
+    VideoWriteMode: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoWriteMode
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.Resolution
+    VideoQuality: typing.ClassVar[type] = nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoQuality
 
-    shift: float | OutputHandle[float] = connect_field(
-        default=5,
-        description="Shift value for the video. Must be between 1.0 and 10.0.",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="The text prompt used for video generation."
-    )
-    frames_per_second: int | OutputHandle[int] = connect_field(
-        default=16,
-        description="Frames per second of the generated video. Must be between 4 to 60. When using interpolation and `adjust_fps_for_interpolation` is set to true (default true,) the final FPS will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If `adjust_fps_for_interpolation` is set to false, this value will be used as-is.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If set to true, input data will be checked for safety before processing.",
-    )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=80,
-        description="Number of frames to generate. Must be between 40 to 120, (must be multiple of 4).",
-    )
-    guidance_scale: float | OutputHandle[float] = connect_field(
-        default=3.5,
-        description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.",
-    )
-    negative_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Negative prompt for video generation."
-    )
-    video_write_mode: (
-        nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoWriteMode
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoWriteMode.BALANCED,
-        description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.",
-    )
-    resolution: nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.Resolution = (
-        Field(
-            default=nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.Resolution.VALUE_480P,
-            description="Resolution of the generated video (480p, 580p, or 720p).",
-        )
-    )
-    enable_output_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If set to true, output video will be checked for safety after generation.",
-    )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.",
-    )
-    video_quality: (
-        nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoQuality
-    ) = Field(
-        default=nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoQuality.HIGH,
-        description="The quality of the output video. Higher quality means better visual quality but larger file size.",
-    )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the audio file.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=27,
-        description="Number of inference steps for sampling. Higher values give better quality but take longer.",
-    )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1,
-        description="Random seed for reproducibility. If None, a random seed is chosen.",
-    )
+    shift: float | OutputHandle[float] = connect_field(default=5, description='Shift value for the video. Must be between 1.0 and 10.0.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt used for video generation.')
+    frames_per_second: int | OutputHandle[int] = connect_field(default=16, description='Frames per second of the generated video. Must be between 4 to 60. When using interpolation and `adjust_fps_for_interpolation` is set to true (default true,) the final FPS will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If `adjust_fps_for_interpolation` is set to false, this value will be used as-is.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, input data will be checked for safety before processing.')
+    num_frames: int | OutputHandle[int] = connect_field(default=80, description='Number of frames to generate. Must be between 40 to 120, (must be multiple of 4).')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for video generation.')
+    video_write_mode: nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoWriteMode = Field(default=nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoWriteMode.BALANCED, description='The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.')
+    resolution: nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.Resolution = Field(default=nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.Resolution.VALUE_480P, description='Resolution of the generated video (480p, 580p, or 720p).')
+    enable_output_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, output video will be checked for safety after generation.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.')
+    video_quality: nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoQuality = Field(default=nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoQuality.HIGH, description='The quality of the output video. Higher quality means better visual quality but larger file size.')
+    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio file.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=27, description='Number of inference steps for sampling. Higher values give better quality but take longer.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. If None, a random seed is chosen.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1363,3 +622,5 @@ class WanV2214bSpeechToVideo(
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+
