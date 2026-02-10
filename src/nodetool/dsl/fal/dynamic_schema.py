@@ -27,7 +27,7 @@ from nodetool.workflows.base_node import BaseNode
 class FalAI(GraphNode[dict[str, Any]]):
     """
 
-        Dynamic FAL schema-driven node for running any fal.ai endpoint.
+        Dynamic FAL node for running any fal.ai endpoint.
         fal, schema, dynamic, openapi, inference, runtime, model
 
         Use cases:
@@ -35,7 +35,6 @@ class FalAI(GraphNode[dict[str, Any]]):
         - Prototype workflows with experimental FAL models
         - Run custom endpoints by sharing model info (llms.txt)
         - Build flexible pipelines that depend on runtime model selection
-        - Explore model inputs/outputs directly from OpenAPI metadata
 
     This node supports dynamic properties. Additional properties can be passed
     as keyword arguments during initialization and will be stored in the node's
@@ -47,7 +46,7 @@ class FalAI(GraphNode[dict[str, Any]]):
 
     model_info: str | OutputHandle[str] = connect_field(
         default="",
-        description="fal.ai llms.txt URL, fal.ai model URL, endpoint id, or raw llms.txt content used to derive the OpenAPI schema.",
+        description="Paste the full llms.txt from the fal.ai model page (e.g. fal.ai/models/... → copy all).",
     )
 
     def __init__(

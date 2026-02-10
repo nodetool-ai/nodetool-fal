@@ -8,6 +8,7 @@ This script generates FAL node code from OpenAPI schemas and config files.
 import asyncio
 import argparse
 import importlib.util
+import re
 import sys
 from pathlib import Path
 from typing import Any, Optional
@@ -125,7 +126,7 @@ async def generate_module(
             continue
     
     # Write output file
-    output_file = output_dir / f"{module_name}_generated.py"
+    output_file = output_dir / f"{module_name}.py"
     print(f"\nWriting {len(generated_nodes)} nodes to {output_file}")
     
     # Determine which imports are actually needed by checking all generated code
@@ -140,6 +141,65 @@ async def generate_module(
     needs_image = "ImageRef" in all_code
     needs_video = "VideoRef" in all_code
     needs_audio = "AudioRef" in all_code
+    needed_base_type_classes = sorted(
+        bt_name
+        for bt_name in NodeGenerator.KNOWN_BASE_TYPES
+        if re.search(rf"\b{re.escape(bt_name)}\b", all_code)
+    )
+    
+    # Extract and deduplicate enums from all generated code
+    enums_seen = set()
+    enums_to_write = []
+    node_classes = []
+    
+    # Add shared enums from config if available
+    if config_module and hasattr(config_module, "SHARED_ENUMS"):
+        for enum_name, enum_def in config_module.SHARED_ENUMS.items():
+            enums_seen.add(enum_name)
+            lines = [f'class {enum_name}(str, Enum):']
+            if "description" in enum_def:
+                lines.append(f'    """{enum_def["description"]}"""')
+            for value_name, value_str in enum_def["values"]:
+                lines.append(f'    {value_name} = "{value_str}"')
+            enums_to_write.append("\n".join(lines))
+    
+    for class_name, code in generated_nodes:
+        lines = code.split("\n")
+        # Skip import lines and extract enums
+        enum_lines = []
+        class_lines = []
+        in_enum = False
+        current_enum_name = None
+        current_enum_lines = []
+        skip_imports = True
+        
+        for line in lines:
+            if skip_imports and (not line.strip() or line.startswith("from ") or line.startswith("import ")):
+                continue
+            skip_imports = False
+            
+            if line.startswith("class ") and "(Enum)" in line:
+                # Start of an enum
+                in_enum = True
+                current_enum_name = line.split("(")[0].replace("class ", "").strip()
+                current_enum_lines = [line]
+            elif in_enum:
+                current_enum_lines.append(line)
+                # Check if we reached the end of the enum (empty line or next class)
+                if not line.strip() or (line.startswith("class ") and "(Enum)" not in line and "(FALNode)" in line):
+                    if current_enum_name and current_enum_name not in enums_seen:
+                        enums_seen.add(current_enum_name)
+                        enums_to_write.append("\n".join(current_enum_lines[:-1]))  # Exclude the line that broke the loop
+                    in_enum = False
+                    current_enum_name = None
+                    current_enum_lines = []
+                    # If this is the start of a class, we need to process it
+                    if line.startswith("class ") and "(FALNode)" in line:
+                        class_lines.append(line)
+            else:
+                class_lines.append(line)
+        
+        node_classes.append("\n".join(class_lines))
     
     with output_file.open("w") as f:
         # Write imports once at the top
@@ -159,24 +219,23 @@ async def generate_module(
         
         if asset_types:
             f.write(f"from nodetool.metadata.types import {', '.join(asset_types)}\n")
+        if needed_base_type_classes:
+            f.write(f"from nodetool.nodes.fal.types import {', '.join(needed_base_type_classes)}\n")
         
         f.write("from nodetool.nodes.fal.fal_node import FALNode\n")
         f.write("from nodetool.workflows.processing_context import ProcessingContext\n")
         f.write("\n\n")
         
-        for i, (class_name, code) in enumerate(generated_nodes):
+        # Write all unique enums
+        for enum_code in enums_to_write:
+            f.write(enum_code)
+            f.write("\n\n\n")
+        
+        # Write all node classes
+        for i, class_code in enumerate(node_classes):
             if i > 0:
                 f.write("\n\n")
-            # Remove imports from individual node code
-            lines = code.split("\n")
-            # Skip import lines
-            start_idx = 0
-            for idx, line in enumerate(lines):
-                if not line.strip() or line.startswith("from ") or line.startswith("import "):
-                    start_idx = idx + 1
-                else:
-                    break
-            f.write("\n".join(lines[start_idx:]))
+            f.write(class_code)
     
     print(f"✓ Generated {len(generated_nodes)} nodes for {module_name}")
     
@@ -237,23 +296,28 @@ async def main():
     
     # Generate module
     if args.module:
-        # Define endpoints for each module
-        module_endpoints = {
-            "image_to_video": [
-                "fal-ai/pixverse/v5.6/image-to-video",
-                "fal-ai/luma-dream-machine/image-to-video",
-            ],
-            # Add more modules here
-        }
+        # Load endpoints dynamically from config modules
+        # This allows us to keep the generate script in sync with configs
+        config_path = Path(__file__).parent / "configs" / f"{args.module}.py"
+        config_module = load_config_module(config_path)
         
-        if args.module not in module_endpoints:
-            print(f"ERROR: Unknown module '{args.module}'")
-            print(f"Available modules: {', '.join(module_endpoints.keys())}")
+        if not config_module or not hasattr(config_module, "CONFIGS"):
+            print(f"ERROR: No config found for module '{args.module}'")
+            print(f"Available modules: Check codegen/configs/ directory")
             sys.exit(1)
+        
+        # Get all endpoint IDs from the config
+        endpoints = list(config_module.CONFIGS.keys())
+        
+        if not endpoints:
+            print(f"ERROR: No endpoints configured in module '{args.module}'")
+            sys.exit(1)
+        
+        print(f"Loaded {len(endpoints)} endpoints from {args.module} config")
         
         await generate_module(
             args.module,
-            module_endpoints[args.module],
+            endpoints,
             args.output_dir,
             use_cache=not args.no_cache
         )

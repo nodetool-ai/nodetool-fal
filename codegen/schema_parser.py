@@ -46,6 +46,9 @@ class NodeSpec:
 class SchemaParser:
     """Parses OpenAPI schemas into node specifications."""
 
+    def __init__(self):
+        self._root_schema: dict[str, Any] = {}
+
     def parse(self, openapi_schema: dict[str, Any]) -> NodeSpec:
         """
         Parse an OpenAPI schema into a node specification.
@@ -56,6 +59,8 @@ class SchemaParser:
         Returns:
             NodeSpec with all information needed to generate a node
         """
+        self._root_schema = openapi_schema
+
         # Extract endpoint ID
         endpoint_id = self._extract_endpoint_id(openapi_schema)
         
@@ -246,16 +251,26 @@ class SchemaParser:
         json_type = prop.get("type", "string")
         
         if json_type == "string":
-            # Check for image URL patterns
-            desc_lower = prop.get("description", "").lower()
-            title_lower = prop.get("title", "").lower()
+            # Check for image URL patterns - be more selective
+            # Only treat as asset refs if field name ends with _url or is exactly image/video/audio
             name_lower = prop_name.lower()
             
-            if "image" in desc_lower or "image" in title_lower or ("image" in name_lower and "_url" in name_lower):
+            if name_lower.endswith("_url") or name_lower.endswith("_urls"):
+                desc_lower = prop.get("description", "").lower()
+                title_lower = prop.get("title", "").lower()
+                
+                if "image" in name_lower or "image" in desc_lower or "image" in title_lower:
+                    return "ImageRef"
+                elif "video" in name_lower or "video" in desc_lower or "video" in title_lower:
+                    return "VideoRef"
+                elif "audio" in name_lower or "audio" in desc_lower or "audio" in title_lower:
+                    return "AudioRef"
+            elif name_lower in ["image", "mask"]:
+                # Specific known image input fields
                 return "ImageRef"
-            elif "video" in desc_lower or "video" in title_lower or ("video" in name_lower and "_url" in name_lower):
+            elif name_lower in ["video"]:
                 return "VideoRef"
-            elif "audio" in desc_lower or "audio" in title_lower or ("audio" in name_lower and "_url" in name_lower):
+            elif name_lower in ["audio"]:
                 return "AudioRef"
             
             return "str"
@@ -267,6 +282,11 @@ class SchemaParser:
             return "bool"
         elif json_type == "array":
             items = prop.get("items", {})
+            # Handle $ref in array items (complex object types)
+            if "$ref" in items:
+                ref_type = self._resolve_ref_type_name(items["$ref"])
+                if ref_type:
+                    return f"list[{ref_type}]"
             item_type = self._json_type_to_python(items, None, "")
             return f"list[{item_type}]"
         elif json_type == "object":
@@ -274,8 +294,33 @@ class SchemaParser:
         
         return "Any"
 
+    def _resolve_ref_type_name(self, ref_path: str) -> Optional[str]:
+        """Resolve a $ref path to the referenced schema's title or name.
+        
+        Returns the schema title (e.g., 'KlingV3MultiPromptElement') which
+        corresponds to a BaseType subclass name.
+        """
+        if not ref_path.startswith("#/"):
+            return None
+        parts = ref_path.lstrip("#/").split("/")
+        current = self._root_schema
+        for part in parts:
+            current = current.get(part, {})
+            if not current:
+                return None
+        # Use the title from the resolved schema
+        return current.get("title")
+
     def _get_default_value(self, prop: dict[str, Any], python_type: str, required: bool, enum_name: Optional[str] = None) -> str:
         """Get default value for a field."""
+        # Asset refs should always default to empty refs in nodetool nodes.
+        if "ImageRef" in python_type:
+            return "ImageRef()"
+        if "VideoRef" in python_type:
+            return "VideoRef()"
+        if "AudioRef" in python_type:
+            return "AudioRef()"
+
         if "default" in prop:
             default = prop["default"]
             if isinstance(default, str):
@@ -295,13 +340,7 @@ class SchemaParser:
                 return str(default)
         
         # Generate sensible defaults based on type
-        if "ImageRef" in python_type:
-            return "ImageRef()"
-        elif "VideoRef" in python_type:
-            return "VideoRef()"
-        elif "AudioRef" in python_type:
-            return "AudioRef()"
-        elif python_type == "str":
+        if python_type == "str":
             return '""'
         elif python_type == "int":
             return "-1" if "seed" in prop.get("description", "").lower() else "0"
@@ -377,17 +416,74 @@ class SchemaParser:
 
     def _to_enum_value(self, value: str) -> str:
         """Convert a string value to a valid Python enum name."""
+        import re as _re
         # Examples:
         # "16:9" -> "RATIO_16_9"
         # "square_hd" -> "SQUARE_HD"
         # "5" -> "DURATION_5"
+        # "3D Model" -> "MODEL_3D"
+        # "Digital Art" -> "DIGITAL_ART"
+        # "(No style)" -> "NO_STYLE"
+        # "realistic_image/b_and_w" -> "REALISTIC_IMAGE__B_AND_W"
+        # "X264 (.mp4)" -> "X264__MP4"
+        # "DPM++ 2M" -> "DPM_PLUS_PLUS_2M"
+        # "Who's Arrested?" -> "WHOS_ARRESTED"
         
-        if ":" in value:
+        # Handle ratios early (before removing colons)
+        if ":" in value and _re.match(r'^\d+:\d+$', value.strip()):
             value = value.replace(":", "_")
             return f"RATIO_{value}".upper()
         
         # Handle numeric values
-        if value.isdigit():
-            return f"VALUE_{value}"
+        if value.strip().isdigit():
+            return f"VALUE_{value.strip()}"
         
-        return value.replace("-", "_").upper()
+        # Replace ++ with _PLUS_PLUS, + with _PLUS
+        value = value.replace("++", "_PLUS_PLUS_").replace("+", "_PLUS_")
+        
+        # Remove/replace special characters
+        value = value.replace("(", "").replace(")", "").replace(",", "_")
+        value = value.replace("'", "").replace("'", "").replace("\"", "")
+        value = value.replace("!", "").replace("?", "").replace("&", "_AND_")
+        value = value.replace(":", "_").replace(";", "_").replace("#", "_")
+        value = value.replace("@", "_AT_").replace("$", "_")
+        value = value.replace("~", "_").replace("`", "").replace("^", "_")
+        value = value.replace("{", "").replace("}", "").replace("[", "").replace("]", "")
+        value = value.replace("\\", "_").replace("|", "_").replace("=", "_")
+        value = value.replace("<", "_").replace(">", "_")
+        
+        # Replace spaces, hyphens, slashes, dots with underscores
+        # Use double underscore for slashes to make them stand out
+        value = value.replace("/", "__").replace(" ", "_").replace("-", "_").replace(".", "_")
+        
+        # Convert to uppercase
+        result = value.upper()
+        
+        # Collapse multiple underscores and strip leading/trailing underscores
+        result = _re.sub(r'_+', '_', result).strip('_')
+        
+        # If starts with a digit, prefix with an appropriate word
+        if result and result[0].isdigit():
+            # Try to extract meaningful prefix from the rest of the string
+            if "D" in result and result.index("D") < 3:
+                # Like "3D" -> move to end: "MODEL_3D" or "ART_3D"
+                parts = result.split("_")
+                if len(parts) > 1:
+                    # Move first part to end
+                    result = "_".join(parts[1:] + [parts[0]])
+                else:
+                    result = f"VALUE_{result}"
+            else:
+                result = f"VALUE_{result}"
+        
+        # Final safety: ensure result is a valid identifier
+        if not result or not result.isidentifier():
+            # Replace any remaining invalid characters
+            result = _re.sub(r'[^A-Za-z0-9_]', '_', result)
+            result = _re.sub(r'_+', '_', result).strip('_')
+            if not result:
+                result = "VALUE_UNKNOWN"
+            if result[0].isdigit():
+                result = f"VALUE_{result}"
+        
+        return result
