@@ -46,7 +46,7 @@ class FfmpegApiLoudnorm(FALNode):
     true_peak: float = Field(
         default=-0.1, description="Maximum true peak in dBTP."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to normalize"
     )
     integrated_loudness: float = Field(
@@ -67,7 +67,7 @@ class FfmpegApiLoudnorm(FALNode):
             "dual_mono": self.dual_mono,
             "measured_thresh": self.measured_thresh,
             "true_peak": self.true_peak,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "integrated_loudness": self.integrated_loudness,
             "loudness_range": self.loudness_range,
         }
@@ -106,7 +106,7 @@ class FfmpegApiWaveform(FALNode):
     smoothing_window: int = Field(
         default=3, description="Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number."
     )
-    media_url: AudioRef = Field(
+    media: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to analyze"
     )
     points_per_second: float = Field(
@@ -117,7 +117,7 @@ class FfmpegApiWaveform(FALNode):
         arguments = {
             "precision": self.precision,
             "smoothing_window": self.smoothing_window,
-            "media_url": self.media_url,
+            "media_url": self.media,
             "points_per_second": self.points_per_second,
         }
 
@@ -133,7 +133,7 @@ class FfmpegApiWaveform(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["precision", "smoothing_window", "media_url", "points_per_second"]
+        return ["precision", "smoothing_window", "media", "points_per_second"]
 
 class FfmpegApiMetadata(FALNode):
     """
@@ -151,14 +151,14 @@ class FfmpegApiMetadata(FALNode):
     extract_frames: bool = Field(
         default=False, description="Whether to extract the start and end frames for videos. Note that when true the request will be slower."
     )
-    media_url: VideoRef = Field(
+    media: VideoRef = Field(
         default=VideoRef(), description="URL of the media file (video or audio) to analyze"
     )
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
             "extract_frames": self.extract_frames,
-            "media_url": self.media_url,
+            "media_url": self.media,
         }
 
         # Remove None values
@@ -173,4 +173,4 @@ class FfmpegApiMetadata(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["extract_frames", "media_url"]
+        return ["extract_frames", "media"]

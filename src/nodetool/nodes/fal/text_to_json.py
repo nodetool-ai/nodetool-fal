@@ -25,25 +25,25 @@ class BriaFiboEditEditStructured_instruction(FALNode):
     seed: int = Field(
         default=5555, description="Random seed for reproducibility."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="Reference image mask (file or URL). Optional."
     )
     instruction: str = Field(
         default="", description="Instruction for image editing."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Reference image (file or URL)."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_base64 = await context.image_to_base64(self.mask)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "instruction": self.instruction,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -58,7 +58,7 @@ class BriaFiboEditEditStructured_instruction(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["sync_mode", "seed", "mask_url", "instruction", "image_url"]
+        return ["sync_mode", "seed", "mask", "instruction", "image"]
 
 class BriaFiboLiteGenerateStructured_prompt(FALNode):
     """
@@ -82,17 +82,17 @@ class BriaFiboLiteGenerateStructured_prompt(FALNode):
     structured_prompt: str = Field(
         default="", description="The structured prompt to generate an image from."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Reference image (file or URL)."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "structured_prompt": self.structured_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -107,7 +107,7 @@ class BriaFiboLiteGenerateStructured_prompt(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "seed", "structured_prompt", "image_url"]
+        return ["prompt", "seed", "structured_prompt", "image"]
 
 class BriaFiboLiteGenerateStructured_promptLite(FALNode):
     """
@@ -131,17 +131,17 @@ class BriaFiboLiteGenerateStructured_promptLite(FALNode):
     structured_prompt: str = Field(
         default="", description="The structured prompt to generate an image from."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Reference image (file or URL)."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "structured_prompt": self.structured_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -156,7 +156,7 @@ class BriaFiboLiteGenerateStructured_promptLite(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "seed", "structured_prompt", "image_url"]
+        return ["prompt", "seed", "structured_prompt", "image"]
 
 class BriaFiboGenerateStructured_prompt(FALNode):
     """
@@ -180,17 +180,17 @@ class BriaFiboGenerateStructured_prompt(FALNode):
     structured_prompt: str = Field(
         default="", description="The structured prompt to generate an image from."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Reference image (file or URL)."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "structured_prompt": self.structured_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -205,4 +205,4 @@ class BriaFiboGenerateStructured_prompt(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "seed", "structured_prompt", "image_url"]
+        return ["prompt", "seed", "structured_prompt", "image"]

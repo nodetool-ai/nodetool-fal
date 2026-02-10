@@ -34,19 +34,19 @@ class Ultrashape(FALNode):
     seed: int = Field(
         default=42, description="Random seed."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the reference image for mesh refinement."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "octree_resolution": self.octree_resolution,
             "remove_background": self.remove_background,
             "num_inference_steps": self.num_inference_steps,
             "model_url": self.model_url,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -76,7 +76,7 @@ class Sam33DAlign(FALNode):
     - Rapid prototyping
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the original image used for MoGe depth estimation"
     )
     body_mesh_url: str = Field(
@@ -88,19 +88,19 @@ class Sam33DAlign(FALNode):
     focal_length: float = Field(
         default=0.0, description="Focal length from SAM-3D Body metadata. If not provided, estimated from MoGe."
     )
-    body_mask_url: ImageRef = Field(
+    body_mask: ImageRef = Field(
         default=ImageRef(), description="URL of the human mask image. If not provided, uses full image."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        body_mask_url_base64 = await context.image_to_base64(self.body_mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        body_mask_base64 = await context.image_to_base64(self.body_mask)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "body_mesh_url": self.body_mesh_url,
             "object_mesh_url": self.object_mesh_url,
             "focal_length": self.focal_length,
-            "body_mask_url": f"data:image/png;base64,{body_mask_url_base64}",
+            "body_mask_url": f"data:image/png;base64,{body_mask_base64}",
         }
 
         # Remove None values
@@ -115,7 +115,7 @@ class Sam33DAlign(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image_url", "body_mesh_url", "object_mesh_url", "focal_length", "body_mask_url"]
+        return ["image", "body_mesh_url", "object_mesh_url", "focal_length", "body_mask"]
 
 class MeshyV5Retexture(FALNode):
     """
@@ -145,19 +145,19 @@ class MeshyV5Retexture(FALNode):
     model_url: str = Field(
         default="", description="URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream."
     )
-    image_style_url: ImageRef = Field(
+    image_style: ImageRef = Field(
         default=ImageRef(), description="2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_style_url_base64 = await context.image_to_base64(self.image_style_url)
+        image_style_base64 = await context.image_to_base64(self.image_style)
         arguments = {
             "enable_pbr": self.enable_pbr,
             "text_style_prompt": self.text_style_prompt,
             "enable_safety_checker": self.enable_safety_checker,
             "enable_original_uv": self.enable_original_uv,
             "model_url": self.model_url,
-            "image_style_url": f"data:image/png;base64,{image_style_url_base64}",
+            "image_style_url": f"data:image/png;base64,{image_style_base64}",
         }
 
         # Remove None values

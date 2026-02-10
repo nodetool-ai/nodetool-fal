@@ -2,8 +2,8 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import VideoRef, AudioRef
+from nodetool.nodes.fal.types import AudioTimeSpan
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import AudioTimeSpan  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -48,7 +48,7 @@ class ElevenlabsVoiceChanger(FALNode):
     voice: str = Field(
         default="Rachel", description="The voice to use for speech generation"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The input audio file"
     )
     seed: int = Field(
@@ -64,7 +64,7 @@ class ElevenlabsVoiceChanger(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "voice": self.voice,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "output_format": self.output_format.value,
             "remove_background_noise": self.remove_background_noise,
@@ -117,7 +117,7 @@ class NovaSr(FALNode):
     bitrate: str = Field(
         default="192k", description="The bitrate of the output audio."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file to enhance."
     )
     audio_format: AudioFormat = Field(
@@ -128,7 +128,7 @@ class NovaSr(FALNode):
         arguments = {
             "sync_mode": self.sync_mode,
             "bitrate": self.bitrate,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "audio_format": self.audio_format.value,
         }
 
@@ -179,7 +179,7 @@ class Deepfilternet3(FALNode):
     audio_format: AudioFormat = Field(
         default=AudioFormat.MP3, description="The format for the output audio."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio to enhance."
     )
     bitrate: str = Field(
@@ -190,7 +190,7 @@ class Deepfilternet3(FALNode):
         arguments = {
             "sync_mode": self.sync_mode,
             "audio_format": self.audio_format.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "bitrate": self.bitrate,
         }
 
@@ -243,7 +243,7 @@ class SamAudioSeparate(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.BALANCED, description="The acceleration level to use."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to process (WAV, MP3, FLAC supported)"
     )
     predict_spans: bool = Field(
@@ -260,7 +260,7 @@ class SamAudioSeparate(FALNode):
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "predict_spans": self.predict_spans,
             "output_format": self.output_format.value,
             "reranking_candidates": self.reranking_candidates,
@@ -324,7 +324,7 @@ class SamAudioSpanSeparate(FALNode):
     trim_to_span: bool = Field(
         default=False, description="Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to process."
     )
     reranking_candidates: int = Field(
@@ -335,10 +335,10 @@ class SamAudioSpanSeparate(FALNode):
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
-            "spans": self.spans,
+            "spans": [item.model_dump(exclude={"type"}) for item in self.spans],
             "output_format": self.output_format.value,
             "trim_to_span": self.trim_to_span,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "reranking_candidates": self.reranking_candidates,
         }
 
@@ -405,7 +405,7 @@ class Demucs(FALNode):
     model: Model = Field(
         default=Model.HTDEMUCS_6S, description="Demucs model to use for separation"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to separate into stems"
     )
     shifts: int = Field(
@@ -419,7 +419,7 @@ class Demucs(FALNode):
             "stems": self.stems,
             "overlap": self.overlap,
             "model": self.model.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "shifts": self.shifts,
         }
 
@@ -459,7 +459,7 @@ class StableAudio25AudioToAudio(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The audio clip to transform"
     )
     num_inference_steps: int = Field(
@@ -480,7 +480,7 @@ class StableAudio25AudioToAudio(FALNode):
             "prompt": self.prompt,
             "strength": self.strength,
             "sync_mode": self.sync_mode,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -515,7 +515,7 @@ class FfmpegApiMergeAudios(FALNode):
     - Generate combined audio output
     """
 
-    audio_urls: list[str] = Field(
+    audios: list[str] = Field(
         default=[], description="List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate."
     )
     output_format: str = Field(
@@ -524,7 +524,7 @@ class FfmpegApiMergeAudios(FALNode):
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
-            "audio_urls": self.audio_urls,
+            "audio_urls": self.audios,
             "output_format": self.output_format,
         }
 
@@ -556,13 +556,13 @@ class KlingVideoCreateVoice(FALNode):
     - Audio effect application
     """
 
-    voice_url: VideoRef = Field(
+    voice: VideoRef = Field(
         default=VideoRef(), description="URL of the voice audio file. Supports .mp3/.wav audio or .mp4/.mov video. Duration must be 5-30 seconds with clean, single-voice audio."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
-            "voice_url": self.voice_url,
+            "voice_url": self.voice,
         }
 
         # Remove None values
@@ -598,7 +598,7 @@ class AudioUnderstanding(FALNode):
     detailed_analysis: bool = Field(
         default=False, description="Whether to request a more detailed analysis of the audio"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to analyze"
     )
 
@@ -606,7 +606,7 @@ class AudioUnderstanding(FALNode):
         arguments = {
             "prompt": self.prompt,
             "detailed_analysis": self.detailed_analysis,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -648,7 +648,7 @@ class StableAudio25Inpaint(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The audio clip to inpaint"
     )
     seed: int = Field(
@@ -670,7 +670,7 @@ class StableAudio25Inpaint(FALNode):
             "guidance_scale": self.guidance_scale,
             "mask_end": self.mask_end,
             "sync_mode": self.sync_mode,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "seconds_total": self.seconds_total,
             "num_inference_steps": self.num_inference_steps,
@@ -750,7 +750,7 @@ class SonautoV2Extend(FALNode):
     crop_duration: float = Field(
         default=0, description="Duration in seconds to crop from the selected side before extending from that side."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file to alter. Must be a valid publicly accessible URL."
     )
     seed: str = Field(
@@ -772,7 +772,7 @@ class SonautoV2Extend(FALNode):
             "side": self.side.value,
             "balance_strength": self.balance_strength,
             "crop_duration": self.crop_duration,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "extend_duration": self.extend_duration,
         }
@@ -860,7 +860,7 @@ class AceStepAudioOutpaint(FALNode):
     guidance_interval_decay: float = Field(
         default=0, description="Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to be outpainted."
     )
     seed: int = Field(
@@ -885,7 +885,7 @@ class AceStepAudioOutpaint(FALNode):
             "lyric_guidance_scale": self.lyric_guidance_scale,
             "guidance_interval": self.guidance_interval,
             "guidance_interval_decay": self.guidance_interval_decay,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "granularity_scale": self.granularity_scale,
         }
@@ -996,7 +996,7 @@ class AceStepAudioInpaint(FALNode):
     start_time_relative_to: StartTimeRelativeTo = Field(
         default=StartTimeRelativeTo.START, description="Whether the start time is relative to the start or end of the audio."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to be inpainted."
     )
     seed: int = Field(
@@ -1024,7 +1024,7 @@ class AceStepAudioInpaint(FALNode):
             "variance": self.variance,
             "guidance_interval_decay": self.guidance_interval_decay,
             "start_time_relative_to": self.start_time_relative_to.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "granularity_scale": self.granularity_scale,
         }
@@ -1119,7 +1119,7 @@ class AceStepAudioToAudio(FALNode):
     guidance_interval_decay: float = Field(
         default=0, description="Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to be outpainted."
     )
     seed: int = Field(
@@ -1150,7 +1150,7 @@ class AceStepAudioToAudio(FALNode):
             "guidance_interval": self.guidance_interval,
             "edit_mode": self.edit_mode.value,
             "guidance_interval_decay": self.guidance_interval_decay,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "granularity_scale": self.granularity_scale,
             "original_tags": self.original_tags,
@@ -1191,7 +1191,7 @@ class DiaTtsVoiceClone(FALNode):
     ref_text: str = Field(
         default="", description="The reference text to be used for TTS."
     )
-    ref_audio_url: AudioRef = Field(
+    ref_audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the reference audio file."
     )
 
@@ -1199,7 +1199,7 @@ class DiaTtsVoiceClone(FALNode):
         arguments = {
             "text": self.text,
             "ref_text": self.ref_text,
-            "ref_audio_url": self.ref_audio_url,
+            "ref_audio_url": self.ref_audio,
         }
 
         # Remove None values
@@ -1230,17 +1230,17 @@ class ElevenlabsAudioIsolation(FALNode):
     - Audio effect application
     """
 
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="Video file to use for audio isolation. Either `audio_url` or `video_url` must be provided."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to isolate voice from"
     )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
-            "video_url": self.video_url,
-            "audio_url": self.audio_url,
+            "video_url": self.video,
+            "audio_url": self.audio,
         }
 
         # Remove None values

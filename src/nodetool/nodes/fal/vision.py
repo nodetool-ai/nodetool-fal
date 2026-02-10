@@ -2,8 +2,8 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef
+from nodetool.nodes.fal.types import ImageInput, MoondreamInputParam, ReferenceImageInput, SemanticImageInput
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import ImageInput, MoondreamInputParam, ReferenceImageInput, SemanticImageInput  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -20,14 +20,14 @@ class AIDetectorImage(FALNode):
     - Analyze image provenance
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL pointing to an image to analyze for AI generation.(Max: 3000 characters)"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -67,7 +67,7 @@ class ArbiterImageText(FALNode):
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
             "measurements": self.measurements,
-            "inputs": self.inputs,
+            "inputs": [item.model_dump(exclude={"type"}) for item in self.inputs],
         }
 
         # Remove None values
@@ -107,7 +107,7 @@ class ArbiterImageImage(FALNode):
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
             "measurements": self.measurements,
-            "inputs": self.inputs,
+            "inputs": [item.model_dump(exclude={"type"}) for item in self.inputs],
         }
 
         # Remove None values
@@ -147,7 +147,7 @@ class ArbiterImage(FALNode):
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
             "measurements": self.measurements,
-            "inputs": self.inputs,
+            "inputs": [item.model_dump(exclude={"type"}) for item in self.inputs],
         }
 
         # Remove None values
@@ -180,15 +180,15 @@ class Florence2RegionToDescription(FALNode):
     region: str = Field(
         default="", description="The user input coordinates"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "region": self.region,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -218,14 +218,14 @@ class Florence2OCR(FALNode):
     - Convert images to text
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -255,14 +255,14 @@ class Florence2MoreDetailedCaption(FALNode):
     - Generate long-form descriptions
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -295,15 +295,15 @@ class Florence2RegionToCategory(FALNode):
     region: str = Field(
         default="", description="The user input coordinates"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "region": self.region,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -333,14 +333,14 @@ class Florence2Caption(FALNode):
     - Produce accessibility captions
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -370,14 +370,14 @@ class Florence2DetailedCaption(FALNode):
     - Generate informative descriptions
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -407,14 +407,14 @@ class Sam3ImageEmbed(FALNode):
     - Rapid prototyping
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to embed."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -514,16 +514,16 @@ class Moondream3PreviewDetect(FALNode):
     preview: bool = Field(
         default=False, description="Whether to preview the output"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "preview": self.preview,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -559,16 +559,16 @@ class Moondream3PreviewPoint(FALNode):
     preview: bool = Field(
         default=False, description="Whether to preview the output"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "preview": self.preview,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -610,18 +610,18 @@ class Moondream3PreviewQuery(FALNode):
     reasoning: bool = Field(
         default=True, description="Whether to include detailed reasoning behind the answer"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "top_p": self.top_p,
             "temperature": self.temperature,
             "reasoning": self.reasoning,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -669,17 +669,17 @@ class Moondream3PreviewCaption(FALNode):
     length: Length = Field(
         default=Length.NORMAL, description="Length of the caption to generate"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "top_p": self.top_p,
             "temperature": self.temperature,
             "length": self.length.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -764,16 +764,16 @@ class PerceptronIsaac01(FALNode):
     response_style: ResponseStyle = Field(
         default=ResponseStyle.TEXT, description="Response style to be used for the image. - text: Model will output text. Good for descriptions and captioning. - box: Model will output a combination of text and bounding boxes. Good for localization. - point: Model will output a combination of text and points. Good for counting many objects. - polygon: Model will output a combination of text and polygons. Good for granular segmentation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "response_style": self.response_style.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -846,7 +846,7 @@ class VideoUnderstanding(FALNode):
     detailed_analysis: bool = Field(
         default=False, description="Whether to request a more detailed analysis of the video"
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="URL of the video to analyze"
     )
     prompt: str = Field(
@@ -856,7 +856,7 @@ class VideoUnderstanding(FALNode):
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
             "detailed_analysis": self.detailed_analysis,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "prompt": self.prompt,
         }
 
@@ -890,15 +890,15 @@ class Moondream2VisualQuery(FALNode):
     prompt: str = Field(
         default="", description="Query to be asked in the image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -928,14 +928,14 @@ class Moondream2(FALNode):
     - Scene understanding
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -968,15 +968,15 @@ class Moondream2PointObjectDetection(FALNode):
     object: str = Field(
         default="", description="Object to be detected in the image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "object": self.object,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1009,15 +1009,15 @@ class Moondream2ObjectDetection(FALNode):
     object: str = Field(
         default="", description="Object to be detected in the image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "object": self.object,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1053,7 +1053,7 @@ class GotOcrV2(FALNode):
     multi_page: bool = Field(
         default=False, description="Use provided images to generate a single output."
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images."
     )
 
@@ -1061,7 +1061,7 @@ class GotOcrV2(FALNode):
         arguments = {
             "do_format": self.do_format,
             "multi_page": self.multi_page,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -1094,7 +1094,7 @@ class MoondreamNextBatch(FALNode):
     prompt: str = Field(
         default="", description="Single prompt to apply to all images"
     )
-    images_data_url: ImageRef = Field(
+    images_data: ImageRef = Field(
         default=ImageRef(), description="List of image URLs to be processed (maximum 32 images)"
     )
     max_tokens: int = Field(
@@ -1102,10 +1102,10 @@ class MoondreamNextBatch(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        images_data_url_base64 = await context.image_to_base64(self.images_data_url)
+        images_data_base64 = await context.image_to_base64(self.images_data)
         arguments = {
             "prompt": self.prompt,
-            "images_data_url": f"data:image/png;base64,{images_data_url_base64}",
+            "images_data_url": f"data:image/png;base64,{images_data_base64}",
             "max_tokens": self.max_tokens,
         }
 
@@ -1139,7 +1139,7 @@ class Sa2va4bVideo(FALNode):
     prompt: str = Field(
         default="", description="Prompt to be used for the chat completion"
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The URL of the input video."
     )
     num_frames_to_sample: int = Field(
@@ -1149,7 +1149,7 @@ class Sa2va4bVideo(FALNode):
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "prompt": self.prompt,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "num_frames_to_sample": self.num_frames_to_sample,
         }
 
@@ -1183,7 +1183,7 @@ class Sa2va8bVideo(FALNode):
     prompt: str = Field(
         default="", description="Prompt to be used for the chat completion"
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The URL of the input video."
     )
     num_frames_to_sample: int = Field(
@@ -1193,7 +1193,7 @@ class Sa2va8bVideo(FALNode):
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "prompt": self.prompt,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "num_frames_to_sample": self.num_frames_to_sample,
         }
 
@@ -1227,15 +1227,15 @@ class Sa2va4bImage(FALNode):
     prompt: str = Field(
         default="", description="Prompt to be used for the chat completion"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Url for the Input image."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1268,15 +1268,15 @@ class Sa2va8bImage(FALNode):
     prompt: str = Field(
         default="", description="Prompt to be used for the chat completion"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Url for the Input image."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1323,17 +1323,17 @@ class MoondreamNext(FALNode):
     max_tokens: int = Field(
         default=64, description="Maximum number of tokens to generate"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "task_type": self.task_type.value,
             "max_tokens": self.max_tokens,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1363,14 +1363,14 @@ class ImageutilsNsfw(FALNode):
     - Scene understanding
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image url."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1431,7 +1431,7 @@ class MoondreamBatched(FALNode):
         arguments = {
             "model_id": self.model_id.value,
             "repetition_penalty": self.repetition_penalty,
-            "inputs": self.inputs,
+            "inputs": [item.model_dump(exclude={"type"}) for item in self.inputs],
             "max_tokens": self.max_tokens,
             "temperature": self.temperature,
             "top_p": self.top_p,
@@ -1476,18 +1476,18 @@ class LlavaNext(FALNode):
     temperature: float = Field(
         default=0.2, description="Temperature for sampling"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "top_p": self.top_p,
             "max_tokens": self.max_tokens,
             "temperature": self.temperature,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values

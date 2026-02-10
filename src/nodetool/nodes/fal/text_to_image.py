@@ -2,8 +2,8 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
+from nodetool.nodes.fal.types import ControlNet, Embedding, GuidanceInput, IPAdapter, LoRAInput, LoRAWeight, LoraWeight, RGBColor
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import ControlNet, Embedding, GuidanceInput, IPAdapter, LoRAInput, LoRAWeight, LoraWeight, RGBColor  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -333,7 +333,7 @@ class FluxV1ProUltra(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from."
     )
     sync_mode: bool = Field(
@@ -356,14 +356,14 @@ class FluxV1ProUltra(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio,
             "num_images": self.num_images,
             "raw": self.raw,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "enable_safety_checker": self.enable_safety_checker,
@@ -447,7 +447,7 @@ class FluxLora(FALNode):
             "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -778,7 +778,7 @@ class RecraftV3(FALNode):
             "prompt": self.prompt,
             "image_size": self.image_size,
             "style": self.style.value,
-            "colors": self.colors,
+            "colors": [item.model_dump(exclude={"type"}) for item in self.colors],
             "enable_safety_checker": self.enable_safety_checker,
             "style_id": self.style_id,
         }
@@ -869,7 +869,7 @@ class StableDiffusionV35Large(FALNode):
             "output_format": self.output_format.value,
             "ip_adapter": self.ip_adapter,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
@@ -1276,7 +1276,7 @@ class OmniGenV1(FALNode):
     img_guidance_scale: float = Field(
         default=1.6, description="The Image Guidance scale is a measure of how close you want the model to stick to your input image when looking for a related image to show you."
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to use while generating the image, Use <img><|image_1|></img> for the first image and so on."
     )
     output_format: OutputFormat = Field(
@@ -1304,7 +1304,7 @@ class OmniGenV1(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "img_guidance_scale": self.img_guidance_scale,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
@@ -1752,7 +1752,7 @@ class QwenImage2512Lora(FALNode):
             "acceleration": self.acceleration.value,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -1947,7 +1947,7 @@ class ZImageBaseLora(FALNode):
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
@@ -2134,7 +2134,7 @@ class ZImageTurboLora(FALNode):
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
@@ -2402,7 +2402,7 @@ class Flux2Klein4BBaseLora(FALNode):
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
@@ -2671,7 +2671,7 @@ class Flux2Klein9BBaseLora(FALNode):
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
@@ -2974,7 +2974,7 @@ class WanV26TextToImage(FALNode):
     max_images: int = Field(
         default=1, description="Maximum number of images to generate (1-5). Actual count may be less depending on model inference."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional reference image (0 or 1). When provided, can be used for style guidance. Resolution: 384-5000px each dimension. Max size: 10MB. Formats: JPEG, JPG, PNG (no alpha), BMP, WEBP."
     )
     enable_safety_checker: bool = Field(
@@ -2988,12 +2988,12 @@ class WanV26TextToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "max_images": self.max_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
@@ -3321,7 +3321,7 @@ class BriaFiboLiteGenerate(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_1_1, description="Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Reference image (file or URL)."
     )
     sync_mode: bool = Field(
@@ -3335,12 +3335,12 @@ class BriaFiboLiteGenerate(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "steps_num": self.steps_num,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
             "structured_prompt": self.structured_prompt,
@@ -4523,7 +4523,7 @@ class BriaFiboGenerate(FALNode):
     steps_num: int = Field(
         default=50, description="Number of inference steps."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Reference image (file or URL)."
     )
     sync_mode: bool = Field(
@@ -4543,12 +4543,12 @@ class BriaFiboGenerate(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "steps_num": self.steps_num,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -5613,7 +5613,7 @@ class WanV22A14BTextToImageLora(FALNode):
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "reverse_video": self.reverse_video,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -5889,7 +5889,7 @@ class QwenImage(FALNode):
             "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
             "use_turbo": self.use_turbo,
@@ -5971,7 +5971,7 @@ class FluxKreaLoraStream(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -6053,7 +6053,7 @@ class FluxKreaLora(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -6391,7 +6391,7 @@ class FluxKontextLoraTextToImage(FALNode):
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -6470,7 +6470,7 @@ class OmnigenV2(FALNode):
     image_guidance_scale: float = Field(
         default=2, description="The Image Guidance scale controls how closely the model follows the input images. For image editing: 1.3-2.0, for in-context generation: 2.0-3.0"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URLs of input images to use for image editing or multi-image generation. Support up to 3 images."
     )
     output_format: OutputFormat = Field(
@@ -6500,7 +6500,7 @@ class OmnigenV2(FALNode):
             "text_guidance_scale": self.text_guidance_scale,
             "num_images": self.num_images,
             "image_guidance_scale": self.image_guidance_scale,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "cfg_range_start": self.cfg_range_start,
@@ -7139,13 +7139,13 @@ class Dreamo(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    first_image_url: ImageRef = Field(
+    first_image: ImageRef = Field(
         default=ImageRef(), description="URL of first reference image to use for generation."
     )
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    second_image_url: ImageRef = Field(
+    second_image: ImageRef = Field(
         default=ImageRef(), description="URL of second reference image to use for generation."
     )
     second_reference_task: SecondReferenceTask = Field(
@@ -7180,13 +7180,13 @@ class Dreamo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        first_image_url_base64 = await context.image_to_base64(self.first_image_url)
-        second_image_url_base64 = await context.image_to_base64(self.second_image_url)
+        first_image_base64 = await context.image_to_base64(self.first_image)
+        second_image_base64 = await context.image_to_base64(self.second_image)
         arguments = {
             "prompt": self.prompt,
-            "first_image_url": f"data:image/png;base64,{first_image_url_base64}",
+            "first_image_url": f"data:image/png;base64,{first_image_base64}",
             "image_size": self.image_size,
-            "second_image_url": f"data:image/png;base64,{second_image_url_base64}",
+            "second_image_url": f"data:image/png;base64,{second_image_base64}",
             "second_reference_task": self.second_reference_task.value,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -7274,7 +7274,7 @@ class FluxLoraStream(FALNode):
             "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -8050,7 +8050,7 @@ class RundiffusionFalJuggernautFluxLora(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -8365,7 +8365,7 @@ class RundiffusionFalRundiffusionPhotoFlux(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -8695,7 +8695,7 @@ class FluxControlLoraCanny(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    control_lora_image_url: ImageRef = Field(
+    control_lora_image: ImageRef = Field(
         default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
     seed: int = Field(
@@ -8703,19 +8703,19 @@ class FluxControlLoraCanny(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_lora_image_url_base64 = await context.image_to_base64(self.control_lora_image_url)
+        control_lora_image_base64 = await context.image_to_base64(self.control_lora_image)
         arguments = {
             "control_lora_strength": self.control_lora_strength,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "prompt": self.prompt,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "enable_safety_checker": self.enable_safety_checker,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}",
             "seed": self.seed,
         }
 
@@ -8792,12 +8792,12 @@ class FluxControlLoraDepth(FALNode):
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    control_lora_image_url: ImageRef = Field(
+    control_lora_image: ImageRef = Field(
         default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_lora_image_url_base64 = await context.image_to_base64(self.control_lora_image_url)
+        control_lora_image_base64 = await context.image_to_base64(self.control_lora_image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -8806,12 +8806,12 @@ class FluxControlLoraDepth(FALNode):
             "output_format": self.output_format.value,
             "preprocess_depth": self.preprocess_depth,
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
             "guidance_scale": self.guidance_scale,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}",
         }
 
         # Remove None values
@@ -9178,7 +9178,7 @@ class FluxProV11UltraFinetuned(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from."
     )
     sync_mode: bool = Field(
@@ -9192,7 +9192,7 @@ class FluxProV11UltraFinetuned(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "finetune_id": self.finetune_id,
@@ -9204,7 +9204,7 @@ class FluxProV11UltraFinetuned(FALNode):
             "aspect_ratio": self.aspect_ratio,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
             "finetune_strength": self.finetune_strength,
@@ -9496,7 +9496,7 @@ class BriaTextToImageBase(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "prompt_enhancement": self.prompt_enhancement,
-            "guidance": self.guidance,
+            "guidance": [item.model_dump(exclude={"type"}) for item in self.guidance],
             "aspect_ratio": self.aspect_ratio.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
@@ -9596,7 +9596,7 @@ class BriaTextToImageFast(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "prompt_enhancement": self.prompt_enhancement,
-            "guidance": self.guidance,
+            "guidance": [item.model_dump(exclude={"type"}) for item in self.guidance],
             "aspect_ratio": self.aspect_ratio.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
@@ -9696,7 +9696,7 @@ class BriaTextToImageHd(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "prompt_enhancement": self.prompt_enhancement,
-            "guidance": self.guidance,
+            "guidance": [item.model_dump(exclude={"type"}) for item in self.guidance],
             "aspect_ratio": self.aspect_ratio.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
@@ -9802,7 +9802,7 @@ class Recraft20b(FALNode):
             "prompt": self.prompt,
             "image_size": self.image_size,
             "enable_safety_checker": self.enable_safety_checker,
-            "colors": self.colors,
+            "colors": [item.model_dump(exclude={"type"}) for item in self.colors],
             "style": self.style.value,
             "style_id": self.style_id,
         }
@@ -10055,7 +10055,7 @@ class FluxLoraInpainting(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     sync_mode: bool = Field(
@@ -10084,16 +10084,16 @@ class FluxLoraInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "mask_url": self.mask_url,
@@ -10243,7 +10243,7 @@ class FooocusUpscaleOrVary(FALNode):
     styles: list[str] = Field(
         default=[], description="The style to use."
     )
-    uov_image_url: ImageRef = Field(
+    uov_image: ImageRef = Field(
         default=ImageRef(), description="The image to upscale or vary."
     )
     performance: Performance = Field(
@@ -10308,15 +10308,15 @@ class FooocusUpscaleOrVary(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        uov_image_url_base64 = await context.image_to_base64(self.uov_image_url)
+        uov_image_base64 = await context.image_to_base64(self.uov_image)
         arguments = {
             "styles": self.styles,
-            "uov_image_url": f"data:image/png;base64,{uov_image_url_base64}",
+            "uov_image_url": f"data:image/png;base64,{uov_image_base64}",
             "performance": self.performance.value,
             "mixing_image_prompt_and_vary_upscale": self.mixing_image_prompt_and_vary_upscale,
             "image_prompt_3": self.image_prompt_3,
             "prompt": self.prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "image_prompt_4": self.image_prompt_4,
             "image_prompt_1": self.image_prompt_1,
             "enable_safety_checker": self.enable_safety_checker,
@@ -10484,7 +10484,7 @@ class FluxSubject(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image of the subject"
     )
     sync_mode: bool = Field(
@@ -10504,13 +10504,13 @@ class FluxSubject(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -10571,13 +10571,13 @@ class SdxlControlnetUnion(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
     )
-    normal_image_url: ImageRef = Field(
+    normal_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
-    teed_image_url: ImageRef = Field(
+    teed_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     loras: list[LoraWeight] = Field(
@@ -10586,7 +10586,7 @@ class SdxlControlnetUnion(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    canny_image_url: ImageRef = Field(
+    canny_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     segmentation_preprocess: bool = Field(
@@ -10604,10 +10604,10 @@ class SdxlControlnetUnion(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    segmentation_image_url: ImageRef = Field(
+    segmentation_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    openpose_image_url: ImageRef = Field(
+    openpose_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     canny_preprocess: bool = Field(
@@ -10616,7 +10616,7 @@ class SdxlControlnetUnion(FALNode):
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    depth_image_url: ImageRef = Field(
+    depth_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     normal_preprocess: bool = Field(
@@ -10648,32 +10648,32 @@ class SdxlControlnetUnion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        normal_image_url_base64 = await context.image_to_base64(self.normal_image_url)
-        teed_image_url_base64 = await context.image_to_base64(self.teed_image_url)
-        canny_image_url_base64 = await context.image_to_base64(self.canny_image_url)
-        segmentation_image_url_base64 = await context.image_to_base64(self.segmentation_image_url)
-        openpose_image_url_base64 = await context.image_to_base64(self.openpose_image_url)
-        depth_image_url_base64 = await context.image_to_base64(self.depth_image_url)
+        normal_image_base64 = await context.image_to_base64(self.normal_image)
+        teed_image_base64 = await context.image_to_base64(self.teed_image)
+        canny_image_base64 = await context.image_to_base64(self.canny_image)
+        segmentation_image_base64 = await context.image_to_base64(self.segmentation_image)
+        openpose_image_base64 = await context.image_to_base64(self.openpose_image)
+        depth_image_base64 = await context.image_to_base64(self.depth_image)
         arguments = {
             "prompt": self.prompt,
             "depth_preprocess": self.depth_preprocess,
             "image_size": self.image_size,
-            "normal_image_url": f"data:image/png;base64,{normal_image_url_base64}",
-            "embeddings": self.embeddings,
-            "teed_image_url": f"data:image/png;base64,{teed_image_url_base64}",
-            "loras": self.loras,
+            "normal_image_url": f"data:image/png;base64,{normal_image_base64}",
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
+            "teed_image_url": f"data:image/png;base64,{teed_image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
-            "canny_image_url": f"data:image/png;base64,{canny_image_url_base64}",
+            "canny_image_url": f"data:image/png;base64,{canny_image_base64}",
             "segmentation_preprocess": self.segmentation_preprocess,
             "format": self.format.value,
             "sync_mode": self.sync_mode,
             "request_id": self.request_id,
             "seed": self.seed,
-            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_url_base64}",
-            "openpose_image_url": f"data:image/png;base64,{openpose_image_url_base64}",
+            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_base64}",
+            "openpose_image_url": f"data:image/png;base64,{openpose_image_base64}",
             "canny_preprocess": self.canny_preprocess,
             "expand_prompt": self.expand_prompt,
-            "depth_image_url": f"data:image/png;base64,{depth_image_url_base64}",
+            "depth_image_url": f"data:image/png;base64,{depth_image_base64}",
             "normal_preprocess": self.normal_preprocess,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -10954,9 +10954,9 @@ class FastSdxl(FALNode):
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
@@ -11162,9 +11162,9 @@ class LightningModels(FALNode):
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "scheduler": self.scheduler.value if self.scheduler else None,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -11269,7 +11269,7 @@ class PlaygroundV25(FALNode):
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "guidance_rescale": self.guidance_rescale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -11383,9 +11383,9 @@ class RealisticVision(FALNode):
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_rescale": self.guidance_rescale,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -11502,9 +11502,9 @@ class Dreamshaper(FALNode):
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -11611,9 +11611,9 @@ class StableDiffusionV15(FALNode):
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -11781,7 +11781,7 @@ class FastLightningSdxl(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "format": self.format.value,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "sync_mode": self.sync_mode,
             "guidance_rescale": self.guidance_rescale,
@@ -11869,7 +11869,7 @@ class FastFooocusSdxlImageToImage(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -11886,12 +11886,12 @@ class FastFooocusSdxlImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "enable_refiner": self.enable_refiner,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "guidance_rescale": self.guidance_rescale,
             "guidance_scale": self.guidance_scale,
@@ -11899,7 +11899,7 @@ class FastFooocusSdxlImageToImage(FALNode):
             "negative_prompt": self.negative_prompt,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "safety_checker_version": self.safety_checker_version.value,
             "num_inference_steps": self.num_inference_steps,
@@ -11965,7 +11965,7 @@ class FastSdxlControlnetCanny(FALNode):
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    control_image_url: ImageRef = Field(
+    control_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     num_inference_steps: int = Field(
@@ -11979,19 +11979,19 @@ class FastSdxlControlnetCanny(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        control_image_base64 = await context.image_to_base64(self.control_image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
             "sync_mode": self.sync_mode,
-            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}",
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
             "enable_deep_cache": self.enable_deep_cache,
@@ -12205,7 +12205,7 @@ class FastFooocusSdxl(FALNode):
             "prompt": self.prompt,
             "enable_refiner": self.enable_refiner,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "guidance_rescale": self.guidance_rescale,
             "guidance_scale": self.guidance_scale,
@@ -12264,7 +12264,7 @@ class IllusionDiffusion(FALNode):
     controlnet_conditioning_scale: float = Field(
         default=1, description="The scale of the ControlNet."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image url."
     )
     scheduler: Scheduler = Field(
@@ -12290,12 +12290,12 @@ class IllusionDiffusion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "scheduler": self.scheduler.value,
             "control_guidance_start": self.control_guidance_start,
             "guidance_scale": self.guidance_scale,
@@ -12379,7 +12379,7 @@ class FooocusImagePrompt(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
-    uov_image_url: ImageRef = Field(
+    uov_image: ImageRef = Field(
         default=ImageRef(), description="The image to upscale or vary."
     )
     performance: Performance = Field(
@@ -12409,7 +12409,7 @@ class FooocusImagePrompt(FALNode):
     outpaint_selections: list[str] = Field(
         default=[], description="The directions to outpaint."
     )
-    inpaint_image_url: ImageRef = Field(
+    inpaint_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a reference for inpainting."
     )
     output_format: OutputFormat = Field(
@@ -12439,7 +12439,7 @@ class FooocusImagePrompt(FALNode):
     mixing_image_prompt_and_vary_upscale: bool = Field(
         default=False, description="Mixing Image Prompt and Vary/Upscale"
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a mask for the generated image."
     )
     image_prompt_1: str = Field(
@@ -12462,22 +12462,22 @@ class FooocusImagePrompt(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        uov_image_url_base64 = await context.image_to_base64(self.uov_image_url)
-        inpaint_image_url_base64 = await context.image_to_base64(self.inpaint_image_url)
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        uov_image_base64 = await context.image_to_base64(self.uov_image)
+        inpaint_image_base64 = await context.image_to_base64(self.inpaint_image)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
         arguments = {
             "prompt": self.prompt,
-            "uov_image_url": f"data:image/png;base64,{uov_image_url_base64}",
+            "uov_image_url": f"data:image/png;base64,{uov_image_base64}",
             "performance": self.performance.value,
             "image_prompt_3": self.image_prompt_3,
             "styles": self.styles,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "image_prompt_4": self.image_prompt_4,
             "guidance_scale": self.guidance_scale,
             "sharpness": self.sharpness,
             "mixing_image_prompt_and_inpaint": self.mixing_image_prompt_and_inpaint,
             "outpaint_selections": self.outpaint_selections,
-            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_url_base64}",
+            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}",
             "output_format": self.output_format.value,
             "refiner_model": self.refiner_model.value,
             "image_prompt_2": self.image_prompt_2,
@@ -12487,7 +12487,7 @@ class FooocusImagePrompt(FALNode):
             "seed": self.seed,
             "refiner_switch": self.refiner_switch,
             "mixing_image_prompt_and_vary_upscale": self.mixing_image_prompt_and_vary_upscale,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
             "image_prompt_1": self.image_prompt_1,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -12597,7 +12597,7 @@ class FooocusInpaint(FALNode):
     outpaint_selections: list[str] = Field(
         default=[], description="The directions to outpaint."
     )
-    inpaint_image_url: ImageRef = Field(
+    inpaint_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a reference for inpainting."
     )
     refiner_model: RefinerModel = Field(
@@ -12627,7 +12627,7 @@ class FooocusInpaint(FALNode):
     inpaint_disable_initial_latent: bool = Field(
         default=False, description="If set to true, the initial preprocessing will be disabled."
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a mask for the generated image."
     )
     invert_mask: bool = Field(
@@ -12665,20 +12665,20 @@ class FooocusInpaint(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        inpaint_image_url_base64 = await context.image_to_base64(self.inpaint_image_url)
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        inpaint_image_base64 = await context.image_to_base64(self.inpaint_image)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
         arguments = {
             "prompt": self.prompt,
             "performance": self.performance.value,
             "styles": self.styles,
             "image_prompt_3": self.image_prompt_3,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "image_prompt_4": self.image_prompt_4,
             "guidance_scale": self.guidance_scale,
             "sharpness": self.sharpness,
             "mixing_image_prompt_and_inpaint": self.mixing_image_prompt_and_inpaint,
             "outpaint_selections": self.outpaint_selections,
-            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_url_base64}",
+            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}",
             "refiner_model": self.refiner_model.value,
             "output_format": self.output_format.value,
             "image_prompt_2": self.image_prompt_2,
@@ -12688,7 +12688,7 @@ class FooocusInpaint(FALNode):
             "seed": self.seed,
             "refiner_switch": self.refiner_switch,
             "inpaint_disable_initial_latent": self.inpaint_disable_initial_latent,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
             "invert_mask": self.invert_mask,
             "image_prompt_1": self.image_prompt_1,
             "enable_safety_checker": self.enable_safety_checker,
@@ -12754,7 +12754,7 @@ class Lcm(FALNode):
     model: Model = Field(
         default=Model.SDV1_5, description="The model to use for generating the image."
     )
-    lora_url: ImageRef = Field(
+    lora: ImageRef = Field(
         default=ImageRef(), description="The url of the lora server to use for image generation."
     )
     guidance_scale: float = Field(
@@ -12772,7 +12772,7 @@ class Lcm(FALNode):
     lora_scale: float = Field(
         default=1, description="The scale of the lora server to use for image generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The base image to use for guiding the image generation on image-to-image generations. If the either width or height of the image is larger than 1024 pixels, the image will be resized to 1024 pixels while keeping the aspect ratio."
     )
     strength: float = Field(
@@ -12787,7 +12787,7 @@ class Lcm(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The mask to use for guiding the image generation on image inpainting. The model will focus on the mask area and try to fill it with the most relevant content. The mask must be a black and white image where the white area is the area that needs to be filled and the black area is the area that should be ignored. The mask must have the same dimensions as the image passed as `image_url`."
     )
     num_inference_steps: int = Field(
@@ -12795,27 +12795,27 @@ class Lcm(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        lora_url_base64 = await context.image_to_base64(self.lora_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        lora_base64 = await context.image_to_base64(self.lora)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "controlnet_inpaint": self.controlnet_inpaint,
             "image_size": self.image_size,
             "enable_safety_checks": self.enable_safety_checks,
             "model": self.model.value,
-            "lora_url": f"data:image/png;base64,{lora_url_base64}",
+            "lora_url": f"data:image/png;base64,{lora_base64}",
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
             "inpaint_mask_only": self.inpaint_mask_only,
             "num_images": self.num_images,
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "request_id": self.request_id,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "num_inference_steps": self.num_inference_steps,
         }
 
@@ -12848,14 +12848,14 @@ class DiffusionEdge(FALNode):
     - Rapid prototyping and mockups
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The text prompt you would like to convert to speech."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -12933,7 +12933,7 @@ class Fooocus(FALNode):
     control_type: ControlType = Field(
         default=ControlType.PYRACANNY, description="The type of image control"
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a mask for the generated image."
     )
     loras: list[LoraWeight] = Field(
@@ -12951,7 +12951,7 @@ class Fooocus(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    inpaint_image_url: ImageRef = Field(
+    inpaint_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a reference for inpainting."
     )
     mixing_image_prompt_and_inpaint: bool = Field(
@@ -12972,7 +12972,7 @@ class Fooocus(FALNode):
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    control_image_url: ImageRef = Field(
+    control_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a reference for the generated image."
     )
     seed: int = Field(
@@ -12989,28 +12989,28 @@ class Fooocus(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
-        inpaint_image_url_base64 = await context.image_to_base64(self.inpaint_image_url)
-        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
+        inpaint_image_base64 = await context.image_to_base64(self.inpaint_image)
+        control_image_base64 = await context.image_to_base64(self.control_image)
         arguments = {
             "prompt": self.prompt,
             "performance": self.performance.value,
             "styles": self.styles,
             "control_type": self.control_type.value,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
-            "loras": self.loras,
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "sharpness": self.sharpness,
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
-            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_url_base64}",
+            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}",
             "mixing_image_prompt_and_inpaint": self.mixing_image_prompt_and_inpaint,
             "aspect_ratio": self.aspect_ratio,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
             "refiner_model": self.refiner_model.value,
             "sync_mode": self.sync_mode,
-            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}",
             "seed": self.seed,
             "refiner_switch": self.refiner_switch,
             "control_image_weight": self.control_image_weight,
@@ -13090,7 +13090,7 @@ class Lora(FALNode):
     embeddings: list[Embedding] = Field(
         default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
     )
-    ic_light_model_url: ImageRef = Field(
+    ic_light_model: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model to use for the image generation."
     )
     image_encoder_weight_name: str = Field(
@@ -13138,7 +13138,7 @@ class Lora(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    ic_light_model_background_image_url: ImageRef = Field(
+    ic_light_model_background_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model background image to use for the image generation. Make sure to use a background compatible with the model."
     )
     rescale_betas_snr_zero: bool = Field(
@@ -13171,7 +13171,7 @@ class Lora(FALNode):
     debug_latents: bool = Field(
         default=False, description="If set to true, the latents will be saved for debugging."
     )
-    ic_light_image_url: ImageRef = Field(
+    ic_light_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model image to use for the image generation."
     )
     unet_name: str = Field(
@@ -13191,18 +13191,18 @@ class Lora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        ic_light_model_url_base64 = await context.image_to_base64(self.ic_light_model_url)
-        ic_light_model_background_image_url_base64 = await context.image_to_base64(self.ic_light_model_background_image_url)
-        ic_light_image_url_base64 = await context.image_to_base64(self.ic_light_image_url)
+        ic_light_model_base64 = await context.image_to_base64(self.ic_light_model)
+        ic_light_model_background_image_base64 = await context.image_to_base64(self.ic_light_model_background_image)
+        ic_light_image_base64 = await context.image_to_base64(self.ic_light_image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "tile_height": self.tile_height,
-            "embeddings": self.embeddings,
-            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_url_base64}",
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
+            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_base64}",
             "image_encoder_weight_name": self.image_encoder_weight_name,
-            "ip_adapter": self.ip_adapter,
-            "loras": self.loras,
+            "ip_adapter": [item.model_dump(exclude={"type"}) for item in self.ip_adapter],
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "scheduler": self.scheduler.value if self.scheduler else None,
             "sigmas": self.sigmas,
             "guidance_scale": self.guidance_scale,
@@ -13215,7 +13215,7 @@ class Lora(FALNode):
             "model_name": self.model_name,
             "controlnet_guess_mode": self.controlnet_guess_mode,
             "seed": self.seed,
-            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_url_base64}",
+            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_base64}",
             "rescale_betas_snr_zero": self.rescale_betas_snr_zero,
             "tile_width": self.tile_width,
             "prediction_type": self.prediction_type.value,
@@ -13226,11 +13226,11 @@ class Lora(FALNode):
             "image_format": self.image_format.value,
             "num_images": self.num_images,
             "debug_latents": self.debug_latents,
-            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_url_base64}",
+            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_base64}",
             "unet_name": self.unet_name,
             "clip_skip": self.clip_skip,
             "tile_stride_height": self.tile_stride_height,
-            "controlnets": self.controlnets,
+            "controlnets": [item.model_dump(exclude={"type"}) for item in self.controlnets],
             "num_inference_steps": self.num_inference_steps,
         }
 

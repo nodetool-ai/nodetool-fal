@@ -2,8 +2,8 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef
+from nodetool.nodes.fal.types import BBoxPromptBase, BoxPrompt, BoxPromptBase, ChronoLoraWeight, ControlLoraWeight, ControlNet, ControlNetUnion, EasyControlWeight, ElementInput, Embedding, IPAdapter, LoRAInput, LoraWeight, PointPrompt, RGBColor, ReferenceFace, Turn
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import BBoxPromptBase, BoxPrompt, BoxPromptBase, ChronoLoraWeight, ControlLoraWeight, ControlNet, ControlNetUnion, EasyControlWeight, ElementInput, Embedding, IPAdapter, LoRAInput, LoraWeight, PointPrompt, RGBColor, ReferenceFace  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -58,7 +58,7 @@ class FluxSchnellRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="Output format (jpeg or png)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -75,13 +75,13 @@ class FluxSchnellRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "num_images": self.num_images,
             "image_size": self.image_size.value,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -145,7 +145,7 @@ class FluxDevRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="Output format (jpeg or png)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -165,13 +165,13 @@ class FluxDevRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "num_images": self.num_images,
             "image_size": self.image_size.value,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -239,7 +239,7 @@ class FluxProRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="Output format (jpeg or png)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -262,13 +262,13 @@ class FluxProRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -327,7 +327,7 @@ class IdeogramV2Edit(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -336,21 +336,21 @@ class IdeogramV2Edit(FALNode):
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The mask URL to inpaint the image. Needs to match the dimensions of the input image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "style": self.style.value,
             "expand_prompt": self.expand_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
         }
 
         # Remove None values
@@ -422,7 +422,7 @@ class IdeogramV2Remix(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
     strength: float = Field(
@@ -436,13 +436,13 @@ class IdeogramV2Remix(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "style": self.style.value,
             "expand_prompt": self.expand_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "seed": self.seed,
@@ -507,7 +507,7 @@ class IdeogramV3Edit(FALNode):
     color_palette: str = Field(
         default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image."
     )
     sync_mode: bool = Field(
@@ -519,17 +519,17 @@ class IdeogramV3Edit(FALNode):
     images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The mask URL to inpaint the image. MUST have the exact same dimensions (width and height) as the input image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         images_data_urls = []
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
             images_data_urls.append(f"data:image/png;base64,{image_base64}")
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -538,11 +538,11 @@ class IdeogramV3Edit(FALNode):
             "rendering_speed": self.rendering_speed.value,
             "style_codes": self.style_codes,
             "color_palette": self.color_palette,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
             "image_urls": images_data_urls,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
         }
 
         # Remove None values
@@ -602,7 +602,7 @@ class FluxProFill(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -614,7 +614,7 @@ class FluxProFill(FALNode):
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The mask URL to inpaint the image. Needs to match the dimensions of the input image."
     )
     enhance_prompt: bool = Field(
@@ -622,17 +622,17 @@ class FluxProFill(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "enhance_prompt": self.enhance_prompt,
         }
 
@@ -708,7 +708,7 @@ class FluxProCanny(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform"
     )
-    control_image_url: ImageRef = Field(
+    control_image: ImageRef = Field(
         default=ImageRef(), description="The control image URL to generate the Canny edge map from."
     )
     seed: int = Field(
@@ -719,7 +719,7 @@ class FluxProCanny(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        control_image_base64 = await context.image_to_base64(self.control_image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -729,7 +729,7 @@ class FluxProCanny(FALNode):
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}",
             "seed": self.seed,
             "enhance_prompt": self.enhance_prompt,
         }
@@ -806,7 +806,7 @@ class FluxProDepth(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform"
     )
-    control_image_url: ImageRef = Field(
+    control_image: ImageRef = Field(
         default=ImageRef(), description="The control image URL to generate the depth map from."
     )
     seed: int = Field(
@@ -817,7 +817,7 @@ class FluxProDepth(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        control_image_base64 = await context.image_to_base64(self.control_image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -827,7 +827,7 @@ class FluxProDepth(FALNode):
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}",
             "seed": self.seed,
             "enhance_prompt": self.enhance_prompt,
         }
@@ -875,25 +875,25 @@ class BriaEraser(FALNode):
     preserve_alpha: bool = Field(
         default=False, description="If set to true, attempts to preserve the alpha channel of the input image."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The URL of the binary mask image that represents the area that will be cleaned."
     )
     mask_type: MaskType = Field(
         default=MaskType.MANUAL, description="You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input Image to erase from"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_base64 = await context.image_to_base64(self.mask)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "preserve_alpha": self.preserve_alpha,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "mask_type": self.mask_type.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -940,19 +940,19 @@ class BriaBackgroundReplace(FALNode):
     negative_prompt: str = Field(
         default="", description="Negative prompt for background replacement."
     )
-    image_url: ImageRef = Field(
-        default="https://v3b.fal.media/files/b/0a8bea8c/Mztgx0NG3HPdby-4iPqwH_a_coffee_machine_standing_in_the_kitchen.png", description="Reference image (file or URL)."
+    image: ImageRef = Field(
+        default=ImageRef(), description="Reference image (file or URL)."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "steps_num": self.steps_num,
             "sync_mode": self.sync_mode,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -993,7 +993,7 @@ class ClarityUpscaler(FALNode):
     creativity: float = Field(
         default=0.35, description="The creativity of the model. The higher the creativity, the more the model will deviate from the prompt. Refers to the denoise strength of the sampling."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to upscale."
     )
     upscale_factor: float = Field(
@@ -1016,12 +1016,12 @@ class ClarityUpscaler(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resemblance": self.resemblance,
             "creativity": self.creativity,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "upscale_factor": self.upscale_factor,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -1157,7 +1157,7 @@ class RecraftV3ImageToImage(FALNode):
     style_id: str = Field(
         default="", description="The ID of the custom style reference (optional)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to modify. Must be less than 5 MB in size, have resolution less than 16 MP and max dimension less than 4096 pixels."
     )
     sync_mode: bool = Field(
@@ -1174,15 +1174,15 @@ class RecraftV3ImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "style": self.style.value,
             "style_id": self.style_id,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
-            "colors": self.colors,
+            "colors": [item.model_dump(exclude={"type"}) for item in self.colors],
             "negative_prompt": self.negative_prompt,
         }
 
@@ -1246,7 +1246,7 @@ class KolorsImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for image to image"
     )
     sync_mode: bool = Field(
@@ -1275,13 +1275,13 @@ class KolorsImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "scheduler": self.scheduler.value,
             "strength": self.strength,
@@ -1359,7 +1359,7 @@ class BiRefNet(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the output image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to remove background from"
     )
     model: Model = Field(
@@ -1376,11 +1376,11 @@ class BiRefNet(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "operating_resolution": self.operating_resolution.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "model": self.model.value,
             "sync_mode": self.sync_mode,
             "output_mask": self.output_mask,
@@ -1417,7 +1417,7 @@ class CodeFormer(FALNode):
     aligned: bool = Field(
         default=False, description="Should faces etc should be aligned."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
     upscale_factor: float = Field(
@@ -1437,10 +1437,10 @@ class CodeFormer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aligned": self.aligned,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "upscale_factor": self.upscale_factor,
             "fidelity": self.fidelity,
             "face_upscale": self.face_upscale,
@@ -1816,7 +1816,7 @@ class QwenImageEdit2511Lora(FALNode):
             "num_inference_steps": self.num_inference_steps,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -2140,7 +2140,7 @@ class QwenImageEdit2509Lora(FALNode):
             "seed": self.seed,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -2206,7 +2206,7 @@ class QwenImageLayered(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the input image."
     )
     sync_mode: bool = Field(
@@ -2229,13 +2229,13 @@ class QwenImageLayered(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
             "num_layers": self.num_layers,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -2301,7 +2301,7 @@ class QwenImageLayeredLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the input image."
     )
     loras: list[LoRAInput] = Field(
@@ -2327,14 +2327,14 @@ class QwenImageLayeredLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
             "num_layers": self.num_layers,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -2544,7 +2544,7 @@ class Flux2Klein4BBaseEditLora(FALNode):
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -2754,7 +2754,7 @@ class Flux2Klein9BBaseEditLora(FALNode):
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -3742,7 +3742,7 @@ class BriaFiboEdit(FALNode):
     instruction: str = Field(
         default="", description="Instruction for image editing."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Reference image (file or URL)."
     )
     sync_mode: bool = Field(
@@ -3754,7 +3754,7 @@ class BriaFiboEdit(FALNode):
     structured_instruction: str = Field(
         default="", description="The structured prompt to generate an image from."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="Mask image (file or URL). Optional"
     )
     negative_prompt: str = Field(
@@ -3765,16 +3765,16 @@ class BriaFiboEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "steps_num": self.steps_num,
             "instruction": self.instruction,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "structured_instruction": self.structured_instruction,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "negative_prompt": self.negative_prompt,
             "seed": self.seed,
         }
@@ -3811,15 +3811,15 @@ class BriaFiboEditAddObjectByText(FALNode):
     instruction: str = Field(
         default="", description="The full natural language command describing what to add and where."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "instruction": self.instruction,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3854,15 +3854,15 @@ class BriaFiboEditEraseByText(FALNode):
     object_name: str = Field(
         default="", description="The name of the object to remove."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "object_name": self.object_name,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3897,15 +3897,15 @@ class BriaFiboEditReplaceObjectByText(FALNode):
     instruction: str = Field(
         default="", description="The full natural language command describing what to replace."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "instruction": self.instruction,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3940,15 +3940,15 @@ class BriaFiboEditBlend(FALNode):
     instruction: str = Field(
         default="", description="Instruct what elements you would like to blend in your image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "instruction": self.instruction,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3993,15 +3993,15 @@ class BriaFiboEditColorize(FALNode):
     color: Color = Field(
         default="", description="Select the color palette or aesthetic for the output image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "color": self.color.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4033,14 +4033,14 @@ class BriaFiboEditRestore(FALNode):
     - Reconstruct missing image parts
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4094,15 +4094,15 @@ class BriaFiboEditRestyle(FALNode):
     style: Style = Field(
         default="", description="Select the desired artistic style for the output image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "style": self.style.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4159,16 +4159,16 @@ class BriaFiboEditRelight(FALNode):
     light_direction: str = Field(
         default="", description="Where the light comes from."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "light_type": self.light_type.value,
             "light_direction": self.light_direction,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4213,15 +4213,15 @@ class BriaFiboEditReseason(FALNode):
     season: Season = Field(
         default="", description="The desired season."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "season": self.season.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4256,15 +4256,15 @@ class BriaFiboEditRewriteText(FALNode):
     new_text: str = Field(
         default="", description="The new text string to appear in the image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "new_text": self.new_text,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4296,14 +4296,14 @@ class BriaFiboEditSketchToColoredImage(FALNode):
     - Produce colored artwork from outlines
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The source image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4487,7 +4487,7 @@ class GptImage15Edit(FALNode):
     input_fidelity: InputFidelity = Field(
         default=InputFidelity.HIGH, description="Input fidelity for the generated image"
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the mask image to use for the generation. This indicates what part of the image to edit."
     )
     sync_mode: bool = Field(
@@ -4498,7 +4498,7 @@ class GptImage15Edit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
         images_data_urls = []
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
@@ -4511,7 +4511,7 @@ class GptImage15Edit(FALNode):
             "quality": self.quality.value,
             "output_format": self.output_format.value,
             "input_fidelity": self.input_fidelity.value,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
             "sync_mode": self.sync_mode,
             "image_urls": images_data_urls,
         }
@@ -4577,7 +4577,7 @@ class ZImageTurboImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Image-to-Image generation."
     )
     sync_mode: bool = Field(
@@ -4600,14 +4600,14 @@ class ZImageTurboImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -4677,7 +4677,7 @@ class ZImageTurboImageToImageLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Image-to-Image generation."
     )
     sync_mode: bool = Field(
@@ -4703,16 +4703,16 @@ class ZImageTurboImageToImageLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "strength": self.strength,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
@@ -4775,7 +4775,7 @@ class ZImageTurboInpaint(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use."
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="URL of Mask for Inpaint generation."
     )
     control_end: float = Field(
@@ -4793,7 +4793,7 @@ class ZImageTurboInpaint(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Inpaint generation."
     )
     sync_mode: bool = Field(
@@ -4816,19 +4816,19 @@ class ZImageTurboInpaint(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
             "control_end": self.control_end,
             "control_start": self.control_start,
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "control_scale": self.control_scale,
@@ -4892,7 +4892,7 @@ class ZImageTurboInpaintLora(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use."
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="URL of Mask for Inpaint generation."
     )
     loras: list[LoRAInput] = Field(
@@ -4913,7 +4913,7 @@ class ZImageTurboInpaintLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Inpaint generation."
     )
     sync_mode: bool = Field(
@@ -4936,20 +4936,20 @@ class ZImageTurboInpaintLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
-            "loras": self.loras,
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "control_end": self.control_end,
             "control_start": self.control_start,
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "control_scale": self.control_scale,
@@ -5037,7 +5037,7 @@ class ZImageTurboControlnet(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for ControlNet generation."
     )
     sync_mode: bool = Field(
@@ -5060,7 +5060,7 @@ class ZImageTurboControlnet(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -5070,7 +5070,7 @@ class ZImageTurboControlnet(FALNode):
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "control_scale": self.control_scale,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -5161,7 +5161,7 @@ class ZImageTurboControlnetLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for ControlNet generation."
     )
     sync_mode: bool = Field(
@@ -5184,18 +5184,18 @@ class ZImageTurboControlnetLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "control_end": self.control_end,
             "control_start": self.control_start,
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "control_scale": self.control_scale,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -5236,20 +5236,20 @@ class AiFaceSwapImage(FALNode):
     enable_occlusion_prevention: bool = Field(
         default=False, description="Enable occlusion prevention for handling faces covered by hands/objects. Warning: Enabling this runs an occlusion-aware model which costs 2x more."
     )
-    source_face_url: ImageRef = Field(
+    source_face: ImageRef = Field(
         default=ImageRef(), description="Source face image. Allowed items: bmp, jpeg, png, tiff, webp"
     )
-    target_image_url: ImageRef = Field(
+    target_image: ImageRef = Field(
         default=ImageRef(), description="Target image URL. Allowed items: bmp, jpeg, png, tiff, webp"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        source_face_url_base64 = await context.image_to_base64(self.source_face_url)
-        target_image_url_base64 = await context.image_to_base64(self.target_image_url)
+        source_face_base64 = await context.image_to_base64(self.source_face)
+        target_image_base64 = await context.image_to_base64(self.target_image)
         arguments = {
             "enable_occlusion_prevention": self.enable_occlusion_prevention,
-            "source_face_url": f"data:image/png;base64,{source_face_url_base64}",
-            "target_image_url": f"data:image/png;base64,{target_image_url_base64}",
+            "source_face_url": f"data:image/png;base64,{source_face_base64}",
+            "target_image_url": f"data:image/png;base64,{target_image_base64}",
         }
 
         # Remove None values
@@ -5456,7 +5456,7 @@ class AiHomeStyle(FALNode):
         SLATE_SHADES = "slate shades"
 
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to do architectural styling"
     )
     input_image_strength: float = Field(
@@ -5477,8 +5477,8 @@ class AiHomeStyle(FALNode):
     color_palette: ColorPalette = Field(
         default="", description="Color palette for furniture and decor"
     )
-    style_image_url: ImageRef = Field(
-        default="", description="URL of the style image, optional. If given, other parameters are ignored"
+    style_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the style image, optional. If given, other parameters are ignored"
     )
     custom_prompt: str = Field(
         default="", description="Custom prompt for architectural editing, it overrides above options when used"
@@ -5488,17 +5488,17 @@ class AiHomeStyle(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
-        style_image_url_base64 = await context.image_to_base64(self.style_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
+        style_image_base64 = await context.image_to_base64(self.style_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "input_image_strength": self.input_image_strength,
             "additional_elements": self.additional_elements,
             "output_format": self.output_format.value,
             "style": self.style.value,
             "architecture_type": self.architecture_type.value,
             "color_palette": self.color_palette.value,
-            "style_image_url": f"data:image/png;base64,{style_image_url_base64}",
+            "style_image_url": f"data:image/png;base64,{style_image_base64}",
             "custom_prompt": self.custom_prompt,
             "enhanced_rendering": self.enhanced_rendering,
         }
@@ -5715,7 +5715,7 @@ class AiHomeEdit(FALNode):
         SLATE_SHADES = "slate shades"
 
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to do architectural editing"
     )
     editing_type: EditingType = Field(
@@ -5741,9 +5741,9 @@ class AiHomeEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "editing_type": self.editing_type.value,
             "style": self.style.value,
             "additional_elements": self.additional_elements,
@@ -5817,7 +5817,7 @@ class AiBabyAndAgingGeneratorSingle(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image"
     )
-    id_image_urls: list[str] = Field(
+    id_images: list[str] = Field(
         default=[], description="List of ID images for single mode (or general reference images)"
     )
     output_format: OutputFormat = Field(
@@ -5838,7 +5838,7 @@ class AiBabyAndAgingGeneratorSingle(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "id_image_urls": self.id_image_urls,
+            "id_image_urls": self.id_images,
             "output_format": self.output_format.value,
             "age_group": self.age_group.value,
             "gender": self.gender.value,
@@ -5914,7 +5914,7 @@ class AiBabyAndAgingGeneratorMulti(FALNode):
     father_weight: float = Field(
         default=0.5, description="Weight of the father's influence in multi mode generation"
     )
-    mother_image_urls: list[str] = Field(
+    mother_images: list[str] = Field(
         default=[], description="List of mother images for multi mode"
     )
     output_format: OutputFormat = Field(
@@ -5926,7 +5926,7 @@ class AiBabyAndAgingGeneratorMulti(FALNode):
     gender: Gender = Field(
         default="", description="Gender for the generated image. Choose from: 'male' or 'female'."
     )
-    father_image_urls: list[str] = Field(
+    father_images: list[str] = Field(
         default=[], description="List of father images for multi mode"
     )
     seed: str = Field(
@@ -5939,11 +5939,11 @@ class AiBabyAndAgingGeneratorMulti(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "father_weight": self.father_weight,
-            "mother_image_urls": self.mother_image_urls,
+            "mother_image_urls": self.mother_images,
             "output_format": self.output_format.value,
             "age_group": self.age_group.value,
             "gender": self.gender.value,
-            "father_image_urls": self.father_image_urls,
+            "father_image_urls": self.father_images,
             "seed": self.seed,
         }
 
@@ -6066,7 +6066,7 @@ class StepxEdit2(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -6089,13 +6089,13 @@ class StepxEdit2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "enable_reflection_mode": self.enable_reflection_mode,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -6162,7 +6162,7 @@ class LongcatImageEdit(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
     sync_mode: bool = Field(
@@ -6182,13 +6182,13 @@ class LongcatImageEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -6310,7 +6310,7 @@ class ViduQ2ReferenceToImage(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="URLs of the reference images to use for consistent subject appearance"
     )
     seed: int = Field(
@@ -6321,7 +6321,7 @@ class ViduQ2ReferenceToImage(FALNode):
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "seed": self.seed,
         }
 
@@ -6421,7 +6421,7 @@ class KlingImageO1(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "elements": self.elements,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
             "image_urls": images_data_urls,
         }
 
@@ -7620,18 +7620,18 @@ class Moondream3PreviewSegment(FALNode):
     preview: bool = Field(
         default=False, description="Whether to preview the output and return a binary mask of the image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "spatial_references": self.spatial_references,
             "settings": self.settings,
             "object": self.object,
             "preview": self.preview,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -7769,16 +7769,16 @@ class ClarityaiCrystalUpscaler(FALNode):
     scale_factor: float = Field(
         default=2, description="Scale factor"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL to the input image"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "creativity": self.creativity,
             "scale_factor": self.scale_factor,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -7856,7 +7856,7 @@ class ChronoEditLora(FALNode):
     sync_mode: bool = Field(
         default=False, description="Whether to return the image in sync mode."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to edit."
     )
     enable_prompt_expansion: bool = Field(
@@ -7870,10 +7870,10 @@ class ChronoEditLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "turbo_mode": self.turbo_mode,
             "enable_temporal_reasoning": self.enable_temporal_reasoning,
             "enable_safety_checker": self.enable_safety_checker,
@@ -7882,7 +7882,7 @@ class ChronoEditLora(FALNode):
             "output_format": self.output_format.value,
             "num_temporal_reasoning_steps": self.num_temporal_reasoning_steps,
             "sync_mode": self.sync_mode,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -7945,7 +7945,7 @@ class ChronoEditLoraGalleryPaintbrush(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the output image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to edit."
     )
     sync_mode: bool = Field(
@@ -7963,7 +7963,7 @@ class ChronoEditLoraGalleryPaintbrush(FALNode):
     num_inference_steps: int = Field(
         default=8, description="Number of denoising steps to run."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="Optional mask image where black areas indicate regions to sketch/paint."
     )
     seed: int = Field(
@@ -7974,20 +7974,20 @@ class ChronoEditLoraGalleryPaintbrush(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "turbo_mode": self.turbo_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
         }
@@ -8036,7 +8036,7 @@ class ChronoEditLoraGalleryUpscaler(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the output image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to upscale."
     )
     sync_mode: bool = Field(
@@ -8062,13 +8062,13 @@ class ChronoEditLoraGalleryUpscaler(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "upscale_factor": self.upscale_factor,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -8126,7 +8126,7 @@ class Sam3ImageRle(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be segmented"
     )
     sync_mode: bool = Field(
@@ -8152,18 +8152,18 @@ class Sam3ImageRle(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "include_boxes": self.include_boxes,
             "return_multiple_masks": self.return_multiple_masks,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
-            "point_prompts": self.point_prompts,
+            "point_prompts": [item.model_dump(exclude={"type"}) for item in self.point_prompts],
             "include_scores": self.include_scores,
             "max_masks": self.max_masks,
-            "box_prompts": self.box_prompts,
+            "box_prompts": [item.model_dump(exclude={"type"}) for item in self.box_prompts],
             "apply_mask": self.apply_mask,
             "text_prompt": self.text_prompt,
         }
@@ -8216,7 +8216,7 @@ class Sam3Image(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be segmented"
     )
     sync_mode: bool = Field(
@@ -8242,18 +8242,18 @@ class Sam3Image(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "include_boxes": self.include_boxes,
             "return_multiple_masks": self.return_multiple_masks,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
-            "point_prompts": self.point_prompts,
+            "point_prompts": [item.model_dump(exclude={"type"}) for item in self.point_prompts],
             "include_scores": self.include_scores,
             "max_masks": self.max_masks,
-            "box_prompts": self.box_prompts,
+            "box_prompts": [item.model_dump(exclude={"type"}) for item in self.box_prompts],
             "apply_mask": self.apply_mask,
             "text_prompt": self.text_prompt,
         }
@@ -9567,18 +9567,18 @@ class ReveFastEdit(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="Output format for the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the reference image to edit. Must be publicly accessible or base64 data URI. Supports PNG, JPEG, WebP, AVIF, and HEIF formats."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "sync_mode": self.sync_mode,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -9635,7 +9635,7 @@ class ImageAppsV2Outpaint(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the output image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL to outpaint"
     )
     sync_mode: bool = Field(
@@ -9655,14 +9655,14 @@ class ImageAppsV2Outpaint(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "expand_right": self.expand_right,
             "num_images": self.num_images,
             "zoom_out_percentage": self.zoom_out_percentage,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "expand_left": self.expand_left,
@@ -9705,7 +9705,7 @@ class FluxVisionUpscaler(FALNode):
     creativity: float = Field(
         default=0.3, description="The creativity of the model. The higher the creativity, the more the model will deviate from the original. Refers to the denoise strength of the sampling."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to upscale."
     )
     upscale_factor: float = Field(
@@ -9722,11 +9722,11 @@ class FluxVisionUpscaler(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "guidance": self.guidance,
             "creativity": self.creativity,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "upscale_factor": self.upscale_factor,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -9803,7 +9803,7 @@ class Emu35ImageEditImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the output image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to edit."
     )
     sync_mode: bool = Field(
@@ -9817,13 +9817,13 @@ class Emu35ImageEditImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -9886,7 +9886,7 @@ class ChronoEdit(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the output image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to edit."
     )
     turbo_mode: bool = Field(
@@ -9915,13 +9915,13 @@ class ChronoEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "turbo_mode": self.turbo_mode,
             "num_temporal_reasoning_steps": self.num_temporal_reasoning_steps,
             "sync_mode": self.sync_mode,
@@ -10170,18 +10170,18 @@ class ReveEdit(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="Output format for the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the reference image to edit. Must be publicly accessible or base64 data URI. Supports PNG, JPEG, WebP, AVIF, and HEIF formats."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "sync_mode": self.sync_mode,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -10279,7 +10279,7 @@ class Image2Pixel(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to process into improved pixel art"
     )
     background_mode: BackgroundMode = Field(
@@ -10293,7 +10293,7 @@ class Image2Pixel(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "cleanup_morph": self.cleanup_morph,
             "auto_color_detect": self.auto_color_detect,
@@ -10308,7 +10308,7 @@ class Image2Pixel(FALNode):
             "transparent_background": self.transparent_background,
             "downscale_method": self.downscale_method.value,
             "sync_mode": self.sync_mode,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "background_mode": self.background_mode.value,
             "max_colors": self.max_colors,
             "dominant_color_threshold": self.dominant_color_threshold,
@@ -10456,7 +10456,7 @@ class QwenImageEditPlusLora(FALNode):
             "seed": self.seed,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -10503,7 +10503,7 @@ class Lucidflux(FALNode):
     target_height: int = Field(
         default=1024, description="The height of the output image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
     target_width: int = Field(
@@ -10517,12 +10517,12 @@ class Lucidflux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "guidance": self.guidance,
             "target_height": self.target_height,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "target_width": self.target_width,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -10586,7 +10586,7 @@ class QwenImageEditImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
     sync_mode: bool = Field(
@@ -10612,14 +10612,14 @@ class QwenImageEditImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
@@ -10862,7 +10862,7 @@ class SeedvrUpscaleImage(FALNode):
     target_resolution: TargetResolution = Field(
         default=TargetResolution.VALUE_1080P, description="The target resolution to upscale to when `upscale_mode` is `target`."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The input image to be processed"
     )
     sync_mode: bool = Field(
@@ -10876,13 +10876,13 @@ class SeedvrUpscaleImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "upscale_mode": self.upscale_mode.value,
             "noise_scale": self.noise_scale,
             "output_format": self.output_format.value,
             "target_resolution": self.target_resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "upscale_factor": self.upscale_factor,
             "seed": self.seed,
@@ -10918,20 +10918,20 @@ class ImageAppsV2ProductHolding(FALNode):
     aspect_ratio: str = Field(
         default="", description="Aspect ratio for 4K output"
     )
-    product_image_url: ImageRef = Field(
+    product_image: ImageRef = Field(
         default=ImageRef(), description="Image URL of the product to be held by the person"
     )
-    person_image_url: ImageRef = Field(
+    person_image: ImageRef = Field(
         default=ImageRef(), description="Image URL of the person who will hold the product"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        product_image_url_base64 = await context.image_to_base64(self.product_image_url)
-        person_image_url_base64 = await context.image_to_base64(self.person_image_url)
+        product_image_base64 = await context.image_to_base64(self.product_image)
+        person_image_base64 = await context.image_to_base64(self.person_image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
-            "product_image_url": f"data:image/png;base64,{product_image_url_base64}",
-            "person_image_url": f"data:image/png;base64,{person_image_url_base64}",
+            "product_image_url": f"data:image/png;base64,{product_image_base64}",
+            "person_image_url": f"data:image/png;base64,{person_image_base64}",
         }
 
         # Remove None values
@@ -10966,15 +10966,15 @@ class ImageAppsV2ProductPhotography(FALNode):
     aspect_ratio: str = Field(
         default="", description="Aspect ratio for 4K output"
     )
-    product_image_url: ImageRef = Field(
+    product_image: ImageRef = Field(
         default=ImageRef(), description="Image URL of the product to create professional studio photography"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        product_image_url_base64 = await context.image_to_base64(self.product_image_url)
+        product_image_base64 = await context.image_to_base64(self.product_image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
-            "product_image_url": f"data:image/png;base64,{product_image_url_base64}",
+            "product_image_url": f"data:image/png;base64,{product_image_base64}",
         }
 
         # Remove None values
@@ -11012,21 +11012,21 @@ class ImageAppsV2VirtualTryOn(FALNode):
     aspect_ratio: str = Field(
         default="", description="Aspect ratio for 4K output (default: 3:4 for fashion)"
     )
-    clothing_image_url: ImageRef = Field(
+    clothing_image: ImageRef = Field(
         default=ImageRef(), description="Clothing photo URL"
     )
-    person_image_url: ImageRef = Field(
+    person_image: ImageRef = Field(
         default=ImageRef(), description="Person photo URL"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        clothing_image_url_base64 = await context.image_to_base64(self.clothing_image_url)
-        person_image_url_base64 = await context.image_to_base64(self.person_image_url)
+        clothing_image_base64 = await context.image_to_base64(self.clothing_image)
+        person_image_base64 = await context.image_to_base64(self.person_image)
         arguments = {
             "preserve_pose": self.preserve_pose,
             "aspect_ratio": self.aspect_ratio,
-            "clothing_image_url": f"data:image/png;base64,{clothing_image_url_base64}",
-            "person_image_url": f"data:image/png;base64,{person_image_url_base64}",
+            "clothing_image_url": f"data:image/png;base64,{clothing_image_base64}",
+            "person_image_url": f"data:image/png;base64,{person_image_base64}",
         }
 
         # Remove None values
@@ -11089,16 +11089,16 @@ class ImageAppsV2TextureTransform(FALNode):
     aspect_ratio: str = Field(
         default="", description="Aspect ratio for 4K output"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for texture transformation"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "target_texture": self.target_texture.value,
             "aspect_ratio": self.aspect_ratio,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11157,16 +11157,16 @@ class ImageAppsV2Relighting(FALNode):
     lighting_style: LightingStyle = Field(
         default=LightingStyle.NATURAL
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for relighting"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
             "lighting_style": self.lighting_style.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11233,21 +11233,21 @@ class ImageAppsV2StyleTransfer(FALNode):
     aspect_ratio: str = Field(
         default="", description="Aspect ratio for 4K output"
     )
-    style_reference_image_url: ImageRef = Field(
+    style_reference_image: ImageRef = Field(
         default=ImageRef(), description="Optional reference image URL. When provided, the style will be inferred from this image instead of the selected preset style."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for style transfer"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        style_reference_image_url_base64 = await context.image_to_base64(self.style_reference_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        style_reference_image_base64 = await context.image_to_base64(self.style_reference_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "target_style": self.target_style.value,
             "aspect_ratio": self.aspect_ratio,
-            "style_reference_image_url": f"data:image/png;base64,{style_reference_image_url_base64}",
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "style_reference_image_url": f"data:image/png;base64,{style_reference_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11291,18 +11291,18 @@ class ImageAppsV2PhotoRestoration(FALNode):
     fix_colors: bool = Field(
         default=True
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Old or damaged photo URL to restore"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "enhance_resolution": self.enhance_resolution,
             "aspect_ratio": self.aspect_ratio,
             "remove_scratches": self.remove_scratches,
             "fix_colors": self.fix_colors,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11337,15 +11337,15 @@ class ImageAppsV2PortraitEnhance(FALNode):
     aspect_ratio: str = Field(
         default="", description="Aspect ratio for 4K output (default: 3:4 for portraits)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Portrait image URL to enhance"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11402,16 +11402,16 @@ class ImageAppsV2PhotographyEffects(FALNode):
     aspect_ratio: str = Field(
         default="", description="Aspect ratio for 4K output"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for photography effects"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "effect_type": self.effect_type.value,
             "aspect_ratio": self.aspect_ratio,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11461,16 +11461,16 @@ class ImageAppsV2Perspective(FALNode):
     target_perspective: TargetPerspective = Field(
         default=TargetPerspective.FRONT
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for perspective change"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
             "target_perspective": self.target_perspective.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11508,16 +11508,16 @@ class ImageAppsV2ObjectRemoval(FALNode):
     object_to_remove: str = Field(
         default="", description="Object to remove"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL containing object to remove"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
             "object_to_remove": self.object_to_remove,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11562,16 +11562,16 @@ class ImageAppsV2HeadshotPhoto(FALNode):
     background_style: BackgroundStyle = Field(
         default=BackgroundStyle.PROFESSIONAL
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Portrait image URL to convert to professional headshot"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
             "background_style": self.background_style.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11653,17 +11653,17 @@ class ImageAppsV2HairChange(FALNode):
     hair_color: HairColor = Field(
         default=HairColor.NATURAL
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Portrait image URL for hair change"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "target_hairstyle": self.target_hairstyle.value,
             "aspect_ratio": self.aspect_ratio,
             "hair_color": self.hair_color.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11724,16 +11724,16 @@ class ImageAppsV2ExpressionChange(FALNode):
     target_expression: TargetExpression = Field(
         default=TargetExpression.SMILE
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Portrait image URL for expression change"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
             "target_expression": self.target_expression.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11792,7 +11792,7 @@ class ImageAppsV2CityTeleport(FALNode):
         SIDE_ANGLE = "side_angle"
 
 
-    city_image_url: ImageRef = Field(
+    city_image: ImageRef = Field(
         default=ImageRef(), description="Optional city background image URL. When provided, the person will be blended into this custom scene."
     )
     aspect_ratio: str = Field(
@@ -11807,20 +11807,20 @@ class ImageAppsV2CityTeleport(FALNode):
     camera_angle: CameraAngle = Field(
         default=CameraAngle.EYE_LEVEL, description="Camera angle for the shot"
     )
-    person_image_url: ImageRef = Field(
+    person_image: ImageRef = Field(
         default=ImageRef(), description="Person photo URL"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        city_image_url_base64 = await context.image_to_base64(self.city_image_url)
-        person_image_url_base64 = await context.image_to_base64(self.person_image_url)
+        city_image_base64 = await context.image_to_base64(self.city_image)
+        person_image_base64 = await context.image_to_base64(self.person_image)
         arguments = {
-            "city_image_url": f"data:image/png;base64,{city_image_url_base64}",
+            "city_image_url": f"data:image/png;base64,{city_image_base64}",
             "aspect_ratio": self.aspect_ratio,
             "city_name": self.city_name,
             "photo_shot": self.photo_shot.value,
             "camera_angle": self.camera_angle.value,
-            "person_image_url": f"data:image/png;base64,{person_image_url_base64}",
+            "person_image_url": f"data:image/png;base64,{person_image_base64}",
         }
 
         # Remove None values
@@ -11852,7 +11852,7 @@ class ImageAppsV2AgeModify(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Portrait image URL for age modification"
     )
     aspect_ratio: str = Field(
@@ -11866,9 +11866,9 @@ class ImageAppsV2AgeModify(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "aspect_ratio": self.aspect_ratio,
             "preserve_identity": self.preserve_identity,
             "target_age": self.target_age,
@@ -11932,17 +11932,17 @@ class ImageAppsV2MakeupApplication(FALNode):
     makeup_style: MakeupStyle = Field(
         default=MakeupStyle.NATURAL
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Portrait image URL for makeup application"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio,
             "intensity": self.intensity.value,
             "makeup_style": self.makeup_style.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -12014,7 +12014,7 @@ class QwenImageEditInpaint(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
     sync_mode: bool = Field(
@@ -12034,7 +12034,7 @@ class QwenImageEditInpaint(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -12044,7 +12044,7 @@ class QwenImageEditInpaint(FALNode):
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "seed": self.seed,
@@ -12109,7 +12109,7 @@ class FluxSrpoImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -12132,13 +12132,13 @@ class FluxSrpoImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "enable_safety_checker": self.enable_safety_checker,
@@ -12204,7 +12204,7 @@ class Flux1SrpoImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -12227,13 +12227,13 @@ class Flux1SrpoImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "enable_safety_checker": self.enable_safety_checker,
@@ -12302,7 +12302,7 @@ class QwenImageEditLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
     sync_mode: bool = Field(
@@ -12328,16 +12328,16 @@ class QwenImageEditLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -12389,7 +12389,7 @@ class ViduReferenceToImage(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="URLs of the reference images to use for consistent subject appearance"
     )
     seed: int = Field(
@@ -12400,7 +12400,7 @@ class ViduReferenceToImage(FALNode):
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "seed": self.seed,
         }
 
@@ -12569,7 +12569,7 @@ class WanV22A14BImageToImage(FALNode):
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image."
     )
     strength: float = Field(
@@ -12589,7 +12589,7 @@ class WanV22A14BImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "shift": self.shift,
             "prompt": self.prompt,
@@ -12601,7 +12601,7 @@ class WanV22A14BImageToImage(FALNode):
             "negative_prompt": self.negative_prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "enable_output_safety_checker": self.enable_output_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "guidance_scale_2": self.guidance_scale_2,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -12659,7 +12659,7 @@ class Uso(FALNode):
     keep_size: bool = Field(
         default=False, description="Preserve the layout and dimensions of the input content image. Useful for style transfer."
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="List of image URLs in order: [content_image, style_image, extra_style_image]."
     )
     sync_mode: bool = Field(
@@ -12688,7 +12688,7 @@ class Uso(FALNode):
             "image_size": self.image_size,
             "output_format": self.output_format.value,
             "keep_size": self.keep_size,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -12863,7 +12863,7 @@ class QwenImageImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The reference image to guide the generation."
     )
     sync_mode: bool = Field(
@@ -12880,19 +12880,19 @@ class QwenImageImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
             "image_size": self.image_size,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "guidance_scale": self.guidance_scale,
             "use_turbo": self.use_turbo,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "num_inference_steps": self.num_inference_steps,
@@ -12952,14 +12952,14 @@ class BriaReimagine32(FALNode):
     canny_preprocess: bool = Field(
         default=True, description="Canny image preprocess."
     )
-    depth_image_url: ImageRef = Field(
-        default="", description="Depth control image (file or URL)."
+    depth_image: ImageRef = Field(
+        default=ImageRef(), description="Depth control image (file or URL)."
     )
     guidance_scale: float = Field(
         default=5, description="Guidance scale for text."
     )
-    canny_image_url: ImageRef = Field(
-        default="", description="Canny edge control image (file or URL)."
+    canny_image: ImageRef = Field(
+        default=ImageRef(), description="Canny edge control image (file or URL)."
     )
     negative_prompt: str = Field(
         default="Logo,Watermark,Ugly,Morbid,Extra fingers,Poorly drawn hands,Mutation,Blurry,Extra limbs,Gross proportions,Missing arms,Mutated hands,Long neck,Duplicate,Mutilated,Mutilated hands,Poorly drawn face,Deformed,Bad anatomy,Cloned face,Malformed limbs,Missing legs,Too many fingers", description="Negative prompt for image generation."
@@ -12990,15 +12990,15 @@ class BriaReimagine32(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        depth_image_url_base64 = await context.image_to_base64(self.depth_image_url)
-        canny_image_url_base64 = await context.image_to_base64(self.canny_image_url)
+        depth_image_base64 = await context.image_to_base64(self.depth_image)
+        canny_image_base64 = await context.image_to_base64(self.canny_image)
         arguments = {
             "prompt": self.prompt,
             "depth_preprocess": self.depth_preprocess,
             "canny_preprocess": self.canny_preprocess,
-            "depth_image_url": f"data:image/png;base64,{depth_image_url_base64}",
+            "depth_image_url": f"data:image/png;base64,{depth_image_base64}",
             "guidance_scale": self.guidance_scale,
-            "canny_image_url": f"data:image/png;base64,{canny_image_url_base64}",
+            "canny_image_url": f"data:image/png;base64,{canny_image_base64}",
             "negative_prompt": self.negative_prompt,
             "depth_scale": self.depth_scale,
             "aspect_ratio": self.aspect_ratio.value,
@@ -13136,16 +13136,16 @@ class Nextstep1(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -13206,7 +13206,7 @@ class QwenImageEdit(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
     sync_mode: bool = Field(
@@ -13229,14 +13229,14 @@ class QwenImageEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -13306,7 +13306,7 @@ class IdeogramCharacterEdit(FALNode):
     reference_mask_urls: list[str] = Field(
         default=[], description="A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format"
     )
     images: list[ImageRef] = Field(
@@ -13315,7 +13315,7 @@ class IdeogramCharacterEdit(FALNode):
     num_images: int = Field(
         default=1, description="Number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image."
     )
     style_codes: str = Field(
@@ -13330,7 +13330,7 @@ class IdeogramCharacterEdit(FALNode):
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The mask URL to inpaint the image. MUST have the exact same dimensions (width and height) as the input image."
     )
 
@@ -13339,23 +13339,23 @@ class IdeogramCharacterEdit(FALNode):
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
             images_data_urls.append(f"data:image/png;base64,{image_base64}")
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "style": self.style.value,
             "expand_prompt": self.expand_prompt,
             "rendering_speed": self.rendering_speed.value,
             "reference_mask_urls": self.reference_mask_urls,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "image_urls": images_data_urls,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "style_codes": self.style_codes,
             "color_palette": self.color_palette,
             "sync_mode": self.sync_mode,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
         }
 
         # Remove None values
@@ -13422,7 +13422,7 @@ class IdeogramCharacter(FALNode):
     reference_mask_urls: list[str] = Field(
         default=[], description="A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format"
     )
     images: list[ImageRef] = Field(
@@ -13459,7 +13459,7 @@ class IdeogramCharacter(FALNode):
             "expand_prompt": self.expand_prompt,
             "rendering_speed": self.rendering_speed.value,
             "reference_mask_urls": self.reference_mask_urls,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
@@ -13533,7 +13533,7 @@ class IdeogramCharacterRemix(FALNode):
     reference_mask_urls: list[str] = Field(
         default=[], description="A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format"
     )
     images: list[ImageRef] = Field(
@@ -13545,7 +13545,7 @@ class IdeogramCharacterRemix(FALNode):
     num_images: int = Field(
         default=1, description="Number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
     sync_mode: bool = Field(
@@ -13569,7 +13569,7 @@ class IdeogramCharacterRemix(FALNode):
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
             images_data_urls.append(f"data:image/png;base64,{image_base64}")
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -13577,11 +13577,11 @@ class IdeogramCharacterRemix(FALNode):
             "expand_prompt": self.expand_prompt,
             "rendering_speed": self.rendering_speed.value,
             "reference_mask_urls": self.reference_mask_urls,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "color_palette": self.color_palette,
             "strength": self.strength,
@@ -13638,7 +13638,7 @@ class FluxKreaLoraInpainting(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     loras: list[LoraWeight] = Field(
@@ -13667,14 +13667,14 @@ class FluxKreaLoraInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
@@ -13733,7 +13733,7 @@ class FluxKreaLoraImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     loras: list[LoraWeight] = Field(
@@ -13759,14 +13759,14 @@ class FluxKreaLoraImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
@@ -13832,7 +13832,7 @@ class FluxKreaImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -13855,13 +13855,13 @@ class FluxKreaImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "enable_safety_checker": self.enable_safety_checker,
@@ -13927,7 +13927,7 @@ class FluxKreaRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -13947,13 +13947,13 @@ class FluxKreaRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -14018,7 +14018,7 @@ class Flux1KreaImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -14041,13 +14041,13 @@ class Flux1KreaImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "enable_safety_checker": self.enable_safety_checker,
@@ -14113,7 +14113,7 @@ class Flux1KreaRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -14133,13 +14133,13 @@ class Flux1KreaRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -14198,7 +14198,7 @@ class FluxKontextLoraInpaint(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
     )
-    reference_image_url: ImageRef = Field(
+    reference_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the reference image for inpainting."
     )
     loras: list[LoraWeight] = Field(
@@ -14216,7 +14216,7 @@ class FluxKontextLoraInpaint(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be inpainted."
     )
     sync_mode: bool = Field(
@@ -14228,7 +14228,7 @@ class FluxKontextLoraInpaint(FALNode):
     num_inference_steps: int = Field(
         default=30, description="The number of inference steps to perform."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The URL of the mask for inpainting."
     )
     seed: int = Field(
@@ -14236,23 +14236,23 @@ class FluxKontextLoraInpaint(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        reference_image_base64 = await context.image_to_base64(self.reference_image)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
-            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
-            "loras": self.loras,
+            "reference_image_url": f"data:image/png;base64,{reference_image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "num_inference_steps": self.num_inference_steps,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "seed": self.seed,
         }
 
@@ -14288,15 +14288,15 @@ class Hunyuan_World(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for the panorama generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to convert to a panorama."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -14331,7 +14331,7 @@ class ImageEditingRetouch(FALNode):
     lora_scale: float = Field(
         default=1, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to retouch."
     )
     sync_mode: bool = Field(
@@ -14351,10 +14351,10 @@ class ImageEditingRetouch(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -14414,7 +14414,7 @@ class HidreamE11(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of an input image to edit."
     )
     sync_mode: bool = Field(
@@ -14437,14 +14437,14 @@ class HidreamE11(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_guidance_scale": self.image_guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -14515,19 +14515,19 @@ class Rife(FALNode):
     num_frames: int = Field(
         default=1, description="The number of frames to generate between the input images."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the second image to use as the ending point for interpolation."
     )
     output_type: OutputType = Field(
         default=OutputType.IMAGES, description="The type of output to generate; either individual images or a video."
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the first image to use as the starting point for interpolation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        start_image_base64 = await context.image_to_base64(self.start_image)
         arguments = {
             "output_format": self.output_format.value,
             "fps": self.fps,
@@ -14535,9 +14535,9 @@ class Rife(FALNode):
             "include_end": self.include_end,
             "include_start": self.include_start,
             "num_frames": self.num_frames,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "output_type": self.output_type.value,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
         }
 
         # Remove None values
@@ -14621,10 +14621,10 @@ class Film(FALNode):
     fps: int = Field(
         default=8, description="Frames per second for the output video. Only applicable if output_type is 'video'."
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the first image to use as the starting point for interpolation."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the second image to use as the ending point for interpolation."
     )
     image_format: ImageFormat = Field(
@@ -14635,8 +14635,8 @@ class Film(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "video_write_mode": self.video_write_mode.value,
             "num_frames": self.num_frames,
@@ -14645,8 +14645,8 @@ class Film(FALNode):
             "include_end": self.include_end,
             "sync_mode": self.sync_mode,
             "fps": self.fps,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "image_format": self.image_format.value,
             "output_type": self.output_type.value,
         }
@@ -14691,16 +14691,16 @@ class Calligrapher(FALNode):
     auto_mask_generation: bool = Field(
         default=False, description="Whether to automatically generate mask from detected text"
     )
-    reference_image_url: ImageRef = Field(
+    reference_image: ImageRef = Field(
         default=ImageRef(), description="Optional base64 reference image for style"
     )
-    source_image_url: ImageRef = Field(
+    source_image: ImageRef = Field(
         default=ImageRef(), description="Base64-encoded source image with drawn mask layers"
     )
     prompt: str = Field(
         default="", description="Text prompt to inpaint or customize"
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="Base64-encoded mask image (optional if using auto_mask_generation)"
     )
     source_text: str = Field(
@@ -14717,18 +14717,18 @@ class Calligrapher(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
-        source_image_url_base64 = await context.image_to_base64(self.source_image_url)
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        reference_image_base64 = await context.image_to_base64(self.reference_image)
+        source_image_base64 = await context.image_to_base64(self.source_image)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
         arguments = {
             "use_context": self.use_context,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "auto_mask_generation": self.auto_mask_generation,
-            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
-            "source_image_url": f"data:image/png;base64,{source_image_url_base64}",
+            "reference_image_url": f"data:image/png;base64,{reference_image_base64}",
+            "source_image_url": f"data:image/png;base64,{source_image_base64}",
             "prompt": self.prompt,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
             "source_text": self.source_text,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -14785,12 +14785,12 @@ class BriaReimagine(FALNode):
     num_inference_steps: int = Field(
         default=30, description="The number of iterations the model goes through to refine the generated image. This parameter is optional."
     )
-    structure_image_url: ImageRef = Field(
-        default="", description="The URL of the structure reference image. Use \"\" to leave empty. Accepted formats are jpeg, jpg, png, webp."
+    structure_image: ImageRef = Field(
+        default=ImageRef(), description="The URL of the structure reference image. Use \"\" to leave empty. Accepted formats are jpeg, jpg, png, webp."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        structure_image_url_base64 = await context.image_to_base64(self.structure_image_url)
+        structure_image_base64 = await context.image_to_base64(self.structure_image)
         arguments = {
             "prompt": self.prompt,
             "num_results": self.num_results,
@@ -14799,7 +14799,7 @@ class BriaReimagine(FALNode):
             "fast": self.fast,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
-            "structure_image_url": f"data:image/png;base64,{structure_image_url_base64}",
+            "structure_image_url": f"data:image/png;base64,{structure_image_base64}",
         }
 
         # Remove None values
@@ -14834,7 +14834,7 @@ class ImageEditingRealism(FALNode):
     lora_scale: float = Field(
         default=0.6, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to enhance with realism details."
     )
     sync_mode: bool = Field(
@@ -14854,10 +14854,10 @@ class ImageEditingRealism(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -14897,15 +14897,15 @@ class PostProcessingVignette(FALNode):
     vignette_strength: float = Field(
         default=0.5, description="Vignette strength"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "vignette_strength": self.vignette_strength,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -14940,15 +14940,15 @@ class PostProcessingSolarize(FALNode):
     solarize_threshold: float = Field(
         default=0.5, description="Solarize threshold"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "solarize_threshold": self.solarize_threshold,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15001,7 +15001,7 @@ class PostProcessingSharpen(FALNode):
     sharpen_radius: int = Field(
         default=1, description="Sharpen radius (for basic mode)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
     smart_sharpen_strength: float = Field(
@@ -15018,13 +15018,13 @@ class PostProcessingSharpen(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sharpen_mode": self.sharpen_mode.value,
             "sharpen_alpha": self.sharpen_alpha,
             "noise_radius": self.noise_radius,
             "sharpen_radius": self.sharpen_radius,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "smart_sharpen_strength": self.smart_sharpen_strength,
             "cas_amount": self.cas_amount,
             "preserve_edges": self.preserve_edges,
@@ -15069,17 +15069,17 @@ class PostProcessingParabolize(FALNode):
     vertex_x: float = Field(
         default=0.5, description="Vertex X position"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "parabolize_coeff": self.parabolize_coeff,
             "vertex_y": self.vertex_y,
             "vertex_x": self.vertex_x,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15132,17 +15132,17 @@ class PostProcessingGrain(FALNode):
     grain_scale: float = Field(
         default=10, description="Film grain scale"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "grain_style": self.grain_style.value,
             "grain_intensity": self.grain_intensity,
             "grain_scale": self.grain_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15194,16 +15194,16 @@ class PostProcessingDodgeBurn(FALNode):
     dodge_burn_intensity: float = Field(
         default=0.5, description="Dodge and burn intensity"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "dodge_burn_mode": self.dodge_burn_mode.value,
             "dodge_burn_intensity": self.dodge_burn_intensity,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15238,20 +15238,20 @@ class PostProcessingDissolve(FALNode):
     dissolve_factor: float = Field(
         default=0.5, description="Dissolve blend factor"
     )
-    dissolve_image_url: ImageRef = Field(
+    dissolve_image: ImageRef = Field(
         default=ImageRef(), description="URL of second image for dissolve"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        dissolve_image_url_base64 = await context.image_to_base64(self.dissolve_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        dissolve_image_base64 = await context.image_to_base64(self.dissolve_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "dissolve_factor": self.dissolve_factor,
-            "dissolve_image_url": f"data:image/png;base64,{dissolve_image_url_base64}",
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "dissolve_image_url": f"data:image/png;base64,{dissolve_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15299,16 +15299,16 @@ class PostProcessingDesaturate(FALNode):
     desaturate_factor: float = Field(
         default=1, description="Desaturation factor"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "desaturate_method": self.desaturate_method.value,
             "desaturate_factor": self.desaturate_factor,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15372,16 +15372,16 @@ class PostProcessingColorTint(FALNode):
     tint_mode: TintMode = Field(
         default=TintMode.SEPIA, description="Tint color mode"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "tint_strength": self.tint_strength,
             "tint_mode": self.tint_mode.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15428,19 +15428,19 @@ class PostProcessingColorCorrection(FALNode):
     contrast: float = Field(
         default=0, description="Contrast adjustment"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "gamma": self.gamma,
             "saturation": self.saturation,
             "temperature": self.temperature,
             "brightness": self.brightness,
             "contrast": self.contrast,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15509,7 +15509,7 @@ class PostProcessingChromaticAberration(FALNode):
     red_direction: RedDirection = Field(
         default=RedDirection.HORIZONTAL, description="Red channel shift direction"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
     green_shift: int = Field(
@@ -15517,14 +15517,14 @@ class PostProcessingChromaticAberration(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "blue_shift": self.blue_shift,
             "red_shift": self.red_shift,
             "green_direction": self.green_direction.value,
             "blue_direction": self.blue_direction.value,
             "red_direction": self.red_direction.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "green_shift": self.green_shift,
         }
 
@@ -15574,17 +15574,17 @@ class PostProcessingBlur(FALNode):
     blur_type: BlurType = Field(
         default=BlurType.GAUSSIAN, description="Type of blur to apply"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "blur_sigma": self.blur_sigma,
             "blur_radius": self.blur_radius,
             "blur_type": self.blur_type.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -15622,7 +15622,7 @@ class ImageEditingYoutubeThumbnails(FALNode):
     lora_scale: float = Field(
         default=0.5, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to convert to YouTube thumbnail style."
     )
     sync_mode: bool = Field(
@@ -15642,11 +15642,11 @@ class ImageEditingYoutubeThumbnails(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -15724,7 +15724,7 @@ class TopazUpscaleImage(FALNode):
     face_enhancement: bool = Field(
         default=True, description="Whether to apply face enhancement to the image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Url of the image to be upscaled"
     )
     model: Model = Field(
@@ -15741,13 +15741,13 @@ class TopazUpscaleImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "face_enhancement_strength": self.face_enhancement_strength,
             "face_enhancement_creativity": self.face_enhancement_creativity,
             "output_format": self.output_format.value,
             "face_enhancement": self.face_enhancement,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "model": self.model.value,
             "subject_detection": self.subject_detection.value,
             "crop_to_fill": self.crop_to_fill,
@@ -15786,7 +15786,7 @@ class ImageEditingBroccoliHaircut(FALNode):
     lora_scale: float = Field(
         default=1, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to apply broccoli haircut style."
     )
     sync_mode: bool = Field(
@@ -15806,10 +15806,10 @@ class ImageEditingBroccoliHaircut(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -15849,7 +15849,7 @@ class ImageEditingWojakStyle(FALNode):
     lora_scale: float = Field(
         default=1, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to convert to wojak style."
     )
     sync_mode: bool = Field(
@@ -15869,10 +15869,10 @@ class ImageEditingWojakStyle(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -15912,7 +15912,7 @@ class ImageEditingPlushieStyle(FALNode):
     lora_scale: float = Field(
         default=1, description="The scale factor for the LoRA model. Controls the strength of the LoRA effect."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to convert to plushie style."
     )
     sync_mode: bool = Field(
@@ -15932,10 +15932,10 @@ class ImageEditingPlushieStyle(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -16024,7 +16024,7 @@ class FluxKontextLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit. Max width: 14142px, Max height: 14142px, Timeout: 20s"
     )
     loras: list[LoraWeight] = Field(
@@ -16047,15 +16047,15 @@ class FluxKontextLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
             "resolution_mode": self.resolution_mode.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -16226,19 +16226,19 @@ class ChainOfZoom(FALNode):
     user_prompt: str = Field(
         default="", description="Additional prompt text to guide the zoom enhancement"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image to zoom into"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "center_y": self.center_y,
             "scale": self.scale,
             "center_x": self.center_x,
             "user_prompt": self.user_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -16276,7 +16276,7 @@ class Pasd(FALNode):
     prompt: str = Field(
         default="", description="Additional prompt to guide super-resolution"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image to super-resolve"
     )
     steps: int = Field(
@@ -16293,11 +16293,11 @@ class Pasd(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "conditioning_scale": self.conditioning_scale,
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "steps": self.steps,
             "scale": self.scale,
             "guidance_scale": self.guidance_scale,
@@ -16349,17 +16349,17 @@ class ObjectRemovalBbox(FALNode):
     box_prompts: list[BBoxPromptBase] = Field(
         default=[], description="List of bounding box coordinates to erase (only one box prompt is supported)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to remove objects from."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "model": self.model.value,
             "mask_expansion": self.mask_expansion,
-            "box_prompts": self.box_prompts,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "box_prompts": [item.model_dump(exclude={"type"}) for item in self.box_prompts],
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -16404,21 +16404,21 @@ class ObjectRemovalMask(FALNode):
     mask_expansion: int = Field(
         default=15, description="Amount of pixels to expand the mask by. Range: 0-50"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The URL of the mask image. White pixels (255) indicate areas to remove."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to remove objects from."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_base64 = await context.image_to_base64(self.mask)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "model": self.model.value,
             "mask_expansion": self.mask_expansion,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -16466,17 +16466,17 @@ class ObjectRemoval(FALNode):
     model: Model = Field(
         default=Model.BEST_QUALITY
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to remove objects from."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "mask_expansion": self.mask_expansion,
             "model": self.model.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -16508,14 +16508,14 @@ class RecraftVectorize(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be vectorized. Must be in PNG, JPG or WEBP format, less than 5 MB in size, have resolution less than 16 MP and max dimension less than 4096 pixels, min dimension more than 256 pixels."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -16556,7 +16556,7 @@ class FfmpegApiExtractFrame(FALNode):
         LAST = "last"
 
 
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="URL of the video file to use as the video track"
     )
     frame_type: FrameType = Field(
@@ -16565,7 +16565,7 @@ class FfmpegApiExtractFrame(FALNode):
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
-            "video_url": self.video_url,
+            "video_url": self.video,
             "frame_type": self.frame_type.value,
         }
 
@@ -16620,17 +16620,17 @@ class LumaPhotonFlashModify(FALNode):
     strength: float = Field(
         default=0.0, description="The strength of the initial image. Higher strength values are corresponding to more influence of the initial image on the output."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to reframe"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "strength": self.strength,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -16684,17 +16684,17 @@ class LumaPhotonModify(FALNode):
     strength: float = Field(
         default=0.0, description="The strength of the initial image. Higher strength values are corresponding to more influence of the initial image on the output."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to reframe"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "strength": self.strength,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -16765,7 +16765,7 @@ class ImageEditingReframe(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the old or damaged photo to restore."
     )
     sync_mode: bool = Field(
@@ -16785,11 +16785,11 @@ class ImageEditingReframe(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -16865,7 +16865,7 @@ class ImageEditingBabyVersion(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to transform into a baby version."
     )
     sync_mode: bool = Field(
@@ -16885,11 +16885,11 @@ class ImageEditingBabyVersion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -16957,7 +16957,7 @@ class LumaPhotonFlashReframe(FALNode):
     grid_position_y: int = Field(
         default=0, description="Y position of the grid for reframing"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to reframe"
     )
     grid_position_x: int = Field(
@@ -16968,7 +16968,7 @@ class LumaPhotonFlashReframe(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
@@ -16976,7 +16976,7 @@ class LumaPhotonFlashReframe(FALNode):
             "x_end": self.x_end,
             "y_end": self.y_end,
             "grid_position_y": self.grid_position_y,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "grid_position_x": self.grid_position_x,
             "x_start": self.x_start,
         }
@@ -17041,7 +17041,7 @@ class LumaPhotonReframe(FALNode):
     grid_position_y: int = Field(
         default=0, description="Y position of the grid for reframing"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to reframe"
     )
     grid_position_x: int = Field(
@@ -17052,7 +17052,7 @@ class LumaPhotonReframe(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
@@ -17060,7 +17060,7 @@ class LumaPhotonReframe(FALNode):
             "x_end": self.x_end,
             "y_end": self.y_end,
             "grid_position_y": self.grid_position_y,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "grid_position_x": self.grid_position_x,
             "x_start": self.x_start,
         }
@@ -17122,7 +17122,7 @@ class Flux1SchnellRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -17139,13 +17139,13 @@ class Flux1SchnellRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -17209,7 +17209,7 @@ class Flux1DevRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -17229,13 +17229,13 @@ class Flux1DevRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "num_images": self.num_images,
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -17300,7 +17300,7 @@ class Flux1DevImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     sync_mode: bool = Field(
@@ -17323,13 +17323,13 @@ class Flux1DevImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "enable_safety_checker": self.enable_safety_checker,
@@ -17406,7 +17406,7 @@ class ImageEditingTextRemoval(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image containing text to be removed."
     )
     sync_mode: bool = Field(
@@ -17426,11 +17426,11 @@ class ImageEditingTextRemoval(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -17506,7 +17506,7 @@ class ImageEditingPhotoRestoration(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the old or damaged photo to restore."
     )
     sync_mode: bool = Field(
@@ -17526,11 +17526,11 @@ class ImageEditingPhotoRestoration(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -17609,7 +17609,7 @@ class ImageEditingWeatherEffect(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -17629,12 +17629,12 @@ class ImageEditingWeatherEffect(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -17713,7 +17713,7 @@ class ImageEditingTimeOfDay(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -17733,12 +17733,12 @@ class ImageEditingTimeOfDay(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -17817,7 +17817,7 @@ class ImageEditingStyleTransfer(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -17837,12 +17837,12 @@ class ImageEditingStyleTransfer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -17921,7 +17921,7 @@ class ImageEditingSceneComposition(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -17941,12 +17941,12 @@ class ImageEditingSceneComposition(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18022,7 +18022,7 @@ class ImageEditingProfessionalPhoto(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18042,11 +18042,11 @@ class ImageEditingProfessionalPhoto(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18125,7 +18125,7 @@ class ImageEditingObjectRemoval(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18145,12 +18145,12 @@ class ImageEditingObjectRemoval(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18229,7 +18229,7 @@ class ImageEditingHairChange(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18249,12 +18249,12 @@ class ImageEditingHairChange(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18330,7 +18330,7 @@ class ImageEditingFaceEnhancement(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18350,11 +18350,11 @@ class ImageEditingFaceEnhancement(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18433,7 +18433,7 @@ class ImageEditingExpressionChange(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18453,12 +18453,12 @@ class ImageEditingExpressionChange(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18534,7 +18534,7 @@ class ImageEditingColorCorrection(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18554,11 +18554,11 @@ class ImageEditingColorCorrection(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18634,7 +18634,7 @@ class ImageEditingCartoonify(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18654,11 +18654,11 @@ class ImageEditingCartoonify(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18737,7 +18737,7 @@ class ImageEditingBackgroundChange(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18757,12 +18757,12 @@ class ImageEditingBackgroundChange(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -18841,7 +18841,7 @@ class ImageEditingAgeProgression(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -18861,12 +18861,12 @@ class ImageEditingAgeProgression(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -19170,7 +19170,7 @@ class FluxProKontextMax(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image prompt for the omni model."
     )
     sync_mode: bool = Field(
@@ -19190,13 +19190,13 @@ class FluxProKontextMax(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -19285,7 +19285,7 @@ class FluxKontextDev(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="Output format"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit."
     )
     sync_mode: bool = Field(
@@ -19305,14 +19305,14 @@ class FluxKontextDev(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution_mode": self.resolution_mode.value,
             "acceleration": self.acceleration.value,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -19361,18 +19361,18 @@ class BagelEdit(FALNode):
     use_thought: bool = Field(
         default=False, description="Whether to use thought tokens for generation. If set to true, the model will \"think\" to potentially improve generation quality. Increases generation time and increases the cost by 20%."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to edit."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
             "use_thought": self.use_thought,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -19404,14 +19404,14 @@ class SmoretalkAiRembgEnhance(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -19449,16 +19449,16 @@ class RecraftUpscaleCreative(FALNode):
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, the safety checker will be enabled."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be upscaled. Must be in PNG format."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -19496,16 +19496,16 @@ class RecraftUpscaleCrisp(FALNode):
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, the safety checker will be enabled."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be upscaled. Must be in PNG format."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -19563,18 +19563,18 @@ class MinimaxImage01SubjectReference(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_1_1, description="Aspect ratio of the generated image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the subject reference image to use for consistent character appearance"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "prompt_optimizer": self.prompt_optimizer,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -19626,7 +19626,7 @@ class HidreamI1FullImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from."
     )
     sync_mode: bool = Field(
@@ -19655,15 +19655,15 @@ class HidreamI1FullImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -19734,7 +19734,7 @@ class IdeogramV3Reframe(FALNode):
     style_codes: str = Field(
         default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to reframe"
     )
     seed: str = Field(
@@ -19745,7 +19745,7 @@ class IdeogramV3Reframe(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         images_data_urls = []
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
@@ -19759,7 +19759,7 @@ class IdeogramV3Reframe(FALNode):
             "sync_mode": self.sync_mode,
             "color_palette": self.color_palette,
             "style_codes": self.style_codes,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "image_urls": images_data_urls,
         }
@@ -19829,7 +19829,7 @@ class IdeogramV3ReplaceBackground(FALNode):
     style_codes: str = Field(
         default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL whose background needs to be replaced"
     )
     seed: str = Field(
@@ -19840,7 +19840,7 @@ class IdeogramV3ReplaceBackground(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         images_data_urls = []
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
@@ -19855,7 +19855,7 @@ class IdeogramV3ReplaceBackground(FALNode):
             "sync_mode": self.sync_mode,
             "color_palette": self.color_palette,
             "style_codes": self.style_codes,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "image_urls": images_data_urls,
         }
@@ -19922,7 +19922,7 @@ class IdeogramV3Remix(FALNode):
     num_images: int = Field(
         default=1, description="Number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
     sync_mode: bool = Field(
@@ -19946,7 +19946,7 @@ class IdeogramV3Remix(FALNode):
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
             images_data_urls.append(f"data:image/png;base64,{image_base64}")
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -19956,7 +19956,7 @@ class IdeogramV3Remix(FALNode):
             "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "color_palette": self.color_palette,
             "strength": self.strength,
@@ -20007,7 +20007,7 @@ class Step1xEdit(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -20030,11 +20030,11 @@ class Step1xEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -20112,7 +20112,7 @@ class Image2svg(FALNode):
     length_threshold: float = Field(
         default=4, description="Length threshold for curves/lines"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to convert to SVG"
     )
     mode: Mode = Field(
@@ -20132,7 +20132,7 @@ class Image2svg(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "splice_threshold": self.splice_threshold,
             "hierarchical": self.hierarchical.value,
@@ -20140,7 +20140,7 @@ class Image2svg(FALNode):
             "colormode": self.colormode.value,
             "max_iterations": self.max_iterations,
             "length_threshold": self.length_threshold,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "mode": self.mode.value,
             "corner_threshold": self.corner_threshold,
             "path_precision": self.path_precision,
@@ -20197,7 +20197,7 @@ class Uno(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to use while generating the image."
     )
     sync_mode: bool = Field(
@@ -20222,7 +20222,7 @@ class Uno(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -20395,7 +20395,7 @@ class RundiffusionFalJuggernautFluxLoraInpainting(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     loras: list[LoraWeight] = Field(
@@ -20424,14 +20424,14 @@ class RundiffusionFalJuggernautFluxLoraInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
@@ -20598,7 +20598,7 @@ class Plushify(FALNode):
     use_cfg_zero: bool = Field(
         default=False, description="Whether to use CFG zero"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to apply cartoon style to"
     )
     scale: float = Field(
@@ -20618,12 +20618,12 @@ class Plushify(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "use_cfg_zero": self.use_cfg_zero,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "scale": self.scale,
             "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
@@ -20683,7 +20683,7 @@ class InstantCharacter(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -20706,14 +20706,14 @@ class InstantCharacter(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "scale": self.scale,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -20754,7 +20754,7 @@ class Cartoonify(FALNode):
     use_cfg_zero: bool = Field(
         default=False, description="Whether to use CFG zero"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to apply Pixar style to"
     )
     guidance_scale: float = Field(
@@ -20774,10 +20774,10 @@ class Cartoonify(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "use_cfg_zero": self.use_cfg_zero,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "scale": self.scale,
@@ -20829,21 +20829,21 @@ class FinegrainEraserMask(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducible generation"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="URL of the mask image. Should be a binary mask where white (255) indicates areas to erase"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to edit"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_base64 = await context.image_to_base64(self.mask)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "mode": self.mode.value,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -20891,17 +20891,17 @@ class FinegrainEraserBbox(FALNode):
     box_prompts: list[BoxPromptBase] = Field(
         default=[], description="List of bounding box coordinates to erase (only one box prompt is supported)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to edit"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "mode": self.mode.value,
             "seed": self.seed,
-            "box_prompts": self.box_prompts,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "box_prompts": [item.model_dump(exclude={"type"}) for item in self.box_prompts],
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -20949,17 +20949,17 @@ class FinegrainEraser(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducible generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to edit"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "mode": self.mode.value,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -20992,15 +20992,15 @@ class StarVector(FALNode):
     seed: int = Field(
         default=-1, description="seed to be used for generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21036,16 +21036,16 @@ class Ghiblify(FALNode):
     seed: str = Field(
         default="", description="The seed to use for the upscale. If not provided, a random seed will be used."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to upscale."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21094,17 +21094,17 @@ class Thera(FALNode):
     backbone: Backbone = Field(
         default="", description="Backbone to use for upscaling"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for upscaling"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "upscale_factor": self.upscale_factor,
             "seed": self.seed,
             "backbone": self.backbone.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21148,16 +21148,16 @@ class MixDehazeNet(FALNode):
     seed: int = Field(
         default=-1, description="seed to be used for generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for image enhancement"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "model": self.model.value,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21192,15 +21192,15 @@ class GeminiFlashEdit(FALNode):
     prompt: str = Field(
         default="", description="The prompt for image generation or editing"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an input image for editing. If not provided, generates a new image."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21233,14 +21233,14 @@ class GeminiFlashEditMulti(FALNode):
     prompt: str = Field(
         default="", description="The prompt for image generation or editing"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="List of URLs of input images for editing"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "prompt": self.prompt,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -21279,17 +21279,17 @@ class InvisibleWatermark(FALNode):
     length: int = Field(
         default=0, description="Length of watermark bits to decode (required when decode=True)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be watermarked or decoded"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "decode": self.decode,
             "watermark": self.watermark,
             "length": self.length,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21336,7 +21336,7 @@ class RundiffusionFalJuggernautFluxBaseImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     strength: float = Field(
@@ -21359,12 +21359,12 @@ class RundiffusionFalJuggernautFluxBaseImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
@@ -21419,7 +21419,7 @@ class RundiffusionFalJuggernautFluxProImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate an image from."
     )
     strength: float = Field(
@@ -21442,12 +21442,12 @@ class RundiffusionFalJuggernautFluxProImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
@@ -21488,15 +21488,15 @@ class DocresDewarp(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21544,16 +21544,16 @@ class Docres(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "task": self.task.value,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21600,16 +21600,16 @@ class Swin2sr(FALNode):
     seed: int = Field(
         default=-1, description="seed to be used for generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for image enhancement"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "task": self.task.value,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21681,7 +21681,7 @@ class IdeogramV2aRemix(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
     strength: float = Field(
@@ -21695,13 +21695,13 @@ class IdeogramV2aRemix(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "style": self.style.value,
             "expand_prompt": self.expand_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "seed": self.seed,
@@ -21776,7 +21776,7 @@ class IdeogramV2aTurboRemix(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
     strength: float = Field(
@@ -21790,13 +21790,13 @@ class IdeogramV2aTurboRemix(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "style": self.style.value,
             "expand_prompt": self.expand_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "seed": self.seed,
@@ -21858,12 +21858,12 @@ class EvfSam(FALNode):
     negative_prompt: str = Field(
         default="", description="Areas to exclude from segmentation (will be subtracted from prompt results)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "use_grounding_dino": self.use_grounding_dino,
@@ -21874,7 +21874,7 @@ class EvfSam(FALNode):
             "revert_mask": self.revert_mask,
             "blur_mask": self.blur_mask,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21909,15 +21909,15 @@ class Ddcolor(FALNode):
     seed: int = Field(
         default=-1, description="seed to be used for generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -21966,7 +21966,7 @@ class Sam2AutoSegment(FALNode):
     min_mask_region_area: int = Field(
         default=100, description="Minimum area of a mask region."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be automatically segmented"
     )
     sync_mode: bool = Field(
@@ -21980,12 +21980,12 @@ class Sam2AutoSegment(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "points_per_side": self.points_per_side,
             "output_format": self.output_format.value,
             "min_mask_region_area": self.min_mask_region_area,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "pred_iou_thresh": self.pred_iou_thresh,
             "stability_score_thresh": self.stability_score_thresh,
@@ -22021,15 +22021,15 @@ class NafnetDeblur(FALNode):
     seed: int = Field(
         default=-1, description="seed to be used for generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -22064,15 +22064,15 @@ class NafnetDenoise(FALNode):
     seed: int = Field(
         default=-1, description="seed to be used for generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -22247,8 +22247,8 @@ class PostProcessing(FALNode):
     enable_vignette: bool = Field(
         default=False, description="Enable vignette effect"
     )
-    dissolve_image_url: ImageRef = Field(
-        default="", description="URL of second image for dissolve"
+    dissolve_image: ImageRef = Field(
+        default=ImageRef(), description="URL of second image for dissolve"
     )
     red_shift: int = Field(
         default=0, description="Red channel shift amount"
@@ -22268,7 +22268,7 @@ class PostProcessing(FALNode):
     red_direction: RedDirection = Field(
         default=RedDirection.HORIZONTAL, description="Red channel shift direction"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to process"
     )
     vertex_x: float = Field(
@@ -22363,8 +22363,8 @@ class PostProcessing(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        dissolve_image_url_base64 = await context.image_to_base64(self.dissolve_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        dissolve_image_base64 = await context.image_to_base64(self.dissolve_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "blue_shift": self.blue_shift,
             "vertex_y": self.vertex_y,
@@ -22382,14 +22382,14 @@ class PostProcessing(FALNode):
             "tint_mode": self.tint_mode.value,
             "blur_type": self.blur_type.value,
             "enable_vignette": self.enable_vignette,
-            "dissolve_image_url": f"data:image/png;base64,{dissolve_image_url_base64}",
+            "dissolve_image_url": f"data:image/png;base64,{dissolve_image_base64}",
             "red_shift": self.red_shift,
             "enable_desaturate": self.enable_desaturate,
             "grain_intensity": self.grain_intensity,
             "dodge_burn_intensity": self.dodge_burn_intensity,
             "smart_sharpen_strength": self.smart_sharpen_strength,
             "red_direction": self.red_direction.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "vertex_x": self.vertex_x,
             "tint_strength": self.tint_strength,
             "enable_dissolve": self.enable_dissolve,
@@ -22460,7 +22460,7 @@ class Flowedit(FALNode):
     n_max: int = Field(
         default=23, description="Control the strength of the edit"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
     source_prompt: str = Field(
@@ -22483,12 +22483,12 @@ class Flowedit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "src_guidance_scale": self.src_guidance_scale,
             "n_min": self.n_min,
             "n_max": self.n_max,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "source_prompt": self.source_prompt,
             "tar_guidance_scale": self.tar_guidance_scale,
             "target_prompt": self.target_prompt,
@@ -22527,15 +22527,15 @@ class BenV2Image(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducible generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for background removal"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -22597,7 +22597,7 @@ class FluxControlLoraCannyImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     strength: float = Field(
@@ -22612,28 +22612,28 @@ class FluxControlLoraCannyImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    control_lora_image_url: ImageRef = Field(
+    control_lora_image: ImageRef = Field(
         default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        control_lora_image_url_base64 = await context.image_to_base64(self.control_lora_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        control_lora_image_base64 = await context.image_to_base64(self.control_lora_image)
         arguments = {
             "control_lora_strength": self.control_lora_strength,
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "guidance_scale": self.guidance_scale,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}",
         }
 
         # Remove None values
@@ -22697,7 +22697,7 @@ class FluxControlLoraDepthImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     sync_mode: bool = Field(
@@ -22712,28 +22712,28 @@ class FluxControlLoraDepthImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    control_lora_image_url: ImageRef = Field(
+    control_lora_image: ImageRef = Field(
         default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        control_lora_image_url_base64 = await context.image_to_base64(self.control_lora_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        control_lora_image_base64 = await context.image_to_base64(self.control_lora_image)
         arguments = {
             "prompt": self.prompt,
             "control_lora_strength": self.control_lora_strength,
             "image_size": self.image_size,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "guidance_scale": self.guidance_scale,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}",
         }
 
         # Remove None values
@@ -22777,7 +22777,7 @@ class IdeogramUpscale(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt with MagicPrompt functionality."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to upscale"
     )
     sync_mode: bool = Field(
@@ -22788,13 +22788,13 @@ class IdeogramUpscale(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "detail": self.detail,
             "resemblance": self.resemblance,
             "expand_prompt": self.expand_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
         }
@@ -22828,23 +22828,23 @@ class KlingV15KolorsVirtualTryOn(FALNode):
     - Automated image optimization
     """
 
-    garment_image_url: ImageRef = Field(
+    garment_image: ImageRef = Field(
         default=ImageRef(), description="Url to the garment image."
     )
     sync_mode: bool = Field(
         default=False, description="If true, the function will return the image in the response."
     )
-    human_image_url: ImageRef = Field(
+    human_image: ImageRef = Field(
         default=ImageRef(), description="Url for the human image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        garment_image_url_base64 = await context.image_to_base64(self.garment_image_url)
-        human_image_url_base64 = await context.image_to_base64(self.human_image_url)
+        garment_image_base64 = await context.image_to_base64(self.garment_image)
+        human_image_base64 = await context.image_to_base64(self.human_image)
         arguments = {
-            "garment_image_url": f"data:image/png;base64,{garment_image_url_base64}",
+            "garment_image_url": f"data:image/png;base64,{garment_image_base64}",
             "sync_mode": self.sync_mode,
-            "human_image_url": f"data:image/png;base64,{human_image_url_base64}",
+            "human_image_url": f"data:image/png;base64,{human_image_base64}",
         }
 
         # Remove None values
@@ -22896,7 +22896,7 @@ class FluxLoraCanny(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for canny input"
     )
     loras: list[LoraWeight] = Field(
@@ -22919,14 +22919,14 @@ class FluxLoraCanny(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -22997,7 +22997,7 @@ class FluxProV1FillFinetuned(FALNode):
     finetune_id: str = Field(
         default="", description="References your specific model"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -23009,7 +23009,7 @@ class FluxProV1FillFinetuned(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The mask URL to inpaint the image. Needs to match the dimensions of the input image."
     )
     enhance_prompt: bool = Field(
@@ -23017,19 +23017,19 @@ class FluxProV1FillFinetuned(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "finetune_strength": self.finetune_strength,
             "output_format": self.output_format.value,
             "finetune_id": self.finetune_id,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "enhance_prompt": self.enhance_prompt,
         }
 
@@ -23086,19 +23086,19 @@ class MoondreamNextDetection(FALNode):
     combine_points: bool = Field(
         default=False, description="Whether to combine points into a single point for point detection. This has no effect for bbox detection or gaze detection."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "detection_prompt": self.detection_prompt,
             "use_ensemble": self.use_ensemble,
             "task_type": self.task_type.value,
             "show_visualization": self.show_visualization,
             "combine_points": self.combine_points,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -23142,25 +23142,25 @@ class BriaEraserV2(FALNode):
     preserve_alpha: bool = Field(
         default=False, description="If set to true, attempts to preserve the alpha channel of the input image."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The URL of the binary mask image that represents the area that will be cleaned."
     )
     mask_type: MaskType = Field(
         default=MaskType.MANUAL, description="You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input Image to erase from"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_base64 = await context.image_to_base64(self.mask)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "preserve_alpha": self.preserve_alpha,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "mask_type": self.mask_type.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -23216,7 +23216,7 @@ class BriaExpand(FALNode):
     original_image_location: list[int] = Field(
         default=[], description="The desired location of the original image, inside the full canvas. Provide the location of the upper left corner of the original image. The location can also be outside the canvas (the original image will be cropped). Will be ignored if aspect_ratio is provided."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the input image."
     )
     sync_mode: bool = Field(
@@ -23236,12 +23236,12 @@ class BriaExpand(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "original_image_location": self.original_image_location,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "original_image_size": self.original_image_size,
             "canvas_size": self.canvas_size,
@@ -23282,7 +23282,7 @@ class BriaGenfill(FALNode):
     num_images: int = Field(
         default=1, description="Number of Images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input Image to erase from"
     )
     sync_mode: bool = Field(
@@ -23291,7 +23291,7 @@ class BriaGenfill(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The URL of the binary mask image that represents the area that will be cleaned."
     )
     negative_prompt: str = Field(
@@ -23299,15 +23299,15 @@ class BriaGenfill(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "negative_prompt": self.negative_prompt,
         }
 
@@ -23365,8 +23365,8 @@ class BriaProductShot(FALNode):
         MANUAL_PADDING = "manual_padding"
 
 
-    ref_image_url: ImageRef = Field(
-        default="", description="The URL of the reference image to be used for generating the new scene or background for the product shot. Use \"\" to leave empty.Either ref_image_url or scene_description has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp."
+    ref_image: ImageRef = Field(
+        default=ImageRef(), description="The URL of the reference image to be used for generating the new scene or background for the product shot. Use \"\" to leave empty.Either ref_image_url or scene_description has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp."
     )
     manual_placement_selection: ManualPlacementSelection = Field(
         default=ManualPlacementSelection.BOTTOM_CENTER, description="If you've selected placement_type=manual_placement, you should use this parameter to specify which placements/positions you would like to use from the list. You can select more than one placement in one request."
@@ -23398,15 +23398,15 @@ class BriaProductShot(FALNode):
     scene_description: str = Field(
         default="", description="Text description of the new scene or background for the provided product shot. Bria currently supports prompts in English only, excluding special characters."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the product shot to be placed in a lifestyle shot. If both image_url and image_file are provided, image_url will be used. Accepted formats are jpeg, jpg, png, webp. Maximum file size 12MB."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        ref_image_url_base64 = await context.image_to_base64(self.ref_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        ref_image_base64 = await context.image_to_base64(self.ref_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "ref_image_url": f"data:image/png;base64,{ref_image_url_base64}",
+            "ref_image_url": f"data:image/png;base64,{ref_image_base64}",
             "manual_placement_selection": self.manual_placement_selection.value,
             "num_results": self.num_results,
             "padding_values": self.padding_values,
@@ -23417,7 +23417,7 @@ class BriaProductShot(FALNode):
             "fast": self.fast,
             "optimize_description": self.optimize_description,
             "scene_description": self.scene_description,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -23452,15 +23452,15 @@ class BriaBackgroundRemove(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input Image to erase from"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -23498,13 +23498,13 @@ class BriaBackgroundReplaceV2(FALNode):
     num_images: int = Field(
         default=1, description="Number of Images to generate."
     )
-    ref_image_url: ImageRef = Field(
-        default="", description="The URL of the reference image to be used for generating the new background. Use \"\" to leave empty. Either ref_image_url or bg_prompt has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp."
+    ref_image: ImageRef = Field(
+        default=ImageRef(), description="The URL of the reference image to be used for generating the new background. Use \"\" to leave empty. Either ref_image_url or bg_prompt has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp."
     )
     refine_prompt: bool = Field(
         default=True, description="Whether to refine prompt"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input Image to erase from"
     )
     sync_mode: bool = Field(
@@ -23521,14 +23521,14 @@ class BriaBackgroundReplaceV2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        ref_image_url_base64 = await context.image_to_base64(self.ref_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        ref_image_base64 = await context.image_to_base64(self.ref_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "ref_image_url": f"data:image/png;base64,{ref_image_url_base64}",
+            "ref_image_url": f"data:image/png;base64,{ref_image_base64}",
             "refine_prompt": self.refine_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "fast": self.fast,
             "seed": self.seed,
@@ -23599,7 +23599,7 @@ class FluxLoraFill(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for fill operation"
     )
     sync_mode: bool = Field(
@@ -23619,18 +23619,18 @@ class FluxLoraFill(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resize_to_original": self.resize_to_original,
             "paste_back": self.paste_back,
             "image_size": self.image_size,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "guidance_scale": self.guidance_scale,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "fill_image": self.fill_image,
             "num_inference_steps": self.num_inference_steps,
@@ -23684,13 +23684,13 @@ class CatVton(FALNode):
         OUTER = "outer"
 
 
-    garment_image_url: ImageRef = Field(
+    garment_image: ImageRef = Field(
         default=ImageRef(), description="Url to the garment image."
     )
     image_size: str = Field(
         default="portrait_4_3", description="The size of the generated image."
     )
-    human_image_url: ImageRef = Field(
+    human_image: ImageRef = Field(
         default=ImageRef(), description="Url for the human image."
     )
     cloth_type: ClothType = Field(
@@ -23707,12 +23707,12 @@ class CatVton(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        garment_image_url_base64 = await context.image_to_base64(self.garment_image_url)
-        human_image_url_base64 = await context.image_to_base64(self.human_image_url)
+        garment_image_base64 = await context.image_to_base64(self.garment_image)
+        human_image_base64 = await context.image_to_base64(self.human_image)
         arguments = {
-            "garment_image_url": f"data:image/png;base64,{garment_image_url_base64}",
+            "garment_image_url": f"data:image/png;base64,{garment_image_base64}",
             "image_size": self.image_size,
-            "human_image_url": f"data:image/png;base64,{human_image_url_base64}",
+            "human_image_url": f"data:image/png;base64,{human_image_base64}",
             "cloth_type": self.cloth_type.value,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -23756,7 +23756,7 @@ class LeffaPoseTransfer(FALNode):
         PNG = "png"
 
 
-    pose_image_url: ImageRef = Field(
+    pose_image: ImageRef = Field(
         default=ImageRef(), description="Url for the human image."
     )
     output_format: OutputFormat = Field(
@@ -23777,22 +23777,22 @@ class LeffaPoseTransfer(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    person_image_url: ImageRef = Field(
+    person_image: ImageRef = Field(
         default=ImageRef(), description="Url to the garment image."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        pose_image_url_base64 = await context.image_to_base64(self.pose_image_url)
-        person_image_url_base64 = await context.image_to_base64(self.person_image_url)
+        pose_image_base64 = await context.image_to_base64(self.pose_image)
+        person_image_base64 = await context.image_to_base64(self.person_image)
         arguments = {
-            "pose_image_url": f"data:image/png;base64,{pose_image_url_base64}",
+            "pose_image_url": f"data:image/png;base64,{pose_image_base64}",
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
-            "person_image_url": f"data:image/png;base64,{person_image_url_base64}",
+            "person_image_url": f"data:image/png;base64,{person_image_base64}",
         }
 
         # Remove None values
@@ -23838,10 +23838,10 @@ class LeffaVirtualTryon(FALNode):
         DRESSES = "dresses"
 
 
-    garment_image_url: ImageRef = Field(
+    garment_image: ImageRef = Field(
         default=ImageRef(), description="Url to the garment image."
     )
-    human_image_url: ImageRef = Field(
+    human_image: ImageRef = Field(
         default=ImageRef(), description="Url for the human image."
     )
     output_format: OutputFormat = Field(
@@ -23867,11 +23867,11 @@ class LeffaVirtualTryon(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        garment_image_url_base64 = await context.image_to_base64(self.garment_image_url)
-        human_image_url_base64 = await context.image_to_base64(self.human_image_url)
+        garment_image_base64 = await context.image_to_base64(self.garment_image)
+        human_image_base64 = await context.image_to_base64(self.human_image)
         arguments = {
-            "garment_image_url": f"data:image/png;base64,{garment_image_url_base64}",
-            "human_image_url": f"data:image/png;base64,{human_image_url_base64}",
+            "garment_image_url": f"data:image/png;base64,{garment_image_base64}",
+            "human_image_url": f"data:image/png;base64,{human_image_base64}",
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "garment_type": self.garment_type.value,
@@ -23929,7 +23929,7 @@ class IdeogramV2TurboEdit(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -23938,21 +23938,21 @@ class IdeogramV2TurboEdit(FALNode):
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="The mask URL to inpaint the image. Needs to match the dimensions of the input image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
             "prompt": self.prompt,
             "style": self.style.value,
             "expand_prompt": self.expand_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
         }
 
         # Remove None values
@@ -24024,7 +24024,7 @@ class IdeogramV2TurboRemix(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
     strength: float = Field(
@@ -24038,13 +24038,13 @@ class IdeogramV2TurboRemix(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "style": self.style.value,
             "expand_prompt": self.expand_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "seed": self.seed,
@@ -24110,7 +24110,7 @@ class FluxProV11Redux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -24133,13 +24133,13 @@ class FluxProV11Redux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
@@ -24197,7 +24197,7 @@ class FluxLoraDepth(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for depth input"
     )
     loras: list[LoraWeight] = Field(
@@ -24220,14 +24220,14 @@ class FluxLoraDepth(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -24298,7 +24298,7 @@ class FluxProV11UltraRedux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from. Needs to match the dimensions of the mask."
     )
     sync_mode: bool = Field(
@@ -24321,14 +24321,14 @@ class FluxProV11UltraRedux(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio,
             "num_images": self.num_images,
             "raw": self.raw,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "enable_safety_checker": self.enable_safety_checker,
@@ -24396,7 +24396,7 @@ class IclightV2(FALNode):
     background_threshold: float = Field(
         default=0.67, description="Threshold for the background removal algorithm. A high threshold will produce sharper masks. Note: This parameter is currently deprecated and has no effect on the output."
     )
-    mask_image_url: ImageRef = Field(
+    mask_image: ImageRef = Field(
         default=ImageRef(), description="URL of mask to be used for ic-light conditioning image"
     )
     guidance_scale: float = Field(
@@ -24420,7 +24420,7 @@ class IclightV2(FALNode):
     hr_downscale: float = Field(
         default=0.5
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be used for relighting"
     )
     sync_mode: bool = Field(
@@ -24443,14 +24443,14 @@ class IclightV2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        mask_image_base64 = await context.image_to_base64(self.mask_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "initial_latent": self.initial_latent.value,
             "prompt": self.prompt,
             "image_size": self.image_size,
             "background_threshold": self.background_threshold,
-            "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
             "guidance_scale": self.guidance_scale,
             "lowres_denoise": self.lowres_denoise,
             "enable_safety_checker": self.enable_safety_checker,
@@ -24458,7 +24458,7 @@ class IclightV2(FALNode):
             "num_images": self.num_images,
             "output_format": self.output_format.value,
             "hr_downscale": self.hr_downscale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "highres_denoise": self.highres_denoise,
             "num_inference_steps": self.num_inference_steps,
@@ -24502,7 +24502,7 @@ class FluxDifferentialDiffusion(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use as initial image."
     )
     sync_mode: bool = Field(
@@ -24517,7 +24517,7 @@ class FluxDifferentialDiffusion(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    change_map_image_url: ImageRef = Field(
+    change_map_image: ImageRef = Field(
         default=ImageRef(), description="URL of change map."
     )
     enable_safety_checker: bool = Field(
@@ -24528,17 +24528,17 @@ class FluxDifferentialDiffusion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        change_map_image_url_base64 = await context.image_to_base64(self.change_map_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        change_map_image_base64 = await context.image_to_base64(self.change_map_image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "change_map_image_url": f"data:image/png;base64,{change_map_image_url_base64}",
+            "change_map_image_url": f"data:image/png;base64,{change_map_image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -24593,7 +24593,7 @@ class FluxPulid(FALNode):
     start_step: int = Field(
         default=0, description="The number of steps to start the CFG from."
     )
-    reference_image_url: ImageRef = Field(
+    reference_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting."
     )
     enable_safety_checker: bool = Field(
@@ -24622,13 +24622,13 @@ class FluxPulid(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        reference_image_base64 = await context.image_to_base64(self.reference_image)
         arguments = {
             "prompt": self.prompt,
             "id_weight": self.id_weight,
             "image_size": self.image_size,
             "start_step": self.start_step,
-            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "reference_image_url": f"data:image/png;base64,{reference_image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "max_sequence_length": self.max_sequence_length.value,
             "sync_mode": self.sync_mode,
@@ -24716,7 +24716,7 @@ class BirefnetV2(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the output image"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to remove background from"
     )
     model: Model = Field(
@@ -24733,11 +24733,11 @@ class BirefnetV2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "operating_resolution": self.operating_resolution.value,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "model": self.model.value,
             "sync_mode": self.sync_mode,
             "output_mask": self.output_mask,
@@ -24830,7 +24830,7 @@ class LivePortraitImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="Output format"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be animated"
     )
     woo: float = Field(
@@ -24850,7 +24850,7 @@ class LivePortraitImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "smile": self.smile,
             "eyebrow": self.eyebrow,
@@ -24869,7 +24869,7 @@ class LivePortraitImage(FALNode):
             "pupil_y": self.pupil_y,
             "rotate_yaw": self.rotate_yaw,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "woo": self.woo,
             "aaa": self.aaa,
             "flag_do_rot": self.flag_do_rot,
@@ -24989,7 +24989,7 @@ class FluxGeneralRfInversion(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to be edited"
     )
     fill_image: str = Field(
@@ -25001,7 +25001,7 @@ class FluxGeneralRfInversion(FALNode):
     reverse_guidance_schedule: ReverseGuidanceSchedule = Field(
         default=ReverseGuidanceSchedule.CONSTANT, description="Scheduler for applying reverse guidance."
     )
-    reference_image_url: ImageRef = Field(
+    reference_image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Reference-Only"
     )
     reverse_guidance_end: int = Field(
@@ -25045,17 +25045,17 @@ class FluxGeneralRfInversion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        reference_image_base64 = await context.image_to_base64(self.reference_image)
         arguments = {
             "prompt": self.prompt,
             "nag_end": self.nag_end,
             "image_size": self.image_size,
-            "control_loras": self.control_loras,
+            "control_loras": [item.model_dump(exclude={"type"}) for item in self.control_loras],
             "controller_guidance_reverse": self.controller_guidance_reverse,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "reverse_guidance_start": self.reverse_guidance_start,
-            "easycontrols": self.easycontrols,
+            "easycontrols": [item.model_dump(exclude={"type"}) for item in self.easycontrols],
             "guidance_scale": self.guidance_scale,
             "scheduler": self.scheduler.value,
             "output_format": self.output_format.value,
@@ -25066,14 +25066,14 @@ class FluxGeneralRfInversion(FALNode):
             "reference_end": self.reference_end,
             "controller_guidance_forward": self.controller_guidance_forward,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "fill_image": self.fill_image,
             "nag_scale": self.nag_scale,
             "reverse_guidance_schedule": self.reverse_guidance_schedule.value,
-            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "reference_image_url": f"data:image/png;base64,{reference_image_base64}",
             "reverse_guidance_end": self.reverse_guidance_end,
             "enable_safety_checker": self.enable_safety_checker,
-            "controlnet_unions": self.controlnet_unions,
+            "controlnet_unions": [item.model_dump(exclude={"type"}) for item in self.controlnet_unions],
             "negative_prompt": self.negative_prompt,
             "nag_tau": self.nag_tau,
             "num_images": self.num_images,
@@ -25083,7 +25083,7 @@ class FluxGeneralRfInversion(FALNode):
             "max_shift": self.max_shift,
             "num_inference_steps": self.num_inference_steps,
             "reference_start": self.reference_start,
-            "controlnets": self.controlnets,
+            "controlnets": [item.model_dump(exclude={"type"}) for item in self.controlnets],
         }
 
         # Remove None values
@@ -25121,16 +25121,16 @@ class ImagePreprocessorsHed(FALNode):
     scribble: bool = Field(
         default=False, description="Whether to use the scribble version of the HED detector"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "safe": self.safe,
             "scribble": self.scribble,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25162,14 +25162,14 @@ class ImagePreprocessorsDepthAnythingV2(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25215,16 +25215,16 @@ class ImagePreprocessorsScribble(FALNode):
     safe: bool = Field(
         default=False, description="Whether to use the safe version of the Scribble detector"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "model": self.model.value,
             "safe": self.safe,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25262,16 +25262,16 @@ class ImagePreprocessorsMlsd(FALNode):
     score_threshold: float = Field(
         default=0.1, description="Score threshold for the MLSD detector"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "distance_threshold": self.distance_threshold,
             "score_threshold": self.score_threshold,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25303,14 +25303,14 @@ class ImagePreprocessorsSam(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25348,16 +25348,16 @@ class ImagePreprocessorsMidas(FALNode):
     background_threshold: float = Field(
         default=0.1, description="Background threshold for the MiDaS detector"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "a": self.a,
             "background_threshold": self.background_threshold,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25387,14 +25387,14 @@ class ImagePreprocessorsTeed(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25429,15 +25429,15 @@ class ImagePreprocessorsLineart(FALNode):
     coarse: bool = Field(
         default=False, description="Whether to use the coarse model"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "coarse": self.coarse,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25469,14 +25469,14 @@ class ImagePreprocessorsZoe(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25517,17 +25517,17 @@ class ImagePreprocessorsPidi(FALNode):
     scribble: bool = Field(
         default=False, description="Whether to use the scribble version of the Pidi detector"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to process"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "safe": self.safe,
             "apply_filter": self.apply_filter,
             "scribble": self.scribble,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25583,19 +25583,19 @@ class Sam2Image(FALNode):
     apply_mask: bool = Field(
         default=False, description="Apply the mask on the image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be segmented"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "output_format": self.output_format.value,
-            "prompts": self.prompts,
-            "box_prompts": self.box_prompts,
+            "prompts": [item.model_dump(exclude={"type"}) for item in self.prompts],
+            "box_prompts": [item.model_dump(exclude={"type"}) for item in self.box_prompts],
             "apply_mask": self.apply_mask,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -25702,13 +25702,13 @@ class FluxGeneralInpainting(FALNode):
     mask_url: str = Field(
         default="", description="The mask to area to Inpaint in."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     nag_scale: float = Field(
         default=3, description="The scale for NAG. Higher values will result in a image that is more distant to the negative prompt."
     )
-    reference_image_url: ImageRef = Field(
+    reference_image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Reference-Only"
     )
     enable_safety_checker: bool = Field(
@@ -25758,16 +25758,16 @@ class FluxGeneralInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        reference_image_base64 = await context.image_to_base64(self.reference_image)
         arguments = {
             "prompt": self.prompt,
             "nag_end": self.nag_end,
             "image_size": self.image_size,
-            "control_loras": self.control_loras,
-            "loras": self.loras,
+            "control_loras": [item.model_dump(exclude={"type"}) for item in self.control_loras],
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "scheduler": self.scheduler.value,
-            "easycontrols": self.easycontrols,
+            "easycontrols": [item.model_dump(exclude={"type"}) for item in self.easycontrols],
             "guidance_scale": self.guidance_scale,
             "real_cfg_scale": self.real_cfg_scale,
             "output_format": self.output_format.value,
@@ -25779,22 +25779,22 @@ class FluxGeneralInpainting(FALNode):
             "reference_strength": self.reference_strength,
             "seed": self.seed,
             "mask_url": self.mask_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "nag_scale": self.nag_scale,
-            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "reference_image_url": f"data:image/png;base64,{reference_image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
-            "controlnet_unions": self.controlnet_unions,
+            "controlnet_unions": [item.model_dump(exclude={"type"}) for item in self.controlnet_unions],
             "negative_prompt": self.negative_prompt,
             "nag_tau": self.nag_tau,
             "num_images": self.num_images,
             "use_beta_schedule": self.use_beta_schedule,
-            "ip_adapters": self.ip_adapters,
+            "ip_adapters": [item.model_dump(exclude={"type"}) for item in self.ip_adapters],
             "base_shift": self.base_shift,
             "nag_alpha": self.nag_alpha,
             "strength": self.strength,
             "max_shift": self.max_shift,
             "num_inference_steps": self.num_inference_steps,
-            "controlnets": self.controlnets,
+            "controlnets": [item.model_dump(exclude={"type"}) for item in self.controlnets],
             "reference_start": self.reference_start,
             "use_real_cfg": self.use_real_cfg,
         }
@@ -25900,13 +25900,13 @@ class FluxGeneralImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     nag_scale: float = Field(
         default=3, description="The scale for NAG. Higher values will result in a image that is more distant to the negative prompt."
     )
-    reference_image_url: ImageRef = Field(
+    reference_image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Reference-Only"
     )
     enable_safety_checker: bool = Field(
@@ -25956,16 +25956,16 @@ class FluxGeneralImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        reference_image_base64 = await context.image_to_base64(self.reference_image)
         arguments = {
             "prompt": self.prompt,
             "nag_end": self.nag_end,
             "image_size": self.image_size,
-            "control_loras": self.control_loras,
-            "loras": self.loras,
+            "control_loras": [item.model_dump(exclude={"type"}) for item in self.control_loras],
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "scheduler": self.scheduler.value,
-            "easycontrols": self.easycontrols,
+            "easycontrols": [item.model_dump(exclude={"type"}) for item in self.easycontrols],
             "guidance_scale": self.guidance_scale,
             "real_cfg_scale": self.real_cfg_scale,
             "output_format": self.output_format.value,
@@ -25976,22 +25976,22 @@ class FluxGeneralImageToImage(FALNode):
             "reference_end": self.reference_end,
             "reference_strength": self.reference_strength,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "nag_scale": self.nag_scale,
-            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "reference_image_url": f"data:image/png;base64,{reference_image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
-            "controlnet_unions": self.controlnet_unions,
+            "controlnet_unions": [item.model_dump(exclude={"type"}) for item in self.controlnet_unions],
             "negative_prompt": self.negative_prompt,
             "nag_tau": self.nag_tau,
             "num_images": self.num_images,
             "use_beta_schedule": self.use_beta_schedule,
-            "ip_adapters": self.ip_adapters,
+            "ip_adapters": [item.model_dump(exclude={"type"}) for item in self.ip_adapters],
             "base_shift": self.base_shift,
             "nag_alpha": self.nag_alpha,
             "strength": self.strength,
             "max_shift": self.max_shift,
             "num_inference_steps": self.num_inference_steps,
-            "controlnets": self.controlnets,
+            "controlnets": [item.model_dump(exclude={"type"}) for item in self.controlnets],
             "reference_start": self.reference_start,
             "use_real_cfg": self.use_real_cfg,
         }
@@ -26097,13 +26097,13 @@ class FluxGeneralDifferentialDiffusion(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use as initial image."
     )
     nag_scale: float = Field(
         default=3, description="The scale for NAG. Higher values will result in a image that is more distant to the negative prompt."
     )
-    reference_image_url: ImageRef = Field(
+    reference_image: ImageRef = Field(
         default=ImageRef(), description="URL of Image for Reference-Only"
     )
     enable_safety_checker: bool = Field(
@@ -26118,7 +26118,7 @@ class FluxGeneralDifferentialDiffusion(FALNode):
     nag_tau: float = Field(
         default=2.5, description="The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value."
     )
-    change_map_image_url: ImageRef = Field(
+    change_map_image: ImageRef = Field(
         default=ImageRef(), description="URL of change map."
     )
     num_images: int = Field(
@@ -26156,17 +26156,17 @@ class FluxGeneralDifferentialDiffusion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        reference_image_url_base64 = await context.image_to_base64(self.reference_image_url)
-        change_map_image_url_base64 = await context.image_to_base64(self.change_map_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        reference_image_base64 = await context.image_to_base64(self.reference_image)
+        change_map_image_base64 = await context.image_to_base64(self.change_map_image)
         arguments = {
             "prompt": self.prompt,
             "nag_end": self.nag_end,
             "image_size": self.image_size,
-            "control_loras": self.control_loras,
-            "loras": self.loras,
+            "control_loras": [item.model_dump(exclude={"type"}) for item in self.control_loras],
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "scheduler": self.scheduler.value,
-            "easycontrols": self.easycontrols,
+            "easycontrols": [item.model_dump(exclude={"type"}) for item in self.easycontrols],
             "guidance_scale": self.guidance_scale,
             "real_cfg_scale": self.real_cfg_scale,
             "output_format": self.output_format.value,
@@ -26177,23 +26177,23 @@ class FluxGeneralDifferentialDiffusion(FALNode):
             "reference_end": self.reference_end,
             "reference_strength": self.reference_strength,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "nag_scale": self.nag_scale,
-            "reference_image_url": f"data:image/png;base64,{reference_image_url_base64}",
+            "reference_image_url": f"data:image/png;base64,{reference_image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
-            "controlnet_unions": self.controlnet_unions,
+            "controlnet_unions": [item.model_dump(exclude={"type"}) for item in self.controlnet_unions],
             "negative_prompt": self.negative_prompt,
             "nag_tau": self.nag_tau,
-            "change_map_image_url": f"data:image/png;base64,{change_map_image_url_base64}",
+            "change_map_image_url": f"data:image/png;base64,{change_map_image_base64}",
             "num_images": self.num_images,
             "use_beta_schedule": self.use_beta_schedule,
-            "ip_adapters": self.ip_adapters,
+            "ip_adapters": [item.model_dump(exclude={"type"}) for item in self.ip_adapters],
             "base_shift": self.base_shift,
             "nag_alpha": self.nag_alpha,
             "strength": self.strength,
             "max_shift": self.max_shift,
             "num_inference_steps": self.num_inference_steps,
-            "controlnets": self.controlnets,
+            "controlnets": [item.model_dump(exclude={"type"}) for item in self.controlnets],
             "reference_start": self.reference_start,
             "use_real_cfg": self.use_real_cfg,
         }
@@ -26247,7 +26247,7 @@ class FluxLoraImageToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
     sync_mode: bool = Field(
@@ -26273,16 +26273,16 @@ class FluxLoraImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "strength": self.strength,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -26342,13 +26342,13 @@ class SdxlControlnetUnionInpainting(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
     )
-    normal_image_url: ImageRef = Field(
+    normal_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
-    teed_image_url: ImageRef = Field(
+    teed_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     loras: list[LoraWeight] = Field(
@@ -26357,7 +26357,7 @@ class SdxlControlnetUnionInpainting(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    canny_image_url: ImageRef = Field(
+    canny_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     segmentation_preprocess: bool = Field(
@@ -26366,7 +26366,7 @@ class SdxlControlnetUnionInpainting(FALNode):
     format: Format = Field(
         default=Format.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     sync_mode: bool = Field(
@@ -26381,10 +26381,10 @@ class SdxlControlnetUnionInpainting(FALNode):
     mask_url: str = Field(
         default="", description="The URL of the mask to use for inpainting."
     )
-    segmentation_image_url: ImageRef = Field(
+    segmentation_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    openpose_image_url: ImageRef = Field(
+    openpose_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     canny_preprocess: bool = Field(
@@ -26393,7 +26393,7 @@ class SdxlControlnetUnionInpainting(FALNode):
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    depth_image_url: ImageRef = Field(
+    depth_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     normal_preprocess: bool = Field(
@@ -26428,35 +26428,35 @@ class SdxlControlnetUnionInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        normal_image_url_base64 = await context.image_to_base64(self.normal_image_url)
-        teed_image_url_base64 = await context.image_to_base64(self.teed_image_url)
-        canny_image_url_base64 = await context.image_to_base64(self.canny_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        segmentation_image_url_base64 = await context.image_to_base64(self.segmentation_image_url)
-        openpose_image_url_base64 = await context.image_to_base64(self.openpose_image_url)
-        depth_image_url_base64 = await context.image_to_base64(self.depth_image_url)
+        normal_image_base64 = await context.image_to_base64(self.normal_image)
+        teed_image_base64 = await context.image_to_base64(self.teed_image)
+        canny_image_base64 = await context.image_to_base64(self.canny_image)
+        image_base64 = await context.image_to_base64(self.image)
+        segmentation_image_base64 = await context.image_to_base64(self.segmentation_image)
+        openpose_image_base64 = await context.image_to_base64(self.openpose_image)
+        depth_image_base64 = await context.image_to_base64(self.depth_image)
         arguments = {
             "prompt": self.prompt,
             "depth_preprocess": self.depth_preprocess,
             "image_size": self.image_size,
-            "normal_image_url": f"data:image/png;base64,{normal_image_url_base64}",
-            "embeddings": self.embeddings,
-            "teed_image_url": f"data:image/png;base64,{teed_image_url_base64}",
-            "loras": self.loras,
+            "normal_image_url": f"data:image/png;base64,{normal_image_base64}",
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
+            "teed_image_url": f"data:image/png;base64,{teed_image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
-            "canny_image_url": f"data:image/png;base64,{canny_image_url_base64}",
+            "canny_image_url": f"data:image/png;base64,{canny_image_base64}",
             "segmentation_preprocess": self.segmentation_preprocess,
             "format": self.format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "request_id": self.request_id,
             "seed": self.seed,
             "mask_url": self.mask_url,
-            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_url_base64}",
-            "openpose_image_url": f"data:image/png;base64,{openpose_image_url_base64}",
+            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_base64}",
+            "openpose_image_url": f"data:image/png;base64,{openpose_image_base64}",
             "canny_preprocess": self.canny_preprocess,
             "expand_prompt": self.expand_prompt,
-            "depth_image_url": f"data:image/png;base64,{depth_image_url_base64}",
+            "depth_image_url": f"data:image/png;base64,{depth_image_base64}",
             "normal_preprocess": self.normal_preprocess,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -26522,13 +26522,13 @@ class SdxlControlnetUnionImageToImage(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image. Leave it none to automatically infer from the control image."
     )
-    normal_image_url: ImageRef = Field(
+    normal_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
-    teed_image_url: ImageRef = Field(
+    teed_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     loras: list[LoraWeight] = Field(
@@ -26537,7 +26537,7 @@ class SdxlControlnetUnionImageToImage(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    canny_image_url: ImageRef = Field(
+    canny_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     segmentation_preprocess: bool = Field(
@@ -26546,7 +26546,7 @@ class SdxlControlnetUnionImageToImage(FALNode):
     format: Format = Field(
         default=Format.JPEG, description="The format of the generated image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     sync_mode: bool = Field(
@@ -26558,10 +26558,10 @@ class SdxlControlnetUnionImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    segmentation_image_url: ImageRef = Field(
+    segmentation_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    openpose_image_url: ImageRef = Field(
+    openpose_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     canny_preprocess: bool = Field(
@@ -26570,7 +26570,7 @@ class SdxlControlnetUnionImageToImage(FALNode):
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    depth_image_url: ImageRef = Field(
+    depth_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     normal_preprocess: bool = Field(
@@ -26611,34 +26611,34 @@ class SdxlControlnetUnionImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        normal_image_url_base64 = await context.image_to_base64(self.normal_image_url)
-        teed_image_url_base64 = await context.image_to_base64(self.teed_image_url)
-        canny_image_url_base64 = await context.image_to_base64(self.canny_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        segmentation_image_url_base64 = await context.image_to_base64(self.segmentation_image_url)
-        openpose_image_url_base64 = await context.image_to_base64(self.openpose_image_url)
-        depth_image_url_base64 = await context.image_to_base64(self.depth_image_url)
+        normal_image_base64 = await context.image_to_base64(self.normal_image)
+        teed_image_base64 = await context.image_to_base64(self.teed_image)
+        canny_image_base64 = await context.image_to_base64(self.canny_image)
+        image_base64 = await context.image_to_base64(self.image)
+        segmentation_image_base64 = await context.image_to_base64(self.segmentation_image)
+        openpose_image_base64 = await context.image_to_base64(self.openpose_image)
+        depth_image_base64 = await context.image_to_base64(self.depth_image)
         arguments = {
             "prompt": self.prompt,
             "depth_preprocess": self.depth_preprocess,
             "image_size": self.image_size,
-            "normal_image_url": f"data:image/png;base64,{normal_image_url_base64}",
-            "embeddings": self.embeddings,
-            "teed_image_url": f"data:image/png;base64,{teed_image_url_base64}",
-            "loras": self.loras,
+            "normal_image_url": f"data:image/png;base64,{normal_image_base64}",
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
+            "teed_image_url": f"data:image/png;base64,{teed_image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
-            "canny_image_url": f"data:image/png;base64,{canny_image_url_base64}",
+            "canny_image_url": f"data:image/png;base64,{canny_image_base64}",
             "segmentation_preprocess": self.segmentation_preprocess,
             "format": self.format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "request_id": self.request_id,
             "seed": self.seed,
-            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_url_base64}",
-            "openpose_image_url": f"data:image/png;base64,{openpose_image_url_base64}",
+            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_base64}",
+            "openpose_image_url": f"data:image/png;base64,{openpose_image_base64}",
             "canny_preprocess": self.canny_preprocess,
             "expand_prompt": self.expand_prompt,
-            "depth_image_url": f"data:image/png;base64,{depth_image_url_base64}",
+            "depth_image_url": f"data:image/png;base64,{depth_image_base64}",
             "normal_preprocess": self.normal_preprocess,
             "enable_safety_checker": self.enable_safety_checker,
             "preserve_aspect_ratio": self.preserve_aspect_ratio,
@@ -26697,19 +26697,19 @@ class Era3d(FALNode):
     seed: int = Field(
         default=-1, description="Seed for random number generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to remove background from"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "cfg": self.cfg,
             "background_removal": self.background_removal,
             "steps": self.steps,
             "crop_size": self.crop_size,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -26741,14 +26741,14 @@ class Florence2LargeDenseRegionCaption(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -26781,15 +26781,15 @@ class Florence2LargeReferringExpressionSegmentation(FALNode):
     text_input: str = Field(
         default="", description="Text input for the task"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "text_input": self.text_input,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -26819,14 +26819,14 @@ class Florence2LargeObjectDetection(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -26859,15 +26859,15 @@ class Florence2LargeOpenVocabularyDetection(FALNode):
     text_input: str = Field(
         default="", description="Text input for the task"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "text_input": self.text_input,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -26900,15 +26900,15 @@ class Florence2LargeCaptionToPhraseGrounding(FALNode):
     text_input: str = Field(
         default="", description="Text input for the task"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "text_input": self.text_input,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -26938,14 +26938,14 @@ class Florence2LargeRegionProposal(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -26975,14 +26975,14 @@ class Florence2LargeOcrWithRegion(FALNode):
     - Automated image optimization
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -27015,15 +27015,15 @@ class Florence2LargeRegionToSegmentation(FALNode):
     region: str = Field(
         default="", description="The user input coordinates"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "region": self.region,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -27065,7 +27065,7 @@ class StableDiffusionV3MediumImageToImage(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from."
     )
     strength: float = Field(
@@ -27091,13 +27091,13 @@ class StableDiffusionV3MediumImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt_expansion": self.prompt_expansion,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
@@ -27152,15 +27152,15 @@ class Dwpose(FALNode):
     draw_mode: DrawMode = Field(
         default=DrawMode.BODY_POSE, description="Mode of drawing the pose on the image. Options are: 'full-pose', 'body-pose', 'face-pose', 'hand-pose', 'face-hand-mask', 'face-mask', 'hand-mask'."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "draw_mode": self.draw_mode.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -27222,7 +27222,7 @@ class Sd15DepthControlnet(FALNode):
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    control_image_url: ImageRef = Field(
+    control_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     num_inference_steps: int = Field(
@@ -27236,19 +27236,19 @@ class Sd15DepthControlnet(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        control_image_base64 = await context.image_to_base64(self.control_image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
             "sync_mode": self.sync_mode,
-            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}",
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
             "enable_deep_cache": self.enable_deep_cache,
@@ -27286,7 +27286,7 @@ class OmniZero(FALNode):
     prompt: str = Field(
         default="", description="Prompt to guide the image generation."
     )
-    identity_image_url: ImageRef = Field(
+    identity_image: ImageRef = Field(
         default=ImageRef(), description="Identity image url."
     )
     identity_strength: float = Field(
@@ -27304,7 +27304,7 @@ class OmniZero(FALNode):
     negative_prompt: str = Field(
         default="", description="Negative prompt to guide the image generation."
     )
-    composition_image_url: ImageRef = Field(
+    composition_image: ImageRef = Field(
         default=ImageRef(), description="Composition image url."
     )
     depth_strength: float = Field(
@@ -27313,10 +27313,10 @@ class OmniZero(FALNode):
     composition_strength: float = Field(
         default=1, description="Composition strength."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image url."
     )
-    style_image_url: ImageRef = Field(
+    style_image: ImageRef = Field(
         default=ImageRef(), description="Style image url."
     )
     face_strength: float = Field(
@@ -27330,23 +27330,23 @@ class OmniZero(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        identity_image_url_base64 = await context.image_to_base64(self.identity_image_url)
-        composition_image_url_base64 = await context.image_to_base64(self.composition_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        style_image_url_base64 = await context.image_to_base64(self.style_image_url)
+        identity_image_base64 = await context.image_to_base64(self.identity_image)
+        composition_image_base64 = await context.image_to_base64(self.composition_image)
+        image_base64 = await context.image_to_base64(self.image)
+        style_image_base64 = await context.image_to_base64(self.style_image)
         arguments = {
             "prompt": self.prompt,
-            "identity_image_url": f"data:image/png;base64,{identity_image_url_base64}",
+            "identity_image_url": f"data:image/png;base64,{identity_image_base64}",
             "identity_strength": self.identity_strength,
             "number_of_images": self.number_of_images,
             "guidance_scale": self.guidance_scale,
             "image_strength": self.image_strength,
             "negative_prompt": self.negative_prompt,
-            "composition_image_url": f"data:image/png;base64,{composition_image_url_base64}",
+            "composition_image_url": f"data:image/png;base64,{composition_image_base64}",
             "depth_strength": self.depth_strength,
             "composition_strength": self.composition_strength,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "style_image_url": f"data:image/png;base64,{style_image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "style_image_url": f"data:image/png;base64,{style_image_base64}",
             "face_strength": self.face_strength,
             "style_strength": self.style_strength,
             "seed": self.seed,
@@ -27396,7 +27396,7 @@ class IpAdapterFaceId(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
-    face_image_url: ImageRef = Field(
+    face_image: ImageRef = Field(
         default=ImageRef(), description="An image of a face to match. If an image with a size of 640x640 is not provided, it will be scaled and cropped to that size."
     )
     width: int = Field(
@@ -27429,7 +27429,7 @@ class IpAdapterFaceId(FALNode):
     model_type: ModelType = Field(
         default=ModelType.VALUE_1_5_V1, description="The model type to use. 1_5 is the default and is recommended for most use cases."
     )
-    face_images_data_url: ImageRef = Field(
+    face_images_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of faces. The images embedding will be averaged to create a more accurate face id."
     )
     num_inference_steps: int = Field(
@@ -27437,11 +27437,11 @@ class IpAdapterFaceId(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        face_image_url_base64 = await context.image_to_base64(self.face_image_url)
-        face_images_data_url_base64 = await context.image_to_base64(self.face_images_data_url)
+        face_image_base64 = await context.image_to_base64(self.face_image)
+        face_images_data_base64 = await context.image_to_base64(self.face_images_data)
         arguments = {
             "prompt": self.prompt,
-            "face_image_url": f"data:image/png;base64,{face_image_url_base64}",
+            "face_image_url": f"data:image/png;base64,{face_image_base64}",
             "width": self.width,
             "face_id_det_size": self.face_id_det_size,
             "guidance_scale": self.guidance_scale,
@@ -27452,7 +27452,7 @@ class IpAdapterFaceId(FALNode):
             "base_1_5_model_repo": self.base_1_5_model_repo,
             "seed": self.seed,
             "model_type": self.model_type.value,
-            "face_images_data_url": f"data:image/png;base64,{face_images_data_url_base64}",
+            "face_images_data_url": f"data:image/png;base64,{face_images_data_base64}",
             "num_inference_steps": self.num_inference_steps,
         }
 
@@ -27527,7 +27527,7 @@ class LoraInpaint(FALNode):
     embeddings: list[Embedding] = Field(
         default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
     )
-    ic_light_model_url: ImageRef = Field(
+    ic_light_model: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model to use for the image generation."
     )
     image_encoder_weight_name: str = Field(
@@ -27566,19 +27566,19 @@ class LoraInpaint(FALNode):
     variant: str = Field(
         default="", description="The variant of the model to use for huggingface models, e.g. 'fp16'."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for image to image/inpainting."
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="URL of black-and-white image to use as mask during inpainting."
     )
     image_encoder_subfolder: str = Field(
         default="", description="The subfolder of the image encoder model to use for the image generation."
     )
-    ic_light_model_background_image_url: ImageRef = Field(
+    ic_light_model_background_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model background image to use for the image generation. Make sure to use a background compatible with the model."
     )
     rescale_betas_snr_zero: bool = Field(
@@ -27614,7 +27614,7 @@ class LoraInpaint(FALNode):
     debug_latents: bool = Field(
         default=False, description="If set to true, the latents will be saved for debugging."
     )
-    ic_light_image_url: ImageRef = Field(
+    ic_light_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model image to use for the image generation."
     )
     unet_name: str = Field(
@@ -27634,20 +27634,20 @@ class LoraInpaint(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        ic_light_model_url_base64 = await context.image_to_base64(self.ic_light_model_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
-        ic_light_model_background_image_url_base64 = await context.image_to_base64(self.ic_light_model_background_image_url)
-        ic_light_image_url_base64 = await context.image_to_base64(self.ic_light_image_url)
+        ic_light_model_base64 = await context.image_to_base64(self.ic_light_model)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
+        ic_light_model_background_image_base64 = await context.image_to_base64(self.ic_light_model_background_image)
+        ic_light_image_base64 = await context.image_to_base64(self.ic_light_image)
         arguments = {
             "prompt": self.prompt,
             "noise_strength": self.noise_strength,
             "tile_height": self.tile_height,
-            "embeddings": self.embeddings,
-            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_url_base64}",
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
+            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_base64}",
             "image_encoder_weight_name": self.image_encoder_weight_name,
-            "ip_adapter": self.ip_adapter,
-            "loras": self.loras,
+            "ip_adapter": [item.model_dump(exclude={"type"}) for item in self.ip_adapter],
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "scheduler": self.scheduler.value if self.scheduler else None,
             "sigmas": self.sigmas,
             "guidance_scale": self.guidance_scale,
@@ -27657,11 +27657,11 @@ class LoraInpaint(FALNode):
             "model_name": self.model_name,
             "prompt_weighting": self.prompt_weighting,
             "variant": self.variant,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "image_encoder_subfolder": self.image_encoder_subfolder,
-            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_url_base64}",
+            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_base64}",
             "rescale_betas_snr_zero": self.rescale_betas_snr_zero,
             "tile_width": self.tile_width,
             "controlnet_guess_mode": self.controlnet_guess_mode,
@@ -27673,11 +27673,11 @@ class LoraInpaint(FALNode):
             "image_format": self.image_format.value,
             "num_images": self.num_images,
             "debug_latents": self.debug_latents,
-            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_url_base64}",
+            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_base64}",
             "unet_name": self.unet_name,
             "clip_skip": self.clip_skip,
             "tile_stride_height": self.tile_stride_height,
-            "controlnets": self.controlnets,
+            "controlnets": [item.model_dump(exclude={"type"}) for item in self.controlnets],
             "num_inference_steps": self.num_inference_steps,
         }
 
@@ -27754,7 +27754,7 @@ class LoraImageToImage(FALNode):
     embeddings: list[Embedding] = Field(
         default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
     )
-    ic_light_model_url: ImageRef = Field(
+    ic_light_model: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model to use for the image generation."
     )
     image_encoder_weight_name: str = Field(
@@ -27793,7 +27793,7 @@ class LoraImageToImage(FALNode):
     variant: str = Field(
         default="", description="The variant of the model to use for huggingface models, e.g. 'fp16'."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for image to image/inpainting."
     )
     controlnet_guess_mode: bool = Field(
@@ -27805,7 +27805,7 @@ class LoraImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    ic_light_model_background_image_url: ImageRef = Field(
+    ic_light_model_background_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model background image to use for the image generation. Make sure to use a background compatible with the model."
     )
     rescale_betas_snr_zero: bool = Field(
@@ -27838,7 +27838,7 @@ class LoraImageToImage(FALNode):
     debug_latents: bool = Field(
         default=False, description="If set to true, the latents will be saved for debugging."
     )
-    ic_light_image_url: ImageRef = Field(
+    ic_light_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the IC Light model image to use for the image generation."
     )
     unet_name: str = Field(
@@ -27858,19 +27858,19 @@ class LoraImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        ic_light_model_url_base64 = await context.image_to_base64(self.ic_light_model_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        ic_light_model_background_image_url_base64 = await context.image_to_base64(self.ic_light_model_background_image_url)
-        ic_light_image_url_base64 = await context.image_to_base64(self.ic_light_image_url)
+        ic_light_model_base64 = await context.image_to_base64(self.ic_light_model)
+        image_base64 = await context.image_to_base64(self.image)
+        ic_light_model_background_image_base64 = await context.image_to_base64(self.ic_light_model_background_image)
+        ic_light_image_base64 = await context.image_to_base64(self.ic_light_image)
         arguments = {
             "prompt": self.prompt,
             "noise_strength": self.noise_strength,
             "tile_height": self.tile_height,
-            "embeddings": self.embeddings,
-            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_url_base64}",
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
+            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_base64}",
             "image_encoder_weight_name": self.image_encoder_weight_name,
-            "ip_adapter": self.ip_adapter,
-            "loras": self.loras,
+            "ip_adapter": [item.model_dump(exclude={"type"}) for item in self.ip_adapter],
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "scheduler": self.scheduler.value if self.scheduler else None,
             "sigmas": self.sigmas,
             "guidance_scale": self.guidance_scale,
@@ -27880,11 +27880,11 @@ class LoraImageToImage(FALNode):
             "model_name": self.model_name,
             "prompt_weighting": self.prompt_weighting,
             "variant": self.variant,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "controlnet_guess_mode": self.controlnet_guess_mode,
             "image_encoder_subfolder": self.image_encoder_subfolder,
             "seed": self.seed,
-            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_url_base64}",
+            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_base64}",
             "rescale_betas_snr_zero": self.rescale_betas_snr_zero,
             "tile_width": self.tile_width,
             "prediction_type": self.prediction_type.value,
@@ -27895,11 +27895,11 @@ class LoraImageToImage(FALNode):
             "image_format": self.image_format.value,
             "num_images": self.num_images,
             "debug_latents": self.debug_latents,
-            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_url_base64}",
+            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_base64}",
             "unet_name": self.unet_name,
             "clip_skip": self.clip_skip,
             "tile_stride_height": self.tile_stride_height,
-            "controlnets": self.controlnets,
+            "controlnets": [item.model_dump(exclude={"type"}) for item in self.controlnets],
             "num_inference_steps": self.num_inference_steps,
         }
 
@@ -27983,7 +27983,7 @@ class FastSdxlImageToImage(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -28006,13 +28006,13 @@ class FastSdxlImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "guidance_scale": self.guidance_scale,
             "preserve_aspect_ratio": self.preserve_aspect_ratio,
@@ -28020,7 +28020,7 @@ class FastSdxlImageToImage(FALNode):
             "crop_output": self.crop_output,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "safety_checker_version": self.safety_checker_version.value,
@@ -28103,7 +28103,7 @@ class FastSdxlInpainting(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -28129,19 +28129,19 @@ class FastSdxlInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "safety_checker_version": self.safety_checker_version.value,
@@ -28192,7 +28192,7 @@ class FaceToSticker(FALNode):
     ip_adapter_weight: float = Field(
         default=0.2, description="The weight of the IP adapter."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the video."
     )
     upscale_steps: int = Field(
@@ -28221,13 +28221,13 @@ class FaceToSticker(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "enable_safety_checker": self.enable_safety_checker,
             "image_size": self.image_size,
             "ip_adapter_weight": self.ip_adapter_weight,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "upscale_steps": self.upscale_steps,
             "instant_id_strength": self.instant_id_strength,
             "upscale": self.upscale,
@@ -28306,10 +28306,10 @@ class Photomaker(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    image_archive_url: ImageRef = Field(
+    image_archive: ImageRef = Field(
         default=ImageRef(), description="The URL of the image archive containing the images you want to use."
     )
-    initial_image_url: ImageRef = Field(
+    initial_image: ImageRef = Field(
         default=ImageRef(), description="Optional initial image for img2img"
     )
     num_inference_steps: int = Field(
@@ -28326,8 +28326,8 @@ class Photomaker(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_archive_url_base64 = await context.image_to_base64(self.image_archive_url)
-        initial_image_url_base64 = await context.image_to_base64(self.initial_image_url)
+        image_archive_base64 = await context.image_to_base64(self.image_archive)
+        initial_image_base64 = await context.image_to_base64(self.initial_image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -28335,8 +28335,8 @@ class Photomaker(FALNode):
             "style": self.style.value,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_archive_url": f"data:image/png;base64,{image_archive_url_base64}",
-            "initial_image_url": f"data:image/png;base64,{initial_image_url_base64}",
+            "image_archive_url": f"data:image/png;base64,{image_archive_base64}",
+            "initial_image_url": f"data:image/png;base64,{initial_image_base64}",
             "num_inference_steps": self.num_inference_steps,
             "initial_image_strength": self.initial_image_strength,
             "base_pipeline": self.base_pipeline.value,
@@ -28416,7 +28416,7 @@ class CreativeUpscaler(FALNode):
     base_model_url: str = Field(
         default="", description="The URL to the base model to use for the upscaling"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to upscale."
     )
     creativity: float = Field(
@@ -28439,7 +28439,7 @@ class CreativeUpscaler(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "shape_preservation": self.shape_preservation,
             "prompt": self.prompt,
@@ -28453,7 +28453,7 @@ class CreativeUpscaler(FALNode):
             "additional_lora_scale": self.additional_lora_scale,
             "detail": self.detail,
             "base_model_url": self.base_model_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "creativity": self.creativity,
             "override_size_limits": self.override_size_limits,
             "prompt_suffix": self.prompt_suffix,
@@ -28540,7 +28540,7 @@ class PlaygroundV25ImageToImage(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -28560,11 +28560,11 @@ class PlaygroundV25ImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "guidance_rescale": self.guidance_rescale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -28574,7 +28574,7 @@ class PlaygroundV25ImageToImage(FALNode):
             "crop_output": self.crop_output,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "safety_checker_version": self.safety_checker_version.value,
             "request_id": self.request_id,
@@ -28665,7 +28665,7 @@ class FastLightningSdxlImageToImage(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -28688,11 +28688,11 @@ class FastLightningSdxlImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "guidance_rescale": self.guidance_rescale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -28700,7 +28700,7 @@ class FastLightningSdxlImageToImage(FALNode):
             "crop_output": self.crop_output,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "safety_checker_version": self.safety_checker_version.value,
@@ -28786,7 +28786,7 @@ class FastLightningSdxlInpainting(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -28812,17 +28812,17 @@ class FastLightningSdxlInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "guidance_rescale": self.guidance_rescale,
             "enable_safety_checker": self.enable_safety_checker,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "safety_checker_version": self.safety_checker_version.value,
@@ -28906,7 +28906,7 @@ class PlaygroundV25Inpainting(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -28929,11 +28929,11 @@ class PlaygroundV25Inpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "embeddings": self.embeddings,
+            "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "guidance_rescale": self.guidance_rescale,
             "guidance_scale": self.guidance_scale,
@@ -28941,7 +28941,7 @@ class PlaygroundV25Inpainting(FALNode):
             "negative_prompt": self.negative_prompt,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "safety_checker_version": self.safety_checker_version.value,
             "request_id": self.request_id,
@@ -29028,7 +29028,7 @@ class FastLcmDiffusionInpainting(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -29057,7 +29057,7 @@ class FastLcmDiffusionInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -29068,7 +29068,7 @@ class FastLcmDiffusionInpainting(FALNode):
             "negative_prompt": self.negative_prompt,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "safety_checker_version": self.safety_checker_version.value,
@@ -29163,7 +29163,7 @@ class FastLcmDiffusionImageToImage(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     sync_mode: bool = Field(
@@ -29189,7 +29189,7 @@ class FastLcmDiffusionImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -29202,7 +29202,7 @@ class FastLcmDiffusionImageToImage(FALNode):
             "crop_output": self.crop_output,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "model_name": self.model_name.value,
             "safety_checker_version": self.safety_checker_version.value,
@@ -29244,15 +29244,15 @@ class Retoucher(FALNode):
     seed: int = Field(
         default=-1, description="Seed for reproducibility. Different seeds will make slightly different results."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to be retouched."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -29291,17 +29291,17 @@ class ImageutilsDepth(FALNode):
     depth_and_normal: bool = Field(
         default=False, description="depth_and_normal"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image url."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "bg_th": self.bg_th,
             "a": self.a,
             "depth_and_normal": self.depth_and_normal,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -29342,17 +29342,17 @@ class ImageutilsMarigoldDepth(FALNode):
     processing_res: int = Field(
         default=0, description="Maximum processing resolution. Defaults `0` which means it uses the size of the input image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image url."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "ensemble_size": self.ensemble_size,
             "num_inference_steps": self.num_inference_steps,
             "processing_res": self.processing_res,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -29436,7 +29436,7 @@ class Pulid(FALNode):
             "id_mix": self.id_mix,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "reference_images": self.reference_images,
+            "reference_images": [item.model_dump(exclude={"type"}) for item in self.reference_images],
             "negative_prompt": self.negative_prompt,
             "seed": self.seed,
         }
@@ -29497,7 +29497,7 @@ class FastSdxlControlnetCannyImageToImage(FALNode):
     controlnet_conditioning_scale: float = Field(
         default=0.5, description="The scale of the controlnet conditioning."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -29506,7 +29506,7 @@ class FastSdxlControlnetCannyImageToImage(FALNode):
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    control_image_url: ImageRef = Field(
+    control_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     num_inference_steps: int = Field(
@@ -29517,22 +29517,22 @@ class FastSdxlControlnetCannyImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        control_image_base64 = await context.image_to_base64(self.control_image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
-            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}",
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
         }
@@ -29593,7 +29593,7 @@ class FastSdxlControlnetCannyInpainting(FALNode):
     controlnet_conditioning_scale: float = Field(
         default=0.5, description="The scale of the controlnet conditioning."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
     strength: float = Field(
@@ -29602,7 +29602,7 @@ class FastSdxlControlnetCannyInpainting(FALNode):
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    control_image_url: ImageRef = Field(
+    control_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
     seed: int = Field(
@@ -29616,22 +29616,22 @@ class FastSdxlControlnetCannyInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        control_image_url_base64 = await context.image_to_base64(self.control_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        control_image_base64 = await context.image_to_base64(self.control_image)
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
-            "control_image_url": f"data:image/png;base64,{control_image_url_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}",
             "seed": self.seed,
             "mask_url": self.mask_url,
             "num_inference_steps": self.num_inference_steps,
@@ -29672,7 +29672,7 @@ class LcmSd15I2i(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate. The function will return a list of images with the same prompt and negative prompt but different seeds."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a base."
     )
     strength: float = Field(
@@ -29701,11 +29701,11 @@ class LcmSd15I2i(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "enable_safety_checks": self.enable_safety_checks,
@@ -29748,7 +29748,7 @@ class Inpaint(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image for img2img or inpaint mode"
     )
     model_name: str = Field(
@@ -29771,10 +29771,10 @@ class Inpaint(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "model_name": self.model_name,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -29844,19 +29844,19 @@ class Esrgan(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="Output image format (png or jpeg)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Url to input image"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "model": self.model.value,
             "face": self.face,
             "scale": self.scale,
             "tile": self.tile,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -29894,16 +29894,16 @@ class ImageutilsRembg(FALNode):
     crop_to_bbox: bool = Field(
         default=False, description="If set to true, the resulting image be cropped to a bounding box around the subject"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Input image url."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "crop_to_bbox": self.crop_to_bbox,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values

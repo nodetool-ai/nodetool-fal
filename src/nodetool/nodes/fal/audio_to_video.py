@@ -1,8 +1,8 @@
 from enum import Enum
 from pydantic import Field
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
+from nodetool.nodes.fal.types import LoRAInput
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import LoRAInput  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -113,13 +113,13 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     video_output_type: VideoOutputType = Field(
         default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
     sync_mode: bool = Field(
@@ -137,7 +137,7 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio to generate the video from."
     )
     seed: str = Field(
@@ -145,15 +145,15 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "match_audio_length": self.match_audio_length,
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
             "use_multiscale": self.use_multiscale,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "enable_safety_checker": self.enable_safety_checker,
@@ -163,15 +163,15 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
             "negative_prompt": self.negative_prompt,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "video_quality": self.video_quality.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "audio_strength": self.audio_strength,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
         }
 
@@ -300,7 +300,7 @@ class Ltx219BAudioToVideoLora(FALNode):
     video_output_type: VideoOutputType = Field(
         default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     enable_safety_checker: bool = Field(
@@ -309,7 +309,7 @@ class Ltx219BAudioToVideoLora(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
     sync_mode: bool = Field(
@@ -327,7 +327,7 @@ class Ltx219BAudioToVideoLora(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio to generate the video from."
     )
     seed: str = Field(
@@ -335,8 +335,8 @@ class Ltx219BAudioToVideoLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "match_audio_length": self.match_audio_length,
             "prompt": self.prompt,
@@ -344,7 +344,7 @@ class Ltx219BAudioToVideoLora(FALNode):
             "use_multiscale": self.use_multiscale,
             "num_inference_steps": self.num_inference_steps,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
@@ -354,16 +354,16 @@ class Ltx219BAudioToVideoLora(FALNode):
             "negative_prompt": self.negative_prompt,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "video_quality": self.video_quality.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "audio_strength": self.audio_strength,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
         }
 
@@ -486,13 +486,13 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     video_output_type: VideoOutputType = Field(
         default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
     video_quality: VideoQuality = Field(
@@ -510,7 +510,7 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio to generate the video from."
     )
     seed: str = Field(
@@ -518,8 +518,8 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "match_audio_length": self.match_audio_length,
             "prompt": self.prompt,
@@ -535,15 +535,15 @@ class Ltx219BDistilledAudioToVideo(FALNode):
             "negative_prompt": self.negative_prompt,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "audio_strength": self.audio_strength,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
         }
 
@@ -669,7 +669,7 @@ class Ltx219BAudioToVideo(FALNode):
     video_output_type: VideoOutputType = Field(
         default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     enable_safety_checker: bool = Field(
@@ -678,7 +678,7 @@ class Ltx219BAudioToVideo(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
     video_quality: VideoQuality = Field(
@@ -696,7 +696,7 @@ class Ltx219BAudioToVideo(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio to generate the video from."
     )
     seed: str = Field(
@@ -704,8 +704,8 @@ class Ltx219BAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "match_audio_length": self.match_audio_length,
             "prompt": self.prompt,
@@ -722,16 +722,16 @@ class Ltx219BAudioToVideo(FALNode):
             "negative_prompt": self.negative_prompt,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "audio_strength": self.audio_strength,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
         }
 
@@ -763,10 +763,10 @@ class ElevenlabsDubbing(FALNode):
     - Rapid prototyping
     """
 
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="URL of the video file to dub. Either audio_url or video_url must be provided. If both are provided, video_url takes priority."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="URL of the audio file to dub. Either audio_url or video_url must be provided."
     )
     highest_resolution: bool = Field(
@@ -784,8 +784,8 @@ class ElevenlabsDubbing(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "video_url": self.video_url,
-            "audio_url": self.audio_url,
+            "video_url": self.video,
+            "audio_url": self.audio,
             "highest_resolution": self.highest_resolution,
             "num_speakers": self.num_speakers,
             "target_lang": self.target_lang,
@@ -805,7 +805,7 @@ class ElevenlabsDubbing(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["video_url", "audio_url", "highest_resolution", "num_speakers", "target_lang"]
+        return ["video", "audio", "highest_resolution", "num_speakers", "target_lang"]
 
 class LongcatMultiAvatarImageAudioToVideo(FALNode):
     """
@@ -862,7 +862,7 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
     audio_type: AudioType = Field(
         default=AudioType.PARA, description="How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image containing two speakers."
     )
     audio_url_person1: str = Field(
@@ -882,7 +882,7 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "num_inference_steps": self.num_inference_steps,
@@ -893,7 +893,7 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
             "text_guidance_scale": self.text_guidance_scale,
             "resolution": self.resolution.value,
             "audio_type": self.audio_type.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "audio_url_person1": self.audio_url_person1,
             "seed": self.seed,
             "audio_guidance_scale": self.audio_guidance_scale,
@@ -952,10 +952,10 @@ class LongcatSingleAvatarImageAudioToVideo(FALNode):
     num_segments: int = Field(
         default=1, description="Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to animate."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file to drive the avatar."
     )
     num_inference_steps: int = Field(
@@ -972,15 +972,15 @@ class LongcatSingleAvatarImageAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
             "audio_guidance_scale": self.audio_guidance_scale,
             "num_segments": self.num_segments,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "audio_url": self.audio_url,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "audio_url": self.audio,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
@@ -1038,7 +1038,7 @@ class LongcatSingleAvatarAudioToVideo(FALNode):
     num_segments: int = Field(
         default=1, description="Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file to drive the avatar."
     )
     num_inference_steps: int = Field(
@@ -1061,7 +1061,7 @@ class LongcatSingleAvatarAudioToVideo(FALNode):
             "enable_safety_checker": self.enable_safety_checker,
             "audio_guidance_scale": self.audio_guidance_scale,
             "num_segments": self.num_segments,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
@@ -1133,7 +1133,7 @@ class ArgilAvatarsAudioToVideo(FALNode):
     remove_background: bool = Field(
         default=False, description="Enabling the remove background feature will result in a 50% increase in the price."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef()
     )
 
@@ -1141,7 +1141,7 @@ class ArgilAvatarsAudioToVideo(FALNode):
         arguments = {
             "avatar": self.avatar.value,
             "remove_background": self.remove_background,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -1157,7 +1157,7 @@ class ArgilAvatarsAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["avatar", "remove_background", "audio_url"]
+        return ["avatar", "remove_background", "audio"]
 
 class WanV2214bSpeechToVideo(FALNode):
     """
@@ -1228,13 +1228,13 @@ class WanV2214bSpeechToVideo(FALNode):
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     video_quality: VideoQuality = Field(
         default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
     )
     num_inference_steps: int = Field(
@@ -1245,7 +1245,7 @@ class WanV2214bSpeechToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "shift": self.shift,
             "prompt": self.prompt,
@@ -1257,9 +1257,9 @@ class WanV2214bSpeechToVideo(FALNode):
             "video_write_mode": self.video_write_mode.value,
             "resolution": self.resolution.value,
             "enable_output_safety_checker": self.enable_output_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
         }
@@ -1311,7 +1311,7 @@ class StableAvatar(FALNode):
     perturbation: float = Field(
         default=0.1, description="The amount of perturbation to use for the video generation. 0.0 means no perturbation, 1.0 means full perturbation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a reference for the video generation."
     )
     guidance_scale: float = Field(
@@ -1323,7 +1323,7 @@ class StableAvatar(FALNode):
     num_inference_steps: int = Field(
         default=50, description="The number of inference steps to use for the video generation."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio to use as a reference for the video generation."
     )
     audio_guidance_scale: float = Field(
@@ -1331,16 +1331,16 @@ class StableAvatar(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "perturbation": self.perturbation,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "audio_guidance_scale": self.audio_guidance_scale,
         }
 
@@ -1357,7 +1357,7 @@ class StableAvatar(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "aspect_ratio", "perturbation", "image_url", "guidance_scale"]
+        return ["prompt", "aspect_ratio", "perturbation", "image", "guidance_scale"]
 
 class EchomimicV3(FALNode):
     """
@@ -1375,10 +1375,10 @@ class EchomimicV3(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for the video generation."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio to use as a reference for the video generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a reference for the video generation."
     )
     guidance_scale: float = Field(
@@ -1398,11 +1398,11 @@ class EchomimicV3(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "audio_guidance_scale": self.audio_guidance_scale,
             "num_frames_per_generation": self.num_frames_per_generation,
@@ -1423,7 +1423,7 @@ class EchomimicV3(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "audio_url", "image_url", "guidance_scale", "audio_guidance_scale"]
+        return ["prompt", "audio", "image", "guidance_scale", "audio_guidance_scale"]
 
 class VeedAvatarsAudioToVideo(FALNode):
     """
@@ -1472,7 +1472,7 @@ class VeedAvatarsAudioToVideo(FALNode):
         ANY_FEMALE_SIDE = "any_female_side"
 
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef()
     )
     avatar_id: AvatarId = Field(
@@ -1481,7 +1481,7 @@ class VeedAvatarsAudioToVideo(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "avatar_id": self.avatar_id.value,
         }
 
@@ -1498,4 +1498,4 @@ class VeedAvatarsAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["audio_url", "avatar_id"]
+        return ["audio", "avatar_id"]

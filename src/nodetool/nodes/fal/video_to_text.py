@@ -22,7 +22,7 @@ class OpenrouterRouterVideoEnterprise(FALNode):
     prompt: str = Field(
         default="", description="Prompt to be used for the video processing"
     )
-    video_urls: VideoRef = Field(
+    videos: VideoRef = Field(
         default=VideoRef(), description="List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url."
     )
     reasoning: bool = Field(
@@ -44,7 +44,7 @@ class OpenrouterRouterVideoEnterprise(FALNode):
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "prompt": self.prompt,
-            "video_urls": self.video_urls,
+            "video_urls": self.videos,
             "reasoning": self.reasoning,
             "system_prompt": self.system_prompt,
             "model": self.model,
@@ -64,7 +64,7 @@ class OpenrouterRouterVideoEnterprise(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "video_urls", "reasoning", "system_prompt", "model"]
+        return ["prompt", "videos", "reasoning", "system_prompt", "model"]
 
 class OpenrouterRouterVideo(FALNode):
     """
@@ -82,7 +82,7 @@ class OpenrouterRouterVideo(FALNode):
     prompt: str = Field(
         default="", description="Prompt to be used for the video processing"
     )
-    video_urls: VideoRef = Field(
+    videos: VideoRef = Field(
         default=VideoRef(), description="List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url."
     )
     reasoning: bool = Field(
@@ -104,7 +104,7 @@ class OpenrouterRouterVideo(FALNode):
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "prompt": self.prompt,
-            "video_urls": self.video_urls,
+            "video_urls": self.videos,
             "reasoning": self.reasoning,
             "system_prompt": self.system_prompt,
             "model": self.model,
@@ -124,4 +124,4 @@ class OpenrouterRouterVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "video_urls", "reasoning", "system_prompt", "model"]
+        return ["prompt", "videos", "reasoning", "system_prompt", "model"]

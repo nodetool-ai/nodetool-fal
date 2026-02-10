@@ -313,6 +313,14 @@ class SchemaParser:
 
     def _get_default_value(self, prop: dict[str, Any], python_type: str, required: bool, enum_name: Optional[str] = None) -> str:
         """Get default value for a field."""
+        # Asset refs should always default to empty refs in nodetool nodes.
+        if "ImageRef" in python_type:
+            return "ImageRef()"
+        if "VideoRef" in python_type:
+            return "VideoRef()"
+        if "AudioRef" in python_type:
+            return "AudioRef()"
+
         if "default" in prop:
             default = prop["default"]
             if isinstance(default, str):
@@ -332,13 +340,7 @@ class SchemaParser:
                 return str(default)
         
         # Generate sensible defaults based on type
-        if "ImageRef" in python_type:
-            return "ImageRef()"
-        elif "VideoRef" in python_type:
-            return "VideoRef()"
-        elif "AudioRef" in python_type:
-            return "AudioRef()"
-        elif python_type == "str":
+        if python_type == "str":
             return '""'
         elif python_type == "int":
             return "-1" if "seed" in prop.get("description", "").lower() else "0"

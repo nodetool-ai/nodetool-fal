@@ -18,23 +18,33 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.image_to_json
 from nodetool.workflows.base_node import BaseNode
 
+
 class BagelUnderstand(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-        Bagel is a 7B parameter multimodal model from Bytedance-Seed that can generate both text and images.
-        vision, analysis, json, image-understanding
+    Bagel is a 7B parameter multimodal model from Bytedance-Seed that can generate both text and images.
+    vision, analysis, json, image-understanding
 
-        Use cases:
-        - Image analysis to structured data
-        - Visual content understanding
-        - Automated image metadata extraction
-        - Content classification
-        - Image-based data extraction
+    Use cases:
+    - Image analysis to structured data
+    - Visual content understanding
+    - Automated image metadata extraction
+    - Content classification
+    - Image-based data extraction
     """
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to query the image with.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation.')
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image for the query.')
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The prompt to query the image with."
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="The seed to use for the generation."
+    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image for the query.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -43,5 +53,3 @@ class BagelUnderstand(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str,
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
-
-

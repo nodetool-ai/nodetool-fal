@@ -2,8 +2,8 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import AudioRef
+from nodetool.nodes.fal.types import Speaker, VibeVoiceSpeaker
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import VibeVoiceSpeaker  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -899,10 +899,10 @@ class IndexTts2TextToSpeech(FALNode):
     strength: float = Field(
         default=1, description="The strength of the emotional style transfer. Higher values result in stronger emotional influence."
     )
-    emotional_audio_url: AudioRef = Field(
+    emotional_audio: AudioRef = Field(
         default=AudioRef(), description="The emotional reference audio file to extract the style from."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The audio file to generate the speech from."
     )
     emotion_prompt: str = Field(
@@ -917,8 +917,8 @@ class IndexTts2TextToSpeech(FALNode):
             "prompt": self.prompt,
             "emotional_strengths": self.emotional_strengths,
             "strength": self.strength,
-            "emotional_audio_url": self.emotional_audio_url,
-            "audio_url": self.audio_url,
+            "emotional_audio_url": self.emotional_audio,
+            "audio_url": self.audio,
             "emotion_prompt": self.emotion_prompt,
             "should_use_prompt_for_emotion": self.should_use_prompt_for_emotion,
         }
@@ -1155,7 +1155,7 @@ class Vibevoice7b(FALNode):
         arguments = {
             "script": self.script,
             "seed": self.seed,
-            "speakers": self.speakers,
+            "speakers": [item.model_dump(exclude={"type"}) for item in self.speakers],
             "cfg_scale": self.cfg_scale,
         }
 
@@ -1204,7 +1204,7 @@ class Vibevoice(FALNode):
         arguments = {
             "script": self.script,
             "seed": self.seed,
-            "speakers": self.speakers,
+            "speakers": [item.model_dump(exclude={"type"}) for item in self.speakers],
             "cfg_scale": self.cfg_scale,
         }
 
@@ -1526,7 +1526,7 @@ class ResembleAiChatterboxhdTextToSpeech(FALNode):
     voice: Voice | None = Field(
         default=None, description="The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL to the audio sample to use as a voice prompt for zero-shot TTS voice cloning. Providing a audio sample will override the voice setting. If neither voice nor audio_url are provided, a random voice will be used."
     )
     temperature: float = Field(
@@ -1545,7 +1545,7 @@ class ResembleAiChatterboxhdTextToSpeech(FALNode):
             "exaggeration": self.exaggeration,
             "high_quality_audio": self.high_quality_audio,
             "voice": self.voice.value if self.voice else None,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "temperature": self.temperature,
             "seed": self.seed,
             "cfg": self.cfg,
@@ -1585,8 +1585,8 @@ class ChatterboxTextToSpeech(FALNode):
     exaggeration: float = Field(
         default=0.25, description="Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration)."
     )
-    audio_url: AudioRef = Field(
-        default="https://storage.googleapis.com/chatterbox-demo-samples/prompts/male_rickmorty.mp3", description="Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio."
+    audio: AudioRef = Field(
+        default=AudioRef(), description="Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio."
     )
     temperature: float = Field(
         default=0.7, description="Temperature for generation (higher = more creative)."
@@ -1602,7 +1602,7 @@ class ChatterboxTextToSpeech(FALNode):
         arguments = {
             "text": self.text,
             "exaggeration": self.exaggeration,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "temperature": self.temperature,
             "seed": self.seed,
             "cfg": self.cfg,
@@ -1654,7 +1654,7 @@ class MinimaxVoiceClone(FALNode):
     accuracy: float = Field(
         default=0.0, description="Text validation accuracy threshold (0-1)"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the input audio file for voice cloning. Should be at least 10 seconds long. To retain the voice permanently, use it with a TTS (text-to-speech) endpoint at least once within 7 days. Otherwise, it will be automatically deleted."
     )
     noise_reduction: bool = Field(
@@ -1669,7 +1669,7 @@ class MinimaxVoiceClone(FALNode):
             "model": self.model.value,
             "text": self.text,
             "accuracy": self.accuracy,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "noise_reduction": self.noise_reduction,
             "need_volume_normalization": self.need_volume_normalization,
         }

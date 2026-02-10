@@ -22,7 +22,6 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "field_overrides": {
             "image_url": {
-                "name": "image",  # Rename field
                 "description": "The image to transform into a video"
             },
             "prompt": {

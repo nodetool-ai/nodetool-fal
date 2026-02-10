@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import AudioRef
+from nodetool.nodes.fal.types import Speaker
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -32,14 +33,14 @@ class NemotronAsrStream(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.NONE, description="Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER)."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
             "acceleration": self.acceleration.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -54,7 +55,7 @@ class NemotronAsrStream(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["acceleration", "audio_url"]
+        return ["acceleration", "audio"]
 
 class NemotronAsr(FALNode):
     """
@@ -82,14 +83,14 @@ class NemotronAsr(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.NONE, description="Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER)."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "acceleration": self.acceleration.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -104,7 +105,7 @@ class NemotronAsr(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["acceleration", "audio_url"]
+        return ["acceleration", "audio"]
 
 class SileroVad(FALNode):
     """
@@ -119,13 +120,13 @@ class SileroVad(FALNode):
     - Meeting transcription
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio to get speech timestamps from."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -140,4 +141,4 @@ class SileroVad(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["audio_url"]
+        return ["audio"]

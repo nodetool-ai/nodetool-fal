@@ -2,8 +2,8 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
+from nodetool.nodes.fal.types import KlingV3MultiPromptElement, LoRAInput, LoRAWeight, LoraWeight
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import KlingV3MultiPromptElement, LoRAInput, LoRAWeight, LoraWeight  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -140,7 +140,7 @@ class CogVideoX5B(FALNode):
         arguments = {
             "prompt": self.prompt,
             "use_rife": self.use_rife,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -334,7 +334,7 @@ class AnimateDiffSparseCtrlLCM(FALNode):
     keyframe_0_index: int = Field(
         default=0, description="The frame index of the first keyframe to use for the generation."
     )
-    keyframe_1_image_url: ImageRef = Field(
+    keyframe_1_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the second keyframe to use for the generation."
     )
     keyframe_1_index: int = Field(
@@ -346,33 +346,33 @@ class AnimateDiffSparseCtrlLCM(FALNode):
     num_inference_steps: int = Field(
         default=4, description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image."
     )
-    keyframe_2_image_url: ImageRef = Field(
+    keyframe_2_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the third keyframe to use for the generation."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to specify what you don't want."
     )
-    keyframe_0_image_url: ImageRef = Field(
+    keyframe_0_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the first keyframe to use for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        keyframe_1_image_url_base64 = await context.image_to_base64(self.keyframe_1_image_url)
-        keyframe_2_image_url_base64 = await context.image_to_base64(self.keyframe_2_image_url)
-        keyframe_0_image_url_base64 = await context.image_to_base64(self.keyframe_0_image_url)
+        keyframe_1_image_base64 = await context.image_to_base64(self.keyframe_1_image)
+        keyframe_2_image_base64 = await context.image_to_base64(self.keyframe_2_image)
+        keyframe_0_image_base64 = await context.image_to_base64(self.keyframe_0_image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "controlnet_type": self.controlnet_type.value,
             "keyframe_2_index": self.keyframe_2_index,
             "keyframe_0_index": self.keyframe_0_index,
-            "keyframe_1_image_url": f"data:image/png;base64,{keyframe_1_image_url_base64}",
+            "keyframe_1_image_url": f"data:image/png;base64,{keyframe_1_image_base64}",
             "keyframe_1_index": self.keyframe_1_index,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "keyframe_2_image_url": f"data:image/png;base64,{keyframe_2_image_url_base64}",
+            "keyframe_2_image_url": f"data:image/png;base64,{keyframe_2_image_base64}",
             "negative_prompt": self.negative_prompt,
-            "keyframe_0_image_url": f"data:image/png;base64,{keyframe_0_image_url_base64}",
+            "keyframe_0_image_url": f"data:image/png;base64,{keyframe_0_image_base64}",
         }
 
         # Remove None values
@@ -793,17 +793,17 @@ class VeedFabric10Text(FALNode):
     voice_description: str = Field(
         default="", description="Optional additional voice description. The primary voice description is auto-generated from the image. You can use simple descriptors like 'British accent' or 'Confident' or provide a detailed description like 'Confident male voice, mid-20s, with notes of...'"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "text": self.text,
             "resolution": self.resolution.value,
             "voice_description": self.voice_description,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1034,18 +1034,18 @@ class StableVideo(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "motion_bucket_id": self.motion_bucket_id,
             "fps": self.fps,
             "cond_aug": self.cond_aug,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1471,7 +1471,7 @@ class Ltx219BDistilledTextToVideoLora(FALNode):
             "acceleration": self.acceleration.value,
             "generate_audio": self.generate_audio,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "enable_safety_checker": self.enable_safety_checker,
@@ -1781,7 +1781,7 @@ class Ltx219BTextToVideoLora(FALNode):
             "acceleration": self.acceleration.value,
             "generate_audio": self.generate_audio,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
@@ -2111,7 +2111,7 @@ class WanV26TextToVideo(FALNode):
     enable_prompt_expansion: bool = Field(
         default=True, description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="URL of the audio to use as the background music. Must be publicly accessible. Limit handling: If the audio duration exceeds the duration value (5, 10, or 15 seconds), the audio is truncated to the first N seconds, and the rest is discarded. If the audio is shorter than the video, the remaining part of the video will be silent. For example, if the audio is 3 seconds long and the video duration is 5 seconds, the first 3 seconds of the output video will have sound, and the last 2 seconds will be silent. - Format: WAV, MP3. - Duration: 3 to 30 s. - File size: Up to 15 MB."
     )
     seed: int = Field(
@@ -2134,7 +2134,7 @@ class WanV26TextToVideo(FALNode):
             "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "multi_shots": self.multi_shots,
             "negative_prompt": self.negative_prompt,
@@ -3839,7 +3839,7 @@ class Wan25PreviewTextToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_1080P, description="Video resolution tier"
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="URL of the audio to use as the background music. Must be publicly accessible. Limit handling: If the audio duration exceeds the duration value (5 or 10 seconds), the audio is truncated to the first 5 or 10 seconds, and the rest is discarded. If the audio is shorter than the video, the remaining part of the video will be silent. For example, if the audio is 3 seconds long and the video duration is 5 seconds, the first 3 seconds of the output video will have sound, and the last 2 seconds will be silent. - Format: WAV, MP3. - Duration: 3 to 30 s. - File size: Up to 15 MB."
     )
     seed: int = Field(
@@ -3861,7 +3861,7 @@ class Wan25PreviewTextToVideo(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -4047,7 +4047,7 @@ class InfinitalkSingleText(FALNode):
     text_input: str = Field(
         default="", description="The text input to guide video generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     voice: Voice = Field(
@@ -4061,13 +4061,13 @@ class InfinitalkSingleText(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "acceleration": self.acceleration.value,
             "text_input": self.text_input,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "voice": self.voice.value,
             "num_frames": self.num_frames,
             "seed": self.seed,
@@ -4298,7 +4298,7 @@ class WanV22A14bTextToVideoLora(FALNode):
             "num_interpolated_frames": self.num_interpolated_frames,
             "acceleration": self.acceleration.value,
             "reverse_video": self.reverse_video,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "frames_per_second": self.frames_per_second,
             "guidance_scale": self.guidance_scale,
             "num_frames": self.num_frames,
@@ -5125,7 +5125,7 @@ class Ltxv13b098Distilled(FALNode):
             "prompt": self.prompt,
             "expand_prompt": self.expand_prompt,
             "temporal_adain_factor": self.temporal_adain_factor,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
@@ -5540,7 +5540,7 @@ class LtxVideo13bDev(FALNode):
             "prompt": self.prompt,
             "reverse_video": self.reverse_video,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
             "num_frames": self.num_frames,
             "enable_safety_checker": self.enable_safety_checker,
@@ -5649,7 +5649,7 @@ class LtxVideo13bDistilled(FALNode):
             "reverse_video": self.reverse_video,
             "prompt": self.prompt,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
@@ -6134,17 +6134,17 @@ class KlingVideoLipsyncAudioToVideo(FALNode):
     - Automated video production
     """
 
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The URL of the video to generate the lip sync for. Supports .mp4/.mov, ≤100MB, 2–10s, 720p/1080p only, width/height 720–1920px."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio to generate the lip sync for. Minimum duration is 2s and maximum duration is 60s. Maximum file size is 5MB."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "video_url": self.video_url,
-            "audio_url": self.audio_url,
+            "video_url": self.video,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -6237,7 +6237,7 @@ class KlingVideoLipsyncTextToVideo(FALNode):
     text: str = Field(
         default="", description="Text content for lip-sync video generation. Max 120 characters."
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The URL of the video to generate the lip sync for. Supports .mp4/.mov, ≤100MB, 2-60s, 720p/1080p only, width/height 720–1920px. If validation fails, an error is returned."
     )
     voice_id: VoiceId = Field(
@@ -6253,7 +6253,7 @@ class KlingVideoLipsyncTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "text": self.text,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "voice_id": self.voice_id.value,
             "voice_language": self.voice_language.value,
             "voice_speed": self.voice_speed,
@@ -6350,7 +6350,7 @@ class WanT2vLora(FALNode):
             "reverse_video": self.reverse_video,
             "seed": self.seed,
             "aspect_ratio": self.aspect_ratio.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "frames_per_second": self.frames_per_second,
             "turbo_mode": self.turbo_mode,
             "enable_safety_checker": self.enable_safety_checker,
@@ -6883,7 +6883,7 @@ class KlingVideoV16ProEffects(FALNode):
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
@@ -6891,7 +6891,7 @@ class KlingVideoV16ProEffects(FALNode):
         arguments = {
             "duration": self.duration.value,
             "effect_scene": self.effect_scene.value,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -7138,7 +7138,7 @@ class KlingVideoV16StandardEffects(FALNode):
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
@@ -7146,7 +7146,7 @@ class KlingVideoV16StandardEffects(FALNode):
         arguments = {
             "duration": self.duration.value,
             "effect_scene": self.effect_scene.value,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -7393,7 +7393,7 @@ class KlingVideoV15ProEffects(FALNode):
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
@@ -7401,7 +7401,7 @@ class KlingVideoV15ProEffects(FALNode):
         arguments = {
             "duration": self.duration.value,
             "effect_scene": self.effect_scene.value,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -7648,7 +7648,7 @@ class KlingVideoV1StandardEffects(FALNode):
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
@@ -7656,7 +7656,7 @@ class KlingVideoV1StandardEffects(FALNode):
         arguments = {
             "duration": self.duration.value,
             "effect_scene": self.effect_scene.value,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -8357,7 +8357,7 @@ class HunyuanVideoLora(FALNode):
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
             "num_frames": self.num_frames.value,

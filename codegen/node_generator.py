@@ -179,8 +179,10 @@ class NodeGenerator:
                     if "description" in override:
                         field.description = override["description"]
 
-        # Special handling: normalize image_urls inputs to images (list[ImageRef])
+        # Special handling: normalize asset URL fields to nodetool-native names.
         self._normalize_image_urls_fields(spec)
+        self._normalize_asset_url_fields(spec)
+        self._normalize_asset_urls_fields(spec)
         
         return spec
 
@@ -201,6 +203,48 @@ class NodeGenerator:
             field.enum_ref = None
             if field.default_value == "None":
                 field.default_value = "[]"
+
+    def _normalize_asset_url_fields(self, spec: NodeSpec) -> None:
+        """Normalize `*_url` fields to `*` for asset refs while preserving API names."""
+        for field in spec.input_fields:
+            api_param_name = self._field_renames.get(field.name, field.name)
+            if not api_param_name.endswith("_url"):
+                continue
+            if not any(
+                ref_type in field.python_type
+                for ref_type in ("ImageRef", "AudioRef", "VideoRef")
+            ):
+                continue
+
+            normalized_name = api_param_name.removesuffix("_url")
+            if any(other.name == normalized_name and other is not field for other in spec.input_fields):
+                continue
+
+            # Preserve API mapping while exposing nodetool-native field names.
+            if field.name in self._field_renames:
+                del self._field_renames[field.name]
+            field.name = normalized_name
+            self._field_renames[field.name] = api_param_name
+
+    def _normalize_asset_urls_fields(self, spec: NodeSpec) -> None:
+        """Normalize asset list URL fields (e.g. `input_image_urls` -> `input_images`)."""
+        for field in spec.input_fields:
+            api_param_name = self._field_renames.get(field.name, field.name)
+            if api_param_name == "image_urls":
+                continue
+            if not api_param_name.endswith("_urls"):
+                continue
+            if not any(asset in api_param_name for asset in ("image", "audio", "video")):
+                continue
+
+            normalized_name = f"{api_param_name.removesuffix('_urls')}s"
+            if any(other.name == normalized_name and other is not field for other in spec.input_fields):
+                continue
+
+            if field.name in self._field_renames:
+                del self._field_renames[field.name]
+            field.name = normalized_name
+            self._field_renames[field.name] = api_param_name
 
     def _generate_imports(self, spec: NodeSpec) -> list[str]:
         """Generate import statements."""

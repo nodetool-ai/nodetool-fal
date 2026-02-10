@@ -19,13 +19,13 @@ class WorkflowUtilitiesInterleaveVideo(FALNode):
     - Data processing
     """
 
-    video_urls: list[str] = Field(
+    videos: list[str] = Field(
         default=[], description="List of video URLs to interleave in order"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "video_urls": self.video_urls,
+            "video_urls": self.videos,
         }
 
         # Remove None values
@@ -41,7 +41,7 @@ class WorkflowUtilitiesInterleaveVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["video_urls"]
+        return ["videos"]
 
 class Qwen3TtsCloneVoice17b(FALNode):
     """
@@ -56,7 +56,7 @@ class Qwen3TtsCloneVoice17b(FALNode):
     - Data processing
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL to the reference audio file used for voice cloning."
     )
     reference_text: str = Field(
@@ -65,7 +65,7 @@ class Qwen3TtsCloneVoice17b(FALNode):
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "reference_text": self.reference_text,
         }
 
@@ -81,7 +81,7 @@ class Qwen3TtsCloneVoice17b(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["audio_url", "reference_text"]
+        return ["audio", "reference_text"]
 
 class Qwen3TtsCloneVoice06b(FALNode):
     """
@@ -96,7 +96,7 @@ class Qwen3TtsCloneVoice06b(FALNode):
     - Data processing
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL to the reference audio file used for voice cloning."
     )
     reference_text: str = Field(
@@ -105,7 +105,7 @@ class Qwen3TtsCloneVoice06b(FALNode):
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "reference_text": self.reference_text,
         }
 
@@ -121,7 +121,7 @@ class Qwen3TtsCloneVoice06b(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["audio_url", "reference_text"]
+        return ["audio", "reference_text"]
 
 class OpenrouterRouterAudio(FALNode):
     """
@@ -148,7 +148,7 @@ class OpenrouterRouterAudio(FALNode):
     model: str = Field(
         default="", description="Name of the model to use. Charged based on actual token usage."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a."
     )
     temperature: float = Field(
@@ -164,7 +164,7 @@ class OpenrouterRouterAudio(FALNode):
             "system_prompt": self.system_prompt,
             "reasoning": self.reasoning,
             "model": self.model,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
         }
@@ -181,4 +181,4 @@ class OpenrouterRouterAudio(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "system_prompt", "reasoning", "model", "audio_url"]
+        return ["prompt", "system_prompt", "reasoning", "model", "audio"]

@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
+from nodetool.nodes.fal.types import Track
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -372,7 +373,7 @@ class VideoPromptGenerator(FALNode):
     special_effects: SpecialEffects = Field(
         default=SpecialEffects.NONE, description="Special effects approach"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of an image to analyze and incorporate into the video prompt (optional)"
     )
     model: Model = Field(
@@ -389,14 +390,14 @@ class VideoPromptGenerator(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "custom_elements": self.custom_elements,
             "style": self.style.value,
             "camera_direction": self.camera_direction.value,
             "pacing": self.pacing.value,
             "special_effects": self.special_effects.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "model": self.model.value,
             "camera_style": self.camera_style.value,
             "input_concept": self.input_concept,

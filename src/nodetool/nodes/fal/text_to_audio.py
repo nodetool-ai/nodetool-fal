@@ -1,8 +1,8 @@
 from enum import Enum
 from pydantic import Field
 from nodetool.metadata.types import AudioRef
+from nodetool.nodes.fal.types import DialogueBlock, InpaintSection, PronunciationDictionaryLocator, Speaker, Turn
 from nodetool.nodes.fal.fal_node import FALNode
-from nodetool.nodes.fal.types import DialogueBlock, InpaintSection, PronunciationDictionaryLocator, Speaker, Turn  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
@@ -238,8 +238,8 @@ class CSM1B(FALNode):
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
-            "scene": self.scene,
-            "context": self.context,
+            "scene": [item.model_dump(exclude={"type"}) for item in self.scene],
+            "context": [item.model_dump(exclude={"type"}) for item in self.context],
         }
 
         # Remove None values
@@ -293,7 +293,7 @@ class DiffRhythm(FALNode):
     cfg_strength: float = Field(
         default=4, description="The CFG strength to use for the music generation."
     )
-    reference_audio_url: AudioRef = Field(
+    reference_audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the reference audio to use for the music generation."
     )
     music_duration: MusicDuration = Field(
@@ -313,7 +313,7 @@ class DiffRhythm(FALNode):
         arguments = {
             "lyrics": self.lyrics,
             "cfg_strength": self.cfg_strength,
-            "reference_audio_url": self.reference_audio_url,
+            "reference_audio_url": self.reference_audio,
             "music_duration": self.music_duration.value,
             "scheduler": self.scheduler.value,
             "num_inference_steps": self.num_inference_steps,
@@ -457,10 +457,10 @@ class ElevenLabsTextToDialogueV3(FALNode):
         arguments = {
             "stability": self.stability,
             "language_code": self.language_code,
-            "inputs": self.inputs,
+            "inputs": [item.model_dump(exclude={"type"}) for item in self.inputs],
             "seed": self.seed,
             "use_speaker_boost": self.use_speaker_boost,
-            "pronunciation_dictionary_locators": self.pronunciation_dictionary_locators,
+            "pronunciation_dictionary_locators": [item.model_dump(exclude={"type"}) for item in self.pronunciation_dictionary_locators],
         }
 
         # Remove None values
@@ -749,7 +749,7 @@ class F5TTS(FALNode):
     model_type: ModelType = Field(
         default="", description="The name of the model to be used for TTS."
     )
-    ref_audio_url: AudioRef = Field(
+    ref_audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the reference audio file."
     )
 
@@ -759,7 +759,7 @@ class F5TTS(FALNode):
             "remove_silence": self.remove_silence,
             "gen_text": self.gen_text,
             "model_type": self.model_type.value,
-            "ref_audio_url": self.ref_audio_url,
+            "ref_audio_url": self.ref_audio,
         }
 
         # Remove None values
@@ -948,7 +948,7 @@ class XTTS(FALNode):
     gpt_cond_chunk_len: int = Field(
         default=4, description="The length of the GPT conditioning chunks. Defaults to 4."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the voice file to match"
     )
     temperature: float = Field(
@@ -968,7 +968,7 @@ class XTTS(FALNode):
             "language": self.language.value,
             "gpt_cond_len": self.gpt_cond_len,
             "gpt_cond_chunk_len": self.gpt_cond_chunk_len,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "temperature": self.temperature,
             "sample_rate": self.sample_rate,
             "max_ref_length": self.max_ref_length,
@@ -1298,7 +1298,7 @@ class SonautoV2Inpaint(FALNode):
     balance_strength: float = Field(
         default=0.7, description="Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file to alter. Must be a valid publicly accessible URL."
     )
     seed: str = Field(
@@ -1314,9 +1314,9 @@ class SonautoV2Inpaint(FALNode):
             "num_songs": self.num_songs,
             "output_format": self.output_format.value,
             "selection_crop": self.selection_crop,
-            "sections": self.sections,
+            "sections": [item.model_dump(exclude={"type"}) for item in self.sections],
             "balance_strength": self.balance_strength,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
         }
 
@@ -1744,14 +1744,14 @@ class Zonos(FALNode):
     prompt: str = Field(
         default="", description="The content generated using cloned voice."
     )
-    reference_audio_url: AudioRef = Field(
+    reference_audio: AudioRef = Field(
         default=AudioRef(), description="The reference audio."
     )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "prompt": self.prompt,
-            "reference_audio_url": self.reference_audio_url,
+            "reference_audio_url": self.reference_audio,
         }
 
         # Remove None values
@@ -2215,14 +2215,14 @@ class MinimaxMusic(FALNode):
     prompt: str = Field(
         default="", description="Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters."
     )
-    reference_audio_url: AudioRef = Field(
+    reference_audio: AudioRef = Field(
         default=AudioRef(), description="Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds."
     )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "prompt": self.prompt,
-            "reference_audio_url": self.reference_audio_url,
+            "reference_audio_url": self.reference_audio,
         }
 
         # Remove None values
