@@ -18,6 +18,118 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.3d_to_3d
 from nodetool.workflows.base_node import BaseNode
 
+class HunyuanPart(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Use the capabilities of hunyuan part to generate point clouds from your 3D files.
+        3d, editing, transformation, modeling
+
+        Use cases:
+        - 3D model editing and refinement
+        - Mesh optimization
+        - Texture application
+        - 3D format conversion
+        - Model retopology
+    """
+
+    point_prompt_x: float | OutputHandle[float] = connect_field(default=0, description='X coordinate of the point prompt for segmentation (normalized space -1 to 1).')
+    point_prompt_z: float | OutputHandle[float] = connect_field(default=0, description='Z coordinate of the point prompt for segmentation (normalized space -1 to 1).')
+    use_normal: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use normal information for segmentation.')
+    noise_std: float | OutputHandle[float] = connect_field(default=0, description='Standard deviation of noise to add to sampled points.')
+    point_num: int | OutputHandle[int] = connect_field(default=100000, description='Number of points to sample from the mesh.')
+    model_file_url: str | OutputHandle[str] = connect_field(default='', description='URL of the 3D model file (.glb or .obj) to process for segmentation.')
+    point_prompt_y: float | OutputHandle[float] = connect_field(default=0, description='Y coordinate of the point prompt for segmentation (normalized space -1 to 1).')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and input will produce the same segmentation results.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.3d_to_3d.HunyuanPart
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.3d_to_3d
+from nodetool.workflows.base_node import BaseNode
+
+class MeshyV5Remesh(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Meshy-5 remesh allows you to remesh and export existing 3D models into various formats
+        3d, editing, transformation, modeling
+
+        Use cases:
+        - 3D model editing and refinement
+        - Mesh optimization
+        - Texture application
+        - 3D format conversion
+        - Model retopology
+    """
+
+    Topology: typing.ClassVar[type] = nodetool.nodes.fal.3d_to_3d.MeshyV5Remesh.Topology
+
+    resize_height: float | OutputHandle[float] = connect_field(default=0, description='Resize the model to a certain height measured in meters. Set to 0 for no resizing.')
+    topology: nodetool.nodes.fal.3d_to_3d.MeshyV5Remesh.Topology = Field(default=nodetool.nodes.fal.3d_to_3d.MeshyV5Remesh.Topology.TRIANGLE, description='Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.')
+    target_polycount: int | OutputHandle[int] = connect_field(default=30000, description='Target number of polygons in the generated model. Actual count may vary based on geometry complexity.')
+    model_url: str | OutputHandle[str] = connect_field(default='', description='URL or base64 data URI of a 3D model to remesh. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.')
+    origin_at: nodetool.nodes.fal.3d_to_3d.MeshyV5Remesh.OriginAt | OutputHandle[nodetool.nodes.fal.3d_to_3d.MeshyV5Remesh.OriginAt] | None = connect_field(default=None, description='Position of the origin. None means no effect.')
+    target_formats: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of target formats for the remeshed model.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.3d_to_3d.MeshyV5Remesh
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.3d_to_3d
+from nodetool.workflows.base_node import BaseNode
+
+class MeshyV5Retexture(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+    """
+
+        Meshy-5 retexture applies new, high-quality textures to existing 3D models using either text prompts or reference images. It supports PBR material generation for realistic, production-ready results.
+        3d, editing, transformation, modeling
+
+        Use cases:
+        - 3D model editing and refinement
+        - Mesh optimization
+        - Texture application
+        - 3D format conversion
+        - Model retopology
+    """
+
+    enable_pbr: bool | OutputHandle[bool] = connect_field(default=False, description='Generate PBR Maps (metallic, roughness, normal) in addition to base color.')
+    text_style_prompt: str | OutputHandle[str] = connect_field(default='', description='Describe your desired texture style using text. Maximum 600 characters. Required if image_style_url is not provided.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, input data will be checked for safety before processing.')
+    enable_original_uv: bool | OutputHandle[bool] = connect_field(default=True, description='Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.')
+    model_url: str | OutputHandle[str] = connect_field(default='', description='URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.')
+    image_style: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence.')
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.3d_to_3d.MeshyV5Retexture
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.3d_to_3d
+from nodetool.workflows.base_node import BaseNode
+
 class Sam33DAlign(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
@@ -32,11 +144,11 @@ class Sam33DAlign(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any
         - Rapid prototyping
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the original image used for MoGe depth estimation')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the original image used for MoGe depth estimation')
     body_mesh_url: str | OutputHandle[str] = connect_field(default='', description='URL of the SAM-3D Body mesh file (.ply or .glb) to align')
     object_mesh_url: str | OutputHandle[str] = connect_field(default='', description='Optional URL of SAM-3D Object mesh (.glb) to create combined scene')
     focal_length: float | OutputHandle[float] = connect_field(default=0.0, description='Focal length from SAM-3D Body metadata. If not provided, estimated from MoGe.')
-    body_mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the human mask image. If not provided, uses full image.')
+    body_mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the human mask image. If not provided, uses full image.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -72,7 +184,7 @@ class Ultrashape(SingleOutputGraphNode[Any], GraphNode[Any]):
     num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Diffusion steps.')
     model_url: str | OutputHandle[str] = connect_field(default='', description='URL of the coarse mesh (.glb or .obj) to refine.')
     seed: int | OutputHandle[int] = connect_field(default=42, description='Random seed.')
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the reference image for mesh refinement.')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the reference image for mesh refinement.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:

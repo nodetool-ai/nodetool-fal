@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import AudioRef
+from nodetool.nodes.fal.types import Turn
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -22,7 +23,7 @@ class ElevenLabsSpeechToText(FALNode):
     language_code: str = Field(
         default="", description="Language code of the audio"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to transcribe"
     )
     diarize: bool = Field(
@@ -35,7 +36,7 @@ class ElevenLabsSpeechToText(FALNode):
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "language_code": self.language_code,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "diarize": self.diarize,
             "tag_audio_events": self.tag_audio_events,
         }
@@ -70,7 +71,7 @@ class ElevenLabsScribeV2(FALNode):
     language_code: str = Field(
         default="", description="Language code of the audio"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to transcribe"
     )
     diarize: bool = Field(
@@ -86,7 +87,7 @@ class ElevenLabsScribeV2(FALNode):
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "language_code": self.language_code,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "diarize": self.diarize,
             "keyterms": self.keyterms,
             "tag_audio_events": self.tag_audio_events,
@@ -119,13 +120,13 @@ class SmartTurn(FALNode):
     - Process conversational audio
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -155,7 +156,7 @@ class SpeechToText(FALNode):
     - Extract text from speech
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="Local filesystem path (or remote URL) to a long audio file"
     )
     use_pnc: bool = Field(
@@ -164,7 +165,7 @@ class SpeechToText(FALNode):
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "use_pnc": self.use_pnc,
         }
 
@@ -195,7 +196,7 @@ class SpeechToTextStream(FALNode):
     - Live speech-to-text conversion
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="Local filesystem path (or remote URL) to a long audio file"
     )
     use_pnc: bool = Field(
@@ -204,7 +205,7 @@ class SpeechToTextStream(FALNode):
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "use_pnc": self.use_pnc,
         }
 
@@ -235,7 +236,7 @@ class SpeechToTextTurbo(FALNode):
     - Efficient speech-to-text
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="Local filesystem path (or remote URL) to a long audio file"
     )
     use_pnc: bool = Field(
@@ -244,7 +245,7 @@ class SpeechToTextTurbo(FALNode):
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "use_pnc": self.use_pnc,
         }
 
@@ -275,7 +276,7 @@ class SpeechToTextTurboStream(FALNode):
     - Efficient real-time processing
     """
 
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="Local filesystem path (or remote URL) to a long audio file"
     )
     use_pnc: bool = Field(
@@ -284,7 +285,7 @@ class SpeechToTextTurboStream(FALNode):
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "use_pnc": self.use_pnc,
         }
 
@@ -465,7 +466,7 @@ class Whisper(FALNode):
     chunk_level: ChunkLevel = Field(
         default=ChunkLevel.SEGMENT, description="Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm."
     )
     diarize: bool = Field(
@@ -481,7 +482,7 @@ class Whisper(FALNode):
             "num_speakers": self.num_speakers,
             "task": self.task.value,
             "chunk_level": self.chunk_level.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "diarize": self.diarize,
         }
 
@@ -535,7 +536,7 @@ class Wizper(FALNode):
     chunk_level: str = Field(
         default="segment", description="Level of the chunks to return."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm."
     )
     merge_chunks: bool = Field(
@@ -549,7 +550,7 @@ class Wizper(FALNode):
             "max_segment_len": self.max_segment_len,
             "task": self.task.value,
             "chunk_level": self.chunk_level,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "merge_chunks": self.merge_chunks,
         }
 

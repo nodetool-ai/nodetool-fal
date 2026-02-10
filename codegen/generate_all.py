@@ -25,6 +25,16 @@ MODULES = [
     'image_to_3d',
     'audio_to_video',
     '3d_to_3d',
+    'audio_to_text',
+    'image_to_json',
+    'json_processing',
+    'speech_to_speech',
+    'text_to_3d',
+    'text_to_json',
+    'text_to_text',
+    'unknown',
+    'video_to_audio',
+    'video_to_text',
 ]
 
 

@@ -50,6 +50,42 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["text"]
     },
+    "openrouter/router/openai/v1/responses": {
+        "class_name": "OpenrouterRouterOpenaiV1Responses",
+        "docstring": "The OpenRouter Responses API with fal, powered by OpenRouter, provides unified access to a wide range of large language models - including GPT, Claude, Gemini, and many others through a single API interface.",
+        "tags": ["llm", "language-model", "text-generation", "ai"],
+        "use_cases": [
+            "Text generation and completion",
+            "Conversational AI",
+            "Content summarization",
+            "Code generation",
+            "Creative writing assistance",
+        ],
+    },
+    "openrouter/router/openai/v1/embeddings": {
+        "class_name": "OpenrouterRouterOpenaiV1Embeddings",
+        "docstring": "The OpenRouter Embeddings API with fal, powered by OpenRouter, provides unified access to a wide range of large language models - including GPT, Claude, Gemini, and many others through a single API interface.",
+        "tags": ["llm", "language-model", "text-generation", "ai"],
+        "use_cases": [
+            "Text generation and completion",
+            "Conversational AI",
+            "Content summarization",
+            "Code generation",
+            "Creative writing assistance",
+        ],
+    },
+    "fal-ai/video-prompt-generator": {
+        "class_name": "VideoPromptGenerator",
+        "docstring": "Generate video prompts using a variety of techniques including camera direction, style, pacing, special effects and more.",
+        "tags": ["llm", "language-model", "text-generation", "ai"],
+        "use_cases": [
+            "Text generation and completion",
+            "Conversational AI",
+            "Content summarization",
+            "Code generation",
+            "Creative writing assistance",
+        ],
+    },
 }
 
 

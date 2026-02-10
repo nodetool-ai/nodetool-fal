@@ -332,7 +332,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
     },
     
     "fal-ai/luma-photon-flash": {
-        "class_name": "LumaPhotonFlash",
+        "class_name": "LumaPhotonFlashVideo",
         "docstring": "Luma Photon Flash generates photorealistic videos quickly with optimized speed.",
         "tags": ["video", "generation", "luma", "photon", "flash", "fast", "text-to-video"],
         "use_cases": [
@@ -430,7 +430,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
     },
 
     "fal-ai/pixverse/v5.6/text-to-video": {
-        "class_name": "PixverseV5.6TextToVideo",
+        "class_name": "PixverseV56TextToVideo",
         "docstring": "Pixverse",
         "tags": ["video", "generation", "text-to-video", "txt2vid"],
         "use_cases": [
@@ -508,7 +508,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "wan/v2.6/text-to-video": {
-        "class_name": "WanV2.6TextToVideo",
+        "class_name": "WanV26TextToVideo",
         "docstring": "Wan v2.6 Text to Video",
         "tags": ["video", "generation", "text-to-video", "txt2vid"],
         "use_cases": [
@@ -521,7 +521,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/kling-video/v2.6/pro/text-to-video": {
-        "class_name": "KlingVideoV2.6ProTextToVideo",
+        "class_name": "KlingVideoV26ProTextToVideo",
         "docstring": "Kling Video v2.6 Text to Video",
         "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
         "use_cases": [
@@ -534,7 +534,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/pixverse/v5.5/text-to-video": {
-        "class_name": "PixverseV5.5TextToVideo",
+        "class_name": "PixverseV55TextToVideo",
         "docstring": "Pixverse",
         "tags": ["video", "generation", "text-to-video", "txt2vid"],
         "use_cases": [
@@ -573,7 +573,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/hunyuan-video-v1.5/text-to-video": {
-        "class_name": "HunyuanVideoV1.5TextToVideo",
+        "class_name": "HunyuanVideoV15TextToVideo",
         "docstring": "Hunyuan Video V1.5",
         "tags": ["video", "generation", "text-to-video", "txt2vid"],
         "use_cases": [
@@ -664,7 +664,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/minimax/hailuo-2.3/standard/text-to-video": {
-        "class_name": "MinimaxHailuo2.3StandardTextToVideo",
+        "class_name": "MinimaxHailuo23StandardTextToVideo",
         "docstring": "MiniMax Hailuo 2.3 [Standard] (Text to Video)",
         "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
         "use_cases": [
@@ -677,7 +677,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/minimax/hailuo-2.3/pro/text-to-video": {
-        "class_name": "MinimaxHailuo2.3ProTextToVideo",
+        "class_name": "MinimaxHailuo23ProTextToVideo",
         "docstring": "MiniMax Hailuo 2.3 [Pro] (Text to Video)",
         "tags": ["video", "generation", "text-to-video", "txt2vid", "professional"],
         "use_cases": [
@@ -755,7 +755,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/veo3.1/fast": {
-        "class_name": "Veo3.1Fast",
+        "class_name": "Veo31Fast",
         "docstring": "Veo 3.1 Fast",
         "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
         "use_cases": [
@@ -768,7 +768,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
     },
     "fal-ai/veo3.1": {
-        "class_name": "Veo3.1",
+        "class_name": "Veo31",
         "docstring": "Veo 3.1",
         "tags": ["video", "generation", "text-to-video", "txt2vid"],
         "use_cases": [
@@ -870,6 +870,622 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Automated video production"
 
         ],
+    },
+    "fal-ai/wan/v2.2-a14b/text-to-video/lora": {
+        "class_name": "WanV22A14bTextToVideoLora",
+        "docstring": "Wan-2.2 text-to-video is a video model that generates high-quality videos with high visual quality and motion diversity from text prompts. This endpoint supports LoRAs made for Wan 2.2.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "lora"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan/v2.2-5b/text-to-video/distill": {
+        "class_name": "WanV225bTextToVideoDistill",
+        "docstring": "Wan 2.2's 5B distill model produces up to 5 seconds of video 720p at 24FPS with fluid motion and powerful prompt understanding",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan/v2.2-5b/text-to-video/fast-wan": {
+        "class_name": "WanV225bTextToVideoFastWan",
+        "docstring": "Wan 2.2's 5B FastVideo model produces up to 5 seconds of video 720p at 24FPS with fluid motion and powerful prompt understanding",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/text-to-video/turbo": {
+        "class_name": "WanV22A14bTextToVideoTurbo",
+        "docstring": "Wan-2.2 turbo text-to-video is a video model that generates high-quality videos with high visual quality and motion diversity from text prompts. ",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan/v2.2-5b/text-to-video": {
+        "class_name": "WanV225bTextToVideo",
+        "docstring": "Wan 2.2's 5B model produces up to 5 seconds of video 720p at 24FPS with fluid motion and powerful prompt understanding",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/text-to-video": {
+        "class_name": "WanV22A14bTextToVideo",
+        "docstring": "Wan-2.2 text-to-video is a video model that generates high-quality videos with high visual quality and motion diversity from text prompts. ",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/ltxv-13b-098-distilled": {
+        "class_name": "Ltxv13b098Distilled",
+        "docstring": "Generate long videos from prompts using LTX Video-0.9.8 13B Distilled and custom LoRA",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/minimax/hailuo-02/pro/text-to-video": {
+        "class_name": "MinimaxHailuo02ProTextToVideo",
+        "docstring": "MiniMax Hailuo-02 Text To Video API (Pro, 1080p): Advanced video generation model with 1080p resolution",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/bytedance/seedance/v1/pro/text-to-video": {
+        "class_name": "BytedanceSeedanceV1ProTextToVideo",
+        "docstring": "Seedance 1.0 Pro, a high quality video generation model developed by Bytedance.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/bytedance/seedance/v1/lite/text-to-video": {
+        "class_name": "BytedanceSeedanceV1LiteTextToVideo",
+        "docstring": "Seedance 1.0 Lite",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v2.1/master/text-to-video": {
+        "class_name": "KlingVideoV21MasterTextToVideo",
+        "docstring": "Kling 2.1 Master: The premium endpoint for Kling 2.1, designed for top-tier text-to-video generation with unparalleled motion fluidity, cinematic visuals, and exceptional prompt precision.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/ltx-video-13b-dev": {
+        "class_name": "LtxVideo13bDev",
+        "docstring": "Generate videos from prompts using LTX Video-0.9.7 13B and custom LoRA",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/ltx-video-13b-distilled": {
+        "class_name": "LtxVideo13bDistilled",
+        "docstring": "Generate videos from prompts using LTX Video-0.9.7 13B Distilled and custom LoRA",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pixverse/v4.5/text-to-video/fast": {
+        "class_name": "PixverseV45TextToVideoFast",
+        "docstring": "Generate high quality and fast video clips from text and image prompts using PixVerse v4.5 fast",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pixverse/v4.5/text-to-video": {
+        "class_name": "PixverseV45TextToVideo",
+        "docstring": "Generate high quality video clips from text and image prompts using PixVerse v4.5",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/vidu/q1/text-to-video": {
+        "class_name": "ViduQ1TextToVideo",
+        "docstring": "Vidu Q1 Text to Video generates high-quality 1080p videos with exceptional visual quality and motion diversity",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/magi": {
+        "class_name": "Magi",
+        "docstring": "MAGI-1 is a video generation model with exceptional understanding of physical interactions and cinematic prompts",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/magi-distilled": {
+        "class_name": "MagiDistilled",
+        "docstring": "MAGI-1 distilled is a faster video generation model with exceptional understanding of physical interactions and cinematic prompts",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pixverse/v4/text-to-video": {
+        "class_name": "PixverseV4TextToVideo",
+        "docstring": "Generate high quality video clips from text and image prompts using PixVerse v4",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pixverse/v4/text-to-video/fast": {
+        "class_name": "PixverseV4TextToVideoFast",
+        "docstring": "Generate high quality and fast video clips from text and image prompts using PixVerse v4 fast",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/lipsync/audio-to-video": {
+        "class_name": "KlingVideoLipsyncAudioToVideo",
+        "docstring": "Kling LipSync is an audio-to-video model that generates realistic lip movements from audio input.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/lipsync/text-to-video": {
+        "class_name": "KlingVideoLipsyncTextToVideo",
+        "docstring": "Kling LipSync is a text-to-video model that generates realistic lip movements from text input.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan-t2v-lora": {
+        "class_name": "WanT2vLora",
+        "docstring": "Add custom LoRAs to Wan-2.1 is a text-to-video model that generates high-quality videos with high visual quality and motion diversity from images",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "lora"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/luma-dream-machine/ray-2-flash": {
+        "class_name": "LumaDreamMachineRay2Flash",
+        "docstring": "Ray2 Flash is a fast video generative model capable of creating realistic visuals with natural, coherent motion.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pika/v2.1/text-to-video": {
+        "class_name": "PikaV21TextToVideo",
+        "docstring": "Start with a simple text input to create dynamic generations that defy expectations. Anything you dream can come to life with sharp details, impressive character control and cinematic camera moves.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pika/v2.2/text-to-video": {
+        "class_name": "PikaV22TextToVideo",
+        "docstring": "Start with a simple text input to create dynamic generations that defy expectations in up to 1080p. Experience better image clarity and crisper, sharper visuals.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pika/v2/turbo/text-to-video": {
+        "class_name": "PikaV2TurboTextToVideo",
+        "docstring": "Pika v2 Turbo creates videos from a text prompt with high quality output.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan-pro/text-to-video": {
+        "class_name": "WanProTextToVideo",
+        "docstring": "Wan-2.1 Pro is a premium text-to-video model that generates high-quality 1080p videos at 30fps with up to 6 seconds duration, delivering exceptional visual quality and motion diversity from text prompts",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v1.6/pro/effects": {
+        "class_name": "KlingVideoV16ProEffects",
+        "docstring": "Generate video clips from your prompts using Kling 1.6 (pro)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v1.6/standard/effects": {
+        "class_name": "KlingVideoV16StandardEffects",
+        "docstring": "Generate video clips from your prompts using Kling 1.6 (std)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v1.5/pro/effects": {
+        "class_name": "KlingVideoV15ProEffects",
+        "docstring": "Generate video clips from your prompts using Kling 1.5 (pro)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v1/standard/effects": {
+        "class_name": "KlingVideoV1StandardEffects",
+        "docstring": "Generate video clips from your prompts using Kling 1.0",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/ltx-video-v095": {
+        "class_name": "LtxVideoV095",
+        "docstring": "Generate videos from prompts using LTX Video-0.9.5",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v1.6/pro/text-to-video": {
+        "class_name": "KlingVideoV16ProTextToVideo",
+        "docstring": "Generate video clips from your prompts using Kling 1.6 (pro)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan/v2.1/1.3b/text-to-video": {
+        "class_name": "WanV2113bTextToVideo",
+        "docstring": "Wan-2.1 1.3B is a text-to-video model that generates high-quality videos with high visual quality and motion diversity from text promptsat faster speeds.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/wan-t2v": {
+        "class_name": "WanT2v",
+        "docstring": "Wan-2.1 is a text-to-video model that generates high-quality videos with high visual quality and motion diversity from text prompts",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/veo2": {
+        "class_name": "Veo2",
+        "docstring": "Veo 2 creates videos with realistic motion and high quality output. Explore different styles and find your own with extensive camera controls.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/minimax/video-01-director": {
+        "class_name": "MinimaxVideo01Director",
+        "docstring": "Generate video clips more accurately with respect to natural language descriptions and using camera movement instructions for shot control.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pixverse/v3.5/text-to-video": {
+        "class_name": "PixverseV35TextToVideo",
+        "docstring": "Generate high quality video clips from text prompts using PixVerse v3.5",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/pixverse/v3.5/text-to-video/fast": {
+        "class_name": "PixverseV35TextToVideoFast",
+        "docstring": "Generate high quality video clips quickly from text prompts using PixVerse v3.5 Fast",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/luma-dream-machine/ray-2": {
+        "class_name": "LumaDreamMachineRay2",
+        "docstring": "Ray2 is a large-scale video generative model capable of creating realistic visuals with natural, coherent motion.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/hunyuan-video-lora": {
+        "class_name": "HunyuanVideoLora",
+        "docstring": "Hunyuan Video is an Open video generation model with high visual quality, motion diversity, text-video alignment, and generation stability",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "lora"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/transpixar": {
+        "class_name": "Transpixar",
+        "docstring": "Transform text into stunning videos with TransPixar - an AI model that generates both RGB footage and alpha channels, enabling seamless compositing and creative video effects.",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v1.6/standard/text-to-video": {
+        "class_name": "KlingVideoV16StandardTextToVideo",
+        "docstring": "Generate video clips from your prompts using Kling 1.6 (std)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/minimax/video-01-live": {
+        "class_name": "MinimaxVideo01Live",
+        "docstring": "Generate video clips from your prompts using MiniMax model",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/kling-video/v1.5/pro/text-to-video": {
+        "class_name": "KlingVideoV15ProTextToVideo",
+        "docstring": "Generate video clips from your prompts using Kling 1.5 (pro)",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/fast-svd/text-to-video": {
+        "class_name": "FastSvdTextToVideo",
+        "docstring": "Generate short video clips from your prompts using SVD v1.1",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/fast-svd-lcm/text-to-video": {
+        "class_name": "FastSvdLcmTextToVideo",
+        "docstring": "Generate short video clips from your images using SVD v1.1 at Lightning Speed",
+        "tags": ["video", "generation", "text-to-video", "txt2vid", "fast"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    "fal-ai/minimax/video-01": {
+        "class_name": "MinimaxVideo01",
+        "docstring": "Generate video clips from your prompts using MiniMax model",
+        "tags": ["video", "generation", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "AI-generated video content",
+            "Marketing and advertising videos",
+            "Educational content creation",
+            "Social media video posts",
+            "Automated video production",
+        ],
+    },
+    # Kling Video V3 Standard Text-to-Video
+    "fal-ai/kling-video/v3/standard/text-to-video": {
+        "class_name": "KlingVideoV3StandardTextToVideo",
+        "docstring": "Kling Video V3 Standard generates videos from text prompts with balanced quality and speed using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "standard", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate cinematic videos from text descriptions",
+            "Create marketing videos from product descriptions",
+            "Produce educational video content from scripts",
+            "Generate social media video content",
+            "Create animated scenes from text prompts"
+        ],
+        "basic_fields": ["prompt", "duration", "aspect_ratio"]
+    },
+    # Kling Video V3 Pro Text-to-Video
+    "fal-ai/kling-video/v3/pro/text-to-video": {
+        "class_name": "KlingVideoV3ProTextToVideo",
+        "docstring": "Kling Video V3 Pro generates professional quality videos from text prompts with enhanced visual fidelity using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "pro", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Create professional-grade videos from detailed prompts",
+            "Generate cinematic video content with precise motion",
+            "Produce high-fidelity advertising videos",
+            "Create premium animated content from scripts",
+            "Generate top-tier video for film and media"
+        ],
+        "basic_fields": ["prompt", "duration", "aspect_ratio"]
     },
 }
 
