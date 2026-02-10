@@ -14,20 +14,14 @@ from nodetool.dsl.graph import GraphNode, SingleOutputGraphNode
 
 import typing
 from pydantic import Field
-from nodetool.dsl.handles import (
-    OutputHandle,
-    OutputsProxy,
-    DynamicOutputsProxy,
-    connect_field,
-)
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, DynamicOutputsProxy, connect_field
 import nodetool.nodes.fal.dynamic_schema
 from nodetool.workflows.base_node import BaseNode
-
 
 class FalAI(GraphNode[dict[str, Any]]):
     """
 
-        Dynamic FAL schema-driven node for running any fal.ai endpoint.
+        Dynamic FAL node for running any fal.ai endpoint.
         fal, schema, dynamic, openapi, inference, runtime, model
 
         Use cases:
@@ -35,7 +29,6 @@ class FalAI(GraphNode[dict[str, Any]]):
         - Prototype workflows with experimental FAL models
         - Run custom endpoints by sharing model info (llms.txt)
         - Build flexible pipelines that depend on runtime model selection
-        - Explore model inputs/outputs directly from OpenAPI metadata
 
     This node supports dynamic properties. Additional properties can be passed
     as keyword arguments during initialization and will be stored in the node's
@@ -45,17 +38,9 @@ class FalAI(GraphNode[dict[str, Any]]):
         node = FalAI(prop1=value1, prop2=value2)
     """
 
-    model_info: str | OutputHandle[str] = connect_field(
-        default="",
-        description="fal.ai llms.txt URL, fal.ai model URL, endpoint id, or raw llms.txt content used to derive the OpenAPI schema.",
-    )
+    model_info: str | OutputHandle[str] = connect_field(default='', description='Paste the full llms.txt from the fal.ai model page (e.g. fal.ai/models/... → copy all).')
 
-    def __init__(
-        self,
-        *,
-        dynamic_outputs: dict[str, typing.Any] | None = None,
-        **kwargs: typing.Any,
-    ) -> None:
+    def __init__(self, *, dynamic_outputs: dict[str, typing.Any] | None = None, **kwargs: typing.Any) -> None:
         """
         Initialize a FalAI node.
 
@@ -86,3 +71,5 @@ class FalAI(GraphNode[dict[str, Any]]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

@@ -53,4 +53,6 @@ cert.pem
 key.pem
 .aider*
 
-.codegpt
+.codegpt.codegen_cache/
+.codegen_cache/
+generated/

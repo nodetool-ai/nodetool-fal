@@ -20,7 +20,6 @@ from nodetool.metadata.types import (
     BaseType,
     DocumentRef,
     ImageRef,
-    ImageSize,
     Model3DRef,
     VideoRef,
     asset_types,
@@ -626,13 +625,6 @@ async def _coerce_input_value(
     asset_value = _coerce_asset_ref(value)
     if asset_value is not None:
         return await _serialize_asset_ref(asset_value, context, node)
-        
-    if isinstance(value, ImageSize):
-        # Convert ImageSize object to dict for FAL API
-        return {
-            "width": value.width,
-            "height": value.height,
-        }
 
     if resolved.get("type") == "array":
         item_schema = resolved.get("items") or {}
