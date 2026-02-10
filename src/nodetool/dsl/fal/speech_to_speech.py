@@ -35,19 +35,17 @@ class ChatterboxSpeechToSpeech(
     - Accent conversion
     """
 
-    source_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    source_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
         description=None,
     )
-    target_voice_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = (
-        connect_field(
-            default=types.AudioRef(
-                type="audio", uri="", asset_id=None, data=None, metadata=None
-            ),
-            description="Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.",
-        )
+    target_voice_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.",
     )
 
     @classmethod
@@ -86,15 +84,13 @@ class ResembleAiChatterboxhdSpeechToSpeech(
         default=False,
         description="If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.",
     )
-    target_voice_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = (
-        connect_field(
-            default=types.AudioRef(
-                type="audio", uri="", asset_id=None, data=None, metadata=None
-            ),
-            description="URL to the audio file which represents the voice of the output audio. If provided, this will override the target_voice setting. If neither target_voice nor target_voice_audio_url are provided, the default target voice will be used.",
-        )
+    target_voice_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="URL to the audio file which represents the voice of the output audio. If provided, this will override the target_voice setting. If neither target_voice nor target_voice_audio_url are provided, the default target voice will be used.",
     )
-    source_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    source_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),

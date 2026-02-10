@@ -38,7 +38,7 @@ class ElevenLabsScribeV2(
     language_code: str | OutputHandle[str] = connect_field(
         default="", description="Language code of the audio"
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -90,7 +90,7 @@ class ElevenLabsSpeechToText(
     language_code: str | OutputHandle[str] = connect_field(
         default="", description="Language code of the audio"
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -133,7 +133,7 @@ class SmartTurn(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
     - Process conversational audio
     """
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -170,7 +170,7 @@ class SpeechToText(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     - Extract text from speech
     """
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -211,7 +211,7 @@ class SpeechToTextStream(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Live speech-to-text conversion
     """
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -254,7 +254,7 @@ class SpeechToTextTurbo(
     - Efficient speech-to-text
     """
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -295,7 +295,7 @@ class SpeechToTextTurboStream(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Efficient real-time processing
     """
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -371,7 +371,7 @@ class Whisper(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
         default=nodetool.nodes.fal.speech_to_text.Whisper.ChunkLevel.SEGMENT,
         description="Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -433,7 +433,7 @@ class Wizper(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     chunk_level: str | OutputHandle[str] = connect_field(
         default="segment", description="Level of the chunks to return."
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),

@@ -247,7 +247,7 @@ class MeshyV6PreviewTextTo3d(
         default=True,
         description="Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
     )
-    texture_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    texture_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),

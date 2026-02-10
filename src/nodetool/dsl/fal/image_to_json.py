@@ -39,7 +39,7 @@ class BagelUnderstand(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str,
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="The seed to use for the generation."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),

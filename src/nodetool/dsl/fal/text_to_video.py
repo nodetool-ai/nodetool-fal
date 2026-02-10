@@ -61,7 +61,7 @@ class AnimateDiffSparseCtrlLCM(
         default=0,
         description="The frame index of the first keyframe to use for the generation.",
     )
-    keyframe_1_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    keyframe_1_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -79,7 +79,7 @@ class AnimateDiffSparseCtrlLCM(
         default=4,
         description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image.",
     )
-    keyframe_2_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    keyframe_2_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -89,7 +89,7 @@ class AnimateDiffSparseCtrlLCM(
         default="",
         description="The negative prompt to use. Use it to specify what you don't want.",
     )
-    keyframe_0_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    keyframe_0_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -132,9 +132,8 @@ class AnimateDiffTextToVideo(
         default="",
         description="The prompt to use for generating the video. Be as descriptive as possible for best results.",
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1,
-        description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.",
+    num_frames: int | OutputHandle[int] = connect_field(
+        default=16, description="The number of frames to generate for the video."
     )
     fps: int | OutputHandle[int] = connect_field(
         default=8, description="Number of frames per second to extract from the video."
@@ -146,8 +145,9 @@ class AnimateDiffTextToVideo(
         default=7.5,
         description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.",
     )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=16, description="The number of frames to generate for the video."
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1,
+        description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.",
     )
     num_inference_steps: int | OutputHandle[int] = connect_field(
         default=25, description="The number of inference steps to perform."
@@ -196,10 +196,6 @@ class AnimateDiffTurboTextToVideo(
         default="",
         description="The prompt to use for generating the video. Be as descriptive as possible for best results.",
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1,
-        description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.",
-    )
     fps: int | OutputHandle[int] = connect_field(
         default=8, description="Number of frames per second to extract from the video."
     )
@@ -207,22 +203,23 @@ class AnimateDiffTurboTextToVideo(
         default="square", description="The size of the video to generate."
     )
     guidance_scale: float | OutputHandle[float] = connect_field(
-        default=1,
+        default=2,
         description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.",
     )
-    num_frames: int | OutputHandle[int] = connect_field(
-        default=16, description="The number of frames to generate for the video."
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1,
+        description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.",
     )
     num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=4,
+        default=8,
         description="The number of inference steps to perform. 4-12 is recommended for turbo mode.",
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="(bad quality, worst quality:1.2), ugly faces, bad anime",
         description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).",
     )
-    motions: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The motions to apply to the video."
+    num_frames: int | OutputHandle[int] = connect_field(
+        default=16, description="The number of frames to generate for the video."
     )
 
     @classmethod
@@ -313,11 +310,11 @@ class BytedanceSeedanceV1LiteTextToVideo(
     AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.AspectRatio
     )
-    Duration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Duration
-    )
     Resolution: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Resolution
+    )
+    Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Duration
     )
 
     prompt: str | OutputHandle[str] = connect_field(
@@ -329,17 +326,17 @@ class BytedanceSeedanceV1LiteTextToVideo(
         default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    duration: (
-        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Duration
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Duration.VALUE_5,
-        description="Duration of the video in seconds",
-    )
     resolution: (
         nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Resolution
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Resolution.VALUE_720P,
         description="Video resolution - 480p for faster generation, 720p for higher quality",
+    )
+    duration: (
+        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Duration
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1LiteTextToVideo.Duration.VALUE_5,
+        description="Duration of the video in seconds",
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -387,11 +384,11 @@ class BytedanceSeedanceV1ProTextToVideo(
     AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.AspectRatio
     )
-    Duration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Duration
-    )
     Resolution: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Resolution
+    )
+    Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Duration
     )
 
     prompt: str | OutputHandle[str] = connect_field(
@@ -403,17 +400,17 @@ class BytedanceSeedanceV1ProTextToVideo(
         default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    duration: (
-        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Duration
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Duration.VALUE_5,
-        description="Duration of the video in seconds",
-    )
     resolution: (
         nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Resolution
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Resolution.VALUE_1080P,
         description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality",
+    )
+    duration: (
+        nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Duration
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.BytedanceSeedanceV1ProTextToVideo.Duration.VALUE_5,
+        description="Duration of the video in seconds",
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -462,9 +459,11 @@ class CogVideoX5B(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
     use_rife: bool | OutputHandle[bool] = connect_field(
         default=True, description="Use RIFE for video interpolation"
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="The LoRAs to use for the image generation. We currently support one lora.",
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = (
+        connect_field(
+            default=[],
+            description="The LoRAs to use for the image generation. We currently support one lora.",
+        )
     )
     video_size: str | OutputHandle[str] = connect_field(
         default="", description="The size of the generated video."
@@ -742,9 +741,11 @@ class HunyuanVideoLora(
         default=nodetool.nodes.fal.text_to_video.HunyuanVideoLora.Resolution.VALUE_720P,
         description="The resolution of the video to generate.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.",
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = (
+        connect_field(
+            default=[],
+            description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.",
+        )
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=False, description="If set to true, the safety checker will be enabled."
@@ -891,7 +892,7 @@ class InfinitalkSingleText(
     text_input: str | OutputHandle[str] = connect_field(
         default="", description="The text input to guide video generation."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1215,7 +1216,7 @@ class KlingVideoLipsyncAudioToVideo(
     - Automated video production
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1227,7 +1228,7 @@ class KlingVideoLipsyncAudioToVideo(
         ),
         description="The URL of the video to generate the lip sync for. Supports .mp4/.mov, ≤100MB, 2–10s, 720p/1080p only, width/height 720–1920px.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1277,7 +1278,7 @@ class KlingVideoLipsyncTextToVideo(
         default="",
         description="Text content for lip-sync video generation. Max 120 characters.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1350,10 +1351,6 @@ class KlingVideoV15ProEffects(
         default=nodetool.nodes.fal.text_to_video.KlingVideoV15ProEffects.Duration.VALUE_5,
         description="The duration of the generated video in seconds",
     )
-    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="URL of images to be used for hug, kiss or heart_gesture video.",
-    )
     effect_scene: (
         nodetool.nodes.fal.text_to_video.KlingVideoV15ProEffects.EffectScene
     ) = Field(
@@ -1361,6 +1358,10 @@ class KlingVideoV15ProEffects(
             ""
         ),
         description="The effect scene to use for the video generation",
+    )
+    input_images: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="URL of images to be used for hug, kiss or heart_gesture video.",
     )
 
     @classmethod
@@ -1395,25 +1396,25 @@ class KlingVideoV15ProTextToVideo(
     - Automated video production
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.AspectRatio
-    )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.Duration
     )
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.AspectRatio
+    )
 
     prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    aspect_ratio: (
-        nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.AspectRatio
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
-    )
     duration: nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.Duration = (
         Field(
             default=nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.Duration.VALUE_5,
             description="The duration of the generated video in seconds",
         )
+    )
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV15ProTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video frame",
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="blur, distort, and low quality", description=None
@@ -1466,10 +1467,6 @@ class KlingVideoV16ProEffects(
         default=nodetool.nodes.fal.text_to_video.KlingVideoV16ProEffects.Duration.VALUE_5,
         description="The duration of the generated video in seconds",
     )
-    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="URL of images to be used for hug, kiss or heart_gesture video.",
-    )
     effect_scene: (
         nodetool.nodes.fal.text_to_video.KlingVideoV16ProEffects.EffectScene
     ) = Field(
@@ -1477,6 +1474,10 @@ class KlingVideoV16ProEffects(
             ""
         ),
         description="The effect scene to use for the video generation",
+    )
+    input_images: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="URL of images to be used for hug, kiss or heart_gesture video.",
     )
 
     @classmethod
@@ -1511,25 +1512,25 @@ class KlingVideoV16ProTextToVideo(
     - Automated video production
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.AspectRatio
-    )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.Duration
     )
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.AspectRatio
+    )
 
     prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    aspect_ratio: (
-        nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.AspectRatio
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
-    )
     duration: nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.Duration = (
         Field(
             default=nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.Duration.VALUE_5,
             description="The duration of the generated video in seconds",
         )
+    )
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV16ProTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video frame",
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="blur, distort, and low quality", description=None
@@ -1584,10 +1585,6 @@ class KlingVideoV16StandardEffects(
             description="The duration of the generated video in seconds",
         )
     )
-    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="URL of images to be used for hug, kiss or heart_gesture video.",
-    )
     effect_scene: (
         nodetool.nodes.fal.text_to_video.KlingVideoV16StandardEffects.EffectScene
     ) = Field(
@@ -1595,6 +1592,10 @@ class KlingVideoV16StandardEffects(
             ""
         ),
         description="The effect scene to use for the video generation",
+    )
+    input_images: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="URL of images to be used for hug, kiss or heart_gesture video.",
     )
 
     @classmethod
@@ -1629,25 +1630,25 @@ class KlingVideoV16StandardTextToVideo(
     - Automated video production
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.AspectRatio
-    )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.Duration
     )
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.AspectRatio
+    )
 
     prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    aspect_ratio: (
-        nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.AspectRatio
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
-    )
     duration: (
         nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.Duration
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.Duration.VALUE_5,
         description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV16StandardTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video frame",
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="blur, distort, and low quality", description=None
@@ -1702,10 +1703,6 @@ class KlingVideoV1StandardEffects(
             description="The duration of the generated video in seconds",
         )
     )
-    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="URL of images to be used for hug, kiss or heart_gesture video.",
-    )
     effect_scene: (
         nodetool.nodes.fal.text_to_video.KlingVideoV1StandardEffects.EffectScene
     ) = Field(
@@ -1713,6 +1710,10 @@ class KlingVideoV1StandardEffects(
             ""
         ),
         description="The effect scene to use for the video generation",
+    )
+    input_images: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="URL of images to be used for hug, kiss or heart_gesture video.",
     )
 
     @classmethod
@@ -1747,28 +1748,22 @@ class KlingVideoV1StandardTextToVideo(
     - Create video concepts
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.AspectRatio
-    )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.Duration
     )
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.AspectRatio
+    )
 
     prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    aspect_ratio: (
-        nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.AspectRatio
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
-    )
-    advanced_camera_control: str | OutputHandle[str] = connect_field(
-        default="", description="Advanced Camera control parameters"
-    )
     duration: (
         nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.Duration
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.Duration.VALUE_5,
         description="The duration of the generated video in seconds",
+    )
+    advanced_camera_control: str | OutputHandle[str] = connect_field(
+        default="", description="Advanced Camera control parameters"
     )
     camera_control: (
         nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.CameraControl
@@ -1777,6 +1772,12 @@ class KlingVideoV1StandardTextToVideo(
         ]
         | None
     ) = connect_field(default=None, description="Camera control parameters")
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV1StandardTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video frame",
+    )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="blur, distort, and low quality", description=None
     )
@@ -1817,25 +1818,25 @@ class KlingVideoV21MasterTextToVideo(
     - Automated video production
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.AspectRatio
-    )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.Duration
     )
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.AspectRatio
+    )
 
     prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    aspect_ratio: (
-        nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.AspectRatio
-    ) = Field(
-        default=nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video frame",
-    )
     duration: (
         nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.Duration
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.Duration.VALUE_5,
         description="The duration of the generated video in seconds",
+    )
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV21MasterTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video frame",
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="blur, distort, and low quality", description=None
@@ -1912,6 +1913,180 @@ class KlingVideoV26ProTextToVideo(
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
         return nodetool.nodes.fal.text_to_video.KlingVideoV26ProTextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingVideoV3ProTextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Kling Video V3 Pro generates professional quality videos from text prompts with enhanced visual fidelity using the latest V3 model.
+    video, generation, kling, v3, pro, text-to-video, txt2vid
+
+    Use cases:
+    - Create professional-grade videos from detailed prompts
+    - Generate cinematic video content with precise motion
+    - Produce high-fidelity advertising videos
+    - Create premium animated content from scripts
+    - Generate top-tier video for film and media
+    """
+
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.AspectRatio
+    )
+    Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.Duration
+    )
+    ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.",
+    )
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video frame",
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.",
+    )
+    duration: nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.Duration = (
+        Field(
+            default=nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.Duration.VALUE_5,
+            description="The duration of the generated video in seconds",
+        )
+    )
+    multi_prompt: (
+        list[types.KlingV3MultiPromptElement]
+        | OutputHandle[list[types.KlingV3MultiPromptElement]]
+    ) = connect_field(
+        default=[],
+        description="List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots with specified prompts and durations.",
+    )
+    shot_type: nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.ShotType = (
+        Field(
+            default=nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo.ShotType.CUSTOMIZE,
+            description="The type of multi-shot video generation",
+        )
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="blur, distort, and low quality", description=None
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=0.5,
+        description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.KlingVideoV3ProTextToVideo
+
+    @classmethod
+    def get_node_type(cls):
+        return cls.get_node_class().get_node_type()
+
+
+import typing
+from pydantic import Field
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
+import nodetool.nodes.fal.text_to_video
+from nodetool.workflows.base_node import BaseNode
+
+
+class KlingVideoV3StandardTextToVideo(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
+    """
+
+    Kling Video V3 Standard generates videos from text prompts with balanced quality and speed using the latest V3 model.
+    video, generation, kling, v3, standard, text-to-video, txt2vid
+
+    Use cases:
+    - Generate cinematic videos from text descriptions
+    - Create marketing videos from product descriptions
+    - Produce educational video content from scripts
+    - Generate social media video content
+    - Create animated scenes from text prompts
+    """
+
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.AspectRatio
+    )
+    Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.Duration
+    )
+    ShotType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.ShotType
+    )
+
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.",
+    )
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video frame",
+    )
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice",
+    )
+    generate_audio: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.",
+    )
+    duration: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.Duration
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.Duration.VALUE_5,
+        description="The duration of the generated video in seconds",
+    )
+    multi_prompt: (
+        list[types.KlingV3MultiPromptElement]
+        | OutputHandle[list[types.KlingV3MultiPromptElement]]
+    ) = connect_field(
+        default=[],
+        description="List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots with specified prompts and durations.",
+    )
+    shot_type: (
+        nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.ShotType
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo.ShotType.CUSTOMIZE,
+        description="The type of multi-shot video generation",
+    )
+    negative_prompt: str | OutputHandle[str] = connect_field(
+        default="blur, distort, and low quality", description=None
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=0.5,
+        description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.",
+    )
+
+    @classmethod
+    def get_node_class(cls) -> type[BaseNode]:
+        return nodetool.nodes.fal.text_to_video.KlingVideoV3StandardTextToVideo
 
     @classmethod
     def get_node_type(cls):
@@ -2609,7 +2784,7 @@ class Ltx219BDistilledTextToVideoLora(
     fps: float | OutputHandle[float] = connect_field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: (
@@ -2854,7 +3029,7 @@ class Ltx219BTextToVideoLora(
     fps: float | OutputHandle[float] = connect_field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: nodetool.nodes.fal.text_to_video.Ltx219BTextToVideoLora.CameraLora = (
@@ -2972,8 +3147,8 @@ class LtxVideo13bDev(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
         default=False,
         description="Whether to expand the prompt using a language model.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
     second_pass_num_inference_steps: int | OutputHandle[int] = connect_field(
         default=30, description="Number of inference steps during the second pass."
@@ -3063,8 +3238,8 @@ class LtxVideo13bDistilled(
         default=False,
         description="Whether to expand the prompt using a language model.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
@@ -3225,8 +3400,8 @@ class Ltxv13b098Distilled(
         default=0.5,
         description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
@@ -3513,10 +3688,10 @@ class MinimaxHailuo02ProTextToVideo(
     - Automated video production
     """
 
+    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
     prompt_optimizer: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -3550,11 +3725,11 @@ class MinimaxHailuo23ProTextToVideo(
     - Automated video production
     """
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Text prompt for video generation"
+    )
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     @classmethod
@@ -3593,16 +3768,16 @@ class MinimaxHailuo23StandardTextToVideo(
         nodetool.nodes.fal.text_to_video.MinimaxHailuo23StandardTextToVideo.Duration
     )
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
+    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
     duration: (
         nodetool.nodes.fal.text_to_video.MinimaxHailuo23StandardTextToVideo.Duration
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.MinimaxHailuo23StandardTextToVideo.Duration.VALUE_6,
         description="The duration of the video in seconds.",
     )
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to use the model's prompt optimizer"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -3634,10 +3809,10 @@ class MinimaxVideo01(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
     - Automated video production
     """
 
+    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
     prompt_optimizer: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -3671,12 +3846,12 @@ class MinimaxVideo01Director(
     - Automated video production
     """
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str | OutputHandle[str] = connect_field(
         default="",
         description="Text prompt for video generation. Camera movement instructions can be added using square brackets (e.g. [Pan left] or [Zoom in]). You can use up to 3 combined movements per prompt. Supported movements: Truck left/right, Pan left/right, Push in/Pull out, Pedestal up/down, Tilt up/down, Zoom in/out, Shake, Tracking shot, Static shot. For example: [Truck left, Pan right, Zoom in]. For a more detailed guide, refer https://sixth-switch-2ac.notion.site/T2V-01-Director-Model-Tutorial-with-camera-movement-1886c20a98eb80f395b8e05291ad8645",
+    )
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     @classmethod
@@ -3711,10 +3886,10 @@ class MinimaxVideo01Live(
     - Automated video production
     """
 
+    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
     prompt_optimizer: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
-    prompt: str | OutputHandle[str] = connect_field(default="", description=None)
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -4758,24 +4933,24 @@ class SeeDanceV15ProTextToVideo(
     - Create dance animation prototypes
     """
 
-    Resolution: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Resolution
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.AspectRatio
     )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Duration
     )
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.AspectRatio
+    Resolution: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Resolution
     )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: (
-        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Resolution
+    aspect_ratio: (
+        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.AspectRatio
     ) = Field(
-        default=nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Resolution.VALUE_720P,
-        description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality",
+        default=nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.AspectRatio.RATIO_16_9,
+        description="The aspect ratio of the generated video",
     )
     duration: nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Duration = (
         Field(
@@ -4786,11 +4961,11 @@ class SeeDanceV15ProTextToVideo(
     generate_audio: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to generate audio for the video"
     )
-    aspect_ratio: (
-        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.AspectRatio
+    resolution: (
+        nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Resolution
     ) = Field(
-        default=nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.AspectRatio.RATIO_16_9,
-        description="The aspect ratio of the generated video",
+        default=nodetool.nodes.fal.text_to_video.SeeDanceV15ProTextToVideo.Resolution.VALUE_720P,
+        description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality",
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -4838,11 +5013,11 @@ class SeeDanceV1ProFastTextToVideo(
     AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.AspectRatio
     )
-    Duration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Duration
-    )
     Resolution: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Resolution
+    )
+    Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Duration
     )
 
     prompt: str | OutputHandle[str] = connect_field(
@@ -4854,17 +5029,17 @@ class SeeDanceV1ProFastTextToVideo(
         default=nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
     )
-    duration: nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Duration = (
-        Field(
-            default=nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Duration.VALUE_5,
-            description="Duration of the video in seconds",
-        )
-    )
     resolution: (
         nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Resolution
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Resolution.VALUE_1080P,
         description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality",
+    )
+    duration: nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Duration = (
+        Field(
+            default=nodetool.nodes.fal.text_to_video.SeeDanceV1ProFastTextToVideo.Duration.VALUE_5,
+            description="Duration of the video in seconds",
+        )
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -4922,7 +5097,7 @@ class StableVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
         default=-1,
         description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -5116,7 +5291,7 @@ class VeedFabric10Text(
         default="",
         description="Optional additional voice description. The primary voice description is auto-generated from the image. You can use simple descriptors like 'British accent' or 'Confident' or provide a detailed description like 'Confident male voice, mid-20s, with notes of...'",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -5415,11 +5590,11 @@ class Wan25PreviewTextToVideo(
     - Automated video production
     """
 
-    Duration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Duration
-    )
     AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.AspectRatio
+    )
+    Duration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Duration
     )
     Resolution: typing.ClassVar[type] = (
         nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Resolution
@@ -5429,15 +5604,15 @@ class Wan25PreviewTextToVideo(
         default="",
         description="The text prompt for video generation. Supports Chinese and English, max 800 characters.",
     )
-    duration: nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Duration = Field(
-        default=nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Duration.VALUE_5,
-        description="Duration of the generated video in seconds. Choose between 5 or 10 seconds.",
-    )
     aspect_ratio: (
         nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.AspectRatio
     ) = Field(
         default=nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.AspectRatio.RATIO_16_9,
         description="The aspect ratio of the generated video",
+    )
+    duration: nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Duration = Field(
+        default=nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Duration.VALUE_5,
+        description="Duration of the generated video in seconds. Choose between 5 or 10 seconds.",
     )
     resolution: nodetool.nodes.fal.text_to_video.Wan25PreviewTextToVideo.Resolution = (
         Field(
@@ -5445,7 +5620,7 @@ class Wan25PreviewTextToVideo(
             description="Video resolution tier",
         )
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -5461,16 +5636,16 @@ class Wan25PreviewTextToVideo(
         default=-1,
         description="Random seed for reproducibility. If None, a random seed is chosen.",
     )
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time.",
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="",
         description="Negative prompt to describe content to avoid. Max 500 characters.",
     )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time.",
     )
 
     @classmethod
@@ -5765,8 +5940,10 @@ class WanT2vLora(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=nodetool.nodes.fal.text_to_video.WanT2vLora.AspectRatio.RATIO_16_9,
         description="Aspect ratio of the generated video (16:9 or 9:16).",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to be used in the inference."
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = (
+        connect_field(
+            default=[], description="LoRA weights to be used in the inference."
+        )
     )
     frames_per_second: int | OutputHandle[int] = connect_field(
         default=16,
@@ -6382,8 +6559,10 @@ class WanV22A14bTextToVideoLora(
     reverse_video: bool | OutputHandle[bool] = connect_field(
         default=False, description="If true, the video will be reversed."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to be used in the inference."
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(
+            default=[], description="LoRA weights to be used in the inference."
+        )
     )
     frames_per_second: int | OutputHandle[int] = connect_field(
         default=16,
@@ -6621,7 +6800,7 @@ class WanV26TextToVideo(
         default=True,
         description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time.",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",

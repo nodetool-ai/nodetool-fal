@@ -39,37 +39,37 @@ class FfmpegApiLoudnorm(
         default="",
         description="Measured true peak of input file in dBTP. Required for linear mode.",
     )
+    offset: float | OutputHandle[float] = connect_field(
+        default=0, description="Offset gain in dB applied before the true-peak limiter"
+    )
     print_summary: bool | OutputHandle[bool] = connect_field(
         default=False,
         description="Return loudness measurement summary with the normalized audio",
-    )
-    linear: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).",
     )
     measured_i: str | OutputHandle[str] = connect_field(
         default="",
         description="Measured integrated loudness of input file in LUFS. Required for linear mode.",
     )
-    offset: float | OutputHandle[float] = connect_field(
-        default=0, description="Offset gain in dB applied before the true-peak limiter"
+    linear: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).",
     )
     measured_lra: str | OutputHandle[str] = connect_field(
         default="",
         description="Measured loudness range of input file in LU. Required for linear mode.",
     )
-    measured_thresh: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Measured threshold of input file in LUFS. Required for linear mode.",
-    )
     dual_mono: bool | OutputHandle[bool] = connect_field(
         default=False,
         description="Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems",
     )
+    measured_thresh: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Measured threshold of input file in LUFS. Required for linear mode.",
+    )
     true_peak: float | OutputHandle[float] = connect_field(
         default=-0.1, description="Maximum true peak in dBTP."
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -116,7 +116,7 @@ class FfmpegApiMetadata(SingleOutputGraphNode[Any], GraphNode[Any]):
         default=False,
         description="Whether to extract the start and end frames for videos. Note that when true the request will be slower.",
     )
-    media_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    media: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -169,7 +169,7 @@ class FfmpegApiWaveform(
         default=3,
         description="Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.",
     )
-    media_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    media: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),

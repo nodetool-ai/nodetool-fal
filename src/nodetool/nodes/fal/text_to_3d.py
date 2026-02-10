@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
+from nodetool.nodes.fal.types import Turn
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -261,7 +262,7 @@ class MeshyV6PreviewTextTo3d(FALNode):
     should_remesh: bool = Field(
         default=True, description="Whether to enable the remesh phase. When false, returns unprocessed triangular mesh."
     )
-    texture_image_url: ImageRef = Field(
+    texture_image: ImageRef = Field(
         default=ImageRef(), description="2D image to guide the texturing process (only used in 'full' mode)"
     )
     topology: Topology = Field(
@@ -281,7 +282,7 @@ class MeshyV6PreviewTextTo3d(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        texture_image_url_base64 = await context.image_to_base64(self.texture_image_url)
+        texture_image_base64 = await context.image_to_base64(self.texture_image)
         arguments = {
             "prompt": self.prompt,
             "enable_pbr": self.enable_pbr,
@@ -291,7 +292,7 @@ class MeshyV6PreviewTextTo3d(FALNode):
             "mode": self.mode.value,
             "symmetry_mode": self.symmetry_mode.value,
             "should_remesh": self.should_remesh,
-            "texture_image_url": f"data:image/png;base64,{texture_image_url_base64}",
+            "texture_image_url": f"data:image/png;base64,{texture_image_base64}",
             "topology": self.topology.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,

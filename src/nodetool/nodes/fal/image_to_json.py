@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
@@ -24,16 +25,16 @@ class BagelUnderstand(FALNode):
     seed: int = Field(
         default=-1, description="The seed to use for the generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image for the query."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -48,4 +49,4 @@ class BagelUnderstand(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "seed", "image_url"]
+        return ["prompt", "seed", "image"]

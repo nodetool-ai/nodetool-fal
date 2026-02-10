@@ -46,6 +46,9 @@ class NodeSpec:
 class SchemaParser:
     """Parses OpenAPI schemas into node specifications."""
 
+    def __init__(self):
+        self._root_schema: dict[str, Any] = {}
+
     def parse(self, openapi_schema: dict[str, Any]) -> NodeSpec:
         """
         Parse an OpenAPI schema into a node specification.
@@ -56,6 +59,8 @@ class SchemaParser:
         Returns:
             NodeSpec with all information needed to generate a node
         """
+        self._root_schema = openapi_schema
+
         # Extract endpoint ID
         endpoint_id = self._extract_endpoint_id(openapi_schema)
         
@@ -277,6 +282,11 @@ class SchemaParser:
             return "bool"
         elif json_type == "array":
             items = prop.get("items", {})
+            # Handle $ref in array items (complex object types)
+            if "$ref" in items:
+                ref_type = self._resolve_ref_type_name(items["$ref"])
+                if ref_type:
+                    return f"list[{ref_type}]"
             item_type = self._json_type_to_python(items, None, "")
             return f"list[{item_type}]"
         elif json_type == "object":
@@ -284,8 +294,33 @@ class SchemaParser:
         
         return "Any"
 
+    def _resolve_ref_type_name(self, ref_path: str) -> Optional[str]:
+        """Resolve a $ref path to the referenced schema's title or name.
+        
+        Returns the schema title (e.g., 'KlingV3MultiPromptElement') which
+        corresponds to a BaseType subclass name.
+        """
+        if not ref_path.startswith("#/"):
+            return None
+        parts = ref_path.lstrip("#/").split("/")
+        current = self._root_schema
+        for part in parts:
+            current = current.get(part, {})
+            if not current:
+                return None
+        # Use the title from the resolved schema
+        return current.get("title")
+
     def _get_default_value(self, prop: dict[str, Any], python_type: str, required: bool, enum_name: Optional[str] = None) -> str:
         """Get default value for a field."""
+        # Asset refs should always default to empty refs in nodetool nodes.
+        if "ImageRef" in python_type:
+            return "ImageRef()"
+        if "VideoRef" in python_type:
+            return "VideoRef()"
+        if "AudioRef" in python_type:
+            return "AudioRef()"
+
         if "default" in prop:
             default = prop["default"]
             if isinstance(default, str):
@@ -305,13 +340,7 @@ class SchemaParser:
                 return str(default)
         
         # Generate sensible defaults based on type
-        if "ImageRef" in python_type:
-            return "ImageRef()"
-        elif "VideoRef" in python_type:
-            return "VideoRef()"
-        elif "AudioRef" in python_type:
-            return "AudioRef()"
-        elif python_type == "str":
+        if python_type == "str":
             return '""'
         elif python_type == "int":
             return "-1" if "seed" in prop.get("description", "").lower() else "0"

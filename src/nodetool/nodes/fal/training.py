@@ -22,7 +22,7 @@ class ZImageBaseTrainer(FALNode):
     steps: int = Field(
         default=2000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images and corresponding captions. The images should be named: ROOT.EXT. For example: 001.jpg The corresponding captions should be named: ROOT.txt. For example: 001.txt If no text file is provided for an image, the default_caption will be used."
     )
     learning_rate: float = Field(
@@ -33,10 +33,10 @@ class ZImageBaseTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -53,7 +53,7 @@ class ZImageBaseTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class ZImageTurboTrainerV2(FALNode):
     """
@@ -71,7 +71,7 @@ class ZImageTurboTrainerV2(FALNode):
     steps: int = Field(
         default=2000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images and corresponding captions. The images should be named: ROOT.EXT. For example: 001.jpg The corresponding captions should be named: ROOT.txt. For example: 001.txt If no text file is provided for an image, the default_caption will be used."
     )
     learning_rate: float = Field(
@@ -82,10 +82,10 @@ class ZImageTurboTrainerV2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -102,7 +102,7 @@ class ZImageTurboTrainerV2(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class Flux2Klein9BBaseTrainerEdit(FALNode):
     """
@@ -128,7 +128,7 @@ class Flux2Klein9BBaseTrainerEdit(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain up to four reference image for each image pair. The reference images should be named: ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT For example: photo_start.jpg, photo_start2.jpg, photo_end.jpg The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -142,10 +142,10 @@ class Flux2Klein9BBaseTrainerEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -163,7 +163,7 @@ class Flux2Klein9BBaseTrainerEdit(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class Flux2Klein9BBaseTrainer(FALNode):
     """
@@ -189,7 +189,7 @@ class Flux2Klein9BBaseTrainer(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better. The zip can also contain a text file for each image. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -203,10 +203,10 @@ class Flux2Klein9BBaseTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -224,7 +224,7 @@ class Flux2Klein9BBaseTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class Flux2Klein4BBaseTrainer(FALNode):
     """
@@ -250,7 +250,7 @@ class Flux2Klein4BBaseTrainer(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better. The zip can also contain a text file for each image. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -264,10 +264,10 @@ class Flux2Klein4BBaseTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -285,7 +285,7 @@ class Flux2Klein4BBaseTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class Flux2Klein4BBaseTrainerEdit(FALNode):
     """
@@ -311,7 +311,7 @@ class Flux2Klein4BBaseTrainerEdit(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain up to four reference image for each image pair. The reference images should be named: ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT For example: photo_start.jpg, photo_start2.jpg, photo_end.jpg The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -325,10 +325,10 @@ class Flux2Klein4BBaseTrainerEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -346,7 +346,7 @@ class Flux2Klein4BBaseTrainerEdit(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class QwenImage2512TrainerV2(FALNode):
     """
@@ -364,7 +364,7 @@ class QwenImage2512TrainerV2(FALNode):
     steps: int = Field(
         default=2000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images and corresponding captions. The images should be named: ROOT.EXT. For example: 001.jpg The corresponding captions should be named: ROOT.txt. For example: 001.txt If no text file is provided for an image, the default_caption will be used."
     )
     learning_rate: float = Field(
@@ -375,10 +375,10 @@ class QwenImage2512TrainerV2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -395,7 +395,7 @@ class QwenImage2512TrainerV2(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class Flux2TrainerV2Edit(FALNode):
     """
@@ -421,7 +421,7 @@ class Flux2TrainerV2Edit(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain up to four reference image for each image pair. The reference images should be named: ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT For example: photo_start.jpg, photo_start2.jpg, photo_end.jpg The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -435,10 +435,10 @@ class Flux2TrainerV2Edit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -456,7 +456,7 @@ class Flux2TrainerV2Edit(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class Flux2TrainerV2(FALNode):
     """
@@ -482,7 +482,7 @@ class Flux2TrainerV2(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better. The zip can also contain a text file for each image. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -496,10 +496,10 @@ class Flux2TrainerV2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -517,7 +517,7 @@ class Flux2TrainerV2(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class QwenImage2512Trainer(FALNode):
     """
@@ -535,7 +535,7 @@ class QwenImage2512Trainer(FALNode):
     steps: int = Field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive for text-to-image training. The zip should contain images with their corresponding text captions: image.EXT and image.txt For example: photo.jpg and photo.txt The text file contains the caption/prompt describing the target image. If no text file is provided for an image, the default_caption will be used. If no default_caption is provided and a text file is missing, the training will fail."
     )
     learning_rate: float = Field(
@@ -546,10 +546,10 @@ class QwenImage2512Trainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -566,7 +566,7 @@ class QwenImage2512Trainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class QwenImageEdit2511Trainer(FALNode):
     """
@@ -584,7 +584,7 @@ class QwenImageEdit2511Trainer(FALNode):
     steps: int = Field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain more than one reference image for each image pair. The reference images should be named: ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT For example: photo_start.jpg, photo_start2.jpg, photo_end.jpg The Reference Image Count field should be set to the number of reference images. The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -595,10 +595,10 @@ class QwenImageEdit2511Trainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -615,7 +615,7 @@ class QwenImageEdit2511Trainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class QwenImageLayeredTrainer(FALNode):
     """
@@ -633,7 +633,7 @@ class QwenImageLayeredTrainer(FALNode):
     steps: int = Field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain groups of images. The images should be named: ROOT_start.EXT, ROOT_end.EXT, ROOT_end2.EXT, ..., ROOT_endN.EXT For example: photo_start.png, photo_end.png, photo_end2.png, ..., photo_endN.png The start image is the base image that will be decomposed into layers. The end images are the layers that will be added to the base image. ROOT_end.EXT is the first layer, ROOT_end2.EXT is the second layer, and so on. You can have up to 8 layers. All image groups must have the same number of output layers. The end images can contain transparent regions. Only PNG and WebP images are supported since these are the only formats that support transparency. The zip can also contain a text file for each image group. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify a description of the base image. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -644,10 +644,10 @@ class QwenImageLayeredTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -664,7 +664,7 @@ class QwenImageLayeredTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class QwenImageEdit2509Trainer(FALNode):
     """
@@ -682,7 +682,7 @@ class QwenImageEdit2509Trainer(FALNode):
     steps: int = Field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain more than one reference image for each image pair. The reference images should be named: ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT For example: photo_start.jpg, photo_start2.jpg, photo_end.jpg The Reference Image Count field should be set to the number of reference images. The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -693,10 +693,10 @@ class QwenImageEdit2509Trainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -713,7 +713,7 @@ class QwenImageEdit2509Trainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class ZImageTrainer(FALNode):
     """
@@ -740,7 +740,7 @@ class ZImageTrainer(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better. The zip can also contain a text file for each image. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     training_type: TrainingType = Field(
@@ -754,10 +754,10 @@ class ZImageTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "training_type": self.training_type.value,
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
@@ -775,7 +775,7 @@ class ZImageTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "training_type", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "training_type", "learning_rate", "default_caption"]
 
 class Flux2TrainerEdit(FALNode):
     """
@@ -801,7 +801,7 @@ class Flux2TrainerEdit(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain up to four reference image for each image pair. The reference images should be named: ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT For example: photo_start.jpg, photo_start2.jpg, photo_end.jpg The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -815,10 +815,10 @@ class Flux2TrainerEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -836,7 +836,7 @@ class Flux2TrainerEdit(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class Flux2Trainer(FALNode):
     """
@@ -862,7 +862,7 @@ class Flux2Trainer(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better. The zip can also contain a text file for each image. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -876,10 +876,10 @@ class Flux2Trainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
             "output_lora_format": self.output_lora_format.value,
@@ -897,7 +897,7 @@ class Flux2Trainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption", "output_lora_format"]
+        return ["steps", "image_data", "learning_rate", "default_caption", "output_lora_format"]
 
 class QwenImageEditPlusTrainer(FALNode):
     """
@@ -915,7 +915,7 @@ class QwenImageEditPlusTrainer(FALNode):
     steps: int = Field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain more than one reference image for each image pair. The reference images should be named: ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT For example: photo_start.jpg, photo_start2.jpg, photo_end.jpg The Reference Image Count field should be set to the number of reference images. The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -926,10 +926,10 @@ class QwenImageEditPlusTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -946,7 +946,7 @@ class QwenImageEditPlusTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class QwenImageEditTrainer(FALNode):
     """
@@ -964,7 +964,7 @@ class QwenImageEditTrainer(FALNode):
     steps: int = Field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to the input data zip archive. The zip should contain pairs of images. The images should be named: ROOT_start.EXT and ROOT_end.EXT For example: photo_start.jpg and photo_end.jpg The zip can also contain a text file for each image pair. The text file should be named: ROOT.txt For example: photo.txt This text file can be used to specify the edit instructions for the image pair. If no text file is provided, the default_caption will be used. If no default_caption is provided, the training will fail."
     )
     learning_rate: float = Field(
@@ -975,10 +975,10 @@ class QwenImageEditTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "default_caption": self.default_caption,
         }
@@ -995,7 +995,7 @@ class QwenImageEditTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "default_caption"]
+        return ["steps", "image_data", "learning_rate", "default_caption"]
 
 class QwenImageTrainer(FALNode):
     """
@@ -1013,7 +1013,7 @@ class QwenImageTrainer(FALNode):
     steps: int = Field(
         default=1000, description="Total number of training steps to perform. Default is 4000."
     )
-    image_data_url: ImageRef = Field(
+    image_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images for training. The archive should contain images and corresponding text files with captions. Each text file should have the same name as the image file it corresponds to (e.g., image1.jpg and image1.txt). If text files are missing for some images, you can provide a trigger_phrase to automatically create them. Supported image formats: PNG, JPG, JPEG, WEBP. Try to use at least 10 images, although more is better."
     )
     learning_rate: float = Field(
@@ -1024,10 +1024,10 @@ class QwenImageTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_data_url_base64 = await context.image_to_base64(self.image_data_url)
+        image_data_base64 = await context.image_to_base64(self.image_data)
         arguments = {
             "steps": self.steps,
-            "image_data_url": f"data:image/png;base64,{image_data_url_base64}",
+            "image_data_url": f"data:image/png;base64,{image_data_base64}",
             "learning_rate": self.learning_rate,
             "trigger_phrase": self.trigger_phrase,
         }
@@ -1044,7 +1044,7 @@ class QwenImageTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["steps", "image_data_url", "learning_rate", "trigger_phrase"]
+        return ["steps", "image_data", "learning_rate", "trigger_phrase"]
 
 class Wan22ImageTrainer(FALNode):
     """
@@ -1130,7 +1130,7 @@ class WanTrainerT2v(FALNode):
     number_of_steps: int = Field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: ImageRef = Field(
+    training_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better. In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to."
     )
     trigger_phrase: str = Field(
@@ -1144,10 +1144,10 @@ class WanTrainerT2v(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        training_data_url_base64 = await context.image_to_base64(self.training_data_url)
+        training_data_base64 = await context.image_to_base64(self.training_data)
         arguments = {
             "number_of_steps": self.number_of_steps,
-            "training_data_url": f"data:image/png;base64,{training_data_url_base64}",
+            "training_data_url": f"data:image/png;base64,{training_data_base64}",
             "trigger_phrase": self.trigger_phrase,
             "learning_rate": self.learning_rate,
             "auto_scale_input": self.auto_scale_input,
@@ -1165,7 +1165,7 @@ class WanTrainerT2v(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["number_of_steps", "training_data_url", "trigger_phrase", "learning_rate", "auto_scale_input"]
+        return ["number_of_steps", "training_data", "trigger_phrase", "learning_rate", "auto_scale_input"]
 
 class WanTrainerT2v14b(FALNode):
     """
@@ -1183,7 +1183,7 @@ class WanTrainerT2v14b(FALNode):
     number_of_steps: int = Field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: ImageRef = Field(
+    training_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better. In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to."
     )
     trigger_phrase: str = Field(
@@ -1197,10 +1197,10 @@ class WanTrainerT2v14b(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        training_data_url_base64 = await context.image_to_base64(self.training_data_url)
+        training_data_base64 = await context.image_to_base64(self.training_data)
         arguments = {
             "number_of_steps": self.number_of_steps,
-            "training_data_url": f"data:image/png;base64,{training_data_url_base64}",
+            "training_data_url": f"data:image/png;base64,{training_data_base64}",
             "trigger_phrase": self.trigger_phrase,
             "learning_rate": self.learning_rate,
             "auto_scale_input": self.auto_scale_input,
@@ -1218,7 +1218,7 @@ class WanTrainerT2v14b(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["number_of_steps", "training_data_url", "trigger_phrase", "learning_rate", "auto_scale_input"]
+        return ["number_of_steps", "training_data", "trigger_phrase", "learning_rate", "auto_scale_input"]
 
 class WanTrainerI2v720p(FALNode):
     """
@@ -1236,7 +1236,7 @@ class WanTrainerI2v720p(FALNode):
     number_of_steps: int = Field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: ImageRef = Field(
+    training_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better. In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to."
     )
     trigger_phrase: str = Field(
@@ -1250,10 +1250,10 @@ class WanTrainerI2v720p(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        training_data_url_base64 = await context.image_to_base64(self.training_data_url)
+        training_data_base64 = await context.image_to_base64(self.training_data)
         arguments = {
             "number_of_steps": self.number_of_steps,
-            "training_data_url": f"data:image/png;base64,{training_data_url_base64}",
+            "training_data_url": f"data:image/png;base64,{training_data_base64}",
             "trigger_phrase": self.trigger_phrase,
             "learning_rate": self.learning_rate,
             "auto_scale_input": self.auto_scale_input,
@@ -1271,7 +1271,7 @@ class WanTrainerI2v720p(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["number_of_steps", "training_data_url", "trigger_phrase", "learning_rate", "auto_scale_input"]
+        return ["number_of_steps", "training_data", "trigger_phrase", "learning_rate", "auto_scale_input"]
 
 class WanTrainerFlf2v720p(FALNode):
     """
@@ -1289,7 +1289,7 @@ class WanTrainerFlf2v720p(FALNode):
     number_of_steps: int = Field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: ImageRef = Field(
+    training_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better. In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to."
     )
     trigger_phrase: str = Field(
@@ -1303,10 +1303,10 @@ class WanTrainerFlf2v720p(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        training_data_url_base64 = await context.image_to_base64(self.training_data_url)
+        training_data_base64 = await context.image_to_base64(self.training_data)
         arguments = {
             "number_of_steps": self.number_of_steps,
-            "training_data_url": f"data:image/png;base64,{training_data_url_base64}",
+            "training_data_url": f"data:image/png;base64,{training_data_base64}",
             "trigger_phrase": self.trigger_phrase,
             "learning_rate": self.learning_rate,
             "auto_scale_input": self.auto_scale_input,
@@ -1324,7 +1324,7 @@ class WanTrainerFlf2v720p(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["number_of_steps", "training_data_url", "trigger_phrase", "learning_rate", "auto_scale_input"]
+        return ["number_of_steps", "training_data", "trigger_phrase", "learning_rate", "auto_scale_input"]
 
 class RecraftV3CreateStyle(FALNode):
     """
@@ -1430,7 +1430,7 @@ class RecraftV3CreateStyle(FALNode):
         VECTOR_ILLUSTRATION_LINOCUT = "vector_illustration/linocut"
 
 
-    images_data_url: ImageRef = Field(
+    images_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images, use PNG format. Maximum 5 images are allowed."
     )
     base_style: BaseStyle = Field(
@@ -1438,9 +1438,9 @@ class RecraftV3CreateStyle(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        images_data_url_base64 = await context.image_to_base64(self.images_data_url)
+        images_data_base64 = await context.image_to_base64(self.images_data)
         arguments = {
-            "images_data_url": f"data:image/png;base64,{images_data_url_base64}",
+            "images_data_url": f"data:image/png;base64,{images_data_base64}",
             "base_style": self.base_style.value,
         }
 
@@ -1456,7 +1456,7 @@ class RecraftV3CreateStyle(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["images_data_url", "base_style"]
+        return ["images_data", "base_style"]
 
 class TurboFluxTrainer(FALNode):
     """
@@ -1479,7 +1479,7 @@ class TurboFluxTrainer(FALNode):
         STYLE = "style"
 
 
-    images_data_url: ImageRef = Field(
+    images_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better."
     )
     trigger_phrase: str = Field(
@@ -1499,9 +1499,9 @@ class TurboFluxTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        images_data_url_base64 = await context.image_to_base64(self.images_data_url)
+        images_data_base64 = await context.image_to_base64(self.images_data)
         arguments = {
-            "images_data_url": f"data:image/png;base64,{images_data_url_base64}",
+            "images_data_url": f"data:image/png;base64,{images_data_base64}",
             "trigger_phrase": self.trigger_phrase,
             "steps": self.steps,
             "learning_rate": self.learning_rate,
@@ -1521,7 +1521,7 @@ class TurboFluxTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["images_data_url", "trigger_phrase", "steps", "learning_rate", "training_style"]
+        return ["images_data", "trigger_phrase", "steps", "learning_rate", "training_style"]
 
 class WanTrainer(FALNode):
     """
@@ -1539,7 +1539,7 @@ class WanTrainer(FALNode):
     number_of_steps: int = Field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: ImageRef = Field(
+    training_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better. In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to."
     )
     trigger_phrase: str = Field(
@@ -1553,10 +1553,10 @@ class WanTrainer(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        training_data_url_base64 = await context.image_to_base64(self.training_data_url)
+        training_data_base64 = await context.image_to_base64(self.training_data)
         arguments = {
             "number_of_steps": self.number_of_steps,
-            "training_data_url": f"data:image/png;base64,{training_data_url_base64}",
+            "training_data_url": f"data:image/png;base64,{training_data_base64}",
             "trigger_phrase": self.trigger_phrase,
             "learning_rate": self.learning_rate,
             "auto_scale_input": self.auto_scale_input,
@@ -1574,7 +1574,7 @@ class WanTrainer(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["number_of_steps", "training_data_url", "trigger_phrase", "learning_rate", "auto_scale_input"]
+        return ["number_of_steps", "training_data", "trigger_phrase", "learning_rate", "auto_scale_input"]
 
 class HunyuanVideoLoraTraining(FALNode):
     """
@@ -1592,7 +1592,7 @@ class HunyuanVideoLoraTraining(FALNode):
     trigger_word: str = Field(
         default="", description="The trigger word to use."
     )
-    images_data_url: ImageRef = Field(
+    images_data: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images. Try to use at least 4 images in general the more the better. In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to."
     )
     steps: int = Field(
@@ -1609,10 +1609,10 @@ class HunyuanVideoLoraTraining(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        images_data_url_base64 = await context.image_to_base64(self.images_data_url)
+        images_data_base64 = await context.image_to_base64(self.images_data)
         arguments = {
             "trigger_word": self.trigger_word,
-            "images_data_url": f"data:image/png;base64,{images_data_url_base64}",
+            "images_data_url": f"data:image/png;base64,{images_data_base64}",
             "steps": self.steps,
             "data_archive_format": self.data_archive_format,
             "learning_rate": self.learning_rate,
@@ -1631,4 +1631,4 @@ class HunyuanVideoLoraTraining(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["trigger_word", "images_data_url", "steps", "data_archive_format", "learning_rate"]
+        return ["trigger_word", "images_data", "steps", "data_archive_format", "learning_rate"]

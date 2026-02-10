@@ -325,10 +325,10 @@ class CSM1B(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     - Create interactive voice responses
     """
 
-    scene: list[str] | OutputHandle[list[str]] = connect_field(
+    scene: list[types.Turn] | OutputHandle[list[types.Turn]] = connect_field(
         default=[], description="The text to generate an audio from."
     )
-    context: list[str] | OutputHandle[list[str]] = connect_field(
+    context: list[types.Speaker] | OutputHandle[list[types.Speaker]] = connect_field(
         default=[], description="The context to generate an audio from."
     )
 
@@ -454,7 +454,7 @@ class DiffRhythm(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef
     cfg_strength: float | OutputHandle[float] = connect_field(
         default=4, description="The CFG strength to use for the music generation."
     )
-    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    reference_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -629,8 +629,8 @@ class ElevenLabsTTSMultilingualV2(
         nodetool.nodes.fal.text_to_audio.ElevenLabsTTSMultilingualV2.ApplyTextNormalization
     )
 
-    text: str | OutputHandle[str] = connect_field(
-        default="", description="The text to convert to speech"
+    stability: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Voice stability (0-1)"
     )
     next_text: str | OutputHandle[str] = connect_field(
         default="",
@@ -643,8 +643,8 @@ class ElevenLabsTTSMultilingualV2(
     style: float | OutputHandle[float] = connect_field(
         default=0, description="Style exaggeration (0-1)"
     )
-    stability: float | OutputHandle[float] = connect_field(
-        default=0.5, description="Voice stability (0-1)"
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
     )
     timestamps: bool | OutputHandle[bool] = connect_field(
         default=False,
@@ -705,15 +705,15 @@ class ElevenLabsTTSV3(SingleOutputGraphNode[types.AudioRef], GraphNode[types.Aud
         nodetool.nodes.fal.text_to_audio.ElevenLabsTTSV3.ApplyTextNormalization
     )
 
-    text: str | OutputHandle[str] = connect_field(
-        default="", description="The text to convert to speech"
-    )
     stability: float | OutputHandle[float] = connect_field(
         default=0.5, description="Voice stability (0-1)"
     )
     speed: float | OutputHandle[float] = connect_field(
         default=1,
         description="Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
     )
     style: float | OutputHandle[float] = connect_field(
         default=0, description="Style exaggeration (0-1)"
@@ -775,13 +775,15 @@ class ElevenLabsTextToDialogueV3(
         default="",
         description="Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion. Must be one of 0.0, 0.5, 1.0, else it will be rounded to the nearest value.",
     )
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.",
-    )
     language_code: str | OutputHandle[str] = connect_field(
         default="",
         description="Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.",
+    )
+    inputs: list[types.DialogueBlock] | OutputHandle[list[types.DialogueBlock]] = (
+        connect_field(
+            default=[],
+            description="A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.",
+        )
     )
     seed: str | OutputHandle[str] = connect_field(
         default="", description="Random seed for reproducibility."
@@ -790,11 +792,12 @@ class ElevenLabsTextToDialogueV3(
         default="",
         description="This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
     )
-    pronunciation_dictionary_locators: list[str] | OutputHandle[list[str]] = (
-        connect_field(
-            default=[],
-            description="A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
-        )
+    pronunciation_dictionary_locators: (
+        list[types.PronunciationDictionaryLocator]
+        | OutputHandle[list[types.PronunciationDictionaryLocator]]
+    ) = connect_field(
+        default=[],
+        description="A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
     )
 
     @classmethod
@@ -843,7 +846,7 @@ class F5TTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
         default=nodetool.nodes.fal.text_to_audio.F5TTS.ModelType(""),
         description="The name of the model to be used for TTS.",
     )
-    ref_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    ref_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1353,7 +1356,7 @@ class MinimaxMusic(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioR
         default="",
         description="Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters.",
     )
-    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    reference_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1562,15 +1565,17 @@ class SonautoV2Inpaint(
     selection_crop: bool | OutputHandle[bool] = connect_field(
         default=False, description="Crop to the selected region"
     )
-    sections: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="List of sections to inpaint. Currently, only one section is supported so the list length must be 1.",
+    sections: list[types.InpaintSection] | OutputHandle[list[types.InpaintSection]] = (
+        connect_field(
+            default=[],
+            description="List of sections to inpaint. Currently, only one section is supported so the list length must be 1.",
+        )
     )
     balance_strength: float | OutputHandle[float] = connect_field(
         default=0.7,
         description="Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1804,7 +1809,7 @@ class XTTS(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
         default=4,
         description="The length of the GPT conditioning chunks. Defaults to 4.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1893,7 +1898,7 @@ class Zonos(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The content generated using cloned voice."
     )
-    reference_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    reference_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),

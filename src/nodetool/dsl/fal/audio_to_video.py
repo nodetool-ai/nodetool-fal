@@ -47,7 +47,7 @@ class ArgilAvatarsAudioToVideo(
         default=False,
         description="Enabling the remove background feature will result in a 50% increase in the price.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -87,7 +87,7 @@ class EchomimicV3(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to use for the video generation."
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -99,7 +99,7 @@ class EchomimicV3(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
         ),
         description="The URL of the audio to use as a reference for the video generation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -154,7 +154,7 @@ class ElevenlabsDubbing(
     - Rapid prototyping
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -166,10 +166,7 @@ class ElevenlabsDubbing(
         ),
         description="URL of the video file to dub. Either audio_url or video_url must be provided. If both are provided, video_url takes priority.",
     )
-    highest_resolution: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to use the highest resolution for dubbing."
-    )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -181,12 +178,15 @@ class ElevenlabsDubbing(
         ),
         description="URL of the audio file to dub. Either audio_url or video_url must be provided.",
     )
-    target_lang: str | OutputHandle[str] = connect_field(
-        default="", description="Target language code for dubbing (ISO 639-1)"
+    highest_resolution: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Whether to use the highest resolution for dubbing."
     )
     num_speakers: str | OutputHandle[str] = connect_field(
         default="",
         description="Number of speakers in the audio. If not provided, will be auto-detected.",
+    )
+    target_lang: str | OutputHandle[str] = connect_field(
+        default="", description="Target language code for dubbing (ISO 639-1)"
     )
     source_lang: str | OutputHandle[str] = connect_field(
         default="",
@@ -269,7 +269,7 @@ class LongcatMultiAvatarImageAudioToVideo(
         default=nodetool.nodes.fal.audio_to_video.LongcatMultiAvatarImageAudioToVideo.AudioType.PARA,
         description="How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -352,7 +352,7 @@ class LongcatSingleAvatarAudioToVideo(
         default=1,
         description="Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -428,13 +428,13 @@ class LongcatSingleAvatarImageAudioToVideo(
         default=1,
         description="Number of video segments to generate. Each segment adds ~5 seconds of video. First segment is ~5.8s, additional segments are 5s each.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
         description="The URL of the image to animate.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -566,7 +566,7 @@ class Ltx219BAudioToVideo(
         default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideo.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -578,7 +578,7 @@ class Ltx219BAudioToVideo(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -605,7 +605,7 @@ class Ltx219BAudioToVideo(
         default=1,
         description="The strength of the end image to use for the video generation.",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -692,7 +692,7 @@ class Ltx219BAudioToVideoLora(
     fps: float | OutputHandle[float] = connect_field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: (
@@ -736,7 +736,7 @@ class Ltx219BAudioToVideoLora(
         default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -748,7 +748,7 @@ class Ltx219BAudioToVideoLora(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -775,7 +775,7 @@ class Ltx219BAudioToVideoLora(
         default=1,
         description="The strength of the end image to use for the video generation.",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -900,7 +900,7 @@ class Ltx219BDistilledAudioToVideo(
         default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideo.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -909,7 +909,7 @@ class Ltx219BDistilledAudioToVideo(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -936,7 +936,7 @@ class Ltx219BDistilledAudioToVideo(
         default=1,
         description="The strength of the end image to use for the video generation.",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1020,7 +1020,7 @@ class Ltx219BDistilledAudioToVideoLora(
     fps: float | OutputHandle[float] = connect_field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: (
@@ -1064,7 +1064,7 @@ class Ltx219BDistilledAudioToVideoLora(
         default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1073,7 +1073,7 @@ class Ltx219BDistilledAudioToVideoLora(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1100,7 +1100,7 @@ class Ltx219BDistilledAudioToVideoLora(
         default=1,
         description="The strength of the end image to use for the video generation.",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1161,7 +1161,7 @@ class StableAvatar(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
         default=0.1,
         description="The amount of perturbation to use for the video generation. 0.0 means no perturbation, 1.0 means full perturbation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1177,7 +1177,7 @@ class StableAvatar(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
         default=50,
         description="The number of inference steps to use for the video generation.",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1230,7 +1230,7 @@ class VeedAvatarsAudioToVideo(
         nodetool.nodes.fal.audio_to_video.VeedAvatarsAudioToVideo.AvatarId
     )
 
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1329,7 +1329,7 @@ class WanV2214bSpeechToVideo(
         default=False,
         description="If set to true, output video will be checked for safety after generation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1341,7 +1341,7 @@ class WanV2214bSpeechToVideo(
         default=nodetool.nodes.fal.audio_to_video.WanV2214bSpeechToVideo.VideoQuality.HIGH,
         description="The quality of the output video. Higher quality means better visual quality but larger file size.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),

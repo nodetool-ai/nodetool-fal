@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
+from nodetool.nodes.fal.types import KlingV3MultiPromptElement, LoRAInput, LoRAWeight, LoraWeight
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -113,7 +114,7 @@ class CogVideoX5B(FALNode):
     use_rife: bool = Field(
         default=True, description="Use RIFE for video interpolation"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. We currently support one lora."
     )
     video_size: str = Field(
@@ -139,7 +140,7 @@ class CogVideoX5B(FALNode):
         arguments = {
             "prompt": self.prompt,
             "use_rife": self.use_rife,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -179,8 +180,8 @@ class AnimateDiffTextToVideo(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the video. Be as descriptive as possible for best results."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    num_frames: int = Field(
+        default=16, description="The number of frames to generate for the video."
     )
     fps: int = Field(
         default=8, description="Number of frames per second to extract from the video."
@@ -191,8 +192,8 @@ class AnimateDiffTextToVideo(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_frames: int = Field(
-        default=16, description="The number of frames to generate for the video."
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
     num_inference_steps: int = Field(
         default=25, description="The number of inference steps to perform."
@@ -207,11 +208,11 @@ class AnimateDiffTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "seed": self.seed,
+            "num_frames": self.num_frames,
             "fps": self.fps,
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
-            "num_frames": self.num_frames,
+            "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
             "negative_prompt": self.negative_prompt,
             "motions": self.motions,
@@ -248,9 +249,6 @@ class AnimateDiffTurboTextToVideo(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the video. Be as descriptive as possible for best results."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
-    )
     fps: int = Field(
         default=8, description="Number of frames per second to extract from the video."
     )
@@ -258,32 +256,31 @@ class AnimateDiffTurboTextToVideo(FALNode):
         default="square", description="The size of the video to generate."
     )
     guidance_scale: float = Field(
-        default=1, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+        default=2, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_frames: int = Field(
-        default=16, description="The number of frames to generate for the video."
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
     num_inference_steps: int = Field(
-        default=4, description="The number of inference steps to perform. 4-12 is recommended for turbo mode."
+        default=8, description="The number of inference steps to perform. 4-12 is recommended for turbo mode."
     )
     negative_prompt: str = Field(
         default="(bad quality, worst quality:1.2), ugly faces, bad anime", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    motions: list[str] = Field(
-        default=[], description="The motions to apply to the video."
+    num_frames: int = Field(
+        default=16, description="The number of frames to generate for the video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "seed": self.seed,
             "fps": self.fps,
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
-            "num_frames": self.num_frames,
+            "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
             "negative_prompt": self.negative_prompt,
-            "motions": self.motions,
+            "num_frames": self.num_frames,
         }
 
         # Remove None values
@@ -337,7 +334,7 @@ class AnimateDiffSparseCtrlLCM(FALNode):
     keyframe_0_index: int = Field(
         default=0, description="The frame index of the first keyframe to use for the generation."
     )
-    keyframe_1_image_url: ImageRef = Field(
+    keyframe_1_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the second keyframe to use for the generation."
     )
     keyframe_1_index: int = Field(
@@ -349,33 +346,33 @@ class AnimateDiffSparseCtrlLCM(FALNode):
     num_inference_steps: int = Field(
         default=4, description="Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image."
     )
-    keyframe_2_image_url: ImageRef = Field(
+    keyframe_2_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the third keyframe to use for the generation."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to specify what you don't want."
     )
-    keyframe_0_image_url: ImageRef = Field(
+    keyframe_0_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the first keyframe to use for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        keyframe_1_image_url_base64 = await context.image_to_base64(self.keyframe_1_image_url)
-        keyframe_2_image_url_base64 = await context.image_to_base64(self.keyframe_2_image_url)
-        keyframe_0_image_url_base64 = await context.image_to_base64(self.keyframe_0_image_url)
+        keyframe_1_image_base64 = await context.image_to_base64(self.keyframe_1_image)
+        keyframe_2_image_base64 = await context.image_to_base64(self.keyframe_2_image)
+        keyframe_0_image_base64 = await context.image_to_base64(self.keyframe_0_image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "controlnet_type": self.controlnet_type.value,
             "keyframe_2_index": self.keyframe_2_index,
             "keyframe_0_index": self.keyframe_0_index,
-            "keyframe_1_image_url": f"data:image/png;base64,{keyframe_1_image_url_base64}",
+            "keyframe_1_image_url": f"data:image/png;base64,{keyframe_1_image_base64}",
             "keyframe_1_index": self.keyframe_1_index,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "keyframe_2_image_url": f"data:image/png;base64,{keyframe_2_image_url_base64}",
+            "keyframe_2_image_url": f"data:image/png;base64,{keyframe_2_image_base64}",
             "negative_prompt": self.negative_prompt,
-            "keyframe_0_image_url": f"data:image/png;base64,{keyframe_0_image_url_base64}",
+            "keyframe_0_image_url": f"data:image/png;base64,{keyframe_0_image_base64}",
         }
 
         # Remove None values
@@ -583,13 +580,16 @@ class SeeDanceV15ProTextToVideo(FALNode):
     - Create dance animation prototypes
     """
 
-    class Resolution(Enum):
+    class AspectRatio(Enum):
         """
-        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+        The aspect ratio of the generated video
         """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
 
     class Duration(Enum):
         """
@@ -605,23 +605,20 @@ class SeeDanceV15ProTextToVideo(FALNode):
         VALUE_11 = "11"
         VALUE_12 = "12"
 
-    class AspectRatio(Enum):
+    class Resolution(Enum):
         """
-        The aspect ratio of the generated video
+        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
         """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
 
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Duration of the video in seconds"
@@ -629,8 +626,8 @@ class SeeDanceV15ProTextToVideo(FALNode):
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -645,10 +642,10 @@ class SeeDanceV15ProTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
             "generate_audio": self.generate_audio,
-            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
             "seed": self.seed,
@@ -693,6 +690,14 @@ class SeeDanceV1ProFastTextToVideo(FALNode):
         RATIO_3_4 = "3:4"
         RATIO_9_16 = "9:16"
 
+    class Resolution(Enum):
+        """
+        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
     class Duration(Enum):
         """
         Duration of the video in seconds
@@ -709,14 +714,6 @@ class SeeDanceV1ProFastTextToVideo(FALNode):
         VALUE_11 = "11"
         VALUE_12 = "12"
 
-    class Resolution(Enum):
-        """
-        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
@@ -724,11 +721,11 @@ class SeeDanceV1ProFastTextToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the video in seconds"
-    )
     resolution: Resolution = Field(
         default=Resolution.VALUE_1080P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Duration of the video in seconds"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -744,8 +741,8 @@ class SeeDanceV1ProFastTextToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "duration": self.duration.value,
             "resolution": self.resolution.value,
+            "duration": self.duration.value,
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
             "seed": self.seed,
@@ -796,17 +793,17 @@ class VeedFabric10Text(FALNode):
     voice_description: str = Field(
         default="", description="Optional additional voice description. The primary voice description is auto-generated from the image. You can use simple descriptors like 'British accent' or 'Confident' or provide a detailed description like 'Confident male voice, mid-20s, with notes of...'"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "text": self.text,
             "resolution": self.resolution.value,
             "voice_description": self.voice_description,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -890,14 +887,6 @@ class KlingVideoV1StandardTextToVideo(FALNode):
     - Create video concepts
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
     class Duration(Enum):
         """
         The duration of the generated video in seconds
@@ -914,21 +903,29 @@ class KlingVideoV1StandardTextToVideo(FALNode):
         RIGHT_TURN_FORWARD = "right_turn_forward"
         LEFT_TURN_FORWARD = "left_turn_forward"
 
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
 
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
     advanced_camera_control: str = Field(
         default="", description="Advanced Camera control parameters"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
-    )
     camera_control: CameraControl | None = Field(
         default=None, description="Camera control parameters"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
@@ -940,10 +937,10 @@ class KlingVideoV1StandardTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
-            "advanced_camera_control": self.advanced_camera_control,
             "duration": self.duration.value,
+            "advanced_camera_control": self.advanced_camera_control,
             "camera_control": self.camera_control.value if self.camera_control else None,
+            "aspect_ratio": self.aspect_ratio.value,
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -1037,18 +1034,18 @@ class StableVideo(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "motion_bucket_id": self.motion_bucket_id,
             "fps": self.fps,
             "cond_aug": self.cond_aug,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1427,7 +1424,7 @@ class Ltx219BDistilledTextToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -1474,7 +1471,7 @@ class Ltx219BDistilledTextToVideoLora(FALNode):
             "acceleration": self.acceleration.value,
             "generate_audio": self.generate_audio,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "enable_safety_checker": self.enable_safety_checker,
@@ -1731,7 +1728,7 @@ class Ltx219BTextToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -1784,7 +1781,7 @@ class Ltx219BTextToVideoLora(FALNode):
             "acceleration": self.acceleration.value,
             "generate_audio": self.generate_audio,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
@@ -2114,7 +2111,7 @@ class WanV26TextToVideo(FALNode):
     enable_prompt_expansion: bool = Field(
         default=True, description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="URL of the audio to use as the background music. Must be publicly accessible. Limit handling: If the audio duration exceeds the duration value (5, 10, or 15 seconds), the audio is truncated to the first N seconds, and the rest is discarded. If the audio is shorter than the video, the remaining part of the video will be silent. For example, if the audio is 3 seconds long and the video duration is 5 seconds, the first 3 seconds of the output video will have sound, and the last 2 seconds will be silent. - Format: WAV, MP3. - Duration: 3 to 30 s. - File size: Up to 15 MB."
     )
     seed: int = Field(
@@ -2137,7 +2134,7 @@ class WanV26TextToVideo(FALNode):
             "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "multi_shots": self.multi_shots,
             "negative_prompt": self.negative_prompt,
@@ -3115,21 +3112,21 @@ class MinimaxHailuo23StandardTextToVideo(FALNode):
         VALUE_10 = "10"
 
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
+    prompt: str = Field(
+        default=""
     )
     duration: Duration = Field(
         default=Duration.VALUE_6, description="The duration of the video in seconds."
     )
-    prompt: str = Field(
-        default=""
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
-            "duration": self.duration.value,
             "prompt": self.prompt,
+            "duration": self.duration.value,
+            "prompt_optimizer": self.prompt_optimizer,
         }
 
         # Remove None values
@@ -3160,17 +3157,17 @@ class MinimaxHailuo23ProTextToVideo(FALNode):
     - Automated video production
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default="", description="Text prompt for video generation"
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
         }
 
         # Remove None values
@@ -3806,13 +3803,6 @@ class Wan25PreviewTextToVideo(FALNode):
     - Automated video production
     """
 
-    class Duration(Enum):
-        """
-        Duration of the generated video in seconds. Choose between 5 or 10 seconds.
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
     class AspectRatio(Enum):
         """
         The aspect ratio of the generated video
@@ -3820,6 +3810,13 @@ class Wan25PreviewTextToVideo(FALNode):
         RATIO_16_9 = "16:9"
         RATIO_9_16 = "9:16"
         RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        Duration of the generated video in seconds. Choose between 5 or 10 seconds.
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
 
     class Resolution(Enum):
         """
@@ -3833,42 +3830,42 @@ class Wan25PreviewTextToVideo(FALNode):
     prompt: str = Field(
         default="", description="The text prompt for video generation. Supports Chinese and English, max 800 characters."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5 or 10 seconds."
-    )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5 or 10 seconds."
     )
     resolution: Resolution = Field(
         default=Resolution.VALUE_1080P, description="Video resolution tier"
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="URL of the audio to use as the background music. Must be publicly accessible. Limit handling: If the audio duration exceeds the duration value (5 or 10 seconds), the audio is truncated to the first 5 or 10 seconds, and the rest is discarded. If the audio is shorter than the video, the remaining part of the video will be silent. For example, if the audio is 3 seconds long and the video duration is 5 seconds, the first 3 seconds of the output video will have sound, and the last 2 seconds will be silent. - Format: WAV, MP3. - Duration: 3 to 30 s. - File size: Up to 15 MB."
     )
     seed: int = Field(
         default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
     )
-    enable_prompt_expansion: bool = Field(
-        default=True, description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str = Field(
         default="", description="Negative prompt to describe content to avoid. Max 500 characters."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    enable_prompt_expansion: bool = Field(
+        default=True, description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
+            "duration": self.duration.value,
             "resolution": self.resolution.value,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
-            "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
         }
 
         # Remove None values
@@ -4050,7 +4047,7 @@ class InfinitalkSingleText(FALNode):
     text_input: str = Field(
         default="", description="The text input to guide video generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     voice: Voice = Field(
@@ -4064,13 +4061,13 @@ class InfinitalkSingleText(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "acceleration": self.acceleration.value,
             "text_input": self.text_input,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "voice": self.voice.value,
             "num_frames": self.num_frames,
             "seed": self.seed,
@@ -4242,7 +4239,7 @@ class WanV22A14bTextToVideoLora(FALNode):
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
     )
     frames_per_second: int = Field(
@@ -4301,7 +4298,7 @@ class WanV22A14bTextToVideoLora(FALNode):
             "num_interpolated_frames": self.num_interpolated_frames,
             "acceleration": self.acceleration.value,
             "reverse_video": self.reverse_video,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "frames_per_second": self.frames_per_second,
             "guidance_scale": self.guidance_scale,
             "num_frames": self.num_frames,
@@ -5088,7 +5085,7 @@ class Ltxv13b098Distilled(FALNode):
     temporal_adain_factor: float = Field(
         default=0.5, description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -5128,7 +5125,7 @@ class Ltxv13b098Distilled(FALNode):
             "prompt": self.prompt,
             "expand_prompt": self.expand_prompt,
             "temporal_adain_factor": self.temporal_adain_factor,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
@@ -5168,17 +5165,17 @@ class MinimaxHailuo02ProTextToVideo(FALNode):
     - Automated video production
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
         }
 
         # Remove None values
@@ -5220,6 +5217,14 @@ class BytedanceSeedanceV1ProTextToVideo(FALNode):
         RATIO_3_4 = "3:4"
         RATIO_9_16 = "9:16"
 
+    class Resolution(Enum):
+        """
+        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
     class Duration(Enum):
         """
         Duration of the video in seconds
@@ -5236,14 +5241,6 @@ class BytedanceSeedanceV1ProTextToVideo(FALNode):
         VALUE_11 = "11"
         VALUE_12 = "12"
 
-    class Resolution(Enum):
-        """
-        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
@@ -5251,11 +5248,11 @@ class BytedanceSeedanceV1ProTextToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the video in seconds"
-    )
     resolution: Resolution = Field(
         default=Resolution.VALUE_1080P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Duration of the video in seconds"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -5271,8 +5268,8 @@ class BytedanceSeedanceV1ProTextToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "duration": self.duration.value,
             "resolution": self.resolution.value,
+            "duration": self.duration.value,
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
             "seed": self.seed,
@@ -5318,6 +5315,14 @@ class BytedanceSeedanceV1LiteTextToVideo(FALNode):
         RATIO_9_16 = "9:16"
         RATIO_9_21 = "9:21"
 
+    class Resolution(Enum):
+        """
+        Video resolution - 480p for faster generation, 720p for higher quality
+        """
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
+
     class Duration(Enum):
         """
         Duration of the video in seconds
@@ -5334,14 +5339,6 @@ class BytedanceSeedanceV1LiteTextToVideo(FALNode):
         VALUE_11 = "11"
         VALUE_12 = "12"
 
-    class Resolution(Enum):
-        """
-        Video resolution - 480p for faster generation, 720p for higher quality
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
@@ -5349,11 +5346,11 @@ class BytedanceSeedanceV1LiteTextToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the video in seconds"
-    )
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Duration of the video in seconds"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -5369,8 +5366,8 @@ class BytedanceSeedanceV1LiteTextToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "duration": self.duration.value,
             "resolution": self.resolution.value,
+            "duration": self.duration.value,
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
             "seed": self.seed,
@@ -5404,6 +5401,13 @@ class KlingVideoV21MasterTextToVideo(FALNode):
     - Automated video production
     """
 
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
     class AspectRatio(Enum):
         """
         The aspect ratio of the generated video frame
@@ -5412,22 +5416,15 @@ class KlingVideoV21MasterTextToVideo(FALNode):
         RATIO_9_16 = "9:16"
         RATIO_1_1 = "1:1"
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
 
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
-    )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
@@ -5439,8 +5436,8 @@ class KlingVideoV21MasterTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -5507,7 +5504,7 @@ class LtxVideo13bDev(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     second_pass_num_inference_steps: int = Field(
@@ -5543,7 +5540,7 @@ class LtxVideo13bDev(FALNode):
             "prompt": self.prompt,
             "reverse_video": self.reverse_video,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
             "num_frames": self.num_frames,
             "enable_safety_checker": self.enable_safety_checker,
@@ -5616,7 +5613,7 @@ class LtxVideo13bDistilled(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -5652,7 +5649,7 @@ class LtxVideo13bDistilled(FALNode):
             "reverse_video": self.reverse_video,
             "prompt": self.prompt,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
@@ -6137,17 +6134,17 @@ class KlingVideoLipsyncAudioToVideo(FALNode):
     - Automated video production
     """
 
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The URL of the video to generate the lip sync for. Supports .mp4/.mov, ≤100MB, 2–10s, 720p/1080p only, width/height 720–1920px."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio to generate the lip sync for. Minimum duration is 2s and maximum duration is 60s. Maximum file size is 5MB."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "video_url": self.video_url,
-            "audio_url": self.audio_url,
+            "video_url": self.video,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -6240,7 +6237,7 @@ class KlingVideoLipsyncTextToVideo(FALNode):
     text: str = Field(
         default="", description="Text content for lip-sync video generation. Max 120 characters."
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The URL of the video to generate the lip sync for. Supports .mp4/.mov, ≤100MB, 2-60s, 720p/1080p only, width/height 720–1920px. If validation fails, an error is returned."
     )
     voice_id: VoiceId = Field(
@@ -6256,7 +6253,7 @@ class KlingVideoLipsyncTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "text": self.text,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "voice_id": self.voice_id.value,
             "voice_language": self.voice_language.value,
             "voice_speed": self.voice_speed,
@@ -6321,7 +6318,7 @@ class WanT2vLora(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video (16:9 or 9:16)."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
     )
     frames_per_second: int = Field(
@@ -6353,7 +6350,7 @@ class WanT2vLora(FALNode):
             "reverse_video": self.reverse_video,
             "seed": self.seed,
             "aspect_ratio": self.aspect_ratio.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "frames_per_second": self.frames_per_second,
             "turbo_mode": self.turbo_mode,
             "enable_safety_checker": self.enable_safety_checker,
@@ -6883,18 +6880,18 @@ class KlingVideoV16ProEffects(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    input_image_urls: list[str] = Field(
-        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
-    )
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
+    )
+    input_images: list[str] = Field(
+        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "duration": self.duration.value,
-            "input_image_urls": self.input_image_urls,
             "effect_scene": self.effect_scene.value,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -7138,18 +7135,18 @@ class KlingVideoV16StandardEffects(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    input_image_urls: list[str] = Field(
-        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
-    )
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
+    )
+    input_images: list[str] = Field(
+        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "duration": self.duration.value,
-            "input_image_urls": self.input_image_urls,
             "effect_scene": self.effect_scene.value,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -7393,18 +7390,18 @@ class KlingVideoV15ProEffects(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    input_image_urls: list[str] = Field(
-        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
-    )
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
+    )
+    input_images: list[str] = Field(
+        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "duration": self.duration.value,
-            "input_image_urls": self.input_image_urls,
             "effect_scene": self.effect_scene.value,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -7648,18 +7645,18 @@ class KlingVideoV1StandardEffects(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    input_image_urls: list[str] = Field(
-        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
-    )
     effect_scene: EffectScene = Field(
         default="", description="The effect scene to use for the video generation"
+    )
+    input_images: list[str] = Field(
+        default=[], description="URL of images to be used for hug, kiss or heart_gesture video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "duration": self.duration.value,
-            "input_image_urls": self.input_image_urls,
             "effect_scene": self.effect_scene.value,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -7766,6 +7763,13 @@ class KlingVideoV16ProTextToVideo(FALNode):
     - Automated video production
     """
 
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
     class AspectRatio(Enum):
         """
         The aspect ratio of the generated video frame
@@ -7774,22 +7778,15 @@ class KlingVideoV16ProTextToVideo(FALNode):
         RATIO_9_16 = "9:16"
         RATIO_1_1 = "1:1"
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
 
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
-    )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
@@ -7801,8 +7798,8 @@ class KlingVideoV16ProTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -8002,17 +7999,17 @@ class MinimaxVideo01Director(FALNode):
     - Automated video production
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default="", description="Text prompt for video generation. Camera movement instructions can be added using square brackets (e.g. [Pan left] or [Zoom in]). You can use up to 3 combined movements per prompt. Supported movements: Truck left/right, Pan left/right, Push in/Pull out, Pedestal up/down, Tilt up/down, Zoom in/out, Shake, Tracking shot, Static shot. For example: [Truck left, Pan right, Zoom in]. For a more detailed guide, refer https://sixth-switch-2ac.notion.site/T2V-01-Director-Model-Tutorial-with-camera-movement-1886c20a98eb80f395b8e05291ad8645"
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
         }
 
         # Remove None values
@@ -8339,7 +8336,7 @@ class HunyuanVideoLora(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the video to generate."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
@@ -8360,7 +8357,7 @@ class HunyuanVideoLora(FALNode):
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
             "num_frames": self.num_frames.value,
@@ -8451,6 +8448,13 @@ class KlingVideoV16StandardTextToVideo(FALNode):
     - Automated video production
     """
 
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
     class AspectRatio(Enum):
         """
         The aspect ratio of the generated video frame
@@ -8459,22 +8463,15 @@ class KlingVideoV16StandardTextToVideo(FALNode):
         RATIO_9_16 = "9:16"
         RATIO_1_1 = "1:1"
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
 
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
-    )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
@@ -8486,8 +8483,8 @@ class KlingVideoV16StandardTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -8520,17 +8517,17 @@ class MinimaxVideo01Live(FALNode):
     - Automated video production
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
         }
 
         # Remove None values
@@ -8561,6 +8558,13 @@ class KlingVideoV15ProTextToVideo(FALNode):
     - Automated video production
     """
 
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
     class AspectRatio(Enum):
         """
         The aspect ratio of the generated video frame
@@ -8569,22 +8573,15 @@ class KlingVideoV15ProTextToVideo(FALNode):
         RATIO_9_16 = "9:16"
         RATIO_1_1 = "1:1"
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
 
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
-    )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
@@ -8596,8 +8593,8 @@ class KlingVideoV15ProTextToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -8772,17 +8769,17 @@ class MinimaxVideo01(FALNode):
     - Automated video production
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
         }
 
         # Remove None values
@@ -8799,3 +8796,209 @@ class MinimaxVideo01(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt"]
+
+class KlingVideoV3StandardTextToVideo(FALNode):
+    """
+    Kling Video V3 Standard generates videos from text prompts with balanced quality and speed using the latest V3 model.
+    video, generation, kling, v3, standard, text-to-video, txt2vid
+
+    Use cases:
+    - Generate cinematic videos from text descriptions
+    - Create marketing videos from product descriptions
+    - Produce educational video content from scripts
+    - Generate social media video content
+    - Create animated scenes from text prompts
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation
+        """
+        CUSTOMIZE = "customize"
+        INTELLIGENT = "intelligent"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots with specified prompts and durations."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation"
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality"
+    )
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "voice_ids": self.voice_ids,
+            "generate_audio": self.generate_audio,
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "shot_type": self.shot_type.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/standard/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]
+
+class KlingVideoV3ProTextToVideo(FALNode):
+    """
+    Kling Video V3 Pro generates professional quality videos from text prompts with enhanced visual fidelity using the latest V3 model.
+    video, generation, kling, v3, pro, text-to-video, txt2vid
+
+    Use cases:
+    - Create professional-grade videos from detailed prompts
+    - Generate cinematic video content with precise motion
+    - Produce high-fidelity advertising videos
+    - Create premium animated content from scripts
+    - Generate top-tier video for film and media
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation
+        """
+        CUSTOMIZE = "customize"
+        INTELLIGENT = "intelligent"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots with specified prompts and durations."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation"
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality"
+    )
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "voice_ids": self.voice_ids,
+            "generate_audio": self.generate_audio,
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "shot_type": self.shot_type.value,
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/pro/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]

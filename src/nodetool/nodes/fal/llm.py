@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
+from nodetool.nodes.fal.types import Track
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -19,33 +20,33 @@ class OpenRouter(FALNode):
     - Unified LLM API access
     """
 
-    model: str = Field(
-        default="", description="Name of the model to use. Charged based on actual token usage."
-    )
     prompt: str = Field(
         default="", description="Prompt to be used for the chat completion"
     )
-    max_tokens: str = Field(
-        default="", description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length."
+    model: str = Field(
+        default="", description="Name of the model to use. Charged based on actual token usage."
+    )
+    max_tokens: int = Field(
+        default=0, description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length."
     )
     temperature: float = Field(
         default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input."
     )
-    reasoning: bool = Field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
     system_prompt: str = Field(
         default="", description="System prompt to provide context or instructions to the model"
+    )
+    reasoning: bool = Field(
+        default=False, description="Should reasoning be the part of the final answer."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "model": self.model,
             "prompt": self.prompt,
+            "model": self.model,
             "max_tokens": self.max_tokens,
             "temperature": self.temperature,
-            "reasoning": self.reasoning,
             "system_prompt": self.system_prompt,
+            "reasoning": self.reasoning,
         }
 
         # Remove None values
@@ -372,7 +373,7 @@ class VideoPromptGenerator(FALNode):
     special_effects: SpecialEffects = Field(
         default=SpecialEffects.NONE, description="Special effects approach"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of an image to analyze and incorporate into the video prompt (optional)"
     )
     model: Model = Field(
@@ -389,14 +390,14 @@ class VideoPromptGenerator(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "custom_elements": self.custom_elements,
             "style": self.style.value,
             "camera_direction": self.camera_direction.value,
             "pacing": self.pacing.value,
             "special_effects": self.special_effects.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "model": self.model.value,
             "camera_style": self.camera_style.value,
             "input_concept": self.input_concept,

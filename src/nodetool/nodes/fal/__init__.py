@@ -1,3 +1,4 @@
+import nodetool.nodes.fal.types  # noqa: F401
 import nodetool.nodes.fal.llm  # noqa: F401
 import nodetool.nodes.fal.text_to_image  # noqa: F401
 import nodetool.nodes.fal.text_to_audio  # noqa: F401

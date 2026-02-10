@@ -38,13 +38,13 @@ class SamAudioVisualSeparate(FALNode):
     prompt: str = Field(
         default="", description="Text prompt to assist with separation. Use natural language to describe the target sound."
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="URL of the video file to process (MP4, MOV, etc.)"
     )
     acceleration: Acceleration = Field(
         default=Acceleration.BALANCED, description="The acceleration level to use."
     )
-    mask_video_url: VideoRef = Field(
+    mask_video: VideoRef = Field(
         default=VideoRef(), description="URL of the mask video (binary mask indicating target object). Black=target, White=background."
     )
     output_format: OutputFormat = Field(
@@ -57,9 +57,9 @@ class SamAudioVisualSeparate(FALNode):
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
             "prompt": self.prompt,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "acceleration": self.acceleration.value,
-            "mask_video_url": self.mask_video_url,
+            "mask_video_url": self.mask_video,
             "output_format": self.output_format.value,
             "reranking_candidates": self.reranking_candidates,
         }
@@ -76,7 +76,7 @@ class SamAudioVisualSeparate(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "video_url", "acceleration", "mask_video_url", "output_format"]
+        return ["prompt", "video", "acceleration", "mask_video", "output_format"]
 
 class MireloAiSfxV15VideoToAudio(FALNode):
     """
@@ -100,7 +100,7 @@ class MireloAiSfxV15VideoToAudio(FALNode):
     start_offset: str = Field(
         default=0, description="The start offset in seconds to start the audio generation from"
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="A video url that can accessed from the API to process and add sound effects"
     )
     seed: str = Field(
@@ -115,7 +115,7 @@ class MireloAiSfxV15VideoToAudio(FALNode):
             "num_samples": self.num_samples,
             "duration": self.duration,
             "start_offset": self.start_offset,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "seed": self.seed,
             "text_prompt": self.text_prompt,
         }
@@ -133,7 +133,7 @@ class MireloAiSfxV15VideoToAudio(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["num_samples", "duration", "start_offset", "video_url", "seed"]
+        return ["num_samples", "duration", "start_offset", "video", "seed"]
 
 class KlingVideoVideoToAudio(FALNode):
     """
@@ -148,7 +148,7 @@ class KlingVideoVideoToAudio(FALNode):
     - Sound effect isolation
     """
 
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s."
     )
     asmr_mode: bool = Field(
@@ -163,7 +163,7 @@ class KlingVideoVideoToAudio(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "video_url": self.video_url,
+            "video_url": self.video,
             "asmr_mode": self.asmr_mode,
             "background_music_prompt": self.background_music_prompt,
             "sound_effect_prompt": self.sound_effect_prompt,
@@ -182,7 +182,7 @@ class KlingVideoVideoToAudio(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["video_url", "asmr_mode", "background_music_prompt", "sound_effect_prompt"]
+        return ["video", "asmr_mode", "background_music_prompt", "sound_effect_prompt"]
 
 class MireloAiSfxV1VideoToAudio(FALNode):
     """
@@ -200,7 +200,7 @@ class MireloAiSfxV1VideoToAudio(FALNode):
     num_samples: str = Field(
         default=2, description="The number of samples to generate from the model"
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="A video url that can accessed from the API to process and add sound effects"
     )
     duration: str = Field(
@@ -216,7 +216,7 @@ class MireloAiSfxV1VideoToAudio(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "num_samples": self.num_samples,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "duration": self.duration,
             "seed": self.seed,
             "text_prompt": self.text_prompt,
@@ -235,4 +235,4 @@ class MireloAiSfxV1VideoToAudio(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["num_samples", "video_url", "duration", "seed", "text_prompt"]
+        return ["num_samples", "video", "duration", "seed", "text_prompt"]

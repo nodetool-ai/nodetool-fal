@@ -1459,6 +1459,34 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Automated video production",
         ],
     },
+    # Kling Video V3 Standard Text-to-Video
+    "fal-ai/kling-video/v3/standard/text-to-video": {
+        "class_name": "KlingVideoV3StandardTextToVideo",
+        "docstring": "Kling Video V3 Standard generates videos from text prompts with balanced quality and speed using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "standard", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Generate cinematic videos from text descriptions",
+            "Create marketing videos from product descriptions",
+            "Produce educational video content from scripts",
+            "Generate social media video content",
+            "Create animated scenes from text prompts"
+        ],
+        "basic_fields": ["prompt", "duration", "aspect_ratio"]
+    },
+    # Kling Video V3 Pro Text-to-Video
+    "fal-ai/kling-video/v3/pro/text-to-video": {
+        "class_name": "KlingVideoV3ProTextToVideo",
+        "docstring": "Kling Video V3 Pro generates professional quality videos from text prompts with enhanced visual fidelity using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "pro", "text-to-video", "txt2vid"],
+        "use_cases": [
+            "Create professional-grade videos from detailed prompts",
+            "Generate cinematic video content with precise motion",
+            "Produce high-fidelity advertising videos",
+            "Create premium animated content from scripts",
+            "Generate top-tier video for film and media"
+        ],
+        "basic_fields": ["prompt", "duration", "aspect_ratio"]
+    },
 }
 
 

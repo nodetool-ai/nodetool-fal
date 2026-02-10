@@ -11,6 +11,52 @@ from codegen.schema_parser import NodeSpec, FieldDef, EnumDef
 class NodeGenerator:
     """Generates Python code for FAL nodes."""
 
+    # Known BaseType subclass names that map to specific types
+    KNOWN_BASE_TYPES = {
+        "KlingV3MultiPromptElement",
+        "KlingV3ComboElementInput",
+        "LoraWeight",
+        "LoRAWeight",
+        "LoRAInput",
+        "ControlLoraWeight",
+        "ChronoLoraWeight",
+        "EasyControlWeight",
+        "ControlNet",
+        "ControlNetUnion",
+        "ControlNetUnionInput",
+        "IPAdapter",
+        "Embedding",
+        "RGBColor",
+        "PointPrompt",
+        "PointPromptBase",
+        "BoxPrompt",
+        "BoxPromptBase",
+        "BBoxPromptBase",
+        "ElementInput",
+        "OmniVideoElementInput",
+        "DynamicMask",
+        "Frame",
+        "KeyframeTransition",
+        "ImageCondition",
+        "VideoCondition",
+        "ImageConditioningInput",
+        "VideoConditioningInput",
+        "Track",
+        "AudioTimeSpan",
+        "InpaintSection",
+        "DialogueBlock",
+        "PronunciationDictionaryLocator",
+        "Speaker",
+        "Turn",
+        "VibeVoiceSpeaker",
+        "GuidanceInput",
+        "ReferenceFace",
+        "MoondreamInputParam",
+        "ImageInput",
+        "ReferenceImageInput",
+        "SemanticImageInput",
+    }
+
     def __init__(self):
         self._config_basic_fields = None
         self._field_renames = {}
@@ -132,8 +178,73 @@ class NodeGenerator:
                         field.default_value = override["default_value"]
                     if "description" in override:
                         field.description = override["description"]
+
+        # Special handling: normalize asset URL fields to nodetool-native names.
+        self._normalize_image_urls_fields(spec)
+        self._normalize_asset_url_fields(spec)
+        self._normalize_asset_urls_fields(spec)
         
         return spec
+
+    def _normalize_image_urls_fields(self, spec: NodeSpec) -> None:
+        """Normalize `image_urls` input fields to `images: list[ImageRef]`."""
+        for field in spec.input_fields:
+            api_param_name = self._field_renames.get(field.name, field.name)
+            if api_param_name != "image_urls":
+                continue
+
+            # Keep API mapping to image_urls while exposing a nodetool-native images field.
+            if field.name in self._field_renames:
+                del self._field_renames[field.name]
+            field.name = "images"
+            self._field_renames[field.name] = "image_urls"
+
+            field.python_type = "list[ImageRef]"
+            field.enum_ref = None
+            if field.default_value == "None":
+                field.default_value = "[]"
+
+    def _normalize_asset_url_fields(self, spec: NodeSpec) -> None:
+        """Normalize `*_url` fields to `*` for asset refs while preserving API names."""
+        for field in spec.input_fields:
+            api_param_name = self._field_renames.get(field.name, field.name)
+            if not api_param_name.endswith("_url"):
+                continue
+            if not any(
+                ref_type in field.python_type
+                for ref_type in ("ImageRef", "AudioRef", "VideoRef")
+            ):
+                continue
+
+            normalized_name = api_param_name.removesuffix("_url")
+            if any(other.name == normalized_name and other is not field for other in spec.input_fields):
+                continue
+
+            # Preserve API mapping while exposing nodetool-native field names.
+            if field.name in self._field_renames:
+                del self._field_renames[field.name]
+            field.name = normalized_name
+            self._field_renames[field.name] = api_param_name
+
+    def _normalize_asset_urls_fields(self, spec: NodeSpec) -> None:
+        """Normalize asset list URL fields (e.g. `input_image_urls` -> `input_images`)."""
+        for field in spec.input_fields:
+            api_param_name = self._field_renames.get(field.name, field.name)
+            if api_param_name == "image_urls":
+                continue
+            if not api_param_name.endswith("_urls"):
+                continue
+            if not any(asset in api_param_name for asset in ("image", "audio", "video")):
+                continue
+
+            normalized_name = f"{api_param_name.removesuffix('_urls')}s"
+            if any(other.name == normalized_name and other is not field for other in spec.input_fields):
+                continue
+
+            if field.name in self._field_renames:
+                del self._field_renames[field.name]
+            field.name = normalized_name
+            self._field_renames[field.name] = api_param_name
 
     def _generate_imports(self, spec: NodeSpec) -> list[str]:
         """Generate import statements."""
@@ -146,8 +257,11 @@ class NodeGenerator:
         if spec.enums:
             imports.insert(0, "from enum import Enum")
         
-        # Determine which asset types are needed
+        # Determine which asset types and BaseType subclasses are needed
         asset_types = set()
+        base_type_classes = set()
+        needs_base_type = False
+        
         for field in spec.input_fields + spec.output_fields:
             if "ImageRef" in field.python_type:
                 asset_types.add("ImageRef")
@@ -155,6 +269,11 @@ class NodeGenerator:
                 asset_types.add("VideoRef")
             elif "AudioRef" in field.python_type:
                 asset_types.add("AudioRef")
+            # Detect BaseType subclass references (e.g., list[KlingV3MultiPromptElement])
+            for bt_name in self.KNOWN_BASE_TYPES:
+                if bt_name in field.python_type:
+                    base_type_classes.add(bt_name)
+                    needs_base_type = True
         
         # Add output type
         if "ImageRef" in spec.output_type:
@@ -164,8 +283,12 @@ class NodeGenerator:
         elif "AudioRef" in spec.output_type:
             asset_types.add("AudioRef")
         
-        if asset_types:
-            imports.append(f"from nodetool.metadata.types import {', '.join(sorted(asset_types))}")
+        # Build nodetool.metadata.types import
+        metadata_types = sorted(asset_types)
+        if needs_base_type:
+            metadata_types = ["BaseType"] + metadata_types
+        if metadata_types:
+            imports.append(f"from nodetool.metadata.types import {', '.join(metadata_types)}")
         
         imports.extend([
             "from nodetool.nodes.fal.fal_node import FALNode",
@@ -288,6 +411,13 @@ class NodeGenerator:
         
         return lines
 
+    def _is_base_type_list(self, field: FieldDef) -> bool:
+        """Check if a field is a list of BaseType subclass instances."""
+        for bt_name in self.KNOWN_BASE_TYPES:
+            if bt_name in field.python_type:
+                return True
+        return False
+
     def _generate_process_method(self, spec: NodeSpec) -> list[str]:
         """Generate async process method."""
         lines = [
@@ -296,8 +426,15 @@ class NodeGenerator:
         
         # Convert input images/videos/audio to required format
         image_fields = []
+        image_list_fields = []
         for field in spec.input_fields:
-            if "ImageRef" in field.python_type:
+            if field.python_type == "list[ImageRef]":
+                lines.append(f"        {field.name}_data_urls = []")
+                lines.append(f"        for image in self.{field.name} or []:")
+                lines.append("            image_base64 = await context.image_to_base64(image)")
+                lines.append(f'            {field.name}_data_urls.append(f"data:image/png;base64,{{image_base64}}")')
+                image_list_fields.append(field.name)
+            elif "ImageRef" in field.python_type:
                 lines.append(f"        {field.name}_base64 = await context.image_to_base64(self.{field.name})")
                 image_fields.append(field.name)
         
@@ -311,12 +448,17 @@ class NodeGenerator:
             if field.name in image_fields:
                 # Use the API parameter name for image URLs
                 lines.append(f'            "{api_param_name}": f"data:image/png;base64,{{{field.name}_base64}}",')
+            elif field.name in image_list_fields:
+                lines.append(f'            "{api_param_name}": {field.name}_data_urls,')
             elif field.enum_ref:
                 # Handle optional enums
                 if not field.required and field.default_value == "None":
                     lines.append(f'            "{api_param_name}": self.{field.name}.value if self.{field.name} else None,')
                 else:
                     lines.append(f'            "{api_param_name}": self.{field.name}.value,')
+            elif self._is_base_type_list(field):
+                # Serialize BaseType list items, excluding the internal 'type' field
+                lines.append(f'            "{api_param_name}": [item.model_dump(exclude={{"type"}}) for item in self.{field.name}],')
             else:
                 lines.append(f'            "{api_param_name}": self.{field.name},')
         

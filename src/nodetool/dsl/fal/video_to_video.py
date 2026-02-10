@@ -37,13 +37,13 @@ class AIFaceSwapVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
         default=False,
         description="Enable occlusion prevention for handling faces covered by hands/objects. Warning: Enabling this runs an occlusion-aware model which costs 2x more.",
     )
-    source_face_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    source_face: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
         description="Source face image. Allowed items: bmp, jpeg, png, tiff, webp",
     )
-    target_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    target_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -88,7 +88,7 @@ class AMTInterpolation(
     - Enhance video playback quality
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -143,7 +143,10 @@ class AnimateDiffTurboVideoToVideo(
         default="",
         description="The prompt to use for generating the image. Be as descriptive as possible for best results.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_n_seconds: int | OutputHandle[int] = connect_field(
+        default=3, description="The first N number of seconds of video to animate."
+    )
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -155,9 +158,6 @@ class AnimateDiffTurboVideoToVideo(
         ),
         description="URL of the video.",
     )
-    first_n_seconds: int | OutputHandle[int] = connect_field(
-        default=3, description="The first N number of seconds of video to animate."
-    )
     fps: int | OutputHandle[int] = connect_field(
         default=8, description="Number of frames per second to extract from the video."
     )
@@ -165,23 +165,20 @@ class AnimateDiffTurboVideoToVideo(
         default=0.7, description="The strength of the input video in the final output."
     )
     guidance_scale: float | OutputHandle[float] = connect_field(
-        default=1,
+        default=2,
         description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.",
-    )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=8,
-        description="The number of inference steps to perform. 4-12 is recommended for turbo mode.",
     )
     seed: int | OutputHandle[int] = connect_field(
         default=-1,
         description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.",
     )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=12,
+        description="The number of inference steps to perform. 4-12 is recommended for turbo mode.",
+    )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="(bad quality, worst quality:1.2), ugly faces, bad anime",
         description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).",
-    )
-    motions: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The motions to apply to the video."
     )
 
     @classmethod
@@ -220,7 +217,10 @@ class AnimateDiffVideoToVideo(
         default="",
         description="The prompt to use for generating the image. Be as descriptive as possible for best results.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_n_seconds: int | OutputHandle[int] = connect_field(
+        default=3, description="The first N number of seconds of video to animate."
+    )
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -232,9 +232,6 @@ class AnimateDiffVideoToVideo(
         ),
         description="URL of the video.",
     )
-    first_n_seconds: int | OutputHandle[int] = connect_field(
-        default=3, description="The first N number of seconds of video to animate."
-    )
     fps: int | OutputHandle[int] = connect_field(
         default=8, description="Number of frames per second to extract from the video."
     )
@@ -245,12 +242,12 @@ class AnimateDiffVideoToVideo(
         default=7.5,
         description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.",
     )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=25, description="The number of inference steps to perform."
-    )
     seed: int | OutputHandle[int] = connect_field(
         default=-1,
         description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=25, description="The number of inference steps to perform."
     )
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="(bad quality, worst quality:1.2), ugly faces, bad anime",
@@ -294,7 +291,7 @@ class AutoCaption(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
         default="Standard",
         description="Font for generated captions. Choose one in 'Arial','Standard','Garamond', 'Times New Roman','Georgia', or pass a url to a .ttf file",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -359,7 +356,7 @@ class BenV2Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
     - Optimize video output
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -412,17 +409,17 @@ class BiRefNetV2Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
     VideoWriteMode: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoWriteMode
     )
-    VideoOutputType: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoOutputType
-    )
     OperatingResolution: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.BiRefNetV2Video.OperatingResolution
     )
-    Model: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_video.BiRefNetV2Video.Model
+    VideoOutputType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoOutputType
     )
     VideoQuality: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoQuality
+    )
+    Model: typing.ClassVar[type] = (
+        nodetool.nodes.fal.video_to_video.BiRefNetV2Video.Model
     )
 
     video_write_mode: (
@@ -431,19 +428,13 @@ class BiRefNetV2Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
         default=nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoWriteMode.BALANCED,
         description="The write mode of the generated video.",
     )
-    video_output_type: (
-        nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoOutputType
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoOutputType.X264_MP4,
-        description="The output type of the generated video.",
-    )
     operating_resolution: (
         nodetool.nodes.fal.video_to_video.BiRefNetV2Video.OperatingResolution
     ) = Field(
         default=nodetool.nodes.fal.video_to_video.BiRefNetV2Video.OperatingResolution.VALUE_1024X1024,
         description="The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -455,9 +446,11 @@ class BiRefNetV2Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
         ),
         description="URL of the video to remove background from",
     )
-    model: nodetool.nodes.fal.video_to_video.BiRefNetV2Video.Model = Field(
-        default=nodetool.nodes.fal.video_to_video.BiRefNetV2Video.Model.GENERAL_USE_LIGHT,
-        description="Model to use for background removal. The 'General Use (Light)' model is the original model used in the BiRefNet repository. The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images. The 'General Use (Heavy)' model is a slower but more accurate model. The 'Matting' model is a model trained specifically for matting images. The 'Portrait' model is a model trained specifically for portrait images. The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304. The 'General Use (Light)' model is recommended for most use cases. The corresponding models are as follows: - 'General Use (Light)': BiRefNet - 'General Use (Light 2K)': BiRefNet_lite-2K - 'General Use (Heavy)': BiRefNet_lite - 'Matting': BiRefNet-matting - 'Portrait': BiRefNet-portrait - 'General Use (Dynamic)': BiRefNet_dynamic",
+    video_output_type: (
+        nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoOutputType
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoOutputType.X264_MP4,
+        description="The output type of the generated video.",
     )
     video_quality: nodetool.nodes.fal.video_to_video.BiRefNetV2Video.VideoQuality = (
         Field(
@@ -468,6 +461,10 @@ class BiRefNetV2Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
     sync_mode: bool | OutputHandle[bool] = connect_field(
         default=False,
         description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    )
+    model: nodetool.nodes.fal.video_to_video.BiRefNetV2Video.Model = Field(
+        default=nodetool.nodes.fal.video_to_video.BiRefNetV2Video.Model.GENERAL_USE_LIGHT,
+        description="Model to use for background removal. The 'General Use (Light)' model is the original model used in the BiRefNet repository. The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images. The 'General Use (Heavy)' model is a slower but more accurate model. The 'Matting' model is a model trained specifically for matting images. The 'Portrait' model is a model trained specifically for portrait images. The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304. The 'General Use (Light)' model is recommended for most use cases. The corresponding models are as follows: - 'General Use (Light)': BiRefNet - 'General Use (Light 2K)': BiRefNet_lite-2K - 'General Use (Heavy)': BiRefNet_lite - 'Matting': BiRefNet-matting - 'Portrait': BiRefNet-portrait - 'General Use (Dynamic)': BiRefNet_dynamic",
     )
     output_mask: bool | OutputHandle[bool] = connect_field(
         default=False,
@@ -518,7 +515,7 @@ class BriaVideoEraseKeypoints(
         default=True,
         description="If true, audio will be preserved in the output video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -584,7 +581,7 @@ class BriaVideoEraseMask(
         default=True,
         description="If true, audio will be preserved in the output video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -602,7 +599,7 @@ class BriaVideoEraseMask(
         default=nodetool.nodes.fal.video_to_video.BriaVideoEraseMask.OutputContainerAndCodec.MP4_H264,
         description="Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -658,7 +655,7 @@ class BriaVideoErasePrompt(
         default=True,
         description="If true, audio will be preserved in the output video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -723,7 +720,7 @@ class BriaVideoEraserKeypoints(
         default=True,
         description="If true, audio will be preserved in the output video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -789,7 +786,7 @@ class BriaVideoEraserMask(
         default=True,
         description="If true, audio will be preserved in the output video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -807,7 +804,7 @@ class BriaVideoEraserMask(
         default=nodetool.nodes.fal.video_to_video.BriaVideoEraserMask.OutputContainerAndCodec.MP4_H264,
         description="Output container and codec. Options: mp4_h265, mp4_h264, webm_vp9, gif, mov_h264, mov_h265, mov_proresks, mkv_h264, mkv_h265, mkv_vp9, mkv_mpeg4.",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -863,7 +860,7 @@ class BriaVideoEraserPrompt(
         default=True,
         description="If true, audio will be preserved in the output video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -927,7 +924,7 @@ class BriaVideoIncreaseResolution(
         nodetool.nodes.fal.video_to_video.BriaVideoIncreaseResolution.DesiredIncrease
     )
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -991,13 +988,7 @@ class BytedanceUpscalerUpscaleVideo(
         nodetool.nodes.fal.video_to_video.BytedanceUpscalerUpscaleVideo.TargetResolution
     )
 
-    target_fps: (
-        nodetool.nodes.fal.video_to_video.BytedanceUpscalerUpscaleVideo.TargetFps
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.BytedanceUpscalerUpscaleVideo.TargetFps.VALUE_30FPS,
-        description="The target FPS of the video to upscale.",
-    )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1008,6 +999,12 @@ class BytedanceUpscalerUpscaleVideo(
             format=None,
         ),
         description="The URL of the video to upscale.",
+    )
+    target_fps: (
+        nodetool.nodes.fal.video_to_video.BytedanceUpscalerUpscaleVideo.TargetFps
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.BytedanceUpscalerUpscaleVideo.TargetFps.VALUE_30FPS,
+        description="The target FPS of the video to upscale.",
     )
     target_resolution: (
         nodetool.nodes.fal.video_to_video.BytedanceUpscalerUpscaleVideo.TargetResolution
@@ -1069,7 +1066,7 @@ class CCSR(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     t_min: float | OutputHandle[float] = connect_field(
         default=0.3333, description="The starting point of uniform sampling strategy."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1134,7 +1131,7 @@ class CassetteaiVideoSoundEffectsGenerator(
     - Content repurposing
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1179,7 +1176,7 @@ class ClarityaiCrystalVideoUpscaler(
     - Content repurposing
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1231,7 +1228,7 @@ class CogVideoX5BVideoToVideo(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to generate the video from."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1246,9 +1243,11 @@ class CogVideoX5BVideoToVideo(
     use_rife: bool | OutputHandle[bool] = connect_field(
         default=True, description="Use RIFE for video interpolation"
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="The LoRAs to use for the image generation. We currently support one lora.",
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = (
+        connect_field(
+            default=[],
+            description="The LoRAs to use for the image generation. We currently support one lora.",
+        )
     )
     video_size: str | OutputHandle[str] = connect_field(
         default="", description="The size of the generated video."
@@ -1308,7 +1307,7 @@ class Controlnext(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
     controlnext_cond_scale: float | OutputHandle[float] = connect_field(
         default=1, description="Condition scale for ControlNeXt."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1344,7 +1343,7 @@ class Controlnext(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
     sample_stride: int | OutputHandle[int] = connect_field(
         default=2, description="Stride for sampling frames from the input video."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1396,7 +1395,7 @@ class DecartLucyEditDev(
         default=True,
         description="If set to true, the function will wait for the video to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the video directly in the response without going through the CDN.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1451,7 +1450,7 @@ class DecartLucyEditFast(
         default=False,
         description="If set to true, the function will wait for the video to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the video directly in the response without going through the CDN.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1510,7 +1509,7 @@ class DecartLucyEditPro(
         default=True,
         description="If set to true, the function will wait for the video to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the video directly in the response without going through the CDN.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1573,7 +1572,7 @@ class DecartLucyRestyle(
         default=False,
         description="If set to true, the function will wait for the video to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the video directly in the response without going through the CDN.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1636,7 +1635,7 @@ class Dubbing(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     do_lipsync: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to lip sync the audio to the video"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1687,7 +1686,7 @@ class DwposeVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
         nodetool.nodes.fal.video_to_video.DwposeVideo.DrawMode
     )
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1751,7 +1750,7 @@ class Editto(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1878,7 +1877,7 @@ class FfmpegApiCompose(
     - Content repurposing
     """
 
-    tracks: list[str] | OutputHandle[list[str]] = connect_field(
+    tracks: list[types.Track] | OutputHandle[list[types.Track]] = connect_field(
         default=[], description="List of tracks to be combined into the final media"
     )
 
@@ -1918,7 +1917,7 @@ class FfmpegApiMergeAudioVideo(
         default=0,
         description="Offset in seconds for when the audio should start relative to the video",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1930,7 +1929,7 @@ class FfmpegApiMergeAudioVideo(
         ),
         description="URL of the video file to use as the video track",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1969,16 +1968,16 @@ class FfmpegApiMergeVideos(
     - Content repurposing
     """
 
-    target_fps: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Target FPS for the output video. If not provided, uses the lowest FPS from input videos.",
-    )
-    video_urls: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="List of video URLs to merge in order"
-    )
     resolution: str | OutputHandle[str] = connect_field(
         default="",
         description="Resolution of the final video. Width and height must be between 512 and 2048.",
+    )
+    videos: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[], description="List of video URLs to merge in order"
+    )
+    target_fps: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Target FPS for the output video. If not provided, uses the lowest FPS from input videos.",
     )
 
     @classmethod
@@ -2024,7 +2023,7 @@ class FilmVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
             description="The write mode of the output video. Only applicable if output_type is 'video'.",
         )
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2100,17 +2099,17 @@ class FlashvsrUpscaleVideo(
     Acceleration: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.Acceleration
     )
-    OutputFormat: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputFormat
-    )
     OutputWriteMode: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputWriteMode
+    )
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputFormat
     )
     OutputQuality: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputQuality
     )
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2132,6 +2131,12 @@ class FlashvsrUpscaleVideo(
         default=70,
         description="Quality level for tile blending (0-100). Controls overlap between tiles to prevent grid artifacts. Higher values provide better quality with more overlap. Recommended: 70-85 for high-res videos, 50-70 for faster processing.",
     )
+    output_write_mode: (
+        nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputWriteMode
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputWriteMode.BALANCED,
+        description="The write mode of the output video.",
+    )
     output_format: (
         nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputFormat
     ) = Field(
@@ -2141,15 +2146,9 @@ class FlashvsrUpscaleVideo(
     color_fix: bool | OutputHandle[bool] = connect_field(
         default=True, description="Color correction enabled."
     )
-    output_write_mode: (
-        nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputWriteMode
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputWriteMode.BALANCED,
-        description="The write mode of the output video.",
-    )
-    sync_mode: bool | OutputHandle[bool] = connect_field(
+    preserve_audio: bool | OutputHandle[bool] = connect_field(
         default=False,
-        description="If `True`, the media will be returned inline and not stored in history.",
+        description="Copy the original audio tracks into the upscaled video using FFmpeg when possible.",
     )
     output_quality: (
         nodetool.nodes.fal.video_to_video.FlashvsrUpscaleVideo.OutputQuality
@@ -2160,9 +2159,9 @@ class FlashvsrUpscaleVideo(
     upscale_factor: float | OutputHandle[float] = connect_field(
         default=2, description="Upscaling factor to be used."
     )
-    preserve_audio: bool | OutputHandle[bool] = connect_field(
+    sync_mode: bool | OutputHandle[bool] = connect_field(
         default=False,
-        description="Copy the original audio tracks into the upscaled video using FFmpeg when possible.",
+        description="If `True`, the media will be returned inline and not stored in history.",
     )
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="The random seed used for the generation process."
@@ -2200,7 +2199,7 @@ class HunyuanVideoFoley(
     - Content repurposing
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2286,7 +2285,7 @@ class HunyuanVideoLoraVideoToVideo(
         default=nodetool.nodes.fal.video_to_video.HunyuanVideoLoraVideoToVideo.Resolution.VALUE_720P,
         description="The resolution of the video to generate.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2298,9 +2297,11 @@ class HunyuanVideoLoraVideoToVideo(
         ),
         description="URL of the video",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.",
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = (
+        connect_field(
+            default=[],
+            description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.",
+        )
     )
     strength: float | OutputHandle[float] = connect_field(
         default=0.75, description="Strength of video-to-video"
@@ -2381,7 +2382,7 @@ class HunyuanVideoToVideo(
             description="The resolution of the video to generate.",
         )
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2463,13 +2464,13 @@ class Infinitalk(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=nodetool.nodes.fal.video_to_video.Infinitalk.Acceleration.REGULAR,
         description="The acceleration level to use for generation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
         description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -2538,7 +2539,7 @@ class InfinitalkVideoToVideo(
         default=nodetool.nodes.fal.video_to_video.InfinitalkVideoToVideo.Acceleration.REGULAR,
         description="The acceleration level to use for generation.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2550,7 +2551,7 @@ class InfinitalkVideoToVideo(
         ),
         description="URL of the input video.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -2601,7 +2602,7 @@ class KlingVideoO1StandardVideoToVideoEdit(
         default="",
         description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2613,11 +2614,14 @@ class KlingVideoO1StandardVideoToVideoEdit(
         ),
         description="Reference video URL. Only .mp4/.mov formats supported, 3-10 seconds duration, 720-2160px resolution, max 200MB. Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s",
     )
-    elements: list[str] | OutputHandle[list[str]] = connect_field(
+    elements: (
+        list[types.OmniVideoElementInput]
+        | OutputHandle[list[types.OmniVideoElementInput]]
+    ) = connect_field(
         default=[],
         description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
@@ -2657,24 +2661,18 @@ class KlingVideoO1StandardVideoToVideoReference(
     - Content repurposing
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.AspectRatio
-    )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.Duration
+    )
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.AspectRatio
     )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="",
         description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order.",
     )
-    aspect_ratio: (
-        nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.AspectRatio
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.AspectRatio.AUTO,
-        description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.",
-    )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2692,14 +2690,23 @@ class KlingVideoO1StandardVideoToVideoReference(
         default=nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.Duration.VALUE_5,
         description="Video duration in seconds.",
     )
+    aspect_ratio: (
+        nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.KlingVideoO1StandardVideoToVideoReference.AspectRatio.AUTO,
+        description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.",
+    )
     keep_audio: bool | OutputHandle[bool] = connect_field(
         default=False, description="Whether to keep the original audio from the video."
     )
-    elements: list[str] | OutputHandle[list[str]] = connect_field(
+    elements: (
+        list[types.OmniVideoElementInput]
+        | OutputHandle[list[types.OmniVideoElementInput]]
+    ) = connect_field(
         default=[],
         description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
@@ -2742,7 +2749,7 @@ class KlingVideoO1VideoToVideoEdit(
         default="",
         description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2754,11 +2761,14 @@ class KlingVideoO1VideoToVideoEdit(
         ),
         description="Reference video URL. Only .mp4/.mov formats supported, 3-10 seconds duration, 720-2160px resolution, max 200MB. Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s",
     )
-    elements: list[str] | OutputHandle[list[str]] = connect_field(
+    elements: (
+        list[types.OmniVideoElementInput]
+        | OutputHandle[list[types.OmniVideoElementInput]]
+    ) = connect_field(
         default=[],
         description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
@@ -2798,24 +2808,18 @@ class KlingVideoO1VideoToVideoReference(
     - Content repurposing
     """
 
-    AspectRatio: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.AspectRatio
-    )
     Duration: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.Duration
+    )
+    AspectRatio: typing.ClassVar[type] = (
+        nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.AspectRatio
     )
 
     prompt: str | OutputHandle[str] = connect_field(
         default="",
         description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order.",
     )
-    aspect_ratio: (
-        nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.AspectRatio
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.AspectRatio.AUTO,
-        description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.",
-    )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -2833,14 +2837,23 @@ class KlingVideoO1VideoToVideoReference(
         default=nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.Duration.VALUE_5,
         description="Video duration in seconds.",
     )
+    aspect_ratio: (
+        nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.AspectRatio
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.KlingVideoO1VideoToVideoReference.AspectRatio.AUTO,
+        description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.",
+    )
     keep_audio: bool | OutputHandle[bool] = connect_field(
         default=False, description="Whether to keep the original audio from the video."
     )
-    elements: list[str] | OutputHandle[list[str]] = connect_field(
+    elements: (
+        list[types.OmniVideoElementInput]
+        | OutputHandle[list[types.OmniVideoElementInput]]
+    ) = connect_field(
         default=[],
         description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.",
     )
@@ -2882,7 +2895,7 @@ class KlingVideoV26ProMotionControl(
     )
 
     prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    video_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    video: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -2900,7 +2913,7 @@ class KlingVideoV26ProMotionControl(
         default=True,
         description="Whether to keep the original sound from the reference video.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -2944,7 +2957,7 @@ class KlingVideoV26StandardMotionControl(
     )
 
     prompt: str | OutputHandle[str] = connect_field(default="", description=None)
-    video_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    video: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -2962,7 +2975,7 @@ class KlingVideoV26StandardMotionControl(
         default=True,
         description="Whether to keep the original sound from the reference video.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3004,7 +3017,7 @@ class KreaWan14BVideoToVideo(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt for the video-to-video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3058,7 +3071,7 @@ class Latentsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
     - Content repurposing
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3077,7 +3090,7 @@ class Latentsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=-1,
         description="Random seed for generation. If None, a random seed will be used.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3135,7 +3148,7 @@ class LightxRecamera(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
         default="",
         description="Camera trajectory parameters (required for recamera mode).",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3202,7 +3215,7 @@ class LightxRelight(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
         default="",
         description="Optional text prompt. If omitted, Light-X will auto-caption the video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3222,7 +3235,7 @@ class LightxRelight(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
         default=0,
         description="Frame index to use as referencen to relight the video with reference.",
     )
-    relit_cond_img_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    relit_cond_img: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3294,7 +3307,7 @@ class Ltx219BDistilledExtendVideo(
         default=True,
         description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3337,7 +3350,7 @@ class Ltx219BDistilledExtendVideo(
         default=1,
         description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3460,7 +3473,7 @@ class Ltx219BDistilledExtendVideoLora(
         default=True,
         description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3487,7 +3500,7 @@ class Ltx219BDistilledExtendVideoLora(
     fps: float | OutputHandle[float] = connect_field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: (
@@ -3506,7 +3519,7 @@ class Ltx219BDistilledExtendVideoLora(
         default=1,
         description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3631,7 +3644,7 @@ class Ltx219BDistilledVideoToVideo(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to generate the video from."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3660,7 +3673,7 @@ class Ltx219BDistilledVideoToVideo(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3680,7 +3693,7 @@ class Ltx219BDistilledVideoToVideo(
         default=nodetool.nodes.fal.video_to_video.Ltx219BDistilledVideoToVideo.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3750,7 +3763,7 @@ class Ltx219BDistilledVideoToVideo(
             description="The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)",
         )
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3832,7 +3845,7 @@ class Ltx219BDistilledVideoToVideoLora(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to generate the video from."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -3855,7 +3868,7 @@ class Ltx219BDistilledVideoToVideoLora(
     generate_audio: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to generate audio for the video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     video_size: str | OutputHandle[str] = connect_field(
@@ -3864,7 +3877,7 @@ class Ltx219BDistilledVideoToVideoLora(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3884,7 +3897,7 @@ class Ltx219BDistilledVideoToVideoLora(
         default=nodetool.nodes.fal.video_to_video.Ltx219BDistilledVideoToVideoLora.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -3954,7 +3967,7 @@ class Ltx219BDistilledVideoToVideoLora(
         default=nodetool.nodes.fal.video_to_video.Ltx219BDistilledVideoToVideoLora.IcLora.MATCH_PREPROCESSOR,
         description="The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4034,7 +4047,7 @@ class Ltx219BExtendVideo(
         default=True,
         description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4080,7 +4093,7 @@ class Ltx219BExtendVideo(
         default=1,
         description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -4206,7 +4219,7 @@ class Ltx219BExtendVideoLora(
         default=True,
         description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4224,7 +4237,7 @@ class Ltx219BExtendVideoLora(
     generate_audio: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to generate audio for the video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     video_size: str | OutputHandle[str] = connect_field(
@@ -4237,7 +4250,7 @@ class Ltx219BExtendVideoLora(
         default=1,
         description="The scale of the camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.",
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -4384,7 +4397,7 @@ class Ltx219BVideoToVideo(
         default=True,
         description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4415,7 +4428,7 @@ class Ltx219BVideoToVideo(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -4435,7 +4448,7 @@ class Ltx219BVideoToVideo(
         default=nodetool.nodes.fal.video_to_video.Ltx219BVideoToVideo.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -4503,7 +4516,7 @@ class Ltx219BVideoToVideo(
         default=nodetool.nodes.fal.video_to_video.Ltx219BVideoToVideo.IcLora.MATCH_PREPROCESSOR,
         description="The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4589,7 +4602,7 @@ class Ltx219BVideoToVideoLora(
         default=True,
         description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4611,7 +4624,7 @@ class Ltx219BVideoToVideoLora(
     generate_audio: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to generate audio for the video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(
         default=[], description="The LoRAs to use for the generation."
     )
     video_size: str | OutputHandle[str] = connect_field(
@@ -4623,7 +4636,7 @@ class Ltx219BVideoToVideoLora(
     num_frames: int | OutputHandle[int] = connect_field(
         default=121, description="The number of frames to generate."
     )
-    end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -4643,7 +4656,7 @@ class Ltx219BVideoToVideoLora(
         default=nodetool.nodes.fal.video_to_video.Ltx219BVideoToVideoLora.VideoOutputType.X264_MP4,
         description="The output type of the generated video.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -4711,7 +4724,7 @@ class Ltx219BVideoToVideoLora(
         default=nodetool.nodes.fal.video_to_video.Ltx219BVideoToVideoLora.IcLora.MATCH_PREPROCESSOR,
         description="The type of IC-LoRA to load. In-Context LoRA weights are used to condition the video based on edge, depth, or pose videos. Only change this from `match_preprocessor` if your videos are already preprocessed (or you are using the detailer.)",
     )
-    audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    audio: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4776,7 +4789,7 @@ class Ltx2RetakeVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to retake the video with"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -4858,8 +4871,8 @@ class LtxVideo13bDevExtend(
         default=False,
         description="Whether to expand the prompt using a language model.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
     second_pass_num_inference_steps: int | OutputHandle[int] = connect_field(
         default=30, description="Number of inference steps during the second pass."
@@ -4969,12 +4982,13 @@ class LtxVideo13bDevMulticonditioning(
         default=False,
         description="Whether to expand the prompt using a language model.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
-    images: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="URL of images to use as conditioning"
-    )
+    images: (
+        list[types.ImageConditioningInput]
+        | OutputHandle[list[types.ImageConditioningInput]]
+    ) = connect_field(default=[], description="URL of images to use as conditioning")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
     )
@@ -5000,9 +5014,10 @@ class LtxVideo13bDevMulticonditioning(
         default=nodetool.nodes.fal.video_to_video.LtxVideo13bDevMulticonditioning.AspectRatio.AUTO,
         description="The aspect ratio of the video.",
     )
-    videos: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="Videos to use as conditioning"
-    )
+    videos: (
+        list[types.VideoConditioningInput]
+        | OutputHandle[list[types.VideoConditioningInput]]
+    ) = connect_field(default=[], description="Videos to use as conditioning")
     constant_rate_factor: int | OutputHandle[int] = connect_field(
         default=35,
         description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality.",
@@ -5074,8 +5089,8 @@ class LtxVideo13bDistilledExtend(
         default=False,
         description="Whether to expand the prompt using a language model.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
@@ -5185,12 +5200,13 @@ class LtxVideo13bDistilledMulticonditioning(
         default=False,
         description="Whether to expand the prompt using a language model.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
-    images: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="URL of images to use as conditioning"
-    )
+    images: (
+        list[types.ImageConditioningInput]
+        | OutputHandle[list[types.ImageConditioningInput]]
+    ) = connect_field(default=[], description="URL of images to use as conditioning")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
     )
@@ -5220,9 +5236,10 @@ class LtxVideo13bDistilledMulticonditioning(
         default=35,
         description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality.",
     )
-    videos: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="Videos to use as conditioning"
-    )
+    videos: (
+        list[types.VideoConditioningInput]
+        | OutputHandle[list[types.VideoConditioningInput]]
+    ) = connect_field(default=[], description="Videos to use as conditioning")
     first_pass_skip_final_steps: int | OutputHandle[int] = connect_field(
         default=1,
         description="Number of inference steps to skip in the final steps of the first pass. By skipping some steps at the end, the first pass can focus on larger changes instead of smaller details.",
@@ -5288,11 +5305,13 @@ class LtxVideoLoraMulticonditioning(
     number_of_frames: int | OutputHandle[int] = connect_field(
         default=89, description="The number of frames in the video."
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The LoRA weights to use for generation."
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="The LoRA weights to use for generation.")
     )
-    images: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The image conditions to use for generation."
+    images: list[types.ImageCondition] | OutputHandle[list[types.ImageCondition]] = (
+        connect_field(
+            default=[], description="The image conditions to use for generation."
+        )
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
@@ -5313,8 +5332,10 @@ class LtxVideoLoraMulticonditioning(
         default=nodetool.nodes.fal.video_to_video.LtxVideoLoraMulticonditioning.Resolution.VALUE_720P,
         description="The resolution of the video.",
     )
-    videos: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The video conditions to use for generation."
+    videos: list[types.VideoCondition] | OutputHandle[list[types.VideoCondition]] = (
+        connect_field(
+            default=[], description="The video conditions to use for generation."
+        )
     )
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="The seed to use for generation."
@@ -5457,12 +5478,14 @@ class LtxVideoV095Multiconditioning(
         default=True,
         description="Whether to expand the prompt using the model's own capabilities.",
     )
-    images: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="URL of images to use as conditioning"
-    )
-    videos: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="Videos to use as conditioning"
-    )
+    images: (
+        list[types.ImageConditioningInput]
+        | OutputHandle[list[types.ImageConditioningInput]]
+    ) = connect_field(default=[], description="URL of images to use as conditioning")
+    videos: (
+        list[types.VideoConditioningInput]
+        | OutputHandle[list[types.VideoConditioningInput]]
+    ) = connect_field(default=[], description="Videos to use as conditioning")
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="Random seed for generation"
     )
@@ -5537,8 +5560,8 @@ class Ltxv13b098DistilledExtend(
         default=0.5,
         description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
@@ -5656,12 +5679,13 @@ class Ltxv13b098DistilledMulticonditioning(
         default=0.5,
         description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution.",
     )
-    loras: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="LoRA weights to use for generation"
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = (
+        connect_field(default=[], description="LoRA weights to use for generation")
     )
-    images: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="URL of images to use as conditioning"
-    )
+    images: (
+        list[types.ImageConditioningInput]
+        | OutputHandle[list[types.ImageConditioningInput]]
+    ) = connect_field(default=[], description="URL of images to use as conditioning")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable the safety checker."
     )
@@ -5695,9 +5719,10 @@ class Ltxv13b098DistilledMulticonditioning(
         default=0,
         description="The compression ratio for tone mapping. This is used to compress the dynamic range of the video to improve visual quality. A value of 0.0 means no compression, while a value of 1.0 means maximum compression.",
     )
-    videos: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="Videos to use as conditioning"
-    )
+    videos: (
+        list[types.VideoConditioningInput]
+        | OutputHandle[list[types.VideoConditioningInput]]
+    ) = connect_field(default=[], description="Videos to use as conditioning")
     constant_rate_factor: int | OutputHandle[int] = connect_field(
         default=29,
         description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality.",
@@ -5745,7 +5770,7 @@ class LumaDreamMachineRay2FlashModify(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Instruction for modifying the video"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -5763,7 +5788,7 @@ class LumaDreamMachineRay2FlashModify(
             description="Amount of modification to apply to the video, adhere_1 is the least amount of modification, reimagine_3 is the most",
         )
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -5823,7 +5848,7 @@ class LumaDreamMachineRay2FlashReframe(
     x_end: int | OutputHandle[int] = connect_field(
         default=0, description="End X coordinate for reframing"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -5847,7 +5872,7 @@ class LumaDreamMachineRay2FlashReframe(
     grid_position_x: int | OutputHandle[int] = connect_field(
         default=0, description="X position of the grid for reframing"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -5893,7 +5918,7 @@ class LumaDreamMachineRay2Modify(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Instruction for modifying the video"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -5909,7 +5934,7 @@ class LumaDreamMachineRay2Modify(
         default=nodetool.nodes.fal.video_to_video.LumaDreamMachineRay2Modify.Mode.FLEX_1,
         description="Amount of modification to apply to the video, adhere_1 is the least amount of modification, reimagine_3 is the most",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -5969,7 +5994,7 @@ class LumaDreamMachineRay2Reframe(
     x_end: int | OutputHandle[int] = connect_field(
         default=0, description="End X coordinate for reframing"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -5993,7 +6018,7 @@ class LumaDreamMachineRay2Reframe(
     grid_position_x: int | OutputHandle[int] = connect_field(
         default=0, description="X position of the grid for reframing"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -6042,7 +6067,7 @@ class MireloAiSfxV15VideoToVideo(
         default=0,
         description="The start offset in seconds to start the audio generation from",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6097,7 +6122,7 @@ class MireloAiSfxV1VideoToVideo(
     num_samples: str | OutputHandle[str] = connect_field(
         default=2, description="The number of samples to generate from the model"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6155,7 +6180,7 @@ class MoonvalleyMareyMotionTransfer(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to generate a video from"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6171,7 +6196,7 @@ class MoonvalleyMareyMotionTransfer(
         default=-1,
         description="Seed for random number generation. Use -1 for random seed each run.",
     )
-    reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    reference_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -6181,11 +6206,11 @@ class MoonvalleyMareyMotionTransfer(
         default="<synthetic> <scene cut> low-poly, flat shader, bad rigging, stiff animation, uncanny eyes, low-quality textures, looping glitch, cheap effect, overbloom, bloom spam, default lighting, game asset, stiff face, ugly specular, AI artifacts",
         description="Negative prompt used to guide the model away from undesirable features.",
     )
-    first_frame_image_url: types.ImageRef | OutputHandle[types.ImageRef] = (
-        connect_field(
-            default="https://video-editor-files-prod.s3.us-east-2.amazonaws.com/users/1e4d46df-0702-4491-95ce-763592f33f34/uploaded-images/9b9dce1c-abd0-46c0-bac9-9454f8893b06/original",
-            description="Optional first frame image URL to use as the first frame of the generated video",
-        )
+    first_frame_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional first frame image URL to use as the first frame of the generated video",
     )
 
     @classmethod
@@ -6223,7 +6248,7 @@ class MoonvalleyMareyPoseTransfer(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to generate a video from"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6239,7 +6264,7 @@ class MoonvalleyMareyPoseTransfer(
         default=-1,
         description="Seed for random number generation. Use -1 for random seed each run.",
     )
-    reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    reference_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -6249,13 +6274,11 @@ class MoonvalleyMareyPoseTransfer(
         default="<synthetic> <scene cut> low-poly, flat shader, bad rigging, stiff animation, uncanny eyes, low-quality textures, looping glitch, cheap effect, overbloom, bloom spam, default lighting, game asset, stiff face, ugly specular, AI artifacts",
         description="Negative prompt used to guide the model away from undesirable features.",
     )
-    first_frame_image_url: types.ImageRef | OutputHandle[types.ImageRef] = (
-        connect_field(
-            default=types.ImageRef(
-                type="image", uri="", asset_id=None, data=None, metadata=None
-            ),
-            description="Optional first frame image URL to use as the first frame of the generated video",
-        )
+    first_frame_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional first frame image URL to use as the first frame of the generated video",
     )
 
     @classmethod
@@ -6311,7 +6334,7 @@ class OneToAllAnimation13B(
         default=1.5,
         description="The pose guidance scale to use for the video generation.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6323,7 +6346,7 @@ class OneToAllAnimation13B(
         ),
         description="The URL of the video to use as a reference for the video generation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -6390,7 +6413,7 @@ class OneToAllAnimation14B(
         default=1.5,
         description="The pose guidance scale to use for the video generation.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6402,7 +6425,7 @@ class OneToAllAnimation14B(
         ),
         description="The URL of the video to use as a reference for the video generation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -6451,7 +6474,7 @@ class PikaV2Pikadditions(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Text prompt describing what to add"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6469,7 +6492,7 @@ class PikaV2Pikadditions(
     negative_prompt: str | OutputHandle[str] = connect_field(
         default="", description="Negative prompt to guide the model"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -6532,7 +6555,7 @@ class PixverseExtend(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
         | OutputHandle[nodetool.nodes.fal.video_to_video.PixverseExtend.Style]
         | None
     ) = connect_field(default=None, description="The style of the extended video")
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6601,7 +6624,7 @@ class PixverseExtendFast(
         default=nodetool.nodes.fal.video_to_video.PixverseExtendFast.Resolution.VALUE_720P,
         description="The resolution of the generated video. Fast mode doesn't support 1080p",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6666,7 +6689,7 @@ class PixverseLipsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
     text: str | OutputHandle[str] = connect_field(
         default="", description="Text content for TTS when audio_url is not provided"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6678,7 +6701,7 @@ class PixverseLipsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
         ),
         description="URL of the input video",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -6725,7 +6748,7 @@ class PixverseSoundEffects(
         default="",
         description="Description of the sound effect to generate. If empty, a random sound effect will be generated",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6771,7 +6794,7 @@ class RifeVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
     - Content repurposing
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6834,7 +6857,7 @@ class Sam2Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
     - Content repurposing
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6846,15 +6869,15 @@ class Sam2Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
         ),
         description="The URL of the video to be segmented.",
     )
-    prompts: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="List of prompts to segment the video"
+    prompts: list[types.PointPrompt] | OutputHandle[list[types.PointPrompt]] = (
+        connect_field(default=[], description="List of prompts to segment the video")
     )
     boundingbox_zip: bool | OutputHandle[bool] = connect_field(
         default=False,
         description="Return per-frame bounding box overlays as a zip archive.",
     )
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="Coordinates for boxes"
+    box_prompts: list[types.BoxPrompt] | OutputHandle[list[types.BoxPrompt]] = (
+        connect_field(default=[], description="Coordinates for boxes")
     )
     apply_mask: bool | OutputHandle[bool] = connect_field(
         default=False, description="Apply the mask on the video."
@@ -6897,7 +6920,7 @@ class Sam3Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
         default="",
         description="Text prompt for segmentation. Use commas to track multiple objects (e.g., 'person, cloth').",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6913,13 +6936,15 @@ class Sam3Video(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
         default=0.5,
         description="Detection confidence threshold (0.0-1.0). Lower = more detections but less precise.",
     )
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="List of box prompt coordinates (x_min, y_min, x_max, y_max).",
+    box_prompts: list[types.BoxPromptBase] | OutputHandle[list[types.BoxPromptBase]] = (
+        connect_field(
+            default=[],
+            description="List of box prompt coordinates (x_min, y_min, x_max, y_max).",
+        )
     )
-    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="List of point prompts"
-    )
+    point_prompts: (
+        list[types.PointPromptBase] | OutputHandle[list[types.PointPromptBase]]
+    ) = connect_field(default=[], description="List of point prompts")
     apply_mask: bool | OutputHandle[bool] = connect_field(
         default=True, description="Apply the mask on the video."
     )
@@ -6962,7 +6987,7 @@ class Sam3VideoRle(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
         default="",
         description="Text prompt for segmentation. Use commas to track multiple objects (e.g., 'person, cloth').",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -6978,11 +7003,15 @@ class Sam3VideoRle(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
         default=0.5,
         description="Detection confidence threshold (0.0-1.0). Lower = more detections but less precise. Defaults: 0.5 for existing, 0.7 for new objects. Try 0.2-0.3 if text prompts fail.",
     )
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="List of box prompts with optional frame_index."
+    box_prompts: list[types.BoxPrompt] | OutputHandle[list[types.BoxPrompt]] = (
+        connect_field(
+            default=[], description="List of box prompts with optional frame_index."
+        )
     )
-    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="List of point prompts with frame indices."
+    point_prompts: list[types.PointPrompt] | OutputHandle[list[types.PointPrompt]] = (
+        connect_field(
+            default=[], description="List of point prompts with frame indices."
+        )
     )
     boundingbox_zip: bool | OutputHandle[bool] = connect_field(
         default=False,
@@ -7036,7 +7065,7 @@ class Scail(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7060,7 +7089,7 @@ class Scail(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
         default=False,
         description="Enable multi-character mode. Use when driving video has multiple people.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -7121,7 +7150,7 @@ class SeedvrUpscaleVideo(
             description="The mode to use for the upscale. If 'target', the upscale factor will be calculated based on the target resolution. If 'factor', the upscale factor will be used directly.",
         )
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7154,15 +7183,15 @@ class SeedvrUpscaleVideo(
         default=nodetool.nodes.fal.video_to_video.SeedvrUpscaleVideo.TargetResolution.VALUE_1080P,
         description="The target resolution to upscale to when `upscale_mode` is `target`.",
     )
+    sync_mode: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    )
     output_quality: (
         nodetool.nodes.fal.video_to_video.SeedvrUpscaleVideo.OutputQuality
     ) = Field(
         default=nodetool.nodes.fal.video_to_video.SeedvrUpscaleVideo.OutputQuality.HIGH,
         description="The quality of the output video.",
-    )
-    sync_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
     )
     upscale_factor: float | OutputHandle[float] = connect_field(
         default=2,
@@ -7260,8 +7289,10 @@ class SteadyDancer(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
         default="A person dancing with smooth and natural movements.",
         description="Text prompt describing the desired animation.",
     )
-    video_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default="https://v3b.fal.media/files/b/0a84de68/jXDWywjhagRfR-GuZjoRs_video.mp4",
+    video: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
         description="URL of the driving pose video. The motion from this video will be transferred to the reference image.",
     )
     acceleration: nodetool.nodes.fal.video_to_video.SteadyDancer.Acceleration = Field(
@@ -7312,8 +7343,10 @@ class SteadyDancer(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoR
         default=nodetool.nodes.fal.video_to_video.SteadyDancer.Resolution.VALUE_576P,
         description="Resolution of the generated video. 576p is default, 720p for higher quality. 480p is lower quality.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default="https://v3b.fal.media/files/b/0a85edaa/GDUCMPrdvOMcI5JpEcU7f.png",
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
         description="URL of the reference image to animate. This is the person/character whose appearance will be preserved.",
     )
     preserve_audio: bool | OutputHandle[bool] = connect_field(
@@ -7368,7 +7401,7 @@ class SyncLipsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
         default=nodetool.nodes.fal.video_to_video.SyncLipsync.Model.LIPSYNC_1_9_0_BETA,
         description="The model to use for lipsyncing",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7384,7 +7417,7 @@ class SyncLipsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
         default=nodetool.nodes.fal.video_to_video.SyncLipsync.SyncMode.CUT_OFF,
         description="Lipsync mode when audio and video durations are out of sync.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -7437,7 +7470,7 @@ class SyncLipsyncReact1(
         default=nodetool.nodes.fal.video_to_video.SyncLipsyncReact1.Emotion(""),
         description="Emotion prompt for the generation. Currently supports single-word emotions only.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7455,7 +7488,7 @@ class SyncLipsyncReact1(
             description="Lipsync mode when audio and video durations are out of sync.",
         )
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -7508,7 +7541,7 @@ class SyncLipsyncV2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
         default=nodetool.nodes.fal.video_to_video.SyncLipsyncV2.Model.LIPSYNC_2,
         description="The model to use for lipsyncing. `lipsync-2-pro` will cost roughly 1.67 times as much as `lipsync-2` for the same duration.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7524,7 +7557,7 @@ class SyncLipsyncV2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
         default=nodetool.nodes.fal.video_to_video.SyncLipsyncV2.SyncMode.CUT_OFF,
         description="Lipsync mode when audio and video durations are out of sync.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -7571,7 +7604,7 @@ class SyncLipsyncV2Pro(
         default=nodetool.nodes.fal.video_to_video.SyncLipsyncV2Pro.SyncMode.CUT_OFF,
         description="Lipsync mode when audio and video durations are out of sync.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7583,7 +7616,7 @@ class SyncLipsyncV2Pro(
         ),
         description="URL of the input video",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -7624,7 +7657,7 @@ class Thinksound(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default="",
         description="A prompt to guide the audio generation. If not provided, it will be extracted from the video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7681,7 +7714,7 @@ class ThinksoundAudio(SingleOutputGraphNode[types.AudioRef], GraphNode[types.Aud
         default="",
         description="A prompt to guide the audio generation. If not provided, it will be extracted from the video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7740,7 +7773,7 @@ class TopazUpscaleVideo(
         default=False,
         description="Whether to use H264 codec for output video. Default is H265.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7791,7 +7824,7 @@ class VeedLipsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
     - Content repurposing
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7803,7 +7836,7 @@ class VeedLipsync(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRe
         ),
         description=None,
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -7846,7 +7879,7 @@ class VeedVideoBackgroundRemoval(
         nodetool.nodes.fal.video_to_video.VeedVideoBackgroundRemoval.OutputCodec
     )
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7908,7 +7941,7 @@ class VeedVideoBackgroundRemovalFast(
         nodetool.nodes.fal.video_to_video.VeedVideoBackgroundRemovalFast.OutputCodec
     )
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -7970,7 +8003,7 @@ class VeedVideoBackgroundRemovalGreenScreen(
         nodetool.nodes.fal.video_to_video.VeedVideoBackgroundRemovalGreenScreen.OutputCodec
     )
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8056,7 +8089,7 @@ class Veo31ExtendVideo(
         default=False,
         description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8142,7 +8175,7 @@ class Veo31FastExtendVideo(
         default=False,
         description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8215,7 +8248,7 @@ class VideoAsPrompt(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
         default=nodetool.nodes.fal.video_to_video.VideoAsPrompt.Resolution.VALUE_480P,
         description="Resolution of the generated video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8227,7 +8260,7 @@ class VideoAsPrompt(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
         ),
         description="reference video to generate effect video from.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -8284,7 +8317,7 @@ class VideoUpscaler(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
     - Restore old video footage
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8357,7 +8390,7 @@ class Wan22VaceFunA14bDepth(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8377,7 +8410,7 @@ class Wan22VaceFunA14bDepth(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8389,7 +8422,7 @@ class Wan22VaceFunA14bDepth(
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URLs to source reference image. If provided, the model will use this image as reference.",
     )
@@ -8497,7 +8530,7 @@ class Wan22VaceFunA14bDepth(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8567,7 +8600,7 @@ class Wan22VaceFunA14bInpainting(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8587,7 +8620,7 @@ class Wan22VaceFunA14bInpainting(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8599,7 +8632,7 @@ class Wan22VaceFunA14bInpainting(
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="Urls to source reference image. If provided, the model will use this image as reference.",
     )
@@ -8637,7 +8670,7 @@ class Wan22VaceFunA14bInpainting(
         default=nodetool.nodes.fal.video_to_video.Wan22VaceFunA14bInpainting.VideoQuality.HIGH,
         description="The quality of the generated video.",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8676,7 +8709,7 @@ class Wan22VaceFunA14bInpainting(
         default="regular",
         description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.",
     )
-    mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    mask_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -8727,7 +8760,7 @@ class Wan22VaceFunA14bInpainting(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8797,7 +8830,7 @@ class Wan22VaceFunA14bOutpainting(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8817,7 +8850,7 @@ class Wan22VaceFunA14bOutpainting(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -8829,7 +8862,7 @@ class Wan22VaceFunA14bOutpainting(
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URLs to source reference image. If provided, the model will use this image as reference.",
     )
@@ -8952,7 +8985,7 @@ class Wan22VaceFunA14bOutpainting(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9023,7 +9056,7 @@ class Wan22VaceFunA14bPose(
         default="",
         description="The text prompt to guide video generation. For pose task, the prompt should describe the desired pose and action of the subject in the video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9043,7 +9076,7 @@ class Wan22VaceFunA14bPose(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9055,7 +9088,7 @@ class Wan22VaceFunA14bPose(
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URLs to source reference image. If provided, the model will use this image as reference.",
     )
@@ -9163,7 +9196,7 @@ class Wan22VaceFunA14bPose(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9234,7 +9267,7 @@ class Wan22VaceFunA14bReframe(
         default="",
         description="The text prompt to guide video generation. Optional for reframing.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9254,7 +9287,7 @@ class Wan22VaceFunA14bReframe(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9374,7 +9407,7 @@ class Wan22VaceFunA14bReframe(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9431,7 +9464,7 @@ class WanFunControl(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
         default=False,
         description="Whether to preprocess the video. If True, the video will be preprocessed to depth or pose.",
     )
-    reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    reference_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -9454,7 +9487,7 @@ class WanFunControl(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
             description="The type of preprocess to apply to the video. Only used when preprocess_video is True.",
         )
     )
-    control_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    control_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9537,7 +9570,7 @@ class WanV2214bAnimateMove(
             description="Resolution of the generated video (480p, 580p, or 720p).",
         )
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9561,7 +9594,7 @@ class WanV2214bAnimateMove(
         default=False,
         description="If set to true, output video will be checked for safety after generation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -9648,7 +9681,7 @@ class WanV2214bAnimateReplace(
             description="Resolution of the generated video (480p, 580p, or 720p).",
         )
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9672,7 +9705,7 @@ class WanV2214bAnimateReplace(
         default=False,
         description="If set to true, output video will be checked for safety after generation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -9760,7 +9793,7 @@ class WanV22A14bVideoToVideo(
         default=5,
         description="Shift value for the video. Must be between 1.0 and 10.0.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -9917,7 +9950,7 @@ class WanV26ReferenceToVideo(
         default=nodetool.nodes.fal.video_to_video.WanV26ReferenceToVideo.Duration.VALUE_5,
         description="Duration of the generated video in seconds. R2V supports only 5 or 10 seconds (no 15s).",
     )
-    video_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    videos: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="Reference videos for subject consistency (1-3 videos). Videos' FPS must be at least 16 FPS.Reference in prompt as @Video1, @Video2, @Video3. Works for people, animals, or objects.",
     )
@@ -9993,7 +10026,7 @@ class WanVace(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     shift: float | OutputHandle[float] = connect_field(
         default=5, description="Shift parameter for video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10008,7 +10041,7 @@ class WanVace(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="Urls to source reference image. If provided, the model will use this image as reference.",
     )
@@ -10020,7 +10053,7 @@ class WanVace(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
         default=16,
         description="Frames per second of the generated video. Must be between 5 to 24.",
     )
-    mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    mask_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -10045,7 +10078,7 @@ class WanVace(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
         default=nodetool.nodes.fal.video_to_video.WanVace.Resolution.VALUE_720P,
         description="Resolution of the generated video (480p,580p, or 720p).",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10113,7 +10146,7 @@ class WanVace13b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
     shift: float | OutputHandle[float] = connect_field(
         default=5, description="Shift parameter for video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10128,7 +10161,7 @@ class WanVace13b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    mask_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -10142,7 +10175,7 @@ class WanVace13b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=16,
         description="Frames per second of the generated video. Must be between 5 to 24.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="Urls to source reference image. If provided, the model will use this image as reference.",
     )
@@ -10165,7 +10198,7 @@ class WanVace13b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=nodetool.nodes.fal.video_to_video.WanVace13b.AspectRatio.RATIO_16_9,
         description="Aspect ratio of the generated video (16:9 or 9:16).",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10248,7 +10281,7 @@ class WanVace14b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10268,7 +10301,7 @@ class WanVace14b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10280,7 +10313,7 @@ class WanVace14b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URLs to source reference image. If provided, the model will use this image as reference.",
     )
@@ -10314,7 +10347,7 @@ class WanVace14b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=False,
         description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10353,7 +10386,7 @@ class WanVace14b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default="regular",
         description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.",
     )
-    mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    mask_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -10404,7 +10437,7 @@ class WanVace14b(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10472,7 +10505,7 @@ class WanVace14bDepth(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10492,7 +10525,7 @@ class WanVace14bDepth(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10504,7 +10537,7 @@ class WanVace14bDepth(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URLs to source reference image. If provided, the model will use this image as reference.",
     )
@@ -10608,7 +10641,7 @@ class WanVace14bDepth(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vid
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10678,7 +10711,7 @@ class WanVace14bInpainting(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10698,7 +10731,7 @@ class WanVace14bInpainting(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10710,7 +10743,7 @@ class WanVace14bInpainting(
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="Urls to source reference image. If provided, the model will use this image as reference.",
     )
@@ -10746,7 +10779,7 @@ class WanVace14bInpainting(
         default=False,
         description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10785,7 +10818,7 @@ class WanVace14bInpainting(
         default="regular",
         description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.",
     )
-    mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    mask_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -10836,7 +10869,7 @@ class WanVace14bInpainting(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10906,7 +10939,7 @@ class WanVace14bOutpainting(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="The text prompt to guide video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10926,7 +10959,7 @@ class WanVace14bOutpainting(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -10938,7 +10971,7 @@ class WanVace14bOutpainting(
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URLs to source reference image. If provided, the model will use this image as reference.",
     )
@@ -11059,7 +11092,7 @@ class WanVace14bOutpainting(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11128,7 +11161,7 @@ class WanVace14bPose(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
         default="",
         description="The text prompt to guide video generation. For pose task, the prompt should describe the desired pose and action of the subject in the video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11148,7 +11181,7 @@ class WanVace14bPose(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11160,7 +11193,7 @@ class WanVace14bPose(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
         ),
         description="URL to the first frame of the video. If provided, the model will use this frame as a reference.",
     )
-    ref_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    ref_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URLs to source reference image. If provided, the model will use this image as reference.",
     )
@@ -11264,7 +11297,7 @@ class WanVace14bPose(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Vide
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11335,7 +11368,7 @@ class WanVace14bReframe(
         default="",
         description="The text prompt to guide video generation. Optional for reframing.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11355,7 +11388,7 @@ class WanVace14bReframe(
         default=0,
         description="Temporal downsample factor for the video. This is an integer value that determines how many frames to skip in the video. A value of 0 means no downsampling. For each downsample factor, one upsample factor will automatically be applied.",
     )
-    first_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    first_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11473,7 +11506,7 @@ class WanVace14bReframe(
         default=30,
         description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
-    last_frame_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    last_frame: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11546,7 +11579,7 @@ class WanVaceAppsLongReframe(
     shift: float | OutputHandle[float] = connect_field(
         default=5, description="Shift parameter for video generation."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11558,19 +11591,19 @@ class WanVaceAppsLongReframe(
         ),
         description="URL to the source video file. This video will be used as a reference for the reframe task.",
     )
-    zoom_factor: float | OutputHandle[float] = connect_field(
-        default=0,
-        description="Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom.",
-    )
-    paste_back: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to paste back the reframed scene to the original video.",
-    )
     acceleration: (
         nodetool.nodes.fal.video_to_video.WanVaceAppsLongReframe.Acceleration
     ) = Field(
         default=nodetool.nodes.fal.video_to_video.WanVaceAppsLongReframe.Acceleration.REGULAR,
         description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.",
+    )
+    paste_back: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Whether to paste back the reframed scene to the original video.",
+    )
+    zoom_factor: float | OutputHandle[float] = connect_field(
+        default=0,
+        description="Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom.",
     )
     prompt: str | OutputHandle[str] = connect_field(
         default="",
@@ -11580,12 +11613,12 @@ class WanVaceAppsLongReframe(
         default=30,
         description="Threshold for scene detection sensitivity (0-100). Lower values detect more scenes.",
     )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
     guidance_scale: float | OutputHandle[float] = connect_field(
         default=5,
         description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt.",
-    )
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
-        default=False, description="If set to true, the safety checker will be enabled."
     )
     auto_downsample_min_fps: float | OutputHandle[float] = connect_field(
         default=6, description="Minimum FPS for auto downsample."
@@ -11603,10 +11636,6 @@ class WanVaceAppsLongReframe(
     ) = Field(
         default=nodetool.nodes.fal.video_to_video.WanVaceAppsLongReframe.VideoWriteMode.BALANCED,
         description="The write mode of the generated video.",
-    )
-    return_frames_zip: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="If true, also return a ZIP file containing all generated frames.",
     )
     aspect_ratio: (
         nodetool.nodes.fal.video_to_video.WanVaceAppsLongReframe.AspectRatio
@@ -11626,6 +11655,10 @@ class WanVaceAppsLongReframe(
         default=nodetool.nodes.fal.video_to_video.WanVaceAppsLongReframe.TransparencyMode.CONTENT_AWARE,
         description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.",
     )
+    return_frames_zip: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="If true, also return a ZIP file containing all generated frames.",
+    )
     trim_borders: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to trim borders from the video."
     )
@@ -11639,9 +11672,9 @@ class WanVaceAppsLongReframe(
         default=False,
         description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
     )
-    seed: int | OutputHandle[int] = connect_field(
-        default=-1,
-        description="Random seed for reproducibility. If None, a random seed is chosen.",
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=30,
+        description="Number of inference steps for sampling. Higher values give better quality but take longer.",
     )
     interpolator_model: (
         nodetool.nodes.fal.video_to_video.WanVaceAppsLongReframe.InterpolatorModel
@@ -11652,9 +11685,9 @@ class WanVaceAppsLongReframe(
     enable_auto_downsample: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to enable auto downsample."
     )
-    num_inference_steps: int | OutputHandle[int] = connect_field(
-        default=30,
-        description="Number of inference steps for sampling. Higher values give better quality but take longer.",
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1,
+        description="Random seed for reproducibility. If None, a random seed is chosen.",
     )
 
     @classmethod
@@ -11689,11 +11722,11 @@ class WanVaceAppsVideoEdit(
     - Content repurposing
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Acceleration
-    )
     Resolution: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Resolution
+    )
+    Acceleration: typing.ClassVar[type] = (
+        nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Acceleration
     )
     AspectRatio: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.AspectRatio
@@ -11705,7 +11738,23 @@ class WanVaceAppsVideoEdit(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to edit the video."
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    resolution: nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Resolution = (
+        Field(
+            default=nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Resolution.AUTO,
+            description="Resolution of the edited video.",
+        )
+    )
+    acceleration: (
+        nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Acceleration
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Acceleration.REGULAR,
+        description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.",
+    )
+    return_frames_zip: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="Whether to include a ZIP archive containing all generated frames.",
+    )
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11716,22 +11765,6 @@ class WanVaceAppsVideoEdit(
             format=None,
         ),
         description="URL of the input video.",
-    )
-    acceleration: (
-        nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Acceleration
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Acceleration.REGULAR,
-        description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.",
-    )
-    resolution: nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Resolution = (
-        Field(
-            default=nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.Resolution.AUTO,
-            description="Resolution of the edited video.",
-        )
-    )
-    return_frames_zip: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Whether to include a ZIP archive containing all generated frames.",
     )
     aspect_ratio: nodetool.nodes.fal.video_to_video.WanVaceAppsVideoEdit.AspectRatio = (
         Field(
@@ -11748,7 +11781,7 @@ class WanVaceAppsVideoEdit(
             description="The type of video you're editing. Use 'general' for most videos, and 'human' for videos emphasizing human subjects and motions. The default value 'auto' means the model will guess based on the first frame of the video.",
         )
     )
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="URLs of the input images to use as a reference for the generation.",
     )
@@ -11801,7 +11834,7 @@ class WanVisionEnhancer(
         default="",
         description="Optional prompt to prepend to the VLM-generated description. Leave empty to use only the auto-generated description from the video.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11870,11 +11903,11 @@ class WorkflowUtilitiesAutoSubtitle(
     FontColor: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.FontColor
     )
-    StrokeColor: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.StrokeColor
-    )
     HighlightColor: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.HighlightColor
+    )
+    StrokeColor: typing.ClassVar[type] = (
+        nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.StrokeColor
     )
     Position: typing.ClassVar[type] = (
         nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.Position
@@ -11883,13 +11916,7 @@ class WorkflowUtilitiesAutoSubtitle(
         nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.BackgroundColor
     )
 
-    font_weight: (
-        nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.FontWeight
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.FontWeight.BOLD,
-        description="Font weight (TikTok style typically uses bold or black)",
-    )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -11900,6 +11927,12 @@ class WorkflowUtilitiesAutoSubtitle(
             format=None,
         ),
         description="URL of the video file to add automatic subtitles to Max file size: 95.4MB, Timeout: 30.0s",
+    )
+    font_weight: (
+        nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.FontWeight
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.FontWeight.BOLD,
+        description="Font weight (TikTok style typically uses bold or black)",
     )
     stroke_width: int | OutputHandle[int] = connect_field(
         default=3, description="Text stroke/outline width in pixels (0 for no stroke)"
@@ -11918,9 +11951,11 @@ class WorkflowUtilitiesAutoSubtitle(
         default="en",
         description="Language code for transcription (e.g., 'en', 'es', 'fr', 'de', 'it', 'pt', 'nl', 'ja', 'zh', 'ko') or 3-letter ISO code (e.g., 'eng', 'spa', 'fra')",
     )
-    y_offset: int | OutputHandle[int] = connect_field(
-        default=75,
-        description="Vertical offset in pixels (positive = move down, negative = move up)",
+    highlight_color: (
+        nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.HighlightColor
+    ) = Field(
+        default=nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.HighlightColor.PURPLE,
+        description="Color for the currently speaking word (karaoke-style highlight)",
     )
     background_opacity: float | OutputHandle[float] = connect_field(
         default=0,
@@ -11932,11 +11967,9 @@ class WorkflowUtilitiesAutoSubtitle(
         default=nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.StrokeColor.BLACK,
         description="Text stroke/outline color",
     )
-    highlight_color: (
-        nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.HighlightColor
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_video.WorkflowUtilitiesAutoSubtitle.HighlightColor.PURPLE,
-        description="Color for the currently speaking word (karaoke-style highlight)",
+    y_offset: int | OutputHandle[int] = connect_field(
+        default=75,
+        description="Vertical offset in pixels (positive = move down, negative = move up)",
     )
     enable_animation: bool | OutputHandle[bool] = connect_field(
         default=True,

@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import VideoRef, AudioRef
@@ -21,31 +22,31 @@ class FfmpegApiLoudnorm(FALNode):
     measured_tp: str = Field(
         default="", description="Measured true peak of input file in dBTP. Required for linear mode."
     )
+    offset: float = Field(
+        default=0, description="Offset gain in dB applied before the true-peak limiter"
+    )
     print_summary: bool = Field(
         default=False, description="Return loudness measurement summary with the normalized audio"
-    )
-    linear: bool = Field(
-        default=False, description="Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality)."
     )
     measured_i: str = Field(
         default="", description="Measured integrated loudness of input file in LUFS. Required for linear mode."
     )
-    offset: float = Field(
-        default=0, description="Offset gain in dB applied before the true-peak limiter"
+    linear: bool = Field(
+        default=False, description="Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality)."
     )
     measured_lra: str = Field(
         default="", description="Measured loudness range of input file in LU. Required for linear mode."
     )
-    measured_thresh: str = Field(
-        default="", description="Measured threshold of input file in LUFS. Required for linear mode."
-    )
     dual_mono: bool = Field(
         default=False, description="Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems"
+    )
+    measured_thresh: str = Field(
+        default="", description="Measured threshold of input file in LUFS. Required for linear mode."
     )
     true_peak: float = Field(
         default=-0.1, description="Maximum true peak in dBTP."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to normalize"
     )
     integrated_loudness: float = Field(
@@ -58,15 +59,15 @@ class FfmpegApiLoudnorm(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "measured_tp": self.measured_tp,
-            "print_summary": self.print_summary,
-            "linear": self.linear,
-            "measured_i": self.measured_i,
             "offset": self.offset,
+            "print_summary": self.print_summary,
+            "measured_i": self.measured_i,
+            "linear": self.linear,
             "measured_lra": self.measured_lra,
-            "measured_thresh": self.measured_thresh,
             "dual_mono": self.dual_mono,
+            "measured_thresh": self.measured_thresh,
             "true_peak": self.true_peak,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "integrated_loudness": self.integrated_loudness,
             "loudness_range": self.loudness_range,
         }
@@ -84,7 +85,7 @@ class FfmpegApiLoudnorm(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["measured_tp", "print_summary", "linear", "measured_i", "offset"]
+        return ["measured_tp", "offset", "print_summary", "measured_i", "linear"]
 
 class FfmpegApiWaveform(FALNode):
     """
@@ -105,7 +106,7 @@ class FfmpegApiWaveform(FALNode):
     smoothing_window: int = Field(
         default=3, description="Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number."
     )
-    media_url: AudioRef = Field(
+    media: AudioRef = Field(
         default=AudioRef(), description="URL of the audio file to analyze"
     )
     points_per_second: float = Field(
@@ -116,7 +117,7 @@ class FfmpegApiWaveform(FALNode):
         arguments = {
             "precision": self.precision,
             "smoothing_window": self.smoothing_window,
-            "media_url": self.media_url,
+            "media_url": self.media,
             "points_per_second": self.points_per_second,
         }
 
@@ -132,7 +133,7 @@ class FfmpegApiWaveform(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["precision", "smoothing_window", "media_url", "points_per_second"]
+        return ["precision", "smoothing_window", "media", "points_per_second"]
 
 class FfmpegApiMetadata(FALNode):
     """
@@ -150,14 +151,14 @@ class FfmpegApiMetadata(FALNode):
     extract_frames: bool = Field(
         default=False, description="Whether to extract the start and end frames for videos. Note that when true the request will be slower."
     )
-    media_url: VideoRef = Field(
+    media: VideoRef = Field(
         default=VideoRef(), description="URL of the media file (video or audio) to analyze"
     )
 
     async def process(self, context: ProcessingContext) -> Any:
         arguments = {
             "extract_frames": self.extract_frames,
-            "media_url": self.media_url,
+            "media_url": self.media,
         }
 
         # Remove None values
@@ -172,4 +173,4 @@ class FfmpegApiMetadata(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["extract_frames", "media_url"]
+        return ["extract_frames", "media"]

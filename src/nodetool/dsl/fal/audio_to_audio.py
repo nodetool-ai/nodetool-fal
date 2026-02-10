@@ -112,7 +112,7 @@ class AceStepAudioInpaint(
         default=nodetool.nodes.fal.audio_to_audio.AceStepAudioInpaint.StartTimeRelativeTo.START,
         description="Whether the start time is relative to the start or end of the audio.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -214,7 +214,7 @@ class AceStepAudioOutpaint(
         default=0,
         description="Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -320,7 +320,7 @@ class AceStepAudioToAudio(
         default=0,
         description="Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -378,7 +378,7 @@ class AudioUnderstanding(SingleOutputGraphNode[Any], GraphNode[Any]):
         default=False,
         description="Whether to request a more detailed analysis of the audio",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -427,7 +427,7 @@ class Deepfilternet3(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, 
         default=nodetool.nodes.fal.audio_to_audio.Deepfilternet3.AudioFormat.MP3,
         description="The format for the output audio.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -492,7 +492,7 @@ class Demucs(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
         default=nodetool.nodes.fal.audio_to_audio.Demucs.Model.HTDEMUCS_6S,
         description="Demucs model to use for separation",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -541,7 +541,7 @@ class DiaTtsVoiceClone(
     ref_text: str | OutputHandle[str] = connect_field(
         default="", description="The reference text to be used for TTS."
     )
-    ref_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    ref_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -580,7 +580,7 @@ class ElevenlabsAudioIsolation(
     - Audio effect application
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -592,7 +592,7 @@ class ElevenlabsAudioIsolation(
         ),
         description="Video file to use for audio isolation. Either `audio_url` or `video_url` must be provided.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -638,7 +638,7 @@ class ElevenlabsVoiceChanger(
     voice: str | OutputHandle[str] = connect_field(
         default="Rachel", description="The voice to use for speech generation"
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -690,7 +690,7 @@ class FfmpegApiMergeAudios(
     - Generate combined audio output
     """
 
-    audio_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    audios: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate.",
     )
@@ -729,7 +729,7 @@ class KlingVideoCreateVoice(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Audio effect application
     """
 
-    voice_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    voice: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -783,7 +783,7 @@ class NovaSr(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     bitrate: str | OutputHandle[str] = connect_field(
         default="192k", description="The bitrate of the output audio."
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -842,7 +842,7 @@ class SamAudioSeparate(
             description="The acceleration level to use.",
         )
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -912,9 +912,11 @@ class SamAudioSpanSeparate(
         default=nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.Acceleration.BALANCED,
         description="The acceleration level to use.",
     )
-    spans: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="Time spans where the target sound occurs which should be isolated.",
+    spans: list[types.AudioTimeSpan] | OutputHandle[list[types.AudioTimeSpan]] = (
+        connect_field(
+            default=[],
+            description="Time spans where the target sound occurs which should be isolated.",
+        )
     )
     output_format: (
         nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.OutputFormat
@@ -926,7 +928,7 @@ class SamAudioSpanSeparate(
         default=False,
         description="Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1014,7 +1016,7 @@ class SonautoV2Extend(SingleOutputGraphNode[types.AudioRef], GraphNode[types.Aud
         default=0,
         description="Duration in seconds to crop from the selected side before extending from that side.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1072,7 +1074,7 @@ class StableAudio25AudioToAudio(
         default=False,
         description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1137,7 +1139,7 @@ class StableAudio25Inpaint(
         default=False,
         description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),

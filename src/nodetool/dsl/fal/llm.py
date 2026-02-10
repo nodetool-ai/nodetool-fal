@@ -33,27 +33,27 @@ class OpenRouter(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]
     - Unified LLM API access
     """
 
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Prompt to be used for the chat completion"
+    )
     model: str | OutputHandle[str] = connect_field(
         default="",
         description="Name of the model to use. Charged based on actual token usage.",
     )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt to be used for the chat completion"
-    )
-    max_tokens: str | OutputHandle[str] = connect_field(
-        default="",
+    max_tokens: int | OutputHandle[int] = connect_field(
+        default=0,
         description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.",
     )
     temperature: float | OutputHandle[float] = connect_field(
         default=1,
         description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
     )
-    reasoning: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
     system_prompt: str | OutputHandle[str] = connect_field(
         default="",
         description="System prompt to provide context or instructions to the model",
+    )
+    reasoning: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Should reasoning be the part of the final answer."
     )
 
     @classmethod
@@ -247,7 +247,7 @@ class VideoPromptGenerator(SingleOutputGraphNode[Any], GraphNode[Any]):
         default=nodetool.nodes.fal.llm.VideoPromptGenerator.SpecialEffects.NONE,
         description="Special effects approach",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),

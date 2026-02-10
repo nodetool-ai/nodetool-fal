@@ -42,7 +42,7 @@ class Flux2Klein4BBaseTrainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -101,7 +101,7 @@ class Flux2Klein4BBaseTrainerEdit(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -160,7 +160,7 @@ class Flux2Klein9BBaseTrainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -219,7 +219,7 @@ class Flux2Klein9BBaseTrainerEdit(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -276,7 +276,7 @@ class Flux2Trainer(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -335,7 +335,7 @@ class Flux2TrainerEdit(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -392,7 +392,7 @@ class Flux2TrainerV2(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, 
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -451,7 +451,7 @@ class Flux2TrainerV2Edit(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -506,7 +506,7 @@ class HunyuanVideoLoraTraining(
     trigger_word: str | OutputHandle[str] = connect_field(
         default="", description="The trigger word to use."
     )
-    images_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    images_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -561,7 +561,7 @@ class QwenImage2512Trainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -610,7 +610,7 @@ class QwenImage2512TrainerV2(
     steps: int | OutputHandle[int] = connect_field(
         default=2000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -659,7 +659,7 @@ class QwenImageEdit2509Trainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -708,7 +708,7 @@ class QwenImageEdit2511Trainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -757,7 +757,7 @@ class QwenImageEditPlusTrainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -806,7 +806,7 @@ class QwenImageEditTrainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -855,7 +855,7 @@ class QwenImageLayeredTrainer(
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -905,7 +905,7 @@ class QwenImageTrainer(
         default=1000,
         description="Total number of training steps to perform. Default is 4000.",
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -953,7 +953,7 @@ class RecraftV3CreateStyle(SingleOutputGraphNode[Any], GraphNode[Any]):
         nodetool.nodes.fal.training.RecraftV3CreateStyle.BaseStyle
     )
 
-    images_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    images_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1000,7 +1000,7 @@ class TurboFluxTrainer(
         nodetool.nodes.fal.training.TurboFluxTrainer.TrainingStyle
     )
 
-    images_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    images_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1121,7 +1121,7 @@ class WanTrainer(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]
     number_of_steps: int | OutputHandle[int] = connect_field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    training_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1175,7 +1175,7 @@ class WanTrainerFlf2v720p(
     number_of_steps: int | OutputHandle[int] = connect_field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    training_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1229,7 +1229,7 @@ class WanTrainerI2v720p(
     number_of_steps: int | OutputHandle[int] = connect_field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    training_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1281,7 +1281,7 @@ class WanTrainerT2v(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, A
     number_of_steps: int | OutputHandle[int] = connect_field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    training_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1335,7 +1335,7 @@ class WanTrainerT2v14b(
     number_of_steps: int | OutputHandle[int] = connect_field(
         default=400, description="The number of steps to train for."
     )
-    training_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    training_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1389,7 +1389,7 @@ class ZImageBaseTrainer(
     steps: int | OutputHandle[int] = connect_field(
         default=2000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1440,7 +1440,7 @@ class ZImageTrainer(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, A
     steps: int | OutputHandle[int] = connect_field(
         default=1000, description="Total number of training steps."
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1493,7 +1493,7 @@ class ZImageTurboTrainerV2(
     steps: int | OutputHandle[int] = connect_field(
         default=2000, description="Number of steps to train for"
     )
-    image_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),

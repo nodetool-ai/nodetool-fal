@@ -35,7 +35,7 @@ class BytedanceSeed3DImageTo3D(
     - Rapid prototyping
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -81,7 +81,7 @@ class Hunyuan3DV3ImageTo3D(
         nodetool.nodes.fal.image_to_3d.Hunyuan3DV3ImageTo3D.GenerateType
     )
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -96,13 +96,13 @@ class Hunyuan3DV3ImageTo3D(
     face_count: int | OutputHandle[int] = connect_field(
         default=500000, description="Target face count. Range: 40000-1500000"
     )
-    right_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    right_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
         description="Optional right view image URL for better 3D reconstruction.",
     )
-    back_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    back_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -118,7 +118,7 @@ class Hunyuan3DV3ImageTo3D(
             description="Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
         )
     )
-    left_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    left_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -157,7 +157,7 @@ class Hunyuan3DV3SketchTo3D(
     - Rapid prototyping
     """
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -204,7 +204,7 @@ class Hunyuan3dV2(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any
     - Architectural visualization
     """
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -258,7 +258,7 @@ class Hunyuan3dV21(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     - Architectural visualization
     """
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -312,7 +312,7 @@ class Hunyuan3dV2Mini(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str,
     - Architectural visualization
     """
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -368,7 +368,7 @@ class Hunyuan3dV2MiniTurbo(
     - Architectural visualization
     """
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -424,7 +424,7 @@ class Hunyuan3dV2MultiView(
     - Architectural visualization
     """
 
-    front_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    front_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -433,7 +433,7 @@ class Hunyuan3dV2MultiView(
     octree_resolution: int | OutputHandle[int] = connect_field(
         default=256, description="Octree resolution for the model."
     )
-    back_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    back_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -453,7 +453,7 @@ class Hunyuan3dV2MultiView(
         default=-1,
         description="The same seed and the same prompt given to the same version of the model will output the same image every time.",
     )
-    left_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    left_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -492,7 +492,7 @@ class Hunyuan3dV2MultiViewTurbo(
     - Architectural visualization
     """
 
-    front_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    front_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -501,7 +501,7 @@ class Hunyuan3dV2MultiViewTurbo(
     octree_resolution: int | OutputHandle[int] = connect_field(
         default=256, description="Octree resolution for the model."
     )
-    back_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    back_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -521,7 +521,7 @@ class Hunyuan3dV2MultiViewTurbo(
         default=-1,
         description="The same seed and the same prompt given to the same version of the model will output the same image every time.",
     )
-    left_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    left_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -560,7 +560,7 @@ class Hunyuan3dV2Turbo(
     - Architectural visualization
     """
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -627,7 +627,7 @@ class Hunyuan_WorldImageToWorld(SingleOutputGraphNode[Any], GraphNode[Any]):
     labels_fg2: str | OutputHandle[str] = connect_field(
         default="", description="Labels for the second foreground object."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -696,7 +696,7 @@ class Hyper3DRodinV2(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, 
         default=False,
         description="Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software.",
     )
-    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    input_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URL of images to use while generating the 3D model. Required for Image-to-3D mode. Up to 5 images allowed.",
     )
@@ -793,7 +793,7 @@ class Hyper3dRodin(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
         default=False,
         description="When generating the human-like model, this parameter control the generation result to T/A Pose.",
     )
-    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    input_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[],
         description="URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.",
     )
@@ -877,7 +877,7 @@ class MeshyV5MultiImageTo3D(
     is_a_t_pose: bool | OutputHandle[bool] = connect_field(
         default=False, description="Whether to generate the model in an A/T pose"
     )
-    texture_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    texture_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -897,7 +897,7 @@ class MeshyV5MultiImageTo3D(
             description="Controls symmetry behavior during model generation.",
         )
     )
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.",
     )
@@ -962,7 +962,7 @@ class MeshyV6PreviewImageTo3D(
     should_texture: bool | OutputHandle[bool] = connect_field(
         default=True, description="Whether to generate textures"
     )
-    texture_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    texture_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -972,7 +972,7 @@ class MeshyV6PreviewImageTo3D(
         default=nodetool.nodes.fal.image_to_3d.MeshyV6PreviewImageTo3D.Topology.TRIANGLE,
         description="Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1025,7 +1025,7 @@ class Omnipart(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]])
     - Rapid prototyping
     """
 
-    input_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    input_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1084,7 +1084,7 @@ class Pshuman(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
         default=-1,
         description="Seed for reproducibility. If None, a random seed will be used.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1121,7 +1121,7 @@ class Sam33DBody(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]
     - Rapid prototyping
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1131,7 +1131,7 @@ class Sam33DBody(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]
         default=True,
         description="Include 3D keypoint markers (spheres) in the GLB mesh for visualization",
     )
-    mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1187,11 +1187,13 @@ class Sam33DObjects(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, A
         default="",
         description="Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation",
     )
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.",
+    box_prompts: list[types.BoxPromptBase] | OutputHandle[list[types.BoxPromptBase]] = (
+        connect_field(
+            default=[],
+            description="Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.",
+        )
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1201,7 +1203,9 @@ class Sam33DObjects(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, A
         default=[],
         description="Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used.",
     )
-    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(
+    point_prompts: (
+        list[types.PointPromptBase] | OutputHandle[list[types.PointPromptBase]]
+    ) = connect_field(
         default=[],
         description="Point prompts for auto-segmentation when no masks provided",
     )
@@ -1273,7 +1277,7 @@ class Tripo3dTripoV25ImageTo3d(
         default=nodetool.nodes.fal.image_to_3d.Tripo3dTripoV25ImageTo3d.TextureAlignment.ORIGINAL_IMAGE,
         description="Determines the prioritization of texture alignment in the 3D model. The default value is original_image.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1352,7 +1356,7 @@ class Tripo3dTripoV25MultiviewTo3d(
         default=0,
         description="Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.",
     )
-    right_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    right_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1372,7 +1376,7 @@ class Tripo3dTripoV25MultiviewTo3d(
         default=False,
         description="Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
     )
-    front_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    front_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1382,7 +1386,7 @@ class Tripo3dTripoV25MultiviewTo3d(
         default=-1,
         description="This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.",
     )
-    back_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    back_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1418,7 +1422,7 @@ class Tripo3dTripoV25MultiviewTo3d(
         default=nodetool.nodes.fal.image_to_3d.Tripo3dTripoV25MultiviewTo3d.Orientation.DEFAULT,
         description="Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.",
     )
-    left_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    left_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1474,7 +1478,7 @@ class Triposr(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
         default=nodetool.nodes.fal.image_to_3d.Triposr.OutputFormat.GLB,
         description="Output format for the 3D model.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),

@@ -35,7 +35,7 @@ class KlingVideoVideoToAudio(
     - Sound effect isolation
     """
 
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -102,7 +102,7 @@ class MireloAiSfxV15VideoToAudio(
         default=0,
         description="The start offset in seconds to start the audio generation from",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -157,7 +157,7 @@ class MireloAiSfxV1VideoToAudio(
     num_samples: str | OutputHandle[str] = connect_field(
         default=2, description="The number of samples to generate from the model"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -223,7 +223,7 @@ class SamAudioVisualSeparate(
         default="",
         description="Text prompt to assist with separation. Use natural language to describe the target sound.",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -241,7 +241,7 @@ class SamAudioVisualSeparate(
         default=nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.Acceleration.BALANCED,
         description="The acceleration level to use.",
     )
-    mask_video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",

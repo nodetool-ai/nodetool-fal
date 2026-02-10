@@ -113,7 +113,7 @@ class MeshyV5Retexture(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, input data will be checked for safety before processing.')
     enable_original_uv: bool | OutputHandle[bool] = connect_field(default=True, description='Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.')
     model_url: str | OutputHandle[str] = connect_field(default='', description='URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.')
-    image_style_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence.')
+    image_style: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -144,11 +144,11 @@ class Sam33DAlign(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any
         - Rapid prototyping
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the original image used for MoGe depth estimation')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the original image used for MoGe depth estimation')
     body_mesh_url: str | OutputHandle[str] = connect_field(default='', description='URL of the SAM-3D Body mesh file (.ply or .glb) to align')
     object_mesh_url: str | OutputHandle[str] = connect_field(default='', description='Optional URL of SAM-3D Object mesh (.glb) to create combined scene')
     focal_length: float | OutputHandle[float] = connect_field(default=0.0, description='Focal length from SAM-3D Body metadata. If not provided, estimated from MoGe.')
-    body_mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the human mask image. If not provided, uses full image.')
+    body_mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the human mask image. If not provided, uses full image.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -184,7 +184,7 @@ class Ultrashape(SingleOutputGraphNode[Any], GraphNode[Any]):
     num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Diffusion steps.')
     model_url: str | OutputHandle[str] = connect_field(default='', description='URL of the coarse mesh (.glb or .obj) to refine.')
     seed: int | OutputHandle[int] = connect_field(default=42, description='Random seed.')
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the reference image for mesh refinement.')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the reference image for mesh refinement.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:

@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
+from nodetool.nodes.fal.types import DynamicMask, Frame, KeyframeTransition, KlingV3ComboElementInput, KlingV3MultiPromptElement, LoRAInput, LoRAWeight, LoraWeight, OmniVideoElementInput, Turn
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -146,22 +147,22 @@ class LumaDreamMachine(FALNode):
     loop: bool = Field(
         default=False, description="Whether the video should loop (end of video is blended with the beginning)"
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="An image to blend the end of the video with"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "loop": self.loop,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -192,7 +193,7 @@ class AMTFrameInterpolation(FALNode):
     - Produce smooth motion effects
     """
 
-    frames: list[str] = Field(
+    frames: list[Frame] = Field(
         default=[], description="Frames to interpolate"
     )
     recursive_interpolation_passes: int = Field(
@@ -204,7 +205,7 @@ class AMTFrameInterpolation(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "frames": self.frames,
+            "frames": [item.model_dump(exclude={"type"}) for item in self.frames],
             "recursive_interpolation_passes": self.recursive_interpolation_passes,
             "output_fps": self.output_fps,
         }
@@ -262,10 +263,10 @@ class AIAvatar(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use for generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
     )
     num_frames: int = Field(
@@ -276,13 +277,13 @@ class AIAvatar(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "acceleration": self.acceleration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "audio_url": self.audio_url,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "audio_url": self.audio,
             "num_frames": self.num_frames,
             "seed": self.seed,
         }
@@ -368,7 +369,7 @@ class AIAvatarSingleText(FALNode):
     text_input: str = Field(
         default="", description="The text input to guide video generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     voice: Voice = Field(
@@ -382,13 +383,13 @@ class AIAvatarSingleText(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "acceleration": self.acceleration.value,
             "text_input": self.text_input,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "voice": self.voice.value,
             "seed": self.seed,
             "num_frames": self.num_frames,
@@ -503,7 +504,7 @@ class AIAvatarMultiText(FALNode):
     first_text_input: str = Field(
         default="", description="The text input to guide video generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     voice2: Voice2 = Field(
@@ -520,14 +521,14 @@ class AIAvatarMultiText(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "second_text_input": self.second_text_input,
             "acceleration": self.acceleration.value,
             "resolution": self.resolution.value,
             "first_text_input": self.first_text_input,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "voice2": self.voice2.value,
             "voice1": self.voice1.value,
             "seed": self.seed,
@@ -587,13 +588,13 @@ class AIAvatarMulti(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use for generation."
     )
-    first_audio_url: AudioRef = Field(
+    first_audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the Person 1 audio file."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    second_audio_url: AudioRef = Field(
+    second_audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the Person 2 audio file."
     )
     seed: int = Field(
@@ -607,14 +608,14 @@ class AIAvatarMulti(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "acceleration": self.acceleration.value,
-            "first_audio_url": self.first_audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "second_audio_url": self.second_audio_url,
+            "first_audio_url": self.first_audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "second_audio_url": self.second_audio,
             "seed": self.seed,
             "use_only_first_audio": self.use_only_first_audio,
             "num_frames": self.num_frames,
@@ -697,7 +698,7 @@ class SeeDanceV15ProImageToVideo(FALNode):
     aspect_ratio: SeeDanceV15ProAspectRatio = Field(
         default=SeeDanceV15ProAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
     )
     enable_safety_checker: bool = Field(
@@ -706,7 +707,7 @@ class SeeDanceV15ProImageToVideo(FALNode):
     camera_fixed: bool = Field(
         default=False, description="Whether to fix the camera position"
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image the video ends with. Defaults to None."
     )
     seed: int = Field(
@@ -714,18 +715,18 @@ class SeeDanceV15ProImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "duration": self.duration.value,
             "generate_audio": self.generate_audio,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "seed": self.seed,
         }
 
@@ -806,7 +807,7 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     aspect_ratio: SeeDanceV1ProFastAspectRatio = Field(
         default=SeeDanceV1ProFastAspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
     )
     enable_safety_checker: bool = Field(
@@ -820,13 +821,13 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
             "seed": self.seed,
@@ -908,7 +909,7 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
     aspect_ratio: SeeDanceV1LiteAspectRatio = Field(
         default=SeeDanceV1LiteAspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="Reference images to generate the video with."
     )
     camera_fixed: bool = Field(
@@ -927,7 +928,7 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
             "resolution": self.resolution.value,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "camera_fixed": self.camera_fixed,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -964,15 +965,15 @@ class ByteDanceVideoStylize(FALNode):
     style: str = Field(
         default="", description="The style for your character in the video. Please use a short description."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to make the stylized video from."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "style": self.style,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1019,21 +1020,21 @@ class OmniHumanV15(FALNode):
     turbo_mode: bool = Field(
         default=False, description="Generate a video at a faster rate with a slight quality trade-off."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio file to generate the video. Audio must be under 30s long for 1080p generation and under 60s long for 720p generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate the video"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "turbo_mode": self.turbo_mode,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1070,10 +1071,10 @@ class CogVideoX5BImageToVideo(FALNode):
     use_rife: bool = Field(
         default=True, description="Use RIFE for video interpolation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL to the image to generate the video from."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. We currently support one lora."
     )
     video_size: str = Field(
@@ -1096,12 +1097,12 @@ class CogVideoX5BImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "use_rife": self.use_rife,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -1150,18 +1151,18 @@ class StableVideoImageToVideo(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "motion_bucket_id": self.motion_bucket_id,
             "fps": self.fps,
             "cond_aug": self.cond_aug,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1207,19 +1208,19 @@ class LTXImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, fused fingers, bad anatomy, weird hand, ugly", description="The negative prompt to generate the video from."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate the video from."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1264,16 +1265,16 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     duration: KlingVideoV1StandardDuration = Field(
         default=KlingVideoV1StandardDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    tail_image_url: ImageRef = Field(
+    tail_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
     )
-    static_mask_url: ImageRef = Field(
+    static_mask: ImageRef = Field(
         default=ImageRef(), description="URL of the image for Static Brush Application Area (Mask image created by users using the motion brush)"
     )
-    dynamic_masks: list[str] = Field(
+    dynamic_masks: list[DynamicMask] = Field(
         default=[], description="List of dynamic masks"
     )
     negative_prompt: str = Field(
@@ -1284,16 +1285,16 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        tail_image_url_base64 = await context.image_to_base64(self.tail_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        static_mask_url_base64 = await context.image_to_base64(self.static_mask_url)
+        tail_image_base64 = await context.image_to_base64(self.tail_image)
+        image_base64 = await context.image_to_base64(self.image)
+        static_mask_base64 = await context.image_to_base64(self.static_mask)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "tail_image_url": f"data:image/png;base64,{tail_image_url_base64}",
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "static_mask_url": f"data:image/png;base64,{static_mask_url_base64}",
-            "dynamic_masks": self.dynamic_masks,
+            "tail_image_url": f"data:image/png;base64,{tail_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "static_mask_url": f"data:image/png;base64,{static_mask_base64}",
+            "dynamic_masks": [item.model_dump(exclude={"type"}) for item in self.dynamic_masks],
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -1372,7 +1373,7 @@ class PixverseV56Transition(FALNode):
         VALUE_10 = "10"
 
 
-    first_image_url: ImageRef = Field(
+    first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     aspect_ratio: AspectRatio = Field(
@@ -1399,7 +1400,7 @@ class PixverseV56Transition(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the last frame"
     )
     negative_prompt: str = Field(
@@ -1407,10 +1408,10 @@ class PixverseV56Transition(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        first_image_url_base64 = await context.image_to_base64(self.first_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        first_image_base64 = await context.image_to_base64(self.first_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
-            "first_image_url": f"data:image/png;base64,{first_image_url_base64}",
+            "first_image_url": f"data:image/png;base64,{first_image_base64}",
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
@@ -1419,7 +1420,7 @@ class PixverseV56Transition(FALNode):
             "duration": self.duration.value,
             "generate_audio_switch": self.generate_audio_switch,
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
         }
 
@@ -1481,13 +1482,13 @@ class ViduQ2ReferenceToVideoPro(FALNode):
     duration: int = Field(
         default=4, description="Duration of the video in seconds (0 for automatic duration)"
     )
-    reference_video_urls: list[str] = Field(
+    reference_videos: list[str] = Field(
         default=[], description="URLs of the reference videos for video editing or motion reference. Supports up to 2 videos."
     )
     bgm: bool = Field(
         default=False, description="Whether to add background music to the generated video"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="URLs of the reference images for subject appearance. If videos are provided, up to 4 images are allowed; otherwise up to 7 images."
     )
     seed: int = Field(
@@ -1503,9 +1504,9 @@ class ViduQ2ReferenceToVideoPro(FALNode):
             "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio,
             "duration": self.duration,
-            "reference_video_urls": self.reference_video_urls,
+            "reference_video_urls": self.reference_videos,
             "bgm": self.bgm,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "seed": self.seed,
             "movement_amplitude": self.movement_amplitude.value,
         }
@@ -1566,10 +1567,10 @@ class WanV26ImageToVideoFlash(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame. Must be publicly accessible or base64 data URI. Image dimensions must be between 240 and 7680."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="URL of the audio to use as the background music. Must be publicly accessible. Limit handling: If the audio duration exceeds the duration value (5, 10, or 15 seconds), the audio is truncated to the first N seconds, and the rest is discarded. If the audio is shorter than the video, the remaining part of the video will be silent. For example, if the audio is 3 seconds long and the video duration is 5 seconds, the first 3 seconds of the output video will have sound, and the last 2 seconds will be silent. - Format: WAV, MP3. - Duration: 3 to 30 s. - File size: Up to 15 MB."
     )
     seed: int = Field(
@@ -1586,14 +1587,14 @@ class WanV26ImageToVideoFlash(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "audio_url": self.audio_url,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "audio_url": self.audio,
             "seed": self.seed,
             "multi_shots": self.multi_shots,
             "negative_prompt": self.negative_prompt,
@@ -1656,10 +1657,10 @@ class WanV26ImageToVideo(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame. Must be publicly accessible or base64 data URI. Image dimensions must be between 240 and 7680."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="URL of the audio to use as the background music. Must be publicly accessible. Limit handling: If the audio duration exceeds the duration value (5, 10, or 15 seconds), the audio is truncated to the first N seconds, and the rest is discarded. If the audio is shorter than the video, the remaining part of the video will be silent. For example, if the audio is 3 seconds long and the video duration is 5 seconds, the first 3 seconds of the output video will have sound, and the last 2 seconds will be silent. - Format: WAV, MP3. - Duration: 3 to 30 s. - File size: Up to 15 MB."
     )
     seed: int = Field(
@@ -1676,14 +1677,14 @@ class WanV26ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "audio_url": self.audio_url,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "audio_url": self.audio,
             "seed": self.seed,
             "multi_shots": self.multi_shots,
             "negative_prompt": self.negative_prompt,
@@ -1807,7 +1808,7 @@ class Ltx219BImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.", description="The negative prompt to generate the video from."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     video_write_mode: VideoWriteMode = Field(
@@ -1822,7 +1823,7 @@ class Ltx219BImageToVideo(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate the video from."
     )
     video_quality: VideoQuality = Field(
@@ -1848,8 +1849,8 @@ class Ltx219BImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "use_multiscale": self.use_multiscale,
@@ -1862,12 +1863,12 @@ class Ltx219BImageToVideo(FALNode):
             "camera_lora_scale": self.camera_lora_scale,
             "image_strength": self.image_strength,
             "negative_prompt": self.negative_prompt,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -1976,7 +1977,7 @@ class Ltx219BImageToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -1997,7 +1998,7 @@ class Ltx219BImageToVideoLora(FALNode):
     negative_prompt: str = Field(
         default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.", description="The negative prompt to generate the video from."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     video_write_mode: VideoWriteMode = Field(
@@ -2012,7 +2013,7 @@ class Ltx219BImageToVideoLora(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate the video from."
     )
     sync_mode: bool = Field(
@@ -2038,27 +2039,27 @@ class Ltx219BImageToVideoLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "use_multiscale": self.use_multiscale,
             "acceleration": self.acceleration.value,
             "generate_audio": self.generate_audio,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
             "camera_lora_scale": self.camera_lora_scale,
             "image_strength": self.image_strength,
             "negative_prompt": self.negative_prompt,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "video_quality": self.video_quality.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -2185,7 +2186,7 @@ class Ltx219BDistilledImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.", description="The negative prompt to generate the video from."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     video_write_mode: VideoWriteMode = Field(
@@ -2197,7 +2198,7 @@ class Ltx219BDistilledImageToVideo(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate the video from."
     )
     video_quality: VideoQuality = Field(
@@ -2220,8 +2221,8 @@ class Ltx219BDistilledImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "use_multiscale": self.use_multiscale,
@@ -2234,11 +2235,11 @@ class Ltx219BDistilledImageToVideo(FALNode):
             "camera_lora_scale": self.camera_lora_scale,
             "image_strength": self.image_strength,
             "negative_prompt": self.negative_prompt,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -2346,7 +2347,7 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -2367,7 +2368,7 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     negative_prompt: str = Field(
         default="blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, wrong gaze direction, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio,incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.", description="The negative prompt to generate the video from."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the end of the video."
     )
     video_write_mode: VideoWriteMode = Field(
@@ -2379,7 +2380,7 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate the video from."
     )
     sync_mode: bool = Field(
@@ -2402,26 +2403,26 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "use_multiscale": self.use_multiscale,
             "acceleration": self.acceleration.value,
             "generate_audio": self.generate_audio,
             "fps": self.fps,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "camera_lora": self.camera_lora.value,
             "video_size": self.video_size,
             "enable_safety_checker": self.enable_safety_checker,
             "camera_lora_scale": self.camera_lora_scale,
             "image_strength": self.image_strength,
             "negative_prompt": self.negative_prompt,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "video_quality": self.video_quality.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -2464,7 +2465,7 @@ class WanMove(FALNode):
     trajectories: list[list[str]] = Field(
         default=[], description="A list of trajectories. Each trajectory list means the movement of one object."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     guidance_scale: float = Field(
@@ -2481,11 +2482,11 @@ class WanMove(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "trajectories": self.trajectories,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -2556,19 +2557,19 @@ class Kandinsky5ProImageToVideo(FALNode):
     num_inference_steps: int = Field(
         default=28
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a reference for the video generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "acceleration": self.acceleration.value,
             "duration": self.duration.value,
             "num_inference_steps": self.num_inference_steps,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -2618,13 +2619,13 @@ class LiveAvatar(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.NONE, description="Acceleration level for faster video decoding"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the reference image for avatar generation. The character in this image will be animated."
     )
     num_clips: int = Field(
         default=10, description="Number of video clips to generate. Each clip is approximately 3 seconds. Set higher for longer videos."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the driving audio file (WAV or MP3). The avatar will be animated to match this audio."
     )
     seed: int = Field(
@@ -2638,14 +2639,14 @@ class LiveAvatar(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "frames_per_clip": self.frames_per_clip,
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "num_clips": self.num_clips,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -2702,7 +2703,7 @@ class HunyuanVideoV15ImageToVideo(FALNode):
     resolution: HunyuanVideoV15Resolution = Field(
         default=HunyuanVideoV15Resolution.VALUE_480P, description="The resolution of the video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the reference image for image-to-video generation."
     )
     enable_prompt_expansion: bool = Field(
@@ -2722,12 +2723,12 @@ class HunyuanVideoV15ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
@@ -2783,21 +2784,21 @@ class KlingVideoO1StandardImageToVideo(FALNode):
     duration: KlingVideoO1StandardDuration = Field(
         default=KlingVideoO1StandardDuration.VALUE_5, description="Video duration in seconds."
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the first frame of the video. Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s"
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the last frame of the video. Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
         }
 
         # Remove None values
@@ -2859,20 +2860,24 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     duration: KlingVideoO1StandardReferenceToVideoDuration = Field(
         default=KlingVideoO1StandardReferenceToVideoDuration.VALUE_5, description="Video duration in seconds."
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image)."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image)."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
-            "elements": self.elements,
-            "image_urls": self.image_urls,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -2923,10 +2928,10 @@ class KlingVideoV26ProImageToVideo(FALNode):
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
     )
     negative_prompt: str = Field(
@@ -2934,15 +2939,15 @@ class KlingVideoV26ProImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "voice_ids": self.voice_ids,
             "generate_audio": self.generate_audio,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
         }
 
@@ -2977,19 +2982,19 @@ class KlingVideoAiAvatarV2Standard(FALNode):
     prompt: str = Field(
         default=".", description="The prompt to use for the video generation."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as your avatar"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3023,19 +3028,19 @@ class KlingVideoAiAvatarV2Pro(FALNode):
     prompt: str = Field(
         default=".", description="The prompt to use for the video generation."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as your avatar"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3086,22 +3091,22 @@ class CreatifyAurora(FALNode):
     audio_guidance_scale: float = Field(
         default=2, description="Guidance scale to be used for audio adherence."
     )
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio file to be used for video generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image file to be used for video generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "guidance_scale": self.guidance_scale,
             "audio_guidance_scale": self.audio_guidance_scale,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3274,19 +3279,19 @@ class PixverseV55Effects(FALNode):
     effect: Effect = Field(
         default="", description="The effect to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of the image to use as the first frame. If not provided, generates from text"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "negative_prompt": self.negative_prompt,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
             "thinking_type": self.thinking_type.value if self.thinking_type else None,
             "effect": self.effect.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3363,7 +3368,7 @@ class PixverseV55Transition(FALNode):
         VALUE_10 = "10"
 
 
-    first_image_url: ImageRef = Field(
+    first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     aspect_ratio: AspectRatio = Field(
@@ -3390,7 +3395,7 @@ class PixverseV55Transition(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the last frame"
     )
     negative_prompt: str = Field(
@@ -3398,10 +3403,10 @@ class PixverseV55Transition(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        first_image_url_base64 = await context.image_to_base64(self.first_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        first_image_base64 = await context.image_to_base64(self.first_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
-            "first_image_url": f"data:image/png;base64,{first_image_url_base64}",
+            "first_image_url": f"data:image/png;base64,{first_image_base64}",
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
@@ -3410,7 +3415,7 @@ class PixverseV55Transition(FALNode):
             "duration": self.duration.value,
             "generate_audio_switch": self.generate_audio_switch,
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
         }
 
@@ -3496,7 +3501,7 @@ class PixverseV55ImageToVideo(FALNode):
     generate_multi_clip_switch: bool = Field(
         default=False, description="Enable multi-clip generation with dynamic camera changes"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     generate_audio_switch: bool = Field(
@@ -3510,7 +3515,7 @@ class PixverseV55ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
@@ -3518,7 +3523,7 @@ class PixverseV55ImageToVideo(FALNode):
             "style": self.style.value if self.style else None,
             "thinking_type": self.thinking_type.value if self.thinking_type else None,
             "generate_multi_clip_switch": self.generate_multi_clip_switch,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "generate_audio_switch": self.generate_audio_switch,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
@@ -3572,21 +3577,21 @@ class KlingVideoO1ImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Video duration in seconds."
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the first frame of the video. Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s"
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the last frame of the video. Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
         }
 
         # Remove None values
@@ -3648,20 +3653,24 @@ class KlingVideoO1ReferenceToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Video duration in seconds."
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image)."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image)."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
-            "elements": self.elements,
-            "image_urls": self.image_urls,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -3730,7 +3739,7 @@ class BytedanceLynx(FALNode):
     frames_per_second: int = Field(
         default=16, description="Frames per second of the generated video. Must be between 5 to 30."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the subject image to be used for video generation"
     )
     guidance_scale: float = Field(
@@ -3750,7 +3759,7 @@ class BytedanceLynx(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
@@ -3759,7 +3768,7 @@ class BytedanceLynx(FALNode):
             "guidance_scale_2": self.guidance_scale_2,
             "strength": self.strength,
             "frames_per_second": self.frames_per_second,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "num_frames": self.num_frames,
@@ -3815,7 +3824,7 @@ class PixverseSwap(FALNode):
     original_sound_switch: bool = Field(
         default=True, description="Whether to keep the original audio"
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="URL of the external video to swap"
     )
     keyframe_id: int = Field(
@@ -3827,19 +3836,19 @@ class PixverseSwap(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The output resolution (1080p not supported)"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the target image for swapping"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "original_sound_switch": self.original_sound_switch,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "keyframe_id": self.keyframe_id,
             "mode": self.mode.value,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -3884,13 +3893,13 @@ class PikaV22Pikaframes(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the generated video"
     )
-    transitions: list[str] = Field(
+    transitions: list[KeyframeTransition] = Field(
         default=[], description="Configuration for each transition. Length must be len(image_urls) - 1. Total duration of all transitions must not exceed 25 seconds. If not provided, uses default 5-second transitions with the global prompt."
     )
     seed: int = Field(
         default=-1, description="The seed for the random number generator"
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="URLs of keyframe images (2-5 images) to create transitions between"
     )
     negative_prompt: str = Field(
@@ -3898,12 +3907,16 @@ class PikaV22Pikaframes(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
-            "transitions": self.transitions,
+            "transitions": [item.model_dump(exclude={"type"}) for item in self.transitions],
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -3999,7 +4012,7 @@ class LongcatVideoImageToVideo720P(FALNode):
     video_output_type: VideoOutputType = Field(
         default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate a video from."
     )
     sync_mode: bool = Field(
@@ -4019,7 +4032,7 @@ class LongcatVideoImageToVideo720P(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
@@ -4031,7 +4044,7 @@ class LongcatVideoImageToVideo720P(FALNode):
             "negative_prompt": self.negative_prompt,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "video_quality": self.video_quality.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -4128,7 +4141,7 @@ class LongcatVideoImageToVideo480P(FALNode):
     video_output_type: VideoOutputType = Field(
         default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate a video from."
     )
     sync_mode: bool = Field(
@@ -4148,7 +4161,7 @@ class LongcatVideoImageToVideo480P(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
@@ -4159,7 +4172,7 @@ class LongcatVideoImageToVideo480P(FALNode):
             "negative_prompt": self.negative_prompt,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "sync_mode": self.sync_mode,
             "video_quality": self.video_quality.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
@@ -4243,7 +4256,7 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
     num_refine_inference_steps: int = Field(
         default=12, description="The number of inference steps to use for refinement."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate a video from."
     )
     enable_safety_checker: bool = Field(
@@ -4263,7 +4276,7 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
@@ -4272,7 +4285,7 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
             "fps": self.fps,
             "sync_mode": self.sync_mode,
             "num_refine_inference_steps": self.num_refine_inference_steps,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -4350,7 +4363,7 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate a video from."
     )
     video_quality: VideoQuality = Field(
@@ -4373,14 +4386,14 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
             "prompt": self.prompt,
             "fps": self.fps,
             "sync_mode": self.sync_mode,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
@@ -4434,17 +4447,17 @@ class MinimaxHailuo23FastStandardImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt_optimizer": self.prompt_optimizer,
             "duration": self.duration.value,
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4492,17 +4505,17 @@ class MinimaxHailuo23StandardImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt_optimizer": self.prompt_optimizer,
             "duration": self.duration.value,
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4539,16 +4552,16 @@ class MinimaxHailuo23FastProImageToVideo(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -4593,7 +4606,7 @@ class KlingVideoV25TurboStandardImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
     )
     negative_prompt: str = Field(
@@ -4604,11 +4617,11 @@ class KlingVideoV25TurboStandardImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -4684,13 +4697,13 @@ class Veo31FastFirstLastFrameToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the generated video."
     )
-    first_frame_url: VideoRef = Field(
+    first_frame: VideoRef = Field(
         default=VideoRef(), description="URL of the first frame of the video"
     )
     seed: int = Field(
         default=-1, description="The seed for the random number generator."
     )
-    last_frame_url: VideoRef = Field(
+    last_frame: VideoRef = Field(
         default=VideoRef(), description="URL of the last frame of the video"
     )
     negative_prompt: str = Field(
@@ -4705,9 +4718,9 @@ class Veo31FastFirstLastFrameToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "resolution": self.resolution.value,
-            "first_frame_url": self.first_frame_url,
+            "first_frame_url": self.first_frame,
             "seed": self.seed,
-            "last_frame_url": self.last_frame_url,
+            "last_frame_url": self.last_frame,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -4782,13 +4795,13 @@ class Veo31FirstLastFrameToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the generated video."
     )
-    first_frame_url: VideoRef = Field(
+    first_frame: VideoRef = Field(
         default=VideoRef(), description="URL of the first frame of the video"
     )
     seed: int = Field(
         default=-1, description="The seed for the random number generator."
     )
-    last_frame_url: VideoRef = Field(
+    last_frame: VideoRef = Field(
         default=VideoRef(), description="URL of the last frame of the video"
     )
     negative_prompt: str = Field(
@@ -4803,9 +4816,9 @@ class Veo31FirstLastFrameToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "resolution": self.resolution.value,
-            "first_frame_url": self.first_frame_url,
+            "first_frame_url": self.first_frame,
             "seed": self.seed,
-            "last_frame_url": self.last_frame_url,
+            "last_frame_url": self.last_frame,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -4877,11 +4890,15 @@ class Veo31ReferenceToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="URLs of the reference images to use for consistent subject appearance"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
@@ -4889,7 +4906,7 @@ class Veo31ReferenceToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "resolution": self.resolution.value,
             "auto_fix": self.auto_fix,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -4963,7 +4980,7 @@ class Veo31FastImageToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the generated video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
     )
     seed: int = Field(
@@ -4974,7 +4991,7 @@ class Veo31FastImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
@@ -4982,7 +4999,7 @@ class Veo31FastImageToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
         }
@@ -5058,7 +5075,7 @@ class Veo31ImageToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the generated video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
     )
     seed: int = Field(
@@ -5069,7 +5086,7 @@ class Veo31ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
@@ -5077,7 +5094,7 @@ class Veo31ImageToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
         }
@@ -5125,19 +5142,19 @@ class OviImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="jitter, bad hands, blur, distortion", description="Negative prompt for video generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The image URL to guide video generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
             "audio_negative_prompt": self.audio_negative_prompt,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5179,19 +5196,19 @@ class VeedFabric10Fast(FALNode):
     resolution: Resolution = Field(
         default="", description="Resolution"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef()
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "resolution": self.resolution.value,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5233,19 +5250,19 @@ class VeedFabric10(FALNode):
     resolution: Resolution = Field(
         default="", description="Resolution"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef()
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "resolution": self.resolution.value,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5279,19 +5296,19 @@ class KlingVideoV1StandardAiAvatar(FALNode):
     prompt: str = Field(
         default=".", description="The prompt to use for the video generation."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as your avatar"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5325,19 +5342,19 @@ class KlingVideoV1ProAiAvatar(FALNode):
     prompt: str = Field(
         default=".", description="The prompt to use for the video generation."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as your avatar"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5394,18 +5411,18 @@ class DecartLucy14BImageToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="Resolution of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "sync_mode": self.sync_mode,
             "aspect_ratio": self.aspect_ratio.value,
             "prompt": self.prompt,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5451,7 +5468,7 @@ class WanAti(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_480P, description="Resolution of the generated video (480p, 580p, 720p)."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image."
     )
     track: list[list[str]] = Field(
@@ -5468,11 +5485,11 @@ class WanAti(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "track": self.track,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -5533,18 +5550,18 @@ class DecartLucy5bImageToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="Resolution of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "sync_mode": self.sync_mode,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5612,7 +5629,7 @@ class PixverseV5Transition(FALNode):
         VALUE_8 = "8"
 
 
-    first_image_url: ImageRef = Field(
+    first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     aspect_ratio: AspectRatio = Field(
@@ -5633,7 +5650,7 @@ class PixverseV5Transition(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the last frame"
     )
     negative_prompt: str = Field(
@@ -5641,17 +5658,17 @@ class PixverseV5Transition(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        first_image_url_base64 = await context.image_to_base64(self.first_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        first_image_base64 = await context.image_to_base64(self.first_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
-            "first_image_url": f"data:image/png;base64,{first_image_url_base64}",
+            "first_image_url": f"data:image/png;base64,{first_image_base64}",
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
             "prompt": self.prompt,
             "duration": self.duration.value,
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
         }
 
@@ -5813,18 +5830,18 @@ class PixverseV5Effects(FALNode):
     effect: Effect = Field(
         default="", description="The effect to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of the image to use as the first frame. If not provided, generates from text"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "negative_prompt": self.negative_prompt,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
             "effect": self.effect.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -5894,7 +5911,7 @@ class PixverseV5ImageToVideo(FALNode):
     style: Style | None = Field(
         default=None, description="The style of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     seed: int = Field(
@@ -5905,13 +5922,13 @@ class PixverseV5ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "duration": self.duration.value,
             "style": self.style.value if self.style else None,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
         }
@@ -5968,7 +5985,7 @@ class MoonvalleyMareyI2v(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5S, description="The duration of the generated video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the first frame of the video."
     )
     dimensions: Dimensions = Field(
@@ -5985,11 +6002,11 @@ class MoonvalleyMareyI2v(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "dimensions": self.dimensions.value,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -6089,7 +6106,7 @@ class WanV22A14bImageToVideoLora(FALNode):
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
     )
     frames_per_second: int = Field(
@@ -6101,7 +6118,7 @@ class WanV22A14bImageToVideoLora(FALNode):
     num_frames: int = Field(
         default=81, description="Number of frames to generate. Must be between 17 to 161 (inclusive)."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the end image."
     )
     negative_prompt: str = Field(
@@ -6128,7 +6145,7 @@ class WanV22A14bImageToVideoLora(FALNode):
     video_quality: VideoQuality = Field(
         default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     adjust_fps_for_interpolation: bool = Field(
@@ -6148,19 +6165,19 @@ class WanV22A14bImageToVideoLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "shift": self.shift,
             "prompt": self.prompt,
             "num_interpolated_frames": self.num_interpolated_frames,
             "acceleration": self.acceleration.value,
             "reverse_video": self.reverse_video,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "frames_per_second": self.frames_per_second,
             "guidance_scale": self.guidance_scale,
             "num_frames": self.num_frames,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
             "video_write_mode": self.video_write_mode.value,
@@ -6169,7 +6186,7 @@ class WanV22A14bImageToVideoLora(FALNode):
             "enable_output_safety_checker": self.enable_output_safety_checker,
             "guidance_scale_2": self.guidance_scale_2,
             "video_quality": self.video_quality.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "adjust_fps_for_interpolation": self.adjust_fps_for_interpolation,
             "seed": self.seed,
             "interpolator_model": self.interpolator_model.value,
@@ -6222,17 +6239,17 @@ class MinimaxHailuo02FastImageToVideo(FALNode):
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
             "prompt_optimizer": self.prompt_optimizer,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -6305,12 +6322,12 @@ class Veo3ImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_8S, description="The duration of the generated video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
@@ -6318,7 +6335,7 @@ class Veo3ImageToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -6409,7 +6426,7 @@ class WanV22A14bImageToVideoTurbo(FALNode):
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     video_quality: VideoQuality = Field(
@@ -6421,7 +6438,7 @@ class WanV22A14bImageToVideoTurbo(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the end image."
     )
     enable_prompt_expansion: bool = Field(
@@ -6429,8 +6446,8 @@ class WanV22A14bImageToVideoTurbo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "video_write_mode": self.video_write_mode.value,
             "resolution": self.resolution.value,
@@ -6438,11 +6455,11 @@ class WanV22A14bImageToVideoTurbo(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "prompt": self.prompt,
             "enable_output_safety_checker": self.enable_output_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "enable_prompt_expansion": self.enable_prompt_expansion,
         }
 
@@ -6552,7 +6569,7 @@ class WanV225bImageToVideo(FALNode):
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     video_quality: VideoQuality = Field(
@@ -6575,7 +6592,7 @@ class WanV225bImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "shift": self.shift,
             "prompt": self.prompt,
@@ -6589,7 +6606,7 @@ class WanV225bImageToVideo(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "enable_output_safety_checker": self.enable_output_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "video_quality": self.video_quality.value,
             "adjust_fps_for_interpolation": self.adjust_fps_for_interpolation,
             "seed": self.seed,
@@ -6697,7 +6714,7 @@ class WanV22A14bImageToVideo(FALNode):
     num_frames: int = Field(
         default=81, description="Number of frames to generate. Must be between 17 to 161 (inclusive)."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the end image."
     )
     negative_prompt: str = Field(
@@ -6724,7 +6741,7 @@ class WanV22A14bImageToVideo(FALNode):
     video_quality: VideoQuality = Field(
         default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     adjust_fps_for_interpolation: bool = Field(
@@ -6744,8 +6761,8 @@ class WanV22A14bImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "shift": self.shift,
             "prompt": self.prompt,
@@ -6754,7 +6771,7 @@ class WanV22A14bImageToVideo(FALNode):
             "frames_per_second": self.frames_per_second,
             "guidance_scale": self.guidance_scale,
             "num_frames": self.num_frames,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
             "video_write_mode": self.video_write_mode.value,
@@ -6763,7 +6780,7 @@ class WanV22A14bImageToVideo(FALNode):
             "enable_output_safety_checker": self.enable_output_safety_checker,
             "guidance_scale_2": self.guidance_scale_2,
             "video_quality": self.video_quality.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "adjust_fps_for_interpolation": self.adjust_fps_for_interpolation,
             "seed": self.seed,
             "interpolator_model": self.interpolator_model.value,
@@ -6799,18 +6816,18 @@ class BytedanceOmnihuman(FALNode):
     - Visual storytelling
     """
 
-    audio_url: VideoRef = Field(
+    audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio file to generate the video. Audio must be under 30s long."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate the video"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "audio_url": self.audio_url,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "audio_url": self.audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -6879,7 +6896,7 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
     temporal_adain_factor: float = Field(
         default=0.5, description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -6906,7 +6923,7 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
     tone_map_compression_ratio: float = Field(
         default=0, description="The compression ratio for tone mapping. This is used to compress the dynamic range of the video to improve visual quality. A value of 0.0 means no compression, while a value of 1.0 means maximum compression."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for Image-to-Video task"
     )
     constant_rate_factor: int = Field(
@@ -6917,7 +6934,7 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
             "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
@@ -6926,7 +6943,7 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
             "prompt": self.prompt,
             "expand_prompt": self.expand_prompt,
             "temporal_adain_factor": self.temporal_adain_factor,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
@@ -6935,7 +6952,7 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
             "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio.value,
             "tone_map_compression_ratio": self.tone_map_compression_ratio,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "constant_rate_factor": self.constant_rate_factor,
             "seed": self.seed,
         }
@@ -7010,12 +7027,12 @@ class Veo3FastImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_8S, description="The duration of the generated video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
@@ -7023,7 +7040,7 @@ class Veo3FastImageToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -7081,7 +7098,7 @@ class ViduQ1ReferenceToVideo(FALNode):
     bgm: bool = Field(
         default=False, description="Whether to add background music to the generated video"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="URLs of the reference images to use for consistent subject appearance. Q1 model supports up to 7 reference images."
     )
     seed: int = Field(
@@ -7096,7 +7113,7 @@ class ViduQ1ReferenceToVideo(FALNode):
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "bgm": self.bgm,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "seed": self.seed,
             "movement_amplitude": self.movement_amplitude.value,
         }
@@ -7129,27 +7146,27 @@ class MinimaxHailuo02ProImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
     )
-    end_image_url: ImageRef = Field(
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
+    )
+    end_image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of the image to use as the last frame of the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "prompt_optimizer": self.prompt_optimizer,
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -7180,13 +7197,17 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
+    class AspectRatio(Enum):
         """
-        Video resolution - 480p for faster generation, 720p for higher quality
+        The aspect ratio of the generated video
         """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        AUTO = "auto"
 
     class Duration(Enum):
         """
@@ -7204,32 +7225,28 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
         VALUE_11 = "11"
         VALUE_12 = "12"
 
-    class AspectRatio(Enum):
+    class Resolution(Enum):
         """
-        The aspect ratio of the generated video
+        Video resolution - 480p for faster generation, 720p for higher quality
         """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        AUTO = "auto"
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
 
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Duration of the video in seconds"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video"
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
     )
     enable_safety_checker: bool = Field(
@@ -7238,7 +7255,7 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
     camera_fixed: bool = Field(
         default=False, description="Whether to fix the camera position"
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image the video ends with. Defaults to None."
     )
     seed: int = Field(
@@ -7246,17 +7263,17 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
-            "resolution": self.resolution.value,
-            "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "duration": self.duration.value,
+            "resolution": self.resolution.value,
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "seed": self.seed,
         }
 
@@ -7291,13 +7308,13 @@ class HunyuanAvatar(FALNode):
     text: str = Field(
         default="A cat is singing.", description="Text prompt describing the scene."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the reference image."
     )
     turbo_mode: bool = Field(
         default=True, description="If true, the video will be generated faster with no noticeable degradation in the visual quality."
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
     )
     seed: int = Field(
@@ -7311,12 +7328,12 @@ class HunyuanAvatar(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "text": self.text,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "turbo_mode": self.turbo_mode,
-            "audio_url": self.audio_url,
+            "audio_url": self.audio,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
             "num_frames": self.num_frames,
@@ -7364,29 +7381,29 @@ class KlingVideoV21ProImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to be used for the video"
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
     )
-    tail_image_url: ImageRef = Field(
+    tail_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
     )
-    cfg_scale: float = Field(
-        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        tail_image_url_base64 = await context.image_to_base64(self.tail_image_url)
+        tail_image_base64 = await context.image_to_base64(self.tail_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "tail_image_url": f"data:image/png;base64,{tail_image_url_base64}",
-            "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
+            "tail_image_url": f"data:image/png;base64,{tail_image_base64}",
+            "negative_prompt": self.negative_prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -7417,7 +7434,7 @@ class HunyuanPortrait(FALNode):
     - Visual storytelling
     """
 
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="The URL of the driving video."
     )
     seed: int = Field(
@@ -7426,17 +7443,17 @@ class HunyuanPortrait(FALNode):
     use_arcface: bool = Field(
         default=True, description="Whether to use ArcFace for face recognition."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the source image."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "video_url": self.video_url,
+            "video_url": self.video,
             "seed": self.seed,
             "use_arcface": self.use_arcface,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -7492,7 +7509,7 @@ class KlingVideoV16StandardElements(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="List of image URLs to use for video generation. Supports up to 4 images."
     )
     negative_prompt: str = Field(
@@ -7504,7 +7521,7 @@ class KlingVideoV16StandardElements(FALNode):
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -7561,7 +7578,7 @@ class KlingVideoV16ProElements(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="List of image URLs to use for video generation. Supports up to 4 images."
     )
     negative_prompt: str = Field(
@@ -7573,7 +7590,7 @@ class KlingVideoV16ProElements(FALNode):
             "prompt": self.prompt,
             "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -7640,7 +7657,7 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -7661,7 +7678,7 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.AUTO, description="The aspect ratio of the video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for Image-to-Video task"
     )
     constant_rate_factor: int = Field(
@@ -7675,7 +7692,7 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
             "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
@@ -7683,14 +7700,14 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
             "reverse_video": self.reverse_video,
             "prompt": self.prompt,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
             "negative_prompt": self.negative_prompt,
             "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "constant_rate_factor": self.constant_rate_factor,
             "first_pass_skip_final_steps": self.first_pass_skip_final_steps,
             "seed": self.seed,
@@ -7759,7 +7776,7 @@ class LtxVideo13bDevImageToVideo(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     second_pass_num_inference_steps: int = Field(
@@ -7780,7 +7797,7 @@ class LtxVideo13bDevImageToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.AUTO, description="The aspect ratio of the video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL for Image-to-Video task"
     )
     constant_rate_factor: int = Field(
@@ -7794,7 +7811,7 @@ class LtxVideo13bDevImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "second_pass_skip_initial_steps": self.second_pass_skip_initial_steps,
             "first_pass_num_inference_steps": self.first_pass_num_inference_steps,
@@ -7802,14 +7819,14 @@ class LtxVideo13bDevImageToVideo(FALNode):
             "prompt": self.prompt,
             "reverse_video": self.reverse_video,
             "expand_prompt": self.expand_prompt,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "second_pass_num_inference_steps": self.second_pass_num_inference_steps,
             "num_frames": self.num_frames,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
             "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "constant_rate_factor": self.constant_rate_factor,
             "first_pass_skip_final_steps": self.first_pass_skip_final_steps,
             "seed": self.seed,
@@ -7881,10 +7898,10 @@ class LtxVideoLoraImageToVideo(FALNode):
     number_of_frames: int = Field(
         default=89, description="The number of frames in the video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as input."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="The LoRA weights to use for generation."
     )
     prompt: str = Field(
@@ -7901,7 +7918,7 @@ class LtxVideoLoraImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "number_of_steps": self.number_of_steps,
             "resolution": self.resolution.value,
@@ -7910,8 +7927,8 @@ class LtxVideoLoraImageToVideo(FALNode):
             "frame_rate": self.frame_rate,
             "expand_prompt": self.expand_prompt,
             "number_of_frames": self.number_of_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "loras": self.loras,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "prompt": self.prompt,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
@@ -7983,7 +8000,7 @@ class PixverseV45Transition(FALNode):
         VALUE_8 = "8"
 
 
-    first_image_url: ImageRef = Field(
+    first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     aspect_ratio: AspectRatio = Field(
@@ -8004,7 +8021,7 @@ class PixverseV45Transition(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the last frame"
     )
     negative_prompt: str = Field(
@@ -8012,17 +8029,17 @@ class PixverseV45Transition(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        first_image_url_base64 = await context.image_to_base64(self.first_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        first_image_base64 = await context.image_to_base64(self.first_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
-            "first_image_url": f"data:image/png;base64,{first_image_url_base64}",
+            "first_image_url": f"data:image/png;base64,{first_image_base64}",
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
             "prompt": self.prompt,
             "duration": self.duration.value,
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
         }
 
@@ -8110,7 +8127,7 @@ class PixverseV45ImageToVideoFast(FALNode):
     camera_movement: CameraMovement | None = Field(
         default=None, description="The type of camera movement to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     seed: int = Field(
@@ -8121,13 +8138,13 @@ class PixverseV45ImageToVideoFast(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
             "camera_movement": self.camera_movement.value if self.camera_movement else None,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
         }
@@ -8290,18 +8307,18 @@ class PixverseV45Effects(FALNode):
     effect: Effect = Field(
         default="", description="The effect to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of the image to use as the first frame. If not provided, generates from text"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "negative_prompt": self.negative_prompt,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
             "effect": self.effect.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -8362,7 +8379,7 @@ class HunyuanCustom(FALNode):
     num_frames: int = Field(
         default=129, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
     )
     fps: int = Field(
@@ -8385,14 +8402,14 @@ class HunyuanCustom(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "fps": self.fps,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
@@ -8456,7 +8473,7 @@ class FramepackF1(FALNode):
     num_frames: int = Field(
         default=180, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
     )
     guidance_scale: float = Field(
@@ -8476,13 +8493,13 @@ class FramepackF1(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
@@ -8531,28 +8548,28 @@ class ViduQ1StartEndToVideo(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to use as the last frame"
     )
     seed: int = Field(
         default=-1, description="Seed for the random number generator"
     )
-    end_image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to use as the last frame"
+    movement_amplitude: MovementAmplitude = Field(
+        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "movement_amplitude": self.movement_amplitude.value,
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "movement_amplitude": self.movement_amplitude.value,
         }
 
         # Remove None values
@@ -8602,17 +8619,17 @@ class ViduQ1ImageToVideo(FALNode):
     movement_amplitude: MovementAmplitude = Field(
         default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "movement_amplitude": self.movement_amplitude.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -8773,18 +8790,18 @@ class PixverseV4Effects(FALNode):
     effect: Effect = Field(
         default="", description="The effect to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of the image to use as the first frame. If not provided, generates from text"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "negative_prompt": self.negative_prompt,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
             "effect": self.effect.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -8845,7 +8862,7 @@ class FramepackFlf2v(FALNode):
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, the safety checker will be enabled."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
     )
     strength: float = Field(
@@ -8857,7 +8874,7 @@ class FramepackFlf2v(FALNode):
     seed: str = Field(
         default="", description="The seed to use for generating the video."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the end image input."
     )
     negative_prompt: str = Field(
@@ -8868,19 +8885,19 @@ class FramepackFlf2v(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "num_frames": self.num_frames,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -8952,10 +8969,10 @@ class WanFlf2v(FALNode):
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, the safety checker will be enabled."
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the starting image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the ending image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     negative_prompt: str = Field(
@@ -8984,16 +9001,16 @@ class WanFlf2v(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "shift": self.shift,
             "acceleration": self.acceleration.value,
             "frames_per_second": self.frames_per_second,
             "enable_safety_checker": self.enable_safety_checker,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
             "num_frames": self.num_frames,
             "resolution": self.resolution.value,
@@ -9059,7 +9076,7 @@ class Framepack(FALNode):
     num_frames: int = Field(
         default=180, description="The number of frames to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
     )
     guidance_scale: float = Field(
@@ -9079,13 +9096,13 @@ class Framepack(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "num_frames": self.num_frames,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
@@ -9177,7 +9194,7 @@ class PixverseV4ImageToVideoFast(FALNode):
     camera_movement: CameraMovement | None = Field(
         default=None, description="The type of camera movement to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     seed: int = Field(
@@ -9188,13 +9205,13 @@ class PixverseV4ImageToVideoFast(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
             "camera_movement": self.camera_movement.value if self.camera_movement else None,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
         }
@@ -9294,7 +9311,7 @@ class PixverseV4ImageToVideo(FALNode):
     camera_movement: CameraMovement | None = Field(
         default=None, description="The type of camera movement to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     seed: int = Field(
@@ -9305,14 +9322,14 @@ class PixverseV4ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "duration": self.duration.value,
             "style": self.style.value if self.style else None,
             "camera_movement": self.camera_movement.value if self.camera_movement else None,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
         }
@@ -9475,18 +9492,18 @@ class PixverseV35Effects(FALNode):
     effect: Effect = Field(
         default="", description="The effect to apply to the video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of the image to use as the first frame. If not provided, generates from text"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "negative_prompt": self.negative_prompt,
             "duration": self.duration.value,
             "resolution": self.resolution.value,
             "effect": self.effect.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -9554,7 +9571,7 @@ class PixverseV35Transition(FALNode):
         VALUE_8 = "8"
 
 
-    first_image_url: ImageRef = Field(
+    first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     aspect_ratio: AspectRatio = Field(
@@ -9575,7 +9592,7 @@ class PixverseV35Transition(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the last frame"
     )
     negative_prompt: str = Field(
@@ -9583,17 +9600,17 @@ class PixverseV35Transition(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        first_image_url_base64 = await context.image_to_base64(self.first_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        first_image_base64 = await context.image_to_base64(self.first_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
-            "first_image_url": f"data:image/png;base64,{first_image_url_base64}",
+            "first_image_url": f"data:image/png;base64,{first_image_base64}",
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
             "prompt": self.prompt,
             "duration": self.duration.value,
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "negative_prompt": self.negative_prompt,
         }
 
@@ -9667,24 +9684,24 @@ class LumaDreamMachineRay2FlashImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5S, description="The duration of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Initial image to start the video from. Can be used together with end_image_url."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="Final image to end the video with. Can be used together with image_url."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "loop": self.loop,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
         }
 
         # Remove None values
@@ -9749,18 +9766,18 @@ class PikaV15Pikaffects(FALNode):
     negative_prompt: str = Field(
         default="", description="Negative prompt to guide the model"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "pikaffect": self.pikaffect.value,
             "prompt": self.prompt,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -9814,19 +9831,19 @@ class PikaV21ImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="", description="A negative prompt to guide the model"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "duration": self.duration,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -9880,19 +9897,19 @@ class PikaV2TurboImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="", description="A negative prompt to guide the model"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "duration": self.duration,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -9942,17 +9959,17 @@ class ViduImageToVideo(FALNode):
     movement_amplitude: MovementAmplitude = Field(
         default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
             "movement_amplitude": self.movement_amplitude.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -10007,7 +10024,7 @@ class ViduReferenceToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
     )
-    reference_image_urls: list[str] = Field(
+    reference_images: list[str] = Field(
         default=[], description="URLs of the reference images to use for consistent subject appearance"
     )
     seed: int = Field(
@@ -10021,7 +10038,7 @@ class ViduReferenceToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "reference_image_urls": self.reference_image_urls,
+            "reference_image_urls": self.reference_images,
             "seed": self.seed,
             "movement_amplitude": self.movement_amplitude.value,
         }
@@ -10067,28 +10084,28 @@ class ViduStartEndToVideo(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
-    start_image_url: ImageRef = Field(
+    start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to use as the last frame"
     )
     seed: int = Field(
         default=-1, description="Random seed for generation"
     )
-    end_image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to use as the last frame"
+    movement_amplitude: MovementAmplitude = Field(
+        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
-            "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "movement_amplitude": self.movement_amplitude.value,
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
             "seed": self.seed,
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "movement_amplitude": self.movement_amplitude.value,
         }
 
         # Remove None values
@@ -10322,7 +10339,7 @@ class ViduTemplateToVideo(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for generation"
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URLs of the images to use with the template. Number of images required varies by template: 'dynasty_dress' and 'shop_frame' accept 1-2 images, 'wish_sender' requires exactly 3 images, all other templates accept only 1 image."
     )
 
@@ -10331,7 +10348,7 @@ class ViduTemplateToVideo(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "template": self.template.value,
             "seed": self.seed,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
         }
 
         # Remove None values
@@ -10388,7 +10405,7 @@ class WanI2vLora(FALNode):
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
     )
     frames_per_second: int = Field(
@@ -10412,7 +10429,7 @@ class WanI2vLora(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
     enable_prompt_expansion: bool = Field(
@@ -10429,12 +10446,12 @@ class WanI2vLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "shift": self.shift,
             "reverse_video": self.reverse_video,
-            "loras": self.loras,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "frames_per_second": self.frames_per_second,
             "turbo_mode": self.turbo_mode,
             "enable_safety_checker": self.enable_safety_checker,
@@ -10442,7 +10459,7 @@ class WanI2vLora(FALNode):
             "negative_prompt": self.negative_prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "guide_scale": self.guide_scale,
@@ -10506,7 +10523,7 @@ class HunyuanVideoImageToVideo(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the video to generate."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
     )
     seed: int = Field(
@@ -10520,12 +10537,12 @@ class HunyuanVideoImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "num_frames": self.num_frames.value,
             "i2v_stability": self.i2v_stability,
@@ -10559,22 +10576,22 @@ class MinimaxVideo01DirectorImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default="", description="Text prompt for video generation. Camera movement instructions can be added using square brackets (e.g. [Pan left] or [Zoom in]). You can use up to 3 combined movements per prompt. Supported movements: Truck left/right, Pan left/right, Push in/Pull out, Pedestal up/down, Tilt up/down, Zoom in/out, Shake, Tracking shot, Static shot. For example: [Truck left, Pan right, Zoom in]. For a more detailed guide, refer https://sixth-switch-2ac.notion.site/T2V-01-Director-Model-Tutorial-with-camera-movement-1886c20a98eb80f395b8e05291ad8645"
     )
-    image_url: ImageRef = Field(
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
+    )
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "prompt_optimizer": self.prompt_optimizer,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -10619,7 +10636,7 @@ class SkyreelsI2v(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="Aspect ratio of the output video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
     )
     guidance_scale: float = Field(
@@ -10636,11 +10653,11 @@ class SkyreelsI2v(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
@@ -10717,24 +10734,24 @@ class LumaDreamMachineRay2ImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5S, description="The duration of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Initial image to start the video from. Can be used together with end_image_url."
     )
-    end_image_url: ImageRef = Field(
+    end_image: ImageRef = Field(
         default=ImageRef(), description="Final image to end the video with. Can be used together with image_url."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "loop": self.loop,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
         }
 
         # Remove None values
@@ -10771,16 +10788,16 @@ class HunyuanVideoImg2vidLora(FALNode):
     seed: int = Field(
         default=-1, description="The seed to use for generating the video."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL to the image to generate the video from. The image must be 960x544 or it will get cropped and resized to that size."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -10845,19 +10862,19 @@ class PixverseV35ImageToVideoFast(FALNode):
     negative_prompt: str = Field(
         default="", description="Negative prompt to be used for the generation"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "style": self.style.value if self.style else None,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -10927,7 +10944,7 @@ class PixverseV35ImageToVideo(FALNode):
     style: Style | None = Field(
         default=None, description="The style of the generated video"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
     seed: int = Field(
@@ -10938,13 +10955,13 @@ class PixverseV35ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "duration": self.duration.value,
             "style": self.style.value if self.style else None,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
         }
@@ -10977,22 +10994,22 @@ class MinimaxVideo01SubjectReference(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
     )
-    subject_reference_image_url: ImageRef = Field(
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
+    )
+    subject_reference_image: ImageRef = Field(
         default=ImageRef(), description="URL of the subject reference image to use for consistent subject appearance"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        subject_reference_image_url_base64 = await context.image_to_base64(self.subject_reference_image_url)
+        subject_reference_image_base64 = await context.image_to_base64(self.subject_reference_image)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
-            "subject_reference_image_url": f"data:image/png;base64,{subject_reference_image_url_base64}",
+            "prompt_optimizer": self.prompt_optimizer,
+            "subject_reference_image_url": f"data:image/png;base64,{subject_reference_image_base64}",
         }
 
         # Remove None values
@@ -11037,24 +11054,24 @@ class KlingVideoV16StandardImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    image_url: ImageRef = Field(
-        default=ImageRef()
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
     )
-    cfg_scale: float = Field(
-        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    image: ImageRef = Field(
+        default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
+            "negative_prompt": self.negative_prompt,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11112,13 +11129,13 @@ class SadtalkerReference(FALNode):
     pose_style: int = Field(
         default=0, description="The style of the pose"
     )
-    source_image_url: ImageRef = Field(
+    source_image: ImageRef = Field(
         default=ImageRef(), description="URL of the source image"
     )
-    reference_pose_video_url: VideoRef = Field(
+    reference_pose_video: VideoRef = Field(
         default=VideoRef(), description="URL of the reference video"
     )
-    driven_audio_url: AudioRef = Field(
+    driven_audio: AudioRef = Field(
         default=AudioRef(), description="URL of the driven audio"
     )
     face_enhancer: FaceEnhancer | None = Field(
@@ -11138,12 +11155,12 @@ class SadtalkerReference(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        source_image_url_base64 = await context.image_to_base64(self.source_image_url)
+        source_image_base64 = await context.image_to_base64(self.source_image)
         arguments = {
             "pose_style": self.pose_style,
-            "source_image_url": f"data:image/png;base64,{source_image_url_base64}",
-            "reference_pose_video_url": self.reference_pose_video_url,
-            "driven_audio_url": self.driven_audio_url,
+            "source_image_url": f"data:image/png;base64,{source_image_base64}",
+            "reference_pose_video_url": self.reference_pose_video,
+            "driven_audio_url": self.driven_audio,
             "face_enhancer": self.face_enhancer.value if self.face_enhancer else None,
             "expression_scale": self.expression_scale,
             "face_model_resolution": self.face_model_resolution.value,
@@ -11179,22 +11196,22 @@ class MinimaxVideo01LiveImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
     )
-    image_url: ImageRef = Field(
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
+    )
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "prompt_optimizer": self.prompt_optimizer,
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11225,13 +11242,6 @@ class KlingVideoV15ProImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
     class AspectRatio(Enum):
         """
         The aspect ratio of the generated video frame
@@ -11240,26 +11250,33 @@ class KlingVideoV15ProImageToVideo(FALNode):
         RATIO_9_16 = "9:16"
         RATIO_1_1 = "1:1"
 
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default=""
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
-    )
-    tail_image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to be used for the end of the video"
-    )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
-    image_url: ImageRef = Field(
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    tail_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the end of the video"
+    )
+    image: ImageRef = Field(
         default=ImageRef()
     )
-    static_mask_url: ImageRef = Field(
+    static_mask: ImageRef = Field(
         default=ImageRef(), description="URL of the image for Static Brush Application Area (Mask image created by users using the motion brush)"
     )
-    dynamic_masks: list[str] = Field(
+    dynamic_masks: list[DynamicMask] = Field(
         default=[], description="List of dynamic masks"
     )
     negative_prompt: str = Field(
@@ -11270,17 +11287,17 @@ class KlingVideoV15ProImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        tail_image_url_base64 = await context.image_to_base64(self.tail_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        static_mask_url_base64 = await context.image_to_base64(self.static_mask_url)
+        tail_image_base64 = await context.image_to_base64(self.tail_image)
+        image_base64 = await context.image_to_base64(self.image)
+        static_mask_base64 = await context.image_to_base64(self.static_mask)
         arguments = {
             "prompt": self.prompt,
-            "duration": self.duration.value,
-            "tail_image_url": f"data:image/png;base64,{tail_image_url_base64}",
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "static_mask_url": f"data:image/png;base64,{static_mask_url_base64}",
-            "dynamic_masks": self.dynamic_masks,
+            "duration": self.duration.value,
+            "tail_image_url": f"data:image/png;base64,{tail_image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "static_mask_url": f"data:image/png;base64,{static_mask_base64}",
+            "dynamic_masks": [item.model_dump(exclude={"type"}) for item in self.dynamic_masks],
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
@@ -11316,7 +11333,7 @@ class LivePortrait(FALNode):
     smile: float = Field(
         default=0, description="Amount to smile"
     )
-    video_url: VideoRef = Field(
+    video: VideoRef = Field(
         default=VideoRef(), description="URL of the video to drive the lip syncing."
     )
     flag_stitching: bool = Field(
@@ -11349,7 +11366,7 @@ class LivePortrait(FALNode):
     rotate_yaw: float = Field(
         default=0, description="Amount to rotate the face in yaw"
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be animated"
     )
     woo: float = Field(
@@ -11399,10 +11416,10 @@ class LivePortrait(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "smile": self.smile,
-            "video_url": self.video_url,
+            "video_url": self.video,
             "flag_stitching": self.flag_stitching,
             "eyebrow": self.eyebrow,
             "wink": self.wink,
@@ -11413,7 +11430,7 @@ class LivePortrait(FALNode):
             "flag_pasteback": self.flag_pasteback,
             "pupil_y": self.pupil_y,
             "rotate_yaw": self.rotate_yaw,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "woo": self.woo,
             "aaa": self.aaa,
             "flag_do_rot": self.flag_do_rot,
@@ -11459,17 +11476,17 @@ class Musetalk(FALNode):
     - Visual storytelling
     """
 
-    source_video_url: VideoRef = Field(
+    source_video: VideoRef = Field(
         default=VideoRef(), description="URL of the source video"
     )
-    audio_url: AudioRef = Field(
+    audio: AudioRef = Field(
         default=AudioRef(), description="URL of the audio"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "source_video_url": self.source_video_url,
-            "audio_url": self.audio_url,
+            "source_video_url": self.source_video,
+            "audio_url": self.audio,
         }
 
         # Remove None values
@@ -11527,10 +11544,10 @@ class Sadtalker(FALNode):
     pose_style: int = Field(
         default=0, description="The style of the pose"
     )
-    source_image_url: ImageRef = Field(
+    source_image: ImageRef = Field(
         default=ImageRef(), description="URL of the source image"
     )
-    driven_audio_url: AudioRef = Field(
+    driven_audio: AudioRef = Field(
         default=AudioRef(), description="URL of the driven audio"
     )
     face_enhancer: FaceEnhancer | None = Field(
@@ -11550,11 +11567,11 @@ class Sadtalker(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        source_image_url_base64 = await context.image_to_base64(self.source_image_url)
+        source_image_base64 = await context.image_to_base64(self.source_image)
         arguments = {
             "pose_style": self.pose_style,
-            "source_image_url": f"data:image/png;base64,{source_image_url_base64}",
-            "driven_audio_url": self.driven_audio_url,
+            "source_image_url": f"data:image/png;base64,{source_image_base64}",
+            "driven_audio_url": self.driven_audio,
             "face_enhancer": self.face_enhancer.value if self.face_enhancer else None,
             "expression_scale": self.expression_scale,
             "face_model_resolution": self.face_model_resolution.value,
@@ -11605,19 +11622,19 @@ class FastSvdLcm(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as a starting point for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "motion_bucket_id": self.motion_bucket_id,
             "fps": self.fps,
             "steps": self.steps,
             "cond_aug": self.cond_aug,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -11634,3 +11651,235 @@ class FastSvdLcm(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV3StandardImageToVideo(FALNode):
+    """
+    Kling Video V3 Standard generates videos from images with balanced quality and speed using the latest V3 model.
+    video, generation, kling, v3, standard, image-to-video
+
+    Use cases:
+    - Animate static images into short video clips
+    - Create engaging social media content from photos
+    - Generate product demonstration videos
+    - Produce marketing and promotional videos
+    - Transform images into cinematic animations
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation. Required when multi_prompt is provided.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
+    )
+    start_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
+    )
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc."
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the end of the video"
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality"
+    )
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "voice_ids": self.voice_ids,
+            "generate_audio": self.generate_audio,
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "shot_type": self.shot_type.value,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image_url", "prompt", "duration"]
+
+class KlingVideoV3ProImageToVideo(FALNode):
+    """
+    Kling Video V3 Pro generates professional quality videos from images with enhanced visual fidelity using the latest V3 model.
+    video, generation, kling, v3, pro, image-to-video
+
+    Use cases:
+    - Create professional-grade video animations from images
+    - Generate cinematic video content with precise motion
+    - Produce high-fidelity product showcase videos
+    - Animate images with enhanced visual quality
+    - Create premium video content for advertising
+    """
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation. Required when multi_prompt is provided.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+    )
+    generate_audio: bool = Field(
+        default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
+    )
+    start_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
+    )
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc."
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the end of the video"
+    )
+    negative_prompt: str = Field(
+        default="blur, distort, and low quality"
+    )
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "voice_ids": self.voice_ids,
+            "generate_audio": self.generate_audio,
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "shot_type": self.shot_type.value,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "negative_prompt": self.negative_prompt,
+            "cfg_scale": self.cfg_scale,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/v3/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image_url", "prompt", "duration"]

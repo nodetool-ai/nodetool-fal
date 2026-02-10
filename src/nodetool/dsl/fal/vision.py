@@ -33,7 +33,7 @@ class AIDetectorImage(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str,
     - Analyze image provenance
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -73,8 +73,8 @@ class ArbiterImage(SingleOutputGraphNode[Any], GraphNode[Any]):
     measurements: list[str] | OutputHandle[list[str]] = connect_field(
         default=[], description="The measurements to use for the measurement."
     )
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The inputs to use for the measurement."
+    inputs: list[types.ImageInput] | OutputHandle[list[types.ImageInput]] = (
+        connect_field(default=[], description="The inputs to use for the measurement.")
     )
 
     @classmethod
@@ -110,9 +110,9 @@ class ArbiterImageImage(SingleOutputGraphNode[Any], GraphNode[Any]):
     measurements: list[str] | OutputHandle[list[str]] = connect_field(
         default=[], description="The measurements to use for the measurement."
     )
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The inputs to use for the measurement."
-    )
+    inputs: (
+        list[types.ReferenceImageInput] | OutputHandle[list[types.ReferenceImageInput]]
+    ) = connect_field(default=[], description="The inputs to use for the measurement.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -147,9 +147,9 @@ class ArbiterImageText(SingleOutputGraphNode[Any], GraphNode[Any]):
     measurements: list[str] | OutputHandle[list[str]] = connect_field(
         default=[], description="The measurements to use for the measurement."
     )
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="The inputs to use for the measurement."
-    )
+    inputs: (
+        list[types.SemanticImageInput] | OutputHandle[list[types.SemanticImageInput]]
+    ) = connect_field(default=[], description="The inputs to use for the measurement.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -181,7 +181,7 @@ class Florence2Caption(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Produce accessibility captions
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -218,7 +218,7 @@ class Florence2DetailedCaption(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Generate informative descriptions
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -255,7 +255,7 @@ class Florence2MoreDetailedCaption(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Generate long-form descriptions
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -292,7 +292,7 @@ class Florence2OCR(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Convert images to text
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -332,7 +332,7 @@ class Florence2RegionToCategory(SingleOutputGraphNode[Any], GraphNode[Any]):
     region: str | OutputHandle[str] = connect_field(
         default="", description="The user input coordinates"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -372,7 +372,7 @@ class Florence2RegionToDescription(SingleOutputGraphNode[Any], GraphNode[Any]):
     region: str | OutputHandle[str] = connect_field(
         default="", description="The user input coordinates"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -415,7 +415,7 @@ class GotOcrV2(SingleOutputGraphNode[Any], GraphNode[Any]):
     multi_page: bool | OutputHandle[bool] = connect_field(
         default=False, description="Use provided images to generate a single output."
     )
-    input_image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    input_images: list[str] | OutputHandle[list[str]] = connect_field(
         default=[], description="URL of images."
     )
 
@@ -449,7 +449,7 @@ class ImageutilsNsfw(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Scene understanding
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -498,7 +498,7 @@ class LlavaNext(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
     temperature: float | OutputHandle[float] = connect_field(
         default=0.2, description="Temperature for sampling"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -535,7 +535,7 @@ class Moondream2(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Scene understanding
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -577,7 +577,7 @@ class Moondream2ObjectDetection(
     object: str | OutputHandle[str] = connect_field(
         default="", description="Object to be detected in the image"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -619,7 +619,7 @@ class Moondream2PointObjectDetection(
     object: str | OutputHandle[str] = connect_field(
         default="", description="Object to be detected in the image"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -659,7 +659,7 @@ class Moondream2VisualQuery(SingleOutputGraphNode[Any], GraphNode[Any]):
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Query to be asked in the image"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -706,15 +706,15 @@ class Moondream3PreviewCaption(
         default=0.0,
         description="Nucleus sampling probability mass to use, between 0 and 1.",
     )
-    length: nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length = Field(
-        default=nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length.NORMAL,
-        description="Length of the caption to generate",
-    )
     temperature: float | OutputHandle[float] = connect_field(
         default=0.0,
         description="Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    length: nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length = Field(
+        default=nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length.NORMAL,
+        description="Length of the caption to generate",
+    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -759,7 +759,7 @@ class Moondream3PreviewDetect(
     preview: bool | OutputHandle[bool] = connect_field(
         default=False, description="Whether to preview the output"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -804,7 +804,7 @@ class Moondream3PreviewPoint(
     preview: bool | OutputHandle[bool] = connect_field(
         default=False, description="Whether to preview the output"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -858,7 +858,7 @@ class Moondream3PreviewQuery(
         default=True,
         description="Whether to include detailed reasoning behind the answer",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -906,9 +906,9 @@ class MoondreamBatched(
     repetition_penalty: float | OutputHandle[float] = connect_field(
         default=1, description="Repetition penalty for sampling"
     )
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="List of input prompts and image URLs"
-    )
+    inputs: (
+        list[types.MoondreamInputParam] | OutputHandle[list[types.MoondreamInputParam]]
+    ) = connect_field(default=[], description="List of input prompts and image URLs")
     max_tokens: int | OutputHandle[int] = connect_field(
         default=64, description="Maximum number of new tokens to generate"
     )
@@ -961,7 +961,7 @@ class MoondreamNext(SingleOutputGraphNode[Any], GraphNode[Any]):
     max_tokens: int | OutputHandle[int] = connect_field(
         default=64, description="Maximum number of tokens to generate"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1003,7 +1003,7 @@ class MoondreamNextBatch(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Single prompt to apply to all images"
     )
-    images_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    images_data: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1048,26 +1048,26 @@ class OpenrouterRouterVision(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to be used for the image"
     )
-    reasoning: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
     system_prompt: str | OutputHandle[str] = connect_field(
         default="",
         description="System prompt to provide context or instructions to the model",
+    )
+    reasoning: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Should reasoning be the part of the final answer."
     )
     model: str | OutputHandle[str] = connect_field(
         default="",
         description="Name of the model to use. Charged based on actual token usage.",
     )
-    max_tokens: str | OutputHandle[str] = connect_field(
-        default="",
+    max_tokens: int | OutputHandle[int] = connect_field(
+        default=0,
         description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.",
     )
     temperature: float | OutputHandle[float] = connect_field(
         default=1,
         description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
     )
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[], description="List of image URLs to be processed"
     )
 
@@ -1114,7 +1114,7 @@ class PerceptronIsaac01(
         default=nodetool.nodes.fal.vision.PerceptronIsaac01.ResponseStyle.TEXT,
         description="Response style to be used for the image. - text: Model will output text. Good for descriptions and captioning. - box: Model will output a combination of text and bounding boxes. Good for localization. - point: Model will output a combination of text and points. Good for counting many objects. - polygon: Model will output a combination of text and polygons. Good for granular segmentation.",
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1186,7 +1186,7 @@ class Sa2va4bImage(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to be used for the chat completion"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1226,7 +1226,7 @@ class Sa2va4bVideo(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to be used for the chat completion"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1276,7 +1276,7 @@ class Sa2va8bImage(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to be used for the chat completion"
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1316,7 +1316,7 @@ class Sa2va8bVideo(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to be used for the chat completion"
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1363,7 +1363,7 @@ class Sam3ImageEmbed(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Rapid prototyping
     """
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1404,7 +1404,7 @@ class VideoUnderstanding(SingleOutputGraphNode[Any], GraphNode[Any]):
         default=False,
         description="Whether to request a more detailed analysis of the video",
     )
-    video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -1450,7 +1450,7 @@ class XAilabNsfw(SingleOutputGraphNode[Any], GraphNode[Any]):
     - Scene understanding
     """
 
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(
         default=[],
         description="List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.",
     )

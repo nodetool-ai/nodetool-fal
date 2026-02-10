@@ -41,8 +41,10 @@ class ChatterboxTextToSpeech(SingleOutputGraphNode[Any], GraphNode[Any]):
         default=0.25,
         description="Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default="https://storage.googleapis.com/chatterbox-demo-samples/prompts/male_rickmorty.mp3",
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
         description="Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.",
     )
     temperature: float | OutputHandle[float] = connect_field(
@@ -191,8 +193,8 @@ class ElevenlabsTtsTurboV25(
         nodetool.nodes.fal.text_to_speech.ElevenlabsTtsTurboV25.ApplyTextNormalization
     )
 
-    text: str | OutputHandle[str] = connect_field(
-        default="", description="The text to convert to speech"
+    stability: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Voice stability (0-1)"
     )
     next_text: str | OutputHandle[str] = connect_field(
         default="",
@@ -205,8 +207,8 @@ class ElevenlabsTtsTurboV25(
     style: float | OutputHandle[float] = connect_field(
         default=0, description="Style exaggeration (0-1)"
     )
-    stability: float | OutputHandle[float] = connect_field(
-        default=0.5, description="Voice stability (0-1)"
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
     )
     timestamps: bool | OutputHandle[bool] = connect_field(
         default=False,
@@ -276,13 +278,13 @@ class IndexTts2TextToSpeech(
         default=1,
         description="The strength of the emotional style transfer. Higher values result in stronger emotional influence.",
     )
-    emotional_audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    emotional_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
         description="The emotional reference audio file to extract the style from.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -588,6 +590,9 @@ class MinimaxPreviewSpeech25Hd(
         default="",
         description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
     )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
     language_boost: (
         nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.LanguageBoost
         | OutputHandle[
@@ -597,9 +602,6 @@ class MinimaxPreviewSpeech25Hd(
     ) = connect_field(
         default=None,
         description="Enhance recognition of specified languages and dialects",
-    )
-    voice_setting: str | OutputHandle[str] = connect_field(
-        default="", description="Voice configuration settings"
     )
     output_format: (
         nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.OutputFormat
@@ -654,6 +656,9 @@ class MinimaxPreviewSpeech25Turbo(
         default="",
         description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
     )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
     language_boost: (
         nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.LanguageBoost
         | OutputHandle[
@@ -663,9 +668,6 @@ class MinimaxPreviewSpeech25Turbo(
     ) = connect_field(
         default=None,
         description="Enhance recognition of specified languages and dialects",
-    )
-    voice_setting: str | OutputHandle[str] = connect_field(
-        default="", description="Voice configuration settings"
     )
     output_format: (
         nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.OutputFormat
@@ -720,6 +722,9 @@ class MinimaxSpeech02Hd(
         default="",
         description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
     )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
     language_boost: (
         nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.LanguageBoost
         | OutputHandle[
@@ -729,9 +734,6 @@ class MinimaxSpeech02Hd(
     ) = connect_field(
         default=None,
         description="Enhance recognition of specified languages and dialects",
-    )
-    voice_setting: str | OutputHandle[str] = connect_field(
-        default="", description="Voice configuration settings"
     )
     output_format: nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.OutputFormat = (
         Field(
@@ -786,6 +788,9 @@ class MinimaxSpeech02Turbo(
         default="",
         description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
     )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
     language_boost: (
         nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.LanguageBoost
         | OutputHandle[
@@ -795,9 +800,6 @@ class MinimaxSpeech02Turbo(
     ) = connect_field(
         default=None,
         description="Enhance recognition of specified languages and dialects",
-    )
-    voice_setting: str | OutputHandle[str] = connect_field(
-        default="", description="Voice configuration settings"
     )
     output_format: (
         nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.OutputFormat
@@ -986,22 +988,22 @@ class MinimaxVoiceClone(
         nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model
     )
 
-    text: str | OutputHandle[str] = connect_field(
-        default="Hello, this is a preview of your cloned voice! I hope you like it!",
-        description="Text to generate a TTS preview with the cloned voice (optional)",
-    )
     model: nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model = Field(
         default=nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model.SPEECH_02_HD,
         description="TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    text: str | OutputHandle[str] = connect_field(
+        default="Hello, this is a preview of your cloned voice! I hope you like it!",
+        description="Text to generate a TTS preview with the cloned voice (optional)",
+    )
+    accuracy: float | OutputHandle[float] = connect_field(
+        default=0.0, description="Text validation accuracy threshold (0-1)"
+    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
         description="URL of the input audio file for voice cloning. Should be at least 10 seconds long. To retain the voice permanently, use it with a TTS (text-to-speech) endpoint at least once within 7 days. Otherwise, it will be automatically deleted.",
-    )
-    accuracy: float | OutputHandle[float] = connect_field(
-        default=0.0, description="Text validation accuracy threshold (0-1)"
     )
     noise_reduction: bool | OutputHandle[bool] = connect_field(
         default=False, description="Enable noise reduction for the cloned voice"
@@ -1414,7 +1416,7 @@ class ResembleAiChatterboxhdTextToSpeech(
         default=None,
         description="The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used.",
     )
-    audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
         default=types.AudioRef(
             type="audio", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -1470,7 +1472,9 @@ class Vibevoice(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="Random seed for reproducible generation."
     )
-    speakers: list[str] | OutputHandle[list[str]] = connect_field(
+    speakers: (
+        list[types.VibeVoiceSpeaker] | OutputHandle[list[types.VibeVoiceSpeaker]]
+    ) = connect_field(
         default=[],
         description="List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
     )
@@ -1565,7 +1569,9 @@ class Vibevoice7b(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRe
     seed: int | OutputHandle[int] = connect_field(
         default=-1, description="Random seed for reproducible generation."
     )
-    speakers: list[str] | OutputHandle[list[str]] = connect_field(
+    speakers: (
+        list[types.VibeVoiceSpeaker] | OutputHandle[list[types.VibeVoiceSpeaker]]
+    ) = connect_field(
         default=[],
         description="List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
     )

@@ -38,7 +38,7 @@ class OpenrouterRouterVideo(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to be used for the video processing"
     )
-    video_urls: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    videos: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",
@@ -105,7 +105,7 @@ class OpenrouterRouterVideoEnterprise(
     prompt: str | OutputHandle[str] = connect_field(
         default="", description="Prompt to be used for the video processing"
     )
-    video_urls: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+    videos: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
         default=types.VideoRef(
             type="video",
             uri="",

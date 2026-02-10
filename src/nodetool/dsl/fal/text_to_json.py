@@ -42,7 +42,7 @@ class BriaFiboEditEditStructured_instruction(
     seed: int | OutputHandle[int] = connect_field(
         default=5555, description="Random seed for reproducibility."
     )
-    mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    mask: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -51,7 +51,7 @@ class BriaFiboEditEditStructured_instruction(
     instruction: str | OutputHandle[str] = connect_field(
         default="", description="Instruction for image editing."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -97,7 +97,7 @@ class BriaFiboGenerateStructured_prompt(SingleOutputGraphNode[Any], GraphNode[An
     structured_prompt: str | OutputHandle[str] = connect_field(
         default="", description="The structured prompt to generate an image from."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -143,7 +143,7 @@ class BriaFiboLiteGenerateStructured_prompt(SingleOutputGraphNode[Any], GraphNod
     structured_prompt: str | OutputHandle[str] = connect_field(
         default="", description="The structured prompt to generate an image from."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),
@@ -191,7 +191,7 @@ class BriaFiboLiteGenerateStructured_promptLite(
     structured_prompt: str | OutputHandle[str] = connect_field(
         default="", description="The structured prompt to generate an image from."
     )
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
         default=types.ImageRef(
             type="image", uri="", asset_id=None, data=None, metadata=None
         ),

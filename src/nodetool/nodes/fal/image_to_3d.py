@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
+from nodetool.nodes.fal.types import BoxPromptBase, PointPromptBase
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -19,7 +20,7 @@ class Hunyuan3DV3SketchTo3D(FALNode):
     - Rapid prototyping
     """
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of sketch or line art image to transform into a 3D model. Image resolution must be between 128x128 and 5000x5000 pixels."
     )
     prompt: str = Field(
@@ -33,9 +34,9 @@ class Hunyuan3DV3SketchTo3D(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "prompt": self.prompt,
             "face_count": self.face_count,
             "enable_pbr": self.enable_pbr,
@@ -53,7 +54,7 @@ class Hunyuan3DV3SketchTo3D(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "prompt", "face_count", "enable_pbr"]
+        return ["input_image", "prompt", "face_count", "enable_pbr"]
 
 class Hunyuan3DV3ImageTo3D(FALNode):
     """
@@ -84,7 +85,7 @@ class Hunyuan3DV3ImageTo3D(FALNode):
         GEOMETRY = "Geometry"
 
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     polygon_type: PolygonType = Field(
@@ -93,10 +94,10 @@ class Hunyuan3DV3ImageTo3D(FALNode):
     face_count: int = Field(
         default=500000, description="Target face count. Range: 40000-1500000"
     )
-    right_image_url: ImageRef = Field(
+    right_image: ImageRef = Field(
         default=ImageRef(), description="Optional right view image URL for better 3D reconstruction."
     )
-    back_image_url: ImageRef = Field(
+    back_image: ImageRef = Field(
         default=ImageRef(), description="Optional back view image URL for better 3D reconstruction."
     )
     enable_pbr: bool = Field(
@@ -105,24 +106,24 @@ class Hunyuan3DV3ImageTo3D(FALNode):
     generate_type: GenerateType = Field(
         default=GenerateType.NORMAL, description="Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture."
     )
-    left_image_url: ImageRef = Field(
+    left_image: ImageRef = Field(
         default=ImageRef(), description="Optional left view image URL for better 3D reconstruction."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
-        right_image_url_base64 = await context.image_to_base64(self.right_image_url)
-        back_image_url_base64 = await context.image_to_base64(self.back_image_url)
-        left_image_url_base64 = await context.image_to_base64(self.left_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
+        right_image_base64 = await context.image_to_base64(self.right_image)
+        back_image_base64 = await context.image_to_base64(self.back_image)
+        left_image_base64 = await context.image_to_base64(self.left_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "polygon_type": self.polygon_type.value,
             "face_count": self.face_count,
-            "right_image_url": f"data:image/png;base64,{right_image_url_base64}",
-            "back_image_url": f"data:image/png;base64,{back_image_url_base64}",
+            "right_image_url": f"data:image/png;base64,{right_image_base64}",
+            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "enable_pbr": self.enable_pbr,
             "generate_type": self.generate_type.value,
-            "left_image_url": f"data:image/png;base64,{left_image_url_base64}",
+            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
 
         # Remove None values
@@ -137,7 +138,7 @@ class Hunyuan3DV3ImageTo3D(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "polygon_type", "face_count", "right_image_url", "back_image_url"]
+        return ["input_image", "polygon_type", "face_count", "right_image", "back_image"]
 
 class Sam33DBody(FALNode):
     """
@@ -152,13 +153,13 @@ class Sam33DBody(FALNode):
     - Rapid prototyping
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image containing humans"
     )
     include_3d_keypoints: bool = Field(
         default=True, description="Include 3D keypoint markers (spheres) in the GLB mesh for visualization"
     )
-    mask_url: ImageRef = Field(
+    mask: ImageRef = Field(
         default=ImageRef(), description="Optional URL of a binary mask image (white=person, black=background). When provided, skips auto human detection and uses this mask instead. Bbox is auto-computed from the mask."
     )
     export_meshes: bool = Field(
@@ -166,12 +167,12 @@ class Sam33DBody(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
-        mask_url_base64 = await context.image_to_base64(self.mask_url)
+        image_base64 = await context.image_to_base64(self.image)
+        mask_base64 = await context.image_to_base64(self.mask)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "include_3d_keypoints": self.include_3d_keypoints,
-            "mask_url": f"data:image/png;base64,{mask_url_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}",
             "export_meshes": self.export_meshes,
         }
 
@@ -187,7 +188,7 @@ class Sam33DBody(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image_url", "include_3d_keypoints", "mask_url", "export_meshes"]
+        return ["image", "include_3d_keypoints", "mask", "export_meshes"]
 
 class Sam33DObjects(FALNode):
     """
@@ -214,16 +215,16 @@ class Sam33DObjects(FALNode):
     pointmap_url: str = Field(
         default="", description="Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation"
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPromptBase] = Field(
         default=[], description="Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to reconstruct in 3D"
     )
     mask_urls: list[str] = Field(
         default=[], description="Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used."
     )
-    point_prompts: list[str] = Field(
+    point_prompts: list[PointPromptBase] = Field(
         default=[], description="Point prompts for auto-segmentation when no masks provided"
     )
     seed: int = Field(
@@ -231,16 +232,16 @@ class Sam33DObjects(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "prompt": self.prompt,
             "export_textured_glb": self.export_textured_glb,
             "detection_threshold": self.detection_threshold,
             "pointmap_url": self.pointmap_url,
-            "box_prompts": self.box_prompts,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "box_prompts": [item.model_dump(exclude={"type"}) for item in self.box_prompts],
+            "image_url": f"data:image/png;base64,{image_base64}",
             "mask_urls": self.mask_urls,
-            "point_prompts": self.point_prompts,
+            "point_prompts": [item.model_dump(exclude={"type"}) for item in self.point_prompts],
             "seed": self.seed,
         }
 
@@ -271,7 +272,7 @@ class Omnipart(FALNode):
     - Rapid prototyping
     """
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     parts: str = Field(
@@ -288,9 +289,9 @@ class Omnipart(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "parts": self.parts,
             "seed": self.seed,
             "minimum_segment_size": self.minimum_segment_size,
@@ -309,7 +310,7 @@ class Omnipart(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "parts", "seed", "minimum_segment_size", "guidance_scale"]
+        return ["input_image", "parts", "seed", "minimum_segment_size", "guidance_scale"]
 
 class BytedanceSeed3DImageTo3D(FALNode):
     """
@@ -324,14 +325,14 @@ class BytedanceSeed3DImageTo3D(FALNode):
     - Rapid prototyping
     """
 
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image for the 3D asset generation."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -346,7 +347,7 @@ class BytedanceSeed3DImageTo3D(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["image_url"]
+        return ["image"]
 
 class MeshyV5MultiImageTo3D(FALNode):
     """
@@ -389,7 +390,7 @@ class MeshyV5MultiImageTo3D(FALNode):
     is_a_t_pose: bool = Field(
         default=False, description="Whether to generate the model in an A/T pose"
     )
-    texture_image_url: ImageRef = Field(
+    texture_image: ImageRef = Field(
         default=ImageRef(), description="2D image to guide the texturing process. Requires should_texture to be true."
     )
     topology: Topology = Field(
@@ -401,7 +402,7 @@ class MeshyV5MultiImageTo3D(FALNode):
     symmetry_mode: SymmetryMode = Field(
         default=SymmetryMode.AUTO, description="Controls symmetry behavior during model generation."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used."
     )
     texture_prompt: str = Field(
@@ -412,17 +413,21 @@ class MeshyV5MultiImageTo3D(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        texture_image_url_base64 = await context.image_to_base64(self.texture_image_url)
+        texture_image_base64 = await context.image_to_base64(self.texture_image)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "enable_pbr": self.enable_pbr,
             "should_texture": self.should_texture,
             "target_polycount": self.target_polycount,
             "is_a_t_pose": self.is_a_t_pose,
-            "texture_image_url": f"data:image/png;base64,{texture_image_url_base64}",
+            "texture_image_url": f"data:image/png;base64,{texture_image_base64}",
             "topology": self.topology.value,
             "enable_safety_checker": self.enable_safety_checker,
             "symmetry_mode": self.symmetry_mode.value,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "texture_prompt": self.texture_prompt,
             "should_remesh": self.should_remesh,
         }
@@ -439,7 +444,7 @@ class MeshyV5MultiImageTo3D(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["enable_pbr", "should_texture", "target_polycount", "is_a_t_pose", "texture_image_url"]
+        return ["enable_pbr", "should_texture", "target_polycount", "is_a_t_pose", "texture_image"]
 
 class MeshyV6PreviewImageTo3D(FALNode):
     """
@@ -482,13 +487,13 @@ class MeshyV6PreviewImageTo3D(FALNode):
     should_texture: bool = Field(
         default=True, description="Whether to generate textures"
     )
-    texture_image_url: ImageRef = Field(
+    texture_image: ImageRef = Field(
         default=ImageRef(), description="2D image to guide the texturing process"
     )
     topology: Topology = Field(
         default=Topology.TRIANGLE, description="Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted."
     )
     enable_safety_checker: bool = Field(
@@ -505,16 +510,16 @@ class MeshyV6PreviewImageTo3D(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        texture_image_url_base64 = await context.image_to_base64(self.texture_image_url)
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        texture_image_base64 = await context.image_to_base64(self.texture_image)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "enable_pbr": self.enable_pbr,
             "is_a_t_pose": self.is_a_t_pose,
             "target_polycount": self.target_polycount,
             "should_texture": self.should_texture,
-            "texture_image_url": f"data:image/png;base64,{texture_image_url_base64}",
+            "texture_image_url": f"data:image/png;base64,{texture_image_base64}",
             "topology": self.topology.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "symmetry_mode": self.symmetry_mode.value,
             "texture_prompt": self.texture_prompt,
@@ -533,7 +538,7 @@ class MeshyV6PreviewImageTo3D(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["enable_pbr", "is_a_t_pose", "target_polycount", "should_texture", "texture_image_url"]
+        return ["enable_pbr", "is_a_t_pose", "target_polycount", "should_texture", "texture_image"]
 
 class Hyper3DRodinV2(FALNode):
     """
@@ -601,7 +606,7 @@ class Hyper3DRodinV2(FALNode):
     TAPose: bool = Field(
         default=False, description="Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software."
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to use while generating the 3D model. Required for Image-to-3D mode. Up to 5 images allowed."
     )
     use_original_alpha: bool = Field(
@@ -627,7 +632,7 @@ class Hyper3DRodinV2(FALNode):
             "preview_render": self.preview_render,
             "bbox_condition": self.bbox_condition,
             "TAPose": self.TAPose,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "use_original_alpha": self.use_original_alpha,
             "geometry_file_format": self.geometry_file_format.value,
             "addons": self.addons.value if self.addons else None,
@@ -668,16 +673,16 @@ class Pshuman(FALNode):
     seed: int = Field(
         default=-1, description="Seed for reproducibility. If None, a random seed will be used."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="A direct URL to the input image of a person."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -692,7 +697,7 @@ class Pshuman(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["guidance_scale", "seed", "image_url"]
+        return ["guidance_scale", "seed", "image"]
 
 class Hunyuan_WorldImageToWorld(FALNode):
     """
@@ -719,18 +724,18 @@ class Hunyuan_WorldImageToWorld(FALNode):
     labels_fg2: str = Field(
         default="", description="Labels for the second foreground object."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to convert to a world."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "classes": self.classes,
             "export_drc": self.export_drc,
             "labels_fg1": self.labels_fg1,
             "labels_fg2": self.labels_fg2,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -745,7 +750,7 @@ class Hunyuan_WorldImageToWorld(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["classes", "export_drc", "labels_fg1", "labels_fg2", "image_url"]
+        return ["classes", "export_drc", "labels_fg1", "labels_fg2", "image"]
 
 class Tripo3dTripoV25MultiviewTo3d(FALNode):
     """
@@ -799,7 +804,7 @@ class Tripo3dTripoV25MultiviewTo3d(FALNode):
     face_limit: int = Field(
         default=0, description="Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined."
     )
-    right_image_url: ImageRef = Field(
+    right_image: ImageRef = Field(
         default=ImageRef(), description="Right view image of the object."
     )
     style: Style | None = Field(
@@ -808,13 +813,13 @@ class Tripo3dTripoV25MultiviewTo3d(FALNode):
     quad: bool = Field(
         default=False, description="Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model."
     )
-    front_image_url: ImageRef = Field(
+    front_image: ImageRef = Field(
         default=ImageRef(), description="Front view image of the object."
     )
     texture_seed: int = Field(
         default=-1, description="This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed."
     )
-    back_image_url: ImageRef = Field(
+    back_image: ImageRef = Field(
         default=ImageRef(), description="Back view image of the object."
     )
     pbr: bool = Field(
@@ -835,30 +840,30 @@ class Tripo3dTripoV25MultiviewTo3d(FALNode):
     orientation: Orientation = Field(
         default=Orientation.DEFAULT, description="Set orientation=align_image to automatically rotate the model to align the original image. The default value is default."
     )
-    left_image_url: ImageRef = Field(
+    left_image: ImageRef = Field(
         default=ImageRef(), description="Left view image of the object."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        right_image_url_base64 = await context.image_to_base64(self.right_image_url)
-        front_image_url_base64 = await context.image_to_base64(self.front_image_url)
-        back_image_url_base64 = await context.image_to_base64(self.back_image_url)
-        left_image_url_base64 = await context.image_to_base64(self.left_image_url)
+        right_image_base64 = await context.image_to_base64(self.right_image)
+        front_image_base64 = await context.image_to_base64(self.front_image)
+        back_image_base64 = await context.image_to_base64(self.back_image)
+        left_image_base64 = await context.image_to_base64(self.left_image)
         arguments = {
             "face_limit": self.face_limit,
-            "right_image_url": f"data:image/png;base64,{right_image_url_base64}",
+            "right_image_url": f"data:image/png;base64,{right_image_base64}",
             "style": self.style.value if self.style else None,
             "quad": self.quad,
-            "front_image_url": f"data:image/png;base64,{front_image_url_base64}",
+            "front_image_url": f"data:image/png;base64,{front_image_base64}",
             "texture_seed": self.texture_seed,
-            "back_image_url": f"data:image/png;base64,{back_image_url_base64}",
+            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "pbr": self.pbr,
             "texture_alignment": self.texture_alignment.value,
             "texture": self.texture.value,
             "auto_size": self.auto_size,
             "seed": self.seed,
             "orientation": self.orientation.value,
-            "left_image_url": f"data:image/png;base64,{left_image_url_base64}",
+            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
 
         # Remove None values
@@ -873,7 +878,7 @@ class Tripo3dTripoV25MultiviewTo3d(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["face_limit", "right_image_url", "style", "quad", "front_image_url"]
+        return ["face_limit", "right_image", "style", "quad", "front_image"]
 
 class Hunyuan3dV21(FALNode):
     """
@@ -888,7 +893,7 @@ class Hunyuan3dV21(FALNode):
     - Architectural visualization
     """
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     octree_resolution: int = Field(
@@ -908,9 +913,9 @@ class Hunyuan3dV21(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "octree_resolution": self.octree_resolution,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -930,7 +935,7 @@ class Hunyuan3dV21(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+        return ["input_image", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
 
 class Tripo3dTripoV25ImageTo3d(FALNode):
     """
@@ -993,7 +998,7 @@ class Tripo3dTripoV25ImageTo3d(FALNode):
     texture_alignment: TextureAlignment = Field(
         default=TextureAlignment.ORIGINAL_IMAGE, description="Determines the prioritization of texture alignment in the 3D model. The default value is original_image."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use for model generation."
     )
     texture: Texture = Field(
@@ -1016,13 +1021,13 @@ class Tripo3dTripoV25ImageTo3d(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "face_limit": self.face_limit,
             "style": self.style.value if self.style else None,
             "pbr": self.pbr,
             "texture_alignment": self.texture_alignment.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
             "texture": self.texture.value,
             "auto_size": self.auto_size,
             "seed": self.seed,
@@ -1043,7 +1048,7 @@ class Tripo3dTripoV25ImageTo3d(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["face_limit", "style", "pbr", "texture_alignment", "image_url"]
+        return ["face_limit", "style", "pbr", "texture_alignment", "image"]
 
 class Hunyuan3dV2MultiView(FALNode):
     """
@@ -1058,13 +1063,13 @@ class Hunyuan3dV2MultiView(FALNode):
     - Architectural visualization
     """
 
-    front_image_url: ImageRef = Field(
+    front_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     octree_resolution: int = Field(
         default=256, description="Octree resolution for the model."
     )
-    back_image_url: ImageRef = Field(
+    back_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     guidance_scale: float = Field(
@@ -1079,23 +1084,23 @@ class Hunyuan3dV2MultiView(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    left_image_url: ImageRef = Field(
+    left_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        front_image_url_base64 = await context.image_to_base64(self.front_image_url)
-        back_image_url_base64 = await context.image_to_base64(self.back_image_url)
-        left_image_url_base64 = await context.image_to_base64(self.left_image_url)
+        front_image_base64 = await context.image_to_base64(self.front_image)
+        back_image_base64 = await context.image_to_base64(self.back_image)
+        left_image_base64 = await context.image_to_base64(self.left_image)
         arguments = {
-            "front_image_url": f"data:image/png;base64,{front_image_url_base64}",
+            "front_image_url": f"data:image/png;base64,{front_image_base64}",
             "octree_resolution": self.octree_resolution,
-            "back_image_url": f"data:image/png;base64,{back_image_url_base64}",
+            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "textured_mesh": self.textured_mesh,
             "seed": self.seed,
-            "left_image_url": f"data:image/png;base64,{left_image_url_base64}",
+            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
 
         # Remove None values
@@ -1110,7 +1115,7 @@ class Hunyuan3dV2MultiView(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["front_image_url", "octree_resolution", "back_image_url", "guidance_scale", "num_inference_steps"]
+        return ["front_image", "octree_resolution", "back_image", "guidance_scale", "num_inference_steps"]
 
 class Hunyuan3dV2Mini(FALNode):
     """
@@ -1125,7 +1130,7 @@ class Hunyuan3dV2Mini(FALNode):
     - Architectural visualization
     """
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     octree_resolution: int = Field(
@@ -1145,9 +1150,9 @@ class Hunyuan3dV2Mini(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "octree_resolution": self.octree_resolution,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -1167,7 +1172,7 @@ class Hunyuan3dV2Mini(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+        return ["input_image", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
 
 class Hunyuan3dV2Turbo(FALNode):
     """
@@ -1182,7 +1187,7 @@ class Hunyuan3dV2Turbo(FALNode):
     - Architectural visualization
     """
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     octree_resolution: int = Field(
@@ -1202,9 +1207,9 @@ class Hunyuan3dV2Turbo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "octree_resolution": self.octree_resolution,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -1224,7 +1229,7 @@ class Hunyuan3dV2Turbo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+        return ["input_image", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
 
 class Hunyuan3dV2MiniTurbo(FALNode):
     """
@@ -1239,7 +1244,7 @@ class Hunyuan3dV2MiniTurbo(FALNode):
     - Architectural visualization
     """
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     octree_resolution: int = Field(
@@ -1259,9 +1264,9 @@ class Hunyuan3dV2MiniTurbo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "octree_resolution": self.octree_resolution,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -1281,7 +1286,7 @@ class Hunyuan3dV2MiniTurbo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+        return ["input_image", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
 
 class Hunyuan3dV2(FALNode):
     """
@@ -1296,7 +1301,7 @@ class Hunyuan3dV2(FALNode):
     - Architectural visualization
     """
 
-    input_image_url: ImageRef = Field(
+    input_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     octree_resolution: int = Field(
@@ -1316,9 +1321,9 @@ class Hunyuan3dV2(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        input_image_url_base64 = await context.image_to_base64(self.input_image_url)
+        input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
-            "input_image_url": f"data:image/png;base64,{input_image_url_base64}",
+            "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "octree_resolution": self.octree_resolution,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
@@ -1338,7 +1343,7 @@ class Hunyuan3dV2(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["input_image_url", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
+        return ["input_image", "octree_resolution", "guidance_scale", "seed", "num_inference_steps"]
 
 class Hunyuan3dV2MultiViewTurbo(FALNode):
     """
@@ -1353,13 +1358,13 @@ class Hunyuan3dV2MultiViewTurbo(FALNode):
     - Architectural visualization
     """
 
-    front_image_url: ImageRef = Field(
+    front_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     octree_resolution: int = Field(
         default=256, description="Octree resolution for the model."
     )
-    back_image_url: ImageRef = Field(
+    back_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
     guidance_scale: float = Field(
@@ -1374,23 +1379,23 @@ class Hunyuan3dV2MultiViewTurbo(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    left_image_url: ImageRef = Field(
+    left_image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        front_image_url_base64 = await context.image_to_base64(self.front_image_url)
-        back_image_url_base64 = await context.image_to_base64(self.back_image_url)
-        left_image_url_base64 = await context.image_to_base64(self.left_image_url)
+        front_image_base64 = await context.image_to_base64(self.front_image)
+        back_image_base64 = await context.image_to_base64(self.back_image)
+        left_image_base64 = await context.image_to_base64(self.left_image)
         arguments = {
-            "front_image_url": f"data:image/png;base64,{front_image_url_base64}",
+            "front_image_url": f"data:image/png;base64,{front_image_base64}",
             "octree_resolution": self.octree_resolution,
-            "back_image_url": f"data:image/png;base64,{back_image_url_base64}",
+            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "textured_mesh": self.textured_mesh,
             "seed": self.seed,
-            "left_image_url": f"data:image/png;base64,{left_image_url_base64}",
+            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
 
         # Remove None values
@@ -1405,7 +1410,7 @@ class Hunyuan3dV2MultiViewTurbo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["front_image_url", "octree_resolution", "back_image_url", "guidance_scale", "num_inference_steps"]
+        return ["front_image", "octree_resolution", "back_image", "guidance_scale", "num_inference_steps"]
 
 class Hyper3dRodin(FALNode):
     """
@@ -1485,7 +1490,7 @@ class Hyper3dRodin(FALNode):
     TAPose: bool = Field(
         default=False, description="When generating the human-like model, this parameter control the generation result to T/A Pose."
     )
-    input_image_urls: list[str] = Field(
+    input_images: list[str] = Field(
         default=[], description="URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode."
     )
     geometry_file_format: GeometryFileFormat = Field(
@@ -1512,7 +1517,7 @@ class Hyper3dRodin(FALNode):
             "tier": self.tier.value,
             "quality": self.quality.value,
             "TAPose": self.TAPose,
-            "input_image_urls": self.input_image_urls,
+            "input_image_urls": self.input_images,
             "geometry_file_format": self.geometry_file_format.value,
             "use_hyper": self.use_hyper,
             "addons": self.addons.value if self.addons else None,
@@ -1567,18 +1572,18 @@ class Triposr(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.GLB, description="Output format for the 3D model."
     )
-    image_url: ImageRef = Field(
+    image: ImageRef = Field(
         default=ImageRef(), description="Path for the image file to be processed."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_url_base64 = await context.image_to_base64(self.image_url)
+        image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "mc_resolution": self.mc_resolution,
             "do_remove_background": self.do_remove_background,
             "foreground_ratio": self.foreground_ratio,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}",
         }
 
         # Remove None values
@@ -1593,4 +1598,4 @@ class Triposr(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["mc_resolution", "do_remove_background", "foreground_ratio", "output_format", "image_url"]
+        return ["mc_resolution", "do_remove_background", "foreground_ratio", "output_format", "image"]
