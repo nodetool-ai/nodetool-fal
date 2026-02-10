@@ -113,11 +113,11 @@ class AnimateDiffVideoToVideo(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
-    video_url: VideoRef = Field(
-        default=VideoRef(), description="URL of the video."
-    )
     first_n_seconds: int = Field(
         default=3, description="The first N number of seconds of video to animate."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video."
     )
     fps: int = Field(
         default=8, description="Number of frames per second to extract from the video."
@@ -128,11 +128,11 @@ class AnimateDiffVideoToVideo(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_inference_steps: int = Field(
-        default=25, description="The number of inference steps to perform."
-    )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=25, description="The number of inference steps to perform."
     )
     negative_prompt: str = Field(
         default="(bad quality, worst quality:1.2), ugly faces, bad anime", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
@@ -144,13 +144,13 @@ class AnimateDiffVideoToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "video_url": self.video_url,
             "first_n_seconds": self.first_n_seconds,
+            "video_url": self.video_url,
             "fps": self.fps,
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "negative_prompt": self.negative_prompt,
             "motions": self.motions,
         }
@@ -186,11 +186,11 @@ class AnimateDiffTurboVideoToVideo(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
-    video_url: VideoRef = Field(
-        default=VideoRef(), description="URL of the video."
-    )
     first_n_seconds: int = Field(
         default=3, description="The first N number of seconds of video to animate."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the video."
     )
     fps: int = Field(
         default=8, description="Number of frames per second to extract from the video."
@@ -199,33 +199,29 @@ class AnimateDiffTurboVideoToVideo(FALNode):
         default=0.7, description="The strength of the input video in the final output."
     )
     guidance_scale: float = Field(
-        default=1, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
-    num_inference_steps: int = Field(
-        default=8, description="The number of inference steps to perform. 4-12 is recommended for turbo mode."
+        default=2, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
+    num_inference_steps: int = Field(
+        default=12, description="The number of inference steps to perform. 4-12 is recommended for turbo mode."
+    )
     negative_prompt: str = Field(
         default="(bad quality, worst quality:1.2), ugly faces, bad anime", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
-    )
-    motions: list[str] = Field(
-        default=[], description="The motions to apply to the video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "prompt": self.prompt,
-            "video_url": self.video_url,
             "first_n_seconds": self.first_n_seconds,
+            "video_url": self.video_url,
             "fps": self.fps,
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "negative_prompt": self.negative_prompt,
-            "motions": self.motions,
         }
 
         # Remove None values
@@ -374,6 +370,14 @@ class BiRefNetV2Video(FALNode):
         BALANCED = "balanced"
         SMALL = "small"
 
+    class OperatingResolution(Enum):
+        """
+        The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model.
+        """
+        VALUE_1024X1024 = "1024x1024"
+        VALUE_2048X2048 = "2048x2048"
+        VALUE_2304X2304 = "2304x2304"
+
     class VideoOutputType(Enum):
         """
         The output type of the generated video.
@@ -383,13 +387,14 @@ class BiRefNetV2Video(FALNode):
         PRORES4444_MOV = "PRORES4444 (.mov)"
         GIF_GIF = "GIF (.gif)"
 
-    class OperatingResolution(Enum):
+    class VideoQuality(Enum):
         """
-        The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model.
+        The quality of the generated video.
         """
-        VALUE_1024X1024 = "1024x1024"
-        VALUE_2048X2048 = "2048x2048"
-        VALUE_2304X2304 = "2304x2304"
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+        MAXIMUM = "maximum"
 
     class Model(Enum):
         """
@@ -416,21 +421,9 @@ class BiRefNetV2Video(FALNode):
         PORTRAIT = "Portrait"
         GENERAL_USE_DYNAMIC = "General Use (Dynamic)"
 
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
 
     video_write_mode: VideoWriteMode = Field(
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
-    )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     operating_resolution: OperatingResolution = Field(
         default=OperatingResolution.VALUE_1024X1024, description="The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model."
@@ -438,14 +431,17 @@ class BiRefNetV2Video(FALNode):
     video_url: VideoRef = Field(
         default=VideoRef(), description="URL of the video to remove background from"
     )
-    model: Model = Field(
-        default=Model.GENERAL_USE_LIGHT, description="Model to use for background removal. The 'General Use (Light)' model is the original model used in the BiRefNet repository. The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images. The 'General Use (Heavy)' model is a slower but more accurate model. The 'Matting' model is a model trained specifically for matting images. The 'Portrait' model is a model trained specifically for portrait images. The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304. The 'General Use (Light)' model is recommended for most use cases. The corresponding models are as follows: - 'General Use (Light)': BiRefNet - 'General Use (Light 2K)': BiRefNet_lite-2K - 'General Use (Heavy)': BiRefNet_lite - 'Matting': BiRefNet-matting - 'Portrait': BiRefNet-portrait - 'General Use (Dynamic)': BiRefNet_dynamic"
+    video_output_type: VideoOutputType = Field(
+        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     video_quality: VideoQuality = Field(
         default=VideoQuality.HIGH, description="The quality of the generated video."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    model: Model = Field(
+        default=Model.GENERAL_USE_LIGHT, description="Model to use for background removal. The 'General Use (Light)' model is the original model used in the BiRefNet repository. The 'General Use (Light 2K)' model is the original model used in the BiRefNet repository but trained with 2K images. The 'General Use (Heavy)' model is a slower but more accurate model. The 'Matting' model is a model trained specifically for matting images. The 'Portrait' model is a model trained specifically for portrait images. The 'General Use (Dynamic)' model supports dynamic resolutions from 256x256 to 2304x2304. The 'General Use (Light)' model is recommended for most use cases. The corresponding models are as follows: - 'General Use (Light)': BiRefNet - 'General Use (Light 2K)': BiRefNet_lite-2K - 'General Use (Heavy)': BiRefNet_lite - 'Matting': BiRefNet-matting - 'Portrait': BiRefNet-portrait - 'General Use (Dynamic)': BiRefNet_dynamic"
     )
     output_mask: bool = Field(
         default=False, description="Whether to output the mask used to remove the background"
@@ -457,12 +453,12 @@ class BiRefNetV2Video(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "video_write_mode": self.video_write_mode.value,
-            "video_output_type": self.video_output_type.value,
             "operating_resolution": self.operating_resolution.value,
             "video_url": self.video_url,
-            "model": self.model.value,
+            "video_output_type": self.video_output_type.value,
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
+            "model": self.model.value,
             "output_mask": self.output_mask,
             "refine_foreground": self.refine_foreground,
         }
@@ -714,7 +710,7 @@ class CogVideoX5BVideoToVideo(FALNode):
     use_rife: bool = Field(
         default=True, description="Use RIFE for video interpolation"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. We currently support one lora."
     )
     video_size: str = Field(
@@ -1105,7 +1101,7 @@ class Ltx219BDistilledVideoToVideoLora(FALNode):
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     video_size: str = Field(
@@ -1557,7 +1553,7 @@ class Ltx219BVideoToVideoLora(FALNode):
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     video_size: str = Field(
@@ -2015,7 +2011,7 @@ class Ltx219BDistilledExtendVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -2393,7 +2389,7 @@ class Ltx219BExtendVideoLora(FALNode):
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     video_size: str = Field(
@@ -3659,15 +3655,6 @@ class KlingVideoO1StandardVideoToVideoReference(FALNode):
     - Content repurposing
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
     class Duration(Enum):
         """
         Video duration in seconds.
@@ -3681,12 +3668,18 @@ class KlingVideoO1StandardVideoToVideoReference(FALNode):
         VALUE_9 = "9"
         VALUE_10 = "10"
 
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
 
     prompt: str = Field(
         default="", description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
-    )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used."
     )
     video_url: VideoRef = Field(
         default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats supported, 3-10 seconds duration, 720-2160px resolution, max 200MB. Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s"
@@ -3694,25 +3687,32 @@ class KlingVideoO1StandardVideoToVideoReference(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Video duration in seconds."
     )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used."
+    )
     keep_audio: bool = Field(
         default=False, description="Whether to keep the original audio from the video."
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "video_url": self.video_url,
             "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "keep_audio": self.keep_audio,
             "elements": self.elements,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -3749,10 +3749,10 @@ class KlingVideoO1StandardVideoToVideoEdit(FALNode):
     video_url: VideoRef = Field(
         default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats supported, 3-10 seconds duration, 720-2160px resolution, max 200MB. Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s"
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
     )
     keep_audio: bool = Field(
@@ -3760,11 +3760,15 @@ class KlingVideoO1StandardVideoToVideoEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "video_url": self.video_url,
             "elements": self.elements,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "keep_audio": self.keep_audio,
         }
 
@@ -4301,10 +4305,10 @@ class KlingVideoO1VideoToVideoEdit(FALNode):
     video_url: VideoRef = Field(
         default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats supported, 3-10 seconds duration, 720-2160px resolution, max 200MB. Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s"
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
     )
     keep_audio: bool = Field(
@@ -4312,11 +4316,15 @@ class KlingVideoO1VideoToVideoEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "video_url": self.video_url,
             "elements": self.elements,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "keep_audio": self.keep_audio,
         }
 
@@ -4348,15 +4356,6 @@ class KlingVideoO1VideoToVideoReference(FALNode):
     - Content repurposing
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
     class Duration(Enum):
         """
         Video duration in seconds.
@@ -4370,12 +4369,18 @@ class KlingVideoO1VideoToVideoReference(FALNode):
         VALUE_9 = "9"
         VALUE_10 = "10"
 
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
 
     prompt: str = Field(
         default="", description="Use @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
-    )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used."
     )
     video_url: VideoRef = Field(
         default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats supported, 3-10 seconds duration, 720-2160px resolution, max 200MB. Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s"
@@ -4383,25 +4388,32 @@ class KlingVideoO1VideoToVideoReference(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Video duration in seconds."
     )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the generated video frame. If 'auto', the aspect ratio will be determined automatically based on the input video, and the closest aspect ratio to the input video will be used."
+    )
     keep_audio: bool = Field(
         default=False, description="Whether to keep the original audio from the video."
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2, etc. Maximum 4 total (elements + reference images) when using video."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "video_url": self.video_url,
             "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "keep_audio": self.keep_audio,
             "elements": self.elements,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -4662,10 +4674,10 @@ class Sam3VideoRle(FALNode):
     detection_threshold: float = Field(
         default=0.5, description="Detection confidence threshold (0.0-1.0). Lower = more detections but less precise. Defaults: 0.5 for existing, 0.7 for new objects. Try 0.2-0.3 if text prompts fail."
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPrompt] = Field(
         default=[], description="List of box prompts with optional frame_index."
     )
-    point_prompts: list[str] = Field(
+    point_prompts: list[PointPrompt] = Field(
         default=[], description="List of point prompts with frame indices."
     )
     boundingbox_zip: bool = Field(
@@ -4731,10 +4743,10 @@ class Sam3Video(FALNode):
     detection_threshold: float = Field(
         default=0.5, description="Detection confidence threshold (0.0-1.0). Lower = more detections but less precise."
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPromptBase] = Field(
         default=[], description="List of box prompt coordinates (x_min, y_min, x_max, y_max)."
     )
-    point_prompts: list[str] = Field(
+    point_prompts: list[PointPromptBase] = Field(
         default=[], description="List of point prompts"
     )
     apply_mask: bool = Field(
@@ -4962,6 +4974,14 @@ class FlashvsrUpscaleVideo(FALNode):
         HIGH = "high"
         FULL = "full"
 
+    class OutputWriteMode(Enum):
+        """
+        The write mode of the output video.
+        """
+        FAST = "fast"
+        BALANCED = "balanced"
+        SMALL = "small"
+
     class OutputFormat(Enum):
         """
         The format of the output video.
@@ -4970,14 +4990,6 @@ class FlashvsrUpscaleVideo(FALNode):
         VP9_WEBM = "VP9 (.webm)"
         PRORES4444_MOV = "PRORES4444 (.mov)"
         GIF_GIF = "GIF (.gif)"
-
-    class OutputWriteMode(Enum):
-        """
-        The write mode of the output video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
 
     class OutputQuality(Enum):
         """
@@ -4998,17 +5010,17 @@ class FlashvsrUpscaleVideo(FALNode):
     quality: int = Field(
         default=70, description="Quality level for tile blending (0-100). Controls overlap between tiles to prevent grid artifacts. Higher values provide better quality with more overlap. Recommended: 70-85 for high-res videos, 50-70 for faster processing."
     )
+    output_write_mode: OutputWriteMode = Field(
+        default=OutputWriteMode.BALANCED, description="The write mode of the output video."
+    )
     output_format: OutputFormat = Field(
         default=OutputFormat.X264_MP4, description="The format of the output video."
     )
     color_fix: bool = Field(
         default=True, description="Color correction enabled."
     )
-    output_write_mode: OutputWriteMode = Field(
-        default=OutputWriteMode.BALANCED, description="The write mode of the output video."
-    )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned inline and not stored in history."
+    preserve_audio: bool = Field(
+        default=False, description="Copy the original audio tracks into the upscaled video using FFmpeg when possible."
     )
     output_quality: OutputQuality = Field(
         default=OutputQuality.HIGH, description="The quality of the output video."
@@ -5016,8 +5028,8 @@ class FlashvsrUpscaleVideo(FALNode):
     upscale_factor: float = Field(
         default=2, description="Upscaling factor to be used."
     )
-    preserve_audio: bool = Field(
-        default=False, description="Copy the original audio tracks into the upscaled video using FFmpeg when possible."
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned inline and not stored in history."
     )
     seed: int = Field(
         default=-1, description="The random seed used for the generation process."
@@ -5028,13 +5040,13 @@ class FlashvsrUpscaleVideo(FALNode):
             "video_url": self.video_url,
             "acceleration": self.acceleration.value,
             "quality": self.quality,
+            "output_write_mode": self.output_write_mode.value,
             "output_format": self.output_format.value,
             "color_fix": self.color_fix,
-            "output_write_mode": self.output_write_mode.value,
-            "sync_mode": self.sync_mode,
+            "preserve_audio": self.preserve_audio,
             "output_quality": self.output_quality.value,
             "upscale_factor": self.upscale_factor,
-            "preserve_audio": self.preserve_audio,
+            "sync_mode": self.sync_mode,
             "seed": self.seed,
         }
 
@@ -5092,12 +5104,12 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
         CYAN = "cyan"
         MAGENTA = "magenta"
 
-    class StrokeColor(Enum):
+    class HighlightColor(Enum):
         """
-        Text stroke/outline color
+        Color for the currently speaking word (karaoke-style highlight)
         """
-        BLACK = "black"
         WHITE = "white"
+        BLACK = "black"
         RED = "red"
         GREEN = "green"
         BLUE = "blue"
@@ -5110,12 +5122,12 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
         CYAN = "cyan"
         MAGENTA = "magenta"
 
-    class HighlightColor(Enum):
+    class StrokeColor(Enum):
         """
-        Color for the currently speaking word (karaoke-style highlight)
+        Text stroke/outline color
         """
-        WHITE = "white"
         BLACK = "black"
+        WHITE = "white"
         RED = "red"
         GREEN = "green"
         BLUE = "blue"
@@ -5157,11 +5169,11 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
         TRANSPARENT = "transparent"
 
 
-    font_weight: FontWeight = Field(
-        default=FontWeight.BOLD, description="Font weight (TikTok style typically uses bold or black)"
-    )
     video_url: VideoRef = Field(
         default=VideoRef(), description="URL of the video file to add automatic subtitles to Max file size: 95.4MB, Timeout: 30.0s"
+    )
+    font_weight: FontWeight = Field(
+        default=FontWeight.BOLD, description="Font weight (TikTok style typically uses bold or black)"
     )
     stroke_width: int = Field(
         default=3, description="Text stroke/outline width in pixels (0 for no stroke)"
@@ -5175,8 +5187,8 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
     language: str = Field(
         default="en", description="Language code for transcription (e.g., 'en', 'es', 'fr', 'de', 'it', 'pt', 'nl', 'ja', 'zh', 'ko') or 3-letter ISO code (e.g., 'eng', 'spa', 'fra')"
     )
-    y_offset: int = Field(
-        default=75, description="Vertical offset in pixels (positive = move down, negative = move up)"
+    highlight_color: HighlightColor = Field(
+        default=HighlightColor.PURPLE, description="Color for the currently speaking word (karaoke-style highlight)"
     )
     background_opacity: float = Field(
         default=0, description="Background opacity (0.0 = fully transparent, 1.0 = fully opaque)"
@@ -5184,8 +5196,8 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
     stroke_color: StrokeColor = Field(
         default=StrokeColor.BLACK, description="Text stroke/outline color"
     )
-    highlight_color: HighlightColor = Field(
-        default=HighlightColor.PURPLE, description="Color for the currently speaking word (karaoke-style highlight)"
+    y_offset: int = Field(
+        default=75, description="Vertical offset in pixels (positive = move down, negative = move up)"
     )
     enable_animation: bool = Field(
         default=True, description="Enable animation effects for subtitles (bounce style entrance)"
@@ -5205,16 +5217,16 @@ class WorkflowUtilitiesAutoSubtitle(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "font_weight": self.font_weight.value,
             "video_url": self.video_url,
+            "font_weight": self.font_weight.value,
             "stroke_width": self.stroke_width,
             "font_color": self.font_color.value,
             "font_size": self.font_size,
             "language": self.language,
-            "y_offset": self.y_offset,
+            "highlight_color": self.highlight_color.value,
             "background_opacity": self.background_opacity,
             "stroke_color": self.stroke_color.value,
-            "highlight_color": self.highlight_color.value,
+            "y_offset": self.y_offset,
             "enable_animation": self.enable_animation,
             "font_name": self.font_name,
             "position": self.position.value,
@@ -5266,11 +5278,11 @@ class BytedanceUpscalerUpscaleVideo(FALNode):
         VALUE_4K = "4k"
 
 
-    target_fps: TargetFps = Field(
-        default=TargetFps.VALUE_30FPS, description="The target FPS of the video to upscale."
-    )
     video_url: VideoRef = Field(
         default=VideoRef(), description="The URL of the video to upscale."
+    )
+    target_fps: TargetFps = Field(
+        default=TargetFps.VALUE_30FPS, description="The target FPS of the video to upscale."
     )
     target_resolution: TargetResolution = Field(
         default=TargetResolution.VALUE_1080P, description="The target resolution of the video to upscale."
@@ -5278,8 +5290,8 @@ class BytedanceUpscalerUpscaleVideo(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "target_fps": self.target_fps.value,
             "video_url": self.video_url,
+            "target_fps": self.target_fps.value,
             "target_resolution": self.target_resolution.value,
         }
 
@@ -5635,14 +5647,14 @@ class WanVaceAppsLongReframe(FALNode):
     video_url: VideoRef = Field(
         default=VideoRef(), description="URL to the source video file. This video will be used as a reference for the reframe task."
     )
-    zoom_factor: float = Field(
-        default=0, description="Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom."
+    acceleration: Acceleration = Field(
+        default=Acceleration.REGULAR, description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
     )
     paste_back: bool = Field(
         default=True, description="Whether to paste back the reframed scene to the original video."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
+    zoom_factor: float = Field(
+        default=0, description="Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom."
     )
     prompt: str = Field(
         default="", description="The text prompt to guide video generation. Optional for reframing."
@@ -5650,11 +5662,11 @@ class WanVaceAppsLongReframe(FALNode):
     scene_threshold: float = Field(
         default=30, description="Threshold for scene detection sensitivity (0-100). Lower values detect more scenes."
     )
-    guidance_scale: float = Field(
-        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
-    )
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, the safety checker will be enabled."
+    )
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt."
     )
     auto_downsample_min_fps: float = Field(
         default=6, description="Minimum FPS for auto downsample."
@@ -5668,9 +5680,6 @@ class WanVaceAppsLongReframe(FALNode):
     video_write_mode: VideoWriteMode = Field(
         default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    return_frames_zip: bool = Field(
-        default=False, description="If true, also return a ZIP file containing all generated frames."
-    )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.AUTO, description="Aspect ratio of the generated video."
     )
@@ -5679,6 +5688,9 @@ class WanVaceAppsLongReframe(FALNode):
     )
     transparency_mode: TransparencyMode = Field(
         default=TransparencyMode.CONTENT_AWARE, description="The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled."
+    )
+    return_frames_zip: bool = Field(
+        default=False, description="If true, also return a ZIP file containing all generated frames."
     )
     trim_borders: bool = Field(
         default=True, description="Whether to trim borders from the video."
@@ -5689,8 +5701,8 @@ class WanVaceAppsLongReframe(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
     )
     interpolator_model: InterpolatorModel = Field(
         default=InterpolatorModel.FILM, description="The model to use for frame interpolation. Options are 'rife' or 'film'."
@@ -5698,36 +5710,36 @@ class WanVaceAppsLongReframe(FALNode):
     enable_auto_downsample: bool = Field(
         default=True, description="Whether to enable auto downsample."
     )
-    num_inference_steps: int = Field(
-        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    seed: int = Field(
+        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "shift": self.shift,
             "video_url": self.video_url,
-            "zoom_factor": self.zoom_factor,
-            "paste_back": self.paste_back,
             "acceleration": self.acceleration.value,
+            "paste_back": self.paste_back,
+            "zoom_factor": self.zoom_factor,
             "prompt": self.prompt,
             "scene_threshold": self.scene_threshold,
-            "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
             "auto_downsample_min_fps": self.auto_downsample_min_fps,
             "negative_prompt": self.negative_prompt,
             "sampler": self.sampler.value,
             "video_write_mode": self.video_write_mode.value,
-            "return_frames_zip": self.return_frames_zip,
             "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
             "transparency_mode": self.transparency_mode.value,
+            "return_frames_zip": self.return_frames_zip,
             "trim_borders": self.trim_borders,
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
-            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "interpolator_model": self.interpolator_model.value,
             "enable_auto_downsample": self.enable_auto_downsample,
-            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -5896,11 +5908,11 @@ class SeedvrUpscaleVideo(FALNode):
     target_resolution: TargetResolution = Field(
         default=TargetResolution.VALUE_1080P, description="The target resolution to upscale to when `upscale_mode` is `target`."
     )
-    output_quality: OutputQuality = Field(
-        default=OutputQuality.HIGH, description="The quality of the output video."
-    )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    output_quality: OutputQuality = Field(
+        default=OutputQuality.HIGH, description="The quality of the output video."
     )
     upscale_factor: float = Field(
         default=2, description="Upscaling factor to be used. Will multiply the dimensions with this factor when `upscale_mode` is `factor`."
@@ -5917,8 +5929,8 @@ class SeedvrUpscaleVideo(FALNode):
             "output_format": self.output_format.value,
             "output_write_mode": self.output_write_mode.value,
             "target_resolution": self.target_resolution.value,
-            "output_quality": self.output_quality.value,
             "sync_mode": self.sync_mode,
+            "output_quality": self.output_quality.value,
             "upscale_factor": self.upscale_factor,
             "seed": self.seed,
         }
@@ -5951,14 +5963,6 @@ class WanVaceAppsVideoEdit(FALNode):
     - Content repurposing
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.
-        """
-        NONE = "none"
-        LOW = "low"
-        REGULAR = "regular"
-
     class Resolution(Enum):
         """
         Resolution of the edited video.
@@ -5969,6 +5973,14 @@ class WanVaceAppsVideoEdit(FALNode):
         VALUE_480P = "480p"
         VALUE_580P = "580p"
         VALUE_720P = "720p"
+
+    class Acceleration(Enum):
+        """
+        Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.
+        """
+        NONE = "none"
+        LOW = "low"
+        REGULAR = "regular"
 
     class AspectRatio(Enum):
         """
@@ -5991,17 +6003,17 @@ class WanVaceAppsVideoEdit(FALNode):
     prompt: str = Field(
         default="", description="Prompt to edit the video."
     )
-    video_url: VideoRef = Field(
-        default=VideoRef(), description="URL of the input video."
+    resolution: Resolution = Field(
+        default=Resolution.AUTO, description="Resolution of the edited video."
     )
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster."
     )
-    resolution: Resolution = Field(
-        default=Resolution.AUTO, description="Resolution of the edited video."
-    )
     return_frames_zip: bool = Field(
         default=False, description="Whether to include a ZIP archive containing all generated frames."
+    )
+    video_url: VideoRef = Field(
+        default=VideoRef(), description="URL of the input video."
     )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.AUTO, description="Aspect ratio of the edited video."
@@ -6012,7 +6024,7 @@ class WanVaceAppsVideoEdit(FALNode):
     video_type: VideoType = Field(
         default=VideoType.AUTO, description="The type of video you're editing. Use 'general' for most videos, and 'human' for videos emphasizing human subjects and motions. The default value 'auto' means the model will guess based on the first frame of the video."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="URLs of the input images to use as a reference for the generation."
     )
     enable_auto_downsample: bool = Field(
@@ -6023,16 +6035,20 @@ class WanVaceAppsVideoEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "video_url": self.video_url,
-            "acceleration": self.acceleration.value,
             "resolution": self.resolution.value,
+            "acceleration": self.acceleration.value,
             "return_frames_zip": self.return_frames_zip,
+            "video_url": self.video_url,
             "aspect_ratio": self.aspect_ratio.value,
             "enable_safety_checker": self.enable_safety_checker,
             "video_type": self.video_type.value,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_auto_downsample": self.enable_auto_downsample,
             "auto_downsample_min_fps": self.auto_downsample_min_fps,
         }
@@ -8040,21 +8056,21 @@ class FfmpegApiMergeVideos(FALNode):
     - Content repurposing
     """
 
-    target_fps: str = Field(
-        default="", description="Target FPS for the output video. If not provided, uses the lowest FPS from input videos."
+    resolution: str = Field(
+        default="", description="Resolution of the final video. Width and height must be between 512 and 2048."
     )
     video_urls: list[str] = Field(
         default=[], description="List of video URLs to merge in order"
     )
-    resolution: str = Field(
-        default="", description="Resolution of the final video. Width and height must be between 512 and 2048."
+    target_fps: str = Field(
+        default="", description="Target FPS for the output video. If not provided, uses the lowest FPS from input videos."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
-            "target_fps": self.target_fps,
-            "video_urls": self.video_urls,
             "resolution": self.resolution,
+            "video_urls": self.video_urls,
+            "target_fps": self.target_fps,
         }
 
         # Remove None values
@@ -8298,7 +8314,7 @@ class Ltxv13b098DistilledExtend(FALNode):
     temporal_adain_factor: float = Field(
         default=0.5, description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -8633,10 +8649,10 @@ class Ltxv13b098DistilledMulticonditioning(FALNode):
     temporal_adain_factor: float = Field(
         default=0.5, description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
-    images: list[str] = Field(
+    images: list[ImageConditioningInput] = Field(
         default=[], description="URL of images to use as conditioning"
     )
     enable_safety_checker: bool = Field(
@@ -8663,7 +8679,7 @@ class Ltxv13b098DistilledMulticonditioning(FALNode):
     tone_map_compression_ratio: float = Field(
         default=0, description="The compression ratio for tone mapping. This is used to compress the dynamic range of the video to improve visual quality. A value of 0.0 means no compression, while a value of 1.0 means maximum compression."
     )
-    videos: list[str] = Field(
+    videos: list[VideoConditioningInput] = Field(
         default=[], description="Videos to use as conditioning"
     )
     constant_rate_factor: int = Field(
@@ -11037,7 +11053,7 @@ class LtxVideo13bDistilledExtend(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -11155,10 +11171,10 @@ class LtxVideo13bDistilledMulticonditioning(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
-    images: list[str] = Field(
+    images: list[ImageConditioningInput] = Field(
         default=[], description="URL of images to use as conditioning"
     )
     enable_safety_checker: bool = Field(
@@ -11182,7 +11198,7 @@ class LtxVideo13bDistilledMulticonditioning(FALNode):
     constant_rate_factor: int = Field(
         default=35, description="The constant rate factor (CRF) to compress input media with. Compressed input media more closely matches the model's training data, which can improve motion quality."
     )
-    videos: list[str] = Field(
+    videos: list[VideoConditioningInput] = Field(
         default=[], description="Videos to use as conditioning"
     )
     first_pass_skip_final_steps: int = Field(
@@ -11277,10 +11293,10 @@ class LtxVideo13bDevMulticonditioning(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
-    images: list[str] = Field(
+    images: list[ImageConditioningInput] = Field(
         default=[], description="URL of images to use as conditioning"
     )
     enable_safety_checker: bool = Field(
@@ -11301,7 +11317,7 @@ class LtxVideo13bDevMulticonditioning(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.AUTO, description="The aspect ratio of the video."
     )
-    videos: list[str] = Field(
+    videos: list[VideoConditioningInput] = Field(
         default=[], description="Videos to use as conditioning"
     )
     constant_rate_factor: int = Field(
@@ -11399,7 +11415,7 @@ class LtxVideo13bDevExtend(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     second_pass_num_inference_steps: int = Field(
@@ -11517,10 +11533,10 @@ class LtxVideoLoraMulticonditioning(FALNode):
     number_of_frames: int = Field(
         default=89, description="The number of frames in the video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="The LoRA weights to use for generation."
     )
-    images: list[str] = Field(
+    images: list[ImageCondition] = Field(
         default=[], description="The image conditions to use for generation."
     )
     enable_safety_checker: bool = Field(
@@ -11535,7 +11551,7 @@ class LtxVideoLoraMulticonditioning(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the video."
     )
-    videos: list[str] = Field(
+    videos: list[VideoCondition] = Field(
         default=[], description="The video conditions to use for generation."
     )
     seed: int = Field(
@@ -12040,10 +12056,10 @@ class LtxVideoV095Multiconditioning(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt using the model's own capabilities."
     )
-    images: list[str] = Field(
+    images: list[ImageConditioningInput] = Field(
         default=[], description="URL of images to use as conditioning"
     )
-    videos: list[str] = Field(
+    videos: list[VideoConditioningInput] = Field(
         default=[], description="Videos to use as conditioning"
     )
     seed: int = Field(
@@ -12181,7 +12197,7 @@ class HunyuanVideoLoraVideoToVideo(FALNode):
     video_url: VideoRef = Field(
         default=VideoRef(), description="URL of the video"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     strength: float = Field(
@@ -12242,7 +12258,7 @@ class FfmpegApiCompose(FALNode):
     - Content repurposing
     """
 
-    tracks: list[str] = Field(
+    tracks: list[Track] = Field(
         default=[], description="List of tracks to be combined into the final media"
     )
 
@@ -12493,13 +12509,13 @@ class Sam2Video(FALNode):
     video_url: VideoRef = Field(
         default=VideoRef(), description="The URL of the video to be segmented."
     )
-    prompts: list[str] = Field(
+    prompts: list[PointPrompt] = Field(
         default=[], description="List of prompts to segment the video"
     )
     boundingbox_zip: bool = Field(
         default=False, description="Return per-frame bounding box overlays as a zip archive."
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPrompt] = Field(
         default=[], description="Coordinates for boxes"
     )
     apply_mask: bool = Field(

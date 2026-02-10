@@ -515,7 +515,7 @@ class IdeogramV3Edit(FALNode):
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
     mask_url: ImageRef = Field(
@@ -524,7 +524,10 @@ class IdeogramV3Edit(FALNode):
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         mask_url_base64 = await context.image_to_base64(self.mask_url)
         arguments = {
             "prompt": self.prompt,
@@ -537,7 +540,7 @@ class IdeogramV3Edit(FALNode):
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "sync_mode": self.sync_mode,
             "seed": self.seed,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
             "mask_url": f"data:image/png;base64,{mask_url_base64}",
         }
 
@@ -1162,7 +1165,7 @@ class RecraftV3ImageToImage(FALNode):
     strength: float = Field(
         default=0.5, description="Defines the difference with the original image, should lie in [0, 1], where 0 means almost identical, and 1 means miserable similarity"
     )
-    colors: list[str] = Field(
+    colors: list[RGBColor] = Field(
         default=[], description="An array of preferable colors"
     )
     negative_prompt: str = Field(
@@ -1500,7 +1503,7 @@ class HunyuanImageV3InstructEdit(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducible results. If None, a random seed is used."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use as a reference for the generation. A maximum of 2 images are supported."
     )
     guidance_scale: float = Field(
@@ -1508,6 +1511,10 @@ class HunyuanImageV3InstructEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -1516,7 +1523,7 @@ class HunyuanImageV3InstructEdit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "guidance_scale": self.guidance_scale,
         }
 
@@ -1579,7 +1586,7 @@ class QwenImageMaxEdit(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducibility (0-2147483647)."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Reference images for editing (1-3 images required). Order matters: reference as 'image 1', 'image 2', 'image 3' in prompt. Resolution: 384-5000px each dimension. Max size: 10MB each. Formats: JPEG, JPG, PNG (no alpha), WEBP."
     )
     negative_prompt: str = Field(
@@ -1590,6 +1597,10 @@ class QwenImageMaxEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -1598,7 +1609,7 @@ class QwenImageMaxEdit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
         }
@@ -1676,7 +1687,7 @@ class QwenImageEdit2511(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit."
     )
     negative_prompt: str = Field(
@@ -1687,6 +1698,10 @@ class QwenImageEdit2511(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -1697,7 +1712,7 @@ class QwenImageEdit2511(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
         }
@@ -1766,7 +1781,7 @@ class QwenImageEdit2511Lora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -1778,7 +1793,7 @@ class QwenImageEdit2511Lora(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit."
     )
     negative_prompt: str = Field(
@@ -1789,6 +1804,10 @@ class QwenImageEdit2511Lora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -1800,7 +1819,7 @@ class QwenImageEdit2511Lora(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
         }
@@ -1865,7 +1884,7 @@ class QwenImageEdit2511MultipleAngles(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to adjust camera angle for."
     )
     negative_prompt: str = Field(
@@ -1900,13 +1919,17 @@ class QwenImageEdit2511MultipleAngles(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "acceleration": self.acceleration.value,
             "image_size": self.image_size,
             "horizontal_angle": self.horizontal_angle,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "zoom": self.zoom,
             "vertical_angle": self.vertical_angle,
@@ -1990,7 +2013,7 @@ class QwenImageEdit2509(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit."
     )
     negative_prompt: str = Field(
@@ -2001,6 +2024,10 @@ class QwenImageEdit2509(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2011,7 +2038,7 @@ class QwenImageEdit2509(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -2078,7 +2105,7 @@ class QwenImageEdit2509Lora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -2090,7 +2117,7 @@ class QwenImageEdit2509Lora(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit."
     )
     negative_prompt: str = Field(
@@ -2101,6 +2128,10 @@ class QwenImageEdit2509Lora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2112,7 +2143,7 @@ class QwenImageEdit2509Lora(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "guidance_scale": self.guidance_scale,
         }
@@ -2272,7 +2303,7 @@ class QwenImageLayeredLora(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the input image."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     sync_mode: bool = Field(
@@ -2384,7 +2415,7 @@ class Flux2Klein4BBaseEdit(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed."
     )
     negative_prompt: str = Field(
@@ -2395,6 +2426,10 @@ class Flux2Klein4BBaseEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2405,7 +2440,7 @@ class Flux2Klein4BBaseEdit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "seed": self.seed,
         }
@@ -2474,7 +2509,7 @@ class Flux2Klein4BBaseEditLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     sync_mode: bool = Field(
@@ -2486,7 +2521,7 @@ class Flux2Klein4BBaseEditLora(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed."
     )
     negative_prompt: str = Field(
@@ -2497,6 +2532,10 @@ class Flux2Klein4BBaseEditLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2508,7 +2547,7 @@ class Flux2Klein4BBaseEditLora(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "seed": self.seed,
         }
@@ -2586,7 +2625,7 @@ class Flux2Klein9BBaseEdit(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed."
     )
     negative_prompt: str = Field(
@@ -2597,6 +2636,10 @@ class Flux2Klein9BBaseEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2607,7 +2650,7 @@ class Flux2Klein9BBaseEdit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "seed": self.seed,
         }
@@ -2676,7 +2719,7 @@ class Flux2Klein9BBaseEditLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     sync_mode: bool = Field(
@@ -2688,7 +2731,7 @@ class Flux2Klein9BBaseEditLora(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed."
     )
     negative_prompt: str = Field(
@@ -2699,6 +2742,10 @@ class Flux2Klein9BBaseEditLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2710,7 +2757,7 @@ class Flux2Klein9BBaseEditLora(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "seed": self.seed,
         }
@@ -2774,7 +2821,7 @@ class Flux2Klein4BEdit(FALNode):
     num_inference_steps: int = Field(
         default=4, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed."
     )
     seed: int = Field(
@@ -2782,6 +2829,10 @@ class Flux2Klein4BEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2790,7 +2841,7 @@ class Flux2Klein4BEdit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "seed": self.seed,
         }
 
@@ -2853,7 +2904,7 @@ class Flux2Klein9BEdit(FALNode):
     num_inference_steps: int = Field(
         default=4, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed."
     )
     seed: int = Field(
@@ -2861,6 +2912,10 @@ class Flux2Klein9BEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2869,7 +2924,7 @@ class Flux2Klein9BEdit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "seed": self.seed,
         }
 
@@ -2932,7 +2987,7 @@ class Flux2FlashEdit(FALNode):
     seed: int = Field(
         default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used."
     )
     enable_prompt_expansion: bool = Field(
@@ -2943,6 +2998,10 @@ class Flux2FlashEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -2951,7 +3010,7 @@ class Flux2FlashEdit(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "enable_safety_checker": self.enable_safety_checker,
         }
@@ -3015,7 +3074,7 @@ class Flux2TurboEdit(FALNode):
     seed: int = Field(
         default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used."
     )
     enable_prompt_expansion: bool = Field(
@@ -3026,6 +3085,10 @@ class Flux2TurboEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -3034,7 +3097,7 @@ class Flux2TurboEdit(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "enable_safety_checker": self.enable_safety_checker,
         }
@@ -3107,11 +3170,15 @@ class Flux2MaxEdit(FALNode):
     seed: int = Field(
         default=-1, description="The seed to use for the generation."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of URLs of input images for editing"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -3120,7 +3187,7 @@ class Flux2MaxEdit(FALNode):
             "safety_tolerance": self.safety_tolerance.value,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -3194,7 +3261,7 @@ class Flux2FlexEdit(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of URLs of input images for editing"
     )
     enable_safety_checker: bool = Field(
@@ -3205,6 +3272,10 @@ class Flux2FlexEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "guidance_scale": self.guidance_scale,
@@ -3214,7 +3285,7 @@ class Flux2FlexEdit(FALNode):
             "safety_tolerance": self.safety_tolerance.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
         }
@@ -3291,7 +3362,7 @@ class Flux2LoraGalleryVirtualTryon(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images for virtual try-on. Provide person image and clothing image."
     )
     enable_safety_checker: bool = Field(
@@ -3302,6 +3373,10 @@ class Flux2LoraGalleryVirtualTryon(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -3312,7 +3387,7 @@ class Flux2LoraGalleryVirtualTryon(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -3377,7 +3452,7 @@ class Flux2LoraGalleryMultipleAngles(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to adjust camera angle for."
     )
     zoom: float = Field(
@@ -3406,13 +3481,17 @@ class Flux2LoraGalleryMultipleAngles(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "horizontal_angle": self.horizontal_angle,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "zoom": self.zoom,
             "vertical_angle": self.vertical_angle,
             "num_images": self.num_images,
@@ -3495,7 +3574,7 @@ class Flux2LoraGalleryFaceToFullPortrait(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the cropped face image."
     )
     enable_safety_checker: bool = Field(
@@ -3506,6 +3585,10 @@ class Flux2LoraGalleryFaceToFullPortrait(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -3516,7 +3599,7 @@ class Flux2LoraGalleryFaceToFullPortrait(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -3593,7 +3676,7 @@ class Flux2LoraGalleryAddBackground(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images. Provide an image with a white or clean background."
     )
     enable_safety_checker: bool = Field(
@@ -3604,6 +3687,10 @@ class Flux2LoraGalleryAddBackground(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -3614,7 +3701,7 @@ class Flux2LoraGalleryAddBackground(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -4279,7 +4366,7 @@ class GlmImageImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducibility. The same seed with the same prompt will produce the same image."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="URL(s) of the condition image(s) for image-to-image generation. Supports up to 4 URLs for multi-image references."
     )
     enable_prompt_expansion: bool = Field(
@@ -4290,6 +4377,10 @@ class GlmImageImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -4299,7 +4390,7 @@ class GlmImageImageToImage(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -4401,12 +4492,16 @@ class GptImage15Edit(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use as a reference for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         mask_image_url_base64 = await context.image_to_base64(self.mask_image_url)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "background": self.background.value,
             "num_images": self.num_images,
@@ -4417,7 +4512,7 @@ class GptImage15Edit(FALNode):
             "input_fidelity": self.input_fidelity.value,
             "mask_image_url": f"data:image/png;base64,{mask_image_url_base64}",
             "sync_mode": self.sync_mode,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -4587,7 +4682,7 @@ class ZImageTurboImageToImageLora(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     strength: float = Field(
@@ -4799,7 +4894,7 @@ class ZImageTurboInpaintLora(FALNode):
     mask_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of Mask for Inpaint generation."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     control_end: float = Field(
@@ -5047,7 +5142,7 @@ class ZImageTurboControlnetLora(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.REGULAR, description="The acceleration level to use."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     control_end: float = Field(
@@ -5895,7 +5990,7 @@ class WanV26ImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducibility (0-2147483647). Same seed produces more consistent results."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Reference images for editing (1-3 images required). Order matters: reference as 'image 1', 'image 2', 'image 3' in prompt. Resolution: 384-5000px each dimension. Max size: 10MB each. Formats: JPEG, JPG, PNG (no alpha), BMP, WEBP."
     )
     negative_prompt: str = Field(
@@ -5906,13 +6001,17 @@ class WanV26ImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "enable_prompt_expansion": self.enable_prompt_expansion,
         }
@@ -6146,11 +6245,15 @@ class BytedanceSeedreamV45Edit(FALNode):
     seed: int = Field(
         default=-1, description="Random seed to control the stochasticity of image generation."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of URLs of input images for editing. Presently, up to 10 image inputs are allowed. If over 10 images are sent, only the last 10 will be used."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -6159,7 +6262,7 @@ class BytedanceSeedreamV45Edit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -6298,14 +6401,18 @@ class KlingImageO1(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    elements: list[str] = Field(
+    elements: list[ElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the image. Reference in prompt as @Element1, @Element2, etc. Maximum 10 total (elements + reference images)."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of reference images. Reference images in prompt using @Image1, @Image2, etc. (1-indexed). Max 10 images."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -6314,7 +6421,7 @@ class KlingImageO1(FALNode):
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "elements": self.elements,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -6392,7 +6499,7 @@ class QwenImageEdit2509LoraGalleryShirtDesign(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt."
     )
     negative_prompt: str = Field(
@@ -6403,6 +6510,10 @@ class QwenImageEdit2509LoraGalleryShirtDesign(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -6414,7 +6525,7 @@ class QwenImageEdit2509LoraGalleryShirtDesign(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -6488,7 +6599,7 @@ class QwenImageEdit2509LoraGalleryRemoveLighting(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image with lighting/shadows to remove."
     )
     negative_prompt: str = Field(
@@ -6499,6 +6610,10 @@ class QwenImageEdit2509LoraGalleryRemoveLighting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
@@ -6508,7 +6623,7 @@ class QwenImageEdit2509LoraGalleryRemoveLighting(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -6588,7 +6703,7 @@ class QwenImageEdit2509LoraGalleryRemoveElement(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image containing elements to remove."
     )
     negative_prompt: str = Field(
@@ -6599,6 +6714,10 @@ class QwenImageEdit2509LoraGalleryRemoveElement(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -6610,7 +6729,7 @@ class QwenImageEdit2509LoraGalleryRemoveElement(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -6684,7 +6803,7 @@ class QwenImageEdit2509LoraGalleryLightingRestoration(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to restore lighting for."
     )
     negative_prompt: str = Field(
@@ -6695,6 +6814,10 @@ class QwenImageEdit2509LoraGalleryLightingRestoration(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
@@ -6704,7 +6827,7 @@ class QwenImageEdit2509LoraGalleryLightingRestoration(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -6784,7 +6907,7 @@ class QwenImageEdit2509LoraGalleryIntegrateProduct(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image with product to integrate into background."
     )
     negative_prompt: str = Field(
@@ -6795,6 +6918,10 @@ class QwenImageEdit2509LoraGalleryIntegrateProduct(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -6806,7 +6933,7 @@ class QwenImageEdit2509LoraGalleryIntegrateProduct(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -6886,7 +7013,7 @@ class QwenImageEdit2509LoraGalleryGroupPhoto(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images."
     )
     negative_prompt: str = Field(
@@ -6897,6 +7024,10 @@ class QwenImageEdit2509LoraGalleryGroupPhoto(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -6908,7 +7039,7 @@ class QwenImageEdit2509LoraGalleryGroupPhoto(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -6988,7 +7119,7 @@ class QwenImageEdit2509LoraGalleryFaceToFullPortrait(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the cropped face image. Provide a close-up face photo."
     )
     negative_prompt: str = Field(
@@ -6999,6 +7130,10 @@ class QwenImageEdit2509LoraGalleryFaceToFullPortrait(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -7010,7 +7145,7 @@ class QwenImageEdit2509LoraGalleryFaceToFullPortrait(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -7090,7 +7225,7 @@ class QwenImageEdit2509LoraGalleryAddBackground(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit. Provide an image with a white or clean background."
     )
     negative_prompt: str = Field(
@@ -7101,6 +7236,10 @@ class QwenImageEdit2509LoraGalleryAddBackground(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -7112,7 +7251,7 @@ class QwenImageEdit2509LoraGalleryAddBackground(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -7192,7 +7331,7 @@ class QwenImageEdit2509LoraGalleryNextScene(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to create the next scene from."
     )
     negative_prompt: str = Field(
@@ -7203,6 +7342,10 @@ class QwenImageEdit2509LoraGalleryNextScene(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -7214,7 +7357,7 @@ class QwenImageEdit2509LoraGalleryNextScene(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -7279,7 +7422,7 @@ class QwenImageEdit2509LoraGalleryMultipleAngles(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker for the generated image."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to adjust camera angle for."
     )
     negative_prompt: str = Field(
@@ -7314,13 +7457,17 @@ class QwenImageEdit2509LoraGalleryMultipleAngles(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "image_size": self.image_size,
             "wide_angle_lens": self.wide_angle_lens,
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "vertical_angle": self.vertical_angle,
             "num_images": self.num_images,
@@ -7402,7 +7549,7 @@ class QwenImageEditPlusLoraGalleryLightingRestoration(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to restore lighting for."
     )
     negative_prompt: str = Field(
@@ -7413,6 +7560,10 @@ class QwenImageEditPlusLoraGalleryLightingRestoration(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
@@ -7422,7 +7573,7 @@ class QwenImageEditPlusLoraGalleryLightingRestoration(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -7552,7 +7703,7 @@ class Flux2LoraGalleryApartmentStaging(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the empty room image to furnish."
     )
     enable_safety_checker: bool = Field(
@@ -7563,6 +7714,10 @@ class Flux2LoraGalleryApartmentStaging(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -7573,7 +7728,7 @@ class Flux2LoraGalleryApartmentStaging(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -7673,7 +7828,7 @@ class ChronoEditLora(FALNode):
     prompt: str = Field(
         default="", description="The prompt to edit the image."
     )
-    loras: list[str] = Field(
+    loras: list[ChronoLoraWeight] = Field(
         default=[], description="Optional additional LoRAs to merge for this request (max 3)."
     )
     turbo_mode: bool = Field(
@@ -7798,7 +7953,7 @@ class ChronoEditLoraGalleryPaintbrush(FALNode):
     turbo_mode: bool = Field(
         default=True, description="Enable turbo mode to use faster inference."
     )
-    loras: list[str] = Field(
+    loras: list[ChronoLoraWeight] = Field(
         default=[], description="Optional additional LoRAs to merge (max 3)."
     )
     guidance_scale: float = Field(
@@ -7886,7 +8041,7 @@ class ChronoEditLoraGalleryUpscaler(FALNode):
     sync_mode: bool = Field(
         default=False, description="Whether to return the image in sync mode."
     )
-    loras: list[str] = Field(
+    loras: list[ChronoLoraWeight] = Field(
         default=[], description="Optional additional LoRAs to merge (max 3)."
     )
     upscale_factor: float = Field(
@@ -7976,7 +8131,7 @@ class Sam3ImageRle(FALNode):
     sync_mode: bool = Field(
         default=False, description="If True, the media will be returned as a data URI."
     )
-    point_prompts: list[str] = Field(
+    point_prompts: list[PointPrompt] = Field(
         default=[], description="List of point prompts"
     )
     include_scores: bool = Field(
@@ -7985,7 +8140,7 @@ class Sam3ImageRle(FALNode):
     max_masks: int = Field(
         default=3, description="Maximum number of masks to return when `return_multiple_masks` is enabled."
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPrompt] = Field(
         default=[], description="Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects."
     )
     apply_mask: bool = Field(
@@ -8066,7 +8221,7 @@ class Sam3Image(FALNode):
     sync_mode: bool = Field(
         default=False, description="If True, the media will be returned as a data URI."
     )
-    point_prompts: list[str] = Field(
+    point_prompts: list[PointPrompt] = Field(
         default=[], description="List of point prompts"
     )
     include_scores: bool = Field(
@@ -8075,7 +8230,7 @@ class Sam3Image(FALNode):
     max_masks: int = Field(
         default=3, description="Maximum number of masks to return when `return_multiple_masks` is enabled."
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPrompt] = Field(
         default=[], description="Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects."
     )
     apply_mask: bool = Field(
@@ -8184,7 +8339,7 @@ class Gemini3ProImagePreviewEdit(FALNode):
     seed: str = Field(
         default="", description="The seed for the random number generator."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use for image-to-image generation or image editing."
     )
     limit_generations: bool = Field(
@@ -8192,6 +8347,10 @@ class Gemini3ProImagePreviewEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -8202,7 +8361,7 @@ class Gemini3ProImagePreviewEdit(FALNode):
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "limit_generations": self.limit_generations,
         }
 
@@ -8293,11 +8452,15 @@ class NanoBananaProEdit(FALNode):
     limit_generations: bool = Field(
         default=False, description="Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use for image-to-image generation or image editing."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -8309,7 +8472,7 @@ class NanoBananaProEdit(FALNode):
             "safety_tolerance": self.safety_tolerance.value,
             "seed": self.seed,
             "limit_generations": self.limit_generations,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -8372,7 +8535,7 @@ class QwenImageEditPlusLoraGalleryMultipleAngles(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker for the generated image."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to adjust camera angle for."
     )
     negative_prompt: str = Field(
@@ -8407,13 +8570,17 @@ class QwenImageEditPlusLoraGalleryMultipleAngles(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "image_size": self.image_size,
             "wide_angle_lens": self.wide_angle_lens,
             "acceleration": self.acceleration.value,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "vertical_angle": self.vertical_angle,
             "num_images": self.num_images,
@@ -8501,7 +8668,7 @@ class QwenImageEditPlusLoraGalleryShirtDesign(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt."
     )
     negative_prompt: str = Field(
@@ -8512,6 +8679,10 @@ class QwenImageEditPlusLoraGalleryShirtDesign(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -8523,7 +8694,7 @@ class QwenImageEditPlusLoraGalleryShirtDesign(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -8597,7 +8768,7 @@ class QwenImageEditPlusLoraGalleryRemoveLighting(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image with lighting/shadows to remove."
     )
     negative_prompt: str = Field(
@@ -8608,6 +8779,10 @@ class QwenImageEditPlusLoraGalleryRemoveLighting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
@@ -8617,7 +8792,7 @@ class QwenImageEditPlusLoraGalleryRemoveLighting(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -8697,7 +8872,7 @@ class QwenImageEditPlusLoraGalleryRemoveElement(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image containing elements to remove."
     )
     negative_prompt: str = Field(
@@ -8708,6 +8883,10 @@ class QwenImageEditPlusLoraGalleryRemoveElement(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -8719,7 +8898,7 @@ class QwenImageEditPlusLoraGalleryRemoveElement(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -8799,7 +8978,7 @@ class QwenImageEditPlusLoraGalleryNextScene(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image to create the next scene from."
     )
     negative_prompt: str = Field(
@@ -8810,6 +8989,10 @@ class QwenImageEditPlusLoraGalleryNextScene(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -8821,7 +9004,7 @@ class QwenImageEditPlusLoraGalleryNextScene(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -8901,7 +9084,7 @@ class QwenImageEditPlusLoraGalleryIntegrateProduct(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the image with product to integrate into background."
     )
     negative_prompt: str = Field(
@@ -8912,6 +9095,10 @@ class QwenImageEditPlusLoraGalleryIntegrateProduct(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -8923,7 +9110,7 @@ class QwenImageEditPlusLoraGalleryIntegrateProduct(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -9003,7 +9190,7 @@ class QwenImageEditPlusLoraGalleryGroupPhoto(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images."
     )
     negative_prompt: str = Field(
@@ -9014,6 +9201,10 @@ class QwenImageEditPlusLoraGalleryGroupPhoto(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -9025,7 +9216,7 @@ class QwenImageEditPlusLoraGalleryGroupPhoto(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -9105,7 +9296,7 @@ class QwenImageEditPlusLoraGalleryFaceToFullPortrait(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URL of the cropped face image. Provide a close-up face photo."
     )
     negative_prompt: str = Field(
@@ -9116,6 +9307,10 @@ class QwenImageEditPlusLoraGalleryFaceToFullPortrait(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -9127,7 +9322,7 @@ class QwenImageEditPlusLoraGalleryFaceToFullPortrait(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -9207,7 +9402,7 @@ class QwenImageEditPlusLoraGalleryAddBackground(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. Same seed with same prompt will produce same result."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit. Provide an image with a white or clean background."
     )
     negative_prompt: str = Field(
@@ -9218,6 +9413,10 @@ class QwenImageEditPlusLoraGalleryAddBackground(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -9229,7 +9428,7 @@ class QwenImageEditPlusLoraGalleryAddBackground(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -9299,18 +9498,22 @@ class ReveFastRemix(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="Output format for the generated image."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "sync_mode": self.sync_mode,
             "output_format": self.output_format.value,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -9813,11 +10016,15 @@ class GptImage1MiniEdit(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use as a reference for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "background": self.background.value,
             "num_images": self.num_images,
@@ -9826,7 +10033,7 @@ class GptImage1MiniEdit(FALNode):
             "quality": self.quality.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -9894,18 +10101,22 @@ class ReveRemix(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="Output format for the generated image."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
             "sync_mode": self.sync_mode,
             "output_format": self.output_format.value,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -10134,14 +10345,18 @@ class Dreamomni2Edit(FALNode):
     prompt: str = Field(
         default="", description="The prompt to edit the image."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of URLs of input images for editing."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -10206,7 +10421,7 @@ class QwenImageEditPlusLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -10218,7 +10433,7 @@ class QwenImageEditPlusLora(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit."
     )
     negative_prompt: str = Field(
@@ -10229,6 +10444,10 @@ class QwenImageEditPlusLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -10240,7 +10459,7 @@ class QwenImageEditPlusLora(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "guidance_scale": self.guidance_scale,
         }
@@ -10453,7 +10672,7 @@ class Wan25PreviewImageToImage(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="URLs of images to edit. For single-image editing, provide 1 URL. For multi-reference generation, provide up to 2 URLs. If more than 2 URLs are provided, only the first 2 will be used."
     )
     negative_prompt: str = Field(
@@ -10461,13 +10680,17 @@ class Wan25PreviewImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -10542,7 +10765,7 @@ class QwenImageEditPlus(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to edit."
     )
     negative_prompt: str = Field(
@@ -10553,6 +10776,10 @@ class QwenImageEditPlus(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -10563,7 +10790,7 @@ class QwenImageEditPlus(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
         }
@@ -12080,7 +12307,7 @@ class QwenImageEditLora(FALNode):
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
     guidance_scale: float = Field(
@@ -12237,11 +12464,15 @@ class BytedanceSeedreamV4Edit(FALNode):
     seed: int = Field(
         default=-1, description="Random seed to control the stochasticity of image generation."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of URLs of input images for editing. Presently, up to 10 image inputs are allowed. If over 10 images are sent, only the last 10 will be used."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -12251,7 +12482,7 @@ class BytedanceSeedreamV4Edit(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -12534,7 +12765,7 @@ class Gemini25FlashImageEdit(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use for image-to-image generation or image editing."
     )
     limit_generations: bool = Field(
@@ -12542,13 +12773,17 @@ class Gemini25FlashImageEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "limit_generations": self.limit_generations,
         }
 
@@ -12606,7 +12841,7 @@ class QwenImageImageToImage(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image. By default, we will use the provided image for determining the image_size."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
@@ -12843,7 +13078,7 @@ class NanoBananaEdit(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use for image-to-image generation or image editing."
     )
     limit_generations: bool = Field(
@@ -12851,13 +13086,17 @@ class NanoBananaEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "limit_generations": self.limit_generations,
         }
 
@@ -13069,7 +13308,7 @@ class IdeogramCharacterEdit(FALNode):
     reference_image_urls: list[str] = Field(
         default=[], description="A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format"
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
     num_images: int = Field(
@@ -13095,7 +13334,10 @@ class IdeogramCharacterEdit(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         image_url_base64 = await context.image_to_base64(self.image_url)
         mask_url_base64 = await context.image_to_base64(self.mask_url)
         arguments = {
@@ -13105,7 +13347,7 @@ class IdeogramCharacterEdit(FALNode):
             "rendering_speed": self.rendering_speed.value,
             "reference_mask_urls": self.reference_mask_urls,
             "reference_image_urls": self.reference_image_urls,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
             "num_images": self.num_images,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "style_codes": self.style_codes,
@@ -13182,7 +13424,7 @@ class IdeogramCharacter(FALNode):
     reference_image_urls: list[str] = Field(
         default=[], description="A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format"
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
     negative_prompt: str = Field(
@@ -13191,21 +13433,24 @@ class IdeogramCharacter(FALNode):
     num_images: int = Field(
         default=1, description="Number of images to generate."
     )
-    style_codes: str = Field(
-        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     color_palette: str = Field(
         default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
     )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -13214,12 +13459,12 @@ class IdeogramCharacter(FALNode):
             "rendering_speed": self.rendering_speed.value,
             "reference_mask_urls": self.reference_mask_urls,
             "reference_image_urls": self.reference_image_urls,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
-            "style_codes": self.style_codes,
-            "color_palette": self.color_palette,
             "sync_mode": self.sync_mode,
+            "color_palette": self.color_palette,
+            "style_codes": self.style_codes,
             "seed": self.seed,
         }
 
@@ -13290,7 +13535,7 @@ class IdeogramCharacterRemix(FALNode):
     reference_image_urls: list[str] = Field(
         default=[], description="A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format"
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
     negative_prompt: str = Field(
@@ -13302,24 +13547,27 @@ class IdeogramCharacterRemix(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
-    style_codes: str = Field(
-        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     color_palette: str = Field(
         default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
     )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
-    )
     strength: float = Field(
         default=0.8, description="Strength of the input image in the remix"
+    )
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
             "prompt": self.prompt,
@@ -13329,14 +13577,14 @@ class IdeogramCharacterRemix(FALNode):
             "rendering_speed": self.rendering_speed.value,
             "reference_mask_urls": self.reference_mask_urls,
             "reference_image_urls": self.reference_image_urls,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "image_url": f"data:image/png;base64,{image_url_base64}",
-            "style_codes": self.style_codes,
-            "color_palette": self.color_palette,
             "sync_mode": self.sync_mode,
+            "color_palette": self.color_palette,
             "strength": self.strength,
+            "style_codes": self.style_codes,
             "seed": self.seed,
         }
 
@@ -13392,7 +13640,7 @@ class FluxKreaLoraInpainting(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -13487,7 +13735,7 @@ class FluxKreaLoraImageToImage(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -13952,7 +14200,7 @@ class FluxKontextLoraInpaint(FALNode):
     reference_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the reference image for inpainting."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     guidance_scale: float = Field(
@@ -15463,11 +15711,11 @@ class TopazUpscaleImage(FALNode):
         BACKGROUND = "Background"
 
 
-    face_enhancement_creativity: float = Field(
-        default=0, description="Creativity level for face enhancement. 0.0 means no creativity, 1.0 means maximum creativity. Ignored if face ehnancement is disabled."
-    )
     face_enhancement_strength: float = Field(
         default=0.8, description="Strength of the face enhancement. 0.0 means no enhancement, 1.0 means maximum enhancement. Ignored if face ehnancement is disabled."
+    )
+    face_enhancement_creativity: float = Field(
+        default=0, description="Creativity level for face enhancement. 0.0 means no creativity, 1.0 means maximum creativity. Ignored if face ehnancement is disabled."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="Output format of the upscaled image."
@@ -15494,8 +15742,8 @@ class TopazUpscaleImage(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
-            "face_enhancement_creativity": self.face_enhancement_creativity,
             "face_enhancement_strength": self.face_enhancement_strength,
+            "face_enhancement_creativity": self.face_enhancement_creativity,
             "output_format": self.output_format.value,
             "face_enhancement": self.face_enhancement,
             "image_url": f"data:image/png;base64,{image_url_base64}",
@@ -15778,7 +16026,7 @@ class FluxKontextLora(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to edit. Max width: 14142px, Max height: 14142px, Timeout: 20s"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -16097,7 +16345,7 @@ class ObjectRemovalBbox(FALNode):
     mask_expansion: int = Field(
         default=15, description="Amount of pixels to expand the mask by. Range: 0-50"
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BBoxPromptBase] = Field(
         default=[], description="List of bounding box coordinates to erase (only one box prompt is supported)"
     )
     image_url: ImageRef = Field(
@@ -18690,11 +18938,11 @@ class FluxProKontextMaxMulti(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
-    )
     aspect_ratio: AspectRatio | None = Field(
         default=None, description="The aspect ratio of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -18711,7 +18959,7 @@ class FluxProKontextMaxMulti(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Image prompt for the omni model."
     )
     enhance_prompt: bool = Field(
@@ -18719,16 +18967,20 @@ class FluxProKontextMaxMulti(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "num_images": self.num_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enhance_prompt": self.enhance_prompt,
         }
 
@@ -18797,11 +19049,11 @@ class FluxProKontextMulti(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
-    )
     aspect_ratio: AspectRatio | None = Field(
         default=None, description="The aspect ratio of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -18818,7 +19070,7 @@ class FluxProKontextMulti(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Image prompt for the omni model."
     )
     enhance_prompt: bool = Field(
@@ -18826,16 +19078,20 @@ class FluxProKontextMulti(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "num_images": self.num_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "enhance_prompt": self.enhance_prompt,
         }
 
@@ -18904,11 +19160,11 @@ class FluxProKontextMax(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
-    )
     aspect_ratio: AspectRatio | None = Field(
         default=None, description="The aspect ratio of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -18936,8 +19192,8 @@ class FluxProKontextMax(FALNode):
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value if self.aspect_ratio else None,
+            "num_images": self.num_images,
             "output_format": self.output_format.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "sync_mode": self.sync_mode,
@@ -19294,17 +19550,17 @@ class MinimaxImage01SubjectReference(FALNode):
         RATIO_21_9 = "21:9"
 
 
-    prompt_optimizer: bool = Field(
-        default=False, description="Whether to enable automatic prompt optimization"
+    prompt: str = Field(
+        default="", description="Text prompt for image generation (max 1500 characters)"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate (1-9)"
     )
+    prompt_optimizer: bool = Field(
+        default=False, description="Whether to enable automatic prompt optimization"
+    )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_1_1, description="Aspect ratio of the generated image"
-    )
-    prompt: str = Field(
-        default="", description="Text prompt for image generation (max 1500 characters)"
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the subject reference image to use for consistent character appearance"
@@ -19313,10 +19569,10 @@ class MinimaxImage01SubjectReference(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
-            "num_images": self.num_images,
-            "aspect_ratio": self.aspect_ratio.value,
             "prompt": self.prompt,
+            "num_images": self.num_images,
+            "prompt_optimizer": self.prompt_optimizer,
+            "aspect_ratio": self.aspect_ratio.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
         }
 
@@ -19375,7 +19631,7 @@ class HidreamI1FullImageToImage(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="A list of LoRAs to apply to the model. Each LoRA specifies its path, scale, and optional weight name."
     )
     strength: float = Field(
@@ -19468,40 +19724,43 @@ class IdeogramV3Reframe(FALNode):
     rendering_speed: RenderingSpeed = Field(
         default=RenderingSpeed.BALANCED, description="The rendering speed to use."
     )
-    style_codes: str = Field(
-        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     color_palette: str = Field(
         default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
     )
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    )
     image_url: ImageRef = Field(
         default=ImageRef(), description="The image URL to reframe"
-    )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "num_images": self.num_images,
             "image_size": self.image_size,
             "style": self.style,
             "style_preset": self.style_preset,
             "rendering_speed": self.rendering_speed.value,
-            "style_codes": self.style_codes,
-            "color_palette": self.color_palette,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
             "sync_mode": self.sync_mode,
+            "color_palette": self.color_palette,
+            "style_codes": self.style_codes,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
             "seed": self.seed,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -19560,28 +19819,31 @@ class IdeogramV3ReplaceBackground(FALNode):
     rendering_speed: RenderingSpeed = Field(
         default=RenderingSpeed.BALANCED, description="The rendering speed to use."
     )
-    style_codes: str = Field(
-        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     color_palette: str = Field(
         default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
     )
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    )
     image_url: ImageRef = Field(
         default=ImageRef(), description="The image URL whose background needs to be replaced"
-    )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -19589,12 +19851,12 @@ class IdeogramV3ReplaceBackground(FALNode):
             "style_preset": self.style_preset,
             "expand_prompt": self.expand_prompt,
             "rendering_speed": self.rendering_speed.value,
-            "style_codes": self.style_codes,
-            "color_palette": self.color_palette,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
             "sync_mode": self.sync_mode,
+            "color_palette": self.color_palette,
+            "style_codes": self.style_codes,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
             "seed": self.seed,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -19650,7 +19912,7 @@ class IdeogramV3Remix(FALNode):
     rendering_speed: RenderingSpeed = Field(
         default=RenderingSpeed.BALANCED, description="The rendering speed to use."
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
     negative_prompt: str = Field(
@@ -19662,24 +19924,27 @@ class IdeogramV3Remix(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="The image URL to remix"
     )
-    strength: float = Field(
-        default=0.8, description="Strength of the input image in the remix"
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     color_palette: str = Field(
         default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
     )
+    strength: float = Field(
+        default=0.8, description="Strength of the input image in the remix"
+    )
     style_codes: str = Field(
         default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
-    )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
             "prompt": self.prompt,
@@ -19687,14 +19952,14 @@ class IdeogramV3Remix(FALNode):
             "style": self.style,
             "expand_prompt": self.expand_prompt,
             "rendering_speed": self.rendering_speed.value,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
             "image_url": f"data:image/png;base64,{image_url_base64}",
-            "strength": self.strength,
-            "color_palette": self.color_palette,
-            "style_codes": self.style_codes,
             "sync_mode": self.sync_mode,
+            "color_palette": self.color_palette,
+            "strength": self.strength,
+            "style_codes": self.style_codes,
             "seed": self.seed,
         }
 
@@ -20059,11 +20324,15 @@ class GptImage1EditImage(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="The URLs of the images to use as a reference for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -20073,7 +20342,7 @@ class GptImage1EditImage(FALNode):
             "output_format": self.output_format.value,
             "background": self.background.value,
             "sync_mode": self.sync_mode,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -20128,7 +20397,7 @@ class RundiffusionFalJuggernautFluxLoraInpainting(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -20618,7 +20887,7 @@ class FinegrainEraserBbox(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducible generation"
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPromptBase] = Field(
         default=[], description="List of bounding box coordinates to erase (only one box prompt is supported)"
     )
     image_url: ImageRef = Field(
@@ -22312,7 +22581,7 @@ class FluxControlLoraCannyImageToImage(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
@@ -22412,14 +22681,14 @@ class FluxControlLoraDepthImageToImage(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
-    )
-    guidance_scale: float = Field(
-        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
@@ -22430,20 +22699,20 @@ class FluxControlLoraDepthImageToImage(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
     )
-    strength: float = Field(
-        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
-    )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    control_lora_image_url: ImageRef = Field(
-        default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
+    strength: float = Field(
+        default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
     )
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    control_lora_image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -22454,16 +22723,16 @@ class FluxControlLoraDepthImageToImage(FALNode):
             "control_lora_strength": self.control_lora_strength,
             "image_size": self.image_size,
             "loras": self.loras,
-            "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
-            "strength": self.strength,
             "sync_mode": self.sync_mode,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
+            "strength": self.strength,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
         }
 
         # Remove None values
@@ -22629,7 +22898,7 @@ class FluxLoraCanny(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for canny input"
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -22801,11 +23070,11 @@ class MoondreamNextDetection(FALNode):
         GAZE_DETECTION = "gaze_detection"
 
 
-    image_url: ImageRef = Field(
-        default=ImageRef(), description="Image URL to be processed"
-    )
     detection_prompt: str = Field(
         default="", description="Text description of what to detect"
+    )
+    use_ensemble: bool = Field(
+        default=False, description="Whether to use ensemble for gaze detection"
     )
     task_type: TaskType = Field(
         default="", description="Type of detection to perform"
@@ -22816,19 +23085,19 @@ class MoondreamNextDetection(FALNode):
     combine_points: bool = Field(
         default=False, description="Whether to combine points into a single point for point detection. This has no effect for bbox detection or gaze detection."
     )
-    use_ensemble: bool = Field(
-        default=False, description="Whether to use ensemble for gaze detection"
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="Image URL to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
-            "image_url": f"data:image/png;base64,{image_url_base64}",
             "detection_prompt": self.detection_prompt,
+            "use_ensemble": self.use_ensemble,
             "task_type": self.task_type.value,
             "show_visualization": self.show_visualization,
             "combine_points": self.combine_points,
-            "use_ensemble": self.use_ensemble,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
         }
 
         # Remove None values
@@ -23314,7 +23583,7 @@ class FluxLoraFill(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
@@ -23852,11 +24121,11 @@ class FluxProV11Redux(FALNode):
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
-    )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     enhance_prompt: bool = Field(
         default=False, description="Whether to enhance the prompt for better results."
@@ -23873,8 +24142,8 @@ class FluxProV11Redux(FALNode):
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "enhance_prompt": self.enhance_prompt,
         }
 
@@ -23930,23 +24199,23 @@ class FluxLoraDepth(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for depth input"
     )
+    loras: list[LoraWeight] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
-        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
-    )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
-    )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    guidance_scale: float = Field(
-        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -23957,12 +24226,12 @@ class FluxLoraDepth(FALNode):
             "image_size": self.image_size,
             "output_format": self.output_format.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
-            "sync_mode": self.sync_mode,
             "loras": self.loras,
-            "enable_safety_checker": self.enable_safety_checker,
-            "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
+            "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
@@ -24016,14 +24285,14 @@ class FluxProV11UltraRedux(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
-    )
     aspect_ratio: str = Field(
         default="16:9", description="The aspect ratio of the generated image."
     )
-    enhance_prompt: bool = Field(
-        default=False, description="Whether to enhance the prompt for better results."
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    raw: bool = Field(
+        default=False, description="Generate less processed, more natural-looking images."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -24037,34 +24306,34 @@ class FluxProV11UltraRedux(FALNode):
     safety_tolerance: SafetyTolerance = Field(
         default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
-    image_prompt_strength: float = Field(
-        default=0.1, description="The strength of the image prompt, between 0 and 1."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    image_prompt_strength: float = Field(
+        default=0.1, description="The strength of the image prompt, between 0 and 1."
     )
-    raw: bool = Field(
-        default=False, description="Generate less processed, more natural-looking images."
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio,
-            "enhance_prompt": self.enhance_prompt,
+            "num_images": self.num_images,
+            "raw": self.raw,
             "output_format": self.output_format.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
-            "image_prompt_strength": self.image_prompt_strength,
-            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
-            "raw": self.raw,
+            "seed": self.seed,
+            "image_prompt_strength": self.image_prompt_strength,
+            "enhance_prompt": self.enhance_prompt,
         }
 
         # Remove None values
@@ -24674,19 +24943,19 @@ class FluxGeneralRfInversion(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    control_loras: list[str] = Field(
+    control_loras: list[ControlLoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     controller_guidance_reverse: float = Field(
         default=0.75, description="The controller guidance (eta) used in the denoising process.Using values closer to 1 will result in an image closer to input."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     reverse_guidance_start: int = Field(
         default=0, description="Timestep to start guidance during reverse process."
     )
-    easycontrols: list[str] = Field(
+    easycontrols: list[EasyControlWeight] = Field(
         default=[], description="EasyControl Inputs to use for image generation."
     )
     guidance_scale: float = Field(
@@ -24740,7 +25009,7 @@ class FluxGeneralRfInversion(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    controlnet_unions: list[str] = Field(
+    controlnet_unions: list[ControlNetUnion] = Field(
         default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
     )
     negative_prompt: str = Field(
@@ -24770,7 +25039,7 @@ class FluxGeneralRfInversion(FALNode):
     reference_start: float = Field(
         default=0, description="The percentage of the total timesteps when the reference guidance is to bestarted."
     )
-    controlnets: list[str] = Field(
+    controlnets: list[ControlNet] = Field(
         default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
     )
 
@@ -25304,10 +25573,10 @@ class Sam2Image(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    prompts: list[str] = Field(
+    prompts: list[PointPrompt] = Field(
         default=[], description="List of prompts to segment the image"
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPrompt] = Field(
         default=[], description="Coordinates for boxes"
     )
     apply_mask: bool = Field(
@@ -25387,16 +25656,16 @@ class FluxGeneralInpainting(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    control_loras: list[str] = Field(
+    control_loras: list[ControlLoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     scheduler: Scheduler = Field(
         default=Scheduler.EULER, description="Scheduler for the denoising process."
     )
-    easycontrols: list[str] = Field(
+    easycontrols: list[EasyControlWeight] = Field(
         default=[], description="EasyControl Inputs to use for image generation."
     )
     guidance_scale: float = Field(
@@ -25444,7 +25713,7 @@ class FluxGeneralInpainting(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    controlnet_unions: list[str] = Field(
+    controlnet_unions: list[ControlNetUnion] = Field(
         default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
     )
     negative_prompt: str = Field(
@@ -25459,7 +25728,7 @@ class FluxGeneralInpainting(FALNode):
     use_beta_schedule: bool = Field(
         default=False, description="Specifies whether beta sigmas ought to be used."
     )
-    ip_adapters: list[str] = Field(
+    ip_adapters: list[IPAdapter] = Field(
         default=[], description="IP-Adapter to use for image generation."
     )
     base_shift: float = Field(
@@ -25477,7 +25746,7 @@ class FluxGeneralInpainting(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    controlnets: list[str] = Field(
+    controlnets: list[ControlNet] = Field(
         default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
     )
     reference_start: float = Field(
@@ -25588,16 +25857,16 @@ class FluxGeneralImageToImage(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    control_loras: list[str] = Field(
+    control_loras: list[ControlLoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     scheduler: Scheduler = Field(
         default=Scheduler.EULER, description="Scheduler for the denoising process."
     )
-    easycontrols: list[str] = Field(
+    easycontrols: list[EasyControlWeight] = Field(
         default=[], description="EasyControl Inputs to use for image generation."
     )
     guidance_scale: float = Field(
@@ -25642,7 +25911,7 @@ class FluxGeneralImageToImage(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    controlnet_unions: list[str] = Field(
+    controlnet_unions: list[ControlNetUnion] = Field(
         default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
     )
     negative_prompt: str = Field(
@@ -25657,7 +25926,7 @@ class FluxGeneralImageToImage(FALNode):
     use_beta_schedule: bool = Field(
         default=False, description="Specifies whether beta sigmas ought to be used."
     )
-    ip_adapters: list[str] = Field(
+    ip_adapters: list[IPAdapter] = Field(
         default=[], description="IP-Adapter to use for image generation."
     )
     base_shift: float = Field(
@@ -25675,7 +25944,7 @@ class FluxGeneralImageToImage(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    controlnets: list[str] = Field(
+    controlnets: list[ControlNet] = Field(
         default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
     )
     reference_start: float = Field(
@@ -25785,16 +26054,16 @@ class FluxGeneralDifferentialDiffusion(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    control_loras: list[str] = Field(
+    control_loras: list[ControlLoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     scheduler: Scheduler = Field(
         default=Scheduler.EULER, description="Scheduler for the denoising process."
     )
-    easycontrols: list[str] = Field(
+    easycontrols: list[EasyControlWeight] = Field(
         default=[], description="EasyControl Inputs to use for image generation."
     )
     guidance_scale: float = Field(
@@ -25839,7 +26108,7 @@ class FluxGeneralDifferentialDiffusion(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    controlnet_unions: list[str] = Field(
+    controlnet_unions: list[ControlNetUnion] = Field(
         default=[], description="The controlnet unions to use for the image generation. Only one controlnet is supported at the moment."
     )
     negative_prompt: str = Field(
@@ -25857,7 +26126,7 @@ class FluxGeneralDifferentialDiffusion(FALNode):
     use_beta_schedule: bool = Field(
         default=False, description="Specifies whether beta sigmas ought to be used."
     )
-    ip_adapters: list[str] = Field(
+    ip_adapters: list[IPAdapter] = Field(
         default=[], description="IP-Adapter to use for image generation."
     )
     base_shift: float = Field(
@@ -25875,7 +26144,7 @@ class FluxGeneralDifferentialDiffusion(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    controlnets: list[str] = Field(
+    controlnets: list[ControlNet] = Field(
         default=[], description="The controlnets to use for the image generation. Only one controlnet is supported at the moment."
     )
     reference_start: float = Field(
@@ -25986,7 +26255,7 @@ class FluxLoraImageToImage(FALNode):
     strength: float = Field(
         default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     guidance_scale: float = Field(
@@ -26075,13 +26344,13 @@ class SdxlControlnetUnionInpainting(FALNode):
     normal_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     teed_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -26255,13 +26524,13 @@ class SdxlControlnetUnionImageToImage(FALNode):
     normal_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     teed_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -26931,7 +27200,7 @@ class Sd15DepthControlnet(FALNode):
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -27144,17 +27413,17 @@ class IpAdapterFaceId(FALNode):
     height: int = Field(
         default=512, description="The height of the generated image."
     )
-    num_samples: int = Field(
-        default=4, description="The number of samples for face id. The more samples the better the image will be but it will also take longer to generate. Default is 4."
-    )
     base_sdxl_model_repo: str = Field(
         default="SG161222/RealVisXL_V3.0", description="The URL to the base SDXL model. Default is SG161222/RealVisXL_V3.0"
+    )
+    num_samples: int = Field(
+        default=4, description="The number of samples for face id. The more samples the better the image will be but it will also take longer to generate. Default is 4."
     )
     base_1_5_model_repo: str = Field(
         default="SG161222/Realistic_Vision_V4.0_noVAE", description="The URL to the base 1.5 model. Default is SG161222/Realistic_Vision_V4.0_noVAE"
     )
-    num_inference_steps: int = Field(
-        default=50, description="The number of inference steps to use for generating the image. The more steps the better the image will be but it will also take longer to generate."
+    seed: int = Field(
+        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
     model_type: ModelType = Field(
         default=ModelType.VALUE_1_5_V1, description="The model type to use. 1_5 is the default and is recommended for most use cases."
@@ -27162,8 +27431,8 @@ class IpAdapterFaceId(FALNode):
     face_images_data_url: ImageRef = Field(
         default=ImageRef(), description="URL to zip archive with images of faces. The images embedding will be averaged to create a more accurate face id."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    num_inference_steps: int = Field(
+        default=50, description="The number of inference steps to use for generating the image. The more steps the better the image will be but it will also take longer to generate."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
@@ -27177,13 +27446,13 @@ class IpAdapterFaceId(FALNode):
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
             "height": self.height,
-            "num_samples": self.num_samples,
             "base_sdxl_model_repo": self.base_sdxl_model_repo,
+            "num_samples": self.num_samples,
             "base_1_5_model_repo": self.base_1_5_model_repo,
-            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
             "model_type": self.model_type.value,
             "face_images_data_url": f"data:image/png;base64,{face_images_data_url_base64}",
-            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
@@ -27254,7 +27523,7 @@ class LoraInpaint(FALNode):
     tile_height: int = Field(
         default=4096, description="The size of the tiles to be used for the image generation."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
     )
     ic_light_model_url: ImageRef = Field(
@@ -27263,10 +27532,10 @@ class LoraInpaint(FALNode):
     image_encoder_weight_name: str = Field(
         default="pytorch_model.bin", description="The weight name of the image encoder model to use for the image generation."
     )
-    ip_adapter: list[str] = Field(
+    ip_adapter: list[IPAdapter] = Field(
         default=[], description="The IP adapter to use for the image generation."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     scheduler: Scheduler | None = Field(
@@ -27356,7 +27625,7 @@ class LoraInpaint(FALNode):
     tile_stride_height: int = Field(
         default=2048, description="The stride of the tiles to be used for the image generation."
     )
-    controlnets: list[str] = Field(
+    controlnets: list[ControlNet] = Field(
         default=[], description="The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps."
     )
     num_inference_steps: int = Field(
@@ -27481,7 +27750,7 @@ class LoraImageToImage(FALNode):
     tile_height: int = Field(
         default=4096, description="The size of the tiles to be used for the image generation."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
     )
     ic_light_model_url: ImageRef = Field(
@@ -27490,10 +27759,10 @@ class LoraImageToImage(FALNode):
     image_encoder_weight_name: str = Field(
         default="pytorch_model.bin", description="The weight name of the image encoder model to use for the image generation."
     )
-    ip_adapter: list[str] = Field(
+    ip_adapter: list[IPAdapter] = Field(
         default=[], description="The IP adapter to use for the image generation."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     scheduler: Scheduler | None = Field(
@@ -27580,7 +27849,7 @@ class LoraImageToImage(FALNode):
     tile_stride_height: int = Field(
         default=2048, description="The stride of the tiles to be used for the image generation."
     )
-    controlnets: list[str] = Field(
+    controlnets: list[ControlNet] = Field(
         default=[], description="The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps."
     )
     num_inference_steps: int = Field(
@@ -27683,13 +27952,13 @@ class FastSdxlImageToImage(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     enable_safety_checker: bool = Field(
@@ -27809,13 +28078,13 @@ class FastSdxlInpainting(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -28240,7 +28509,7 @@ class PlaygroundV25ImageToImage(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -28371,7 +28640,7 @@ class FastLightningSdxlImageToImage(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -28498,7 +28767,7 @@ class FastLightningSdxlInpainting(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -28612,7 +28881,7 @@ class PlaygroundV25Inpainting(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -29146,7 +29415,7 @@ class Pulid(FALNode):
     num_inference_steps: int = Field(
         default=4, description="Number of steps to take"
     )
-    reference_images: list[str] = Field(
+    reference_images: list[ReferenceFace] = Field(
         default=[], description="List of reference faces, ideally 4 images."
     )
     negative_prompt: str = Field(
@@ -29209,7 +29478,7 @@ class FastSdxlControlnetCannyImageToImage(FALNode):
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -29305,7 +29574,7 @@ class FastSdxlControlnetCannyInpainting(FALNode):
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(

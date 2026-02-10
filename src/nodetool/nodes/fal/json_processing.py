@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import VideoRef, AudioRef
@@ -21,26 +22,26 @@ class FfmpegApiLoudnorm(FALNode):
     measured_tp: str = Field(
         default="", description="Measured true peak of input file in dBTP. Required for linear mode."
     )
+    offset: float = Field(
+        default=0, description="Offset gain in dB applied before the true-peak limiter"
+    )
     print_summary: bool = Field(
         default=False, description="Return loudness measurement summary with the normalized audio"
-    )
-    linear: bool = Field(
-        default=False, description="Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality)."
     )
     measured_i: str = Field(
         default="", description="Measured integrated loudness of input file in LUFS. Required for linear mode."
     )
-    offset: float = Field(
-        default=0, description="Offset gain in dB applied before the true-peak limiter"
+    linear: bool = Field(
+        default=False, description="Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality)."
     )
     measured_lra: str = Field(
         default="", description="Measured loudness range of input file in LU. Required for linear mode."
     )
-    measured_thresh: str = Field(
-        default="", description="Measured threshold of input file in LUFS. Required for linear mode."
-    )
     dual_mono: bool = Field(
         default=False, description="Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems"
+    )
+    measured_thresh: str = Field(
+        default="", description="Measured threshold of input file in LUFS. Required for linear mode."
     )
     true_peak: float = Field(
         default=-0.1, description="Maximum true peak in dBTP."
@@ -58,13 +59,13 @@ class FfmpegApiLoudnorm(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "measured_tp": self.measured_tp,
-            "print_summary": self.print_summary,
-            "linear": self.linear,
-            "measured_i": self.measured_i,
             "offset": self.offset,
+            "print_summary": self.print_summary,
+            "measured_i": self.measured_i,
+            "linear": self.linear,
             "measured_lra": self.measured_lra,
-            "measured_thresh": self.measured_thresh,
             "dual_mono": self.dual_mono,
+            "measured_thresh": self.measured_thresh,
             "true_peak": self.true_peak,
             "audio_url": self.audio_url,
             "integrated_loudness": self.integrated_loudness,
@@ -84,7 +85,7 @@ class FfmpegApiLoudnorm(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["measured_tp", "print_summary", "linear", "measured_i", "offset"]
+        return ["measured_tp", "offset", "print_summary", "measured_i", "linear"]
 
 class FfmpegApiWaveform(FALNode):
     """

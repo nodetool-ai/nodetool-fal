@@ -82,7 +82,7 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -269,7 +269,7 @@ class Ltx219BAudioToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -765,17 +765,17 @@ class ElevenlabsDubbing(FALNode):
     video_url: VideoRef = Field(
         default=VideoRef(), description="URL of the video file to dub. Either audio_url or video_url must be provided. If both are provided, video_url takes priority."
     )
-    highest_resolution: bool = Field(
-        default=True, description="Whether to use the highest resolution for dubbing."
-    )
     audio_url: VideoRef = Field(
         default=VideoRef(), description="URL of the audio file to dub. Either audio_url or video_url must be provided."
     )
-    target_lang: str = Field(
-        default="", description="Target language code for dubbing (ISO 639-1)"
+    highest_resolution: bool = Field(
+        default=True, description="Whether to use the highest resolution for dubbing."
     )
     num_speakers: str = Field(
         default="", description="Number of speakers in the audio. If not provided, will be auto-detected."
+    )
+    target_lang: str = Field(
+        default="", description="Target language code for dubbing (ISO 639-1)"
     )
     source_lang: str = Field(
         default="", description="Source language code. If not provided, will be auto-detected."
@@ -784,10 +784,10 @@ class ElevenlabsDubbing(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         arguments = {
             "video_url": self.video_url,
-            "highest_resolution": self.highest_resolution,
             "audio_url": self.audio_url,
-            "target_lang": self.target_lang,
+            "highest_resolution": self.highest_resolution,
             "num_speakers": self.num_speakers,
+            "target_lang": self.target_lang,
             "source_lang": self.source_lang,
         }
 
@@ -804,7 +804,7 @@ class ElevenlabsDubbing(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["video_url", "highest_resolution", "audio_url", "target_lang", "num_speakers"]
+        return ["video_url", "audio_url", "highest_resolution", "num_speakers", "target_lang"]
 
 class LongcatMultiAvatarImageAudioToVideo(FALNode):
     """

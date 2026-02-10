@@ -228,10 +228,10 @@ class CSM1B(FALNode):
     - Create interactive voice responses
     """
 
-    scene: list[str] = Field(
+    scene: list[Turn] = Field(
         default=[], description="The text to generate an audio from."
     )
-    context: list[str] = Field(
+    context: list[Speaker] = Field(
         default=[], description="The context to generate an audio from."
     )
 
@@ -356,8 +356,8 @@ class ElevenLabsTTSMultilingualV2(FALNode):
         OFF = "off"
 
 
-    text: str = Field(
-        default="", description="The text to convert to speech"
+    stability: float = Field(
+        default=0.5, description="Voice stability (0-1)"
     )
     next_text: str = Field(
         default="", description="The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
@@ -368,8 +368,8 @@ class ElevenLabsTTSMultilingualV2(FALNode):
     style: float = Field(
         default=0, description="Style exaggeration (0-1)"
     )
-    stability: float = Field(
-        default=0.5, description="Voice stability (0-1)"
+    text: str = Field(
+        default="", description="The text to convert to speech"
     )
     timestamps: bool = Field(
         default=False, description="Whether to return timestamps for each word in the generated speech"
@@ -392,11 +392,11 @@ class ElevenLabsTTSMultilingualV2(FALNode):
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
-            "text": self.text,
+            "stability": self.stability,
             "next_text": self.next_text,
             "speed": self.speed,
             "style": self.style,
-            "stability": self.stability,
+            "text": self.text,
             "timestamps": self.timestamps,
             "similarity_boost": self.similarity_boost,
             "voice": self.voice,
@@ -436,11 +436,11 @@ class ElevenLabsTextToDialogueV3(FALNode):
     stability: str = Field(
         default="", description="Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion. Must be one of 0.0, 0.5, 1.0, else it will be rounded to the nearest value."
     )
-    inputs: list[str] = Field(
-        default=[], description="A list of dialogue inputs, each containing text and a voice ID which will be converted into speech."
-    )
     language_code: str = Field(
         default="", description="Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model."
+    )
+    inputs: list[DialogueBlock] = Field(
+        default=[], description="A list of dialogue inputs, each containing text and a voice ID which will be converted into speech."
     )
     seed: str = Field(
         default="", description="Random seed for reproducibility."
@@ -448,15 +448,15 @@ class ElevenLabsTextToDialogueV3(FALNode):
     use_speaker_boost: str = Field(
         default="", description="This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency."
     )
-    pronunciation_dictionary_locators: list[str] = Field(
+    pronunciation_dictionary_locators: list[PronunciationDictionaryLocator] = Field(
         default=[], description="A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request"
     )
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "stability": self.stability,
-            "inputs": self.inputs,
             "language_code": self.language_code,
+            "inputs": self.inputs,
             "seed": self.seed,
             "use_speaker_boost": self.use_speaker_boost,
             "pronunciation_dictionary_locators": self.pronunciation_dictionary_locators,
@@ -577,14 +577,14 @@ class ElevenLabsTTSV3(FALNode):
         OFF = "off"
 
 
-    text: str = Field(
-        default="", description="The text to convert to speech"
-    )
     stability: float = Field(
         default=0.5, description="Voice stability (0-1)"
     )
     speed: float = Field(
         default=1, description="Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality."
+    )
+    text: str = Field(
+        default="", description="The text to convert to speech"
     )
     style: float = Field(
         default=0, description="Style exaggeration (0-1)"
@@ -607,9 +607,9 @@ class ElevenLabsTTSV3(FALNode):
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
-            "text": self.text,
             "stability": self.stability,
             "speed": self.speed,
+            "text": self.text,
             "style": self.style,
             "timestamps": self.timestamps,
             "similarity_boost": self.similarity_boost,
@@ -1291,7 +1291,7 @@ class SonautoV2Inpaint(FALNode):
     selection_crop: bool = Field(
         default=False, description="Crop to the selected region"
     )
-    sections: list[str] = Field(
+    sections: list[InpaintSection] = Field(
         default=[], description="List of sections to inpaint. Currently, only one section is supported so the list length must be 1."
     )
     balance_strength: float = Field(

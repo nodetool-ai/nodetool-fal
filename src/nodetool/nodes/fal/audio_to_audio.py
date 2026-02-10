@@ -314,7 +314,7 @@ class SamAudioSpanSeparate(FALNode):
     acceleration: Acceleration = Field(
         default=Acceleration.BALANCED, description="The acceleration level to use."
     )
-    spans: list[str] = Field(
+    spans: list[AudioTimeSpan] = Field(
         default=[], description="Time spans where the target sound occurs which should be isolated."
     )
     output_format: OutputFormat = Field(

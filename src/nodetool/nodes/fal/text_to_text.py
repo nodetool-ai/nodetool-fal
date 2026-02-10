@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.nodes.fal.fal_node import FALNode

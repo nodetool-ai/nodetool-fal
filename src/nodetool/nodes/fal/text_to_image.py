@@ -320,14 +320,14 @@ class FluxV1ProUltra(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
-    num_images: int = Field(
-        default=1, description="Number of images to generate"
-    )
     aspect_ratio: str = Field(
         default="16:9", description="Aspect ratio for the generated image"
     )
-    enhance_prompt: bool = Field(
-        default=False, description="Whether to enhance the prompt for better results."
+    num_images: int = Field(
+        default=1, description="Number of images to generate"
+    )
+    raw: bool = Field(
+        default=False, description="Generate less processed, more natural results"
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -341,34 +341,34 @@ class FluxV1ProUltra(FALNode):
     safety_tolerance: SafetyTolerance = Field(
         default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
-    image_prompt_strength: float = Field(
-        default=0.1, description="Strength of image prompt influence (0-1)"
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    image_prompt_strength: float = Field(
+        default=0.1, description="Strength of image prompt influence (0-1)"
     )
-    raw: bool = Field(
-        default=False, description="Generate less processed, more natural results"
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio,
-            "enhance_prompt": self.enhance_prompt,
+            "num_images": self.num_images,
+            "raw": self.raw,
             "output_format": self.output_format.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
-            "image_prompt_strength": self.image_prompt_strength,
-            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
-            "raw": self.raw,
+            "seed": self.seed,
+            "image_prompt_strength": self.image_prompt_strength,
+            "enhance_prompt": self.enhance_prompt,
         }
 
         # Remove None values
@@ -423,7 +423,7 @@ class FluxLora(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="List of LoRA models to apply with their weights"
     )
     guidance_scale: float = Field(
@@ -762,7 +762,7 @@ class RecraftV3(FALNode):
     style: RecraftV3Style = Field(
         default=RecraftV3Style.REALISTIC_IMAGE, description="Visual style preset for the generated image"
     )
-    colors: list[str] = Field(
+    colors: list[RGBColor] = Field(
         default=[], description="Specific color palette to use in the generation"
     )
     enable_safety_checker: bool = Field(
@@ -840,7 +840,7 @@ class StableDiffusionV35Large(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
@@ -945,11 +945,11 @@ class FluxProNew(FALNode):
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
-    )
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     enhance_prompt: bool = Field(
         default=False, description="Whether to enhance the prompt for better results."
@@ -964,8 +964,8 @@ class FluxProNew(FALNode):
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
             "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "enhance_prompt": self.enhance_prompt,
         }
 
@@ -1022,17 +1022,17 @@ class Flux2Turbo(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=2.5, description="Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
+    guidance_scale: float = Field(
+        default=2.5, description="Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
     enable_prompt_expansion: bool = Field(
         default=False, description="If set to true, the prompt will be expanded for better results."
-    )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -1042,10 +1042,10 @@ class Flux2Turbo(FALNode):
             "image_size": self.image_size.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
-            "seed": self.seed,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
             "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
         }
 
         # Remove None values
@@ -1101,17 +1101,17 @@ class Flux2Flash(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=2.5, description="Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
+    guidance_scale: float = Field(
+        default=2.5, description="Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
     enable_prompt_expansion: bool = Field(
         default=False, description="If set to true, the prompt will be expanded for better results."
-    )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -1121,10 +1121,10 @@ class Flux2Flash(FALNode):
             "image_size": self.image_size.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
-            "seed": self.seed,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
             "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
         }
 
         # Remove None values
@@ -1186,19 +1186,19 @@ class IdeogramV3(FALNode):
     rendering_speed: RenderingSpeed = Field(
         default=RenderingSpeed.BALANCED, description="The rendering speed to use."
     )
-    style_codes: str = Field(
-        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     color_palette: str = Field(
         default="", description="A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)"
     )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    style_codes: str = Field(
+        default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
     )
-    image_urls: ImageRef = Field(
+    images: list[ImageRef] = Field(
         default=ImageRef(), description="A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format"
     )
     negative_prompt: str = Field(
@@ -1206,7 +1206,10 @@ class IdeogramV3(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_urls_base64 = await context.image_to_base64(self.image_urls)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
@@ -1215,11 +1218,11 @@ class IdeogramV3(FALNode):
             "style_preset": self.style_preset,
             "expand_prompt": self.expand_prompt,
             "rendering_speed": self.rendering_speed.value,
-            "style_codes": self.style_codes,
-            "color_palette": self.color_palette,
             "sync_mode": self.sync_mode,
+            "color_palette": self.color_palette,
+            "style_codes": self.style_codes,
             "seed": self.seed,
-            "image_urls": f"data:image/png;base64,{image_urls_base64}",
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -1719,7 +1722,7 @@ class QwenImage2512Lora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -1916,7 +1919,7 @@ class ZImageBaseLora(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     guidance_scale: float = Field(
@@ -2106,7 +2109,7 @@ class ZImageTurboLora(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     enable_prompt_expansion: bool = Field(
@@ -2282,14 +2285,14 @@ class Flux2Klein4BBase(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance."
     )
     negative_prompt: str = Field(
         default="", description="Negative prompt for classifier-free guidance. Describes what to avoid in the image."
     )
-    guidance_scale: float = Field(
-        default=5, description="Guidance scale for classifier-free guidance."
+    seed: int = Field(
+        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -2302,9 +2305,9 @@ class Flux2Klein4BBase(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -2368,11 +2371,11 @@ class Flux2Klein4BBaseLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
-        default=[], description="List of LoRA weights to apply (maximum 3)."
-    )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
+    )
+    loras: list[LoRAInput] = Field(
+        default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -2380,14 +2383,14 @@ class Flux2Klein4BBaseLora(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance."
     )
     negative_prompt: str = Field(
         default="", description="Negative prompt for classifier-free guidance. Describes what to avoid in the image."
     )
-    guidance_scale: float = Field(
-        default=5, description="Guidance scale for classifier-free guidance."
+    seed: int = Field(
+        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -2397,13 +2400,13 @@ class Flux2Klein4BBaseLora(FALNode):
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "loras": self.loras,
             "sync_mode": self.sync_mode,
+            "loras": self.loras,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -2551,14 +2554,14 @@ class Flux2Klein9BBase(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance."
     )
     negative_prompt: str = Field(
         default="", description="Negative prompt for classifier-free guidance. Describes what to avoid in the image."
     )
-    guidance_scale: float = Field(
-        default=5, description="Guidance scale for classifier-free guidance."
+    seed: int = Field(
+        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -2571,9 +2574,9 @@ class Flux2Klein9BBase(FALNode):
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -2637,11 +2640,11 @@ class Flux2Klein9BBaseLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
-        default=[], description="List of LoRA weights to apply (maximum 3)."
-    )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
+    )
+    loras: list[LoRAInput] = Field(
+        default=[], description="List of LoRA weights to apply (maximum 3)."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -2649,14 +2652,14 @@ class Flux2Klein9BBaseLora(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
+    guidance_scale: float = Field(
+        default=5, description="Guidance scale for classifier-free guidance."
     )
     negative_prompt: str = Field(
         default="", description="Negative prompt for classifier-free guidance. Describes what to avoid in the image."
     )
-    guidance_scale: float = Field(
-        default=5, description="Guidance scale for classifier-free guidance."
+    seed: int = Field(
+        default=-1, description="The seed to use for the generation. If not provided, a random seed will be used."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -2666,13 +2669,13 @@ class Flux2Klein9BBaseLora(FALNode):
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "loras": self.loras,
             "sync_mode": self.sync_mode,
+            "loras": self.loras,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
@@ -4153,17 +4156,17 @@ class Gemini3ProImagePreview(FALNode):
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_1K, description="The resolution of the image to generate."
     )
     enable_web_search: bool = Field(
         default=False, description="Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image."
     )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
     aspect_ratio: str = Field(
         default="1:1", description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
-    )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1K, description="The resolution of the image to generate."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
@@ -4184,10 +4187,10 @@ class Gemini3ProImagePreview(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
-            "enable_web_search": self.enable_web_search,
-            "aspect_ratio": self.aspect_ratio,
             "resolution": self.resolution.value,
+            "enable_web_search": self.enable_web_search,
+            "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
@@ -4232,6 +4235,22 @@ class NanoBananaPro(FALNode):
         VALUE_2K = "2K"
         VALUE_4K = "4K"
 
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image. Use "auto" to let the model decide based on the prompt.
+        """
+        AUTO = "auto"
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_3_2 = "3:2"
+        RATIO_4_3 = "4:3"
+        RATIO_5_4 = "5:4"
+        RATIO_1_1 = "1:1"
+        RATIO_4_5 = "4:5"
+        RATIO_3_4 = "3:4"
+        RATIO_2_3 = "2:3"
+        RATIO_9_16 = "9:16"
+
     class OutputFormat(Enum):
         """
         The format of the generated image.
@@ -4261,11 +4280,11 @@ class NanoBananaPro(FALNode):
     enable_web_search: bool = Field(
         default=False, description="Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image."
     )
-    aspect_ratio: str = Field(
-        default="1:1", description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
-    )
     resolution: Resolution = Field(
         default=Resolution.VALUE_1K, description="The resolution of the image to generate."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
@@ -4276,8 +4295,8 @@ class NanoBananaPro(FALNode):
     safety_tolerance: SafetyTolerance = Field(
         default=SafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
     )
-    seed: str = Field(
-        default="", description="The seed for the random number generator."
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator."
     )
     limit_generations: bool = Field(
         default=False, description="Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate."
@@ -4288,8 +4307,8 @@ class NanoBananaPro(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "enable_web_search": self.enable_web_search,
-            "aspect_ratio": self.aspect_ratio,
             "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
@@ -5555,7 +5574,7 @@ class WanV22A14BTextToImageLora(FALNode):
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
     )
     guidance_scale: float = Field(
@@ -5841,7 +5860,7 @@ class QwenImage(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
@@ -5926,7 +5945,7 @@ class FluxKreaLoraStream(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -6008,7 +6027,7 @@ class FluxKreaLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -6345,7 +6364,7 @@ class FluxKontextLoraTextToImage(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.PNG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -6795,11 +6814,11 @@ class FluxProKontextMaxTextToImage(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
-    )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -6823,8 +6842,8 @@ class FluxProKontextMaxTextToImage(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value,
+            "num_images": self.num_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
@@ -6898,11 +6917,11 @@ class FluxProKontextTextToImage(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
-    )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -6926,8 +6945,8 @@ class FluxProKontextTextToImage(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value,
+            "num_images": self.num_images,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
@@ -7231,7 +7250,7 @@ class FluxLoraStream(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     guidance_scale: float = Field(
@@ -7304,25 +7323,25 @@ class MinimaxImage01(FALNode):
         RATIO_21_9 = "21:9"
 
 
-    prompt_optimizer: bool = Field(
-        default=False, description="Whether to enable automatic prompt optimization"
+    prompt: str = Field(
+        default="", description="Text prompt for image generation (max 1500 characters)"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate (1-9)"
     )
+    prompt_optimizer: bool = Field(
+        default=False, description="Whether to enable automatic prompt optimization"
+    )
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_1_1, description="Aspect ratio of the generated image"
-    )
-    prompt: str = Field(
-        default="", description="Text prompt for image generation (max 1500 characters)"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
-            "num_images": self.num_images,
-            "aspect_ratio": self.aspect_ratio.value,
             "prompt": self.prompt,
+            "num_images": self.num_images,
+            "prompt_optimizer": self.prompt_optimizer,
+            "aspect_ratio": self.aspect_ratio.value,
         }
 
         # Remove None values
@@ -8005,7 +8024,7 @@ class RundiffusionFalJuggernautFluxLora(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -8317,7 +8336,7 @@ class RundiffusionFalRundiffusionPhotoFlux(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -8660,7 +8679,7 @@ class FluxControlLoraCanny(FALNode):
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     sync_mode: bool = Field(
@@ -8748,23 +8767,17 @@ class FluxControlLoraDepth(FALNode):
     control_lora_strength: float = Field(
         default=1, description="The strength of the control lora."
     )
-    preprocess_depth: bool = Field(
-        default=True, description="If set to true, the input image will be preprocessed to extract depth information. This is useful for generating depth maps from images."
-    )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
+    )
+    preprocess_depth: bool = Field(
+        default=True, description="If set to true, the input image will be preprocessed to extract depth information. This is useful for generating depth maps from images."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
-    )
-    guidance_scale: float = Field(
-        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
-    control_lora_image_url: ImageRef = Field(
-        default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -8775,6 +8788,12 @@ class FluxControlLoraDepth(FALNode):
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    control_lora_image_url: ImageRef = Field(
+        default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         control_lora_image_url_base64 = await context.image_to_base64(self.control_lora_image_url)
@@ -8783,15 +8802,15 @@ class FluxControlLoraDepth(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "control_lora_strength": self.control_lora_strength,
-            "preprocess_depth": self.preprocess_depth,
             "output_format": self.output_format.value,
+            "preprocess_depth": self.preprocess_depth,
             "sync_mode": self.sync_mode,
             "loras": self.loras,
-            "guidance_scale": self.guidance_scale,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_url_base64}",
         }
 
         # Remove None values
@@ -9137,23 +9156,23 @@ class FluxProV11UltraFinetuned(FALNode):
     safety_tolerance: SafetyTolerance = Field(
         default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
-    image_prompt_strength: float = Field(
-        default=0.1, description="The strength of the image prompt, between 0 and 1."
-    )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    enhance_prompt: bool = Field(
-        default=False, description="Whether to enhance the prompt for better results."
+    image_prompt_strength: float = Field(
+        default=0.1, description="The strength of the image prompt, between 0 and 1."
     )
     raw: bool = Field(
         default=False, description="Generate less processed, more natural-looking images."
     )
-    num_images: int = Field(
-        default=1, description="The number of images to generate."
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
     )
     aspect_ratio: str = Field(
         default="16:9", description="The aspect ratio of the generated image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.JPEG, description="The format of the generated image."
@@ -9177,12 +9196,12 @@ class FluxProV11UltraFinetuned(FALNode):
             "prompt": self.prompt,
             "finetune_id": self.finetune_id,
             "safety_tolerance": self.safety_tolerance.value,
-            "image_prompt_strength": self.image_prompt_strength,
             "enable_safety_checker": self.enable_safety_checker,
-            "enhance_prompt": self.enhance_prompt,
+            "image_prompt_strength": self.image_prompt_strength,
             "raw": self.raw,
-            "num_images": self.num_images,
+            "enhance_prompt": self.enhance_prompt,
             "aspect_ratio": self.aspect_ratio,
+            "num_images": self.num_images,
             "output_format": self.output_format.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "sync_mode": self.sync_mode,
@@ -9446,7 +9465,7 @@ class BriaTextToImageBase(FALNode):
     prompt_enhancement: bool = Field(
         default=False, description="When set to true, enhances the provided prompt by generating additional, more descriptive variations, resulting in more diverse and creative output images."
     )
-    guidance: list[str] = Field(
+    guidance: list[GuidanceInput] = Field(
         default=[], description="Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference."
     )
     aspect_ratio: AspectRatio = Field(
@@ -9546,7 +9565,7 @@ class BriaTextToImageFast(FALNode):
     prompt_enhancement: bool = Field(
         default=False, description="When set to true, enhances the provided prompt by generating additional, more descriptive variations, resulting in more diverse and creative output images."
     )
-    guidance: list[str] = Field(
+    guidance: list[GuidanceInput] = Field(
         default=[], description="Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference."
     )
     aspect_ratio: AspectRatio = Field(
@@ -9646,7 +9665,7 @@ class BriaTextToImageHd(FALNode):
     prompt_enhancement: bool = Field(
         default=False, description="When set to true, enhances the provided prompt by generating additional, more descriptive variations, resulting in more diverse and creative output images."
     )
-    guidance: list[str] = Field(
+    guidance: list[GuidanceInput] = Field(
         default=[], description="Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference."
     )
     aspect_ratio: AspectRatio = Field(
@@ -9767,7 +9786,7 @@ class Recraft20b(FALNode):
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, the safety checker will be enabled."
     )
-    colors: list[str] = Field(
+    colors: list[RGBColor] = Field(
         default=[], description="An array of preferable colors"
     )
     style: Style = Field(
@@ -10044,7 +10063,7 @@ class FluxLoraInpainting(FALNode):
     strength: float = Field(
         default=0.85, description="The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     guidance_scale: float = Field(
@@ -10128,11 +10147,11 @@ class StableDiffusionV3Medium(FALNode):
     guidance_scale: float = Field(
         default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
-    )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to generate an image from."
@@ -10149,8 +10168,8 @@ class StableDiffusionV3Medium(FALNode):
             "prompt": self.prompt,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
         }
@@ -10238,7 +10257,7 @@ class FooocusUpscaleOrVary(FALNode):
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
     image_prompt_4: str = Field(
@@ -10554,13 +10573,13 @@ class SdxlControlnetUnion(FALNode):
     normal_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     teed_image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the control image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -10890,13 +10909,13 @@ class FastSdxl(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     enable_safety_checker: bool = Field(
@@ -11095,13 +11114,13 @@ class LightningModels(FALNode):
     image_size: str = Field(
         default=""
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     scheduler: Scheduler | None = Field(
@@ -11208,7 +11227,7 @@ class PlaygroundV25(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -11313,13 +11332,13 @@ class RealisticVision(FALNode):
     image_size: str = Field(
         default=""
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_rescale: float = Field(
@@ -11438,13 +11457,13 @@ class Dreamshaper(FALNode):
     image_size: str = Field(
         default=""
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -11547,13 +11566,13 @@ class StableDiffusionV15(FALNode):
     image_size: str = Field(
         default="square", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -11727,7 +11746,7 @@ class FastLightningSdxl(FALNode):
     format: Format = Field(
         default=Format.JPEG, description="The format of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -11825,7 +11844,7 @@ class FastFooocusSdxlImageToImage(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image. Leave it none to automatically infer from the prompt image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -11924,7 +11943,7 @@ class FastSdxlControlnetCanny(FALNode):
     expand_prompt: bool = Field(
         default=False, description="If set to true, the prompt will be expanded with additional prompts."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
     guidance_scale: float = Field(
@@ -12146,7 +12165,7 @@ class FastFooocusSdxl(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
     )
     expand_prompt: bool = Field(
@@ -12371,7 +12390,7 @@ class FooocusImagePrompt(FALNode):
     styles: list[str] = Field(
         default=[], description="The style to use."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
     image_prompt_4: str = Field(
@@ -12559,7 +12578,7 @@ class FooocusInpaint(FALNode):
     image_prompt_3: str = Field(
         default=""
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
     image_prompt_4: str = Field(
@@ -12916,7 +12935,7 @@ class Fooocus(FALNode):
     mask_image_url: ImageRef = Field(
         default=ImageRef(), description="The image to use as a mask for the generated image."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
@@ -13067,7 +13086,7 @@ class Lora(FALNode):
     tile_height: int = Field(
         default=4096, description="The size of the tiles to be used for the image generation."
     )
-    embeddings: list[str] = Field(
+    embeddings: list[Embedding] = Field(
         default=[], description="The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights."
     )
     ic_light_model_url: ImageRef = Field(
@@ -13076,10 +13095,10 @@ class Lora(FALNode):
     image_encoder_weight_name: str = Field(
         default="pytorch_model.bin", description="The weight name of the image encoder model to use for the image generation."
     )
-    ip_adapter: list[str] = Field(
+    ip_adapter: list[IPAdapter] = Field(
         default=[], description="The IP adapter to use for the image generation."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     scheduler: Scheduler | None = Field(
@@ -13163,7 +13182,7 @@ class Lora(FALNode):
     tile_stride_height: int = Field(
         default=2048, description="The stride of the tiles to be used for the image generation."
     )
-    controlnets: list[str] = Field(
+    controlnets: list[ControlNet] = Field(
         default=[], description="The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps."
     )
     num_inference_steps: int = Field(

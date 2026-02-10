@@ -1,24 +1,9 @@
 from enum import Enum
 from pydantic import Field
-from typing import Any, Literal
-from nodetool.metadata.types import BaseType, ImageRef, VideoRef, AudioRef
+from typing import Any
+from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
-
-
-class KlingV3MultiPromptElement(BaseType):
-    """A single shot element for Kling V3 multi-shot video generation."""
-    type: Literal["kling_v3_multi_prompt_element"] = "kling_v3_multi_prompt_element"
-    prompt: str = Field(default="", description="The prompt for this shot.")
-    duration: str = Field(default="5", description="The duration of this shot in seconds (3-15).")
-
-
-class KlingV3ComboElementInput(BaseType):
-    """An element (character/object) for Kling V3 video generation. Can be an image set or a video reference."""
-    type: Literal["kling_v3_combo_element_input"] = "kling_v3_combo_element_input"
-    frontal_image_url: str = Field(default="", description="The frontal image URL of the element (main view).")
-    reference_image_urls: list[str] = Field(default=[], description="Additional reference image URLs from different angles. 1-3 images supported.")
-    video_url: str = Field(default="", description="The video URL of the element. A request can only have one element with a video.")
 
 
 class PixverseV56ImageToVideo(FALNode):
@@ -207,7 +192,7 @@ class AMTFrameInterpolation(FALNode):
     - Produce smooth motion effects
     """
 
-    frames: list[str] = Field(
+    frames: list[Frame] = Field(
         default=[], description="Frames to interpolate"
     )
     recursive_interpolation_passes: int = Field(
@@ -1088,7 +1073,7 @@ class CogVideoX5BImageToVideo(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="The URL to the image to generate the video from."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. We currently support one lora."
     )
     video_size: str = Field(
@@ -1288,7 +1273,7 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     static_mask_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image for Static Brush Application Area (Mask image created by users using the motion brush)"
     )
-    dynamic_masks: list[str] = Field(
+    dynamic_masks: list[DynamicMask] = Field(
         default=[], description="List of dynamic masks"
     )
     negative_prompt: str = Field(
@@ -1991,7 +1976,7 @@ class Ltx219BImageToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -2361,7 +2346,7 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
     camera_lora: CameraLora = Field(
@@ -2874,20 +2859,24 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     duration: KlingVideoO1StandardReferenceToVideoDuration = Field(
         default=KlingVideoO1StandardReferenceToVideoDuration.VALUE_5, description="Video duration in seconds."
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image)."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image)."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
             "elements": self.elements,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -3663,20 +3652,24 @@ class KlingVideoO1ReferenceToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Video duration in seconds."
     )
-    elements: list[str] = Field(
+    elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image)."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image)."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
             "elements": self.elements,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -3899,13 +3892,13 @@ class PikaV22Pikaframes(FALNode):
     resolution: Resolution = Field(
         default=Resolution.VALUE_720P, description="The resolution of the generated video"
     )
-    transitions: list[str] = Field(
+    transitions: list[KeyframeTransition] = Field(
         default=[], description="Configuration for each transition. Length must be len(image_urls) - 1. Total duration of all transitions must not exceed 25 seconds. If not provided, uses default 5-second transitions with the global prompt."
     )
     seed: int = Field(
         default=-1, description="The seed for the random number generator"
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="URLs of keyframe images (2-5 images) to create transitions between"
     )
     negative_prompt: str = Field(
@@ -3913,12 +3906,16 @@ class PikaV22Pikaframes(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "transitions": self.transitions,
             "seed": self.seed,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "negative_prompt": self.negative_prompt,
         }
 
@@ -4892,11 +4889,15 @@ class Veo31ReferenceToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="URLs of the reference images to use for consistent subject appearance"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
@@ -4904,7 +4905,7 @@ class Veo31ReferenceToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "resolution": self.resolution.value,
             "auto_fix": self.auto_fix,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -6104,7 +6105,7 @@ class WanV22A14bImageToVideoLora(FALNode):
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
     )
     frames_per_second: int = Field(
@@ -6894,7 +6895,7 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
     temporal_adain_factor: float = Field(
         default=0.5, description="The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -7144,11 +7145,11 @@ class MinimaxHailuo02ProImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
     end_image_url: ImageRef = Field(
         default=ImageRef(), description="Optional URL of the image to use as the last frame of the video"
@@ -7161,8 +7162,8 @@ class MinimaxHailuo02ProImageToVideo(FALNode):
         end_image_url_base64 = await context.image_to_base64(self.end_image_url)
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
             "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
             "image_url": f"data:image/png;base64,{image_url_base64}",
         }
@@ -7195,13 +7196,17 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
+    class AspectRatio(Enum):
         """
-        Video resolution - 480p for faster generation, 720p for higher quality
+        The aspect ratio of the generated video
         """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_4_3 = "4:3"
+        RATIO_1_1 = "1:1"
+        RATIO_3_4 = "3:4"
+        RATIO_9_16 = "9:16"
+        AUTO = "auto"
 
     class Duration(Enum):
         """
@@ -7219,30 +7224,26 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
         VALUE_11 = "11"
         VALUE_12 = "12"
 
-    class AspectRatio(Enum):
+    class Resolution(Enum):
         """
-        The aspect ratio of the generated video
+        Video resolution - 480p for faster generation, 720p for higher quality
         """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        AUTO = "auto"
+        VALUE_480P = "480p"
+        VALUE_720P = "720p"
+        VALUE_1080P = "1080p"
 
 
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="Duration of the video in seconds"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video"
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
@@ -7265,9 +7266,9 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
         end_image_url_base64 = await context.image_to_base64(self.end_image_url)
         arguments = {
             "prompt": self.prompt,
-            "resolution": self.resolution.value,
-            "duration": self.duration.value,
             "aspect_ratio": self.aspect_ratio.value,
+            "duration": self.duration.value,
+            "resolution": self.resolution.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "enable_safety_checker": self.enable_safety_checker,
             "camera_fixed": self.camera_fixed,
@@ -7379,8 +7380,8 @@ class KlingVideoV21ProImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to be used for the video"
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
     )
     tail_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
@@ -7388,20 +7389,20 @@ class KlingVideoV21ProImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
     )
-    cfg_scale: float = Field(
-        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_url_base64 = await context.image_to_base64(self.image_url)
         tail_image_url_base64 = await context.image_to_base64(self.tail_image_url)
+        image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
+            "cfg_scale": self.cfg_scale,
             "tail_image_url": f"data:image/png;base64,{tail_image_url_base64}",
             "negative_prompt": self.negative_prompt,
-            "cfg_scale": self.cfg_scale,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
         }
 
         # Remove None values
@@ -7655,7 +7656,7 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     enable_safety_checker: bool = Field(
@@ -7774,7 +7775,7 @@ class LtxVideo13bDevImageToVideo(FALNode):
     expand_prompt: bool = Field(
         default=False, description="Whether to expand the prompt using a language model."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to use for generation"
     )
     second_pass_num_inference_steps: int = Field(
@@ -7899,7 +7900,7 @@ class LtxVideoLoraImageToVideo(FALNode):
     image_url: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as input."
     )
-    loras: list[str] = Field(
+    loras: list[LoRAWeight] = Field(
         default=[], description="The LoRA weights to use for generation."
     )
     prompt: str = Field(
@@ -8549,14 +8550,14 @@ class ViduQ1StartEndToVideo(FALNode):
     start_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    end_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to use as the last frame"
     )
     seed: int = Field(
         default=-1, description="Seed for the random number generator"
     )
-    end_image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to use as the last frame"
+    movement_amplitude: MovementAmplitude = Field(
+        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -8565,9 +8566,9 @@ class ViduQ1StartEndToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "movement_amplitude": self.movement_amplitude.value,
-            "seed": self.seed,
             "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "seed": self.seed,
+            "movement_amplitude": self.movement_amplitude.value,
         }
 
         # Remove None values
@@ -10085,14 +10086,14 @@ class ViduStartEndToVideo(FALNode):
     start_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    end_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to use as the last frame"
     )
     seed: int = Field(
         default=-1, description="Random seed for generation"
     )
-    end_image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to use as the last frame"
+    movement_amplitude: MovementAmplitude = Field(
+        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -10101,9 +10102,9 @@ class ViduStartEndToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
-            "movement_amplitude": self.movement_amplitude.value,
-            "seed": self.seed,
             "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
+            "seed": self.seed,
+            "movement_amplitude": self.movement_amplitude.value,
         }
 
         # Remove None values
@@ -10403,7 +10404,7 @@ class WanI2vLora(FALNode):
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
-    loras: list[str] = Field(
+    loras: list[LoraWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
     )
     frames_per_second: int = Field(
@@ -10574,11 +10575,11 @@ class MinimaxVideo01DirectorImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default="", description="Text prompt for video generation. Camera movement instructions can be added using square brackets (e.g. [Pan left] or [Zoom in]). You can use up to 3 combined movements per prompt. Supported movements: Truck left/right, Pan left/right, Push in/Pull out, Pedestal up/down, Tilt up/down, Zoom in/out, Shake, Tracking shot, Static shot. For example: [Truck left, Pan right, Zoom in]. For a more detailed guide, refer https://sixth-switch-2ac.notion.site/T2V-01-Director-Model-Tutorial-with-camera-movement-1886c20a98eb80f395b8e05291ad8645"
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -10587,8 +10588,8 @@ class MinimaxVideo01DirectorImageToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
             "image_url": f"data:image/png;base64,{image_url_base64}",
         }
 
@@ -10992,11 +10993,11 @@ class MinimaxVideo01SubjectReference(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
     subject_reference_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the subject reference image to use for consistent subject appearance"
@@ -11005,8 +11006,8 @@ class MinimaxVideo01SubjectReference(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         subject_reference_image_url_base64 = await context.image_to_base64(self.subject_reference_image_url)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
             "subject_reference_image_url": f"data:image/png;base64,{subject_reference_image_url_base64}",
         }
 
@@ -11052,14 +11053,14 @@ class KlingVideoV16StandardImageToVideo(FALNode):
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    image_url: ImageRef = Field(
-        default=ImageRef()
+    cfg_scale: float = Field(
+        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
     )
     negative_prompt: str = Field(
         default="blur, distort, and low quality"
     )
-    cfg_scale: float = Field(
-        default=0.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt."
+    image_url: ImageRef = Field(
+        default=ImageRef()
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -11067,9 +11068,9 @@ class KlingVideoV16StandardImageToVideo(FALNode):
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
-            "image_url": f"data:image/png;base64,{image_url_base64}",
-            "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
+            "negative_prompt": self.negative_prompt,
+            "image_url": f"data:image/png;base64,{image_url_base64}",
         }
 
         # Remove None values
@@ -11194,11 +11195,11 @@ class MinimaxVideo01LiveImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    prompt_optimizer: bool = Field(
-        default=True, description="Whether to use the model's prompt optimizer"
-    )
     prompt: str = Field(
         default=""
+    )
+    prompt_optimizer: bool = Field(
+        default=True, description="Whether to use the model's prompt optimizer"
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -11207,8 +11208,8 @@ class MinimaxVideo01LiveImageToVideo(FALNode):
     async def process(self, context: ProcessingContext) -> VideoRef:
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
-            "prompt_optimizer": self.prompt_optimizer,
             "prompt": self.prompt,
+            "prompt_optimizer": self.prompt_optimizer,
             "image_url": f"data:image/png;base64,{image_url_base64}",
         }
 
@@ -11240,13 +11241,6 @@ class KlingVideoV15ProImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
     class AspectRatio(Enum):
         """
         The aspect ratio of the generated video frame
@@ -11255,9 +11249,19 @@ class KlingVideoV15ProImageToVideo(FALNode):
         RATIO_9_16 = "9:16"
         RATIO_1_1 = "1:1"
 
+    class Duration(Enum):
+        """
+        The duration of the generated video in seconds
+        """
+        VALUE_5 = "5"
+        VALUE_10 = "10"
+
 
     prompt: str = Field(
         default=""
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     duration: Duration = Field(
         default=Duration.VALUE_5, description="The duration of the generated video in seconds"
@@ -11265,16 +11269,13 @@ class KlingVideoV15ProImageToVideo(FALNode):
     tail_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
-    )
     image_url: ImageRef = Field(
         default=ImageRef()
     )
     static_mask_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image for Static Brush Application Area (Mask image created by users using the motion brush)"
     )
-    dynamic_masks: list[str] = Field(
+    dynamic_masks: list[DynamicMask] = Field(
         default=[], description="List of dynamic masks"
     )
     negative_prompt: str = Field(
@@ -11290,9 +11291,9 @@ class KlingVideoV15ProImageToVideo(FALNode):
         static_mask_url_base64 = await context.image_to_base64(self.static_mask_url)
         arguments = {
             "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
             "duration": self.duration.value,
             "tail_image_url": f"data:image/png;base64,{tail_image_url_base64}",
-            "aspect_ratio": self.aspect_ratio.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
             "static_mask_url": f"data:image/png;base64,{static_mask_url_base64}",
             "dynamic_masks": self.dynamic_masks,
@@ -11702,26 +11703,26 @@ class KlingVideoV3StandardImageToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
     )
     generate_audio: bool = Field(
-        default=True, description="Whether to generate native audio for the video."
+        default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
     )
-    voice_ids: list[str] = Field(
-        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+    start_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
     )
-    elements: list[KlingV3ComboElementInput] = Field(
-        default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc."
-    )
     shot_type: ShotType = Field(
         default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
     )
-    start_image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to be used for the video"
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc."
     )
     end_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
@@ -11735,37 +11736,21 @@ class KlingVideoV3StandardImageToVideo(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        arguments: dict[str, Any] = {
+        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "duration": self.duration.value,
+            "voice_ids": self.voice_ids,
             "generate_audio": self.generate_audio,
             "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "shot_type": self.shot_type.value,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
-
-        if self.end_image_url is not None and self.end_image_url.uri:
-            end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-            arguments["end_image_url"] = f"data:image/png;base64,{end_image_url_base64}"
-
-        if self.voice_ids:
-            arguments["voice_ids"] = self.voice_ids
-
-        if self.multi_prompt:
-            arguments["multi_prompt"] = [
-                {"prompt": mp.prompt, "duration": mp.duration}
-                for mp in self.multi_prompt
-            ]
-            arguments["shot_type"] = self.shot_type.value
-
-        if self.elements:
-            element_list = [
-                elem.model_dump(exclude={"type"}, exclude_defaults=True)
-                for elem in self.elements
-            ]
-            if element_list:
-                arguments["elements"] = element_list
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -11834,26 +11819,26 @@ class KlingVideoV3ProImageToVideo(FALNode):
     aspect_ratio: AspectRatio = Field(
         default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
     )
     generate_audio: bool = Field(
-        default=True, description="Whether to generate native audio for the video."
+        default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
     )
-    voice_ids: list[str] = Field(
-        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task)."
+    start_image_url: ImageRef = Field(
+        default=ImageRef(), description="URL of the image to be used for the video"
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
     )
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
     )
-    elements: list[KlingV3ComboElementInput] = Field(
-        default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc."
-    )
     shot_type: ShotType = Field(
         default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
     )
-    start_image_url: ImageRef = Field(
-        default=ImageRef(), description="URL of the image to be used for the video"
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc."
     )
     end_image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
@@ -11867,37 +11852,21 @@ class KlingVideoV3ProImageToVideo(FALNode):
 
     async def process(self, context: ProcessingContext) -> VideoRef:
         start_image_url_base64 = await context.image_to_base64(self.start_image_url)
-        arguments: dict[str, Any] = {
+        end_image_url_base64 = await context.image_to_base64(self.end_image_url)
+        arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
-            "duration": self.duration.value,
+            "voice_ids": self.voice_ids,
             "generate_audio": self.generate_audio,
             "start_image_url": f"data:image/png;base64,{start_image_url_base64}",
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "shot_type": self.shot_type.value,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "end_image_url": f"data:image/png;base64,{end_image_url_base64}",
             "negative_prompt": self.negative_prompt,
             "cfg_scale": self.cfg_scale,
         }
-
-        if self.end_image_url is not None and self.end_image_url.uri:
-            end_image_url_base64 = await context.image_to_base64(self.end_image_url)
-            arguments["end_image_url"] = f"data:image/png;base64,{end_image_url_base64}"
-
-        if self.voice_ids:
-            arguments["voice_ids"] = self.voice_ids
-
-        if self.multi_prompt:
-            arguments["multi_prompt"] = [
-                {"prompt": mp.prompt, "duration": mp.duration}
-                for mp in self.multi_prompt
-            ]
-            arguments["shot_type"] = self.shot_type.value
-
-        if self.elements:
-            element_list = [
-                elem.model_dump(exclude={"type"}, exclude_defaults=True)
-                for elem in self.elements
-            ]
-            if element_list:
-                arguments["elements"] = element_list
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}

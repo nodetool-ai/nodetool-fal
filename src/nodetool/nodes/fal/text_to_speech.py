@@ -1143,7 +1143,7 @@ class Vibevoice7b(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducible generation."
     )
-    speakers: list[str] = Field(
+    speakers: list[VibeVoiceSpeaker] = Field(
         default=[], description="List of speakers to use for the script. If not provided, will be inferred from the script or voice samples."
     )
     cfg_scale: float = Field(
@@ -1192,7 +1192,7 @@ class Vibevoice(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducible generation."
     )
-    speakers: list[str] = Field(
+    speakers: list[VibeVoiceSpeaker] = Field(
         default=[], description="List of speakers to use for the script. If not provided, will be inferred from the script or voice samples."
     )
     cfg_scale: float = Field(
@@ -1292,11 +1292,11 @@ class MinimaxPreviewSpeech25Hd(FALNode):
     text: str = Field(
         default="", description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)"
     )
-    language_boost: LanguageBoost | None = Field(
-        default=None, description="Enhance recognition of specified languages and dialects"
-    )
     voice_setting: str = Field(
         default="", description="Voice configuration settings"
+    )
+    language_boost: LanguageBoost | None = Field(
+        default=None, description="Enhance recognition of specified languages and dialects"
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.HEX, description="Format of the output content (non-streaming only)"
@@ -1311,8 +1311,8 @@ class MinimaxPreviewSpeech25Hd(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "text": self.text,
-            "language_boost": self.language_boost.value if self.language_boost else None,
             "voice_setting": self.voice_setting,
+            "language_boost": self.language_boost.value if self.language_boost else None,
             "output_format": self.output_format.value,
             "pronunciation_dict": self.pronunciation_dict,
             "audio_setting": self.audio_setting,
@@ -1403,11 +1403,11 @@ class MinimaxPreviewSpeech25Turbo(FALNode):
     text: str = Field(
         default="", description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)"
     )
-    language_boost: LanguageBoost | None = Field(
-        default=None, description="Enhance recognition of specified languages and dialects"
-    )
     voice_setting: str = Field(
         default="", description="Voice configuration settings"
+    )
+    language_boost: LanguageBoost | None = Field(
+        default=None, description="Enhance recognition of specified languages and dialects"
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.HEX, description="Format of the output content (non-streaming only)"
@@ -1422,8 +1422,8 @@ class MinimaxPreviewSpeech25Turbo(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "text": self.text,
-            "language_boost": self.language_boost.value if self.language_boost else None,
             "voice_setting": self.voice_setting,
+            "language_boost": self.language_boost.value if self.language_boost else None,
             "output_format": self.output_format.value,
             "pronunciation_dict": self.pronunciation_dict,
             "audio_setting": self.audio_setting,
@@ -1644,17 +1644,17 @@ class MinimaxVoiceClone(FALNode):
         SPEECH_01_TURBO = "speech-01-turbo"
 
 
-    text: str = Field(
-        default="Hello, this is a preview of your cloned voice! I hope you like it!", description="Text to generate a TTS preview with the cloned voice (optional)"
-    )
     model: Model = Field(
         default=Model.SPEECH_02_HD, description="TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo"
     )
-    audio_url: AudioRef = Field(
-        default=AudioRef(), description="URL of the input audio file for voice cloning. Should be at least 10 seconds long. To retain the voice permanently, use it with a TTS (text-to-speech) endpoint at least once within 7 days. Otherwise, it will be automatically deleted."
+    text: str = Field(
+        default="Hello, this is a preview of your cloned voice! I hope you like it!", description="Text to generate a TTS preview with the cloned voice (optional)"
     )
     accuracy: float = Field(
         default=0.0, description="Text validation accuracy threshold (0-1)"
+    )
+    audio_url: AudioRef = Field(
+        default=AudioRef(), description="URL of the input audio file for voice cloning. Should be at least 10 seconds long. To retain the voice permanently, use it with a TTS (text-to-speech) endpoint at least once within 7 days. Otherwise, it will be automatically deleted."
     )
     noise_reduction: bool = Field(
         default=False, description="Enable noise reduction for the cloned voice"
@@ -1665,10 +1665,10 @@ class MinimaxVoiceClone(FALNode):
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
-            "text": self.text,
             "model": self.model.value,
-            "audio_url": self.audio_url,
+            "text": self.text,
             "accuracy": self.accuracy,
+            "audio_url": self.audio_url,
             "noise_reduction": self.noise_reduction,
             "need_volume_normalization": self.need_volume_normalization,
         }
@@ -1755,11 +1755,11 @@ class MinimaxSpeech02Turbo(FALNode):
     text: str = Field(
         default="", description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)"
     )
-    language_boost: LanguageBoost | None = Field(
-        default=None, description="Enhance recognition of specified languages and dialects"
-    )
     voice_setting: str = Field(
         default="", description="Voice configuration settings"
+    )
+    language_boost: LanguageBoost | None = Field(
+        default=None, description="Enhance recognition of specified languages and dialects"
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.HEX, description="Format of the output content (non-streaming only)"
@@ -1774,8 +1774,8 @@ class MinimaxSpeech02Turbo(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "text": self.text,
-            "language_boost": self.language_boost.value if self.language_boost else None,
             "voice_setting": self.voice_setting,
+            "language_boost": self.language_boost.value if self.language_boost else None,
             "output_format": self.output_format.value,
             "pronunciation_dict": self.pronunciation_dict,
             "audio_setting": self.audio_setting,
@@ -1863,11 +1863,11 @@ class MinimaxSpeech02Hd(FALNode):
     text: str = Field(
         default="", description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)"
     )
-    language_boost: LanguageBoost | None = Field(
-        default=None, description="Enhance recognition of specified languages and dialects"
-    )
     voice_setting: str = Field(
         default="", description="Voice configuration settings"
+    )
+    language_boost: LanguageBoost | None = Field(
+        default=None, description="Enhance recognition of specified languages and dialects"
     )
     output_format: OutputFormat = Field(
         default=OutputFormat.HEX, description="Format of the output content (non-streaming only)"
@@ -1882,8 +1882,8 @@ class MinimaxSpeech02Hd(FALNode):
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
             "text": self.text,
-            "language_boost": self.language_boost.value if self.language_boost else None,
             "voice_setting": self.voice_setting,
+            "language_boost": self.language_boost.value if self.language_boost else None,
             "output_format": self.output_format.value,
             "pronunciation_dict": self.pronunciation_dict,
             "audio_setting": self.audio_setting,
@@ -2026,8 +2026,8 @@ class ElevenlabsTtsTurboV25(FALNode):
         OFF = "off"
 
 
-    text: str = Field(
-        default="", description="The text to convert to speech"
+    stability: float = Field(
+        default=0.5, description="Voice stability (0-1)"
     )
     next_text: str = Field(
         default="", description="The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
@@ -2038,8 +2038,8 @@ class ElevenlabsTtsTurboV25(FALNode):
     style: float = Field(
         default=0, description="Style exaggeration (0-1)"
     )
-    stability: float = Field(
-        default=0.5, description="Voice stability (0-1)"
+    text: str = Field(
+        default="", description="The text to convert to speech"
     )
     timestamps: bool = Field(
         default=False, description="Whether to return timestamps for each word in the generated speech"
@@ -2062,11 +2062,11 @@ class ElevenlabsTtsTurboV25(FALNode):
 
     async def process(self, context: ProcessingContext) -> AudioRef:
         arguments = {
-            "text": self.text,
+            "stability": self.stability,
             "next_text": self.next_text,
             "speed": self.speed,
             "style": self.style,
-            "stability": self.stability,
+            "text": self.text,
             "timestamps": self.timestamps,
             "similarity_boost": self.similarity_boost,
             "voice": self.voice,

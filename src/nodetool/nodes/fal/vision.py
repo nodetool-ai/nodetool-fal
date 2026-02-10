@@ -59,7 +59,7 @@ class ArbiterImageText(FALNode):
     measurements: list[str] = Field(
         default=[], description="The measurements to use for the measurement."
     )
-    inputs: list[str] = Field(
+    inputs: list[SemanticImageInput] = Field(
         default=[], description="The inputs to use for the measurement."
     )
 
@@ -99,7 +99,7 @@ class ArbiterImageImage(FALNode):
     measurements: list[str] = Field(
         default=[], description="The measurements to use for the measurement."
     )
-    inputs: list[str] = Field(
+    inputs: list[ReferenceImageInput] = Field(
         default=[], description="The inputs to use for the measurement."
     )
 
@@ -139,7 +139,7 @@ class ArbiterImage(FALNode):
     measurements: list[str] = Field(
         default=[], description="The measurements to use for the measurement."
     )
-    inputs: list[str] = Field(
+    inputs: list[ImageInput] = Field(
         default=[], description="The inputs to use for the measurement."
     )
 
@@ -446,34 +446,38 @@ class OpenrouterRouterVision(FALNode):
     prompt: str = Field(
         default="", description="Prompt to be used for the image"
     )
-    reasoning: bool = Field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
     system_prompt: str = Field(
         default="", description="System prompt to provide context or instructions to the model"
+    )
+    reasoning: bool = Field(
+        default=False, description="Should reasoning be the part of the final answer."
     )
     model: str = Field(
         default="", description="Name of the model to use. Charged based on actual token usage."
     )
-    max_tokens: str = Field(
-        default="", description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length."
+    max_tokens: int = Field(
+        default=0, description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length."
     )
     temperature: float = Field(
         default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of image URLs to be processed"
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "reasoning": self.reasoning,
             "system_prompt": self.system_prompt,
+            "reasoning": self.reasoning,
             "model": self.model,
             "max_tokens": self.max_tokens,
             "temperature": self.temperature,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -658,11 +662,11 @@ class Moondream3PreviewCaption(FALNode):
     top_p: float = Field(
         default=0.0, description="Nucleus sampling probability mass to use, between 0 and 1."
     )
-    length: Length = Field(
-        default=Length.NORMAL, description="Length of the caption to generate"
-    )
     temperature: float = Field(
         default=0.0, description="Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0."
+    )
+    length: Length = Field(
+        default=Length.NORMAL, description="Length of the caption to generate"
     )
     image_url: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s"
@@ -672,8 +676,8 @@ class Moondream3PreviewCaption(FALNode):
         image_url_base64 = await context.image_to_base64(self.image_url)
         arguments = {
             "top_p": self.top_p,
-            "length": self.length.value,
             "temperature": self.temperature,
+            "length": self.length.value,
             "image_url": f"data:image/png;base64,{image_url_base64}",
         }
 
@@ -798,13 +802,17 @@ class XAilabNsfw(FALNode):
     - Scene understanding
     """
 
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked."
     )
 
     async def process(self, context: ProcessingContext) -> Any:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
         }
 
         # Remove None values
@@ -1405,7 +1413,7 @@ class MoondreamBatched(FALNode):
     repetition_penalty: float = Field(
         default=1, description="Repetition penalty for sampling"
     )
-    inputs: list[str] = Field(
+    inputs: list[MoondreamInputParam] = Field(
         default=[], description="List of input prompts and image URLs"
     )
     max_tokens: int = Field(

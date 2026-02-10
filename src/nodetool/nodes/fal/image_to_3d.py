@@ -214,7 +214,7 @@ class Sam33DObjects(FALNode):
     pointmap_url: str = Field(
         default="", description="Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation"
     )
-    box_prompts: list[str] = Field(
+    box_prompts: list[BoxPromptBase] = Field(
         default=[], description="Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction."
     )
     image_url: ImageRef = Field(
@@ -223,7 +223,7 @@ class Sam33DObjects(FALNode):
     mask_urls: list[str] = Field(
         default=[], description="Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used."
     )
-    point_prompts: list[str] = Field(
+    point_prompts: list[PointPromptBase] = Field(
         default=[], description="Point prompts for auto-segmentation when no masks provided"
     )
     seed: int = Field(
@@ -401,7 +401,7 @@ class MeshyV5MultiImageTo3D(FALNode):
     symmetry_mode: SymmetryMode = Field(
         default=SymmetryMode.AUTO, description="Controls symmetry behavior during model generation."
     )
-    image_urls: list[str] = Field(
+    images: list[ImageRef] = Field(
         default=[], description="1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used."
     )
     texture_prompt: str = Field(
@@ -413,6 +413,10 @@ class MeshyV5MultiImageTo3D(FALNode):
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         texture_image_url_base64 = await context.image_to_base64(self.texture_image_url)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "enable_pbr": self.enable_pbr,
             "should_texture": self.should_texture,
@@ -422,7 +426,7 @@ class MeshyV5MultiImageTo3D(FALNode):
             "topology": self.topology.value,
             "enable_safety_checker": self.enable_safety_checker,
             "symmetry_mode": self.symmetry_mode.value,
-            "image_urls": self.image_urls,
+            "image_urls": images_data_urls,
             "texture_prompt": self.texture_prompt,
             "should_remesh": self.should_remesh,
         }
