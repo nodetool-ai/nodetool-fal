@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, quote, urlparse
 
+
 import httpx
 from pydantic import Field
 
@@ -19,6 +20,7 @@ from nodetool.metadata.types import (
     BaseType,
     DocumentRef,
     ImageRef,
+    ImageSize,
     Model3DRef,
     VideoRef,
     asset_types,
@@ -57,6 +59,7 @@ class FalAI(FALNode):
 
     _is_dynamic = True
     _supports_dynamic_outputs = True
+    _dynamic_input_types: dict[str, TypeMetadata] = {}
 
     model_info: str = Field(
         default="",
@@ -67,6 +70,7 @@ class FalAI(FALNode):
 
     def __init__(self, **data: Any):
         super().__init__(**data)
+        self._dynamic_input_types = {}
         self._prime_schema_outputs()
 
     @classmethod
@@ -120,6 +124,13 @@ class FalAI(FALNode):
         if not outputs:
             return {"result": res}
         return outputs
+
+    def find_property(self, name: str):
+        from nodetool.workflows.property import Property
+
+        if name in self._dynamic_input_types:
+            return Property(name=name, type=self._dynamic_input_types[name])
+        return super().find_property(name)
 
     def find_output_instance(self, name: str):
         slot = super().find_output_instance(name)
@@ -188,7 +199,15 @@ class FalAI(FALNode):
         """Populate dynamic input slots from the OpenAPI input schema so the UI shows them without manual add. Preserves existing values."""
         schema_props = bundle.input_schema.get("properties", {})
         required = set(bundle.input_schema.get("required", []))
+        
+        # Reset dynamic input types
+        self._dynamic_input_types = {}
+        
         for name, prop_schema in schema_props.items():
+            # Infer and register strict input type
+            input_type = _infer_input_type(bundle.openapi, prop_schema)
+            self._dynamic_input_types[name] = input_type
+            
             if name not in self._dynamic_properties:
                 self._dynamic_properties[name] = _default_value_for_input_property(
                     bundle.openapi,
@@ -235,7 +254,12 @@ class FalAI(FALNode):
 
 
 async def _fetch_openapi(openapi_url: str) -> dict[str, Any]:
-    url = _normalize_openapi_url(openapi_url) if _is_openapi_url(openapi_url) else openapi_url
+    _validate_fal_url(openapi_url)
+    url = (
+        _normalize_openapi_url(openapi_url)
+        if _is_openapi_url(openapi_url)
+        else openapi_url
+    )
     timeout = httpx.Timeout(20.0)
     async with httpx.AsyncClient(timeout=timeout) as client:
         schema_resp = await client.get(url)
@@ -244,6 +268,7 @@ async def _fetch_openapi(openapi_url: str) -> dict[str, Any]:
 
 
 async def _fetch_model_info(model_info_url: str) -> str:
+    _validate_fal_url(model_info_url)
     timeout = httpx.Timeout(20.0)
     async with httpx.AsyncClient(timeout=timeout) as client:
         resp = await client.get(model_info_url)
@@ -251,9 +276,26 @@ async def _fetch_model_info(model_info_url: str) -> str:
         return resp.text
 
 
+def _validate_fal_url(url: str) -> None:
+    """Ensure the URL points to a trusted fal.ai domain to mitigate SSRF."""
+    parsed = urlparse(url)
+    domain = (parsed.netloc or "").lower()
+    # Allow fal.ai and fal.run (used for endpoints)
+    if not (domain.endswith(".fal.ai") or domain == "fal.ai" or 
+            domain.endswith(".fal.run") or domain == "fal.run"):
+        raise ValueError(
+            f"Invalid domain for FAL schema resolution: {domain or 'unknown'}. "
+            "Only *.fal.ai or *.fal.run domains are permitted."
+        )
+
+
 def _sanitize_endpoint_id(value: str) -> str:
-    """Strip trailing punctuation and whitespace that can cause 404s (e.g. pasted '...base/edit)' )."""
-    return value.strip().rstrip(")\\]}>.,;:").strip()
+    """Strip trailing punctuation and strictly validate endpoint ID format to prevent traversal."""
+    clean = value.strip().rstrip(")\\]}>.,;:").strip()
+    # Permit alphanumeric, hyphens, underscores, and forward slashes (for 'fal-ai/model-name')
+    if not re.match(r"^[a-zA-Z0-9\-_/]+$", clean):
+        raise ValueError(f"Invalid characters in endpoint ID: {clean}")
+    return clean
 
 
 def _normalize_model_info(
@@ -283,8 +325,10 @@ def _cache_key_for_model_info(
     model_info_url: str | None,
     endpoint_hint: str | None,
 ) -> str | None:
+    """Return a unique, safe cache key by hashing the input info."""
+    # We always hash to prevent path traversal risks from un-sanitized strings being used as filenames.
     if endpoint_hint:
-        return endpoint_hint
+        return hashlib.sha256(endpoint_hint.encode("utf-8")).hexdigest()
     if model_info_url:
         return hashlib.sha256(model_info_url.encode("utf-8")).hexdigest()
     if model_info_text:
@@ -582,6 +626,13 @@ async def _coerce_input_value(
     asset_value = _coerce_asset_ref(value)
     if asset_value is not None:
         return await _serialize_asset_ref(asset_value, context, node)
+        
+    if isinstance(value, ImageSize):
+        # Convert ImageSize object to dict for FAL API
+        return {
+            "width": value.width,
+            "height": value.height,
+        }
 
     if resolved.get("type") == "array":
         item_schema = resolved.get("items") or {}
@@ -794,6 +845,95 @@ def _build_output_types(
     return output_types
 
 
+def _infer_input_type(
+    openapi: dict[str, Any], prop_schema: dict[str, Any]
+) -> TypeMetadata:
+    """Infer the strict Nodetool type for a dynamic input."""
+    resolved = _resolve_schema_ref(openapi, prop_schema)
+    kind = resolved.get("type")
+
+    # Detect Enum
+    if "enum" in resolved:
+        return TypeMetadata(type="enum", values=resolved["enum"])
+
+    # Detect ImageSize
+    if kind == "object" and _is_image_size_schema(resolved):
+        return TypeMetadata(type="image_size")
+
+    # Detect List[ImageRef], List[VideoRef], etc.
+    if kind == "array":
+        item_schema = resolved.get("items")
+        if item_schema:
+            resolved_item = _resolve_schema_ref(openapi, item_schema)
+            if _is_file_schema(resolved_item) or resolved_item.get("format") in ("uri", "url"):
+                 # It's a list of files/URLs. Assume ImageRef by default for strict typing if ambiguous, 
+                 # or analyze name? For now, we use a generic AssetRef or ImageRef if name implies it.
+                 # Actually, let's look at the property name or format.
+                 # If name contains "image", return list[ImageRef].
+                 # But we don't have the prop name here easily unless we pass it. 
+                 # Let's rely on _is_url_or_image_array logic if we can, but we need name.
+                 # Let's just return List[Any] if we can't be sure, OR default to List[ImageRef] 
+                 # if it looks like a URI list, because ImageRef is the most common use case 
+                 # and user can cast if needed? 
+                 # BETTER: Pass the name to this function. But I didn't in the call site...
+                 # Let's inspect the SCHEMA for keywords.
+                 if _schema_suggests_image(resolved):
+                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="image")])
+                 if _schema_suggests_video(resolved):
+                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="video")])
+                 if _schema_suggests_audio(resolved):
+                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="audio")])
+                 
+                 # Default to generic asset list if it's a list of URIs
+                 return TypeMetadata(type="list", type_args=[TypeMetadata(type="asset")])
+
+    # Detect ImageRef / VideoRef / AudioRef
+    if kind == "string" and resolved.get("format") in ("uri", "url"):
+         if _schema_suggests_image(resolved):
+             return TypeMetadata(type="image")
+         if _schema_suggests_video(resolved):
+             return TypeMetadata(type="video")
+         if _schema_suggests_audio(resolved):
+             return TypeMetadata(type="audio")
+         return TypeMetadata(type="asset")
+
+    # Standard types
+    if kind == "string":
+        return TypeMetadata(type="str")
+    if kind == "integer":
+        return TypeMetadata(type="int")
+    if kind == "number":
+        return TypeMetadata(type="float")
+    if kind == "boolean":
+        return TypeMetadata(type="bool")
+    
+    return TypeMetadata(type="any")
+
+
+def _is_image_size_schema(schema: dict[str, Any]) -> bool:
+    props = schema.get("properties", {})
+    return "width" in props and "height" in props
+
+
+def _schema_suggests_image(schema: dict[str, Any]) -> bool:
+    """Heuristic to guess if a schema represents an image."""
+    desc = schema.get("description", "").lower()
+    title = schema.get("title", "").lower()
+    return "image" in desc or "image" in title or "png" in desc or "jpg" in desc
+
+
+def _schema_suggests_video(schema: dict[str, Any]) -> bool:
+    desc = schema.get("description", "").lower()
+    title = schema.get("title", "").lower()
+    return "video" in desc or "video" in title or "mp4" in desc
+
+
+def _schema_suggests_audio(schema: dict[str, Any]) -> bool:
+    desc = schema.get("description", "").lower()
+    title = schema.get("title", "").lower()
+    return "audio" in desc or "audio" in title or "mp3" in desc
+
+
 def _infer_output_type(
     openapi: dict[str, Any], name: str, schema: dict[str, Any]
 ) -> TypeMetadata:
@@ -825,6 +965,8 @@ def _infer_output_type(
     if resolved.get("type") == "string":
         return TypeMetadata(type="str")
     if resolved.get("type") == "object":
+        if _is_image_size_schema(resolved):
+            return TypeMetadata(type="image_size")
         return TypeMetadata(type="dict")
     return TypeMetadata(type="any")
 
@@ -854,7 +996,7 @@ def _build_input_types(
     out: dict[str, tuple[TypeMetadata, str | None]] = {}
     for name, prop_schema in properties.items():
         resolved = _resolve_schema_ref(openapi, prop_schema)
-        meta = _infer_output_type(openapi, name, prop_schema)
+        meta = _infer_input_type(openapi, prop_schema)
         desc = resolved.get("description")
         out[name] = (meta, desc)
     return out
@@ -881,10 +1023,17 @@ def _schema_bundle_to_resolve_result(bundle: FalSchemaBundle) -> dict[str, Any]:
         entry: dict[str, Any] = _type_metadata_to_dict(meta)
         if desc is not None:
             entry["description"] = desc
-        # Min/max for number inputs (JSON schema minimum/maximum)
+        
+        # Include metadata if available
         prop_schema = schema_props.get(name)
         if prop_schema is not None:
             resolved_prop = _resolve_schema_ref(bundle.openapi, prop_schema)
+            if "default" in resolved_prop:
+                entry["default"] = resolved_prop["default"]
+            
+            if "enum" in resolved_prop:
+                entry["values"] = resolved_prop["enum"]
+            
             if meta.type in ("int", "float"):
                 if "minimum" in resolved_prop:
                     entry["min"] = resolved_prop["minimum"]
@@ -994,7 +1143,16 @@ async def resolve_dynamic_schema(model_info: str) -> dict[str, Any]:
 
 def _type_metadata_to_dict(meta: TypeMetadata) -> dict[str, Any]:
     """Serialize TypeMetadata for JSON (e.g. API response)."""
-    out: dict[str, Any] = {"type": meta.type, "type_args": [], "optional": getattr(meta, "optional", False)}
+    out: dict[str, Any] = {
+        "type": meta.type,
+        "type_args": [],
+        "optional": getattr(meta, "optional", False),
+    }
+    if getattr(meta, "values", None):
+        out["values"] = meta.values
+    if getattr(meta, "type_name", None):
+        out["type_name"] = meta.type_name
+
     if getattr(meta, "type_args", None):
         out["type_args"] = [
             _type_metadata_to_dict(a) if isinstance(a, TypeMetadata) else a

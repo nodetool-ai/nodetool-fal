@@ -1,4 +1,3 @@
-import nodetool.nodes.fal.types  # noqa: F401
 import nodetool.nodes.fal.llm  # noqa: F401
 import nodetool.nodes.fal.text_to_image  # noqa: F401
 import nodetool.nodes.fal.text_to_audio  # noqa: F401
@@ -8,20 +7,3 @@ import nodetool.nodes.fal.image_to_video  # noqa: F401
 import nodetool.nodes.fal.text_to_video  # noqa: F401
 import nodetool.nodes.fal.model3d  # noqa: F401
 import nodetool.nodes.fal.dynamic_schema  # noqa: F401
-import nodetool.nodes.fal.video_to_video  # noqa: F401
-import nodetool.nodes.fal.vision  # noqa: F401
-import nodetool.nodes.fal.text_to_speech  # noqa: F401
-import nodetool.nodes.fal.audio_to_audio  # noqa: F401
-import nodetool.nodes.fal.training  # noqa: F401
-import nodetool.nodes.fal.image_to_3d  # noqa: F401
-import nodetool.nodes.fal.audio_to_video  # noqa: F401
-import nodetool.nodes.fal.audio_to_text  # noqa: F401
-import nodetool.nodes.fal.image_to_json  # noqa: F401
-import nodetool.nodes.fal.json_processing  # noqa: F401
-import nodetool.nodes.fal.speech_to_speech  # noqa: F401
-import nodetool.nodes.fal.text_to_3d  # noqa: F401
-import nodetool.nodes.fal.text_to_json  # noqa: F401
-import nodetool.nodes.fal.text_to_text  # noqa: F401
-import nodetool.nodes.fal.unknown  # noqa: F401
-import nodetool.nodes.fal.video_to_audio  # noqa: F401
-import nodetool.nodes.fal.video_to_text  # noqa: F401
