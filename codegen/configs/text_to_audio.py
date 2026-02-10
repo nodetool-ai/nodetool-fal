@@ -288,6 +288,289 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["audio"]
     },
+
+    "fal-ai/minimax-music/v2": {
+        "class_name": "MinimaxMusicV2",
+        "docstring": "Minimax Music",
+        "tags": ["audio", "generation", "text-to-audio", "tts", "professional"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "beatoven/sound-effect-generation": {
+        "class_name": "BeatovenSoundEffectGeneration",
+        "docstring": "Sound Effect Generation",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "beatoven/music-generation": {
+        "class_name": "BeatovenMusicGeneration",
+        "docstring": "Music Generation",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/minimax-music/v1.5": {
+        "class_name": "MinimaxMusicV15",
+        "docstring": "MiniMax (Hailuo AI) Music v1.5",
+        "tags": ["audio", "generation", "text-to-audio", "tts", "professional"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "fal-ai/stable-audio-25/text-to-audio": {
+        "class_name": "StableAudio25TextToAudio",
+        "docstring": "Stable Audio 2.5",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "sonauto/v2/inpaint": {
+        "class_name": "SonautoV2Inpaint",
+        "docstring": "Sonauto V2",
+        "tags": ["audio", "generation", "text-to-audio", "tts"],
+        "use_cases": [
+            "Automated content generation",
+            "Creative workflows",
+            "Batch processing",
+            "Professional applications",
+            "Rapid prototyping"
+
+        ],
+    },
+    "sonauto/v2/text-to-music": {
+        "class_name": "SonautoV2TextToMusic",
+        "docstring": "Create full songs in any style",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/lyria2": {
+        "class_name": "Lyria2",
+        "docstring": "Lyria 2 is Google's latest music generation model, you can generate any type of music with this model.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "cassetteai/sound-effects-generator": {
+        "class_name": "CassetteaiSoundEffectsGenerator",
+        "docstring": "Create stunningly realistic sound effects in seconds - CassetteAI's Sound Effects Model generates high-quality SFX up to 30 seconds long in just 1 second of processing time",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "cassetteai/music-generator": {
+        "class_name": "CassetteaiMusicGenerator",
+        "docstring": "CassetteAI’s model generates a 30-second sample in under 2 seconds and a full 3-minute track in under 10 seconds. At 44.1 kHz stereo audio, expect a level of professional consistency with no breaks, no squeaks, and no random interruptions in your creations.  ",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/hindi": {
+        "class_name": "KokoroHindi",
+        "docstring": "A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/british-english": {
+        "class_name": "KokoroBritishEnglish",
+        "docstring": "A high-quality British English text-to-speech model offering natural and expressive voice synthesis.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/american-english": {
+        "class_name": "KokoroAmericanEnglish",
+        "docstring": "Kokoro is a lightweight text-to-speech model that delivers comparable quality to larger models while being significantly faster and more cost-efficient.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/zonos": {
+        "class_name": "Zonos",
+        "docstring": "Clone voice of any person and speak anything in their voice using zonos' voice cloning.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/italian": {
+        "class_name": "KokoroItalian",
+        "docstring": "A high-quality Italian text-to-speech model delivering smooth and expressive speech synthesis.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/brazilian-portuguese": {
+        "class_name": "KokoroBrazilianPortuguese",
+        "docstring": "A natural and expressive Brazilian Portuguese text-to-speech model optimized for clarity and fluency.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/french": {
+        "class_name": "KokoroFrench",
+        "docstring": "An expressive and natural French text-to-speech model for both European and Canadian French.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/japanese": {
+        "class_name": "KokoroJapanese",
+        "docstring": "A fast and natural-sounding Japanese text-to-speech model optimized for smooth pronunciation.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/mandarin-chinese": {
+        "class_name": "KokoroMandarinChinese",
+        "docstring": "A highly efficient Mandarin Chinese text-to-speech model that captures natural tones and prosody.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/kokoro/spanish": {
+        "class_name": "KokoroSpanish",
+        "docstring": "A natural-sounding Spanish text-to-speech model optimized for Latin American and European Spanish.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/yue": {
+        "class_name": "Yue",
+        "docstring": "YuE is a groundbreaking series of open-source foundation models designed for music generation, specifically for transforming lyrics into full songs.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/mmaudio-v2/text-to-audio": {
+        "class_name": "MmaudioV2TextToAudio",
+        "docstring": "MMAudio generates synchronized audio given text inputs. It can generate sounds described by a prompt.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
+    "fal-ai/minimax-music": {
+        "class_name": "MinimaxMusic",
+        "docstring": "Generate music from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality, diverse musical compositions.",
+        "tags": ["audio", "generation", "text-to-audio", "sound"],
+        "use_cases": [
+            "Sound effect generation",
+            "Music composition",
+            "Audio content creation",
+            "Background music generation",
+            "Podcast audio production",
+        ],
+    },
 }
 
 

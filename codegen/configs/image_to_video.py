@@ -22,7 +22,6 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "field_overrides": {
             "image_url": {
-                "name": "image",  # Rename field
                 "description": "The image to transform into a video"
             },
             "prompt": {
@@ -645,6 +644,1305 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Resolution": "CreatifyAuroraResolution"
         },
         "basic_fields": ["image", "prompt"]
+    },
+
+    "fal-ai/pixverse/v5.5/effects": {
+        "class_name": "PixverseV55Effects",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pixverse/v5.5/transition": {
+        "class_name": "PixverseV55Transition",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pixverse/v5.5/image-to-video": {
+        "class_name": "PixverseV55ImageToVideo",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/image-to-video": {
+        "class_name": "KlingVideoO1ImageToVideo",
+        "docstring": "Kling O1 First Frame Last Frame to Video [Pro]",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/o1/reference-to-video": {
+        "class_name": "KlingVideoO1ReferenceToVideo",
+        "docstring": "Kling O1 Reference Image to Video [Pro]",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/ltx-2/image-to-video/fast": {
+        "class_name": "Ltx2ImageToVideoFast",
+        "docstring": "LTX Video 2.0 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/ltx-2/image-to-video": {
+        "class_name": "Ltx2ImageToVideo",
+        "docstring": "LTX Video 2.0 Pro",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "bytedance/lynx": {
+        "class_name": "BytedanceLynx",
+        "docstring": "Lynx",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pixverse/swap": {
+        "class_name": "PixverseSwap",
+        "docstring": "Pixverse",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/pika/v2.2/pikaframes": {
+        "class_name": "PikaV22Pikaframes",
+        "docstring": "Pika",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/image-to-video/720p": {
+        "class_name": "LongcatVideoImageToVideo720P",
+        "docstring": "LongCat Video",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/image-to-video/480p": {
+        "class_name": "LongcatVideoImageToVideo480P",
+        "docstring": "LongCat Video",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/distilled/image-to-video/720p": {
+        "class_name": "LongcatVideoDistilledImageToVideo720P",
+        "docstring": "LongCat Video Distilled",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/longcat-video/distilled/image-to-video/480p": {
+        "class_name": "LongcatVideoDistilledImageToVideo480P",
+        "docstring": "LongCat Video Distilled",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3-fast/standard/image-to-video": {
+        "class_name": "MinimaxHailuo23FastStandardImageToVideo",
+        "docstring": "MiniMax Hailuo 2.3 Fast [Standard] (Image to Video)",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3/standard/image-to-video": {
+        "class_name": "MinimaxHailuo23StandardImageToVideo",
+        "docstring": "MiniMax Hailuo 2.3 [Standard] (Image to Video)",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/minimax/hailuo-2.3-fast/pro/image-to-video": {
+        "class_name": "MinimaxHailuo23FastProImageToVideo",
+        "docstring": "MiniMax Hailuo 2.3 Fast [Pro] (Image to Video)",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/vidu/q2/image-to-video/turbo": {
+        "class_name": "ViduQ2ImageToVideoTurbo",
+        "docstring": "Vidu",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/vidu/q2/image-to-video/pro": {
+        "class_name": "ViduQ2ImageToVideoPro",
+        "docstring": "Vidu",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/v2.5-turbo/standard/image-to-video": {
+        "class_name": "KlingVideoV25TurboStandardImageToVideo",
+        "docstring": "Kling Video",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/fast/first-last-frame-to-video": {
+        "class_name": "Veo31FastFirstLastFrameToVideo",
+        "docstring": "Veo 3.1 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/first-last-frame-to-video": {
+        "class_name": "Veo31FirstLastFrameToVideo",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/reference-to-video": {
+        "class_name": "Veo31ReferenceToVideo",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/fast/image-to-video": {
+        "class_name": "Veo31FastImageToVideo",
+        "docstring": "Veo 3.1 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/veo3.1/image-to-video": {
+        "class_name": "Veo31ImageToVideo",
+        "docstring": "Veo 3.1",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/sora-2/image-to-video/pro": {
+        "class_name": "Sora2ImageToVideoPro",
+        "docstring": "Sora 2",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/sora-2/image-to-video": {
+        "class_name": "Sora2ImageToVideo",
+        "docstring": "Sora 2",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/ovi/image-to-video": {
+        "class_name": "OviImageToVideo",
+        "docstring": "Ovi",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "veed/fabric-1.0/fast": {
+        "class_name": "VeedFabric10Fast",
+        "docstring": "Fabric 1.0 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "veed/fabric-1.0": {
+        "class_name": "VeedFabric10",
+        "docstring": "Fabric 1.0",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/v1/standard/ai-avatar": {
+        "class_name": "KlingVideoV1StandardAiAvatar",
+        "docstring": "Kling AI Avatar",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/kling-video/v1/pro/ai-avatar": {
+        "class_name": "KlingVideoV1ProAiAvatar",
+        "docstring": "Kling AI Avatar Pro",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "professional"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "decart/lucy-14b/image-to-video": {
+        "class_name": "DecartLucy14BImageToVideo",
+        "docstring": "Decart Lucy 14b",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/wan-ati": {
+        "class_name": "WanAti",
+        "docstring": "Wan Ati",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling"
+
+        ],
+    },
+    "fal-ai/decart/lucy-5b/image-to-video": {
+        "class_name": "DecartLucy5bImageToVideo",
+        "docstring": "Lucy-5B is a model that can create 5-second I2V videos in under 5 seconds, achieving >1x RTF end-to-end",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v5/transition": {
+        "class_name": "PixverseV5Transition",
+        "docstring": "Create seamless transition between images using PixVerse v5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v5/effects": {
+        "class_name": "PixverseV5Effects",
+        "docstring": "Generate high quality video clips with different effects using PixVerse v5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v5/image-to-video": {
+        "class_name": "PixverseV5ImageToVideo",
+        "docstring": "Generate high quality video clips from text and image prompts using PixVerse v5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "moonvalley/marey/i2v": {
+        "class_name": "MoonvalleyMareyI2v",
+        "docstring": "Generate a video starting from an image as the first frame with Marey, a generative video model trained exclusively on fully licensed data.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/image-to-video/lora": {
+        "class_name": "WanV22A14bImageToVideoLora",
+        "docstring": "Wan-2.2 image-to-video is a video model that generates high-quality videos with high visual quality and motion diversity from text prompts and images. This endpoint supports LoRAs made for Wan 2.2",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "lora"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/minimax/hailuo-02-fast/image-to-video": {
+        "class_name": "MinimaxHailuo02FastImageToVideo",
+        "docstring": "Create blazing fast and economical videos with MiniMax Hailuo-02 Image To Video API at 512p resolution",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/veo3/image-to-video": {
+        "class_name": "Veo3ImageToVideo",
+        "docstring": "Veo 3 is the latest state-of-the art video generation model from Google DeepMind",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/image-to-video/turbo": {
+        "class_name": "WanV22A14bImageToVideoTurbo",
+        "docstring": "Wan-2.2 Turbo image-to-video is a video model that generates high-quality videos with high visual quality and motion diversity from text prompts. ",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/wan/v2.2-5b/image-to-video": {
+        "class_name": "WanV225bImageToVideo",
+        "docstring": "Wan 2.2's 5B model produces up to 5 seconds of video 720p at 24FPS with fluid motion and powerful prompt understanding",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/wan/v2.2-a14b/image-to-video": {
+        "class_name": "WanV22A14bImageToVideo",
+        "docstring": "fal-ai/wan/v2.2-A14B/image-to-video",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/bytedance/omnihuman": {
+        "class_name": "BytedanceOmnihuman",
+        "docstring": "OmniHuman generates video using an image of a human figure paired with an audio file. It produces vivid, high-quality videos where the character’s emotions and movements maintain a strong correlation with the audio.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/ltxv-13b-098-distilled/image-to-video": {
+        "class_name": "Ltxv13b098DistilledImageToVideo",
+        "docstring": "Generate long videos from prompts and images using LTX Video-0.9.8 13B Distilled and custom LoRA",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/veo3/fast/image-to-video": {
+        "class_name": "Veo3FastImageToVideo",
+        "docstring": "Now with a 50% price drop. Generate videos from your image prompts using Veo 3 fast.",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/vidu/q1/reference-to-video": {
+        "class_name": "ViduQ1ReferenceToVideo",
+        "docstring": "Generate video clips from your multiple image references using Vidu Q1",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/minimax/hailuo-02/pro/image-to-video": {
+        "class_name": "MinimaxHailuo02ProImageToVideo",
+        "docstring": "MiniMax Hailuo-02 Image To Video API (Pro, 1080p): Advanced image-to-video generation model with 1080p resolution",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/bytedance/seedance/v1/lite/image-to-video": {
+        "class_name": "BytedanceSeedanceV1LiteImageToVideo",
+        "docstring": "Seedance 1.0 Lite",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/hunyuan-avatar": {
+        "class_name": "HunyuanAvatar",
+        "docstring": "HunyuanAvatar is a High-Fidelity Audio-Driven Human Animation model for Multiple Characters .",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/kling-video/v2.1/pro/image-to-video": {
+        "class_name": "KlingVideoV21ProImageToVideo",
+        "docstring": "Kling 2.1 Pro is an advanced endpoint for the Kling 2.1 model, offering professional-grade videos with enhanced visual fidelity, precise camera movements, and dynamic motion control, perfect for cinematic storytelling.  ",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/hunyuan-portrait": {
+        "class_name": "HunyuanPortrait",
+        "docstring": "HunyuanPortrait is a diffusion-based framework for generating lifelike, temporally consistent portrait animations.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/kling-video/v1.6/standard/elements": {
+        "class_name": "KlingVideoV16StandardElements",
+        "docstring": "Generate video clips from your multiple image references using Kling 1.6 (standard)",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/kling-video/v1.6/pro/elements": {
+        "class_name": "KlingVideoV16ProElements",
+        "docstring": "Generate video clips from your multiple image references using Kling 1.6 (pro)",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/ltx-video-13b-distilled/image-to-video": {
+        "class_name": "LtxVideo13bDistilledImageToVideo",
+        "docstring": "Generate videos from prompts and images using LTX Video-0.9.7 13B Distilled and custom LoRA",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/ltx-video-13b-dev/image-to-video": {
+        "class_name": "LtxVideo13bDevImageToVideo",
+        "docstring": "Generate videos from prompts and images using LTX Video-0.9.7 13B and custom LoRA",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/ltx-video-lora/image-to-video": {
+        "class_name": "LtxVideoLoraImageToVideo",
+        "docstring": "Generate videos from prompts and images using LTX Video-0.9.7 and custom LoRA",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "lora"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v4.5/transition": {
+        "class_name": "PixverseV45Transition",
+        "docstring": "Create seamless transition between images using PixVerse v4.5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v4.5/image-to-video/fast": {
+        "class_name": "PixverseV45ImageToVideoFast",
+        "docstring": "Generate fast high quality video clips from text and image prompts using PixVerse v4.5",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v4.5/effects": {
+        "class_name": "PixverseV45Effects",
+        "docstring": "Generate high quality video clips with different effects using PixVerse v4.5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/hunyuan-custom": {
+        "class_name": "HunyuanCustom",
+        "docstring": "HunyuanCustom revolutionizes video generation with unmatched identity consistency across multiple input types. Its innovative fusion modules and alignment networks outperform competitors, maintaining subject integrity while responding flexibly to text, image, audio, and video conditions.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/framepack/f1": {
+        "class_name": "FramepackF1",
+        "docstring": "Framepack is an efficient Image-to-video model that autoregressively generates videos.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/vidu/q1/start-end-to-video": {
+        "class_name": "ViduQ1StartEndToVideo",
+        "docstring": "Vidu Q1 Start-End to Video generates smooth transition 1080p videos between specified start and end images.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/vidu/q1/image-to-video": {
+        "class_name": "ViduQ1ImageToVideo",
+        "docstring": "Vidu Q1 Image to Video generates high-quality 1080p videos with exceptional visual quality and motion diversity from a single image",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/magi/image-to-video": {
+        "class_name": "MagiImageToVideo",
+        "docstring": "MAGI-1 generates videos from images with exceptional understanding of physical interactions and prompting",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v4/effects": {
+        "class_name": "PixverseV4Effects",
+        "docstring": "Generate high quality video clips with different effects using PixVerse v4",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/magi-distilled/image-to-video": {
+        "class_name": "MagiDistilledImageToVideo",
+        "docstring": "MAGI-1 distilled generates videos faster from images with exceptional understanding of physical interactions and prompting",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/framepack/flf2v": {
+        "class_name": "FramepackFlf2v",
+        "docstring": "Framepack is an efficient Image-to-video model that autoregressively generates videos.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/wan-flf2v": {
+        "class_name": "WanFlf2v",
+        "docstring": "Wan-2.1 flf2v generates dynamic videos by intelligently bridging a given first frame to a desired end frame through smooth, coherent motion sequences.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/framepack": {
+        "class_name": "Framepack",
+        "docstring": "Framepack is an efficient Image-to-video model that autoregressively generates videos.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v4/image-to-video/fast": {
+        "class_name": "PixverseV4ImageToVideoFast",
+        "docstring": "Generate fast high quality video clips from text and image prompts using PixVerse v4",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v4/image-to-video": {
+        "class_name": "PixverseV4ImageToVideo",
+        "docstring": "Generate high quality video clips from text and image prompts using PixVerse v4",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v3.5/effects": {
+        "class_name": "PixverseV35Effects",
+        "docstring": "Generate high quality video clips with different effects using PixVerse v3.5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v3.5/transition": {
+        "class_name": "PixverseV35Transition",
+        "docstring": "Create seamless transition between images using PixVerse v3.5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/luma-dream-machine/ray-2-flash/image-to-video": {
+        "class_name": "LumaDreamMachineRay2FlashImageToVideo",
+        "docstring": "Ray2 Flash is a fast video generative model capable of creating realistic visuals with natural, coherent motion.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pika/v1.5/pikaffects": {
+        "class_name": "PikaV15Pikaffects",
+        "docstring": "Pika Effects are AI-powered video effects designed to modify objects, characters, and environments in a fun, engaging, and visually compelling manner.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pika/v2.1/image-to-video": {
+        "class_name": "PikaV21ImageToVideo",
+        "docstring": "Turn photos into mind-blowing, dynamic videos. Your images can can come to life with sharp details, impressive character control and cinematic camera moves.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pika/v2.2/image-to-video": {
+        "class_name": "PikaV22ImageToVideo",
+        "docstring": "Turn photos into mind-blowing, dynamic videos in up to 1080p. Experience better image clarity and crisper, sharper visuals.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pika/v2.2/pikascenes": {
+        "class_name": "PikaV22Pikascenes",
+        "docstring": "Pika Scenes v2.2 creates videos from a images with high quality output.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pika/v2/turbo/image-to-video": {
+        "class_name": "PikaV2TurboImageToVideo",
+        "docstring": "Turbo is the model to use when you feel the need for speed. Turn your image to stunning video up to 3x faster – all with high quality outputs. ",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/vidu/image-to-video": {
+        "class_name": "ViduImageToVideo",
+        "docstring": "Vidu Image to Video generates high-quality videos with exceptional visual quality and motion diversity from a single image",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/vidu/reference-to-video": {
+        "class_name": "ViduReferenceToVideo",
+        "docstring": "Vidu Reference to Video creates videos by using a reference images and combining them with a prompt.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/vidu/start-end-to-video": {
+        "class_name": "ViduStartEndToVideo",
+        "docstring": "Vidu Start-End to Video generates smooth transition videos between specified start and end images.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/vidu/template-to-video": {
+        "class_name": "ViduTemplateToVideo",
+        "docstring": "Vidu Template to Video lets you create different effects by applying motion templates to your images.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/wan-i2v-lora": {
+        "class_name": "WanI2vLora",
+        "docstring": "Add custom LoRAs to Wan-2.1 is a image-to-video model that generates high-quality videos with high visual quality and motion diversity from images",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "lora"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/hunyuan-video-image-to-video": {
+        "class_name": "HunyuanVideoImageToVideo",
+        "docstring": "Image to Video for the high-quality Hunyuan Video I2V model.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/minimax/video-01-director/image-to-video": {
+        "class_name": "MinimaxVideo01DirectorImageToVideo",
+        "docstring": "Generate video clips more accurately with respect to initial image, natural language descriptions, and using camera movement instructions for shot control.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/skyreels-i2v": {
+        "class_name": "SkyreelsI2v",
+        "docstring": "SkyReels V1 is the first and most advanced open-source human-centric video foundation model. By fine-tuning HunyuanVideo on O(10M) high-quality film and television clips",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/luma-dream-machine/ray-2/image-to-video": {
+        "class_name": "LumaDreamMachineRay2ImageToVideo",
+        "docstring": "Ray2 is a large-scale video generative model capable of creating realistic visuals with natural, coherent motion.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/hunyuan-video-img2vid-lora": {
+        "class_name": "HunyuanVideoImg2vidLora",
+        "docstring": "Image to Video for the Hunyuan Video model using a custom trained LoRA.",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "lora"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v3.5/image-to-video/fast": {
+        "class_name": "PixverseV35ImageToVideoFast",
+        "docstring": "Generate high quality video clips from text and image prompts quickly using PixVerse v3.5 Fast",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/pixverse/v3.5/image-to-video": {
+        "class_name": "PixverseV35ImageToVideo",
+        "docstring": "Generate high quality video clips from text and image prompts using PixVerse v3.5",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/minimax/video-01-subject-reference": {
+        "class_name": "MinimaxVideo01SubjectReference",
+        "docstring": "Generate video clips maintaining consistent, realistic facial features and identity across dynamic video content",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/kling-video/v1.6/standard/image-to-video": {
+        "class_name": "KlingVideoV16StandardImageToVideo",
+        "docstring": "Generate video clips from your images using Kling 1.6 (std)",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/sadtalker/reference": {
+        "class_name": "SadtalkerReference",
+        "docstring": "Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/minimax/video-01-live/image-to-video": {
+        "class_name": "MinimaxVideo01LiveImageToVideo",
+        "docstring": "Generate video clips from your images using MiniMax Video model",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/kling-video/v1.5/pro/image-to-video": {
+        "class_name": "KlingVideoV15ProImageToVideo",
+        "docstring": "Generate video clips from your images using Kling 1.5 (pro)",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/live-portrait": {
+        "class_name": "LivePortrait",
+        "docstring": "Transfer expression from a video to a portrait.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/musetalk": {
+        "class_name": "Musetalk",
+        "docstring": "MuseTalk is a real-time high quality audio-driven lip-syncing model. Use MuseTalk to animate a face with your own audio.",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/sadtalker": {
+        "class_name": "Sadtalker",
+        "docstring": "Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation",
+        "tags": ["video", "animation", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    "fal-ai/fast-svd-lcm": {
+        "class_name": "FastSvdLcm",
+        "docstring": "Generate short video clips from your images using SVD v1.1 at Lightning Speed",
+        "tags": ["video", "animation", "image-to-video", "img2vid", "fast"],
+        "use_cases": [
+            "Animate static images",
+            "Create engaging social media content",
+            "Product demonstrations",
+            "Marketing and promotional videos",
+            "Visual storytelling",
+        ],
+    },
+    # Kling Video V3 Standard Image-to-Video
+    "fal-ai/kling-video/v3/standard/image-to-video": {
+        "class_name": "KlingVideoV3StandardImageToVideo",
+        "docstring": "Kling Video V3 Standard generates videos from images with balanced quality and speed using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "standard", "image-to-video"],
+        "use_cases": [
+            "Animate static images into short video clips",
+            "Create engaging social media content from photos",
+            "Generate product demonstration videos",
+            "Produce marketing and promotional videos",
+            "Transform images into cinematic animations"
+        ],
+        "basic_fields": ["start_image_url", "prompt", "duration"]
+    },
+    # Kling Video V3 Pro Image-to-Video
+    "fal-ai/kling-video/v3/pro/image-to-video": {
+        "class_name": "KlingVideoV3ProImageToVideo",
+        "docstring": "Kling Video V3 Pro generates professional quality videos from images with enhanced visual fidelity using the latest V3 model.",
+        "tags": ["video", "generation", "kling", "v3", "pro", "image-to-video"],
+        "use_cases": [
+            "Create professional-grade video animations from images",
+            "Generate cinematic video content with precise motion",
+            "Produce high-fidelity product showcase videos",
+            "Animate images with enhanced visual quality",
+            "Create premium video content for advertising"
+        ],
+        "basic_fields": ["start_image_url", "prompt", "duration"]
     },
 }
 

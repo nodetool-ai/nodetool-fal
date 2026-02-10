@@ -1,6 +1,7 @@
 from pydantic import Field
 
 from nodetool.metadata.types import VideoRef, ImageRef
+from nodetool.nodes.fal.types import Frame
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
