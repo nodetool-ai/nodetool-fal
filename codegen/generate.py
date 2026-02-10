@@ -8,6 +8,7 @@ This script generates FAL node code from OpenAPI schemas and config files.
 import asyncio
 import argparse
 import importlib.util
+import re
 import sys
 from pathlib import Path
 from typing import Any, Optional
@@ -125,7 +126,7 @@ async def generate_module(
             continue
     
     # Write output file
-    output_file = output_dir / f"{module_name}_generated.py"
+    output_file = output_dir / f"{module_name}.py"
     print(f"\nWriting {len(generated_nodes)} nodes to {output_file}")
     
     # Determine which imports are actually needed by checking all generated code
@@ -140,6 +141,11 @@ async def generate_module(
     needs_image = "ImageRef" in all_code
     needs_video = "VideoRef" in all_code
     needs_audio = "AudioRef" in all_code
+    needed_base_type_classes = sorted(
+        bt_name
+        for bt_name in NodeGenerator.KNOWN_BASE_TYPES
+        if re.search(rf"\b{re.escape(bt_name)}\b", all_code)
+    )
     
     # Extract and deduplicate enums from all generated code
     enums_seen = set()
@@ -213,6 +219,8 @@ async def generate_module(
         
         if asset_types:
             f.write(f"from nodetool.metadata.types import {', '.join(asset_types)}\n")
+        if needed_base_type_classes:
+            f.write(f"from nodetool.nodes.fal.types import {', '.join(needed_base_type_classes)}\n")
         
         f.write("from nodetool.nodes.fal.fal_node import FALNode\n")
         f.write("from nodetool.workflows.processing_context import ProcessingContext\n")

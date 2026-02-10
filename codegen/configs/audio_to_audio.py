@@ -112,6 +112,129 @@ CONFIGS: dict[str, dict[str, Any]] = {
         ],
         "basic_fields": ["audio", "prompt"]
     },
+
+    # FFmpeg API Merge Audios
+    "fal-ai/ffmpeg-api/merge-audios": {
+        "class_name": "FfmpegApiMergeAudios",
+        "docstring": "FFmpeg API Merge Audios combines multiple audio files into a single output.",
+        "tags": ["audio", "processing", "audio-to-audio", "merging", "ffmpeg"],
+        "use_cases": [
+            "Combine multiple audio tracks",
+            "Merge audio segments",
+            "Create audio compilations",
+            "Join split audio files",
+            "Generate combined audio output"
+        ],
+        "basic_fields": ["audio"]
+    },
+    "fal-ai/kling-video/create-voice": {
+        "class_name": "KlingVideoCreateVoice",
+        "docstring": "Create Voices to be used with Kling 2.6 Voice Control",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "fal-ai/audio-understanding": {
+        "class_name": "AudioUnderstanding",
+        "docstring": "A audio understanding model to analyze audio content and answer questions about what's happening in the audio based on user prompts.",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "fal-ai/stable-audio-25/inpaint": {
+        "class_name": "StableAudio25Inpaint",
+        "docstring": "Generate high quality music and sound effects using Stable Audio 2.5 from StabilityAI",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "sonauto/v2/extend": {
+        "class_name": "SonautoV2Extend",
+        "docstring": "Extend an existing song",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "fal-ai/ace-step/audio-outpaint": {
+        "class_name": "AceStepAudioOutpaint",
+        "docstring": "Extend the beginning or end of provided audio with lyrics and/or style using ACE-Step",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "fal-ai/ace-step/audio-inpaint": {
+        "class_name": "AceStepAudioInpaint",
+        "docstring": "Modify a portion of provided audio with lyrics and/or style using ACE-Step",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "fal-ai/ace-step/audio-to-audio": {
+        "class_name": "AceStepAudioToAudio",
+        "docstring": "Generate music from a lyrics and example audio using ACE-Step",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "fal-ai/dia-tts/voice-clone": {
+        "class_name": "DiaTtsVoiceClone",
+        "docstring": "Clone dialog voices from a sample audio and generate dialogs from text prompts using the Dia TTS which leverages advanced AI techniques to create high-quality text-to-speech.",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
+    "fal-ai/elevenlabs/audio-isolation": {
+        "class_name": "ElevenlabsAudioIsolation",
+        "docstring": "Isolate audio tracks using ElevenLabs advanced audio isolation technology.",
+        "tags": ["audio", "processing", "audio-to-audio", "transformation"],
+        "use_cases": [
+            "Audio enhancement and processing",
+            "Voice transformation",
+            "Audio style transfer",
+            "Sound quality improvement",
+            "Audio effect application",
+        ],
+    },
 }
 
 
