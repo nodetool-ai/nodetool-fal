@@ -138,8 +138,29 @@ class NodeGenerator:
                         field.default_value = override["default_value"]
                     if "description" in override:
                         field.description = override["description"]
+
+        # Special handling: normalize image_urls inputs to images (list[ImageRef])
+        self._normalize_image_urls_fields(spec)
         
         return spec
+
+    def _normalize_image_urls_fields(self, spec: NodeSpec) -> None:
+        """Normalize `image_urls` input fields to `images: list[ImageRef]`."""
+        for field in spec.input_fields:
+            api_param_name = self._field_renames.get(field.name, field.name)
+            if api_param_name != "image_urls":
+                continue
+
+            # Keep API mapping to image_urls while exposing a nodetool-native images field.
+            if field.name in self._field_renames:
+                del self._field_renames[field.name]
+            field.name = "images"
+            self._field_renames[field.name] = "image_urls"
+
+            field.python_type = "list[ImageRef]"
+            field.enum_ref = None
+            if field.default_value == "None":
+                field.default_value = "[]"
 
     def _generate_imports(self, spec: NodeSpec) -> list[str]:
         """Generate import statements."""
@@ -321,8 +342,15 @@ class NodeGenerator:
         
         # Convert input images/videos/audio to required format
         image_fields = []
+        image_list_fields = []
         for field in spec.input_fields:
-            if "ImageRef" in field.python_type:
+            if field.python_type == "list[ImageRef]":
+                lines.append(f"        {field.name}_data_urls = []")
+                lines.append(f"        for image in self.{field.name} or []:")
+                lines.append("            image_base64 = await context.image_to_base64(image)")
+                lines.append(f'            {field.name}_data_urls.append(f"data:image/png;base64,{{image_base64}}")')
+                image_list_fields.append(field.name)
+            elif "ImageRef" in field.python_type:
                 lines.append(f"        {field.name}_base64 = await context.image_to_base64(self.{field.name})")
                 image_fields.append(field.name)
         
@@ -336,6 +364,8 @@ class NodeGenerator:
             if field.name in image_fields:
                 # Use the API parameter name for image URLs
                 lines.append(f'            "{api_param_name}": f"data:image/png;base64,{{{field.name}_base64}}",')
+            elif field.name in image_list_fields:
+                lines.append(f'            "{api_param_name}": {field.name}_data_urls,')
             elif field.enum_ref:
                 # Handle optional enums
                 if not field.required and field.default_value == "None":

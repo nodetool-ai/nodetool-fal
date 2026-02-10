@@ -125,7 +125,7 @@ async def generate_module(
             continue
     
     # Write output file
-    output_file = output_dir / f"{module_name}_generated.py"
+    output_file = output_dir / f"{module_name}.py"
     print(f"\nWriting {len(generated_nodes)} nodes to {output_file}")
     
     # Determine which imports are actually needed by checking all generated code
