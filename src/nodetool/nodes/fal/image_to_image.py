@@ -3,6 +3,7 @@ from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
+from nodetool.nodes.fal.types import BBoxPromptBase, BoxPrompt, BoxPromptBase, ChronoLoraWeight, ControlLoraWeight, ControlNet, ControlNetUnion, EasyControlWeight, ElementInput, Embedding, IPAdapter, LoRAInput, LoraWeight, PointPrompt, RGBColor, ReferenceFace  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 

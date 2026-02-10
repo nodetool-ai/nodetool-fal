@@ -201,7 +201,7 @@ class AMTFrameInterpolation(SingleOutputGraphNode[types.VideoRef], GraphNode[typ
         - Produce smooth motion effects
     """
 
-    frames: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Frames to interpolate')
+    frames: list[types.Frame] | OutputHandle[list[types.Frame]] = connect_field(default=[], description='Frames to interpolate')
     recursive_interpolation_passes: int | OutputHandle[int] = connect_field(default=4, description='Number of recursive interpolation passes')
     output_fps: int | OutputHandle[int] = connect_field(default=24, description='Output frames per second')
 
@@ -344,14 +344,14 @@ class BytedanceSeedanceV1LiteImageToVideo(SingleOutputGraphNode[types.VideoRef],
         - Visual storytelling
     """
 
-    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Resolution
-    Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Duration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.AspectRatio
+    Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Duration
+    Resolution: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Resolution
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt used to generate the video')
-    resolution: nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Resolution = Field(default=nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Resolution.VALUE_720P, description='Video resolution - 480p for faster generation, 720p for higher quality')
-    duration: nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Duration.VALUE_5, description='Duration of the video in seconds')
     aspect_ratio: nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.AspectRatio.AUTO, description='The aspect ratio of the generated video')
+    duration: nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Duration.VALUE_5, description='Duration of the video in seconds')
+    resolution: nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Resolution = Field(default=nodetool.nodes.fal.image_to_video.BytedanceSeedanceV1LiteImageToVideo.Resolution.VALUE_720P, description='Video resolution - 480p for faster generation, 720p for higher quality')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image used to generate video')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     camera_fixed: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to fix the camera position')
@@ -390,7 +390,7 @@ class CogVideoX5BImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[t
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from.')
     use_rife: bool | OutputHandle[bool] = connect_field(default=True, description='Use RIFE for video interpolation')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL to the image to generate the video from.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. We currently support one lora.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. We currently support one lora.')
     video_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated video.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related video to show you.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform.')
@@ -1088,8 +1088,8 @@ class KlingVideoO1ReferenceToVideo(SingleOutputGraphNode[types.VideoRef], GraphN
     prompt: str | OutputHandle[str] = connect_field(default='', description='Take @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order.')
     aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoO1ReferenceToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoO1ReferenceToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame.')
     duration: nodetool.nodes.fal.image_to_video.KlingVideoO1ReferenceToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoO1ReferenceToVideo.Duration.VALUE_5, description='Video duration in seconds.')
-    elements: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image).')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image).')
+    elements: list[types.OmniVideoElementInput] | OutputHandle[list[types.OmniVideoElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image).')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image).')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1162,8 +1162,8 @@ class KlingVideoO1StandardReferenceToVideo(SingleOutputGraphNode[types.VideoRef]
     prompt: str | OutputHandle[str] = connect_field(default='', description='Take @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order.')
     aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoO1StandardReferenceToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoO1StandardReferenceToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame.')
     duration: nodetool.nodes.fal.image_to_video.KlingVideoO1StandardReferenceToVideo.KlingVideoO1StandardReferenceToVideoDuration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoO1StandardReferenceToVideo.KlingVideoO1StandardReferenceToVideoDuration.VALUE_5, description='Video duration in seconds.')
-    elements: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image).')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image).')
+    elements: list[types.OmniVideoElementInput] | OutputHandle[list[types.OmniVideoElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image).')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='Additional reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 7 total (elements + reference images + start image).')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1194,16 +1194,16 @@ class KlingVideoV15ProImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphN
         - Visual storytelling
     """
 
-    Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.Duration
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.AspectRatio
+    Duration: typing.ClassVar[type] = nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.Duration
 
     prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
     duration: nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
     tail_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the end of the video')
-    aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV15ProImageToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description=None)
     static_mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image for Static Brush Application Area (Mask image created by users using the motion brush)')
-    dynamic_masks: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of dynamic masks')
+    dynamic_masks: list[types.DynamicMask] | OutputHandle[list[types.DynamicMask]] = connect_field(default=[], description='List of dynamic masks')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
 
@@ -1316,9 +1316,9 @@ class KlingVideoV16StandardImageToVideo(SingleOutputGraphNode[types.VideoRef], G
 
     prompt: str | OutputHandle[str] = connect_field(default='', description=None)
     duration: nodetool.nodes.fal.image_to_video.KlingVideoV16StandardImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV16StandardImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description=None)
-    negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
+    negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description=None)
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1422,7 +1422,7 @@ class KlingVideoV1StandardImageToVideo(SingleOutputGraphNode[types.VideoRef], Gr
     tail_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the end of the video')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the video')
     static_mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image for Static Brush Application Area (Mask image created by users using the motion brush)')
-    dynamic_masks: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of dynamic masks')
+    dynamic_masks: list[types.DynamicMask] | OutputHandle[list[types.DynamicMask]] = connect_field(default=[], description='List of dynamic masks')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
 
@@ -1459,10 +1459,10 @@ class KlingVideoV21ProImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphN
 
     prompt: str | OutputHandle[str] = connect_field(default='', description=None)
     duration: nodetool.nodes.fal.image_to_video.KlingVideoV21ProImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV21ProImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the video')
+    cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
     tail_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the end of the video')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
-    cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the video')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1575,13 +1575,13 @@ class KlingVideoV3ProImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNo
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.')
     aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
-    duration: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
-    generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video.')
-    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task).')
-    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.')
-    elements: list[types.KlingV3ComboElementInput] | OutputHandle[list[types.KlingV3ComboElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc.')
-    shot_type: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation. Required when multi_prompt is provided.')
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice')
+    generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.')
     start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the video')
+    duration: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
+    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.')
+    shot_type: nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3ProImageToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation. Required when multi_prompt is provided.')
+    elements: list[types.KlingV3ComboElementInput] | OutputHandle[list[types.KlingV3ComboElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc.')
     end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the end of the video')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
@@ -1621,13 +1621,13 @@ class KlingVideoV3StandardImageToVideo(SingleOutputGraphNode[types.VideoRef], Gr
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.')
     aspect_ratio: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.AspectRatio = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.AspectRatio.RATIO_16_9, description='The aspect ratio of the generated video frame')
-    duration: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
-    generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video.')
-    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task).')
-    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.')
-    elements: list[types.KlingV3ComboElementInput] | OutputHandle[list[types.KlingV3ComboElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc.')
-    shot_type: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation. Required when multi_prompt is provided.')
+    voice_ids: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice')
+    generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.')
     start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the video')
+    duration: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.Duration = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.Duration.VALUE_5, description='The duration of the generated video in seconds')
+    multi_prompt: list[types.KlingV3MultiPromptElement] | OutputHandle[list[types.KlingV3MultiPromptElement]] = connect_field(default=[], description='List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.')
+    shot_type: nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType = Field(default=nodetool.nodes.fal.image_to_video.KlingVideoV3StandardImageToVideo.ShotType.CUSTOMIZE, description='The type of multi-shot video generation. Required when multi_prompt is provided.')
+    elements: list[types.KlingV3ComboElementInput] | OutputHandle[list[types.KlingV3ComboElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc.')
     end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be used for the end of the video')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blur, distort, and low quality', description=None)
     cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.')
@@ -2061,7 +2061,7 @@ class Ltx219BDistilledImageToVideoLora(SingleOutputGraphNode[types.VideoRef], Gr
     acceleration: nodetool.nodes.fal.image_to_video.Ltx219BDistilledImageToVideoLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_video.Ltx219BDistilledImageToVideoLora.Acceleration.NONE, description='The acceleration level to use.')
     generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate audio for the video.')
     fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the generation.')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='The LoRAs to use for the generation.')
     camera_lora: nodetool.nodes.fal.image_to_video.Ltx219BDistilledImageToVideoLora.CameraLora = Field(default=nodetool.nodes.fal.image_to_video.Ltx219BDistilledImageToVideoLora.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
     video_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated video.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
@@ -2182,7 +2182,7 @@ class Ltx219BImageToVideoLora(SingleOutputGraphNode[types.VideoRef], GraphNode[t
     acceleration: nodetool.nodes.fal.image_to_video.Ltx219BImageToVideoLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_video.Ltx219BImageToVideoLora.Acceleration.REGULAR, description='The acceleration level to use.')
     generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate audio for the video.')
     fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the generation.')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='The LoRAs to use for the generation.')
     camera_lora: nodetool.nodes.fal.image_to_video.Ltx219BImageToVideoLora.CameraLora = Field(default=nodetool.nodes.fal.image_to_video.Ltx219BImageToVideoLora.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
     video_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated video.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='The guidance scale to use.')
@@ -2241,7 +2241,7 @@ class LtxVideo13bDevImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNod
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt to guide generation')
     reverse_video: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to reverse the video.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to expand the prompt using a language model.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='LoRA weights to use for generation')
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = connect_field(default=[], description='LoRA weights to use for generation')
     second_pass_num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps during the second pass.')
     num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames in the video.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
@@ -2291,7 +2291,7 @@ class LtxVideo13bDistilledImageToVideo(SingleOutputGraphNode[types.VideoRef], Gr
     reverse_video: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to reverse the video.')
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt to guide generation')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to expand the prompt using a language model.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='LoRA weights to use for generation')
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = connect_field(default=[], description='LoRA weights to use for generation')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
     num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames in the video.')
     second_pass_num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='Number of inference steps during the second pass.')
@@ -2343,7 +2343,7 @@ class LtxVideoLoraImageToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to expand the prompt using the LLM.')
     number_of_frames: int | OutputHandle[int] = connect_field(default=89, description='The number of frames in the video.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to use as input.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRA weights to use for generation.')
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = connect_field(default=[], description='The LoRA weights to use for generation.')
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the video from.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for generation.')
@@ -2388,7 +2388,7 @@ class Ltxv13b098DistilledImageToVideo(SingleOutputGraphNode[types.VideoRef], Gra
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt to guide generation')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to expand the prompt using a language model.')
     temporal_adain_factor: float | OutputHandle[float] = connect_field(default=0.5, description='The factor for adaptive instance normalization (AdaIN) applied to generated video chunks after the first. This can help deal with a gradual increase in saturation/contrast in the generated video by normalizing the color distribution across the video. A high value will ensure the color distribution is more consistent across the video, while a low value will allow for more variation in color distribution.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='LoRA weights to use for generation')
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = connect_field(default=[], description='LoRA weights to use for generation')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
     num_frames: int | OutputHandle[int] = connect_field(default=121, description='The number of frames in the video.')
     second_pass_num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='Number of inference steps during the second pass.')
@@ -2585,8 +2585,8 @@ class MinimaxHailuo02ProImageToVideo(SingleOutputGraphNode[types.VideoRef], Grap
         - Visual storytelling
     """
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional URL of the image to use as the last frame of the video')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description=None)
 
@@ -2724,8 +2724,8 @@ class MinimaxVideo01DirectorImageToVideo(SingleOutputGraphNode[types.VideoRef], 
         - Visual storytelling
     """
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Camera movement instructions can be added using square brackets (e.g. [Pan left] or [Zoom in]). You can use up to 3 combined movements per prompt. Supported movements: Truck left/right, Pan left/right, Push in/Pull out, Pedestal up/down, Tilt up/down, Zoom in/out, Shake, Tracking shot, Static shot. For example: [Truck left, Pan right, Zoom in]. For a more detailed guide, refer https://sixth-switch-2ac.notion.site/T2V-01-Director-Model-Tutorial-with-camera-movement-1886c20a98eb80f395b8e05291ad8645')
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to use as the first frame')
 
     @classmethod
@@ -2757,8 +2757,8 @@ class MinimaxVideo01LiveImageToVideo(SingleOutputGraphNode[types.VideoRef], Grap
         - Visual storytelling
     """
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to use as the first frame')
 
     @classmethod
@@ -2790,8 +2790,8 @@ class MinimaxVideo01SubjectReference(SingleOutputGraphNode[types.VideoRef], Grap
         - Visual storytelling
     """
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     prompt: str | OutputHandle[str] = connect_field(default='', description=None)
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use the model's prompt optimizer")
     subject_reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the subject reference image to use for consistent subject appearance')
 
     @classmethod
@@ -3047,9 +3047,9 @@ class PikaV22Pikaframes(SingleOutputGraphNode[types.VideoRef], GraphNode[types.V
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Default prompt for all transitions. Individual transition prompts override this.')
     resolution: nodetool.nodes.fal.image_to_video.PikaV22Pikaframes.Resolution = Field(default=nodetool.nodes.fal.image_to_video.PikaV22Pikaframes.Resolution.VALUE_720P, description='The resolution of the generated video')
-    transitions: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Configuration for each transition. Length must be len(image_urls) - 1. Total duration of all transitions must not exceed 25 seconds. If not provided, uses default 5-second transitions with the global prompt.')
+    transitions: list[types.KeyframeTransition] | OutputHandle[list[types.KeyframeTransition]] = connect_field(default=[], description='Configuration for each transition. Length must be len(image_urls) - 1. Total duration of all transitions must not exceed 25 seconds. If not provided, uses default 5-second transitions with the global prompt.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed for the random number generator')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URLs of keyframe images (2-5 images) to create transitions between')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='URLs of keyframe images (2-5 images) to create transitions between')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='A negative prompt to guide the model')
 
     @classmethod
@@ -4434,7 +4434,7 @@ class Veo31ReferenceToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[typ
     generate_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to generate audio for the video.')
     resolution: nodetool.nodes.fal.image_to_video.Veo31ReferenceToVideo.Resolution = Field(default=nodetool.nodes.fal.image_to_video.Veo31ReferenceToVideo.Resolution.VALUE_720P, description='The resolution of the generated video.')
     auto_fix: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URLs of the reference images to use for consistent subject appearance')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='URLs of the reference images to use for consistent subject appearance')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -4662,9 +4662,9 @@ class ViduQ1StartEndToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[typ
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation, max 1500 characters')
     start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to use as the first frame')
-    movement_amplitude: nodetool.nodes.fal.image_to_video.ViduQ1StartEndToVideo.MovementAmplitude = Field(default=nodetool.nodes.fal.image_to_video.ViduQ1StartEndToVideo.MovementAmplitude.AUTO, description='The movement amplitude of objects in the frame')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for the random number generator')
     end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to use as the last frame')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for the random number generator')
+    movement_amplitude: nodetool.nodes.fal.image_to_video.ViduQ1StartEndToVideo.MovementAmplitude = Field(default=nodetool.nodes.fal.image_to_video.ViduQ1StartEndToVideo.MovementAmplitude.AUTO, description='The movement amplitude of objects in the frame')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -4779,9 +4779,9 @@ class ViduStartEndToVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation, max 1500 characters')
     start_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to use as the first frame')
-    movement_amplitude: nodetool.nodes.fal.image_to_video.ViduStartEndToVideo.MovementAmplitude = Field(default=nodetool.nodes.fal.image_to_video.ViduStartEndToVideo.MovementAmplitude.AUTO, description='The movement amplitude of objects in the frame')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for generation')
     end_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to use as the last frame')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for generation')
+    movement_amplitude: nodetool.nodes.fal.image_to_video.ViduStartEndToVideo.MovementAmplitude = Field(default=nodetool.nodes.fal.image_to_video.ViduStartEndToVideo.MovementAmplitude.AUTO, description='The movement amplitude of objects in the frame')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -4943,7 +4943,7 @@ class WanI2vLora(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef
     prompt: str | OutputHandle[str] = connect_field(default='', description='The text prompt to guide video generation.')
     shift: float | OutputHandle[float] = connect_field(default=5, description='Shift parameter for video generation.')
     reverse_video: bool | OutputHandle[bool] = connect_field(default=False, description='If true, the video will be reversed.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='LoRA weights to be used in the inference.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='LoRA weights to be used in the inference.')
     frames_per_second: int | OutputHandle[int] = connect_field(default=16, description='Frames per second of the generated video. Must be between 5 to 24.')
     turbo_mode: bool | OutputHandle[bool] = connect_field(default=True, description='If true, the video will be generated faster with no noticeable degradation in the visual quality.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the safety checker will be enabled.')
@@ -5149,7 +5149,7 @@ class WanV22A14bImageToVideoLora(SingleOutputGraphNode[types.VideoRef], GraphNod
     num_interpolated_frames: int | OutputHandle[int] = connect_field(default=1, description='Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.')
     acceleration: nodetool.nodes.fal.image_to_video.WanV22A14bImageToVideoLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_video.WanV22A14bImageToVideoLora.Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.")
     reverse_video: bool | OutputHandle[bool] = connect_field(default=False, description='If true, the video will be reversed.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='LoRA weights to be used in the inference.')
+    loras: list[types.LoRAWeight] | OutputHandle[list[types.LoRAWeight]] = connect_field(default=[], description='LoRA weights to be used in the inference.')
     frames_per_second: int | OutputHandle[int] = connect_field(default=16, description='Frames per second of the generated video. Must be between 4 to 60. When using interpolation and `adjust_fps_for_interpolation` is set to true (default true,) the final FPS will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If `adjust_fps_for_interpolation` is set to false, this value will be used as-is.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.')
     num_frames: int | OutputHandle[int] = connect_field(default=81, description='Number of frames to generate. Must be between 17 to 161 (inclusive).')

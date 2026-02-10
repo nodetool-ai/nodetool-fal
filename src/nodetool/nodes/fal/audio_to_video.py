@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
+from nodetool.nodes.fal.types import LoRAInput  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 

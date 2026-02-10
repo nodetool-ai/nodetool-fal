@@ -3,6 +3,7 @@ from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef
 from nodetool.nodes.fal.fal_node import FALNode
+from nodetool.nodes.fal.types import ImageInput, MoondreamInputParam, ReferenceImageInput, SemanticImageInput  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 

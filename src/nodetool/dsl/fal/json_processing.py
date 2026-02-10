@@ -33,13 +33,13 @@ class FfmpegApiLoudnorm(SingleOutputGraphNode[types.AudioRef], GraphNode[types.A
     """
 
     measured_tp: str | OutputHandle[str] = connect_field(default='', description='Measured true peak of input file in dBTP. Required for linear mode.')
-    print_summary: bool | OutputHandle[bool] = connect_field(default=False, description='Return loudness measurement summary with the normalized audio')
-    linear: bool | OutputHandle[bool] = connect_field(default=False, description='Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).')
-    measured_i: str | OutputHandle[str] = connect_field(default='', description='Measured integrated loudness of input file in LUFS. Required for linear mode.')
     offset: float | OutputHandle[float] = connect_field(default=0, description='Offset gain in dB applied before the true-peak limiter')
+    print_summary: bool | OutputHandle[bool] = connect_field(default=False, description='Return loudness measurement summary with the normalized audio')
+    measured_i: str | OutputHandle[str] = connect_field(default='', description='Measured integrated loudness of input file in LUFS. Required for linear mode.')
+    linear: bool | OutputHandle[bool] = connect_field(default=False, description='Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).')
     measured_lra: str | OutputHandle[str] = connect_field(default='', description='Measured loudness range of input file in LU. Required for linear mode.')
-    measured_thresh: str | OutputHandle[str] = connect_field(default='', description='Measured threshold of input file in LUFS. Required for linear mode.')
     dual_mono: bool | OutputHandle[bool] = connect_field(default=False, description='Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems')
+    measured_thresh: str | OutputHandle[str] = connect_field(default='', description='Measured threshold of input file in LUFS. Required for linear mode.')
     true_peak: float | OutputHandle[float] = connect_field(default=-0.1, description='Maximum true peak in dBTP.')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to normalize')
     integrated_loudness: float | OutputHandle[float] = connect_field(default=-18, description='Integrated loudness target in LUFS.')

@@ -541,7 +541,7 @@ class SamAudioSpanSeparate(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the sound to isolate. Optional but recommended - helps the model identify what type of sound to extract from the span.')
     acceleration: nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.Acceleration = Field(default=nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.Acceleration.BALANCED, description='The acceleration level to use.')
-    spans: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Time spans where the target sound occurs which should be isolated.')
+    spans: list[types.AudioTimeSpan] | OutputHandle[list[types.AudioTimeSpan]] = connect_field(default=[], description='Time spans where the target sound occurs which should be isolated.')
     output_format: nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.OutputFormat = Field(default=nodetool.nodes.fal.audio_to_audio.SamAudioSpanSeparate.OutputFormat.WAV, description='Output audio format.')
     trim_to_span: bool | OutputHandle[bool] = connect_field(default=False, description='Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.')
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to process.')

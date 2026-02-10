@@ -33,12 +33,12 @@ class OpenrouterRouterAudio(SingleOutputGraphNode[dict[str, Any]], GraphNode[dic
     """
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to be used for the audio processing')
-    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
     system_prompt: str | OutputHandle[str] = connect_field(default='', description='System prompt to provide context or instructions to the model')
+    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
     model: str | OutputHandle[str] = connect_field(default='', description='Name of the model to use. Charged based on actual token usage.')
-    max_tokens: str | OutputHandle[str] = connect_field(default='', description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
-    temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
     audio_url: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.')
+    temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
+    max_tokens: int | OutputHandle[int] = connect_field(default=0, description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:

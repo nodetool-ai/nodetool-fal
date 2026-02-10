@@ -1181,7 +1181,7 @@ class BytedanceSeedreamV45Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed to control the stochasticity of image generation.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing. Presently, up to 10 image inputs are allowed. If over 10 images are sent, only the last 10 will be used.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of URLs of input images for editing. Presently, up to 10 image inputs are allowed. If over 10 images are sent, only the last 10 will be used.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1222,7 +1222,7 @@ class BytedanceSeedreamV4Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[t
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed to control the stochasticity of image generation.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing. Presently, up to 10 image inputs are allowed. If over 10 images are sent, only the last 10 will be used.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of URLs of input images for editing. Presently, up to 10 image inputs are allowed. If over 10 images are sent, only the last 10 will be used.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1457,7 +1457,7 @@ class ChronoEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.ChronoEditLora.OutputFormat
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional additional LoRAs to merge for this request (max 3).')
+    loras: list[types.ChronoLoraWeight] | OutputHandle[list[types.ChronoLoraWeight]] = connect_field(default=[], description='Optional additional LoRAs to merge for this request (max 3).')
     turbo_mode: bool | OutputHandle[bool] = connect_field(default=True, description='Enable turbo mode to use for faster inference.')
     enable_temporal_reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable temporal reasoning.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
@@ -1510,7 +1510,7 @@ class ChronoEditLoraGalleryPaintbrush(SingleOutputGraphNode[types.ImageRef], Gra
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to edit.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return the image in sync mode.')
     turbo_mode: bool | OutputHandle[bool] = connect_field(default=True, description='Enable turbo mode to use faster inference.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional additional LoRAs to merge (max 3).')
+    loras: list[types.ChronoLoraWeight] | OutputHandle[list[types.ChronoLoraWeight]] = connect_field(default=[], description='Optional additional LoRAs to merge (max 3).')
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='Classifier-free guidance scale.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=8, description='Number of denoising steps to run.')
     mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Optional mask image where black areas indicate regions to sketch/paint.')
@@ -1552,7 +1552,7 @@ class ChronoEditLoraGalleryUpscaler(SingleOutputGraphNode[types.ImageRef], Graph
     output_format: nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryUpscaler.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ChronoEditLoraGalleryUpscaler.OutputFormat.JPEG, description='The format of the output image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to upscale.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return the image in sync mode.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional additional LoRAs to merge (max 3).')
+    loras: list[types.ChronoLoraWeight] | OutputHandle[list[types.ChronoLoraWeight]] = connect_field(default=[], description='Optional additional LoRAs to merge (max 3).')
     upscale_factor: float | OutputHandle[float] = connect_field(default=2, description='Target scale factor for the output resolution.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The guidance scale for the inference.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of inference steps for the upscaling pass.')
@@ -1849,7 +1849,7 @@ class Dreamomni2Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     """
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of URLs of input images for editing.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -2319,7 +2319,7 @@ class FastLightningSdxlImageToImage(SingleOutputGraphNode[types.ImageRef], Graph
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
     guidance_rescale: float | OutputHandle[float] = connect_field(default=0, description='The rescale factor for the CFG.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -2370,7 +2370,7 @@ class FastLightningSdxlInpainting(SingleOutputGraphNode[types.ImageRef], GraphNo
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
     guidance_rescale: float | OutputHandle[float] = connect_field(default=0, description='The rescale factor for the CFG.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -2417,7 +2417,7 @@ class FastSdxlControlnetCannyImageToImage(SingleOutputGraphNode[types.ImageRef],
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. Leave it none to automatically infer from the control image.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of LoRA weights to use.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the safety checker will be enabled.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).")
@@ -2462,7 +2462,7 @@ class FastSdxlControlnetCannyInpainting(SingleOutputGraphNode[types.ImageRef], G
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. Leave it none to automatically infer from the control image.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of LoRA weights to use.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the safety checker will be enabled.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).")
@@ -2510,9 +2510,9 @@ class FastSdxlImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[type
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of LoRA weights to use.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     preserve_aspect_ratio: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the aspect ratio of the generated image will be preserved even if the image size is too large. However, if the image is not a multiple of 32 in width or height, it will be resized to the nearest multiple of 32. By default, this snapping to the nearest multiple of 32 will not preserve the aspect ratio. Set crop_output to True, to crop the output to the proper aspect ratio after generating.')
@@ -2562,9 +2562,9 @@ class FastSdxlInpainting(SingleOutputGraphNode[types.ImageRef], GraphNode[types.
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of LoRA weights to use.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).")
@@ -2728,7 +2728,7 @@ class FinegrainEraserBbox(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[
 
     mode: nodetool.nodes.fal.image_to_image.FinegrainEraserBbox.Mode = Field(default=nodetool.nodes.fal.image_to_image.FinegrainEraserBbox.Mode.STANDARD, description='Erase quality mode')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible generation')
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of bounding box coordinates to erase (only one box prompt is supported)')
+    box_prompts: list[types.BoxPromptBase] | OutputHandle[list[types.BoxPromptBase]] = connect_field(default=[], description='List of bounding box coordinates to erase (only one box prompt is supported)')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to edit')
 
     @classmethod
@@ -3357,7 +3357,7 @@ class Flux2FlashEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded for better results.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
@@ -3401,7 +3401,7 @@ class Flux2FlexEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
     safety_tolerance: nodetool.nodes.fal.image_to_image.Flux2FlexEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.Flux2FlexEdit.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to expand the prompt using the model's own knowledge.")
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of URLs of input images for editing')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation.')
 
@@ -3446,7 +3446,7 @@ class Flux2Klein4BBaseEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[type
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
 
@@ -3488,11 +3488,11 @@ class Flux2Klein4BBaseEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[
     acceleration: nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
     output_format: nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein4BBaseEditLora.OutputFormat.PNG, description='The format of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
 
@@ -3534,7 +3534,7 @@ class Flux2Klein4BEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
 
     @classmethod
@@ -3578,7 +3578,7 @@ class Flux2Klein9BBaseEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[type
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
 
@@ -3620,11 +3620,11 @@ class Flux2Klein9BBaseEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[
     acceleration: nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.Acceleration.REGULAR, description='The acceleration level to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Guidance scale for classifier-free guidance.')
     output_format: nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Flux2Klein9BBaseEditLora.OutputFormat.PNG, description='The format of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt for classifier-free guidance. Describes what to avoid in the image.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
 
@@ -3666,7 +3666,7 @@ class Flux2Klein9BEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI. Output is not stored when this is True.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
 
     @classmethod
@@ -3710,7 +3710,7 @@ class Flux2LoraGalleryAddBackground(SingleOutputGraphNode[types.ImageRef], Graph
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images. Provide an image with a white or clean background.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images. Provide an image with a white or clean background.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
 
@@ -3755,7 +3755,7 @@ class Flux2LoraGalleryApartmentStaging(SingleOutputGraphNode[types.ImageRef], Gr
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the empty room image to furnish.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the empty room image to furnish.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
 
@@ -3800,7 +3800,7 @@ class Flux2LoraGalleryFaceToFullPortrait(SingleOutputGraphNode[types.ImageRef], 
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the cropped face image.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the cropped face image.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
 
@@ -3841,7 +3841,7 @@ class Flux2LoraGalleryMultipleAngles(SingleOutputGraphNode[types.ImageRef], Grap
     horizontal_angle: float | OutputHandle[float] = connect_field(default=0, description='Horizontal rotation angle around the object in degrees. 0°=front view, 90°=right side, 180°=back view, 270°=left side, 360°=front view again.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
     zoom: float | OutputHandle[float] = connect_field(default=5, description='Camera zoom/distance. 0=wide shot (far away), 5=medium shot (normal), 10=close-up (very close).')
     vertical_angle: float | OutputHandle[float] = connect_field(default=0, description='Vertical camera angle in degrees. 0°=eye-level shot, 30°=elevated shot, 60°=high-angle shot (looking down from above).')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
@@ -3892,7 +3892,7 @@ class Flux2LoraGalleryVirtualTryon(SingleOutputGraphNode[types.ImageRef], GraphN
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for virtual try-on. Provide person image and clothing image.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for virtual try-on. Provide person image and clothing image.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to perform.')
 
@@ -3935,7 +3935,7 @@ class Flux2MaxEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     safety_tolerance: nodetool.nodes.fal.image_to_image.Flux2MaxEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.Flux2MaxEdit.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of input images for editing')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of URLs of input images for editing')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -3975,7 +3975,7 @@ class Flux2TurboEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The seed to use for the generation. If not provided, a random seed will be used.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded for better results.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
@@ -4013,7 +4013,7 @@ class FluxControlLoraCannyImageToImage(SingleOutputGraphNode[types.ImageRef], Gr
     control_lora_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the control lora.')
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
@@ -4059,17 +4059,17 @@ class FluxControlLoraDepthImageToImage(SingleOutputGraphNode[types.ImageRef], Gr
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     control_lora_strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the control lora.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
+    guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     output_format: nodetool.nodes.fal.image_to_image.FluxControlLoraDepthImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxControlLoraDepthImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for inpainting. or img2img')
-    strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    control_lora_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to use for control lora. This is used to control the style of the generated image.')
+    strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    control_lora_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to use for control lora. This is used to control the style of the generated image.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -4190,10 +4190,10 @@ class FluxGeneralDifferentialDiffusion(SingleOutputGraphNode[types.ImageRef], Gr
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     nag_end: float | OutputHandle[float] = connect_field(default=0.25, description='The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    control_loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    control_loras: list[types.ControlLoraWeight] | OutputHandle[list[types.ControlLoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     scheduler: nodetool.nodes.fal.image_to_image.FluxGeneralDifferentialDiffusion.Scheduler = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralDifferentialDiffusion.Scheduler.EULER, description='Scheduler for the denoising process.')
-    easycontrols: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
+    easycontrols: list[types.EasyControlWeight] | OutputHandle[list[types.EasyControlWeight]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     real_cfg_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     output_format: nodetool.nodes.fal.image_to_image.FluxGeneralDifferentialDiffusion.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralDifferentialDiffusion.OutputFormat.PNG, description='The format of the generated image.')
@@ -4208,19 +4208,19 @@ class FluxGeneralDifferentialDiffusion(SingleOutputGraphNode[types.ImageRef], Gr
     nag_scale: float | OutputHandle[float] = connect_field(default=3, description='The scale for NAG. Higher values will result in a image that is more distant to the negative prompt.')
     reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Reference-Only')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
-    controlnet_unions: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnet_unions: list[types.ControlNetUnion] | OutputHandle[list[types.ControlNetUnion]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt.')
     nag_tau: float | OutputHandle[float] = connect_field(default=2.5, description='The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value.')
     change_map_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of change map.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
     use_beta_schedule: bool | OutputHandle[bool] = connect_field(default=False, description='Specifies whether beta sigmas ought to be used.')
-    ip_adapters: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='IP-Adapter to use for image generation.')
+    ip_adapters: list[types.IPAdapter] | OutputHandle[list[types.IPAdapter]] = connect_field(default=[], description='IP-Adapter to use for image generation.')
     base_shift: float | OutputHandle[float] = connect_field(default=0.5, description='Base shift for the scheduled timesteps')
     nag_alpha: float | OutputHandle[float] = connect_field(default=0.25, description='The alpha value for NAG. This value is used as a final weighting factor for steering the normalized guidance (positive and negative prompts) in the direction of the positive prompt. Higher values will result in less steering on the normalized guidance where lower values will result in considering the positive prompt guidance more.')
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for differential diffusion. 1.0 is completely remakes the image while 0.0 preserves the original.')
     max_shift: float | OutputHandle[float] = connect_field(default=1.15, description='Max shift for the scheduled timesteps')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    controlnets: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnets: list[types.ControlNet] | OutputHandle[list[types.ControlNet]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
     reference_start: float | OutputHandle[float] = connect_field(default=0, description='The percentage of the total timesteps when the reference guidance is to bestarted.')
     use_real_cfg: bool | OutputHandle[bool] = connect_field(default=False, description='Uses classical CFG as in SD1.5, SDXL, etc. Increases generation times and price when set to be true. If using XLabs IP-Adapter v1, this will be turned on!.')
 
@@ -4259,10 +4259,10 @@ class FluxGeneralImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[t
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     nag_end: float | OutputHandle[float] = connect_field(default=0.25, description='The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    control_loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    control_loras: list[types.ControlLoraWeight] | OutputHandle[list[types.ControlLoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     scheduler: nodetool.nodes.fal.image_to_image.FluxGeneralImageToImage.Scheduler = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralImageToImage.Scheduler.EULER, description='Scheduler for the denoising process.')
-    easycontrols: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
+    easycontrols: list[types.EasyControlWeight] | OutputHandle[list[types.EasyControlWeight]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     real_cfg_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     output_format: nodetool.nodes.fal.image_to_image.FluxGeneralImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralImageToImage.OutputFormat.PNG, description='The format of the generated image.')
@@ -4277,18 +4277,18 @@ class FluxGeneralImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[t
     nag_scale: float | OutputHandle[float] = connect_field(default=3, description='The scale for NAG. Higher values will result in a image that is more distant to the negative prompt.')
     reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Reference-Only')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
-    controlnet_unions: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnet_unions: list[types.ControlNetUnion] | OutputHandle[list[types.ControlNetUnion]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt.')
     nag_tau: float | OutputHandle[float] = connect_field(default=2.5, description='The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
     use_beta_schedule: bool | OutputHandle[bool] = connect_field(default=False, description='Specifies whether beta sigmas ought to be used.')
-    ip_adapters: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='IP-Adapter to use for image generation.')
+    ip_adapters: list[types.IPAdapter] | OutputHandle[list[types.IPAdapter]] = connect_field(default=[], description='IP-Adapter to use for image generation.')
     base_shift: float | OutputHandle[float] = connect_field(default=0.5, description='Base shift for the scheduled timesteps')
     nag_alpha: float | OutputHandle[float] = connect_field(default=0.25, description='The alpha value for NAG. This value is used as a final weighting factor for steering the normalized guidance (positive and negative prompts) in the direction of the positive prompt. Higher values will result in less steering on the normalized guidance where lower values will result in considering the positive prompt guidance more.')
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
     max_shift: float | OutputHandle[float] = connect_field(default=1.15, description='Max shift for the scheduled timesteps')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    controlnets: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnets: list[types.ControlNet] | OutputHandle[list[types.ControlNet]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
     reference_start: float | OutputHandle[float] = connect_field(default=0, description='The percentage of the total timesteps when the reference guidance is to bestarted.')
     use_real_cfg: bool | OutputHandle[bool] = connect_field(default=False, description='Uses classical CFG as in SD1.5, SDXL, etc. Increases generation times and price when set to be true. If using XLabs IP-Adapter v1, this will be turned on!.')
 
@@ -4327,10 +4327,10 @@ class FluxGeneralInpainting(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     nag_end: float | OutputHandle[float] = connect_field(default=0.25, description='The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    control_loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    control_loras: list[types.ControlLoraWeight] | OutputHandle[list[types.ControlLoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     scheduler: nodetool.nodes.fal.image_to_image.FluxGeneralInpainting.Scheduler = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralInpainting.Scheduler.EULER, description='Scheduler for the denoising process.')
-    easycontrols: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
+    easycontrols: list[types.EasyControlWeight] | OutputHandle[list[types.EasyControlWeight]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     real_cfg_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     output_format: nodetool.nodes.fal.image_to_image.FluxGeneralInpainting.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralInpainting.OutputFormat.PNG, description='The format of the generated image.')
@@ -4346,18 +4346,18 @@ class FluxGeneralInpainting(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     nag_scale: float | OutputHandle[float] = connect_field(default=3, description='The scale for NAG. Higher values will result in a image that is more distant to the negative prompt.')
     reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Reference-Only')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
-    controlnet_unions: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnet_unions: list[types.ControlNetUnion] | OutputHandle[list[types.ControlNetUnion]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt.')
     nag_tau: float | OutputHandle[float] = connect_field(default=2.5, description='The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
     use_beta_schedule: bool | OutputHandle[bool] = connect_field(default=False, description='Specifies whether beta sigmas ought to be used.')
-    ip_adapters: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='IP-Adapter to use for image generation.')
+    ip_adapters: list[types.IPAdapter] | OutputHandle[list[types.IPAdapter]] = connect_field(default=[], description='IP-Adapter to use for image generation.')
     base_shift: float | OutputHandle[float] = connect_field(default=0.5, description='Base shift for the scheduled timesteps')
     nag_alpha: float | OutputHandle[float] = connect_field(default=0.25, description='The alpha value for NAG. This value is used as a final weighting factor for steering the normalized guidance (positive and negative prompts) in the direction of the positive prompt. Higher values will result in less steering on the normalized guidance where lower values will result in considering the positive prompt guidance more.')
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
     max_shift: float | OutputHandle[float] = connect_field(default=1.15, description='Max shift for the scheduled timesteps')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    controlnets: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnets: list[types.ControlNet] | OutputHandle[list[types.ControlNet]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
     reference_start: float | OutputHandle[float] = connect_field(default=0, description='The percentage of the total timesteps when the reference guidance is to bestarted.')
     use_real_cfg: bool | OutputHandle[bool] = connect_field(default=False, description='Uses classical CFG as in SD1.5, SDXL, etc. Increases generation times and price when set to be true. If using XLabs IP-Adapter v1, this will be turned on!.')
 
@@ -4397,11 +4397,11 @@ class FluxGeneralRfInversion(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to edit the image with')
     nag_end: float | OutputHandle[float] = connect_field(default=0.25, description='The proportion of steps to apply NAG. After the specified proportion of steps has been iterated, the remaining steps will use original attention processors in FLUX.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    control_loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    control_loras: list[types.ControlLoraWeight] | OutputHandle[list[types.ControlLoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation which use a control image. You can use any number of LoRAs and they will be merged together to generate the final image.')
     controller_guidance_reverse: float | OutputHandle[float] = connect_field(default=0.75, description='The controller guidance (eta) used in the denoising process.Using values closer to 1 will result in an image closer to input.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     reverse_guidance_start: int | OutputHandle[int] = connect_field(default=0, description='Timestep to start guidance during reverse process.')
-    easycontrols: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
+    easycontrols: list[types.EasyControlWeight] | OutputHandle[list[types.EasyControlWeight]] = connect_field(default=[], description='EasyControl Inputs to use for image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     scheduler: nodetool.nodes.fal.image_to_image.FluxGeneralRfInversion.Scheduler = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralRfInversion.Scheduler.EULER, description='Scheduler for the denoising process.')
     output_format: nodetool.nodes.fal.image_to_image.FluxGeneralRfInversion.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxGeneralRfInversion.OutputFormat.PNG, description='The format of the generated image.')
@@ -4419,7 +4419,7 @@ class FluxGeneralRfInversion(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Reference-Only')
     reverse_guidance_end: int | OutputHandle[int] = connect_field(default=8, description='Timestep to stop guidance during reverse process.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
-    controlnet_unions: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnet_unions: list[types.ControlNetUnion] | OutputHandle[list[types.ControlNetUnion]] = connect_field(default=[], description='The controlnet unions to use for the image generation. Only one controlnet is supported at the moment.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt to steer the image generation away from unwanted features. By default, we will be using NAG for processing the negative prompt.')
     nag_tau: float | OutputHandle[float] = connect_field(default=2.5, description='The tau for NAG. Controls the normalization of the hidden state. Higher values will result in a less aggressive normalization, but may also lead to unexpected changes with respect to the original image. Not recommended to change this value.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
@@ -4429,7 +4429,7 @@ class FluxGeneralRfInversion(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     max_shift: float | OutputHandle[float] = connect_field(default=1.15, description='Max shift for the scheduled timesteps')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     reference_start: float | OutputHandle[float] = connect_field(default=0, description='The percentage of the total timesteps when the reference guidance is to bestarted.')
-    controlnets: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
+    controlnets: list[types.ControlNet] | OutputHandle[list[types.ControlNet]] = connect_field(default=[], description='The controlnets to use for the image generation. Only one controlnet is supported at the moment.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -4515,7 +4515,7 @@ class FluxKontextLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
     resolution_mode: nodetool.nodes.fal.image_to_image.FluxKontextLora.ResolutionMode = Field(default=nodetool.nodes.fal.image_to_image.FluxKontextLora.ResolutionMode.MATCH_INPUT, description="Determines how the output resolution is set for image editing. - `auto`: The model selects an optimal resolution from a predefined set that best matches the input image's aspect ratio. This is the recommended setting for most use cases as it's what the model was trained on. - `match_input`: The model will attempt to use the same resolution as the input image. The resolution will be adjusted to be compatible with the model's requirements (e.g. dimensions must be multiples of 16 and within supported limits). Apart from these, a few aspect ratios are also supported.")
     output_format: nodetool.nodes.fal.image_to_image.FluxKontextLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKontextLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit. Max width: 14142px, Max height: 14142px, Timeout: 20s')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
@@ -4557,7 +4557,7 @@ class FluxKontextLoraInpaint(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt for the image to image task.')
     acceleration: nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.FluxKontextLoraInpaint.Acceleration.NONE, description='The speed of the generation. The higher the speed, the faster the generation.')
     reference_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the reference image for inpainting.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
@@ -4649,7 +4649,7 @@ class FluxKreaLoraImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
     output_format: nodetool.nodes.fal.image_to_image.FluxKreaLoraImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaLoraImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for inpainting. or img2img')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
@@ -4693,7 +4693,7 @@ class FluxKreaLoraInpainting(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
     output_format: nodetool.nodes.fal.image_to_image.FluxKreaLoraInpainting.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxKreaLoraInpainting.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for inpainting. or img2img')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
@@ -4781,7 +4781,7 @@ class FluxLoraCanny(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
     output_format: nodetool.nodes.fal.image_to_image.FluxLoraCanny.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxLoraCanny.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for canny input')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=30, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
@@ -4824,12 +4824,12 @@ class FluxLoraDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
     output_format: nodetool.nodes.fal.image_to_image.FluxLoraDepth.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxLoraDepth.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for depth input')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -4866,7 +4866,7 @@ class FluxLoraFill(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     resize_to_original: bool | OutputHandle[bool] = connect_field(default=False, description='Resizes the image back to the original size. Use when you wish to preserve the exact image size as the originally provided image.')
     paste_back: bool | OutputHandle[bool] = connect_field(default=True, description='Specifies whether to paste-back the original image onto to the non-inpainted areas of the output')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=30, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate. This is always set to 1 for streaming output.')
@@ -4916,7 +4916,7 @@ class FluxLoraImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[type
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for inpainting. or img2img')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
@@ -5087,8 +5087,8 @@ class FluxProKontextMax(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProKontextMax.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     aspect_ratio: nodetool.nodes.fal.image_to_image.FluxProKontextMax.AspectRatio | OutputHandle[nodetool.nodes.fal.image_to_image.FluxProKontextMax.AspectRatio] | None = connect_field(default=None, description='The aspect ratio of the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     output_format: nodetool.nodes.fal.image_to_image.FluxProKontextMax.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProKontextMax.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image prompt for the omni model.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
@@ -5130,14 +5130,14 @@ class FluxProKontextMaxMulti(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProKontextMaxMulti.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     aspect_ratio: nodetool.nodes.fal.image_to_image.FluxProKontextMaxMulti.AspectRatio | OutputHandle[nodetool.nodes.fal.image_to_image.FluxProKontextMaxMulti.AspectRatio] | None = connect_field(default=None, description='The aspect ratio of the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     output_format: nodetool.nodes.fal.image_to_image.FluxProKontextMaxMulti.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProKontextMaxMulti.OutputFormat.JPEG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProKontextMaxMulti.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProKontextMaxMulti.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Image prompt for the omni model.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='Image prompt for the omni model.')
     enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
 
     @classmethod
@@ -5173,14 +5173,14 @@ class FluxProKontextMulti(SingleOutputGraphNode[types.ImageRef], GraphNode[types
     SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProKontextMulti.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     aspect_ratio: nodetool.nodes.fal.image_to_image.FluxProKontextMulti.AspectRatio | OutputHandle[nodetool.nodes.fal.image_to_image.FluxProKontextMulti.AspectRatio] | None = connect_field(default=None, description='The aspect ratio of the generated image.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     output_format: nodetool.nodes.fal.image_to_image.FluxProKontextMulti.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProKontextMulti.OutputFormat.JPEG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProKontextMulti.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProKontextMulti.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Image prompt for the omni model.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='Image prompt for the omni model.')
     enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
 
     @classmethod
@@ -5268,8 +5268,8 @@ class FluxProV11Redux(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProV11Redux.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProV11Redux.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
 
     @classmethod
@@ -5305,17 +5305,17 @@ class FluxProV11UltraRedux(SingleOutputGraphNode[types.ImageRef], GraphNode[type
     SafetyTolerance: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.FluxProV11UltraRedux.SafetyTolerance
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     aspect_ratio: str | OutputHandle[str] = connect_field(default='16:9', description='The aspect ratio of the generated image.')
-    enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
+    raw: bool | OutputHandle[bool] = connect_field(default=False, description='Generate less processed, more natural-looking images.')
     output_format: nodetool.nodes.fal.image_to_image.FluxProV11UltraRedux.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.FluxProV11UltraRedux.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. Needs to match the dimensions of the mask.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     safety_tolerance: nodetool.nodes.fal.image_to_image.FluxProV11UltraRedux.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.FluxProV11UltraRedux.SafetyTolerance.VALUE_2, description='The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.')
-    image_prompt_strength: float | OutputHandle[float] = connect_field(default=0.1, description='The strength of the image prompt, between 0 and 1.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
-    raw: bool | OutputHandle[bool] = connect_field(default=False, description='Generate less processed, more natural-looking images.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
+    image_prompt_strength: float | OutputHandle[float] = connect_field(default=0.1, description='The strength of the image prompt, between 0 and 1.')
+    enhance_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enhance the prompt for better results.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -5567,7 +5567,7 @@ class Gemini25FlashImageEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     output_format: nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Gemini25FlashImageEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
     limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
 
     @classmethod
@@ -5612,7 +5612,7 @@ class Gemini3ProImagePreviewEdit(SingleOutputGraphNode[types.ImageRef], GraphNod
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     safety_tolerance: nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.Gemini3ProImagePreviewEdit.SafetyTolerance.VALUE_4, description='The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.')
     seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
     limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
 
     @classmethod
@@ -5751,7 +5751,7 @@ class GlmImageImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[type
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the image will be returned as a base64 data URI instead of a URL.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=1.5, description='Classifier-free guidance scale. Higher values make the model follow the prompt more closely.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. The same seed with the same prompt will produce the same image.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URL(s) of the condition image(s) for image-to-image generation. Supports up to 4 URLs for multi-image references.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='URL(s) of the condition image(s) for image-to-image generation. Supports up to 4 URLs for multi-image references.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the prompt will be enhanced using an LLM for more detailed and higher quality results.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Number of diffusion denoising steps. More steps generally produce higher quality images.')
 
@@ -5799,7 +5799,7 @@ class GptImage15Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     input_fidelity: nodetool.nodes.fal.image_to_image.GptImage15Edit.InputFidelity = Field(default=nodetool.nodes.fal.image_to_image.GptImage15Edit.InputFidelity.HIGH, description='Input fidelity for the generated image')
     mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the mask image to use for the generation. This indicates what part of the image to edit.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -5844,7 +5844,7 @@ class GptImage1EditImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.
     output_format: nodetool.nodes.fal.image_to_image.GptImage1EditImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.GptImage1EditImage.OutputFormat.PNG, description='Output format for the images')
     background: nodetool.nodes.fal.image_to_image.GptImage1EditImage.Background = Field(default=nodetool.nodes.fal.image_to_image.GptImage1EditImage.Background.AUTO, description='Background for the generated image')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -5887,7 +5887,7 @@ class GptImage1MiniEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     quality: nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Quality = Field(default=nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.Quality.AUTO, description='Quality for the generated image')
     output_format: nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.GptImage1MiniEdit.OutputFormat.PNG, description='Output format for the images')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -5970,7 +5970,7 @@ class HidreamI1FullImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode
     output_format: nodetool.nodes.fal.image_to_image.HidreamI1FullImageToImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.HidreamI1FullImageToImage.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A list of LoRAs to apply to the model. Each LoRA specifies its path, scale, and optional weight name.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='A list of LoRAs to apply to the model. Each LoRA specifies its path, scale, and optional weight name.')
     strength: float | OutputHandle[float] = connect_field(default=0.75, description='Denoising strength for image-to-image generation.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform.')
@@ -6016,7 +6016,7 @@ class HunyuanImageV3InstructEdit(SingleOutputGraphNode[types.ImageRef], GraphNod
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible results. If None, a random seed is used.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation. A maximum of 2 images are supported.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use as a reference for the generation. A maximum of 2 images are supported.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='Controls how much the model adheres to the prompt. Higher values mean stricter adherence.')
 
     @classmethod
@@ -6142,12 +6142,12 @@ class IdeogramCharacter(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramCharacter.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacter.RenderingSpeed.BALANCED, description='The rendering speed to use.')
     reference_mask_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format')
     reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format')
-    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Description of what to exclude from an image. Descriptions in the prompt take precedence to descriptions in the negative prompt.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
-    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
-    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
     seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
 
     @classmethod
@@ -6188,7 +6188,7 @@ class IdeogramCharacterEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacterEdit.RenderingSpeed.BALANCED, description='The rendering speed to use.')
     reference_mask_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format')
     reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format')
-    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image.')
     style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
@@ -6236,14 +6236,14 @@ class IdeogramCharacterRemix(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramCharacterRemix.RenderingSpeed.BALANCED, description='The rendering speed to use.')
     reference_mask_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format')
     reference_image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='A set of images to use as character references. Currently only 1 image is supported, rest will be ignored. (maximum total size 10MB across all character references). The images should be in JPEG, PNG or WebP format')
-    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Description of what to exclude from an image. Descriptions in the prompt take precedence to descriptions in the negative prompt.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to remix')
-    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
-    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
     strength: float | OutputHandle[float] = connect_field(default=0.8, description='Strength of the input image in the remix')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
     seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
 
     @classmethod
@@ -6566,7 +6566,7 @@ class IdeogramV3Edit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Use -1 for random')
-    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
     mask_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The mask URL to inpaint the image. MUST have the exact same dimensions (width and height) as the input image.')
 
     @classmethod
@@ -6605,12 +6605,12 @@ class IdeogramV3Reframe(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     style: str | OutputHandle[str] = connect_field(default='', description='The style type to generate with. Cannot be used with style_codes.')
     style_preset: str | OutputHandle[str] = connect_field(default='', description='Style preset for generation. The chosen style preset will guide the generation.')
     rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramV3Reframe.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramV3Reframe.RenderingSpeed.BALANCED, description='The rendering speed to use.')
-    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
-    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to reframe')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to reframe')
     seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
-    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -6648,14 +6648,14 @@ class IdeogramV3Remix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Ima
     style: str | OutputHandle[str] = connect_field(default='', description='The style type to generate with. Cannot be used with style_codes.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Determine if MagicPrompt should be used in generating the request or not.')
     rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramV3Remix.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramV3Remix.RenderingSpeed.BALANCED, description='The rendering speed to use.')
-    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Description of what to exclude from an image. Descriptions in the prompt take precedence to descriptions in the negative prompt.')
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL to remix')
-    strength: float | OutputHandle[float] = connect_field(default=0.8, description='Strength of the input image in the remix')
-    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
-    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    strength: float | OutputHandle[float] = connect_field(default=0.8, description='Strength of the input image in the remix')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
     seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
 
     @classmethod
@@ -6695,12 +6695,12 @@ class IdeogramV3ReplaceBackground(SingleOutputGraphNode[types.ImageRef], GraphNo
     style_preset: str | OutputHandle[str] = connect_field(default='', description='Style preset for generation. The chosen style preset will guide the generation.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=True, description='Determine if MagicPrompt should be used in generating the request or not.')
     rendering_speed: nodetool.nodes.fal.image_to_image.IdeogramV3ReplaceBackground.RenderingSpeed = Field(default=nodetool.nodes.fal.image_to_image.IdeogramV3ReplaceBackground.RenderingSpeed.BALANCED, description='The rendering speed to use.')
-    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
-    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL whose background needs to be replaced')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
+    color_palette: str | OutputHandle[str] = connect_field(default='', description='A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)')
+    style_codes: str | OutputHandle[str] = connect_field(default='', description='A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image URL whose background needs to be replaced')
     seed: str | OutputHandle[str] = connect_field(default='', description='Seed for the random number generator')
-    image_urls: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='A set of images to use as style references (maximum total size 10MB across all style references). The images should be in JPEG, PNG or WebP format')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -8943,13 +8943,13 @@ class IpAdapterFaceId(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str,
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='blurry, low resolution, bad, ugly, low quality, pixelated, interpolated, compression artifacts, noisey, grainy', description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).")
     height: int | OutputHandle[int] = connect_field(default=512, description='The height of the generated image.')
-    num_samples: int | OutputHandle[int] = connect_field(default=4, description='The number of samples for face id. The more samples the better the image will be but it will also take longer to generate. Default is 4.')
     base_sdxl_model_repo: str | OutputHandle[str] = connect_field(default='SG161222/RealVisXL_V3.0', description='The URL to the base SDXL model. Default is SG161222/RealVisXL_V3.0')
+    num_samples: int | OutputHandle[int] = connect_field(default=4, description='The number of samples for face id. The more samples the better the image will be but it will also take longer to generate. Default is 4.')
     base_1_5_model_repo: str | OutputHandle[str] = connect_field(default='SG161222/Realistic_Vision_V4.0_noVAE', description='The URL to the base 1.5 model. Default is SG161222/Realistic_Vision_V4.0_noVAE')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to use for generating the image. The more steps the better the image will be but it will also take longer to generate.')
+    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.')
     model_type: nodetool.nodes.fal.image_to_image.IpAdapterFaceId.ModelType = Field(default=nodetool.nodes.fal.image_to_image.IpAdapterFaceId.ModelType.VALUE_1_5_V1, description='The model type to use. 1_5 is the default and is recommended for most use cases.')
     face_images_data_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL to zip archive with images of faces. The images embedding will be averaged to create a more accurate face id.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time.')
+    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to use for generating the image. The more steps the better the image will be but it will also take longer to generate.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -8990,8 +8990,8 @@ class KlingImageO1(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageR
     aspect_ratio: nodetool.nodes.fal.image_to_image.KlingImageO1.KlingImageO1AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.KlingImageO1.KlingImageO1AspectRatio.AUTO, description="Aspect ratio of generated images. 'auto' intelligently determines based on input content.")
     output_format: nodetool.nodes.fal.image_to_image.KlingImageO1.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.KlingImageO1.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    elements: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Elements (characters/objects) to include in the image. Reference in prompt as @Element1, @Element2, etc. Maximum 10 total (elements + reference images).')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of reference images. Reference images in prompt using @Image1, @Image2, etc. (1-indexed). Max 10 images.')
+    elements: list[types.ElementInput] | OutputHandle[list[types.ElementInput]] = connect_field(default=[], description='Elements (characters/objects) to include in the image. Reference in prompt as @Element1, @Element2, etc. Maximum 10 total (elements + reference images).')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of reference images. Reference images in prompt using @Image1, @Image2, etc. (1-indexed). Max 10 images.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -9328,11 +9328,11 @@ class LoraImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     noise_strength: float | OutputHandle[float] = connect_field(default=0.5, description='The amount of noise to add to noise image for image. Only used if the image_url is provided. 1.0 is complete noise and 0 is no noise.')
     tile_height: int | OutputHandle[int] = connect_field(default=4096, description='The size of the tiles to be used for the image generation.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights.')
     ic_light_model_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the IC Light model to use for the image generation.')
     image_encoder_weight_name: str | OutputHandle[str] = connect_field(default='pytorch_model.bin', description='The weight name of the image encoder model to use for the image generation.')
-    ip_adapter: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The IP adapter to use for the image generation.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    ip_adapter: list[types.IPAdapter] | OutputHandle[list[types.IPAdapter]] = connect_field(default=[], description='The IP adapter to use for the image generation.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     scheduler: nodetool.nodes.fal.image_to_image.LoraImageToImage.Scheduler | OutputHandle[nodetool.nodes.fal.image_to_image.LoraImageToImage.Scheduler] | None = connect_field(default=None, description='Scheduler / sampler to use for the image denoising process.')
     sigmas: str | OutputHandle[str] = connect_field(default='', description='Optionally override the sigmas to use for the denoising process. Only works with schedulers which support the `sigmas` argument in their `set_sigmas` method. Defaults to not overriding, in which case the scheduler automatically sets the sigmas based on the `num_inference_steps` parameter. If set to a custom sigma schedule, the `num_inference_steps` parameter will be ignored. Cannot be set if `timesteps` is set.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
@@ -9361,7 +9361,7 @@ class LoraImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     unet_name: str | OutputHandle[str] = connect_field(default='', description='URL or HuggingFace ID of the custom U-Net model to use for the image generation.')
     clip_skip: int | OutputHandle[int] = connect_field(default=0, description='Skips part of the image generation process, leading to slightly different results. This means the image renders faster, too.')
     tile_stride_height: int | OutputHandle[int] = connect_field(default=2048, description='The stride of the tiles to be used for the image generation.')
-    controlnets: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps.')
+    controlnets: list[types.ControlNet] | OutputHandle[list[types.ControlNet]] = connect_field(default=[], description='The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image.')
 
     @classmethod
@@ -9399,11 +9399,11 @@ class LoraInpaint(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRe
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     noise_strength: float | OutputHandle[float] = connect_field(default=0.5, description='The amount of noise to add to noise image for image. Only used if the image_url is provided. 1.0 is complete noise and 0 is no noise.')
     tile_height: int | OutputHandle[int] = connect_field(default=4096, description='The size of the tiles to be used for the image generation.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The embeddings to use for the image generation. Only a single embedding is supported at the moment. The embeddings will be used to map the tokens in the prompt to the embedding weights.')
     ic_light_model_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the IC Light model to use for the image generation.')
     image_encoder_weight_name: str | OutputHandle[str] = connect_field(default='pytorch_model.bin', description='The weight name of the image encoder model to use for the image generation.')
-    ip_adapter: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The IP adapter to use for the image generation.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    ip_adapter: list[types.IPAdapter] | OutputHandle[list[types.IPAdapter]] = connect_field(default=[], description='The IP adapter to use for the image generation.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     scheduler: nodetool.nodes.fal.image_to_image.LoraInpaint.Scheduler | OutputHandle[nodetool.nodes.fal.image_to_image.LoraInpaint.Scheduler] | None = connect_field(default=None, description='Scheduler / sampler to use for the image denoising process.')
     sigmas: str | OutputHandle[str] = connect_field(default='', description='Optionally override the sigmas to use for the denoising process. Only works with schedulers which support the `sigmas` argument in their `set_sigmas` method. Defaults to not overriding, in which case the scheduler automatically sets the sigmas based on the `num_inference_steps` parameter. If set to a custom sigma schedule, the `num_inference_steps` parameter will be ignored. Cannot be set if `timesteps` is set.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
@@ -9433,7 +9433,7 @@ class LoraInpaint(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRe
     unet_name: str | OutputHandle[str] = connect_field(default='', description='URL or HuggingFace ID of the custom U-Net model to use for the image generation.')
     clip_skip: int | OutputHandle[int] = connect_field(default=0, description='Skips part of the image generation process, leading to slightly different results. This means the image renders faster, too.')
     tile_stride_height: int | OutputHandle[int] = connect_field(default=2048, description='The stride of the tiles to be used for the image generation.')
-    controlnets: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps.')
+    controlnets: list[types.ControlNet] | OutputHandle[list[types.ControlNet]] = connect_field(default=[], description='The control nets to use for the image generation. You can use any number of control nets and they will be applied to the image at the specified timesteps.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image.')
 
     @classmethod
@@ -9658,10 +9658,10 @@ class MinimaxImage01SubjectReference(SingleOutputGraphNode[types.ImageRef], Grap
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.MinimaxImage01SubjectReference.AspectRatio
 
-    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable automatic prompt optimization')
-    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate (1-9)')
-    aspect_ratio: nodetool.nodes.fal.image_to_image.MinimaxImage01SubjectReference.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.MinimaxImage01SubjectReference.AspectRatio.RATIO_1_1, description='Aspect ratio of the generated image')
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for image generation (max 1500 characters)')
+    num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate (1-9)')
+    prompt_optimizer: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable automatic prompt optimization')
+    aspect_ratio: nodetool.nodes.fal.image_to_image.MinimaxImage01SubjectReference.AspectRatio = Field(default=nodetool.nodes.fal.image_to_image.MinimaxImage01SubjectReference.AspectRatio.RATIO_1_1, description='Aspect ratio of the generated image')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the subject reference image to use for consistent character appearance')
 
     @classmethod
@@ -9765,12 +9765,12 @@ class MoondreamNextDetection(SingleOutputGraphNode[dict[str, Any]], GraphNode[di
 
     TaskType: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.MoondreamNextDetection.TaskType
 
-    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL to be processed')
     detection_prompt: str | OutputHandle[str] = connect_field(default='', description='Text description of what to detect')
+    use_ensemble: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to use ensemble for gaze detection')
     task_type: nodetool.nodes.fal.image_to_image.MoondreamNextDetection.TaskType = Field(default=nodetool.nodes.fal.image_to_image.MoondreamNextDetection.TaskType(''), description='Type of detection to perform')
     show_visualization: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to show visualization for detection')
     combine_points: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to combine points into a single point for point detection. This has no effect for bbox detection or gaze detection.')
-    use_ensemble: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to use ensemble for gaze detection')
+    image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Image URL to be processed')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -9873,7 +9873,7 @@ class NanoBananaEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Imag
     num_images: int | OutputHandle[int] = connect_field(default=1, description='The number of images to generate.')
     output_format: nodetool.nodes.fal.image_to_image.NanoBananaEdit.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.NanoBananaEdit.OutputFormat.PNG, description='The format of the generated image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
     limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
 
     @classmethod
@@ -9919,7 +9919,7 @@ class NanoBananaProEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     safety_tolerance: nodetool.nodes.fal.image_to_image.NanoBananaProEdit.SafetyTolerance = Field(default=nodetool.nodes.fal.image_to_image.NanoBananaProEdit.SafetyTolerance.VALUE_4, description='The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.')
     seed: str | OutputHandle[str] = connect_field(default='', description='The seed for the random number generator.')
     limit_generations: bool | OutputHandle[bool] = connect_field(default=False, description='Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to use for image-to-image generation or image editing.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -10023,7 +10023,7 @@ class ObjectRemovalBbox(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
 
     model: nodetool.nodes.fal.image_to_image.ObjectRemovalBbox.Model = Field(default=nodetool.nodes.fal.image_to_image.ObjectRemovalBbox.Model.BEST_QUALITY, description=None)
     mask_expansion: int | OutputHandle[int] = connect_field(default=15, description='Amount of pixels to expand the mask by. Range: 0-50')
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of bounding box coordinates to erase (only one box prompt is supported)')
+    box_prompts: list[types.BBoxPromptBase] | OutputHandle[list[types.BBoxPromptBase]] = connect_field(default=[], description='List of bounding box coordinates to erase (only one box prompt is supported)')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to remove objects from.')
 
     @classmethod
@@ -10223,7 +10223,7 @@ class PlaygroundV25ImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
     guidance_rescale: float | OutputHandle[float] = connect_field(default=0, description='The rescale factor for the CFG.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -10274,7 +10274,7 @@ class PlaygroundV25Inpainting(SingleOutputGraphNode[types.ImageRef], GraphNode[t
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description='The size of the generated image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
     guidance_rescale: float | OutputHandle[float] = connect_field(default=0, description='The rescale factor for the CFG.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
@@ -10888,7 +10888,7 @@ class Pulid(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     id_mix: bool | OutputHandle[bool] = connect_field(default=False, description='if you want to mix two ID image, please turn this on, otherwise, turn this off')
     guidance_scale: float | OutputHandle[float] = connect_field(default=1.2, description='Guidance scale')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=4, description='Number of steps to take')
-    reference_images: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of reference faces, ideally 4 images.')
+    reference_images: list[types.ReferenceFace] | OutputHandle[list[types.ReferenceFace]] = connect_field(default=[], description='List of reference faces, ideally 4 images.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='flaws in the eyes, flaws in the face, flaws, lowres, non-HDRi, low quality, worst quality,artifacts noise, text, watermark, glitch, deformed, mutated, ugly, disfigured, hands, low resolution, partially rendered objects,  deformed or partially rendered eyes, deformed, deformed eyeballs, cross-eyed,blurry', description='Negative prompt to generate the face from')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility')
 
@@ -10978,7 +10978,7 @@ class QwenImageEdit2509(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform.')
 
@@ -11020,11 +11020,11 @@ class QwenImageEdit2509Lora(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
     acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
     output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509Lora.OutputFormat.PNG, description='The format of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
 
@@ -11070,7 +11070,7 @@ class QwenImageEdit2509LoraGalleryAddBackground(SingleOutputGraphNode[types.Imag
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit. Provide an image with a white or clean background.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit. Provide an image with a white or clean background.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11116,7 +11116,7 @@ class QwenImageEdit2509LoraGalleryFaceToFullPortrait(SingleOutputGraphNode[types
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the cropped face image. Provide a close-up face photo.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the cropped face image. Provide a close-up face photo.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11162,7 +11162,7 @@ class QwenImageEdit2509LoraGalleryGroupPhoto(SingleOutputGraphNode[types.ImageRe
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11208,7 +11208,7 @@ class QwenImageEdit2509LoraGalleryIntegrateProduct(SingleOutputGraphNode[types.I
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with product to integrate into background.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image with product to integrate into background.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11252,7 +11252,7 @@ class QwenImageEdit2509LoraGalleryLightingRestoration(SingleOutputGraphNode[type
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to restore lighting for.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to restore lighting for.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11293,7 +11293,7 @@ class QwenImageEdit2509LoraGalleryMultipleAngles(SingleOutputGraphNode[types.Ima
     acceleration: nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2509LoraGalleryMultipleAngles.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     vertical_angle: float | OutputHandle[float] = connect_field(default=0, description="Adjust vertical camera angle (-1=bird's-eye view/looking down, 0=neutral, 1=worm's-eye view/looking up)")
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
@@ -11347,7 +11347,7 @@ class QwenImageEdit2509LoraGalleryNextScene(SingleOutputGraphNode[types.ImageRef
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to create the next scene from.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to create the next scene from.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11393,7 +11393,7 @@ class QwenImageEdit2509LoraGalleryRemoveElement(SingleOutputGraphNode[types.Imag
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image containing elements to remove.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image containing elements to remove.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11437,7 +11437,7 @@ class QwenImageEdit2509LoraGalleryRemoveLighting(SingleOutputGraphNode[types.Ima
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with lighting/shadows to remove.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image with lighting/shadows to remove.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11483,7 +11483,7 @@ class QwenImageEdit2509LoraGalleryShirtDesign(SingleOutputGraphNode[types.ImageR
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11528,7 +11528,7 @@ class QwenImageEdit2511(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The guidance scale to use for the image generation.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to generate an image from.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
@@ -11570,11 +11570,11 @@ class QwenImageEdit2511Lora(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. If None, uses the input image dimensions.')
     output_format: nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEdit2511Lora.OutputFormat.PNG, description='The format of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If `True`, the media will be returned as a data URI.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The guidance scale to use for the image generation.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt to generate an image from.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
 
@@ -11615,7 +11615,7 @@ class QwenImageEdit2511MultipleAngles(SingleOutputGraphNode[types.ImageRef], Gra
     horizontal_angle: float | OutputHandle[float] = connect_field(default=0, description='Horizontal rotation angle around the object in degrees. 0°=front view, 90°=right side, 180°=back view, 270°=left side, 360°=front view again.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4.5, description='The CFG (Classifier Free Guidance) scale.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='The negative prompt for the generation')
     zoom: float | OutputHandle[float] = connect_field(default=5, description='Camera zoom/distance. 0=wide shot (far away), 5=medium shot (normal), 10=close-up (very close).')
     vertical_angle: float | OutputHandle[float] = connect_field(default=0, description="Vertical camera angle in degrees. -30°=low-angle shot (looking up), 0°=eye-level, 30°=elevated, 60°=high-angle, 90°=bird's-eye view (looking down).")
@@ -11759,7 +11759,7 @@ class QwenImageEditLora(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     output_format: nodetool.nodes.fal.image_to_image.QwenImageEditLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to edit.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=30, description='The number of inference steps to perform.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
@@ -11807,7 +11807,7 @@ class QwenImageEditPlus(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='The number of inference steps to perform.')
 
@@ -11849,11 +11849,11 @@ class QwenImageEditPlusLora(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
     acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.Acceleration.REGULAR, description="Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.")
     output_format: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLora.OutputFormat.PNG, description='The format of the generated image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=28, description='The number of inference steps to perform.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     guidance_scale: float | OutputHandle[float] = connect_field(default=4, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
 
@@ -11899,7 +11899,7 @@ class QwenImageEditPlusLoraGalleryAddBackground(SingleOutputGraphNode[types.Imag
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to edit. Provide an image with a white or clean background.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to edit. Provide an image with a white or clean background.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11945,7 +11945,7 @@ class QwenImageEditPlusLoraGalleryFaceToFullPortrait(SingleOutputGraphNode[types
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the cropped face image. Provide a close-up face photo.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the cropped face image. Provide a close-up face photo.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -11991,7 +11991,7 @@ class QwenImageEditPlusLoraGalleryGroupPhoto(SingleOutputGraphNode[types.ImageRe
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images to combine into a group photo. Provide 2 or more individual portrait images.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -12037,7 +12037,7 @@ class QwenImageEditPlusLoraGalleryIntegrateProduct(SingleOutputGraphNode[types.I
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with product to integrate into background.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image with product to integrate into background.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -12081,7 +12081,7 @@ class QwenImageEditPlusLoraGalleryLightingRestoration(SingleOutputGraphNode[type
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to restore lighting for.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to restore lighting for.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -12122,7 +12122,7 @@ class QwenImageEditPlusLoraGalleryMultipleAngles(SingleOutputGraphNode[types.Ima
     acceleration: nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageEditPlusLoraGalleryMultipleAngles.Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker for the generated image.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to adjust camera angle for.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     vertical_angle: float | OutputHandle[float] = connect_field(default=0, description="Adjust vertical camera angle (-1=bird's-eye view/looking down, 0=neutral, 1=worm's-eye view/looking up)")
     num_images: int | OutputHandle[int] = connect_field(default=1, description='Number of images to generate')
@@ -12176,7 +12176,7 @@ class QwenImageEditPlusLoraGalleryNextScene(SingleOutputGraphNode[types.ImageRef
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image to create the next scene from.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image to create the next scene from.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -12222,7 +12222,7 @@ class QwenImageEditPlusLoraGalleryRemoveElement(SingleOutputGraphNode[types.Imag
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image containing elements to remove.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image containing elements to remove.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -12266,7 +12266,7 @@ class QwenImageEditPlusLoraGalleryRemoveLighting(SingleOutputGraphNode[types.Ima
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URL of the image with lighting/shadows to remove.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URL of the image with lighting/shadows to remove.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -12312,7 +12312,7 @@ class QwenImageEditPlusLoraGalleryShirtDesign(SingleOutputGraphNode[types.ImageR
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=1, description='The CFG (Classifier Free Guidance) scale. Controls how closely the model follows the prompt.')
     seed: str | OutputHandle[str] = connect_field(default='', description='Random seed for reproducibility. Same seed with same prompt will produce same result.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='The URLs of the images: first image is the person wearing a shirt, second image is the design/logo to put on the shirt.')
     negative_prompt: str | OutputHandle[str] = connect_field(default=' ', description='The negative prompt for the generation')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=6, description='The number of inference steps to perform.')
 
@@ -12351,7 +12351,7 @@ class QwenImageImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate the image with')
     acceleration: nodetool.nodes.fal.image_to_image.QwenImageImageToImage.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.QwenImageImageToImage.Acceleration.NONE, description="Acceleration level for image generation. Options: 'none', 'regular', 'high'. Higher acceleration increases speed. 'regular' balances speed and quality. 'high' is recommended for images without text.")
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. By default, we will use the provided image for determining the image_size.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=2.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     use_turbo: bool | OutputHandle[bool] = connect_field(default=False, description='Enable turbo mode for faster generation with high quality. When enabled, uses optimized settings (10 steps, CFG=1.2).')
@@ -12445,7 +12445,7 @@ class QwenImageLayeredLora(SingleOutputGraphNode[types.ImageRef], GraphNode[type
     num_layers: int | OutputHandle[int] = connect_field(default=4, description='The number of layers to generate.')
     output_format: nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.QwenImageLayeredLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the input image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='The guidance scale to use for the image generation.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
@@ -12491,7 +12491,7 @@ class QwenImageMaxEdit(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Im
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Enable LLM prompt optimization for better results.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility (0-2147483647).')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description="Reference images for editing (1-3 images required). Order matters: reference as 'image 1', 'image 2', 'image 3' in prompt. Resolution: 384-5000px each dimension. Max size: 10MB each. Formats: JPEG, JPG, PNG (no alpha), WEBP.")
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description="Reference images for editing (1-3 images required). Order matters: reference as 'image 1', 'image 2', 'image 3' in prompt. Resolution: 384-5000px each dimension. Max size: 10MB each. Formats: JPEG, JPG, PNG (no alpha), WEBP.")
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Content to avoid in the generated image. Max 500 characters.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable content moderation for input and output.')
 
@@ -12598,7 +12598,7 @@ class RecraftV3ImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[typ
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the image to modify. Must be less than 5 MB in size, have resolution less than 16 MP and max dimension less than 4096 pixels.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     strength: float | OutputHandle[float] = connect_field(default=0.5, description='Defines the difference with the original image, should lie in [0, 1], where 0 means almost identical, and 1 means miserable similarity')
-    colors: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='An array of preferable colors')
+    colors: list[types.RGBColor] | OutputHandle[list[types.RGBColor]] = connect_field(default=[], description='An array of preferable colors')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='A text description of undesired elements on an image')
 
     @classmethod
@@ -12774,7 +12774,7 @@ class ReveFastRemix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.Image
     aspect_ratio: nodetool.nodes.fal.image_to_image.ReveFastRemix.AspectRatio | OutputHandle[nodetool.nodes.fal.image_to_image.ReveFastRemix.AspectRatio] | None = connect_field(default=None, description='The desired aspect ratio of the generated image. If not provided, will be smartly chosen by the model.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     output_format: nodetool.nodes.fal.image_to_image.ReveFastRemix.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ReveFastRemix.OutputFormat.PNG, description='Output format for the generated image.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -12812,7 +12812,7 @@ class ReveRemix(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
     aspect_ratio: nodetool.nodes.fal.image_to_image.ReveRemix.AspectRatio | OutputHandle[nodetool.nodes.fal.image_to_image.ReveRemix.AspectRatio] | None = connect_field(default=None, description='The desired aspect ratio of the generated image. If not provided, will be smartly chosen by the model.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     output_format: nodetool.nodes.fal.image_to_image.ReveRemix.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ReveRemix.OutputFormat.PNG, description='Output format for the generated image.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of URLs of reference images. Must provide between 1 and 6 images (inclusive). Each image must be less than 10 MB. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -12934,7 +12934,7 @@ class RundiffusionFalJuggernautFluxLoraInpainting(SingleOutputGraphNode[types.Im
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image.')
     output_format: nodetool.nodes.fal.image_to_image.RundiffusionFalJuggernautFluxLoraInpainting.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.RundiffusionFalJuggernautFluxLoraInpainting.OutputFormat.JPEG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of image to use for inpainting. or img2img')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN.')
     strength: float | OutputHandle[float] = connect_field(default=0.85, description='The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=3.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
@@ -13057,8 +13057,8 @@ class Sam2Image(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
 
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
     output_format: nodetool.nodes.fal.image_to_image.Sam2Image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Sam2Image.OutputFormat.PNG, description='The format of the generated image.')
-    prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of prompts to segment the image')
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Coordinates for boxes')
+    prompts: list[types.PointPrompt] | OutputHandle[list[types.PointPrompt]] = connect_field(default=[], description='List of prompts to segment the image')
+    box_prompts: list[types.BoxPrompt] | OutputHandle[list[types.BoxPrompt]] = connect_field(default=[], description='Coordinates for boxes')
     apply_mask: bool | OutputHandle[bool] = connect_field(default=False, description='Apply the mask on the image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be segmented')
 
@@ -13099,10 +13099,10 @@ class Sam3Image(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
     output_format: nodetool.nodes.fal.image_to_image.Sam3Image.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Sam3Image.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be segmented')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the media will be returned as a data URI.')
-    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of point prompts')
+    point_prompts: list[types.PointPrompt] | OutputHandle[list[types.PointPrompt]] = connect_field(default=[], description='List of point prompts')
     include_scores: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include mask confidence scores.')
     max_masks: int | OutputHandle[int] = connect_field(default=3, description='Maximum number of masks to return when `return_multiple_masks` is enabled.')
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.')
+    box_prompts: list[types.BoxPrompt] | OutputHandle[list[types.BoxPrompt]] = connect_field(default=[], description='Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.')
     apply_mask: bool | OutputHandle[bool] = connect_field(default=True, description='Apply the mask on the image.')
     text_prompt: str | OutputHandle[str] = connect_field(default='', description="[DEPRECATED] Use 'prompt' instead. Kept for backward compatibility.")
 
@@ -13143,10 +13143,10 @@ class Sam3ImageRle(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, An
     output_format: nodetool.nodes.fal.image_to_image.Sam3ImageRle.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.Sam3ImageRle.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be segmented')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the media will be returned as a data URI.')
-    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of point prompts')
+    point_prompts: list[types.PointPrompt] | OutputHandle[list[types.PointPrompt]] = connect_field(default=[], description='List of point prompts')
     include_scores: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to include mask confidence scores.')
     max_masks: int | OutputHandle[int] = connect_field(default=3, description='Maximum number of masks to return when `return_multiple_masks` is enabled.')
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.')
+    box_prompts: list[types.BoxPrompt] | OutputHandle[list[types.BoxPrompt]] = connect_field(default=[], description='Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.')
     apply_mask: bool | OutputHandle[bool] = connect_field(default=True, description='Apply the mask on the image.')
     text_prompt: str | OutputHandle[str] = connect_field(default='', description="[DEPRECATED] Use 'prompt' instead. Kept for backward compatibility.")
 
@@ -13182,7 +13182,7 @@ class Sd15DepthControlnet(SingleOutputGraphNode[types.ImageRef], GraphNode[types
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to use for generating the image. Be as descriptive as possible for best results.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. Leave it none to automatically infer from the control image.')
     expand_prompt: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the prompt will be expanded with additional prompts.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of LoRA weights to use.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=False, description='If set to true, the safety checker will be enabled.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution).")
@@ -13230,9 +13230,9 @@ class SdxlControlnetUnionImageToImage(SingleOutputGraphNode[types.ImageRef], Gra
     depth_preprocess: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the depth image.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. Leave it none to automatically infer from the control image.')
     normal_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the control image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     teed_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the control image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of LoRA weights to use.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     canny_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the control image.')
     segmentation_preprocess: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the segmentation image.')
@@ -13295,9 +13295,9 @@ class SdxlControlnetUnionInpainting(SingleOutputGraphNode[types.ImageRef], Graph
     depth_preprocess: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the depth image.')
     image_size: str | OutputHandle[str] = connect_field(default='', description='The size of the generated image. Leave it none to automatically infer from the control image.')
     normal_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the control image.')
-    embeddings: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of embeddings to use.')
+    embeddings: list[types.Embedding] | OutputHandle[list[types.Embedding]] = connect_field(default=[], description='The list of embeddings to use.')
     teed_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the control image.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The list of LoRA weights to use.')
+    loras: list[types.LoraWeight] | OutputHandle[list[types.LoraWeight]] = connect_field(default=[], description='The list of LoRA weights to use.')
     guidance_scale: float | OutputHandle[float] = connect_field(default=7.5, description='The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.')
     canny_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The URL of the control image.')
     segmentation_preprocess: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to preprocess the segmentation image.')
@@ -13658,8 +13658,8 @@ class TopazUpscaleImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.I
     Model: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.TopazUpscaleImage.Model
     SubjectDetection: typing.ClassVar[type] = nodetool.nodes.fal.image_to_image.TopazUpscaleImage.SubjectDetection
 
-    face_enhancement_creativity: float | OutputHandle[float] = connect_field(default=0, description='Creativity level for face enhancement. 0.0 means no creativity, 1.0 means maximum creativity. Ignored if face ehnancement is disabled.')
     face_enhancement_strength: float | OutputHandle[float] = connect_field(default=0.8, description='Strength of the face enhancement. 0.0 means no enhancement, 1.0 means maximum enhancement. Ignored if face ehnancement is disabled.')
+    face_enhancement_creativity: float | OutputHandle[float] = connect_field(default=0, description='Creativity level for face enhancement. 0.0 means no creativity, 1.0 means maximum creativity. Ignored if face ehnancement is disabled.')
     output_format: nodetool.nodes.fal.image_to_image.TopazUpscaleImage.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.TopazUpscaleImage.OutputFormat.JPEG, description='Output format of the upscaled image.')
     face_enhancement: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to apply face enhancement to the image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Url of the image to be upscaled')
@@ -13860,7 +13860,7 @@ class Wan25PreviewImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[
     image_size: str | OutputHandle[str] = connect_field(default='square', description='The size of the generated image. Width and height must be between 384 and 1440 pixels.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility. If None, a random seed is chosen.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='URLs of images to edit. For single-image editing, provide 1 URL. For multi-reference generation, provide up to 2 URLs. If more than 2 URLs are provided, only the first 2 will be used.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='URLs of images to edit. For single-image editing, provide 1 URL. For multi-reference generation, provide up to 2 URLs. If more than 2 URLs are provided, only the first 2 will be used.')
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Negative prompt to describe content to avoid. Max 500 characters.')
 
     @classmethod
@@ -13947,7 +13947,7 @@ class WanV26ImageToImage(SingleOutputGraphNode[types.ImageRef], GraphNode[types.
     image_size: str | OutputHandle[str] = connect_field(default='square_hd', description="Output image size. Use presets like 'square_hd', 'landscape_16_9', 'portrait_9_16', or specify exact dimensions with ImageSize(width=1280, height=720). Total pixels must be between 768*768 and 1280*1280.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Enable content moderation for input and output.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility (0-2147483647). Same seed produces more consistent results.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description="Reference images for editing (1-3 images required). Order matters: reference as 'image 1', 'image 2', 'image 3' in prompt. Resolution: 384-5000px each dimension. Max size: 10MB each. Formats: JPEG, JPG, PNG (no alpha), BMP, WEBP.")
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description="Reference images for editing (1-3 images required). Order matters: reference as 'image 1', 'image 2', 'image 3' in prompt. Resolution: 384-5000px each dimension. Max size: 10MB each. Formats: JPEG, JPG, PNG (no alpha), BMP, WEBP.")
     negative_prompt: str | OutputHandle[str] = connect_field(default='', description='Content to avoid in the generated image. Max 500 characters.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=True, description='Enable LLM prompt optimization. Significantly improves results for simple prompts but adds 3-4 seconds processing time.')
 
@@ -14036,7 +14036,7 @@ class ZImageTurboControlnetLora(SingleOutputGraphNode[types.ImageRef], GraphNode
     prompt: str | OutputHandle[str] = connect_field(default='', description='The prompt to generate an image from.')
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
     acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboControlnetLora.Acceleration.REGULAR, description='The acceleration level to use.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     control_end: float | OutputHandle[float] = connect_field(default=0.8, description='The end of the controlnet conditioning.')
     control_start: float | OutputHandle[float] = connect_field(default=0, description='The start of the controlnet conditioning.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')
@@ -14134,7 +14134,7 @@ class ZImageTurboImageToImageLora(SingleOutputGraphNode[types.ImageRef], GraphNo
     output_format: nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.OutputFormat = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboImageToImageLora.OutputFormat.PNG, description='The format of the generated image.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Image for Image-to-Image generation.')
     sync_mode: bool | OutputHandle[bool] = connect_field(default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history.")
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     strength: float | OutputHandle[float] = connect_field(default=0.6, description='The strength of the image-to-image conditioning.')
     enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion. Note: this will increase the price by 0.0025 credits per request.')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='The same seed and the same prompt given to the same version of the model will output the same image every time.')
@@ -14226,7 +14226,7 @@ class ZImageTurboInpaintLora(SingleOutputGraphNode[types.ImageRef], GraphNode[ty
     image_size: str | OutputHandle[str] = connect_field(default='auto', description='The size of the generated image.')
     acceleration: nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.Acceleration = Field(default=nodetool.nodes.fal.image_to_image.ZImageTurboInpaintLora.Acceleration.REGULAR, description='The acceleration level to use.')
     mask_image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of Mask for Inpaint generation.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='List of LoRA weights to apply (maximum 3).')
     control_end: float | OutputHandle[float] = connect_field(default=0.8, description='The end of the controlnet conditioning.')
     control_start: float | OutputHandle[float] = connect_field(default=0, description='The start of the controlnet conditioning.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, the safety checker will be enabled.')

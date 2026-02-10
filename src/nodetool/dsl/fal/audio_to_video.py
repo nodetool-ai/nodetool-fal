@@ -106,10 +106,10 @@ class ElevenlabsDubbing(SingleOutputGraphNode[types.VideoRef], GraphNode[types.V
     """
 
     video_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='URL of the video file to dub. Either audio_url or video_url must be provided. If both are provided, video_url takes priority.')
-    highest_resolution: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use the highest resolution for dubbing.')
     audio_url: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='URL of the audio file to dub. Either audio_url or video_url must be provided.')
-    target_lang: str | OutputHandle[str] = connect_field(default='', description='Target language code for dubbing (ISO 639-1)')
+    highest_resolution: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use the highest resolution for dubbing.')
     num_speakers: str | OutputHandle[str] = connect_field(default='', description='Number of speakers in the audio. If not provided, will be auto-detected.')
+    target_lang: str | OutputHandle[str] = connect_field(default='', description='Target language code for dubbing (ISO 639-1)')
     source_lang: str | OutputHandle[str] = connect_field(default='', description='Source language code. If not provided, will be auto-detected.')
 
     @classmethod
@@ -348,7 +348,7 @@ class Ltx219BAudioToVideoLora(SingleOutputGraphNode[types.VideoRef], GraphNode[t
     use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.')
     num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='The number of inference steps to use.')
     fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the generation.')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='The LoRAs to use for the generation.')
     camera_lora: nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BAudioToVideoLora.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
     video_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.")
     guidance_scale: float | OutputHandle[float] = connect_field(default=3, description='The guidance scale to use.')
@@ -470,7 +470,7 @@ class Ltx219BDistilledAudioToVideoLora(SingleOutputGraphNode[types.VideoRef], Gr
     acceleration: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.Acceleration.NONE, description='The acceleration level to use.')
     use_multiscale: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.')
     fps: float | OutputHandle[float] = connect_field(default=25, description='The frames per second of the generated video.')
-    loras: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The LoRAs to use for the generation.')
+    loras: list[types.LoRAInput] | OutputHandle[list[types.LoRAInput]] = connect_field(default=[], description='The LoRAs to use for the generation.')
     camera_lora: nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora = Field(default=nodetool.nodes.fal.audio_to_video.Ltx219BDistilledAudioToVideoLora.CameraLora.NONE, description='The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.')
     video_size: str | OutputHandle[str] = connect_field(default='landscape_4_3', description="The size of the generated video. Use 'auto' to match the input image dimensions if provided.")
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the safety checker.')

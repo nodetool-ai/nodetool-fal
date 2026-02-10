@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import Field
 from nodetool.metadata.types import AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
+from nodetool.nodes.fal.types import DialogueBlock, InpaintSection, PronunciationDictionaryLocator, Speaker, Turn  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 

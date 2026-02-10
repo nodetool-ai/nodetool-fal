@@ -3,6 +3,7 @@ from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
 from nodetool.nodes.fal.fal_node import FALNode
+from nodetool.nodes.fal.types import BoxPromptBase, PointPromptBase  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 

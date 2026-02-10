@@ -533,7 +533,7 @@ class MeshyV5MultiImageTo3D(SingleOutputGraphNode[dict[str, Any]], GraphNode[dic
     topology: nodetool.nodes.fal.image_to_3d.MeshyV5MultiImageTo3D.Topology = Field(default=nodetool.nodes.fal.image_to_3d.MeshyV5MultiImageTo3D.Topology.TRIANGLE, description='Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.')
     enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, input data will be checked for safety before processing.')
     symmetry_mode: nodetool.nodes.fal.image_to_3d.MeshyV5MultiImageTo3D.SymmetryMode = Field(default=nodetool.nodes.fal.image_to_3d.MeshyV5MultiImageTo3D.SymmetryMode.AUTO, description='Controls symmetry behavior during model generation.')
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.')
     texture_prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt to guide the texturing process. Requires should_texture to be true.')
     should_remesh: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.')
 
@@ -716,10 +716,10 @@ class Sam33DObjects(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, A
     export_textured_glb: bool | OutputHandle[bool] = connect_field(default=False, description='If True, exports GLB with baked texture and UVs instead of vertex colors.')
     detection_threshold: float | OutputHandle[float] = connect_field(default=0.0, description="Detection confidence threshold (0.1-1.0). Lower = more detections but less precise. If not set, uses the model's default.")
     pointmap_url: str | OutputHandle[str] = connect_field(default='', description='Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation')
-    box_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.')
+    box_prompts: list[types.BoxPromptBase] | OutputHandle[list[types.BoxPromptBase]] = connect_field(default=[], description='Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to reconstruct in 3D')
     mask_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used.')
-    point_prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Point prompts for auto-segmentation when no masks provided')
+    point_prompts: list[types.PointPromptBase] | OutputHandle[list[types.PointPromptBase]] = connect_field(default=[], description='Point prompts for auto-segmentation when no masks provided')
     seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducibility')
 
     @classmethod

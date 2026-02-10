@@ -3,6 +3,7 @@ from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import VideoRef, AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
+from nodetool.nodes.fal.types import AudioTimeSpan  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 

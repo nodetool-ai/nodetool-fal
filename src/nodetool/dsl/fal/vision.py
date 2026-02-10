@@ -64,7 +64,7 @@ class ArbiterImage(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
     measurements: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The measurements to use for the measurement.')
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The inputs to use for the measurement.')
+    inputs: list[types.ImageInput] | OutputHandle[list[types.ImageInput]] = connect_field(default=[], description='The inputs to use for the measurement.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -96,7 +96,7 @@ class ArbiterImageImage(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
     measurements: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The measurements to use for the measurement.')
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The inputs to use for the measurement.')
+    inputs: list[types.ReferenceImageInput] | OutputHandle[list[types.ReferenceImageInput]] = connect_field(default=[], description='The inputs to use for the measurement.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -128,7 +128,7 @@ class ArbiterImageText(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
     measurements: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The measurements to use for the measurement.')
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='The inputs to use for the measurement.')
+    inputs: list[types.SemanticImageInput] | OutputHandle[list[types.SemanticImageInput]] = connect_field(default=[], description='The inputs to use for the measurement.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -576,8 +576,8 @@ class Moondream3PreviewCaption(SingleOutputGraphNode[dict[str, Any]], GraphNode[
     Length: typing.ClassVar[type] = nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length
 
     top_p: float | OutputHandle[float] = connect_field(default=0.0, description='Nucleus sampling probability mass to use, between 0 and 1.')
-    length: nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length = Field(default=nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length.NORMAL, description='Length of the caption to generate')
     temperature: float | OutputHandle[float] = connect_field(default=0.0, description='Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.')
+    length: nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length = Field(default=nodetool.nodes.fal.vision.Moondream3PreviewCaption.Length.NORMAL, description='Length of the caption to generate')
     image_url: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='URL of the image to be processed Max width: 7000px, Max height: 7000px, Timeout: 20.0s')
 
     @classmethod
@@ -714,7 +714,7 @@ class MoondreamBatched(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str
 
     model_id: nodetool.nodes.fal.vision.MoondreamBatched.ModelId = Field(default=nodetool.nodes.fal.vision.MoondreamBatched.ModelId.VIKHYATK_MOONDREAM2, description='Model ID to use for inference')
     repetition_penalty: float | OutputHandle[float] = connect_field(default=1, description='Repetition penalty for sampling')
-    inputs: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of input prompts and image URLs')
+    inputs: list[types.MoondreamInputParam] | OutputHandle[list[types.MoondreamInputParam]] = connect_field(default=[], description='List of input prompts and image URLs')
     max_tokens: int | OutputHandle[int] = connect_field(default=64, description='Maximum number of new tokens to generate')
     temperature: float | OutputHandle[float] = connect_field(default=0.2, description='Temperature for sampling')
     top_p: float | OutputHandle[float] = connect_field(default=1, description='Top P for sampling')
@@ -818,12 +818,12 @@ class OpenrouterRouterVision(SingleOutputGraphNode[dict[str, Any]], GraphNode[di
     """
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to be used for the image')
-    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
     system_prompt: str | OutputHandle[str] = connect_field(default='', description='System prompt to provide context or instructions to the model')
+    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
     model: str | OutputHandle[str] = connect_field(default='', description='Name of the model to use. Charged based on actual token usage.')
-    max_tokens: str | OutputHandle[str] = connect_field(default='', description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
+    max_tokens: int | OutputHandle[int] = connect_field(default=0, description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
     temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of image URLs to be processed')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of image URLs to be processed')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -1112,7 +1112,7 @@ class XAilabNsfw(SingleOutputGraphNode[Any], GraphNode[Any]):
         - Scene understanding
     """
 
-    image_urls: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.')
+    images: list[types.ImageRef] | OutputHandle[list[types.ImageRef]] = connect_field(default=[], description='List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:

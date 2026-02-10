@@ -3,6 +3,7 @@ from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
 from nodetool.nodes.fal.fal_node import FALNode
+from nodetool.nodes.fal.types import BoxPrompt, BoxPromptBase, ImageCondition, ImageConditioningInput, LoRAInput, LoRAWeight, LoraWeight, OmniVideoElementInput, PointPrompt, PointPromptBase, Track, VideoCondition, VideoConditioningInput  # noqa: F401
 from nodetool.workflows.processing_context import ProcessingContext
 
 
