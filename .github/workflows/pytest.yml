@@ -1,22 +1,32 @@
-name: CI
+name: Python Tests
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Install dependencies
         run: |
-          pip install ".[dev]"
+          uv sync \
+            --extra-index-url https://nodetool-ai.github.io/nodetool-registry/simple/ \
+            --index-strategy unsafe-best-match
+          uv sync --extra dev --index-strategy unsafe-best-match
+
       - name: Run tests
-        run: |
-          pytest -ra
+        run: uv run pytest
