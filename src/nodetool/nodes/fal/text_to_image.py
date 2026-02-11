@@ -2,7 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef
-from nodetool.nodes.fal.types import ControlNet, Embedding, GuidanceInput, IPAdapter, LoRAInput, LoRAWeight, LoraWeight, RGBColor
+from nodetool.nodes.fal.types import ControlNet, ElementInput, Embedding, GuidanceInput, IPAdapter, LoRAInput, LoRAWeight, LoraWeight, RGBColor
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -12906,6 +12906,113 @@ class DiffusionEdge(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt"]
+
+class KlingImageO3TextToImage(FALNode):
+    """
+    Kling Image O3 generates high-quality images from text prompts with refined detail.
+    image, generation, kling, o3, text-to-image, txt2img
+
+    Use cases:
+    - Generate images from detailed text prompts
+    - Create high-fidelity concept art
+    - Produce marketing visuals from descriptions
+    - Generate creative illustrations from ideas
+    - Create polished images for presentations
+    """
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of generated images.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+        RATIO_21_9 = "21:9"
+
+    class Resolution(Enum):
+        """
+        Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res.
+        """
+        VALUE_1K = "1K"
+        VALUE_2K = "2K"
+        VALUE_4K = "4K"
+
+    class ResultType(Enum):
+        """
+        Result type. 'single' for one image, 'series' for a series of related images.
+        """
+        SINGLE = "single"
+        SERIES = "series"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for image generation. Max 2500 characters."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="Aspect ratio of generated images."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_1K, description="Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate (1-9). Only used when result_type is 'single'."
+    )
+    series_amount: int = Field(
+        default=0, description="Number of images in series (2-9). Only used when result_type is 'series'."
+    )
+    result_type: ResultType = Field(
+        default=ResultType.SINGLE, description="Result type. 'single' for one image, 'series' for a series of related images."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI."
+    )
+    elements: list[ElementInput] = Field(
+        default=[], description="Optional: Elements (characters/objects) for face control. Reference in prompt as @Element1, @Element2, etc."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "aspect_ratio": self.aspect_ratio.value,
+            "resolution": self.resolution.value,
+            "num_images": self.num_images,
+            "series_amount": self.series_amount,
+            "result_type": self.result_type.value,
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-image/o3/text-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class Fooocus(FALNode):
     """

@@ -2,7 +2,7 @@ from enum import Enum
 from pydantic import Field
 from typing import Any
 from nodetool.metadata.types import ImageRef, VideoRef, AudioRef
-from nodetool.nodes.fal.types import BoxPrompt, BoxPromptBase, Frame, ImageCondition, ImageConditioningInput, LoRAInput, LoRAWeight, LoraWeight, OmniVideoElementInput, PointPrompt, PointPromptBase, Track, VideoCondition, VideoConditioningInput
+from nodetool.nodes.fal.types import BoxPrompt, BoxPromptBase, Frame, ImageCondition, ImageConditioningInput, KlingV3ImageElementInput, LoRAInput, LoRAWeight, LoraWeight, OmniVideoElementInput, PointPrompt, PointPromptBase, Track, VideoCondition, VideoConditioningInput
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -3787,6 +3787,348 @@ class KlingVideoO1StandardVideoToVideoEdit(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["video"]
+
+class KlingVideoO3StandardVideoToVideoEdit(FALNode):
+    """
+    Kling O3 Edit Video [Standard]
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Reference video as @Video1."
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+    )
+    elements: list[KlingV3ImageElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+    )
+    images: list[ImageRef] = Field(
+        default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+    )
+    keep_audio: bool = Field(
+        default=True, description="Whether to keep the original audio from the reference video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "image_urls": images_data_urls,
+            "keep_audio": self.keep_audio,
+            "shot_type": self.shot_type.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/video-to-video/edit",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video", "prompt"]
+
+class KlingVideoO3ProVideoToVideoEdit(FALNode):
+    """
+    Kling O3 Edit Video [Pro]
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Reference video as @Video1."
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+    )
+    elements: list[KlingV3ImageElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+    )
+    images: list[ImageRef] = Field(
+        default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+    )
+    keep_audio: bool = Field(
+        default=True, description="Whether to keep the original audio from the reference video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
+        arguments = {
+            "prompt": self.prompt,
+            "video_url": self.video,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "image_urls": images_data_urls,
+            "keep_audio": self.keep_audio,
+            "shot_type": self.shot_type.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/video-to-video/edit",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video", "prompt"]
+
+class KlingVideoO3StandardVideoToVideoReference(FALNode):
+    """
+    Kling O3 Reference Video to Video [Standard]
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s for reference video).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Reference video as @Video1."
+    )
+    duration: Duration | None = Field(
+        default=None, description="Video duration in seconds (3-15s for reference video)."
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio."
+    )
+    keep_audio: bool = Field(
+        default=True, description="Whether to keep the original audio from the reference video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+    elements: list[KlingV3ImageElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+    )
+    images: list[ImageRef] = Field(
+        default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value if self.duration else None,
+            "video_url": self.video,
+            "aspect_ratio": self.aspect_ratio.value,
+            "keep_audio": self.keep_audio,
+            "shot_type": self.shot_type.value,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "image_urls": images_data_urls,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/video-to-video/reference",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video", "prompt", "duration"]
+
+class KlingVideoO3ProVideoToVideoReference(FALNode):
+    """
+    Kling O3 Reference Video to Video [Pro]
+    video, editing, video-to-video, vid2vid
+
+    Use cases:
+    - Video style transfer
+    - Video enhancement and restoration
+    - Automated video editing
+    - Special effects generation
+    - Content repurposing
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s for reference video).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio.
+        """
+        AUTO = "auto"
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Reference video as @Video1."
+    )
+    duration: Duration | None = Field(
+        default=None, description="Video duration in seconds (3-15s for reference video)."
+    )
+    video: VideoRef = Field(
+        default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.AUTO, description="Aspect ratio."
+    )
+    keep_audio: bool = Field(
+        default=True, description="Whether to keep the original audio from the reference video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+    elements: list[KlingV3ImageElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+    )
+    images: list[ImageRef] = Field(
+        default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value if self.duration else None,
+            "video_url": self.video,
+            "aspect_ratio": self.aspect_ratio.value,
+            "keep_audio": self.keep_audio,
+            "shot_type": self.shot_type.value,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "image_urls": images_data_urls,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/video-to-video/reference",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["video", "prompt", "duration"]
 
 class SteadyDancer(FALNode):
     """

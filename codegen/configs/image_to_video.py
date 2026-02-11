@@ -581,6 +581,60 @@ CONFIGS: dict[str, dict[str, Any]] = {
         "basic_fields": ["image", "prompt"]
     },
 
+    # Kling Video O3
+    "fal-ai/kling-video/o3/standard/image-to-video": {
+        "class_name": "KlingVideoO3StandardImageToVideo",
+        "docstring": "Kling Video O3 Standard generates videos from images with balanced quality and speed.",
+        "tags": ["video", "generation", "kling", "o3", "standard", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Animate static images into videos",
+            "Create balanced quality image animations",
+            "Produce efficient video content from photos",
+            "Generate consistent video clips from images",
+            "Create standard-tier visual storytelling"
+        ],
+        "basic_fields": ["image", "prompt", "duration"]
+    },
+    "fal-ai/kling-video/o3/pro/image-to-video": {
+        "class_name": "KlingVideoO3ProImageToVideo",
+        "docstring": "Kling Video O3 Pro generates professional quality videos from images with enhanced fidelity.",
+        "tags": ["video", "generation", "kling", "o3", "pro", "image-to-video", "img2vid"],
+        "use_cases": [
+            "Create professional image-driven video content",
+            "Generate premium animations from photos",
+            "Produce cinematic video clips from images",
+            "Create high-fidelity marketing videos from photos",
+            "Generate polished video sequences from images"
+        ],
+        "basic_fields": ["image", "prompt", "duration"]
+    },
+    "fal-ai/kling-video/o3/standard/reference-to-video": {
+        "class_name": "KlingVideoO3StandardReferenceToVideo",
+        "docstring": "Kling Video O3 Standard generates videos using reference images for style consistency.",
+        "tags": ["video", "generation", "kling", "o3", "standard", "reference"],
+        "use_cases": [
+            "Generate videos from reference images",
+            "Create style-consistent animations",
+            "Produce reference-guided content",
+            "Generate videos matching examples",
+            "Create standardized reference videos"
+        ],
+        "basic_fields": ["start_image", "prompt", "duration"]
+    },
+    "fal-ai/kling-video/o3/pro/reference-to-video": {
+        "class_name": "KlingVideoO3ProReferenceToVideo",
+        "docstring": "Kling Video O3 Pro generates high-fidelity videos using reference images for style and structure.",
+        "tags": ["video", "generation", "kling", "o3", "pro", "reference"],
+        "use_cases": [
+            "Generate high-fidelity videos from reference images",
+            "Create premium style-consistent animations",
+            "Produce reference-guided professional content",
+            "Generate videos matching premium examples",
+            "Create polished reference-based video clips"
+        ],
+        "basic_fields": ["start_image", "prompt", "duration"]
+    },
+
     # Kling Video v2.6 Pro
     "fal-ai/kling-video/v2.6/pro/image-to-video": {
         "class_name": "KlingVideoV26ProImageToVideo",

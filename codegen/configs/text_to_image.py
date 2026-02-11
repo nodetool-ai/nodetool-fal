@@ -2157,6 +2157,19 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Rapid prototyping and mockups",
         ],
     },
+    "fal-ai/kling-image/o3/text-to-image": {
+        "class_name": "KlingImageO3TextToImage",
+        "docstring": "Kling Image O3 generates high-quality images from text prompts with refined detail.",
+        "tags": ["image", "generation", "kling", "o3", "text-to-image", "txt2img"],
+        "use_cases": [
+            "Generate images from detailed text prompts",
+            "Create high-fidelity concept art",
+            "Produce marketing visuals from descriptions",
+            "Generate creative illustrations from ideas",
+            "Create polished images for presentations",
+        ],
+        "basic_fields": ["prompt", "resolution", "aspect_ratio"],
+    },
     "fal-ai/fooocus": {
         "class_name": "Fooocus",
         "docstring": "Default parameters with automated optimizations and quality improvements.",

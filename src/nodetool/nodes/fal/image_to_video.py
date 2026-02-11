@@ -2895,6 +2895,406 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
+class KlingVideoO3StandardImageToVideo(FALNode):
+    """
+    Kling Video O3 Standard generates videos from images with balanced quality and speed.
+    video, generation, kling, o3, standard, image-to-video, img2vid
+
+    Use cases:
+    - Animate static images into videos
+    - Create balanced quality image animations
+    - Produce efficient video content from photos
+    - Generate consistent video clips from images
+    - Create standard-tier visual storytelling
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation."
+    )
+    generate_audio: bool = Field(
+        default=False, description="Whether to generate native audio for the video."
+    )
+    image: ImageRef = Field(
+        default=ImageRef(), description="URL of the start frame image."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the end frame image (optional)."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "generate_audio": self.generate_audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "shot_type": self.shot_type.value,
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+class KlingVideoO3ProImageToVideo(FALNode):
+    """
+    Kling Video O3 Pro generates professional quality videos from images with enhanced fidelity.
+    video, generation, kling, o3, pro, image-to-video, img2vid
+
+    Use cases:
+    - Create professional image-driven video content
+    - Generate premium animations from photos
+    - Produce cinematic video clips from images
+    - Create high-fidelity marketing videos from photos
+    - Generate polished video sequences from images
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation."
+    )
+    generate_audio: bool = Field(
+        default=False, description="Whether to generate native audio for the video."
+    )
+    image: ImageRef = Field(
+        default=ImageRef(), description="URL of the start frame image."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="URL of the end frame image (optional)."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        image_base64 = await context.image_to_base64(self.image)
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "generate_audio": self.generate_audio,
+            "image_url": f"data:image/png;base64,{image_base64}",
+            "shot_type": self.shot_type.value,
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/image-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["image", "prompt", "duration"]
+
+class KlingVideoO3StandardReferenceToVideo(FALNode):
+    """
+    Kling Video O3 Standard generates videos using reference images for style consistency.
+    video, generation, kling, o3, standard, reference
+
+    Use cases:
+    - Generate videos from reference images
+    - Create style-consistent animations
+    - Produce reference-guided content
+    - Generate videos matching examples
+    - Create standardized reference videos
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation."
+    )
+    generate_audio: bool = Field(
+        default=False, description="Whether to generate native audio for the video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+    start_image: ImageRef = Field(
+        default=ImageRef(), description="Image to use as the first frame of the video."
+    )
+    images: list[ImageRef] = Field(
+        default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="Image to use as the last frame of the video."
+    )
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "generate_audio": self.generate_audio,
+            "shot_type": self.shot_type.value,
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "image_urls": images_data_urls,
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/reference-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image", "prompt", "duration"]
+
+class KlingVideoO3ProReferenceToVideo(FALNode):
+    """
+    Kling Video O3 Pro generates high-fidelity videos using reference images for style and structure.
+    video, generation, kling, o3, pro, reference
+
+    Use cases:
+    - Generate high-fidelity videos from reference images
+    - Create premium style-consistent animations
+    - Produce reference-guided professional content
+    - Generate videos matching premium examples
+    - Create polished reference-based video clips
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated video frame.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation."
+    )
+    generate_audio: bool = Field(
+        default=False, description="Whether to generate native audio for the video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+    start_image: ImageRef = Field(
+        default=ImageRef(), description="Image to use as the first frame of the video."
+    )
+    images: list[ImageRef] = Field(
+        default=[], description="Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+    )
+    end_image: ImageRef = Field(
+        default=ImageRef(), description="Image to use as the last frame of the video."
+    )
+    elements: list[KlingV3ComboElementInput] = Field(
+        default=[], description="Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        start_image_base64 = await context.image_to_base64(self.start_image)
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
+        end_image_base64 = await context.image_to_base64(self.end_image)
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "generate_audio": self.generate_audio,
+            "shot_type": self.shot_type.value,
+            "start_image_url": f"data:image/png;base64,{start_image_base64}",
+            "image_urls": images_data_urls,
+            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/reference-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["start_image", "prompt", "duration"]
+
 class KlingVideoV26ProImageToVideo(FALNode):
     """
     Kling Video v2.6 Pro generates professional quality videos with latest model improvements.

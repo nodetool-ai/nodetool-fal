@@ -18,21 +18,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_text
 from nodetool.workflows.base_node import BaseNode
 
-class HalfMoonAiAiDetectorDetectText(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+
+class HalfMoonAiAiDetectorDetectText(
+    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
+):
     """
 
-        AI Detector (Text) is an advanced AI service that analyzes a passage and returns a verdict on whether it was likely written by AI.
-        text, processing, transformation, nlp
+    AI Detector (Text) is an advanced AI service that analyzes a passage and returns a verdict on whether it was likely written by AI.
+    text, processing, transformation, nlp
 
-        Use cases:
-        - Text transformation
-        - Content analysis
-        - Text classification
-        - Language processing
-        - Content detection
+    Use cases:
+    - Text transformation
+    - Content analysis
+    - Text classification
+    - Language processing
+    - Content detection
     """
 
-    text: str | OutputHandle[str] = connect_field(default='', description='Text content to analyze for AI generation.')
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="Text content to analyze for AI generation."
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -41,5 +46,3 @@ class HalfMoonAiAiDetectorDetectText(SingleOutputGraphNode[dict[str, Any]], Grap
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
-
-

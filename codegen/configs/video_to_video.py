@@ -728,6 +728,62 @@ CONFIGS: dict[str, dict[str, Any]] = {
 
         ],
     },
+    "fal-ai/kling-video/o3/standard/video-to-video/reference": {
+        "class_name": "KlingVideoO3StandardVideoToVideoReference",
+        "docstring": "Kling O3 Reference Video to Video [Standard]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+        "basic_fields": ["video", "prompt", "duration"]
+    },
+    "fal-ai/kling-video/o3/standard/video-to-video/edit": {
+        "class_name": "KlingVideoO3StandardVideoToVideoEdit",
+        "docstring": "Kling O3 Edit Video [Standard]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+        "basic_fields": ["video", "prompt"]
+    },
+    "fal-ai/kling-video/o3/pro/video-to-video/reference": {
+        "class_name": "KlingVideoO3ProVideoToVideoReference",
+        "docstring": "Kling O3 Reference Video to Video [Pro]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+        "basic_fields": ["video", "prompt", "duration"]
+    },
+    "fal-ai/kling-video/o3/pro/video-to-video/edit": {
+        "class_name": "KlingVideoO3ProVideoToVideoEdit",
+        "docstring": "Kling O3 Edit Video [Pro]",
+        "tags": ["video", "editing", "video-to-video", "vid2vid"],
+        "use_cases": [
+            "Video style transfer",
+            "Video enhancement and restoration",
+            "Automated video editing",
+            "Special effects generation",
+            "Content repurposing"
+
+        ],
+        "basic_fields": ["video", "prompt"]
+    },
     "fal-ai/steady-dancer": {
         "class_name": "SteadyDancer",
         "docstring": "Steady Dancer",
