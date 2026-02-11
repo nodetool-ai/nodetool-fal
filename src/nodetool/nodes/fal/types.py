@@ -165,6 +165,18 @@ class KlingV3ComboElementInput(BaseType):
     element_data: Any = Field(default=None, description="Element data")
 
 
+class KlingV3ImageElementInput(BaseType):
+    """Kling V3 image element input."""
+    type: str = "kling_v3_image_element_input"
+    frontal_image_url: str = Field(
+        default="", description="The frontal image of the element (main view)."
+    )
+    reference_image_urls: list[str] = Field(
+        default_factory=list,
+        description="Additional reference images from different angles. 1-3 images supported. At least one image is required.",
+    )
+
+
 class KlingV3MultiPromptElement(BaseType):
     """Kling V3 multi-prompt element."""
     type: str = "kling_v3_multi_prompt_element"

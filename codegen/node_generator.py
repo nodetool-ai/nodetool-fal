@@ -14,6 +14,7 @@ class NodeGenerator:
     # Known BaseType subclass names that map to specific types
     KNOWN_BASE_TYPES = {
         "KlingV3MultiPromptElement",
+        "KlingV3ImageElementInput",
         "KlingV3ComboElementInput",
         "LoraWeight",
         "LoRAWeight",

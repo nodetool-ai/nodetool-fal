@@ -6441,6 +6441,122 @@ class KlingImageO1(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
+class KlingImageO3ImageToImage(FALNode):
+    """
+    Kling Image O3 transforms images with advanced quality controls and refined detail.
+    image, transformation, kling, o3, image-to-image, img2img
+
+    Use cases:
+    - Transform images with Kling O3 quality
+    - Create refined image variations
+    - Apply style transfers with enhanced detail
+    - Generate high-fidelity image edits
+    - Produce consistent image transformations
+    """
+
+    class Resolution(Enum):
+        """
+        Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res.
+        """
+        VALUE_1K = "1K"
+        VALUE_2K = "2K"
+        VALUE_4K = "4K"
+
+    class KlingImageO3AspectRatio(Enum):
+        """
+        Aspect ratio of generated images. 'auto' intelligently determines based on input content.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+        RATIO_4_3 = "4:3"
+        RATIO_3_4 = "3:4"
+        RATIO_3_2 = "3:2"
+        RATIO_2_3 = "2:3"
+        RATIO_21_9 = "21:9"
+        AUTO = "auto"
+
+    class ResultType(Enum):
+        """
+        Result type. 'single' for one image, 'series' for a series of related images.
+        """
+        SINGLE = "single"
+        SERIES = "series"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for image generation. Reference images using @Image1, @Image2, etc. (or @Image if only one image). Max 2500 characters."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate (1-9). Only used when result_type is 'single'."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_1K, description="Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res."
+    )
+    aspect_ratio: KlingImageO3AspectRatio = Field(
+        default=KlingImageO3AspectRatio.AUTO, description="Aspect ratio of generated images. 'auto' intelligently determines based on input content."
+    )
+    series_amount: int = Field(
+        default=0, description="Number of images in series (2-9). Only used when result_type is 'series'."
+    )
+    result_type: ResultType = Field(
+        default=ResultType.SINGLE, description="Result type. 'single' for one image, 'series' for a series of related images."
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI."
+    )
+    elements: list[ElementInput] = Field(
+        default=[], description="Optional: Elements (characters/objects) for face control. Reference in prompt as @Element1, @Element2, etc."
+    )
+    images: list[ImageRef] = Field(
+        default=[], description="List of reference images. Reference images in prompt using @Image1, @Image2, etc. (1-indexed). Max 10 images."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        images_data_urls = []
+        for image in self.images or []:
+            image_base64 = await context.image_to_base64(image)
+            images_data_urls.append(f"data:image/png;base64,{image_base64}")
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "series_amount": self.series_amount,
+            "result_type": self.result_type.value,
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "elements": [item.model_dump(exclude={"type"}) for item in self.elements],
+            "image_urls": images_data_urls,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-image/o3/image-to-image",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["images", "prompt", "resolution"]
+
 class QwenImageEdit2509LoraGalleryShirtDesign(FALNode):
     """
     Qwen Image Edit 2509 Lora Gallery

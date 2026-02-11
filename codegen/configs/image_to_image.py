@@ -1370,6 +1370,22 @@ CONFIGS: dict[str, dict[str, Any]] = {
         },
         "basic_fields": ["image", "prompt"]
     },
+    "fal-ai/kling-image/o3/image-to-image": {
+        "class_name": "KlingImageO3ImageToImage",
+        "docstring": "Kling Image O3 transforms images with advanced quality controls and refined detail.",
+        "tags": ["image", "transformation", "kling", "o3", "image-to-image", "img2img"],
+        "use_cases": [
+            "Transform images with Kling O3 quality",
+            "Create refined image variations",
+            "Apply style transfers with enhanced detail",
+            "Generate high-fidelity image edits",
+            "Produce consistent image transformations"
+        ],
+        "enum_overrides": {
+            "AspectRatio": "KlingImageO3AspectRatio"
+        },
+        "basic_fields": ["images", "prompt", "resolution"]
+    },
 
     "fal-ai/qwen-image-edit-2509-lora-gallery/shirt-design": {
         "class_name": "QwenImageEdit2509LoraGalleryShirtDesign",

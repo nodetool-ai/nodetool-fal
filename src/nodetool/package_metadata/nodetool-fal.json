@@ -1,7 +1,7 @@
 {
   "name": "nodetool-fal",
   "description": "Nodetool FAL nodes",
-  "version": "0.6.3-rc.18",
+  "version": "0.6.3-rc.19",
   "authors": [
     "Matthias Georgi <matti.georgi@gmail.com>"
   ],
@@ -29379,6 +29379,156 @@
       ]
     },
     {
+      "title": "Kling Image O3 Image To Image",
+      "description": "Kling Image O3 transforms images with advanced quality controls and refined detail.\n    image, transformation, kling, o3, image-to-image, img2img\n\n    Use cases:\n    - Transform images with Kling O3 quality\n    - Create refined image variations\n    - Apply style transfers with enhanced detail\n    - Generate high-fidelity image edits\n    - Produce consistent image transformations",
+      "namespace": "fal.image_to_image",
+      "node_type": "fal.image_to_image.KlingImageO3ImageToImage",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for image generation. Reference images using @Image1, @Image2, etc. (or @Image if only one image). Max 2500 characters."
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "Number of images to generate (1-9). Only used when result_type is 'single'."
+        },
+        {
+          "name": "resolution",
+          "type": {
+            "type": "enum",
+            "values": [
+              "1K",
+              "2K",
+              "4K"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_image.KlingImageO3ImageToImage.Resolution"
+          },
+          "default": "1K",
+          "title": "Resolution",
+          "description": "Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "1:1",
+              "4:3",
+              "3:4",
+              "3:2",
+              "2:3",
+              "21:9",
+              "auto"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_image.KlingImageO3ImageToImage.KlingImageO3AspectRatio"
+          },
+          "default": "auto",
+          "title": "Aspect Ratio",
+          "description": "Aspect ratio of generated images. 'auto' intelligently determines based on input content."
+        },
+        {
+          "name": "series_amount",
+          "type": {
+            "type": "int"
+          },
+          "default": 0,
+          "title": "Series Amount",
+          "description": "Number of images in series (2-9). Only used when result_type is 'series'."
+        },
+        {
+          "name": "result_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "single",
+              "series"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_image.KlingImageO3ImageToImage.ResultType"
+          },
+          "default": "single",
+          "title": "Result Type",
+          "description": "Result type. 'single' for one image, 'series' for a series of related images."
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "enum",
+            "values": [
+              "jpeg",
+              "png",
+              "webp"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_image.KlingImageO3ImageToImage.OutputFormat"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "The format of the generated image."
+        },
+        {
+          "name": "sync_mode",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Sync Mode",
+          "description": "If `True`, the media will be returned as a data URI."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Optional: Elements (characters/objects) for face control. Reference in prompt as @Element1, @Element2, etc."
+        },
+        {
+          "name": "images",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Images",
+          "description": "List of reference images. Reference images in prompt using @Image1, @Image2, etc. (1-indexed). Max 10 images."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "images",
+        "prompt",
+        "resolution"
+      ]
+    },
+    {
       "title": "Kling V15 Kolors Virtual Try On",
       "description": "Kling Kolors Virtual TryOn v1.5 is a high quality image based Try-On endpoint which can be used for commercial try on.\n    editing, transformation, image-to-image, img2img\n\n    Use cases:\n    - Professional photo editing and enhancement\n    - Creative image transformations\n    - Batch image processing workflows\n    - Product photography refinement\n    - Automated image optimization",
       "namespace": "fal.image_to_image",
@@ -52400,6 +52550,246 @@
       ],
       "basic_fields": [
         "prompt"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Pro Text To Video",
+      "description": "Kling Video O3 Pro generates professional quality videos from text prompts with enhanced fidelity.\n    video, generation, kling, o3, pro, text-to-video, txt2vid\n\n    Use cases:\n    - Create professional-grade videos from detailed prompts\n    - Generate cinematic video content with precise motion\n    - Produce high-fidelity advertising videos\n    - Create premium animated content from scripts\n    - Generate top-tier video for film and media",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.KlingVideoO3ProTextToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Required unless multi_prompt is provided."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoO3ProTextToVideo.Duration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s)."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoO3ProTextToVideo.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "Aspect ratio of the generated video."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation."
+        },
+        {
+          "name": "voice_ids",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Voice Ids",
+          "description": "Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Generate Audio",
+          "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoO3ProTextToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "duration",
+        "aspect_ratio"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Standard Text To Video",
+      "description": "Kling Video O3 Standard generates videos from text prompts with balanced quality and speed.\n    video, generation, kling, o3, standard, text-to-video, txt2vid\n\n    Use cases:\n    - Generate cinematic videos from text descriptions\n    - Create marketing videos from product descriptions\n    - Produce educational video content from scripts\n    - Generate social media video content\n    - Create animated scenes from text prompts",
+      "namespace": "fal.text_to_video",
+      "node_type": "fal.text_to_video.KlingVideoO3StandardTextToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Required unless multi_prompt is provided."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoO3StandardTextToVideo.Duration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s)."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoO3StandardTextToVideo.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "Aspect ratio of the generated video."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation."
+        },
+        {
+          "name": "voice_ids",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Voice Ids",
+          "description": "Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Generate Audio",
+          "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_video.KlingVideoO3StandardTextToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "duration",
+        "aspect_ratio"
       ]
     },
     {
@@ -79136,6 +79526,141 @@
       ]
     },
     {
+      "title": "Kling Image O3 Text To Image",
+      "description": "Kling Image O3 generates high-quality images from text prompts with refined detail.\n    image, generation, kling, o3, text-to-image, txt2img\n\n    Use cases:\n    - Generate images from detailed text prompts\n    - Create high-fidelity concept art\n    - Produce marketing visuals from descriptions\n    - Generate creative illustrations from ideas\n    - Create polished images for presentations",
+      "namespace": "fal.text_to_image",
+      "node_type": "fal.text_to_image.KlingImageO3TextToImage",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for image generation. Max 2500 characters."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "1:1",
+              "4:3",
+              "3:4",
+              "3:2",
+              "2:3",
+              "21:9"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.KlingImageO3TextToImage.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "Aspect ratio of generated images."
+        },
+        {
+          "name": "resolution",
+          "type": {
+            "type": "enum",
+            "values": [
+              "1K",
+              "2K",
+              "4K"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.KlingImageO3TextToImage.Resolution"
+          },
+          "default": "1K",
+          "title": "Resolution",
+          "description": "Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res."
+        },
+        {
+          "name": "num_images",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Images",
+          "description": "Number of images to generate (1-9). Only used when result_type is 'single'."
+        },
+        {
+          "name": "series_amount",
+          "type": {
+            "type": "int"
+          },
+          "default": 0,
+          "title": "Series Amount",
+          "description": "Number of images in series (2-9). Only used when result_type is 'series'."
+        },
+        {
+          "name": "result_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "single",
+              "series"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.KlingImageO3TextToImage.ResultType"
+          },
+          "default": "single",
+          "title": "Result Type",
+          "description": "Result type. 'single' for one image, 'series' for a series of related images."
+        },
+        {
+          "name": "output_format",
+          "type": {
+            "type": "enum",
+            "values": [
+              "jpeg",
+              "png",
+              "webp"
+            ],
+            "type_name": "nodetool.nodes.fal.text_to_image.KlingImageO3TextToImage.OutputFormat"
+          },
+          "default": "png",
+          "title": "Output Format",
+          "description": "The format of the generated image."
+        },
+        {
+          "name": "sync_mode",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Sync Mode",
+          "description": "If `True`, the media will be returned as a data URI."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Optional: Elements (characters/objects) for face control. Reference in prompt as @Element1, @Element2, etc."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "prompt",
+        "resolution",
+        "aspect_ratio"
+      ]
+    },
+    {
       "title": "Kolors",
       "description": "Photorealistic Text-to-Image\n    generation, text-to-image, txt2img, ai-art\n\n    Use cases:\n    - AI-powered art generation\n    - Marketing and advertising visuals\n    - Concept art and ideation\n    - Social media content creation\n    - Rapid prototyping and mockups",
       "namespace": "fal.text_to_image",
@@ -90812,6 +91337,476 @@
       ],
       "basic_fields": [
         "video"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Pro Video To Video Edit",
+      "description": "Kling O3 Edit Video [Pro]\n    video, editing, video-to-video, vid2vid\n\n    Use cases:\n    - Video style transfer\n    - Video enhancement and restoration\n    - Automated video editing\n    - Special effects generation\n    - Content repurposing",
+      "namespace": "fal.video_to_video",
+      "node_type": "fal.video_to_video.KlingVideoO3ProVideoToVideoEdit",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Reference video as @Video1."
+        },
+        {
+          "name": "video",
+          "type": {
+            "type": "video"
+          },
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null,
+            "duration": null,
+            "format": null
+          },
+          "title": "Video",
+          "description": "Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_image_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+        },
+        {
+          "name": "images",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Images",
+          "description": "Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+        },
+        {
+          "name": "keep_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Keep Audio",
+          "description": "Whether to keep the original audio from the reference video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoEdit.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "video",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Pro Video To Video Reference",
+      "description": "Kling O3 Reference Video to Video [Pro]\n    video, editing, video-to-video, vid2vid\n\n    Use cases:\n    - Video style transfer\n    - Video enhancement and restoration\n    - Automated video editing\n    - Special effects generation\n    - Content repurposing",
+      "namespace": "fal.video_to_video",
+      "node_type": "fal.video_to_video.KlingVideoO3ProVideoToVideoReference",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Reference video as @Video1."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "optional": true,
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.Duration"
+          },
+          "default": null,
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s for reference video)."
+        },
+        {
+          "name": "video",
+          "type": {
+            "type": "video"
+          },
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null,
+            "duration": null,
+            "format": null
+          },
+          "title": "Video",
+          "description": "Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto",
+              "16:9",
+              "9:16",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.AspectRatio"
+          },
+          "default": "auto",
+          "title": "Aspect Ratio",
+          "description": "Aspect ratio."
+        },
+        {
+          "name": "keep_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Keep Audio",
+          "description": "Whether to keep the original audio from the reference video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_image_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+        },
+        {
+          "name": "images",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Images",
+          "description": "Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "video",
+        "prompt",
+        "duration"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Standard Video To Video Edit",
+      "description": "Kling O3 Edit Video [Standard]\n    video, editing, video-to-video, vid2vid\n\n    Use cases:\n    - Video style transfer\n    - Video enhancement and restoration\n    - Automated video editing\n    - Special effects generation\n    - Content repurposing",
+      "namespace": "fal.video_to_video",
+      "node_type": "fal.video_to_video.KlingVideoO3StandardVideoToVideoEdit",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Reference video as @Video1."
+        },
+        {
+          "name": "video",
+          "type": {
+            "type": "video"
+          },
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null,
+            "duration": null,
+            "format": null
+          },
+          "title": "Video",
+          "description": "Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_image_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+        },
+        {
+          "name": "images",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Images",
+          "description": "Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+        },
+        {
+          "name": "keep_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Keep Audio",
+          "description": "Whether to keep the original audio from the reference video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoEdit.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "video",
+        "prompt"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Standard Video To Video Reference",
+      "description": "Kling O3 Reference Video to Video [Standard]\n    video, editing, video-to-video, vid2vid\n\n    Use cases:\n    - Video style transfer\n    - Video enhancement and restoration\n    - Automated video editing\n    - Special effects generation\n    - Content repurposing",
+      "namespace": "fal.video_to_video",
+      "node_type": "fal.video_to_video.KlingVideoO3StandardVideoToVideoReference",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Reference video as @Video1."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "optional": true,
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.Duration"
+          },
+          "default": null,
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s for reference video)."
+        },
+        {
+          "name": "video",
+          "type": {
+            "type": "video"
+          },
+          "default": {
+            "type": "video",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null,
+            "duration": null,
+            "format": null
+          },
+          "title": "Video",
+          "description": "Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "auto",
+              "16:9",
+              "9:16",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.AspectRatio"
+          },
+          "default": "auto",
+          "title": "Aspect Ratio",
+          "description": "Aspect ratio."
+        },
+        {
+          "name": "keep_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Keep Audio",
+          "description": "Whether to keep the original audio from the reference video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_image_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+        },
+        {
+          "name": "images",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Images",
+          "description": "Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "video",
+        "prompt",
+        "duration"
       ]
     },
     {
@@ -108826,6 +109821,576 @@
       "basic_fields": [
         "image",
         "prompt"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Pro Image To Video",
+      "description": "Kling Video O3 Pro generates professional quality videos from images with enhanced fidelity.\n    video, generation, kling, o3, pro, image-to-video, img2vid\n\n    Use cases:\n    - Create professional image-driven video content\n    - Generate premium animations from photos\n    - Produce cinematic video clips from images\n    - Create high-fidelity marketing videos from photos\n    - Generate polished video sequences from images",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.KlingVideoO3ProImageToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3ProImageToVideo.Duration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s)."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation."
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Generate Audio",
+          "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "URL of the start frame image."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3ProImageToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        },
+        {
+          "name": "end_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "End Image",
+          "description": "URL of the end frame image (optional)."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Pro Reference To Video",
+      "description": "Kling Video O3 Pro generates high-fidelity videos using reference images for style and structure.\n    video, generation, kling, o3, pro, reference\n\n    Use cases:\n    - Generate high-fidelity videos from reference images\n    - Create premium style-consistent animations\n    - Produce reference-guided professional content\n    - Generate videos matching premium examples\n    - Create polished reference-based video clips",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.KlingVideoO3ProReferenceToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3ProReferenceToVideo.Duration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s)."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3ProReferenceToVideo.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video frame."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation."
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Generate Audio",
+          "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3ProReferenceToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        },
+        {
+          "name": "start_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Start Image",
+          "description": "Image to use as the first frame of the video."
+        },
+        {
+          "name": "images",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Images",
+          "description": "Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+        },
+        {
+          "name": "end_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "End Image",
+          "description": "Image to use as the last frame of the video."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_combo_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "start_image",
+        "prompt",
+        "duration"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Standard Image To Video",
+      "description": "Kling Video O3 Standard generates videos from images with balanced quality and speed.\n    video, generation, kling, o3, standard, image-to-video, img2vid\n\n    Use cases:\n    - Animate static images into videos\n    - Create balanced quality image animations\n    - Produce efficient video content from photos\n    - Generate consistent video clips from images\n    - Create standard-tier visual storytelling",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.KlingVideoO3StandardImageToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3StandardImageToVideo.Duration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s)."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation."
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Generate Audio",
+          "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Image",
+          "description": "URL of the start frame image."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3StandardImageToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        },
+        {
+          "name": "end_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "End Image",
+          "description": "URL of the end frame image (optional)."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "image",
+        "prompt",
+        "duration"
+      ]
+    },
+    {
+      "title": "Kling Video O3 Standard Reference To Video",
+      "description": "Kling Video O3 Standard generates videos using reference images for style consistency.\n    video, generation, kling, o3, standard, reference\n\n    Use cases:\n    - Generate videos from reference images\n    - Create style-consistent animations\n    - Produce reference-guided content\n    - Generate videos matching examples\n    - Create standardized reference videos",
+      "namespace": "fal.image_to_video",
+      "node_type": "fal.image_to_video.KlingVideoO3StandardReferenceToVideo",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
+        },
+        {
+          "name": "duration",
+          "type": {
+            "type": "enum",
+            "values": [
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3StandardReferenceToVideo.Duration"
+          },
+          "default": "5",
+          "title": "Duration",
+          "description": "Video duration in seconds (3-15s)."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": {
+            "type": "enum",
+            "values": [
+              "16:9",
+              "9:16",
+              "1:1"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3StandardReferenceToVideo.AspectRatio"
+          },
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "description": "The aspect ratio of the generated video frame."
+        },
+        {
+          "name": "multi_prompt",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_multi_prompt_element"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Multi Prompt",
+          "description": "List of prompts for multi-shot video generation."
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Generate Audio",
+          "description": "Whether to generate native audio for the video."
+        },
+        {
+          "name": "shot_type",
+          "type": {
+            "type": "enum",
+            "values": [
+              "customize"
+            ],
+            "type_name": "nodetool.nodes.fal.image_to_video.KlingVideoO3StandardReferenceToVideo.ShotType"
+          },
+          "default": "customize",
+          "title": "Shot Type",
+          "description": "The type of multi-shot video generation."
+        },
+        {
+          "name": "start_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "Start Image",
+          "description": "Image to use as the first frame of the video."
+        },
+        {
+          "name": "images",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "image"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Images",
+          "description": "Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video."
+        },
+        {
+          "name": "end_image",
+          "type": {
+            "type": "image"
+          },
+          "default": {
+            "type": "image",
+            "uri": "",
+            "asset_id": null,
+            "data": null,
+            "metadata": null
+          },
+          "title": "End Image",
+          "description": "Image to use as the last frame of the video."
+        },
+        {
+          "name": "elements",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "kling_v3_combo_element_input"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Elements",
+          "description": "Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2."
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "video"
+          },
+          "name": "output"
+        }
+      ],
+      "basic_fields": [
+        "start_image",
+        "prompt",
+        "duration"
       ]
     },
     {

@@ -18,25 +18,42 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class ChatterboxTextToSpeech(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-        Whether you're working on memes, videos, games, or AI agents, Chatterbox brings your content to life. Use the first tts from resemble ai.
-        speech, synthesis, text-to-speech, tts
+    Whether you're working on memes, videos, games, or AI agents, Chatterbox brings your content to life. Use the first tts from resemble ai.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>')
-    exaggeration: float | OutputHandle[float] = connect_field(default=0.25, description='Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).')
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.7, description='Temperature for generation (higher = more creative).')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description="Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed..")
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>",
+    )
+    exaggeration: float | OutputHandle[float] = connect_field(
+        default=0.25,
+        description="Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).",
+    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.7, description="Temperature for generation (higher = more creative)."
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1,
+        description="Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed..",
+    )
     cfg: float | OutputHandle[float] = connect_field(default=0.5, description=None)
 
     @classmethod
@@ -54,27 +71,57 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class ChatterboxTextToSpeechMultilingual(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class ChatterboxTextToSpeechMultilingual(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Whether you're working on memes, videos, games, or AI agents, Chatterbox brings your content to life. Use the first tts from resemble ai.
-        speech, synthesis, text-to-speech, tts
+    Whether you're working on memes, videos, games, or AI agents, Chatterbox brings your content to life. Use the first tts from resemble ai.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech (maximum 300 characters). Supports 23 languages including English, French, German, Spanish, Italian, Portuguese, Hindi, Arabic, Chinese, Japanese, Korean, and more.')
-    custom_audio_language: nodetool.nodes.fal.text_to_speech.ChatterboxTextToSpeechMultilingual.CustomAudioLanguage | OutputHandle[nodetool.nodes.fal.text_to_speech.ChatterboxTextToSpeechMultilingual.CustomAudioLanguage] | None = connect_field(default=None, description='If using a custom audio URL, specify the language of the audio here. Ignored if voice is not a custom url.')
-    exaggeration: float | OutputHandle[float] = connect_field(default=0.5, description='Controls speech expressiveness and emotional intensity (0.25-2.0). 0.5 is neutral, higher values increase expressiveness. Extreme values may be unstable.')
-    voice: str | OutputHandle[str] = connect_field(default='english', description='Language code for synthesis. In case using custom please provide audio url and select custom_audio_language.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.8, description='Controls randomness and variation in generation (0.05-5.0). Higher values create more varied speech patterns.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible results. Set to 0 for random generation, or provide a specific number for consistent outputs.')
-    cfg_scale: float | OutputHandle[float] = connect_field(default=0.5, description='Configuration/pace weight controlling generation guidance (0.0-1.0). Use 0.0 for language transfer to mitigate accent inheritance.')
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text to be converted to speech (maximum 300 characters). Supports 23 languages including English, French, German, Spanish, Italian, Portuguese, Hindi, Arabic, Chinese, Japanese, Korean, and more.",
+    )
+    custom_audio_language: (
+        nodetool.nodes.fal.text_to_speech.ChatterboxTextToSpeechMultilingual.CustomAudioLanguage
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.ChatterboxTextToSpeechMultilingual.CustomAudioLanguage
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="If using a custom audio URL, specify the language of the audio here. Ignored if voice is not a custom url.",
+    )
+    exaggeration: float | OutputHandle[float] = connect_field(
+        default=0.5,
+        description="Controls speech expressiveness and emotional intensity (0.25-2.0). 0.5 is neutral, higher values increase expressiveness. Extreme values may be unstable.",
+    )
+    voice: str | OutputHandle[str] = connect_field(
+        default="english",
+        description="Language code for synthesis. In case using custom please provide audio url and select custom_audio_language.",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.8,
+        description="Controls randomness and variation in generation (0.05-5.0). Higher values create more varied speech patterns.",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1,
+        description="Random seed for reproducible results. Set to 0 for random generation, or provide a specific number for consistent outputs.",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=0.5,
+        description="Configuration/pace weight controlling generation guidance (0.0-1.0). Use 0.0 for language transfer to mitigate accent inheritance.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -91,21 +138,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class DiaTts(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-        Dia directly generates realistic dialogue from transcripts. Audio conditioning enables emotion control. Produces natural nonverbals like laughter and throat clearing.
-        speech, synthesis, text-to-speech, tts
+    Dia directly generates realistic dialogue from transcripts. Audio conditioning enables emotion control. Produces natural nonverbals like laughter and throat clearing.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech.')
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to be converted to speech."
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -122,33 +172,68 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class ElevenlabsTtsTurboV25(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class ElevenlabsTtsTurboV25(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Generate high-speed text-to-speech audio using ElevenLabs TTS Turbo v2.5.
-        speech, synthesis, text-to-speech, tts, fast
+    Generate high-speed text-to-speech audio using ElevenLabs TTS Turbo v2.5.
+    speech, synthesis, text-to-speech, tts, fast
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    ApplyTextNormalization: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.ElevenlabsTtsTurboV25.ApplyTextNormalization
+    ApplyTextNormalization: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.ElevenlabsTtsTurboV25.ApplyTextNormalization
+    )
 
-    stability: float | OutputHandle[float] = connect_field(default=0.5, description='Voice stability (0-1)')
-    next_text: str | OutputHandle[str] = connect_field(default='', description="The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.")
-    speed: float | OutputHandle[float] = connect_field(default=1, description='Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.')
-    style: float | OutputHandle[float] = connect_field(default=0, description='Style exaggeration (0-1)')
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to convert to speech')
-    timestamps: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to return timestamps for each word in the generated speech')
-    similarity_boost: float | OutputHandle[float] = connect_field(default=0.75, description='Similarity boost (0-1)')
-    voice: str | OutputHandle[str] = connect_field(default='Rachel', description='The voice to use for speech generation')
-    language_code: str | OutputHandle[str] = connect_field(default='', description='Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.')
-    apply_text_normalization: nodetool.nodes.fal.text_to_speech.ElevenlabsTtsTurboV25.ApplyTextNormalization = Field(default=nodetool.nodes.fal.text_to_speech.ElevenlabsTtsTurboV25.ApplyTextNormalization.AUTO, description="This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.")
-    previous_text: str | OutputHandle[str] = connect_field(default='', description="The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.")
+    stability: float | OutputHandle[float] = connect_field(
+        default=0.5, description="Voice stability (0-1)"
+    )
+    next_text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+    )
+    speed: float | OutputHandle[float] = connect_field(
+        default=1,
+        description="Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
+    )
+    style: float | OutputHandle[float] = connect_field(
+        default=0, description="Style exaggeration (0-1)"
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to convert to speech"
+    )
+    timestamps: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="Whether to return timestamps for each word in the generated speech",
+    )
+    similarity_boost: float | OutputHandle[float] = connect_field(
+        default=0.75, description="Similarity boost (0-1)"
+    )
+    voice: str | OutputHandle[str] = connect_field(
+        default="Rachel", description="The voice to use for speech generation"
+    )
+    language_code: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.",
+    )
+    apply_text_normalization: (
+        nodetool.nodes.fal.text_to_speech.ElevenlabsTtsTurboV25.ApplyTextNormalization
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_speech.ElevenlabsTtsTurboV25.ApplyTextNormalization.AUTO,
+        description="This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.",
+    )
+    previous_text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -165,27 +250,54 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class IndexTts2TextToSpeech(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class IndexTts2TextToSpeech(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Index TTS 2 generates natural-sounding speech from text with advanced neural synthesis.
-        speech, synthesis, text-to-speech, tts, neural
+    Index TTS 2 generates natural-sounding speech from text with advanced neural synthesis.
+    speech, synthesis, text-to-speech, tts, neural
 
-        Use cases:
-        - Generate natural speech from text
-        - Create voice narration
-        - Produce audio books
-        - Generate voice-overs
-        - Create speech content
+    Use cases:
+    - Generate natural speech from text
+    - Create voice narration
+    - Produce audio books
+    - Generate voice-overs
+    - Create speech content
     """
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='The speech prompt to generate')
-    emotional_strengths: str | OutputHandle[str] = connect_field(default='', description='The strengths of individual emotions for fine-grained control.')
-    strength: float | OutputHandle[float] = connect_field(default=1, description='The strength of the emotional style transfer. Higher values result in stronger emotional influence.')
-    emotional_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The emotional reference audio file to extract the style from.')
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The audio file to generate the speech from.')
-    emotion_prompt: str | OutputHandle[str] = connect_field(default='', description='The emotional prompt to influence the emotional style. Must be used together with should_use_prompt_for_emotion.')
-    should_use_prompt_for_emotion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to use the `prompt` to calculate emotional strengths, if enabled it will overwrite the `emotional_strengths` values. If `emotion_prompt` is provided, it will be used to instead of `prompt` to extract the emotional style.')
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="The speech prompt to generate"
+    )
+    emotional_strengths: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The strengths of individual emotions for fine-grained control.",
+    )
+    strength: float | OutputHandle[float] = connect_field(
+        default=1,
+        description="The strength of the emotional style transfer. Higher values result in stronger emotional influence.",
+    )
+    emotional_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The emotional reference audio file to extract the style from.",
+    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The audio file to generate the speech from.",
+    )
+    emotion_prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The emotional prompt to influence the emotional style. Must be used together with should_use_prompt_for_emotion.",
+    )
+    should_use_prompt_for_emotion: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="Whether to use the `prompt` to calculate emotional strengths, if enabled it will overwrite the `emotional_strengths` values. If `emotion_prompt` is provided, it will be used to instead of `prompt` to extract the emotional style.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -202,25 +314,35 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class KlingVideoV1Tts(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-        Generate speech from text prompts and different voices using the Kling TTS model, which leverages advanced AI techniques to create high-quality text-to-speech.
-        speech, synthesis, text-to-speech, tts
+    Generate speech from text prompts and different voices using the Kling TTS model, which leverages advanced AI techniques to create high-quality text-to-speech.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    VoiceId: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.KlingVideoV1Tts.VoiceId
+    VoiceId: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.KlingVideoV1Tts.VoiceId
+    )
 
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech')
-    voice_id: nodetool.nodes.fal.text_to_speech.KlingVideoV1Tts.VoiceId = Field(default=nodetool.nodes.fal.text_to_speech.KlingVideoV1Tts.VoiceId.GENSHIN_VINDI2, description='The voice ID to use for speech synthesis')
-    voice_speed: float | OutputHandle[float] = connect_field(default=1, description='Rate of speech')
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to be converted to speech"
+    )
+    voice_id: nodetool.nodes.fal.text_to_speech.KlingVideoV1Tts.VoiceId = Field(
+        default=nodetool.nodes.fal.text_to_speech.KlingVideoV1Tts.VoiceId.GENSHIN_VINDI2,
+        description="The voice ID to use for speech synthesis",
+    )
+    voice_speed: float | OutputHandle[float] = connect_field(
+        default=1, description="Rate of speech"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -237,31 +359,60 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class Maya(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-        Maya generates high-quality natural speech from text with advanced voice synthesis capabilities.
-        audio, tts, maya, high-quality, text-to-speech
+    Maya generates high-quality natural speech from text with advanced voice synthesis capabilities.
+    audio, tts, maya, high-quality, text-to-speech
 
-        Use cases:
-        - Generate high-quality speech from text
-        - Create professional voice-overs
-        - Produce premium audio narration
-        - Generate natural-sounding speech
-        - Create professional audio content
+    Use cases:
+    - Generate high-quality speech from text
+    - Create professional voice-overs
+    - Produce premium audio narration
+    - Generate natural-sounding speech
+    - Create professional audio content
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.Maya.OutputFormat
-    SampleRate: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.Maya.SampleRate
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.Maya.OutputFormat
+    )
+    SampleRate: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.Maya.SampleRate
+    )
 
-    repetition_penalty: float | OutputHandle[float] = connect_field(default=1.1, description='Penalty for repeating tokens. Higher values reduce repetition artifacts.')
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.')
-    top_p: float | OutputHandle[float] = connect_field(default=0.9, description='Nucleus sampling parameter. Controls diversity of token selection.')
-    text: str | OutputHandle[str] = connect_field(default='', description="The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'")
-    output_format: nodetool.nodes.fal.text_to_speech.Maya.OutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.Maya.OutputFormat.WAV, description='Output audio format for the generated speech')
-    max_tokens: int | OutputHandle[int] = connect_field(default=2000, description='Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.4, description='Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.')
-    sample_rate: nodetool.nodes.fal.text_to_speech.Maya.SampleRate = Field(default=nodetool.nodes.fal.text_to_speech.Maya.SampleRate.VALUE_48_KHZ, description='Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.')
+    repetition_penalty: float | OutputHandle[float] = connect_field(
+        default=1.1,
+        description="Penalty for repeating tokens. Higher values reduce repetition artifacts.",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.",
+    )
+    top_p: float | OutputHandle[float] = connect_field(
+        default=0.9,
+        description="Nucleus sampling parameter. Controls diversity of token selection.",
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'",
+    )
+    output_format: nodetool.nodes.fal.text_to_speech.Maya.OutputFormat = Field(
+        default=nodetool.nodes.fal.text_to_speech.Maya.OutputFormat.WAV,
+        description="Output audio format for the generated speech",
+    )
+    max_tokens: int | OutputHandle[int] = connect_field(
+        default=2000,
+        description="Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.4,
+        description="Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.",
+    )
+    sample_rate: nodetool.nodes.fal.text_to_speech.Maya.SampleRate = Field(
+        default=nodetool.nodes.fal.text_to_speech.Maya.SampleRate.VALUE_48_KHZ,
+        description="Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -278,31 +429,56 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class MayaBatch(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-        Maya Batch TTS generates high-quality speech in batch mode for efficient processing.
-        speech, synthesis, text-to-speech, tts, batch, maya
+    Maya Batch TTS generates high-quality speech in batch mode for efficient processing.
+    speech, synthesis, text-to-speech, tts, batch, maya
 
-        Use cases:
-        - Generate speech for multiple texts
-        - Batch process narration
-        - Create bulk voice-overs
-        - Efficient audio content creation
-        - Generate multiple speech files
+    Use cases:
+    - Generate speech for multiple texts
+    - Batch process narration
+    - Create bulk voice-overs
+    - Efficient audio content creation
+    - Generate multiple speech files
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MayaBatch.OutputFormat
-    SampleRate: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MayaBatch.SampleRate
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MayaBatch.OutputFormat
+    )
+    SampleRate: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MayaBatch.SampleRate
+    )
 
-    repetition_penalty: float | OutputHandle[float] = connect_field(default=1.1, description='Repetition penalty for all generations.')
-    top_p: float | OutputHandle[float] = connect_field(default=0.9, description='Nucleus sampling parameter for all generations.')
-    output_format: nodetool.nodes.fal.text_to_speech.MayaBatch.OutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MayaBatch.OutputFormat.WAV, description='Output audio format for all generated speech files')
-    texts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.')
-    prompts: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.')
-    max_tokens: int | OutputHandle[int] = connect_field(default=2000, description='Maximum SNAC tokens per generation.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.4, description='Sampling temperature for all generations.')
-    sample_rate: nodetool.nodes.fal.text_to_speech.MayaBatch.SampleRate = Field(default=nodetool.nodes.fal.text_to_speech.MayaBatch.SampleRate.VALUE_48_KHZ, description='Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.')
+    repetition_penalty: float | OutputHandle[float] = connect_field(
+        default=1.1, description="Repetition penalty for all generations."
+    )
+    top_p: float | OutputHandle[float] = connect_field(
+        default=0.9, description="Nucleus sampling parameter for all generations."
+    )
+    output_format: nodetool.nodes.fal.text_to_speech.MayaBatch.OutputFormat = Field(
+        default=nodetool.nodes.fal.text_to_speech.MayaBatch.OutputFormat.WAV,
+        description="Output audio format for all generated speech files",
+    )
+    texts: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.",
+    )
+    prompts: list[str] | OutputHandle[list[str]] = connect_field(
+        default=[],
+        description="List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.",
+    )
+    max_tokens: int | OutputHandle[int] = connect_field(
+        default=2000, description="Maximum SNAC tokens per generation."
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.4, description="Sampling temperature for all generations."
+    )
+    sample_rate: nodetool.nodes.fal.text_to_speech.MayaBatch.SampleRate = Field(
+        default=nodetool.nodes.fal.text_to_speech.MayaBatch.SampleRate.VALUE_48_KHZ,
+        description="Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -319,31 +495,60 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class MayaStream(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-        Maya Stream TTS generates high-quality speech in streaming mode for real-time applications.
-        speech, synthesis, text-to-speech, tts, streaming, maya
+    Maya Stream TTS generates high-quality speech in streaming mode for real-time applications.
+    speech, synthesis, text-to-speech, tts, streaming, maya
 
-        Use cases:
-        - Generate speech in real-time
-        - Stream narration dynamically
-        - Create live voice-overs
-        - Real-time audio synthesis
-        - Generate streaming speech
+    Use cases:
+    - Generate speech in real-time
+    - Stream narration dynamically
+    - Create live voice-overs
+    - Real-time audio synthesis
+    - Generate streaming speech
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MayaStream.OutputFormat
-    SampleRate: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MayaStream.SampleRate
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MayaStream.OutputFormat
+    )
+    SampleRate: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MayaStream.SampleRate
+    )
 
-    repetition_penalty: float | OutputHandle[float] = connect_field(default=1.1, description='Penalty for repeating tokens. Higher values reduce repetition artifacts.')
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.')
-    top_p: float | OutputHandle[float] = connect_field(default=0.9, description='Nucleus sampling parameter. Controls diversity of token selection.')
-    text: str | OutputHandle[str] = connect_field(default='', description="The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'")
-    output_format: nodetool.nodes.fal.text_to_speech.MayaStream.OutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MayaStream.OutputFormat.MP3, description="Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).")
-    max_tokens: int | OutputHandle[int] = connect_field(default=2000, description='Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.4, description='Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.')
-    sample_rate: nodetool.nodes.fal.text_to_speech.MayaStream.SampleRate = Field(default=nodetool.nodes.fal.text_to_speech.MayaStream.SampleRate.VALUE_24_KHZ, description='Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).')
+    repetition_penalty: float | OutputHandle[float] = connect_field(
+        default=1.1,
+        description="Penalty for repeating tokens. Higher values reduce repetition artifacts.",
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.",
+    )
+    top_p: float | OutputHandle[float] = connect_field(
+        default=0.9,
+        description="Nucleus sampling parameter. Controls diversity of token selection.",
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'",
+    )
+    output_format: nodetool.nodes.fal.text_to_speech.MayaStream.OutputFormat = Field(
+        default=nodetool.nodes.fal.text_to_speech.MayaStream.OutputFormat.MP3,
+        description="Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).",
+    )
+    max_tokens: int | OutputHandle[int] = connect_field(
+        default=2000,
+        description="Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.4,
+        description="Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.",
+    )
+    sample_rate: nodetool.nodes.fal.text_to_speech.MayaStream.SampleRate = Field(
+        default=nodetool.nodes.fal.text_to_speech.MayaStream.SampleRate.VALUE_24_KHZ,
+        description="Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -360,28 +565,56 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxPreviewSpeech25Hd(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxPreviewSpeech25Hd(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Generate speech from text prompts and different voices using the MiniMax Speech-02 HD model, which leverages advanced AI techniques to create high-quality text-to-speech.
-        speech, synthesis, text-to-speech, tts
+    Generate speech from text prompts and different voices using the MiniMax Speech-02 HD model, which leverages advanced AI techniques to create high-quality text-to-speech.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.OutputFormat
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.OutputFormat
+    )
 
-    text: str | OutputHandle[str] = connect_field(default='', description='Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)')
-    voice_setting: str | OutputHandle[str] = connect_field(default='', description='Voice configuration settings')
-    language_boost: nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.LanguageBoost | OutputHandle[nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.LanguageBoost] | None = connect_field(default=None, description='Enhance recognition of specified languages and dialects')
-    output_format: nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.OutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.OutputFormat.HEX, description='Format of the output content (non-streaming only)')
-    pronunciation_dict: str | OutputHandle[str] = connect_field(default='', description='Custom pronunciation dictionary for text replacement')
-    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+    )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
+    language_boost: (
+        nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.LanguageBoost
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.LanguageBoost
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="Enhance recognition of specified languages and dialects",
+    )
+    output_format: (
+        nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.OutputFormat
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Hd.OutputFormat.HEX,
+        description="Format of the output content (non-streaming only)",
+    )
+    pronunciation_dict: str | OutputHandle[str] = connect_field(
+        default="", description="Custom pronunciation dictionary for text replacement"
+    )
+    audio_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Audio configuration settings"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -398,28 +631,56 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxPreviewSpeech25Turbo(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxPreviewSpeech25Turbo(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Generate fast speech from text prompts and different voices using the MiniMax Speech-02 Turbo model, which leverages advanced AI techniques to create high-quality text-to-speech.
-        speech, synthesis, text-to-speech, tts, fast
+    Generate fast speech from text prompts and different voices using the MiniMax Speech-02 Turbo model, which leverages advanced AI techniques to create high-quality text-to-speech.
+    speech, synthesis, text-to-speech, tts, fast
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.OutputFormat
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.OutputFormat
+    )
 
-    text: str | OutputHandle[str] = connect_field(default='', description='Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)')
-    voice_setting: str | OutputHandle[str] = connect_field(default='', description='Voice configuration settings')
-    language_boost: nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.LanguageBoost | OutputHandle[nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.LanguageBoost] | None = connect_field(default=None, description='Enhance recognition of specified languages and dialects')
-    output_format: nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.OutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.OutputFormat.HEX, description='Format of the output content (non-streaming only)')
-    pronunciation_dict: str | OutputHandle[str] = connect_field(default='', description='Custom pronunciation dictionary for text replacement')
-    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+    )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
+    language_boost: (
+        nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.LanguageBoost
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.LanguageBoost
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="Enhance recognition of specified languages and dialects",
+    )
+    output_format: (
+        nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.OutputFormat
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_speech.MinimaxPreviewSpeech25Turbo.OutputFormat.HEX,
+        description="Format of the output content (non-streaming only)",
+    )
+    pronunciation_dict: str | OutputHandle[str] = connect_field(
+        default="", description="Custom pronunciation dictionary for text replacement"
+    )
+    audio_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Audio configuration settings"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -436,28 +697,56 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxSpeech02Hd(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxSpeech02Hd(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Generate speech from text prompts and different voices using the MiniMax Speech-02 HD model, which leverages advanced AI techniques to create high-quality text-to-speech.
-        speech, synthesis, text-to-speech, tts
+    Generate speech from text prompts and different voices using the MiniMax Speech-02 HD model, which leverages advanced AI techniques to create high-quality text-to-speech.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.OutputFormat
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.OutputFormat
+    )
 
-    text: str | OutputHandle[str] = connect_field(default='', description='Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)')
-    voice_setting: str | OutputHandle[str] = connect_field(default='', description='Voice configuration settings')
-    language_boost: nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.LanguageBoost | OutputHandle[nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.LanguageBoost] | None = connect_field(default=None, description='Enhance recognition of specified languages and dialects')
-    output_format: nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.OutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.OutputFormat.HEX, description='Format of the output content (non-streaming only)')
-    pronunciation_dict: str | OutputHandle[str] = connect_field(default='', description='Custom pronunciation dictionary for text replacement')
-    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+    )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
+    language_boost: (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.LanguageBoost
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.LanguageBoost
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="Enhance recognition of specified languages and dialects",
+    )
+    output_format: nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.OutputFormat = (
+        Field(
+            default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Hd.OutputFormat.HEX,
+            description="Format of the output content (non-streaming only)",
+        )
+    )
+    pronunciation_dict: str | OutputHandle[str] = connect_field(
+        default="", description="Custom pronunciation dictionary for text replacement"
+    )
+    audio_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Audio configuration settings"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -474,28 +763,56 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxSpeech02Turbo(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxSpeech02Turbo(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Generate fast speech from text prompts and different voices using the MiniMax Speech-02 Turbo model, which leverages advanced AI techniques to create high-quality text-to-speech.
-        speech, synthesis, text-to-speech, tts, fast
+    Generate fast speech from text prompts and different voices using the MiniMax Speech-02 Turbo model, which leverages advanced AI techniques to create high-quality text-to-speech.
+    speech, synthesis, text-to-speech, tts, fast
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.OutputFormat
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.OutputFormat
+    )
 
-    text: str | OutputHandle[str] = connect_field(default='', description='Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)')
-    voice_setting: str | OutputHandle[str] = connect_field(default='', description='Voice configuration settings')
-    language_boost: nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.LanguageBoost | OutputHandle[nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.LanguageBoost] | None = connect_field(default=None, description='Enhance recognition of specified languages and dialects')
-    output_format: nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.OutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.OutputFormat.HEX, description='Format of the output content (non-streaming only)')
-    pronunciation_dict: str | OutputHandle[str] = connect_field(default='', description='Custom pronunciation dictionary for text replacement')
-    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+    )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
+    language_boost: (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.LanguageBoost
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.LanguageBoost
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="Enhance recognition of specified languages and dialects",
+    )
+    output_format: (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.OutputFormat
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech02Turbo.OutputFormat.HEX,
+        description="Format of the output content (non-streaming only)",
+    )
+    pronunciation_dict: str | OutputHandle[str] = connect_field(
+        default="", description="Custom pronunciation dictionary for text replacement"
+    )
+    audio_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Audio configuration settings"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -512,29 +829,59 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxSpeech26Hd(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxSpeech26Hd(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Minimax Speech 2.6 HD generates high-definition speech from text with superior audio quality.
-        audio, tts, minimax, 2.6, hd, high-quality
+    Minimax Speech 2.6 HD generates high-definition speech from text with superior audio quality.
+    audio, tts, minimax, 2.6, hd, high-quality
 
-        Use cases:
-        - Generate HD quality speech from text
-        - Create premium voice-overs
-        - Produce high-fidelity audio narration
-        - Generate superior audio quality speech
-        - Create broadcast-quality audio
+    Use cases:
+    - Generate HD quality speech from text
+    - Create premium voice-overs
+    - Produce high-fidelity audio narration
+    - Generate superior audio quality speech
+    - Create broadcast-quality audio
     """
 
-    MinimaxSpeech26HdOutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.MinimaxSpeech26HdOutputFormat
+    MinimaxSpeech26HdOutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.MinimaxSpeech26HdOutputFormat
+    )
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.')
-    language_boost: nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.LanguageBoost | OutputHandle[nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.LanguageBoost] | None = connect_field(default=None, description='Enhance recognition of specified languages and dialects')
-    output_format: nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.MinimaxSpeech26HdOutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.MinimaxSpeech26HdOutputFormat.HEX, description='Format of the output content (non-streaming only)')
-    pronunciation_dict: str | OutputHandle[str] = connect_field(default='', description='Custom pronunciation dictionary for text replacement')
-    voice_setting: str | OutputHandle[str] = connect_field(default='', description='Voice configuration settings')
-    normalization_setting: str | OutputHandle[str] = connect_field(default='', description='Loudness normalization settings for the audio')
-    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.",
+    )
+    language_boost: (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.LanguageBoost
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.LanguageBoost
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="Enhance recognition of specified languages and dialects",
+    )
+    output_format: (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.MinimaxSpeech26HdOutputFormat
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Hd.MinimaxSpeech26HdOutputFormat.HEX,
+        description="Format of the output content (non-streaming only)",
+    )
+    pronunciation_dict: str | OutputHandle[str] = connect_field(
+        default="", description="Custom pronunciation dictionary for text replacement"
+    )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
+    normalization_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Loudness normalization settings for the audio"
+    )
+    audio_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Audio configuration settings"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -551,29 +898,59 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxSpeech26Turbo(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxSpeech26Turbo(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Minimax Speech 2.6 Turbo generates speech from text with optimized speed and good quality.
-        audio, tts, minimax, 2.6, turbo, fast
+    Minimax Speech 2.6 Turbo generates speech from text with optimized speed and good quality.
+    audio, tts, minimax, 2.6, turbo, fast
 
-        Use cases:
-        - Generate speech quickly from text
-        - Create fast voice-overs
-        - Produce rapid audio narration
-        - Generate speech with turbo speed
-        - Create efficient audio content
+    Use cases:
+    - Generate speech quickly from text
+    - Create fast voice-overs
+    - Produce rapid audio narration
+    - Generate speech with turbo speed
+    - Create efficient audio content
     """
 
-    MinimaxSpeech26TurboOutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.MinimaxSpeech26TurboOutputFormat
+    MinimaxSpeech26TurboOutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.MinimaxSpeech26TurboOutputFormat
+    )
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.')
-    language_boost: nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.LanguageBoost | OutputHandle[nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.LanguageBoost] | None = connect_field(default=None, description='Enhance recognition of specified languages and dialects')
-    output_format: nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.MinimaxSpeech26TurboOutputFormat = Field(default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.MinimaxSpeech26TurboOutputFormat.HEX, description='Format of the output content (non-streaming only)')
-    pronunciation_dict: str | OutputHandle[str] = connect_field(default='', description='Custom pronunciation dictionary for text replacement')
-    voice_setting: str | OutputHandle[str] = connect_field(default='', description='Voice configuration settings')
-    normalization_setting: str | OutputHandle[str] = connect_field(default='', description='Loudness normalization settings for the audio')
-    audio_setting: str | OutputHandle[str] = connect_field(default='', description='Audio configuration settings')
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.",
+    )
+    language_boost: (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.LanguageBoost
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.LanguageBoost
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="Enhance recognition of specified languages and dialects",
+    )
+    output_format: (
+        nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.MinimaxSpeech26TurboOutputFormat
+    ) = Field(
+        default=nodetool.nodes.fal.text_to_speech.MinimaxSpeech26Turbo.MinimaxSpeech26TurboOutputFormat.HEX,
+        description="Format of the output content (non-streaming only)",
+    )
+    pronunciation_dict: str | OutputHandle[str] = connect_field(
+        default="", description="Custom pronunciation dictionary for text replacement"
+    )
+    voice_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Voice configuration settings"
+    )
+    normalization_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Loudness normalization settings for the audio"
+    )
+    audio_setting: str | OutputHandle[str] = connect_field(
+        default="", description="Audio configuration settings"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -590,28 +967,50 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxVoiceClone(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxVoiceClone(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Clone a voice from a sample audio and generate speech from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality text-to-speech.
-        speech, synthesis, text-to-speech, tts
+    Clone a voice from a sample audio and generate speech from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality text-to-speech.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    Model: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model
+    Model: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model
+    )
 
-    model: nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model = Field(default=nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model.SPEECH_02_HD, description='TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo')
-    text: str | OutputHandle[str] = connect_field(default='Hello, this is a preview of your cloned voice! I hope you like it!', description='Text to generate a TTS preview with the cloned voice (optional)')
-    accuracy: float | OutputHandle[float] = connect_field(default=0.0, description='Text validation accuracy threshold (0-1)')
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the input audio file for voice cloning. Should be at least 10 seconds long. To retain the voice permanently, use it with a TTS (text-to-speech) endpoint at least once within 7 days. Otherwise, it will be automatically deleted.')
-    noise_reduction: bool | OutputHandle[bool] = connect_field(default=False, description='Enable noise reduction for the cloned voice')
-    need_volume_normalization: bool | OutputHandle[bool] = connect_field(default=False, description='Enable volume normalization for the cloned voice')
+    model: nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model = Field(
+        default=nodetool.nodes.fal.text_to_speech.MinimaxVoiceClone.Model.SPEECH_02_HD,
+        description="TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo",
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="Hello, this is a preview of your cloned voice! I hope you like it!",
+        description="Text to generate a TTS preview with the cloned voice (optional)",
+    )
+    accuracy: float | OutputHandle[float] = connect_field(
+        default=0.0, description="Text validation accuracy threshold (0-1)"
+    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="URL of the input audio file for voice cloning. Should be at least 10 seconds long. To retain the voice permanently, use it with a TTS (text-to-speech) endpoint at least once within 7 days. Otherwise, it will be automatically deleted.",
+    )
+    noise_reduction: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Enable noise reduction for the cloned voice"
+    )
+    need_volume_normalization: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Enable volume normalization for the cloned voice"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -628,22 +1027,31 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class MinimaxVoiceDesign(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class MinimaxVoiceDesign(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Design a personalized voice from a text description, and generate speech from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality text-to-speech.
-        speech, synthesis, text-to-speech, tts
+    Design a personalized voice from a text description, and generate speech from text prompts using the MiniMax model, which leverages advanced AI techniques to create high-quality text-to-speech.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Voice description prompt for generating a personalized voice')
-    preview_text: str | OutputHandle[str] = connect_field(default='', description='Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.')
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Voice description prompt for generating a personalized voice",
+    )
+    preview_text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -660,26 +1068,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class OrpheusTts(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-        Orpheus TTS is a state-of-the-art, Llama-based Speech-LLM designed for high-quality, empathetic text-to-speech generation. This model has been finetuned to deliver human-level speech synthesis, achieving exceptional clarity, expressiveness, and real-time performances.
-        speech, synthesis, text-to-speech, tts
+    Orpheus TTS is a state-of-the-art, Llama-based Speech-LLM designed for high-quality, empathetic text-to-speech generation. This model has been finetuned to deliver human-level speech synthesis, achieving exceptional clarity, expressiveness, and real-time performances.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
     Voice: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.OrpheusTts.Voice
 
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>')
-    voice: nodetool.nodes.fal.text_to_speech.OrpheusTts.Voice = Field(default=nodetool.nodes.fal.text_to_speech.OrpheusTts.Voice.TARA, description='Voice ID for the desired voice.')
-    repetition_penalty: float | OutputHandle[float] = connect_field(default=1.2, description='Repetition penalty (>= 1.1 required for stable generations).')
-    temperature: float | OutputHandle[float] = connect_field(default=0.7, description='Temperature for generation (higher = more creative).')
+    text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>",
+    )
+    voice: nodetool.nodes.fal.text_to_speech.OrpheusTts.Voice = Field(
+        default=nodetool.nodes.fal.text_to_speech.OrpheusTts.Voice.TARA,
+        description="Voice ID for the desired voice.",
+    )
+    repetition_penalty: float | OutputHandle[float] = connect_field(
+        default=1.2,
+        description="Repetition penalty (>= 1.1 required for stable generations).",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.7, description="Temperature for generation (higher = more creative)."
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -696,37 +1116,83 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class Qwen3TtsTextToSpeech06B(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class Qwen3TtsTextToSpeech06B(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Qwen-3 TTS 0.6B generates speech from text efficiently using the compact 600-million parameter model.
-        audio, tts, qwen, 0.6b, efficient, text-to-speech
+    Qwen-3 TTS 0.6B generates speech from text efficiently using the compact 600-million parameter model.
+    audio, tts, qwen, 0.6b, efficient, text-to-speech
 
-        Use cases:
-        - Generate speech efficiently from text
-        - Create fast voice-overs
-        - Produce quick audio narration
-        - Generate spoken content with low latency
-        - Create efficient text-to-speech
+    Use cases:
+    - Generate speech efficiently from text
+    - Create fast voice-overs
+    - Produce quick audio narration
+    - Generate spoken content with low latency
+    - Create efficient text-to-speech
     """
 
-    Language: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Language
+    Language: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Language
+    )
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.')
-    speaker_voice_embedding_file_url: str | OutputHandle[str] = connect_field(default='', description='URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice/0.6b` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.')
-    top_p: float | OutputHandle[float] = connect_field(default=1, description='Top-p sampling parameter.')
-    repetition_penalty: float | OutputHandle[float] = connect_field(default=1.05, description='Penalty to reduce repeated tokens/codes.')
-    subtalker_temperature: float | OutputHandle[float] = connect_field(default=0.9, description='Temperature for sub-talker sampling.')
-    top_k: int | OutputHandle[int] = connect_field(default=50, description='Top-k sampling parameter.')
-    voice: nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Voice | OutputHandle[nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Voice] | None = connect_field(default=None, description="The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.")
-    reference_text: str | OutputHandle[str] = connect_field(default='', description='Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.9, description='Sampling temperature; higher => more random.')
-    language: nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Language = Field(default=nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Language.AUTO, description='The language of the voice.')
-    subtalker_top_k: int | OutputHandle[int] = connect_field(default=50, description='Top-k for sub-talker sampling.')
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech.')
-    max_new_tokens: int | OutputHandle[int] = connect_field(default=200, description='Maximum number of new codec tokens to generate.')
-    subtalker_dosample: bool | OutputHandle[bool] = connect_field(default=True, description='Sampling switch for the sub-talker.')
-    subtalker_top_p: float | OutputHandle[float] = connect_field(default=1, description='Top-p for sub-talker sampling.')
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.",
+    )
+    speaker_voice_embedding_file_url: str | OutputHandle[str] = connect_field(
+        default="",
+        description="URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice/0.6b` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.",
+    )
+    top_p: float | OutputHandle[float] = connect_field(
+        default=1, description="Top-p sampling parameter."
+    )
+    repetition_penalty: float | OutputHandle[float] = connect_field(
+        default=1.05, description="Penalty to reduce repeated tokens/codes."
+    )
+    subtalker_temperature: float | OutputHandle[float] = connect_field(
+        default=0.9, description="Temperature for sub-talker sampling."
+    )
+    top_k: int | OutputHandle[int] = connect_field(
+        default=50, description="Top-k sampling parameter."
+    )
+    voice: (
+        nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Voice
+        | OutputHandle[nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Voice]
+        | None
+    ) = connect_field(
+        default=None,
+        description="The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.",
+    )
+    reference_text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.9, description="Sampling temperature; higher => more random."
+    )
+    language: nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Language = (
+        Field(
+            default=nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech06B.Language.AUTO,
+            description="The language of the voice.",
+        )
+    )
+    subtalker_top_k: int | OutputHandle[int] = connect_field(
+        default=50, description="Top-k for sub-talker sampling."
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to be converted to speech."
+    )
+    max_new_tokens: int | OutputHandle[int] = connect_field(
+        default=200, description="Maximum number of new codec tokens to generate."
+    )
+    subtalker_dosample: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Sampling switch for the sub-talker."
+    )
+    subtalker_top_p: float | OutputHandle[float] = connect_field(
+        default=1, description="Top-p for sub-talker sampling."
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -743,37 +1209,83 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class Qwen3TtsTextToSpeech17B(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class Qwen3TtsTextToSpeech17B(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Qwen-3 TTS 1.7B generates natural-sounding speech from text using the large 1.7-billion parameter model.
-        audio, tts, qwen, 1.7b, text-to-speech, speech-synthesis
+    Qwen-3 TTS 1.7B generates natural-sounding speech from text using the large 1.7-billion parameter model.
+    audio, tts, qwen, 1.7b, text-to-speech, speech-synthesis
 
-        Use cases:
-        - Generate natural-sounding speech from text
-        - Create voice-overs for videos
-        - Produce audiobook narration
-        - Generate spoken content for applications
-        - Create text-to-speech for accessibility
+    Use cases:
+    - Generate natural-sounding speech from text
+    - Create voice-overs for videos
+    - Produce audiobook narration
+    - Generate spoken content for applications
+    - Create text-to-speech for accessibility
     """
 
-    Language: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Language
+    Language: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Language
+    )
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.')
-    speaker_voice_embedding_file_url: str | OutputHandle[str] = connect_field(default='', description='URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.')
-    top_p: float | OutputHandle[float] = connect_field(default=1, description='Top-p sampling parameter.')
-    repetition_penalty: float | OutputHandle[float] = connect_field(default=1.05, description='Penalty to reduce repeated tokens/codes.')
-    subtalker_temperature: float | OutputHandle[float] = connect_field(default=0.9, description='Temperature for sub-talker sampling.')
-    top_k: int | OutputHandle[int] = connect_field(default=50, description='Top-k sampling parameter.')
-    voice: nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Voice | OutputHandle[nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Voice] | None = connect_field(default=None, description="The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.")
-    reference_text: str | OutputHandle[str] = connect_field(default='', description='Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.9, description='Sampling temperature; higher => more random.')
-    language: nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Language = Field(default=nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Language.AUTO, description='The language of the voice.')
-    subtalker_top_k: int | OutputHandle[int] = connect_field(default=50, description='Top-k for sub-talker sampling.')
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech.')
-    max_new_tokens: int | OutputHandle[int] = connect_field(default=200, description='Maximum number of new codec tokens to generate.')
-    subtalker_dosample: bool | OutputHandle[bool] = connect_field(default=True, description='Sampling switch for the sub-talker.')
-    subtalker_top_p: float | OutputHandle[float] = connect_field(default=1, description='Top-p for sub-talker sampling.')
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.",
+    )
+    speaker_voice_embedding_file_url: str | OutputHandle[str] = connect_field(
+        default="",
+        description="URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.",
+    )
+    top_p: float | OutputHandle[float] = connect_field(
+        default=1, description="Top-p sampling parameter."
+    )
+    repetition_penalty: float | OutputHandle[float] = connect_field(
+        default=1.05, description="Penalty to reduce repeated tokens/codes."
+    )
+    subtalker_temperature: float | OutputHandle[float] = connect_field(
+        default=0.9, description="Temperature for sub-talker sampling."
+    )
+    top_k: int | OutputHandle[int] = connect_field(
+        default=50, description="Top-k sampling parameter."
+    )
+    voice: (
+        nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Voice
+        | OutputHandle[nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Voice]
+        | None
+    ) = connect_field(
+        default=None,
+        description="The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.",
+    )
+    reference_text: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.9, description="Sampling temperature; higher => more random."
+    )
+    language: nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Language = (
+        Field(
+            default=nodetool.nodes.fal.text_to_speech.Qwen3TtsTextToSpeech17B.Language.AUTO,
+            description="The language of the voice.",
+        )
+    )
+    subtalker_top_k: int | OutputHandle[int] = connect_field(
+        default=50, description="Top-k for sub-talker sampling."
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to be converted to speech."
+    )
+    max_new_tokens: int | OutputHandle[int] = connect_field(
+        default=200, description="Maximum number of new codec tokens to generate."
+    )
+    subtalker_dosample: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Sampling switch for the sub-talker."
+    )
+    subtalker_top_p: float | OutputHandle[float] = connect_field(
+        default=1, description="Top-p for sub-talker sampling."
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -790,34 +1302,65 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class Qwen3TtsVoiceDesign17B(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class Qwen3TtsVoiceDesign17B(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Qwen-3 TTS Voice Design 1.7B creates custom voice characteristics for personalized speech synthesis.
-        audio, tts, qwen, voice-design, custom, 1.7b
+    Qwen-3 TTS Voice Design 1.7B creates custom voice characteristics for personalized speech synthesis.
+    audio, tts, qwen, voice-design, custom, 1.7b
 
-        Use cases:
-        - Design custom voice characteristics
-        - Create personalized speech synthesis
-        - Generate unique voice styles
-        - Produce custom voice-overs
-        - Create tailored speech synthesis
+    Use cases:
+    - Design custom voice characteristics
+    - Create personalized speech synthesis
+    - Generate unique voice styles
+    - Produce custom voice-overs
+    - Create tailored speech synthesis
     """
 
-    Language: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.Qwen3TtsVoiceDesign17B.Language
+    Language: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.Qwen3TtsVoiceDesign17B.Language
+    )
 
-    repetition_penalty: float | OutputHandle[float] = connect_field(default=1.05, description='Penalty to reduce repeated tokens/codes.')
-    subtalker_top_k: int | OutputHandle[int] = connect_field(default=50, description='Top-k for sub-talker sampling.')
-    top_p: float | OutputHandle[float] = connect_field(default=1, description='Top-p sampling parameter.')
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Optional prompt to guide the style of the generated speech.')
-    max_new_tokens: int | OutputHandle[int] = connect_field(default=200, description='Maximum number of new codec tokens to generate.')
-    text: str | OutputHandle[str] = connect_field(default='', description='The text to be converted to speech.')
-    language: nodetool.nodes.fal.text_to_speech.Qwen3TtsVoiceDesign17B.Language = Field(default=nodetool.nodes.fal.text_to_speech.Qwen3TtsVoiceDesign17B.Language.AUTO, description='The language of the voice to be designed.')
-    top_k: int | OutputHandle[int] = connect_field(default=50, description='Top-k sampling parameter.')
-    subtalker_dosample: bool | OutputHandle[bool] = connect_field(default=True, description='Sampling switch for the sub-talker.')
-    subtalker_temperature: float | OutputHandle[float] = connect_field(default=0.9, description='Temperature for sub-talker sampling.')
-    subtalker_top_p: float | OutputHandle[float] = connect_field(default=1, description='Top-p for sub-talker sampling.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.9, description='Sampling temperature; higher => more random.')
+    repetition_penalty: float | OutputHandle[float] = connect_field(
+        default=1.05, description="Penalty to reduce repeated tokens/codes."
+    )
+    subtalker_top_k: int | OutputHandle[int] = connect_field(
+        default=50, description="Top-k for sub-talker sampling."
+    )
+    top_p: float | OutputHandle[float] = connect_field(
+        default=1, description="Top-p sampling parameter."
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Optional prompt to guide the style of the generated speech.",
+    )
+    max_new_tokens: int | OutputHandle[int] = connect_field(
+        default=200, description="Maximum number of new codec tokens to generate."
+    )
+    text: str | OutputHandle[str] = connect_field(
+        default="", description="The text to be converted to speech."
+    )
+    language: nodetool.nodes.fal.text_to_speech.Qwen3TtsVoiceDesign17B.Language = Field(
+        default=nodetool.nodes.fal.text_to_speech.Qwen3TtsVoiceDesign17B.Language.AUTO,
+        description="The language of the voice to be designed.",
+    )
+    top_k: int | OutputHandle[int] = connect_field(
+        default=50, description="Top-k sampling parameter."
+    )
+    subtalker_dosample: bool | OutputHandle[bool] = connect_field(
+        default=True, description="Sampling switch for the sub-talker."
+    )
+    subtalker_temperature: float | OutputHandle[float] = connect_field(
+        default=0.9, description="Temperature for sub-talker sampling."
+    )
+    subtalker_top_p: float | OutputHandle[float] = connect_field(
+        default=1, description="Top-p for sub-talker sampling."
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.9, description="Sampling temperature; higher => more random."
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -834,28 +1377,63 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class ResembleAiChatterboxhdTextToSpeech(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class ResembleAiChatterboxhdTextToSpeech(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Generate expressive, natural speech with Resemble AI's Chatterbox. Features unique emotion control, instant voice cloning from short audio, and built-in watermarking.
-        speech, synthesis, text-to-speech, tts
+    Generate expressive, natural speech with Resemble AI's Chatterbox. Features unique emotion control, instant voice cloning from short audio, and built-in watermarking.
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    text: str | OutputHandle[str] = connect_field(default='My name is Maximus Decimus Meridius, commander of the Armies of the North, General of the Felix Legions and loyal servant to the true emperor, Marcus Aurelius. Father to a murdered son, husband to a murdered wife. And I will have my vengeance, in this life or the next.', description='Text to synthesize into speech.')
-    exaggeration: float | OutputHandle[float] = connect_field(default=0.5, description='Controls emotion exaggeration. Range typically 0.25 to 2.0.')
-    high_quality_audio: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.')
-    voice: nodetool.nodes.fal.text_to_speech.ResembleAiChatterboxhdTextToSpeech.Voice | OutputHandle[nodetool.nodes.fal.text_to_speech.ResembleAiChatterboxhdTextToSpeech.Voice] | None = connect_field(default=None, description='The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used.')
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL to the audio sample to use as a voice prompt for zero-shot TTS voice cloning. Providing a audio sample will override the voice setting. If neither voice nor audio_url are provided, a random voice will be used.')
-    temperature: float | OutputHandle[float] = connect_field(default=0.8, description='Controls the randomness of generation. Range typically 0.05 to 5.')
-    seed: int | OutputHandle[int] = connect_field(default=0, description="Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed.")
-    cfg: float | OutputHandle[float] = connect_field(default=0.5, description='Classifier-free guidance scale (CFG) controls the conditioning factor. Range typically 0.2 to 1.0. For expressive or dramatic speech, try lower cfg values (e.g. ~0.3) and increase exaggeration to around 0.7 or higher. If the reference speaker has a fast speaking style, lowering cfg to around 0.3 can improve pacing.')
+    text: str | OutputHandle[str] = connect_field(
+        default="My name is Maximus Decimus Meridius, commander of the Armies of the North, General of the Felix Legions and loyal servant to the true emperor, Marcus Aurelius. Father to a murdered son, husband to a murdered wife. And I will have my vengeance, in this life or the next.",
+        description="Text to synthesize into speech.",
+    )
+    exaggeration: float | OutputHandle[float] = connect_field(
+        default=0.5,
+        description="Controls emotion exaggeration. Range typically 0.25 to 2.0.",
+    )
+    high_quality_audio: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.",
+    )
+    voice: (
+        nodetool.nodes.fal.text_to_speech.ResembleAiChatterboxhdTextToSpeech.Voice
+        | OutputHandle[
+            nodetool.nodes.fal.text_to_speech.ResembleAiChatterboxhdTextToSpeech.Voice
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used.",
+    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="URL to the audio sample to use as a voice prompt for zero-shot TTS voice cloning. Providing a audio sample will override the voice setting. If neither voice nor audio_url are provided, a random voice will be used.",
+    )
+    temperature: float | OutputHandle[float] = connect_field(
+        default=0.8,
+        description="Controls the randomness of generation. Range typically 0.05 to 5.",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=0,
+        description="Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed.",
+    )
+    cfg: float | OutputHandle[float] = connect_field(
+        default=0.5,
+        description="Classifier-free guidance scale (CFG) controls the conditioning factor. Range typically 0.2 to 1.0. For expressive or dramatic speech, try lower cfg values (e.g. ~0.3) and increase exaggeration to around 0.7 or higher. If the reference speaker has a fast speaking style, lowering cfg to around 0.3 can improve pacing.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -872,24 +1450,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class Vibevoice(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-        Generate long, expressive multi-voice speech using Microsoft's powerful TTS
-        speech, synthesis, text-to-speech, tts
+    Generate long, expressive multi-voice speech using Microsoft's powerful TTS
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    script: str | OutputHandle[str] = connect_field(default='', description="The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.")
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible generation.')
-    speakers: list[types.VibeVoiceSpeaker] | OutputHandle[list[types.VibeVoiceSpeaker]] = connect_field(default=[], description='List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.')
-    cfg_scale: float | OutputHandle[float] = connect_field(default=1.3, description='CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.')
+    script: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    speakers: (
+        list[types.VibeVoiceSpeaker] | OutputHandle[list[types.VibeVoiceSpeaker]]
+    ) = connect_field(
+        default=[],
+        description="List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=1.3,
+        description="CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -906,26 +1498,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class Vibevoice05B(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-        VibeVoice 0.5B generates expressive and emotive speech from text with natural vocal characteristics.
-        audio, tts, vibevoice, 0.5b, expressive, text-to-speech
+    VibeVoice 0.5B generates expressive and emotive speech from text with natural vocal characteristics.
+    audio, tts, vibevoice, 0.5b, expressive, text-to-speech
 
-        Use cases:
-        - Generate expressive speech from text
-        - Create emotive voice-overs
-        - Produce natural vocal narration
-        - Generate speech with personality
-        - Create engaging audio content
+    Use cases:
+    - Generate expressive speech from text
+    - Create emotive voice-overs
+    - Produce natural vocal narration
+    - Generate speech with personality
+    - Create engaging audio content
     """
 
-    Speaker: typing.ClassVar[type] = nodetool.nodes.fal.text_to_speech.Vibevoice05B.Speaker
+    Speaker: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_speech.Vibevoice05B.Speaker
+    )
 
-    script: str | OutputHandle[str] = connect_field(default='', description='The script to convert to speech.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible generation.')
-    speaker: nodetool.nodes.fal.text_to_speech.Vibevoice05B.Speaker = Field(default=nodetool.nodes.fal.text_to_speech.Vibevoice05B.Speaker(''), description='Voice to use for speaking.')
-    cfg_scale: float | OutputHandle[float] = connect_field(default=1.3, description='CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.')
+    script: str | OutputHandle[str] = connect_field(
+        default="", description="The script to convert to speech."
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    speaker: nodetool.nodes.fal.text_to_speech.Vibevoice05B.Speaker = Field(
+        default=nodetool.nodes.fal.text_to_speech.Vibevoice05B.Speaker(""),
+        description="Voice to use for speaking.",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=1.3,
+        description="CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -942,24 +1547,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_speech
 from nodetool.workflows.base_node import BaseNode
 
+
 class Vibevoice7b(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-        Generate long, expressive multi-voice speech using Microsoft's powerful TTS
-        speech, synthesis, text-to-speech, tts
+    Generate long, expressive multi-voice speech using Microsoft's powerful TTS
+    speech, synthesis, text-to-speech, tts
 
-        Use cases:
-        - Voice synthesis for applications
-        - Audiobook narration
-        - Virtual assistant voices
-        - Accessibility solutions
-        - Content localization
+    Use cases:
+    - Voice synthesis for applications
+    - Audiobook narration
+    - Virtual assistant voices
+    - Accessibility solutions
+    - Content localization
     """
 
-    script: str | OutputHandle[str] = connect_field(default='', description="The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.")
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible generation.')
-    speakers: list[types.VibeVoiceSpeaker] | OutputHandle[list[types.VibeVoiceSpeaker]] = connect_field(default=[], description='List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.')
-    cfg_scale: float | OutputHandle[float] = connect_field(default=1.3, description='CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.')
+    script: str | OutputHandle[str] = connect_field(
+        default="",
+        description="The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    speakers: (
+        list[types.VibeVoiceSpeaker] | OutputHandle[list[types.VibeVoiceSpeaker]]
+    ) = connect_field(
+        default=[],
+        description="List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
+    )
+    cfg_scale: float | OutputHandle[float] = connect_field(
+        default=1.3,
+        description="CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -968,5 +1587,3 @@ class Vibevoice7b(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRe
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
-
-

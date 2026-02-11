@@ -8900,6 +8900,194 @@ class KlingVideoV3StandardTextToVideo(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "duration", "aspect_ratio"]
 
+class KlingVideoO3StandardTextToVideo(FALNode):
+    """
+    Kling Video O3 Standard generates videos from text prompts with balanced quality and speed.
+    video, generation, kling, o3, standard, text-to-video, txt2vid
+
+    Use cases:
+    - Generate cinematic videos from text descriptions
+    - Create marketing videos from product descriptions
+    - Produce educational video content from scripts
+    - Generate social media video content
+    - Create animated scenes from text prompts
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Required unless multi_prompt is provided."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation."
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+    )
+    generate_audio: bool = Field(
+        default=False, description="Whether to generate native audio for the video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "voice_ids": self.voice_ids,
+            "generate_audio": self.generate_audio,
+            "shot_type": self.shot_type.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/standard/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]
+
+class KlingVideoO3ProTextToVideo(FALNode):
+    """
+    Kling Video O3 Pro generates professional quality videos from text prompts with enhanced fidelity.
+    video, generation, kling, o3, pro, text-to-video, txt2vid
+
+    Use cases:
+    - Create professional-grade videos from detailed prompts
+    - Generate cinematic video content with precise motion
+    - Produce high-fidelity advertising videos
+    - Create premium animated content from scripts
+    - Generate top-tier video for film and media
+    """
+
+    class Duration(Enum):
+        """
+        Video duration in seconds (3-15s).
+        """
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+        VALUE_7 = "7"
+        VALUE_8 = "8"
+        VALUE_9 = "9"
+        VALUE_10 = "10"
+        VALUE_11 = "11"
+        VALUE_12 = "12"
+        VALUE_13 = "13"
+        VALUE_14 = "14"
+        VALUE_15 = "15"
+
+    class AspectRatio(Enum):
+        """
+        Aspect ratio of the generated video.
+        """
+        RATIO_16_9 = "16:9"
+        RATIO_9_16 = "9:16"
+        RATIO_1_1 = "1:1"
+
+    class ShotType(Enum):
+        """
+        The type of multi-shot video generation.
+        """
+        CUSTOMIZE = "customize"
+
+
+    prompt: str = Field(
+        default="", description="Text prompt for video generation. Required unless multi_prompt is provided."
+    )
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video."
+    )
+    multi_prompt: list[KlingV3MultiPromptElement] = Field(
+        default=[], description="List of prompts for multi-shot video generation."
+    )
+    voice_ids: list[str] = Field(
+        default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
+    )
+    generate_audio: bool = Field(
+        default=False, description="Whether to generate native audio for the video."
+    )
+    shot_type: ShotType = Field(
+        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    )
+
+    async def process(self, context: ProcessingContext) -> VideoRef:
+        arguments = {
+            "prompt": self.prompt,
+            "duration": self.duration.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "multi_prompt": [item.model_dump(exclude={"type"}) for item in self.multi_prompt],
+            "voice_ids": self.voice_ids,
+            "generate_audio": self.generate_audio,
+            "shot_type": self.shot_type.value,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/kling-video/o3/pro/text-to-video",
+            arguments=arguments,
+        )
+        assert "video" in res
+        return VideoRef(uri=res["video"]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "duration", "aspect_ratio"]
+
 class KlingVideoV3ProTextToVideo(FALNode):
     """
     Kling Video V3 Pro generates professional quality videos from text prompts with enhanced visual fidelity using the latest V3 model.
