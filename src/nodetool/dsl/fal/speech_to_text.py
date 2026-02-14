@@ -18,42 +18,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
-class ElevenLabsScribeV2(
-    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
-):
+class ElevenLabsScribeV2(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    ElevenLabs Scribe V2 provides blazingly fast speech-to-text transcription.
-    audio, transcription, stt, fast, elevenlabs, speech-to-text
+        ElevenLabs Scribe V2 provides blazingly fast speech-to-text transcription.
+        audio, transcription, stt, fast, elevenlabs, speech-to-text
 
-    Use cases:
-    - Fast audio transcription
-    - Real-time speech recognition
-    - Quick transcript generation
-    - High-speed audio processing
-    - Rapid speech-to-text conversion
+        Use cases:
+        - Fast audio transcription
+        - Real-time speech recognition
+        - Quick transcript generation
+        - High-speed audio processing
+        - Rapid speech-to-text conversion
     """
 
-    language_code: str | OutputHandle[str] = connect_field(
-        default="", description="Language code of the audio"
-    )
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the audio file to transcribe",
-    )
-    diarize: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to annotate who is speaking"
-    )
-    keyterms: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[],
-        description="Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.",
-    )
-    tag_audio_events: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Tag audio events like laughter, applause, etc."
-    )
+    language_code: str | OutputHandle[str] = connect_field(default='', description='Language code of the audio')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to transcribe')
+    diarize: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to annotate who is speaking')
+    keyterms: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.')
+    tag_audio_events: bool | OutputHandle[bool] = connect_field(default=True, description='Tag audio events like laughter, applause, etc.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -70,38 +53,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
-class ElevenLabsSpeechToText(
-    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
-):
+class ElevenLabsSpeechToText(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    ElevenLabs Speech to Text transcribes audio to text with high accuracy.
-    audio, transcription, stt, elevenlabs, speech-to-text
+        ElevenLabs Speech to Text transcribes audio to text with high accuracy.
+        audio, transcription, stt, elevenlabs, speech-to-text
 
-    Use cases:
-    - Transcribe audio files
-    - Convert speech to text
-    - Generate transcripts from audio
-    - Extract text from recordings
-    - Create captions from audio
+        Use cases:
+        - Transcribe audio files
+        - Convert speech to text
+        - Generate transcripts from audio
+        - Extract text from recordings
+        - Create captions from audio
     """
 
-    language_code: str | OutputHandle[str] = connect_field(
-        default="", description="Language code of the audio"
-    )
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the audio file to transcribe",
-    )
-    diarize: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Whether to annotate who is speaking"
-    )
-    tag_audio_events: bool | OutputHandle[bool] = connect_field(
-        default=True, description="Tag audio events like laughter, applause, etc."
-    )
+    language_code: str | OutputHandle[str] = connect_field(default='', description='Language code of the audio')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to transcribe')
+    diarize: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to annotate who is speaking')
+    tag_audio_events: bool | OutputHandle[bool] = connect_field(default=True, description='Tag audio events like laughter, applause, etc.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -118,27 +87,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class SmartTurn(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Pipecat's Smart Turn model provides native audio turn detection for conversations.
-    audio, turn-detection, conversation, pipecat, speech-analysis
+        Pipecat's Smart Turn model provides native audio turn detection for conversations.
+        audio, turn-detection, conversation, pipecat, speech-analysis
 
-    Use cases:
-    - Detect conversation turns
-    - Identify speaker changes
-    - Analyze dialogue timing
-    - Detect speech boundaries
-    - Process conversational audio
+        Use cases:
+        - Detect conversation turns
+        - Identify speaker changes
+        - Analyze dialogue timing
+        - Detect speech boundaries
+        - Process conversational audio
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The URL of the audio file to be processed.",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='The URL of the audio file to be processed.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -155,31 +118,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class SpeechToText(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    General-purpose speech-to-text model for accurate audio transcription.
-    audio, transcription, stt, speech-to-text
+        General-purpose speech-to-text model for accurate audio transcription.
+        audio, transcription, stt, speech-to-text
 
-    Use cases:
-    - General audio transcription
-    - Convert speech recordings to text
-    - Generate audio transcripts
-    - Process voice recordings
-    - Extract text from speech
+        Use cases:
+        - General audio transcription
+        - Convert speech recordings to text
+        - Generate audio transcripts
+        - Process voice recordings
+        - Extract text from speech
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Local filesystem path (or remote URL) to a long audio file",
-    )
-    use_pnc: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use Canary's built-in punctuation & capitalization",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='Local filesystem path (or remote URL) to a long audio file')
+    use_pnc: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use Canary's built-in punctuation & capitalization")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -196,31 +150,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class SpeechToTextStream(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Streaming speech-to-text for real-time audio transcription.
-    audio, transcription, stt, streaming, real-time, speech-to-text
+        Streaming speech-to-text for real-time audio transcription.
+        audio, transcription, stt, streaming, real-time, speech-to-text
 
-    Use cases:
-    - Real-time transcription
-    - Live audio captioning
-    - Stream audio processing
-    - Continuous speech recognition
-    - Live speech-to-text conversion
+        Use cases:
+        - Real-time transcription
+        - Live audio captioning
+        - Stream audio processing
+        - Continuous speech recognition
+        - Live speech-to-text conversion
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Local filesystem path (or remote URL) to a long audio file",
-    )
-    use_pnc: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use Canary's built-in punctuation & capitalization",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='Local filesystem path (or remote URL) to a long audio file')
+    use_pnc: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use Canary's built-in punctuation & capitalization")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -237,33 +182,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
-class SpeechToTextTurbo(
-    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
-):
+class SpeechToTextTurbo(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    High-speed speech-to-text model optimized for fast transcription.
-    audio, transcription, stt, turbo, fast, speech-to-text
+        High-speed speech-to-text model optimized for fast transcription.
+        audio, transcription, stt, turbo, fast, speech-to-text
 
-    Use cases:
-    - Fast audio transcription
-    - Quick speech recognition
-    - Rapid transcript generation
-    - High-speed processing
-    - Efficient speech-to-text
+        Use cases:
+        - Fast audio transcription
+        - Quick speech recognition
+        - Rapid transcript generation
+        - High-speed processing
+        - Efficient speech-to-text
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Local filesystem path (or remote URL) to a long audio file",
-    )
-    use_pnc: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use Canary's built-in punctuation & capitalization",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='Local filesystem path (or remote URL) to a long audio file')
+    use_pnc: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use Canary's built-in punctuation & capitalization")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -280,31 +214,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class SpeechToTextTurboStream(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    High-speed streaming speech-to-text for real-time fast transcription.
-    audio, transcription, stt, turbo, streaming, fast, speech-to-text
+        High-speed streaming speech-to-text for real-time fast transcription.
+        audio, transcription, stt, turbo, streaming, fast, speech-to-text
 
-    Use cases:
-    - Real-time fast transcription
-    - Live fast captioning
-    - High-speed streaming STT
-    - Rapid live transcription
-    - Efficient real-time processing
+        Use cases:
+        - Real-time fast transcription
+        - Live fast captioning
+        - High-speed streaming STT
+        - Rapid live transcription
+        - Efficient real-time processing
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="Local filesystem path (or remote URL) to a long audio file",
-    )
-    use_pnc: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to use Canary's built-in punctuation & capitalization",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='Local filesystem path (or remote URL) to a long audio file')
+    use_pnc: bool | OutputHandle[bool] = connect_field(default=True, description="Whether to use Canary's built-in punctuation & capitalization")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -321,66 +246,33 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class Whisper(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    OpenAI's Whisper model for robust multilingual speech recognition.
-    audio, transcription, stt, whisper, multilingual, speech-to-text
+        OpenAI's Whisper model for robust multilingual speech recognition.
+        audio, transcription, stt, whisper, multilingual, speech-to-text
 
-    Use cases:
-    - Multilingual transcription
-    - Robust speech recognition
-    - Transcribe multiple languages
-    - Handle noisy audio
-    - International audio processing
+        Use cases:
+        - Multilingual transcription
+        - Robust speech recognition
+        - Transcribe multiple languages
+        - Handle noisy audio
+        - International audio processing
     """
 
     Version: typing.ClassVar[type] = nodetool.nodes.fal.speech_to_text.Whisper.Version
     Task: typing.ClassVar[type] = nodetool.nodes.fal.speech_to_text.Whisper.Task
-    ChunkLevel: typing.ClassVar[type] = (
-        nodetool.nodes.fal.speech_to_text.Whisper.ChunkLevel
-    )
+    ChunkLevel: typing.ClassVar[type] = nodetool.nodes.fal.speech_to_text.Whisper.ChunkLevel
 
-    version: nodetool.nodes.fal.speech_to_text.Whisper.Version = Field(
-        default=nodetool.nodes.fal.speech_to_text.Whisper.Version.VALUE_3,
-        description="Version of the model to use. All of the models are the Whisper large variant.",
-    )
+    version: nodetool.nodes.fal.speech_to_text.Whisper.Version = Field(default=nodetool.nodes.fal.speech_to_text.Whisper.Version.VALUE_3, description='Version of the model to use. All of the models are the Whisper large variant.')
     batch_size: int | OutputHandle[int] = connect_field(default=64, description=None)
-    language: (
-        nodetool.nodes.fal.speech_to_text.Whisper.Language
-        | OutputHandle[nodetool.nodes.fal.speech_to_text.Whisper.Language]
-        | None
-    ) = connect_field(
-        default=None,
-        description="Language of the audio file. If set to null, the language will be automatically detected. Defaults to null. If translate is selected as the task, the audio will be translated to English, regardless of the language selected.",
-    )
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Prompt to use for generation. Defaults to an empty string.",
-    )
-    num_speakers: int | OutputHandle[int] = connect_field(
-        default=0,
-        description="Number of speakers in the audio file. Defaults to null. If not provided, the number of speakers will be automatically detected.",
-    )
-    task: nodetool.nodes.fal.speech_to_text.Whisper.Task = Field(
-        default=nodetool.nodes.fal.speech_to_text.Whisper.Task.TRANSCRIBE,
-        description="Task to perform on the audio file. Either transcribe or translate.",
-    )
-    chunk_level: nodetool.nodes.fal.speech_to_text.Whisper.ChunkLevel = Field(
-        default=nodetool.nodes.fal.speech_to_text.Whisper.ChunkLevel.SEGMENT,
-        description="Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.",
-    )
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.",
-    )
-    diarize: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Whether to diarize the audio file. Defaults to false. Setting to true will add costs proportional to diarization inference time.",
-    )
+    language: nodetool.nodes.fal.speech_to_text.Whisper.Language | OutputHandle[nodetool.nodes.fal.speech_to_text.Whisper.Language] | None = connect_field(default=None, description='Language of the audio file. If set to null, the language will be automatically detected. Defaults to null. If translate is selected as the task, the audio will be translated to English, regardless of the language selected.')
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to use for generation. Defaults to an empty string.')
+    num_speakers: int | OutputHandle[int] = connect_field(default=0, description='Number of speakers in the audio file. Defaults to null. If not provided, the number of speakers will be automatically detected.')
+    task: nodetool.nodes.fal.speech_to_text.Whisper.Task = Field(default=nodetool.nodes.fal.speech_to_text.Whisper.Task.TRANSCRIBE, description='Task to perform on the audio file. Either transcribe or translate.')
+    chunk_level: nodetool.nodes.fal.speech_to_text.Whisper.ChunkLevel = Field(default=nodetool.nodes.fal.speech_to_text.Whisper.ChunkLevel.SEGMENT, description='Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.')
+    diarize: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to diarize the audio file. Defaults to false. Setting to true will add costs proportional to diarization inference time.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -397,52 +289,29 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_text
 from nodetool.workflows.base_node import BaseNode
 
-
 class Wizper(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Wizper provides fast and accurate speech-to-text transcription.
-    audio, transcription, stt, wizper, fast, speech-to-text
+        Wizper provides fast and accurate speech-to-text transcription.
+        audio, transcription, stt, wizper, fast, speech-to-text
 
-    Use cases:
-    - Fast accurate transcription
-    - Quick speech recognition
-    - Efficient audio processing
-    - Rapid text extraction
-    - Speedy speech-to-text
+        Use cases:
+        - Fast accurate transcription
+        - Quick speech recognition
+        - Efficient audio processing
+        - Rapid text extraction
+        - Speedy speech-to-text
     """
 
     Task: typing.ClassVar[type] = nodetool.nodes.fal.speech_to_text.Wizper.Task
 
-    language: str | OutputHandle[str] = connect_field(
-        default="en",
-        description="Language of the audio file. If translate is selected as the task, the audio will be translated to English, regardless of the language selected. If `None` is passed, the language will be automatically detected. This will also increase the inference time.",
-    )
-    version: str | OutputHandle[str] = connect_field(
-        default="3",
-        description="Version of the model to use. All of the models are the Whisper large variant.",
-    )
-    max_segment_len: int | OutputHandle[int] = connect_field(
-        default=29,
-        description="Maximum speech segment duration in seconds before splitting.",
-    )
-    task: nodetool.nodes.fal.speech_to_text.Wizper.Task = Field(
-        default=nodetool.nodes.fal.speech_to_text.Wizper.Task.TRANSCRIBE,
-        description="Task to perform on the audio file. Either transcribe or translate.",
-    )
-    chunk_level: str | OutputHandle[str] = connect_field(
-        default="segment", description="Level of the chunks to return."
-    )
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.",
-    )
-    merge_chunks: bool | OutputHandle[bool] = connect_field(
-        default=True,
-        description="Whether to merge consecutive chunks. When enabled, chunks are merged if their combined duration does not exceed max_segment_len.",
-    )
+    language: str | OutputHandle[str] = connect_field(default='en', description='Language of the audio file. If translate is selected as the task, the audio will be translated to English, regardless of the language selected. If `None` is passed, the language will be automatically detected. This will also increase the inference time.')
+    version: str | OutputHandle[str] = connect_field(default='3', description='Version of the model to use. All of the models are the Whisper large variant.')
+    max_segment_len: int | OutputHandle[int] = connect_field(default=29, description='Maximum speech segment duration in seconds before splitting.')
+    task: nodetool.nodes.fal.speech_to_text.Wizper.Task = Field(default=nodetool.nodes.fal.speech_to_text.Wizper.Task.TRANSCRIBE, description='Task to perform on the audio file. Either transcribe or translate.')
+    chunk_level: str | OutputHandle[str] = connect_field(default='segment', description='Level of the chunks to return.')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.')
+    merge_chunks: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to merge consecutive chunks. When enabled, chunks are merged if their combined duration does not exceed max_segment_len.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -451,3 +320,5 @@ class Wizper(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

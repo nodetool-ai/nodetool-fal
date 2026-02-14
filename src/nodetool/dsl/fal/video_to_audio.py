@@ -18,47 +18,24 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class KlingVideoVideoToAudio(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class KlingVideoVideoToAudio(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    Generate audio from input videos using Kling
-    audio, extraction, video-to-audio, processing
+        Generate audio from input videos using Kling
+        audio, extraction, video-to-audio, processing
 
-    Use cases:
-    - Audio extraction from video
-    - Sound separation
-    - Video audio analysis
-    - Music extraction
-    - Sound effect isolation
+        Use cases:
+        - Audio extraction from video
+        - Sound separation
+        - Video audio analysis
+        - Music extraction
+        - Sound effect isolation
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s.",
-    )
-    asmr_mode: bool | OutputHandle[bool] = connect_field(
-        default=False,
-        description="Enable ASMR mode. This mode enhances detailed sound effects and is suitable for highly immersive content scenarios.",
-    )
-    background_music_prompt: str | OutputHandle[str] = connect_field(
-        default="intense car race",
-        description="Background music prompt. Cannot exceed 200 characters.",
-    )
-    sound_effect_prompt: str | OutputHandle[str] = connect_field(
-        default="Car tires screech as they accelerate in a drag race",
-        description="Sound effect prompt. Cannot exceed 200 characters.",
-    )
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s.')
+    asmr_mode: bool | OutputHandle[bool] = connect_field(default=False, description='Enable ASMR mode. This mode enhances detailed sound effects and is suitable for highly immersive content scenarios.')
+    background_music_prompt: str | OutputHandle[str] = connect_field(default='intense car race', description='Background music prompt. Cannot exceed 200 characters.')
+    sound_effect_prompt: str | OutputHandle[str] = connect_field(default='Car tires screech as they accelerate in a drag race', description='Sound effect prompt. Cannot exceed 200 characters.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -75,52 +52,26 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class MireloAiSfxV15VideoToAudio(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class MireloAiSfxV15VideoToAudio(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Generate synced sounds for any video, and return the new sound track (like MMAudio)
-    audio, extraction, video-to-audio, processing
+        Generate synced sounds for any video, and return the new sound track (like MMAudio)
+        audio, extraction, video-to-audio, processing
 
-    Use cases:
-    - Audio extraction from video
-    - Sound separation
-    - Video audio analysis
-    - Music extraction
-    - Sound effect isolation
+        Use cases:
+        - Audio extraction from video
+        - Sound separation
+        - Video audio analysis
+        - Music extraction
+        - Sound effect isolation
     """
 
-    num_samples: str | OutputHandle[str] = connect_field(
-        default=2, description="The number of samples to generate from the model"
-    )
-    duration: str | OutputHandle[str] = connect_field(
-        default=10, description="The duration of the generated audio in seconds"
-    )
-    start_offset: str | OutputHandle[str] = connect_field(
-        default=0,
-        description="The start offset in seconds to start the audio generation from",
-    )
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="A video url that can accessed from the API to process and add sound effects",
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default=8069,
-        description="The seed to use for the generation. If not provided, a random seed will be used",
-    )
-    text_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Additional description to guide the model"
-    )
+    num_samples: str | OutputHandle[str] = connect_field(default=2, description='The number of samples to generate from the model')
+    duration: str | OutputHandle[str] = connect_field(default=10, description='The duration of the generated audio in seconds')
+    start_offset: str | OutputHandle[str] = connect_field(default=0, description='The start offset in seconds to start the audio generation from')
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='A video url that can accessed from the API to process and add sound effects')
+    seed: str | OutputHandle[str] = connect_field(default=8069, description='The seed to use for the generation. If not provided, a random seed will be used')
+    text_prompt: str | OutputHandle[str] = connect_field(default='', description='Additional description to guide the model')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -137,48 +88,25 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class MireloAiSfxV1VideoToAudio(
-    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
-):
+class MireloAiSfxV1VideoToAudio(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
     """
 
-    Generate synced sounds for any video, and return the new sound track (like MMAudio)
-    audio, extraction, video-to-audio, processing
+        Generate synced sounds for any video, and return the new sound track (like MMAudio)
+        audio, extraction, video-to-audio, processing
 
-    Use cases:
-    - Audio extraction from video
-    - Sound separation
-    - Video audio analysis
-    - Music extraction
-    - Sound effect isolation
+        Use cases:
+        - Audio extraction from video
+        - Sound separation
+        - Video audio analysis
+        - Music extraction
+        - Sound effect isolation
     """
 
-    num_samples: str | OutputHandle[str] = connect_field(
-        default=2, description="The number of samples to generate from the model"
-    )
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="A video url that can accessed from the API to process and add sound effects",
-    )
-    duration: str | OutputHandle[str] = connect_field(
-        default=10, description="The duration of the generated audio in seconds"
-    )
-    seed: str | OutputHandle[str] = connect_field(
-        default=2105,
-        description="The seed to use for the generation. If not provided, a random seed will be used",
-    )
-    text_prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Additional description to guide the model"
-    )
+    num_samples: str | OutputHandle[str] = connect_field(default=2, description='The number of samples to generate from the model')
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='A video url that can accessed from the API to process and add sound effects')
+    duration: str | OutputHandle[str] = connect_field(default=10, description='The duration of the generated audio in seconds')
+    seed: str | OutputHandle[str] = connect_field(default=2105, description='The seed to use for the generation. If not provided, a random seed will be used')
+    text_prompt: str | OutputHandle[str] = connect_field(default='', description='Additional description to guide the model')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -195,74 +123,29 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_to_audio
 from nodetool.workflows.base_node import BaseNode
 
-
-class SamAudioVisualSeparate(
-    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
-):
+class SamAudioVisualSeparate(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Audio separation with SAM Audio. Isolate any sound using natural language—professional-grade audio editing made simple for creators, researchers, and accessibility applications.
-    audio, extraction, video-to-audio, processing
+        Audio separation with SAM Audio. Isolate any sound using natural language—professional-grade audio editing made simple for creators, researchers, and accessibility applications.
+        audio, extraction, video-to-audio, processing
 
-    Use cases:
-    - Audio extraction from video
-    - Sound separation
-    - Video audio analysis
-    - Music extraction
-    - Sound effect isolation
+        Use cases:
+        - Audio extraction from video
+        - Sound separation
+        - Video audio analysis
+        - Music extraction
+        - Sound effect isolation
     """
 
-    Acceleration: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.Acceleration
-    )
-    OutputFormat: typing.ClassVar[type] = (
-        nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.OutputFormat
-    )
+    Acceleration: typing.ClassVar[type] = nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.Acceleration
+    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.OutputFormat
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Text prompt to assist with separation. Use natural language to describe the target sound.",
-    )
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="URL of the video file to process (MP4, MOV, etc.)",
-    )
-    acceleration: (
-        nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.Acceleration
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.Acceleration.BALANCED,
-        description="The acceleration level to use.",
-    )
-    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="URL of the mask video (binary mask indicating target object). Black=target, White=background.",
-    )
-    output_format: (
-        nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.OutputFormat
-    ) = Field(
-        default=nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.OutputFormat.WAV,
-        description="Output audio format.",
-    )
-    reranking_candidates: int | OutputHandle[int] = connect_field(
-        default=1,
-        description="Number of candidates to generate and rank. Higher improves quality but increases latency and cost.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt to assist with separation. Use natural language to describe the target sound.')
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='URL of the video file to process (MP4, MOV, etc.)')
+    acceleration: nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.Acceleration = Field(default=nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.Acceleration.BALANCED, description='The acceleration level to use.')
+    mask_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='URL of the mask video (binary mask indicating target object). Black=target, White=background.')
+    output_format: nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.OutputFormat = Field(default=nodetool.nodes.fal.video_to_audio.SamAudioVisualSeparate.OutputFormat.WAV, description='Output audio format.')
+    reranking_candidates: int | OutputHandle[int] = connect_field(default=1, description='Number of candidates to generate and rank. Higher improves quality but increases latency and cost.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -271,3 +154,5 @@ class SamAudioVisualSeparate(
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

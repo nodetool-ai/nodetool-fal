@@ -432,11 +432,17 @@ class NodeGenerator:
             if field.python_type == "list[ImageRef]":
                 lines.append(f"        {field.name}_data_urls = []")
                 lines.append(f"        for image in self.{field.name} or []:")
+                lines.append("            if image.is_empty():")
+                lines.append("                continue")
                 lines.append("            image_base64 = await context.image_to_base64(image)")
                 lines.append(f'            {field.name}_data_urls.append(f"data:image/png;base64,{{image_base64}}")')
                 image_list_fields.append(field.name)
             elif "ImageRef" in field.python_type:
-                lines.append(f"        {field.name}_base64 = await context.image_to_base64(self.{field.name})")
+                lines.append(f"        {field.name}_base64 = (")
+                lines.append(f"            await context.image_to_base64(self.{field.name})")
+                lines.append(f"            if not self.{field.name}.is_empty()")
+                lines.append("            else None")
+                lines.append("        )")
                 image_fields.append(field.name)
         
         # Build arguments dict
@@ -448,7 +454,9 @@ class NodeGenerator:
             
             if field.name in image_fields:
                 # Use the API parameter name for image URLs
-                lines.append(f'            "{api_param_name}": f"data:image/png;base64,{{{field.name}_base64}}",')
+                lines.append(
+                    f'            "{api_param_name}": f"data:image/png;base64,{{{field.name}_base64}}" if {field.name}_base64 else None,'
+                )
             elif field.name in image_list_fields:
                 lines.append(f'            "{api_param_name}": {field.name}_data_urls,')
             elif field.enum_ref:
