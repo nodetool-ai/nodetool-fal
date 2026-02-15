@@ -97,12 +97,9 @@ class FALNode(BaseNode):
         elif "image" in result:
             image_count = 1
 
-        # Count video outputs and estimate video seconds
+        # Video duration is not available in FAL API responses
+        # This could be estimated from model parameters in the future
         video_seconds = 0.0
-        if "video" in result:
-            # For video outputs, we don't have duration in the response
-            # Could be estimated from model parameters if available
-            video_seconds = 0.0
 
         # Create usage info
         usage_info = UsageInfo(
