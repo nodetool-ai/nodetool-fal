@@ -16,12 +16,25 @@ import numpy as np
 from nodetool.providers.base import BaseProvider
 from nodetool.providers.types import ImageBytes, TextToImageParams, ImageToImageParams
 from nodetool.config.environment import Environment
-from nodetool.metadata.types import ImageModel, Provider
+from nodetool.metadata.types import (
+    ASRModel,
+    ImageModel,
+    Model3DModel,
+    TTSModel,
+    VideoModel,
+)
 from nodetool.workflows.base_node import ApiKeyMissingError
 from fal_client import AsyncClient
 import httpx
 from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.config.logging_config import get_logger
+from nodetool.fal.generated_models import (
+    IMAGE_MODELS,
+    VIDEO_MODELS,
+    TTS_MODELS,
+    ASR_MODELS,
+    MODEL_3D_MODELS,
+)
 
 log = get_logger(__name__)
 
@@ -290,196 +303,46 @@ class FalProvider(BaseProvider):
         """
         Get available FAL AI image models.
 
-        Returns models only if FAL_API_KEY is configured.
-
         Returns:
             List of ImageModel instances for FAL
         """
-        env = Environment.get_environment()
-        if "FAL_API_KEY" not in env:
-            return []
+        return list(IMAGE_MODELS)
 
-        return [
-            # FLUX Models
-            ImageModel(
-                id="fal-ai/flux/dev", name="FLUX.1 Dev", provider=Provider.FalAI
-            ),
-            ImageModel(
-                id="fal-ai/flux/schnell",
-                name="FLUX.1 Schnell",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-pro/v1.1",
-                name="FLUX.1 Pro v1.1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-pro/v1.1-ultra",
-                name="FLUX.1 Pro Ultra",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-pro/new",
-                name="FLUX.1 Pro (New)",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-lora",
-                name="FLUX.1 Dev with LoRA",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-subject",
-                name="FLUX.1 Subject",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-general",
-                name="FLUX.1 General",
-                provider=Provider.FalAI,
-            ),
-            # Ideogram Models
-            ImageModel(
-                id="fal-ai/ideogram/v2",
-                name="Ideogram v2",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/ideogram/v2/turbo",
-                name="Ideogram v2 Turbo",
-                provider=Provider.FalAI,
-            ),
-            # Recraft Models
-            ImageModel(
-                id="fal-ai/recraft-v3",
-                name="Recraft v3",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/recraft-20b",
-                name="Recraft 20B",
-                provider=Provider.FalAI,
-            ),
-            # Stable Diffusion Models
-            ImageModel(
-                id="fal-ai/stable-diffusion-v3-medium",
-                name="Stable Diffusion v3 Medium",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/stable-diffusion-v35-large",
-                name="Stable Diffusion v3.5 Large",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-sdxl",
-                name="Fast SDXL",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/stable-cascade",
-                name="Stable Cascade",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-lightning-sdxl",
-                name="Fast Lightning SDXL",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/hyper-sdxl",
-                name="Hyper SDXL",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-turbo-diffusion",
-                name="Fast Turbo Diffusion",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-lcm-diffusion",
-                name="Fast LCM Diffusion",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/lcm",
-                name="LCM Diffusion",
-                provider=Provider.FalAI,
-            ),
-            # Bria Models (Licensed Data)
-            ImageModel(
-                id="fal-ai/bria/text-to-image/base",
-                name="Bria v1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/bria/text-to-image/fast",
-                name="Bria v1 Fast",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/bria/text-to-image/hd",
-                name="Bria v1 HD",
-                provider=Provider.FalAI,
-            ),
-            # Other Models
-            ImageModel(
-                id="fal-ai/aura-flow",
-                name="AuraFlow v0.3",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/switti/1024",
-                name="Switti",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/sana",
-                name="Sana v1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/omnigen-v1",
-                name="OmniGen v1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/luma-photon",
-                name="Luma Photon",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/luma-photon/flash",
-                name="Luma Photon Flash",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/playground-v25",
-                name="Playground v2.5",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fooocus",
-                name="Fooocus",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/illusion-diffusion",
-                name="Illusion Diffusion",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/imagen4/preview",
-                name="Imagen 4 Preview",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/lora",
-                name="LoRA Text-to-Image",
-                provider=Provider.FalAI,
-            ),
-        ]
+    async def get_available_video_models(self) -> List[VideoModel]:
+        """
+        Get available FAL AI video models.
+
+        Returns:
+            List of VideoModel instances for FAL
+        """
+        return list(VIDEO_MODELS)
+
+    async def get_available_tts_models(self) -> List[TTSModel]:
+        """
+        Get available FAL AI text-to-speech models.
+
+        Returns:
+            List of TTSModel instances for FAL
+        """
+        return list(TTS_MODELS)
+
+    async def get_available_asr_models(self) -> List[ASRModel]:
+        """
+        Get available FAL AI automatic speech recognition models.
+
+        Returns:
+            List of ASRModel instances for FAL
+        """
+        return list(ASR_MODELS)
+
+    async def get_available_3d_models(self) -> List[Model3DModel]:
+        """
+        Get available FAL AI 3D generation models.
+
+        Returns:
+            List of Model3DModel instances for FAL
+        """
+        return list(MODEL_3D_MODELS)
 
     async def text_to_speech(
         self,
