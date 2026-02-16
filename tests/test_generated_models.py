@@ -5,14 +5,17 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 import asyncio
 
-from nodetool.fal.generated_models import (
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "codegen"))
+
+from generate_provider_models import _class_name_to_title  # noqa: E402
+from nodetool.fal.generated_models import (  # noqa: E402
     IMAGE_MODELS,
     VIDEO_MODELS,
     TTS_MODELS,
     ASR_MODELS,
     MODEL_3D_MODELS,
 )
-from nodetool.metadata.types import (
+from nodetool.metadata.types import (  # noqa: E402
     ImageModel,
     VideoModel,
     TTSModel,
@@ -20,11 +23,11 @@ from nodetool.metadata.types import (
     Model3DModel,
     Provider,
 )
-from nodetool.fal.fal_provider import FalProvider
+from nodetool.fal.fal_provider import FalProvider  # noqa: E402
 
 
 class TestGeneratedModelLists:
-    """Tests for generated model lists from all_models.json."""
+    """Tests for generated model lists from codegen/configs."""
 
     def test_image_models_not_empty(self):
         """IMAGE_MODELS should contain models."""
@@ -188,3 +191,44 @@ class TestProviderGeneratedModels:
         models2 = asyncio.run(provider.get_available_image_models())
         assert models1 is not models2
         assert models1 is not IMAGE_MODELS
+
+
+class TestClassNameToTitle:
+    """Tests for the _class_name_to_title helper."""
+
+    def test_simple_pascal_case(self):
+        assert _class_name_to_title("FluxDev") == "Flux Dev"
+
+    def test_consecutive_uppercase(self):
+        assert _class_name_to_title("CSM1B") == "CSM1 B"
+
+    def test_version_numbers(self):
+        assert _class_name_to_title("FluxV1ProUltra") == "Flux V1 Pro Ultra"
+
+    def test_single_word(self):
+        assert _class_name_to_title("Whisper") == "Whisper"
+
+    def test_mixed_case_with_numbers(self):
+        assert (
+            _class_name_to_title("Ltx219BDistilledAudioToVideo")
+            == "Ltx219 B Distilled Audio To Video"
+        )
+
+
+class TestAudioToVideoModels:
+    """Tests for audio-to-video models in VIDEO_MODELS."""
+
+    def test_audio_to_video_models_exist(self):
+        """VIDEO_MODELS should contain audio-to-video models."""
+        audio_to_video = [
+            m for m in VIDEO_MODELS if "audio-to-video" in m.supported_tasks
+        ]
+        assert len(audio_to_video) > 0
+
+    def test_audio_to_video_models_are_video_models(self):
+        """Audio-to-video models should be VideoModel instances."""
+        audio_to_video = [
+            m for m in VIDEO_MODELS if "audio-to-video" in m.supported_tasks
+        ]
+        for m in audio_to_video:
+            assert isinstance(m, VideoModel)
