@@ -2,21 +2,42 @@
 FAL provider implementation.
 
 This module implements the BaseProvider interface for FAL AI services,
-supporting text-to-image, image-to-image, and text-to-speech generation.
+supporting all model capabilities by dynamically discovering FAL nodes
+and executing models through their node implementations.
 """
 
-import ast
+import ast as ast_module
+import importlib
+import inspect
 import json
 import os
+import pkgutil
 import re
 from collections.abc import AsyncGenerator
 from typing import Any, List
 
 import numpy as np
 from nodetool.providers.base import BaseProvider
-from nodetool.providers.types import ImageBytes, TextToImageParams, ImageToImageParams
+from nodetool.providers.types import (
+    ImageBytes,
+    TextToImageParams,
+    ImageToImageParams,
+    VideoBytes,
+    TextToVideoParams,
+    ImageToVideoParams,
+    Model3DBytes,
+    TextTo3DParams,
+    ImageTo3DParams,
+)
 from nodetool.config.environment import Environment
-from nodetool.metadata.types import ImageModel, Provider
+from nodetool.metadata.types import (
+    ASRModel,
+    ImageModel,
+    Model3DModel,
+    Provider,
+    TTSModel,
+    VideoModel,
+)
 from nodetool.workflows.base_node import ApiKeyMissingError
 from fal_client import AsyncClient
 import httpx
@@ -25,9 +46,155 @@ from nodetool.config.logging_config import get_logger
 
 log = get_logger(__name__)
 
+# Module name -> capability category mapping
+_MODULE_CATEGORY: dict[str, str] = {
+    "text_to_image": "image",
+    "image_to_image": "image",
+    "text_to_video": "video",
+    "image_to_video": "video",
+    "audio_to_video": "video",
+    "video_to_video": "video",
+    "text_to_audio": "tts",
+    "text_to_speech": "tts",
+    "speech_to_text": "asr",
+    "audio_to_text": "asr",
+    "text_to_3d": "3d",
+    "image_to_3d": "3d",
+    "model3d": "3d",
+    "3d_to_3d": "3d",
+}
+
+
+def _get_endpoint_id(cls: type) -> str | None:
+    """Extract the FAL endpoint ID from a node class by parsing its source.
+
+    Looks for the ``application`` keyword in ``submit_request`` calls.
+    """
+    try:
+        source = inspect.getsource(cls)
+        tree = ast_module.parse(source)
+        for node in ast_module.walk(tree):
+            if isinstance(node, ast_module.Call):
+                func = node.func
+                if hasattr(func, "attr") and func.attr == "submit_request":
+                    for kw in node.keywords:
+                        if kw.arg == "application" and isinstance(
+                            kw.value, ast_module.Constant
+                        ):
+                            return kw.value.value
+    except Exception:
+        pass
+    return None
+
+
+def _get_node_name(cls: type) -> str:
+    """Derive a human-readable model name from a node class."""
+    doc = (cls.__doc__ or "").strip()
+    if doc:
+        first_line = doc.split("\n")[0].strip()
+        if len(first_line) > 80:
+            first_line = first_line[:77] + "..."
+        return first_line
+    return cls.__name__
+
+
+def _node_class_path(cls: type) -> str:
+    """Return the fully qualified import path for a node class."""
+    return f"{cls.__module__}.{cls.__name__}"
+
+
+def _discover_fal_nodes() -> dict[str, list[tuple[str, str, str]]]:
+    """Discover all FALNode subclasses from node modules.
+
+    Returns a dict mapping category to list of (endpoint_id, name, class_path) tuples.
+    Categories: ``image``, ``video``, ``tts``, ``asr``, ``3d``.
+    """
+    from nodetool.nodes.fal.fal_node import FALNode
+
+    result: dict[str, list[tuple[str, str, str]]] = {
+        "image": [],
+        "video": [],
+        "tts": [],
+        "asr": [],
+        "3d": [],
+    }
+
+    import nodetool.nodes.fal as fal_pkg
+
+    skip = {
+        "nodetool.nodes.fal.fal_node",
+        "nodetool.nodes.fal.types",
+        "nodetool.nodes.fal.__init__",
+        "nodetool.nodes.fal.dynamic_schema",
+    }
+
+    for _importer, modname, ispkg in pkgutil.iter_modules(
+        fal_pkg.__path__, fal_pkg.__name__ + "."
+    ):
+        if ispkg or modname in skip:
+            continue
+        short = modname.rsplit(".", 1)[-1]
+        category = _MODULE_CATEGORY.get(short)
+        if category is None:
+            continue
+        try:
+            mod = importlib.import_module(modname)
+        except Exception:
+            log.debug("Failed to import FAL module %s", modname)
+            continue
+
+        for _name, obj in inspect.getmembers(mod, inspect.isclass):
+            if (
+                issubclass(obj, FALNode)
+                and obj is not FALNode
+                and obj.__module__ == mod.__name__
+            ):
+                endpoint = _get_endpoint_id(obj)
+                if endpoint:
+                    result[category].append(
+                        (endpoint, _get_node_name(obj), _node_class_path(obj))
+                    )
+    return result
+
+
+# Cache discovered nodes at module level (populated on first access)
+_discovered_nodes: dict[str, list[tuple[str, str, str]]] | None = None
+
+
+def _get_discovered_nodes() -> dict[str, list[tuple[str, str, str]]]:
+    global _discovered_nodes
+    if _discovered_nodes is None:
+        _discovered_nodes = _discover_fal_nodes()
+    return _discovered_nodes
+
+
+def _find_node_class(model_id: str, category: str | None = None) -> type | None:
+    """Find the FAL node class for a given model/endpoint ID.
+
+    Args:
+        model_id: The FAL endpoint ID (e.g. ``fal-ai/flux/dev``).
+        category: Optional category to narrow the search.
+
+    Returns:
+        The node class, or ``None`` if not found.
+    """
+    nodes = _get_discovered_nodes()
+    categories = [category] if category else list(nodes.keys())
+    for cat in categories:
+        for endpoint, _name, class_path in nodes.get(cat, []):
+            if endpoint == model_id:
+                module_path, cls_name = class_path.rsplit(".", 1)
+                mod = importlib.import_module(module_path)
+                return getattr(mod, cls_name, None)
+    return None
+
 
 class FalProvider(BaseProvider):
-    """FAL AI provider supporting image and audio generation."""
+    """FAL AI provider supporting all model capabilities.
+
+    Capabilities are discovered dynamically by introspecting FAL node modules.
+    All models are executed via their corresponding node implementations.
+    """
 
     provider_name = "fal_ai"
 
@@ -79,7 +246,7 @@ class FalProvider(BaseProvider):
                         errors = json.loads(error_list_str)
                     except json.JSONDecodeError:
                         # If JSON fails, use ast.literal_eval for Python dict format (single quotes)
-                        errors = ast.literal_eval(error_list_str)
+                        errors = ast_module.literal_eval(error_list_str)
 
                     if isinstance(errors, list) and errors:
                         formatted_errors = []
@@ -132,6 +299,103 @@ class FalProvider(BaseProvider):
 
         # Return original error if we couldn't parse it
         return error_str
+
+    # ------------------------------------------------------------------
+    # Model discovery – built dynamically from FAL node modules
+    # ------------------------------------------------------------------
+
+    async def get_available_image_models(self) -> List[ImageModel]:
+        """Get available FAL AI image models by introspecting node modules."""
+        nodes = _get_discovered_nodes()
+        return [
+            ImageModel(
+                id=endpoint,
+                name=name,
+                provider=Provider.FalAI,
+                path=class_path,
+            )
+            for endpoint, name, class_path in nodes.get("image", [])
+        ]
+
+    async def get_available_video_models(self) -> list[VideoModel]:
+        """Get available FAL AI video models by introspecting node modules."""
+        nodes = _get_discovered_nodes()
+        return [
+            VideoModel(
+                id=endpoint,
+                name=name,
+                provider=Provider.FalAI,
+                path=class_path,
+            )
+            for endpoint, name, class_path in nodes.get("video", [])
+        ]
+
+    async def get_available_tts_models(self) -> list[TTSModel]:
+        """Get available FAL AI text-to-speech models by introspecting node modules."""
+        nodes = _get_discovered_nodes()
+        return [
+            TTSModel(
+                id=endpoint,
+                name=name,
+                provider=Provider.FalAI,
+                path=class_path,
+            )
+            for endpoint, name, class_path in nodes.get("tts", [])
+        ]
+
+    async def get_available_asr_models(self) -> list[ASRModel]:
+        """Get available FAL AI ASR models by introspecting node modules."""
+        nodes = _get_discovered_nodes()
+        return [
+            ASRModel(
+                id=endpoint,
+                name=name,
+                provider=Provider.FalAI,
+                path=class_path,
+            )
+            for endpoint, name, class_path in nodes.get("asr", [])
+        ]
+
+    async def get_available_3d_models(self) -> list[Model3DModel]:
+        """Get available FAL AI 3D generation models by introspecting node modules."""
+        nodes = _get_discovered_nodes()
+        return [
+            Model3DModel(
+                id=endpoint,
+                name=name,
+                provider=Provider.FalAI,
+                path=class_path,
+            )
+            for endpoint, name, class_path in nodes.get("3d", [])
+        ]
+
+    # ------------------------------------------------------------------
+    # Capability methods – execute via FAL nodes
+    # ------------------------------------------------------------------
+
+    async def _execute_via_node(
+        self,
+        model_id: str,
+        context: ProcessingContext,
+        category: str | None = None,
+        **field_overrides: Any,
+    ) -> Any:
+        """Instantiate a FAL node by model/endpoint ID and execute it.
+
+        Args:
+            model_id: FAL endpoint ID.
+            context: Processing context with secrets.
+            category: Optional category hint for faster lookup.
+            **field_overrides: Field values to set on the node before processing.
+
+        Returns:
+            The result of the node's ``process`` method.
+        """
+        node_cls = _find_node_class(model_id, category=category)
+        if node_cls is None:
+            raise ValueError(f"No FAL node found for model '{model_id}'")
+        node = node_cls(**field_overrides)
+        return await node.process(context)
 
     async def text_to_image(
         self,
@@ -194,9 +458,6 @@ class FalProvider(BaseProvider):
                 response = await http_client.get(image_url)
                 response.raise_for_status()
                 image_bytes = response.content
-
-            self.usage["total_requests"] += 1
-            self.usage["total_images"] += 1
 
             return image_bytes
 
@@ -277,209 +538,11 @@ class FalProvider(BaseProvider):
                 response.raise_for_status()
                 image_bytes = response.content
 
-            self.usage["total_requests"] += 1
-            self.usage["total_images"] += 1
-
             return image_bytes
 
         except Exception as e:
             error_msg = self._format_validation_error(str(e))
             raise RuntimeError(f"FAL image-to-image generation failed: {error_msg}")
-
-    async def get_available_image_models(self) -> List[ImageModel]:
-        """
-        Get available FAL AI image models.
-
-        Returns models only if FAL_API_KEY is configured.
-
-        Returns:
-            List of ImageModel instances for FAL
-        """
-        env = Environment.get_environment()
-        if "FAL_API_KEY" not in env:
-            return []
-
-        return [
-            # FLUX Models
-            ImageModel(
-                id="fal-ai/flux/dev", name="FLUX.1 Dev", provider=Provider.FalAI
-            ),
-            ImageModel(
-                id="fal-ai/flux/schnell",
-                name="FLUX.1 Schnell",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-pro/v1.1",
-                name="FLUX.1 Pro v1.1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-pro/v1.1-ultra",
-                name="FLUX.1 Pro Ultra",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-pro/new",
-                name="FLUX.1 Pro (New)",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-lora",
-                name="FLUX.1 Dev with LoRA",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-subject",
-                name="FLUX.1 Subject",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/flux-general",
-                name="FLUX.1 General",
-                provider=Provider.FalAI,
-            ),
-            # Ideogram Models
-            ImageModel(
-                id="fal-ai/ideogram/v2",
-                name="Ideogram v2",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/ideogram/v2/turbo",
-                name="Ideogram v2 Turbo",
-                provider=Provider.FalAI,
-            ),
-            # Recraft Models
-            ImageModel(
-                id="fal-ai/recraft-v3",
-                name="Recraft v3",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/recraft-20b",
-                name="Recraft 20B",
-                provider=Provider.FalAI,
-            ),
-            # Stable Diffusion Models
-            ImageModel(
-                id="fal-ai/stable-diffusion-v3-medium",
-                name="Stable Diffusion v3 Medium",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/stable-diffusion-v35-large",
-                name="Stable Diffusion v3.5 Large",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-sdxl",
-                name="Fast SDXL",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/stable-cascade",
-                name="Stable Cascade",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-lightning-sdxl",
-                name="Fast Lightning SDXL",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/hyper-sdxl",
-                name="Hyper SDXL",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-turbo-diffusion",
-                name="Fast Turbo Diffusion",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fast-lcm-diffusion",
-                name="Fast LCM Diffusion",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/lcm",
-                name="LCM Diffusion",
-                provider=Provider.FalAI,
-            ),
-            # Bria Models (Licensed Data)
-            ImageModel(
-                id="fal-ai/bria/text-to-image/base",
-                name="Bria v1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/bria/text-to-image/fast",
-                name="Bria v1 Fast",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/bria/text-to-image/hd",
-                name="Bria v1 HD",
-                provider=Provider.FalAI,
-            ),
-            # Other Models
-            ImageModel(
-                id="fal-ai/aura-flow",
-                name="AuraFlow v0.3",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/switti/1024",
-                name="Switti",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/sana",
-                name="Sana v1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/omnigen-v1",
-                name="OmniGen v1",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/luma-photon",
-                name="Luma Photon",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/luma-photon/flash",
-                name="Luma Photon Flash",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/playground-v25",
-                name="Playground v2.5",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/fooocus",
-                name="Fooocus",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/illusion-diffusion",
-                name="Illusion Diffusion",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/imagen4/preview",
-                name="Imagen 4 Preview",
-                provider=Provider.FalAI,
-            ),
-            ImageModel(
-                id="fal-ai/lora",
-                name="LoRA Text-to-Image",
-                provider=Provider.FalAI,
-            ),
-        ]
 
     async def text_to_speech(
         self,
@@ -555,3 +618,290 @@ class FalProvider(BaseProvider):
         except Exception as e:
             error_msg = self._format_validation_error(str(e))
             raise RuntimeError(f"FAL text-to-speech generation failed: {error_msg}")
+
+    async def automatic_speech_recognition(
+        self,
+        audio: bytes,
+        model: str,
+        language: str | None = None,
+        prompt: str | None = None,
+        temperature: float = 0.0,
+        timeout_s: int | None = None,
+        context: Any = None,
+        **kwargs: Any,
+    ) -> str:
+        """Transcribe audio to text using a FAL ASR model.
+
+        Args:
+            audio: Input audio as bytes.
+            model: FAL model identifier (endpoint ID).
+            language: Optional language code.
+            prompt: Optional guiding prompt.
+            temperature: Sampling temperature.
+            timeout_s: Optional timeout in seconds.
+            context: Optional processing context.
+
+        Returns:
+            Transcribed text.
+        """
+        client = self._get_client()
+
+        # Upload audio so FAL can access it
+        audio_url = await client.upload(audio, "audio/mp3")
+
+        arguments: dict[str, Any] = {"audio_url": audio_url}
+        if language:
+            arguments["language"] = language
+        if prompt:
+            arguments["prompt"] = prompt
+        if temperature != 0.0:
+            arguments["temperature"] = temperature
+
+        try:
+            handler = await client.submit(model, arguments=arguments)
+            result = await handler.get()
+
+            # Different ASR models return text in different fields
+            if "text" in result:
+                return result["text"]
+            if "transcription" in result:
+                return result["transcription"]
+            # Fallback: return the whole result as string
+            return str(result)
+
+        except Exception as e:
+            error_msg = self._format_validation_error(str(e))
+            raise RuntimeError(f"FAL ASR failed: {error_msg}")
+
+    async def text_to_video(
+        self,
+        params: TextToVideoParams,
+        timeout_s: int | None = None,
+        context: Any = None,
+        node_id: str | None = None,
+    ) -> VideoBytes:
+        """Generate a video from a text prompt using a FAL model.
+
+        Args:
+            params: Text-to-video generation parameters.
+            timeout_s: Optional timeout in seconds.
+            context: Optional processing context.
+            node_id: Optional node ID for tracking.
+
+        Returns:
+            Raw video bytes.
+        """
+        client = self._get_client()
+
+        arguments: dict[str, Any] = {"prompt": params.prompt}
+        if params.negative_prompt:
+            arguments["negative_prompt"] = params.negative_prompt
+        if params.aspect_ratio:
+            arguments["aspect_ratio"] = params.aspect_ratio
+        if params.resolution:
+            arguments["resolution"] = params.resolution
+        if params.guidance_scale is not None:
+            arguments["guidance_scale"] = params.guidance_scale
+        if params.num_inference_steps is not None:
+            arguments["num_inference_steps"] = params.num_inference_steps
+        if params.seed is not None and params.seed != -1:
+            arguments["seed"] = params.seed
+
+        try:
+            handler = await client.submit(params.model.id, arguments=arguments)
+            result = await handler.get()
+
+            # Extract video URL
+            if "video" in result:
+                video_url = result["video"]["url"]
+            elif "videos" in result and len(result["videos"]) > 0:
+                video_url = result["videos"][0]["url"]
+            else:
+                raise RuntimeError(f"Unexpected FAL response format: {result}")
+
+            async with httpx.AsyncClient() as http_client:
+                response = await http_client.get(video_url)
+                response.raise_for_status()
+                return response.content
+
+        except Exception as e:
+            error_msg = self._format_validation_error(str(e))
+            raise RuntimeError(f"FAL text-to-video generation failed: {error_msg}")
+
+    async def image_to_video(
+        self,
+        image: bytes,
+        params: ImageToVideoParams,
+        timeout_s: int | None = None,
+        context: Any = None,
+        node_id: str | None = None,
+        **kwargs: Any,
+    ) -> VideoBytes:
+        """Generate a video from an input image using a FAL model.
+
+        Args:
+            image: Input image as bytes.
+            params: Image-to-video generation parameters.
+            timeout_s: Optional timeout in seconds.
+            context: Optional processing context.
+            node_id: Optional node ID for tracking.
+
+        Returns:
+            Raw video bytes.
+        """
+        import base64
+
+        client = self._get_client()
+
+        image_b64 = base64.b64encode(image).decode("utf-8")
+        image_data_uri = f"data:image/png;base64,{image_b64}"
+
+        arguments: dict[str, Any] = {"image_url": image_data_uri}
+        if params.prompt:
+            arguments["prompt"] = params.prompt
+        if params.negative_prompt:
+            arguments["negative_prompt"] = params.negative_prompt
+        if params.aspect_ratio:
+            arguments["aspect_ratio"] = params.aspect_ratio
+        if params.resolution:
+            arguments["resolution"] = params.resolution
+        if params.guidance_scale is not None:
+            arguments["guidance_scale"] = params.guidance_scale
+        if params.num_inference_steps is not None:
+            arguments["num_inference_steps"] = params.num_inference_steps
+        if params.seed is not None and params.seed != -1:
+            arguments["seed"] = params.seed
+
+        try:
+            handler = await client.submit(params.model.id, arguments=arguments)
+            result = await handler.get()
+
+            if "video" in result:
+                video_url = result["video"]["url"]
+            elif "videos" in result and len(result["videos"]) > 0:
+                video_url = result["videos"][0]["url"]
+            else:
+                raise RuntimeError(f"Unexpected FAL response format: {result}")
+
+            async with httpx.AsyncClient() as http_client:
+                response = await http_client.get(video_url)
+                response.raise_for_status()
+                return response.content
+
+        except Exception as e:
+            error_msg = self._format_validation_error(str(e))
+            raise RuntimeError(f"FAL image-to-video generation failed: {error_msg}")
+
+    async def text_to_3d(
+        self,
+        params: TextTo3DParams,
+        timeout_s: int | None = None,
+        context: Any = None,
+        node_id: str | None = None,
+    ) -> Model3DBytes:
+        """Generate a 3D model from a text prompt using a FAL model.
+
+        Args:
+            params: Text-to-3D generation parameters.
+            timeout_s: Optional timeout in seconds.
+            context: Optional processing context.
+            node_id: Optional node ID for tracking.
+
+        Returns:
+            Raw 3D model bytes (GLB, OBJ, etc.).
+        """
+        client = self._get_client()
+
+        arguments: dict[str, Any] = {"prompt": params.prompt}
+        if params.negative_prompt:
+            arguments["negative_prompt"] = params.negative_prompt
+        if params.seed is not None and params.seed != -1:
+            arguments["seed"] = params.seed
+
+        try:
+            handler = await client.submit(params.model.id, arguments=arguments)
+            result = await handler.get()
+
+            # Try common 3D output field names
+            model_url = None
+            for key in ("glb", "model", "output", "model_mesh"):
+                if key in result:
+                    val = result[key]
+                    if isinstance(val, dict) and "url" in val:
+                        model_url = val["url"]
+                        break
+                    elif isinstance(val, str):
+                        model_url = val
+                        break
+
+            if model_url is None:
+                raise RuntimeError(f"Unexpected FAL response format: {result}")
+
+            async with httpx.AsyncClient() as http_client:
+                response = await http_client.get(model_url)
+                response.raise_for_status()
+                return response.content
+
+        except Exception as e:
+            error_msg = self._format_validation_error(str(e))
+            raise RuntimeError(f"FAL text-to-3D generation failed: {error_msg}")
+
+    async def image_to_3d(
+        self,
+        image: bytes,
+        params: ImageTo3DParams,
+        timeout_s: int | None = None,
+        context: Any = None,
+        node_id: str | None = None,
+    ) -> Model3DBytes:
+        """Generate a 3D model from an input image using a FAL model.
+
+        Args:
+            image: Input image as bytes.
+            params: Image-to-3D generation parameters.
+            timeout_s: Optional timeout in seconds.
+            context: Optional processing context.
+            node_id: Optional node ID for tracking.
+
+        Returns:
+            Raw 3D model bytes (GLB, OBJ, etc.).
+        """
+        import base64
+
+        client = self._get_client()
+
+        image_b64 = base64.b64encode(image).decode("utf-8")
+        image_data_uri = f"data:image/png;base64,{image_b64}"
+
+        arguments: dict[str, Any] = {"image_url": image_data_uri}
+        if params.prompt:
+            arguments["prompt"] = params.prompt
+        if params.seed is not None and params.seed != -1:
+            arguments["seed"] = params.seed
+
+        try:
+            handler = await client.submit(params.model.id, arguments=arguments)
+            result = await handler.get()
+
+            model_url = None
+            for key in ("glb", "model", "output", "model_mesh"):
+                if key in result:
+                    val = result[key]
+                    if isinstance(val, dict) and "url" in val:
+                        model_url = val["url"]
+                        break
+                    elif isinstance(val, str):
+                        model_url = val
+                        break
+
+            if model_url is None:
+                raise RuntimeError(f"Unexpected FAL response format: {result}")
+
+            async with httpx.AsyncClient() as http_client:
+                response = await http_client.get(model_url)
+                response.raise_for_status()
+                return response.content
+
+        except Exception as e:
+            error_msg = self._format_validation_error(str(e))
+            raise RuntimeError(f"FAL image-to-3D generation failed: {error_msg}")
