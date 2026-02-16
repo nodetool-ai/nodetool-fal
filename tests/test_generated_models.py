@@ -129,7 +129,12 @@ class TestGeneratedModelLists:
         for m in VIDEO_MODELS:
             assert len(m.supported_tasks) > 0
             for task in m.supported_tasks:
-                assert task in ("text-to-video", "image-to-video", "video-to-video")
+                assert task in (
+                    "text-to-video",
+                    "image-to-video",
+                    "video-to-video",
+                    "audio-to-video",
+                )
 
 
 class TestProviderGeneratedModels:
