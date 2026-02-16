@@ -6,7 +6,7 @@ supporting all model capabilities by dynamically discovering FAL nodes
 and executing models through their node implementations.
 """
 
-import ast as ast_module
+import ast
 import importlib
 import inspect
 import json
@@ -72,14 +72,14 @@ def _get_endpoint_id(cls: type) -> str | None:
     """
     try:
         source = inspect.getsource(cls)
-        tree = ast_module.parse(source)
-        for node in ast_module.walk(tree):
-            if isinstance(node, ast_module.Call):
+        tree = ast.parse(source)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
                 func = node.func
                 if hasattr(func, "attr") and func.attr == "submit_request":
                     for kw in node.keywords:
                         if kw.arg == "application" and isinstance(
-                            kw.value, ast_module.Constant
+                            kw.value, ast.Constant
                         ):
                             return kw.value.value
     except Exception:
@@ -246,7 +246,7 @@ class FalProvider(BaseProvider):
                         errors = json.loads(error_list_str)
                     except json.JSONDecodeError:
                         # If JSON fails, use ast.literal_eval for Python dict format (single quotes)
-                        errors = ast_module.literal_eval(error_list_str)
+                        errors = ast.literal_eval(error_list_str)
 
                     if isinstance(errors, list) and errors:
                         formatted_errors = []
@@ -373,23 +373,32 @@ class FalProvider(BaseProvider):
     # Capability methods – execute via FAL nodes
     # ------------------------------------------------------------------
 
-    async def _execute_via_node(
+    async def execute_via_node(
         self,
         model_id: str,
         context: ProcessingContext,
         category: str | None = None,
         **field_overrides: Any,
     ) -> Any:
-        """Instantiate a FAL node by model/endpoint ID and execute it.
+        """Execute any discovered FAL model through its node implementation.
+
+        This is the primary entry-point for running FAL models via nodes.
+        The *model_id* is resolved to the corresponding ``FALNode`` subclass,
+        an instance is created with the given *field_overrides*, and
+        ``process()`` is called.
 
         Args:
-            model_id: FAL endpoint ID.
+            model_id: FAL endpoint ID (e.g. ``"fal-ai/flux/dev"``).
             context: Processing context with secrets.
-            category: Optional category hint for faster lookup.
+            category: Optional category hint (``"image"``, ``"video"``, etc.)
+                for faster lookup.
             **field_overrides: Field values to set on the node before processing.
 
         Returns:
             The result of the node's ``process`` method.
+
+        Raises:
+            ValueError: If no node is found for the given *model_id*.
         """
         node_cls = _find_node_class(model_id, category=category)
         if node_cls is None:
