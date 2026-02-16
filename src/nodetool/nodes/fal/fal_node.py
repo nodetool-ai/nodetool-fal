@@ -14,6 +14,7 @@ class FALNode(BaseNode):
     """
 
     _auto_save_asset: ClassVar[bool] = True
+    _required_settings: ClassVar[list[str]] = ["FAL_API_KEY"]
 
     @classmethod
     def is_visible(cls) -> bool:
