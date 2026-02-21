@@ -3974,8 +3974,8 @@ class KlingVideoO3StandardVideoToVideoReference(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation. Reference video as @Video1."
     )
-    duration: Duration | None = Field(
-        default=None, description="Video duration in seconds (3-15s for reference video)."
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s for reference video)."
     )
     video: VideoRef = Field(
         default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
@@ -4003,7 +4003,7 @@ class KlingVideoO3StandardVideoToVideoReference(FALNode):
             images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "duration": self.duration.value if self.duration else None,
+            "duration": self.duration.value,
             "video_url": self.video,
             "aspect_ratio": self.aspect_ratio.value,
             "keep_audio": self.keep_audio,
@@ -4012,8 +4012,8 @@ class KlingVideoO3StandardVideoToVideoReference(FALNode):
             "image_urls": images_data_urls,
         }
 
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Remove None, empty string, and empty list values
+        arguments = {k: v for k, v in arguments.items() if v is not None and v != "" and v != []}
 
         res = await self.submit_request(
             context=context,
@@ -4077,8 +4077,8 @@ class KlingVideoO3ProVideoToVideoReference(FALNode):
     prompt: str = Field(
         default="", description="Text prompt for video generation. Reference video as @Video1."
     )
-    duration: Duration | None = Field(
-        default=None, description="Video duration in seconds (3-15s for reference video)."
+    duration: Duration = Field(
+        default=Duration.VALUE_5, description="Video duration in seconds (3-15s for reference video)."
     )
     video: VideoRef = Field(
         default=VideoRef(), description="Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB."
@@ -4106,7 +4106,7 @@ class KlingVideoO3ProVideoToVideoReference(FALNode):
             images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
             "prompt": self.prompt,
-            "duration": self.duration.value if self.duration else None,
+            "duration": self.duration.value,
             "video_url": self.video,
             "aspect_ratio": self.aspect_ratio.value,
             "keep_audio": self.keep_audio,
@@ -4115,8 +4115,8 @@ class KlingVideoO3ProVideoToVideoReference(FALNode):
             "image_urls": images_data_urls,
         }
 
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Remove None, empty string, and empty list values
+        arguments = {k: v for k, v in arguments.items() if v is not None and v != "" and v != []}
 
         res = await self.submit_request(
             context=context,

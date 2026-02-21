@@ -1630,10 +1630,11 @@ class KlingVideoO3ProVideoToVideoReference(SingleOutputGraphNode[types.VideoRef]
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.AspectRatio
+    Duration: typing.ClassVar[type] = nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.Duration
     ShotType: typing.ClassVar[type] = nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.ShotType
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Reference video as @Video1.')
-    duration: nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.Duration | OutputHandle[nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.Duration] | None = connect_field(default=None, description='Video duration in seconds (3-15s for reference video).')
+    duration: nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.Duration | OutputHandle[nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.Duration] = connect_field(default=nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.Duration.VALUE_5, description='Video duration in seconds (3-15s for reference video).')
     video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.')
     aspect_ratio: nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.AspectRatio = Field(default=nodetool.nodes.fal.video_to_video.KlingVideoO3ProVideoToVideoReference.AspectRatio.AUTO, description='Aspect ratio.')
     keep_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to keep the original audio from the reference video.')
@@ -1709,10 +1710,11 @@ class KlingVideoO3StandardVideoToVideoReference(SingleOutputGraphNode[types.Vide
     """
 
     AspectRatio: typing.ClassVar[type] = nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.AspectRatio
+    Duration: typing.ClassVar[type] = nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.Duration
     ShotType: typing.ClassVar[type] = nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.ShotType
 
     prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt for video generation. Reference video as @Video1.')
-    duration: nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.Duration | OutputHandle[nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.Duration] | None = connect_field(default=None, description='Video duration in seconds (3-15s for reference video).')
+    duration: nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.Duration | OutputHandle[nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.Duration] = connect_field(default=nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.Duration.VALUE_5, description='Video duration in seconds (3-15s for reference video).')
     video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.')
     aspect_ratio: nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.AspectRatio = Field(default=nodetool.nodes.fal.video_to_video.KlingVideoO3StandardVideoToVideoReference.AspectRatio.AUTO, description='Aspect ratio.')
     keep_audio: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to keep the original audio from the reference video.')

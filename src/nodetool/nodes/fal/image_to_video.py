@@ -3122,8 +3122,8 @@ class KlingVideoO3StandardImageToVideo(FALNode):
             "end_image_url": f"data:image/png;base64,{end_image_base64}" if end_image_base64 else None,
         }
 
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Remove None, empty string, and empty list values
+        arguments = {k: v for k, v in arguments.items() if v is not None and v != "" and v != []}
 
         res = await self.submit_request(
             context=context,
@@ -3218,8 +3218,8 @@ class KlingVideoO3ProImageToVideo(FALNode):
             "end_image_url": f"data:image/png;base64,{end_image_base64}" if end_image_base64 else None,
         }
 
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Remove None, empty string, and empty list values
+        arguments = {k: v for k, v in arguments.items() if v is not None and v != "" and v != []}
 
         res = await self.submit_request(
             context=context,
