@@ -178,26 +178,36 @@ async def generate_module(
                 continue
             skip_imports = False
             
-            if line.startswith("class ") and "(Enum)" in line:
+            stripped_line = line.strip()
+            if stripped_line.startswith("class ") and "(Enum)" in stripped_line:
                 # Start of an enum
                 in_enum = True
-                current_enum_name = line.split("(")[0].replace("class ", "").strip()
-                current_enum_lines = [line]
+                current_enum_name = stripped_line.split("(")[0].replace("class ", "").strip()
+                # Store the line without indentation (as module-level class)
+                current_enum_lines = [stripped_line]
             elif in_enum:
-                current_enum_lines.append(line)
-                # Check if we reached the end of the enum (empty line or next class)
-                if not line.strip() or (line.startswith("class ") and "(Enum)" not in line and "(FALNode)" in line):
+                # Add line to current enum (dedented)
+                current_enum_lines.append(stripped_line if not line.strip() else stripped_line)
+                # Check if we reached the end of the enum (empty line or next class definition)
+                if not stripped_line or (stripped_line.startswith("class ") and "(Enum)" not in stripped_line):
                     if current_enum_name and current_enum_name not in enums_seen:
                         enums_seen.add(current_enum_name)
-                        enums_to_write.append("\n".join(current_enum_lines[:-1]))  # Exclude the line that broke the loop
+                        # Remove trailing empty line if present
+                        while current_enum_lines and not current_enum_lines[-1]:
+                            current_enum_lines.pop()
+                        enums_to_write.append("\n".join(current_enum_lines))
                     in_enum = False
                     current_enum_name = None
                     current_enum_lines = []
-                    # If this is the start of a class, we need to process it
-                    if line.startswith("class ") and "(FALNode)" in line:
-                        class_lines.append(line)
+                    # If this is the start of a FALNode class, add it to class_lines
+                    if stripped_line.startswith("class ") and "(FALNode)" in stripped_line:
+                        class_lines.append(stripped_line)
             else:
-                class_lines.append(line)
+                # Not in an enum, keep the line as-is (but dedented if it's a class def)
+                if stripped_line.startswith("class ") and "(FALNode)" in stripped_line:
+                    class_lines.append(stripped_line)
+                else:
+                    class_lines.append(line)
         
         node_classes.append("\n".join(class_lines))
     

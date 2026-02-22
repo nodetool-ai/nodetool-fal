@@ -18,28 +18,50 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_3d
 from nodetool.workflows.base_node import BaseNode
 
-class Hunyuan3dV3TextTo3d(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+
+class Hunyuan3dV3TextTo3d(
+    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
+):
     """
 
-        Turn simple sketches into detailed, fully-textured 3D models. Instantly convert your concept designs into formats ready for Unity, Unreal, and Blender.
-        3d, generation, text-to-3d, modeling
+    Turn simple sketches into detailed, fully-textured 3D models. Instantly convert your concept designs into formats ready for Unity, Unreal, and Blender.
+    3d, generation, text-to-3d, modeling
 
-        Use cases:
-        - 3D model generation from text
-        - Concept visualization
-        - Game asset creation
-        - Architectural prototyping
-        - Product design visualization
+    Use cases:
+    - 3D model generation from text
+    - Concept visualization
+    - Game asset creation
+    - Architectural prototyping
+    - Product design visualization
     """
 
-    PolygonType: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.PolygonType
-    GenerateType: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.GenerateType
+    PolygonType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.PolygonType
+    )
+    GenerateType: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.GenerateType
+    )
 
-    enable_pbr: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable PBR material generation')
-    polygon_type: nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.PolygonType = Field(default=nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.PolygonType.TRIANGLE, description='Polygon type. Only takes effect when GenerateType is LowPoly.')
-    face_count: int | OutputHandle[int] = connect_field(default=500000, description='Target face count. Range: 40000-1500000')
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.')
-    generate_type: nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.GenerateType = Field(default=nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.GenerateType.NORMAL, description='Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.')
+    enable_pbr: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Whether to enable PBR material generation"
+    )
+    polygon_type: nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.PolygonType = Field(
+        default=nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.PolygonType.TRIANGLE,
+        description="Polygon type. Only takes effect when GenerateType is LowPoly.",
+    )
+    face_count: int | OutputHandle[int] = connect_field(
+        default=500000, description="Target face count. Range: 40000-1500000"
+    )
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.",
+    )
+    generate_type: nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.GenerateType = (
+        Field(
+            default=nodetool.nodes.fal.text_to_3d.Hunyuan3dV3TextTo3d.GenerateType.NORMAL,
+            description="Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
+        )
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -56,27 +78,42 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_3d
 from nodetool.workflows.base_node import BaseNode
 
+
 class HunyuanMotion(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-        Generate 3D human motions via text-to-generation interface of Hunyuan Motion!
-        3d, generation, text-to-3d, modeling
+    Generate 3D human motions via text-to-generation interface of Hunyuan Motion!
+    3d, generation, text-to-3d, modeling
 
-        Use cases:
-        - 3D model generation from text
-        - Concept visualization
-        - Game asset creation
-        - Architectural prototyping
-        - Product design visualization
+    Use cases:
+    - 3D model generation from text
+    - Concept visualization
+    - Game asset creation
+    - Architectural prototyping
+    - Product design visualization
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.HunyuanMotion.OutputFormat
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.HunyuanMotion.OutputFormat
+    )
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the motion to generate.')
-    duration: float | OutputHandle[float] = connect_field(default=5, description='Motion duration in seconds (0.5-12.0).')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Classifier-free guidance scale. Higher = more faithful to prompt.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible generation.')
-    output_format: nodetool.nodes.fal.text_to_3d.HunyuanMotion.OutputFormat = Field(default=nodetool.nodes.fal.text_to_3d.HunyuanMotion.OutputFormat.FBX, description="Output format: 'fbx' for animation files, 'dict' for raw JSON.")
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Text prompt describing the motion to generate."
+    )
+    duration: float | OutputHandle[float] = connect_field(
+        default=5, description="Motion duration in seconds (0.5-12.0)."
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=5,
+        description="Classifier-free guidance scale. Higher = more faithful to prompt.",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    output_format: nodetool.nodes.fal.text_to_3d.HunyuanMotion.OutputFormat = Field(
+        default=nodetool.nodes.fal.text_to_3d.HunyuanMotion.OutputFormat.FBX,
+        description="Output format: 'fbx' for animation files, 'dict' for raw JSON.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -93,27 +130,44 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_3d
 from nodetool.workflows.base_node import BaseNode
 
-class HunyuanMotionFast(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+
+class HunyuanMotionFast(
+    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
+):
     """
 
-        Generate 3D human motions via text-to-generation interface of Hunyuan Motion!
-        3d, generation, text-to-3d, modeling, fast
+    Generate 3D human motions via text-to-generation interface of Hunyuan Motion!
+    3d, generation, text-to-3d, modeling, fast
 
-        Use cases:
-        - 3D model generation from text
-        - Concept visualization
-        - Game asset creation
-        - Architectural prototyping
-        - Product design visualization
+    Use cases:
+    - 3D model generation from text
+    - Concept visualization
+    - Game asset creation
+    - Architectural prototyping
+    - Product design visualization
     """
 
-    OutputFormat: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.HunyuanMotionFast.OutputFormat
+    OutputFormat: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.HunyuanMotionFast.OutputFormat
+    )
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Text prompt describing the motion to generate.')
-    duration: float | OutputHandle[float] = connect_field(default=5, description='Motion duration in seconds (0.5-12.0).')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=5, description='Classifier-free guidance scale. Higher = more faithful to prompt.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Random seed for reproducible generation.')
-    output_format: nodetool.nodes.fal.text_to_3d.HunyuanMotionFast.OutputFormat = Field(default=nodetool.nodes.fal.text_to_3d.HunyuanMotionFast.OutputFormat.FBX, description="Output format: 'fbx' for animation files, 'dict' for raw JSON.")
+    prompt: str | OutputHandle[str] = connect_field(
+        default="", description="Text prompt describing the motion to generate."
+    )
+    duration: float | OutputHandle[float] = connect_field(
+        default=5, description="Motion duration in seconds (0.5-12.0)."
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=5,
+        description="Classifier-free guidance scale. Higher = more faithful to prompt.",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Random seed for reproducible generation."
+    )
+    output_format: nodetool.nodes.fal.text_to_3d.HunyuanMotionFast.OutputFormat = Field(
+        default=nodetool.nodes.fal.text_to_3d.HunyuanMotionFast.OutputFormat.FBX,
+        description="Output format: 'fbx' for animation files, 'dict' for raw JSON.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -130,39 +184,94 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.text_to_3d
 from nodetool.workflows.base_node import BaseNode
 
-class MeshyV6PreviewTextTo3d(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
+
+class MeshyV6PreviewTextTo3d(
+    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
+):
     """
 
-        Meshy-6-Preview is the latest model from Meshy. It generates realistic and production ready 3D models.
-        3d, generation, text-to-3d, modeling
+    Meshy-6-Preview is the latest model from Meshy. It generates realistic and production ready 3D models.
+    3d, generation, text-to-3d, modeling
 
-        Use cases:
-        - 3D model generation from text
-        - Concept visualization
-        - Game asset creation
-        - Architectural prototyping
-        - Product design visualization
+    Use cases:
+    - 3D model generation from text
+    - Concept visualization
+    - Game asset creation
+    - Architectural prototyping
+    - Product design visualization
     """
 
-    ArtStyle: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.ArtStyle
-    Mode: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Mode
-    SymmetryMode: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.SymmetryMode
-    Topology: typing.ClassVar[type] = nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Topology
+    ArtStyle: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.ArtStyle
+    )
+    Mode: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Mode
+    )
+    SymmetryMode: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.SymmetryMode
+    )
+    Topology: typing.ClassVar[type] = (
+        nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Topology
+    )
 
-    prompt: str | OutputHandle[str] = connect_field(default='', description='Describe what kind of object the 3D model is. Maximum 600 characters.')
-    enable_pbr: bool | OutputHandle[bool] = connect_field(default=False, description='Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.')
-    target_polycount: int | OutputHandle[int] = connect_field(default=30000, description='Target number of polygons in the generated model')
-    art_style: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.ArtStyle = Field(default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.ArtStyle.REALISTIC, description='Desired art style of the object. Note: enable_pbr should be false for sculpture style.')
-    enable_safety_checker: bool | OutputHandle[bool] = connect_field(default=True, description='If set to true, input data will be checked for safety before processing.')
-    mode: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Mode = Field(default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Mode.FULL, description="Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).")
-    symmetry_mode: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.SymmetryMode = Field(default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.SymmetryMode.AUTO, description='Controls symmetry behavior during model generation.')
-    should_remesh: bool | OutputHandle[bool] = connect_field(default=True, description='Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.')
-    texture_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description="2D image to guide the texturing process (only used in 'full' mode)")
-    topology: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Topology = Field(default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Topology.TRIANGLE, description='Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.')
-    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible results. Same prompt and seed usually generate the same result.')
-    is_a_t_pose: bool | OutputHandle[bool] = connect_field(default=False, description='Whether to generate the model in an A/T pose')
-    texture_prompt: str | OutputHandle[str] = connect_field(default='', description="Additional text prompt to guide the texturing process (only used in 'full' mode)")
+    prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Describe what kind of object the 3D model is. Maximum 600 characters.",
+    )
+    enable_pbr: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
+    )
+    target_polycount: int | OutputHandle[int] = connect_field(
+        default=30000, description="Target number of polygons in the generated model"
+    )
+    art_style: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.ArtStyle = Field(
+        default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.ArtStyle.REALISTIC,
+        description="Desired art style of the object. Note: enable_pbr should be false for sculpture style.",
+    )
+    enable_safety_checker: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="If set to true, input data will be checked for safety before processing.",
+    )
+    mode: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Mode = Field(
+        default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Mode.FULL,
+        description="Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).",
+    )
+    symmetry_mode: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.SymmetryMode = (
+        Field(
+            default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.SymmetryMode.AUTO,
+            description="Controls symmetry behavior during model generation.",
+        )
+    )
+    should_remesh: bool | OutputHandle[bool] = connect_field(
+        default=True,
+        description="Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
+    )
+    texture_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="2D image to guide the texturing process (only used in 'full' mode)",
+    )
+    topology: nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Topology = Field(
+        default=nodetool.nodes.fal.text_to_3d.MeshyV6PreviewTextTo3d.Topology.TRIANGLE,
+        description="Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+    )
+    enable_prompt_expansion: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1,
+        description="Seed for reproducible results. Same prompt and seed usually generate the same result.",
+    )
+    is_a_t_pose: bool | OutputHandle[bool] = connect_field(
+        default=False, description="Whether to generate the model in an A/T pose"
+    )
+    texture_prompt: str | OutputHandle[str] = connect_field(
+        default="",
+        description="Additional text prompt to guide the texturing process (only used in 'full' mode)",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -171,5 +280,3 @@ class MeshyV6PreviewTextTo3d(SingleOutputGraphNode[dict[str, Any]], GraphNode[di
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
-
-

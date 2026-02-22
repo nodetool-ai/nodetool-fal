@@ -126,6 +126,10 @@ class FALNode(BaseNode):
         # Convert AssetRef objects to FAL storage URLs
         converted_arguments = await self._convert_assets_recursive(client, arguments, context)
         
+        # Log the outgoing request parameters
+        logger.info(f"FAL Request: {application}")
+        logger.info(f"FAL Arguments: {converted_arguments}")
+        
         handler = await client.submit(
             application,
             arguments=converted_arguments,

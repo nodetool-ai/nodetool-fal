@@ -18,23 +18,43 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
+
 class FaceSwapVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-        Swap faces in videos using a source face image. Replaces faces in the target video with the source face while maintaining natural motion and expressions.
-        face-swap, video-editing, face-replacement, deep-fake, video-manipulation
+    Swap faces in videos using a source face image. Replaces faces in the target video with the source face while maintaining natural motion and expressions.
+    face-swap, video-editing, face-replacement, deep-fake, video-manipulation
 
-        Use cases:
-        - Create face-swapped video content
-        - Generate creative video edits
-        - Produce entertainment content
-        - Test different faces in video footage
-        - Create video memes and parodies
+    Use cases:
+    - Create face-swapped video content
+    - Generate creative video edits
+    - Produce entertainment content
+    - Test different faces in video footage
+    - Create video memes and parodies
     """
 
-    source_face: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='Source face image to swap into video')
-    target_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='Target video to swap face in (max 25 minutes)')
-    enable_occlusion_prevention: bool | OutputHandle[bool] = connect_field(default=False, description='Enable occlusion prevention for faces covered by hands/objects (costs 2x more)')
+    source_face: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Source face image to swap into video",
+    )
+    target_video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+        default=types.VideoRef(
+            type="video",
+            uri="",
+            asset_id=None,
+            data=None,
+            metadata=None,
+            duration=None,
+            format=None,
+        ),
+        description="Target video to swap face in (max 25 minutes)",
+    )
+    enable_occlusion_prevention: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="Enable occlusion prevention for faces covered by hands/objects (costs 2x more)",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -51,22 +71,30 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
+
 class LiveAvatar(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-        Live Avatar creates animated avatars from images and audio.
-        video, avatar, animation, audio-driven
+    Live Avatar creates animated avatars from images and audio.
+    video, avatar, animation, audio-driven
 
-        Use cases:
-        - Create talking avatars
-        - Generate animated presentations
-        - Produce video content from photos
-        - Create virtual presenters
-        - Generate video messages
+    Use cases:
+    - Create talking avatars
+    - Generate animated presentations
+    - Produce video content from photos
+    - Create virtual presenters
+    - Generate video messages
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The avatar image')
-    audio: str | OutputHandle[str] = connect_field(default='', description='URL to the driving audio')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The avatar image",
+    )
+    audio: str | OutputHandle[str] = connect_field(
+        default="", description="URL to the driving audio"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -83,23 +111,36 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
+
 class RIFE(SingleOutputGraphNode[list], GraphNode[list]):
     """
 
-        RIFE (Real-time Intermediate Flow Estimation) interpolates frames for smooth video.
-        video, interpolation, frame-rate, smoothing
+    RIFE (Real-time Intermediate Flow Estimation) interpolates frames for smooth video.
+    video, interpolation, frame-rate, smoothing
 
-        Use cases:
-        - Increase video frame rate
-        - Create smooth slow motion
-        - Improve video fluidity
-        - Generate intermediate frames
-        - Enhance animation smoothness
+    Use cases:
+    - Increase video frame rate
+    - Create smooth slow motion
+    - Improve video fluidity
+    - Generate intermediate frames
+    - Enhance animation smoothness
     """
 
-    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The start frame')
-    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The end frame')
-    num_frames: int | OutputHandle[int] = connect_field(default=2, description='Number of intermediate frames')
+    start_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The start frame",
+    )
+    end_image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The end frame",
+    )
+    num_frames: int | OutputHandle[int] = connect_field(
+        default=2, description="Number of intermediate frames"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -116,22 +157,36 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
+
 class RIFEVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-        RIFE Video interpolates video frames for increased frame rate.
-        video, interpolation, frame-rate, enhancement
+    RIFE Video interpolates video frames for increased frame rate.
+    video, interpolation, frame-rate, enhancement
 
-        Use cases:
-        - Double video frame rate
-        - Create slow motion videos
-        - Improve video smoothness
-        - Enhance low-fps footage
-        - Generate high-fps content
+    Use cases:
+    - Double video frame rate
+    - Create slow motion videos
+    - Improve video smoothness
+    - Enhance low-fps footage
+    - Generate high-fps content
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The video to interpolate')
-    multiplier: int | OutputHandle[int] = connect_field(default=2, description='Frame rate multiplier')
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+        default=types.VideoRef(
+            type="video",
+            uri="",
+            asset_id=None,
+            data=None,
+            metadata=None,
+            duration=None,
+            format=None,
+        ),
+        description="The video to interpolate",
+    )
+    multiplier: int | OutputHandle[int] = connect_field(
+        default=2, description="Frame rate multiplier"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -148,22 +203,36 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
+
 class SyncLipsyncV2(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-        Sync Lipsync V2 synchronizes lip movements to audio.
-        video, lipsync, audio, synchronization
+    Sync Lipsync V2 synchronizes lip movements to audio.
+    video, lipsync, audio, synchronization
 
-        Use cases:
-        - Sync lips to new audio
-        - Create talking head videos
-        - Dub videos in other languages
-        - Generate speaking animations
-        - Create video voice-overs
+    Use cases:
+    - Sync lips to new audio
+    - Create talking head videos
+    - Dub videos in other languages
+    - Generate speaking animations
+    - Create video voice-overs
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The video with the face')
-    audio: str | OutputHandle[str] = connect_field(default='', description='URL to the audio file for lipsync')
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+        default=types.VideoRef(
+            type="video",
+            uri="",
+            asset_id=None,
+            data=None,
+            metadata=None,
+            duration=None,
+            format=None,
+        ),
+        description="The video with the face",
+    )
+    audio: str | OutputHandle[str] = connect_field(
+        default="", description="URL to the audio file for lipsync"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -180,22 +249,38 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
-class TopazVideoUpscale(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
+
+class TopazVideoUpscale(
+    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
+):
     """
 
-        Topaz Video Upscale enhances video quality using advanced AI.
-        video, upscaling, enhancement, topaz, professional
+    Topaz Video Upscale enhances video quality using advanced AI.
+    video, upscaling, enhancement, topaz, professional
 
-        Use cases:
-        - Professional video upscaling
-        - Restore archival footage
-        - Enhance video for broadcast
-        - Improve video quality
-        - Prepare videos for 4K display
+    Use cases:
+    - Professional video upscaling
+    - Restore archival footage
+    - Enhance video for broadcast
+    - Improve video quality
+    - Prepare videos for 4K display
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The video to upscale')
-    scale: int | OutputHandle[int] = connect_field(default=2, description='Upscaling factor')
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+        default=types.VideoRef(
+            type="video",
+            uri="",
+            asset_id=None,
+            data=None,
+            metadata=None,
+            duration=None,
+            format=None,
+        ),
+        description="The video to upscale",
+    )
+    scale: int | OutputHandle[int] = connect_field(
+        default=2, description="Upscaling factor"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -212,22 +297,36 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.video_processing
 from nodetool.workflows.base_node import BaseNode
 
+
 class VideoUpscaler(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-        Video Upscaler enhances video resolution using AI.
-        video, upscaling, enhancement, super-resolution
+    Video Upscaler enhances video resolution using AI.
+    video, upscaling, enhancement, super-resolution
 
-        Use cases:
-        - Upscale low-resolution videos
-        - Enhance video quality
-        - Improve video for larger displays
-        - Restore old videos
-        - Prepare videos for high-res output
+    Use cases:
+    - Upscale low-resolution videos
+    - Enhance video quality
+    - Improve video for larger displays
+    - Restore old videos
+    - Prepare videos for high-res output
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The video to upscale')
-    scale: float | OutputHandle[float] = connect_field(default=2.0, description='Upscaling factor (1-8)')
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
+        default=types.VideoRef(
+            type="video",
+            uri="",
+            asset_id=None,
+            data=None,
+            metadata=None,
+            duration=None,
+            format=None,
+        ),
+        description="The video to upscale",
+    )
+    scale: float | OutputHandle[float] = connect_field(
+        default=2.0, description="Upscaling factor (1-8)"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -236,5 +335,3 @@ class VideoUpscaler(SingleOutputGraphNode[types.VideoRef], GraphNode[types.Video
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
-
-

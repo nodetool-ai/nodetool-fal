@@ -6,6 +6,55 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
+class Ltx219BDistilledAudioToVideoLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BDistilledAudioToVideoLoraCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BDistilledAudioToVideoLoraVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BDistilledAudioToVideoLoraVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BDistilledAudioToVideoLoraVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+
 class Ltx219BDistilledAudioToVideoLora(FALNode):
     """
     LTX-2 19B Distilled
@@ -19,63 +68,14 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     - Rapid prototyping
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
     )
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The acceleration level to use."
+    acceleration: Ltx219BDistilledAudioToVideoLoraAcceleration = Field(
+        default=Ltx219BDistilledAudioToVideoLoraAcceleration.NONE, description="The acceleration level to use."
     )
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -86,8 +86,8 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BDistilledAudioToVideoLoraCameraLora = Field(
+        default=Ltx219BDistilledAudioToVideoLoraCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="landscape_4_3", description="The size of the generated video. Use 'auto' to match the input image dimensions if provided."
@@ -107,11 +107,11 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     image_strength: float = Field(
         default=1, description="The strength of the image to use for the video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BDistilledAudioToVideoLoraVideoWriteMode = Field(
+        default=Ltx219BDistilledAudioToVideoLoraVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BDistilledAudioToVideoLoraVideoOutputType = Field(
+        default=Ltx219BDistilledAudioToVideoLoraVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -122,8 +122,8 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BDistilledAudioToVideoLoraVideoQuality = Field(
+        default=Ltx219BDistilledAudioToVideoLoraVideoQuality.HIGH, description="The quality of the generated video."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -145,8 +145,22 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_base64 = await context.image_to_base64(self.end_image)
-        image_base64 = await context.image_to_base64(self.image)
+        client = await self.get_client(context)
+        end_image_base64 = (
+            await context.image_to_base64(self.end_image)
+            if not self.end_image.is_empty()
+            else None
+        )
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         arguments = {
             "match_audio_length": self.match_audio_length,
             "use_multiscale": self.use_multiscale,
@@ -158,25 +172,29 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
             "video_size": self.video_size,
             "enable_safety_checker": self.enable_safety_checker,
             "camera_lora_scale": self.camera_lora_scale,
-            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}" if end_image_base64 else None,
             "negative_prompt": self.negative_prompt,
             "image_strength": self.image_strength,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
             "num_frames": self.num_frames,
             "preprocess_audio": self.preprocess_audio,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "audio_strength": self.audio_strength,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -188,7 +206,56 @@ class Ltx219BDistilledAudioToVideoLora(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["match_audio_length", "use_multiscale", "acceleration", "prompt", "fps"]
+        return ["image", "audio", "end_image", "prompt", "negative_prompt"]
+
+class Ltx219BAudioToVideoLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BAudioToVideoLoraCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BAudioToVideoLoraVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BAudioToVideoLoraVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BAudioToVideoLoraVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class Ltx219BAudioToVideoLora(FALNode):
     """
@@ -203,63 +270,14 @@ class Ltx219BAudioToVideoLora(FALNode):
     - Rapid prototyping
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
     )
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: Ltx219BAudioToVideoLoraAcceleration = Field(
+        default=Ltx219BAudioToVideoLoraAcceleration.REGULAR, description="The acceleration level to use."
     )
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -273,8 +291,8 @@ class Ltx219BAudioToVideoLora(FALNode):
     loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BAudioToVideoLoraCameraLora = Field(
+        default=Ltx219BAudioToVideoLoraCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="landscape_4_3", description="The size of the generated video. Use 'auto' to match the input image dimensions if provided."
@@ -294,11 +312,11 @@ class Ltx219BAudioToVideoLora(FALNode):
     image_strength: float = Field(
         default=1, description="The strength of the image to use for the video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BAudioToVideoLoraVideoWriteMode = Field(
+        default=Ltx219BAudioToVideoLoraVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BAudioToVideoLoraVideoOutputType = Field(
+        default=Ltx219BAudioToVideoLoraVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -312,8 +330,8 @@ class Ltx219BAudioToVideoLora(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BAudioToVideoLoraVideoQuality = Field(
+        default=Ltx219BAudioToVideoLoraVideoQuality.HIGH, description="The quality of the generated video."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -335,8 +353,22 @@ class Ltx219BAudioToVideoLora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_base64 = await context.image_to_base64(self.end_image)
-        image_base64 = await context.image_to_base64(self.image)
+        client = await self.get_client(context)
+        end_image_base64 = (
+            await context.image_to_base64(self.end_image)
+            if not self.end_image.is_empty()
+            else None
+        )
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         arguments = {
             "match_audio_length": self.match_audio_length,
             "prompt": self.prompt,
@@ -349,7 +381,7 @@ class Ltx219BAudioToVideoLora(FALNode):
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
             "camera_lora_scale": self.camera_lora_scale,
-            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}" if end_image_base64 else None,
             "negative_prompt": self.negative_prompt,
             "image_strength": self.image_strength,
             "video_write_mode": self.video_write_mode.value,
@@ -357,18 +389,22 @@ class Ltx219BAudioToVideoLora(FALNode):
             "num_frames": self.num_frames,
             "enable_safety_checker": self.enable_safety_checker,
             "preprocess_audio": self.preprocess_audio,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -380,7 +416,56 @@ class Ltx219BAudioToVideoLora(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["match_audio_length", "prompt", "acceleration", "use_multiscale", "audio_strength"]
+        return ["image", "audio", "end_image", "prompt", "negative_prompt"]
+
+class Ltx219BDistilledAudioToVideoAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BDistilledAudioToVideoCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BDistilledAudioToVideoVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BDistilledAudioToVideoVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BDistilledAudioToVideoVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class Ltx219BDistilledAudioToVideo(FALNode):
     """
@@ -395,63 +480,14 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     - Rapid prototyping
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
     )
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The acceleration level to use."
+    acceleration: Ltx219BDistilledAudioToVideoAcceleration = Field(
+        default=Ltx219BDistilledAudioToVideoAcceleration.NONE, description="The acceleration level to use."
     )
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
@@ -459,8 +495,8 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BDistilledAudioToVideoCameraLora = Field(
+        default=Ltx219BDistilledAudioToVideoCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="landscape_4_3", description="The size of the generated video. Use 'auto' to match the input image dimensions if provided."
@@ -480,11 +516,11 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     image_strength: float = Field(
         default=1, description="The strength of the image to use for the video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BDistilledAudioToVideoVideoWriteMode = Field(
+        default=Ltx219BDistilledAudioToVideoVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BDistilledAudioToVideoVideoOutputType = Field(
+        default=Ltx219BDistilledAudioToVideoVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -495,8 +531,8 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BDistilledAudioToVideoVideoQuality = Field(
+        default=Ltx219BDistilledAudioToVideoVideoQuality.HIGH, description="The quality of the generated video."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -518,8 +554,22 @@ class Ltx219BDistilledAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_base64 = await context.image_to_base64(self.end_image)
-        image_base64 = await context.image_to_base64(self.image)
+        client = await self.get_client(context)
+        end_image_base64 = (
+            await context.image_to_base64(self.end_image)
+            if not self.end_image.is_empty()
+            else None
+        )
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         arguments = {
             "match_audio_length": self.match_audio_length,
             "use_multiscale": self.use_multiscale,
@@ -530,25 +580,29 @@ class Ltx219BDistilledAudioToVideo(FALNode):
             "video_size": self.video_size,
             "enable_safety_checker": self.enable_safety_checker,
             "camera_lora_scale": self.camera_lora_scale,
-            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}" if end_image_base64 else None,
             "negative_prompt": self.negative_prompt,
             "image_strength": self.image_strength,
             "video_write_mode": self.video_write_mode.value,
             "video_output_type": self.video_output_type.value,
             "num_frames": self.num_frames,
             "preprocess_audio": self.preprocess_audio,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "audio_strength": self.audio_strength,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -560,7 +614,56 @@ class Ltx219BDistilledAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["match_audio_length", "use_multiscale", "acceleration", "prompt", "fps"]
+        return ["image", "audio", "end_image", "prompt", "negative_prompt"]
+
+class Ltx219BAudioToVideoAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BAudioToVideoCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BAudioToVideoVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BAudioToVideoVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BAudioToVideoVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class Ltx219BAudioToVideo(FALNode):
     """
@@ -575,63 +678,14 @@ class Ltx219BAudioToVideo(FALNode):
     - Rapid prototyping
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     match_audio_length: bool = Field(
         default=True, description="When enabled, the number of frames will be calculated based on the audio duration and FPS. When disabled, use the specified num_frames."
     )
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: Ltx219BAudioToVideoAcceleration = Field(
+        default=Ltx219BAudioToVideoAcceleration.REGULAR, description="The acceleration level to use."
     )
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
@@ -642,8 +696,8 @@ class Ltx219BAudioToVideo(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BAudioToVideoCameraLora = Field(
+        default=Ltx219BAudioToVideoCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="landscape_4_3", description="The size of the generated video. Use 'auto' to match the input image dimensions if provided."
@@ -663,11 +717,11 @@ class Ltx219BAudioToVideo(FALNode):
     image_strength: float = Field(
         default=1, description="The strength of the image to use for the video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BAudioToVideoVideoWriteMode = Field(
+        default=Ltx219BAudioToVideoVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BAudioToVideoVideoOutputType = Field(
+        default=Ltx219BAudioToVideoVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -681,8 +735,8 @@ class Ltx219BAudioToVideo(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="Optional URL of an image to use as the first frame of the video."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BAudioToVideoVideoQuality = Field(
+        default=Ltx219BAudioToVideoVideoQuality.HIGH, description="The quality of the generated video."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -704,8 +758,22 @@ class Ltx219BAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        end_image_base64 = await context.image_to_base64(self.end_image)
-        image_base64 = await context.image_to_base64(self.image)
+        client = await self.get_client(context)
+        end_image_base64 = (
+            await context.image_to_base64(self.end_image)
+            if not self.end_image.is_empty()
+            else None
+        )
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         arguments = {
             "match_audio_length": self.match_audio_length,
             "prompt": self.prompt,
@@ -717,7 +785,7 @@ class Ltx219BAudioToVideo(FALNode):
             "video_size": self.video_size,
             "guidance_scale": self.guidance_scale,
             "camera_lora_scale": self.camera_lora_scale,
-            "end_image_url": f"data:image/png;base64,{end_image_base64}",
+            "end_image_url": f"data:image/png;base64,{end_image_base64}" if end_image_base64 else None,
             "negative_prompt": self.negative_prompt,
             "image_strength": self.image_strength,
             "video_write_mode": self.video_write_mode.value,
@@ -725,18 +793,22 @@ class Ltx219BAudioToVideo(FALNode):
             "num_frames": self.num_frames,
             "enable_safety_checker": self.enable_safety_checker,
             "preprocess_audio": self.preprocess_audio,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "video_quality": self.video_quality.value,
             "sync_mode": self.sync_mode,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "end_image_strength": self.end_image_strength,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -748,7 +820,7 @@ class Ltx219BAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["match_audio_length", "prompt", "acceleration", "use_multiscale", "audio_strength"]
+        return ["image", "audio", "end_image", "prompt", "negative_prompt"]
 
 class ElevenlabsDubbing(FALNode):
     """
@@ -772,28 +844,43 @@ class ElevenlabsDubbing(FALNode):
     highest_resolution: bool = Field(
         default=True, description="Whether to use the highest resolution for dubbing."
     )
-    num_speakers: str = Field(
-        default="", description="Number of speakers in the audio. If not provided, will be auto-detected."
-    )
     target_lang: str = Field(
         default="", description="Target language code for dubbing (ISO 639-1)"
     )
     source_lang: str = Field(
         default="", description="Source language code. If not provided, will be auto-detected."
     )
+    num_speakers: str = Field(
+        default="", description="Number of speakers in the audio. If not provided, will be auto-detected."
+    )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        video_url = (
+            await self._upload_asset_to_fal(client, self.video, context)
+            if not self.video.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         arguments = {
-            "video_url": self.video,
-            "audio_url": self.audio,
+            "video_url": video_url,
+            "audio_url": audio_url,
             "highest_resolution": self.highest_resolution,
-            "num_speakers": self.num_speakers,
             "target_lang": self.target_lang,
             "source_lang": self.source_lang,
+            "num_speakers": self.num_speakers,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -805,7 +892,22 @@ class ElevenlabsDubbing(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["video", "audio", "highest_resolution", "num_speakers", "target_lang"]
+        return ["video", "audio", "highest_resolution", "target_lang", "source_lang"]
+
+class LongcatMultiAvatarImageAudioToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class LongcatMultiAvatarImageAudioToVideoAudioType(str, Enum):
+    """
+    How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2.
+    """
+    PARA = "para"
+    ADD = "add"
+
 
 class LongcatMultiAvatarImageAudioToVideo(FALNode):
     """
@@ -819,21 +921,6 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
     - Professional applications
     - Rapid prototyping
     """
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class AudioType(Enum):
-        """
-        How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2.
-        """
-        PARA = "para"
-        ADD = "add"
-
 
     prompt: str = Field(
         default="Two people are having a conversation with natural expressions and movements.", description="The prompt to guide the video generation."
@@ -856,11 +943,11 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
     text_guidance_scale: float = Field(
         default=4, description="The text guidance scale for classifier-free guidance."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second."
+    resolution: LongcatMultiAvatarImageAudioToVideoResolution = Field(
+        default=LongcatMultiAvatarImageAudioToVideoResolution.VALUE_480P, description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second."
     )
-    audio_type: AudioType = Field(
-        default=AudioType.PARA, description="How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2."
+    audio_type: LongcatMultiAvatarImageAudioToVideoAudioType = Field(
+        default=LongcatMultiAvatarImageAudioToVideoAudioType.PARA, description="How to combine the two audio tracks. 'para' (parallel) plays both simultaneously, 'add' (sequential) plays person 1 first then person 2."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image containing two speakers."
@@ -882,7 +969,11 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "num_inference_steps": self.num_inference_steps,
@@ -893,7 +984,7 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
             "text_guidance_scale": self.text_guidance_scale,
             "resolution": self.resolution.value,
             "audio_type": self.audio_type.value,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "audio_url_person1": self.audio_url_person1,
             "seed": self.seed,
             "audio_guidance_scale": self.audio_guidance_scale,
@@ -903,6 +994,10 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -914,7 +1009,15 @@ class LongcatMultiAvatarImageAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "num_inference_steps", "audio_url_person2", "enable_safety_checker", "bbox_person1"]
+        return ["image", "prompt", "negative_prompt", "resolution", "enable_safety_checker"]
+
+class LongcatSingleAvatarImageAudioToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
 
 class LongcatSingleAvatarImageAudioToVideo(FALNode):
     """
@@ -929,19 +1032,11 @@ class LongcatSingleAvatarImageAudioToVideo(FALNode):
     - Podcast video generation
     """
 
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-
     prompt: str = Field(
         default="", description="The prompt to guide the video generation."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second."
+    resolution: LongcatSingleAvatarImageAudioToVideoResolution = Field(
+        default=LongcatSingleAvatarImageAudioToVideoResolution.VALUE_480P, description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second."
     )
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable safety checker."
@@ -972,14 +1067,18 @@ class LongcatSingleAvatarImageAudioToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
             "audio_guidance_scale": self.audio_guidance_scale,
             "num_segments": self.num_segments,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "audio_url": self.audio,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
@@ -989,6 +1088,10 @@ class LongcatSingleAvatarImageAudioToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1000,7 +1103,15 @@ class LongcatSingleAvatarImageAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "resolution", "enable_safety_checker", "audio_guidance_scale", "num_segments"]
+        return ["image", "audio", "prompt", "negative_prompt", "resolution"]
+
+class LongcatSingleAvatarAudioToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
 
 class LongcatSingleAvatarAudioToVideo(FALNode):
     """
@@ -1015,19 +1126,11 @@ class LongcatSingleAvatarAudioToVideo(FALNode):
     - Podcast video generation
     """
 
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-
     prompt: str = Field(
         default="A person is talking naturally with natural expressions and movements.", description="The prompt to guide the video generation."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second."
+    resolution: LongcatSingleAvatarAudioToVideoResolution = Field(
+        default=LongcatSingleAvatarAudioToVideoResolution.VALUE_480P, description="Resolution of the generated video (480p or 720p). Billing is per video-second (16 frames): 480p is 1 unit per second and 720p is 4 units per second."
     )
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable safety checker."
@@ -1070,6 +1173,10 @@ class LongcatSingleAvatarAudioToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1081,7 +1188,38 @@ class LongcatSingleAvatarAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "resolution", "enable_safety_checker", "audio_guidance_scale", "num_segments"]
+        return ["audio", "prompt", "negative_prompt", "resolution", "enable_safety_checker"]
+
+class ArgilAvatarsAudioToVideoAvatar(str, Enum):
+    MIA_OUTDOOR_UGC = "Mia outdoor (UGC)"
+    LARA_MASTERCLASS = "Lara (Masterclass)"
+    INES_UGC = "Ines (UGC)"
+    MARIA_MASTERCLASS = "Maria (Masterclass)"
+    EMMA_UGC = "Emma (UGC)"
+    SIENNA_MASTERCLASS = "Sienna (Masterclass)"
+    ELENA_UGC = "Elena (UGC)"
+    JASMINE_MASTERCLASS = "Jasmine (Masterclass)"
+    AMARA_MASTERCLASS = "Amara (Masterclass)"
+    RYAN_PODCAST_UGC = "Ryan podcast (UGC)"
+    TYLER_MASTERCLASS = "Tyler (Masterclass)"
+    JAYSE_MASTERCLASS = "Jayse (Masterclass)"
+    PAUL_MASTERCLASS = "Paul (Masterclass)"
+    MATTEO_UGC = "Matteo (UGC)"
+    DANIEL_CAR_UGC = "Daniel car (UGC)"
+    DARIO_MASTERCLASS = "Dario (Masterclass)"
+    VIVA_MASTERCLASS = "Viva (Masterclass)"
+    CHEN_MASTERCLASS = "Chen (Masterclass)"
+    ALEX_MASTERCLASS = "Alex (Masterclass)"
+    VANESSA_UGC = "Vanessa (UGC)"
+    LAURENT_UGC = "Laurent (UGC)"
+    NOEMIE_CAR_UGC = "Noemie car (UGC)"
+    BRANDON_UGC = "Brandon (UGC)"
+    BYRON_MASTERCLASS = "Byron (Masterclass)"
+    CALISTA_MASTERCLASS = "Calista (Masterclass)"
+    MILO_MASTERCLASS = "Milo (Masterclass)"
+    FABIEN_MASTERCLASS = "Fabien (Masterclass)"
+    ROSE_UGC = "Rose (UGC)"
+
 
 class ArgilAvatarsAudioToVideo(FALNode):
     """
@@ -1096,38 +1234,7 @@ class ArgilAvatarsAudioToVideo(FALNode):
     - Podcast video generation
     """
 
-    class Avatar(Enum):
-        MIA_OUTDOOR_UGC = "Mia outdoor (UGC)"
-        LARA_MASTERCLASS = "Lara (Masterclass)"
-        INES_UGC = "Ines (UGC)"
-        MARIA_MASTERCLASS = "Maria (Masterclass)"
-        EMMA_UGC = "Emma (UGC)"
-        SIENNA_MASTERCLASS = "Sienna (Masterclass)"
-        ELENA_UGC = "Elena (UGC)"
-        JASMINE_MASTERCLASS = "Jasmine (Masterclass)"
-        AMARA_MASTERCLASS = "Amara (Masterclass)"
-        RYAN_PODCAST_UGC = "Ryan podcast (UGC)"
-        TYLER_MASTERCLASS = "Tyler (Masterclass)"
-        JAYSE_MASTERCLASS = "Jayse (Masterclass)"
-        PAUL_MASTERCLASS = "Paul (Masterclass)"
-        MATTEO_UGC = "Matteo (UGC)"
-        DANIEL_CAR_UGC = "Daniel car (UGC)"
-        DARIO_MASTERCLASS = "Dario (Masterclass)"
-        VIVA_MASTERCLASS = "Viva (Masterclass)"
-        CHEN_MASTERCLASS = "Chen (Masterclass)"
-        ALEX_MASTERCLASS = "Alex (Masterclass)"
-        VANESSA_UGC = "Vanessa (UGC)"
-        LAURENT_UGC = "Laurent (UGC)"
-        NOEMIE_CAR_UGC = "Noemie car (UGC)"
-        BRANDON_UGC = "Brandon (UGC)"
-        BYRON_MASTERCLASS = "Byron (Masterclass)"
-        CALISTA_MASTERCLASS = "Calista (Masterclass)"
-        MILO_MASTERCLASS = "Milo (Masterclass)"
-        FABIEN_MASTERCLASS = "Fabien (Masterclass)"
-        ROSE_UGC = "Rose (UGC)"
-
-
-    avatar: Avatar = Field(
+    avatar: ArgilAvatarsAudioToVideoAvatar = Field(
         default=""
     )
     remove_background: bool = Field(
@@ -1146,6 +1253,10 @@ class ArgilAvatarsAudioToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1157,7 +1268,33 @@ class ArgilAvatarsAudioToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["avatar", "remove_background", "audio"]
+        return ["audio", "remove_background", "avatar"]
+
+class WanV2214bSpeechToVideoVideoWriteMode(str, Enum):
+    """
+    The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class WanV2214bSpeechToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (480p, 580p, or 720p).
+    """
+    VALUE_480P = "480p"
+    VALUE_580P = "580p"
+    VALUE_720P = "720p"
+
+class WanV2214bSpeechToVideoVideoQuality(str, Enum):
+    """
+    The quality of the output video. Higher quality means better visual quality but larger file size.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class WanV2214bSpeechToVideo(FALNode):
     """
@@ -1172,39 +1309,13 @@ class WanV2214bSpeechToVideo(FALNode):
     - Podcast video generation
     """
 
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p, 580p, or 720p).
-        """
-        VALUE_480P = "480p"
-        VALUE_580P = "580p"
-        VALUE_720P = "720p"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the output video. Higher quality means better visual quality but larger file size.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     shift: float = Field(
         default=5, description="Shift value for the video. Must be between 1.0 and 10.0."
     )
     prompt: str = Field(
         default="", description="The text prompt used for video generation."
     )
-    frames_per_second: int = Field(
+    frames_per_second: str = Field(
         default=16, description="Frames per second of the generated video. Must be between 4 to 60. When using interpolation and `adjust_fps_for_interpolation` is set to true (default true,) the final FPS will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If `adjust_fps_for_interpolation` is set to false, this value will be used as-is."
     )
     enable_safety_checker: bool = Field(
@@ -1219,11 +1330,11 @@ class WanV2214bSpeechToVideo(FALNode):
     negative_prompt: str = Field(
         default="", description="Negative prompt for video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    video_write_mode: WanV2214bSpeechToVideoVideoWriteMode = Field(
+        default=WanV2214bSpeechToVideoVideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the generated video (480p, 580p, or 720p)."
+    resolution: WanV2214bSpeechToVideoResolution = Field(
+        default=WanV2214bSpeechToVideoResolution.VALUE_480P, description="Resolution of the generated video (480p, 580p, or 720p)."
     )
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
@@ -1231,8 +1342,8 @@ class WanV2214bSpeechToVideo(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    video_quality: WanV2214bSpeechToVideoVideoQuality = Field(
+        default=WanV2214bSpeechToVideoVideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
     audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the audio file."
@@ -1240,12 +1351,16 @@ class WanV2214bSpeechToVideo(FALNode):
     num_inference_steps: int = Field(
         default=27, description="Number of inference steps for sampling. Higher values give better quality but take longer."
     )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "shift": self.shift,
             "prompt": self.prompt,
@@ -1257,7 +1372,7 @@ class WanV2214bSpeechToVideo(FALNode):
             "video_write_mode": self.video_write_mode.value,
             "resolution": self.resolution.value,
             "enable_output_safety_checker": self.enable_output_safety_checker,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "video_quality": self.video_quality.value,
             "audio_url": self.audio,
             "num_inference_steps": self.num_inference_steps,
@@ -1266,6 +1381,10 @@ class WanV2214bSpeechToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1277,7 +1396,17 @@ class WanV2214bSpeechToVideo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["shift", "prompt", "frames_per_second", "enable_safety_checker", "num_frames"]
+        return ["image", "audio", "prompt", "negative_prompt", "resolution"]
+
+class StableAvatarAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video to generate. If 'auto', the aspect ratio will be determined by the reference image.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_1_1 = "1:1"
+    RATIO_9_16 = "9:16"
+    AUTO = "auto"
+
 
 class StableAvatar(FALNode):
     """
@@ -1292,21 +1421,11 @@ class StableAvatar(FALNode):
     - Podcast video generation
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video to generate. If 'auto', the aspect ratio will be determined by the reference image.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_1_1 = "1:1"
-        RATIO_9_16 = "9:16"
-        AUTO = "auto"
-
-
     prompt: str = Field(
         default="", description="The prompt to use for the video generation."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the video to generate. If 'auto', the aspect ratio will be determined by the reference image."
+    aspect_ratio: StableAvatarAspectRatio = Field(
+        default=StableAvatarAspectRatio.AUTO, description="The aspect ratio of the video to generate. If 'auto', the aspect ratio will be determined by the reference image."
     )
     perturbation: float = Field(
         default=0.1, description="The amount of perturbation to use for the video generation. 0.0 means no perturbation, 1.0 means full perturbation."
@@ -1331,21 +1450,35 @@ class StableAvatar(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_base64 = await context.image_to_base64(self.image)
+        client = await self.get_client(context)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
             "perturbation": self.perturbation,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "audio_guidance_scale": self.audio_guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1357,7 +1490,7 @@ class StableAvatar(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "aspect_ratio", "perturbation", "image", "guidance_scale"]
+        return ["image", "audio", "prompt", "aspect_ratio", "perturbation"]
 
 class EchomimicV3(FALNode):
     """
@@ -1398,11 +1531,21 @@ class EchomimicV3(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
-        image_base64 = await context.image_to_base64(self.image)
+        client = await self.get_client(context)
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
-            "audio_url": self.audio,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "audio_url": audio_url,
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "guidance_scale": self.guidance_scale,
             "audio_guidance_scale": self.audio_guidance_scale,
             "num_frames_per_generation": self.num_frames_per_generation,
@@ -1412,6 +1555,10 @@ class EchomimicV3(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1423,7 +1570,41 @@ class EchomimicV3(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt", "audio", "image", "guidance_scale", "audio_guidance_scale"]
+        return ["audio", "image", "prompt", "negative_prompt", "guidance_scale"]
+
+class VeedAvatarsAudioToVideoAvatarId(str, Enum):
+    """
+    The avatar to use for the video
+    """
+    EMILY_VERTICAL_PRIMARY = "emily_vertical_primary"
+    EMILY_VERTICAL_SECONDARY = "emily_vertical_secondary"
+    MARCUS_VERTICAL_PRIMARY = "marcus_vertical_primary"
+    MARCUS_VERTICAL_SECONDARY = "marcus_vertical_secondary"
+    MIRA_VERTICAL_PRIMARY = "mira_vertical_primary"
+    MIRA_VERTICAL_SECONDARY = "mira_vertical_secondary"
+    JASMINE_VERTICAL_PRIMARY = "jasmine_vertical_primary"
+    JASMINE_VERTICAL_SECONDARY = "jasmine_vertical_secondary"
+    JASMINE_VERTICAL_WALKING = "jasmine_vertical_walking"
+    AISHA_VERTICAL_WALKING = "aisha_vertical_walking"
+    ELENA_VERTICAL_PRIMARY = "elena_vertical_primary"
+    ELENA_VERTICAL_SECONDARY = "elena_vertical_secondary"
+    ANY_MALE_VERTICAL_PRIMARY = "any_male_vertical_primary"
+    ANY_FEMALE_VERTICAL_PRIMARY = "any_female_vertical_primary"
+    ANY_MALE_VERTICAL_SECONDARY = "any_male_vertical_secondary"
+    ANY_FEMALE_VERTICAL_SECONDARY = "any_female_vertical_secondary"
+    ANY_FEMALE_VERTICAL_WALKING = "any_female_vertical_walking"
+    EMILY_PRIMARY = "emily_primary"
+    EMILY_SIDE = "emily_side"
+    MARCUS_PRIMARY = "marcus_primary"
+    MARCUS_SIDE = "marcus_side"
+    AISHA_WALKING = "aisha_walking"
+    ELENA_PRIMARY = "elena_primary"
+    ELENA_SIDE = "elena_side"
+    ANY_MALE_PRIMARY = "any_male_primary"
+    ANY_FEMALE_PRIMARY = "any_female_primary"
+    ANY_MALE_SIDE = "any_male_side"
+    ANY_FEMALE_SIDE = "any_female_side"
+
 
 class VeedAvatarsAudioToVideo(FALNode):
     """
@@ -1438,44 +1619,10 @@ class VeedAvatarsAudioToVideo(FALNode):
     - Podcast video generation
     """
 
-    class AvatarId(Enum):
-        """
-        The avatar to use for the video
-        """
-        EMILY_VERTICAL_PRIMARY = "emily_vertical_primary"
-        EMILY_VERTICAL_SECONDARY = "emily_vertical_secondary"
-        MARCUS_VERTICAL_PRIMARY = "marcus_vertical_primary"
-        MARCUS_VERTICAL_SECONDARY = "marcus_vertical_secondary"
-        MIRA_VERTICAL_PRIMARY = "mira_vertical_primary"
-        MIRA_VERTICAL_SECONDARY = "mira_vertical_secondary"
-        JASMINE_VERTICAL_PRIMARY = "jasmine_vertical_primary"
-        JASMINE_VERTICAL_SECONDARY = "jasmine_vertical_secondary"
-        JASMINE_VERTICAL_WALKING = "jasmine_vertical_walking"
-        AISHA_VERTICAL_WALKING = "aisha_vertical_walking"
-        ELENA_VERTICAL_PRIMARY = "elena_vertical_primary"
-        ELENA_VERTICAL_SECONDARY = "elena_vertical_secondary"
-        ANY_MALE_VERTICAL_PRIMARY = "any_male_vertical_primary"
-        ANY_FEMALE_VERTICAL_PRIMARY = "any_female_vertical_primary"
-        ANY_MALE_VERTICAL_SECONDARY = "any_male_vertical_secondary"
-        ANY_FEMALE_VERTICAL_SECONDARY = "any_female_vertical_secondary"
-        ANY_FEMALE_VERTICAL_WALKING = "any_female_vertical_walking"
-        EMILY_PRIMARY = "emily_primary"
-        EMILY_SIDE = "emily_side"
-        MARCUS_PRIMARY = "marcus_primary"
-        MARCUS_SIDE = "marcus_side"
-        AISHA_WALKING = "aisha_walking"
-        ELENA_PRIMARY = "elena_primary"
-        ELENA_SIDE = "elena_side"
-        ANY_MALE_PRIMARY = "any_male_primary"
-        ANY_FEMALE_PRIMARY = "any_female_primary"
-        ANY_MALE_SIDE = "any_male_side"
-        ANY_FEMALE_SIDE = "any_female_side"
-
-
     audio: AudioRef = Field(
         default=AudioRef()
     )
-    avatar_id: AvatarId = Field(
+    avatar_id: VeedAvatarsAudioToVideoAvatarId = Field(
         default="", description="The avatar to use for the video"
     )
 
@@ -1487,6 +1634,10 @@ class VeedAvatarsAudioToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,

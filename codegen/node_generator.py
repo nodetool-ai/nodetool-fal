@@ -78,6 +78,29 @@ class NodeGenerator:
         # Apply config overrides
         spec = self._apply_config(spec, config)
         
+        # Prefix enum names with class name to avoid conflicts
+        enum_name_map = {}
+        for enum_def in spec.enums:
+            prefixed_name = f"{spec.class_name}{enum_def.name}"
+            enum_name_map[enum_def.name] = prefixed_name
+            enum_def.name = prefixed_name
+        
+        # Update enum references in fields
+        for field in spec.input_fields + spec.output_fields:
+            if field.enum_ref and field.enum_ref in enum_name_map:
+                field.enum_ref = enum_name_map[field.enum_ref]
+                # Update python_type if it references the enum
+                if field.python_type in enum_name_map:
+                    field.python_type = enum_name_map[field.python_type]
+                elif " | " in field.python_type:
+                    parts = field.python_type.split(" | ")
+                    new_parts = [enum_name_map.get(p, p) for p in parts]
+                    field.python_type = " | ".join(new_parts)
+                # Update default_value if it references the enum
+                for old_name, new_name in enum_name_map.items():
+                    if field.default_value.startswith(old_name + "."):
+                        field.default_value = field.default_value.replace(old_name + ".", new_name + ".", 1)
+        
         lines = []
         
         # Imports
@@ -85,7 +108,14 @@ class NodeGenerator:
         lines.append("")
         lines.append("")
         
-        # Node class (enums are now nested inside the class)
+        # Enums at module level with prefixed names
+        if spec.enums:
+            for enum_def in spec.enums:
+                lines.extend(self._generate_enum(enum_def, indent=0))
+                lines.append("")
+            lines.append("")
+        
+        # Node class
         lines.extend(self._generate_class(spec))
         
         return "\n".join(lines)
@@ -306,7 +336,7 @@ class NodeGenerator:
             indent: Indentation level (1 for nested in class, 0 for module level)
         """
         ind = "    " * indent
-        lines = [f"{ind}class {enum_def.name}(Enum):"]
+        lines = [f"{ind}class {enum_def.name}(str, Enum):"]
         
         if enum_def.description:
             # Handle multi-line descriptions properly
@@ -334,12 +364,7 @@ class NodeGenerator:
         lines.extend(self._generate_docstring(spec))
         lines.append("")
         
-        # Nested enums (if any)
-        if spec.enums:
-            for enum_def in spec.enums:
-                lines.extend(self._generate_enum(enum_def, indent=1))
-                lines.append("")
-            lines.append("")
+        # Note: Enums are now generated at module level, not nested
         
         # Fields
         for field in spec.input_fields:
@@ -428,6 +453,33 @@ class NodeGenerator:
         # Convert input images/videos/audio to required format
         image_fields = []
         image_list_fields = []
+        video_fields = []
+        video_list_fields = []
+        nested_asset_fields = {}  # Maps field name to (nested_key, extra_field_names)
+        
+        # First pass: identify nested asset fields and their associated extra fields
+        for field in spec.input_fields:
+            if field.nested_asset_key:
+                # Collect extra fields that belong to this nested structure
+                # These are fields that have this field as their parent
+                extra_fields = [
+                    f.name for f in spec.input_fields
+                    if f.parent_field == field.name
+                ]
+                nested_asset_fields[field.name] = (field.nested_asset_key, extra_fields)
+        
+        # Check if we need to upload videos
+        needs_video_upload = any(
+            field.python_type in ("VideoRef", "VideoRef | None")
+            for field in spec.input_fields
+        ) or any(
+            field.python_type == "list[VideoRef]"
+            for field in spec.input_fields
+        )
+        
+        if needs_video_upload:
+            lines.append("        client = await self.get_client(context)")
+        
         for field in spec.input_fields:
             if field.python_type == "list[ImageRef]":
                 lines.append(f"        {field.name}_data_urls = []")
@@ -437,28 +489,80 @@ class NodeGenerator:
                 lines.append("            image_base64 = await context.image_to_base64(image)")
                 lines.append(f'            {field.name}_data_urls.append(f"data:image/png;base64,{{image_base64}}")')
                 image_list_fields.append(field.name)
-            elif "ImageRef" in field.python_type:
+            elif field.python_type == "list[VideoRef]":
+                lines.append(f"        {field.name}_urls = []")
+                lines.append(f"        for video in self.{field.name} or []:")
+                lines.append("            if video.is_empty():")
+                lines.append("                continue")
+                lines.append(f"            video_bytes = await context.asset_to_bytes(video)")
+                lines.append(f'            video_url = await client.upload(video_bytes, "video/mp4")')
+                lines.append(f'            {field.name}_urls.append(video_url)')
+                video_list_fields.append(field.name)
+            elif field.python_type in ("ImageRef", "ImageRef | None"):
                 lines.append(f"        {field.name}_base64 = (")
                 lines.append(f"            await context.image_to_base64(self.{field.name})")
                 lines.append(f"            if not self.{field.name}.is_empty()")
                 lines.append("            else None")
                 lines.append("        )")
                 image_fields.append(field.name)
+            elif field.python_type in ("VideoRef", "VideoRef | None"):
+                lines.append(f"        {field.name}_url = (")
+                lines.append(f"            await self._upload_asset_to_fal(client, self.{field.name}, context)")
+                lines.append(f"            if not self.{field.name}.is_empty()")
+                lines.append("            else None")
+                lines.append("        )")
+                video_fields.append(field.name)
         
         # Build arguments dict
         lines.append("        arguments = {")
+        
+        # Build a set of all extra fields that are part of nested structures
+        # These will be handled with their main field
+        nested_extra_fields = set()
+        for main_field, (nested_key, extra_fields) in nested_asset_fields.items():
+            for extra_field in extra_fields:
+                nested_extra_fields.add(extra_field)
         
         for field in spec.input_fields:
             # Get the API parameter name (use original name if field was renamed)
             api_param_name = self._field_renames.get(field.name, field.name)
             
+            # Skip extra fields that are part of nested structures - they'll be handled with the main field
+            if field.name in nested_extra_fields:
+                continue
+            
             if field.name in image_fields:
-                # Use the API parameter name for image URLs
-                lines.append(
-                    f'            "{api_param_name}": f"data:image/png;base64,{{{field.name}_base64}}" if {field.name}_base64 else None,'
-                )
+                # Check if this image field has a nested structure
+                if field.name in nested_asset_fields:
+                    nested_key, extra_fields = nested_asset_fields[field.name]
+                    # Build nested object
+                    nested_lines = [f'            "{api_param_name}": {{']
+                    nested_lines.append(f'                "{nested_key}": f"data:image/png;base64,{{{field.name}_base64}}" if {field.name}_base64 else None,')
+                    for extra_field in extra_fields:
+                        nested_lines.append(f'                "{extra_field}": self.{extra_field},')
+                    nested_lines.append("            },")
+                    lines.extend(nested_lines)
+                else:
+                    lines.append(
+                        f'            "{api_param_name}": f"data:image/png;base64,{{{field.name}_base64}}" if {field.name}_base64 else None,'
+                    )
             elif field.name in image_list_fields:
                 lines.append(f'            "{api_param_name}": {field.name}_data_urls,')
+            elif field.name in video_fields:
+                # Check if this video field has a nested structure
+                if field.name in nested_asset_fields:
+                    nested_key, extra_fields = nested_asset_fields[field.name]
+                    # Build nested object
+                    nested_lines = [f'            "{api_param_name}": {{']
+                    nested_lines.append(f'                "{nested_key}": {field.name}_url,')
+                    for extra_field in extra_fields:
+                        nested_lines.append(f'                "{extra_field}": self.{extra_field},')
+                    nested_lines.append("            },")
+                    lines.extend(nested_lines)
+                else:
+                    lines.append(f'            "{api_param_name}": {field.name}_url,')
+            elif field.name in video_list_fields:
+                lines.append(f'            "{api_param_name}": {field.name}_urls,')
             elif field.enum_ref:
                 # Handle optional enums
                 if not field.required and field.default_value == "None":
@@ -474,9 +578,13 @@ class NodeGenerator:
         lines.append("        }")
         lines.append("")
         
-        # Filter out None values
+        # Filter out None values (recursively for nested dicts)
         lines.append("        # Remove None values")
         lines.append("        arguments = {k: v for k, v in arguments.items() if v is not None}")
+        lines.append("        # Also filter nested dicts")
+        lines.append("        for key in arguments:")
+        lines.append("            if isinstance(arguments[key], dict):")
+        lines.append("                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}")
         lines.append("")
         
         # Submit request
@@ -508,8 +616,8 @@ class NodeGenerator:
         if self._config_basic_fields:
             basic_fields = self._config_basic_fields
         else:
-            # Select up to 5 most important fields
-            basic_fields = [f.name for f in spec.input_fields[:5]]
+            # Prioritize fields for better UX
+            basic_fields = self._select_basic_fields(spec)
         
         fields_str = ", ".join(f'"{f}"' for f in basic_fields)
         
@@ -518,3 +626,55 @@ class NodeGenerator:
             "    def get_basic_fields(cls):",
             f"        return [{fields_str}]",
         ]
+    
+    def _select_basic_fields(self, spec: NodeSpec) -> list[str]:
+        """Select the most important fields to show in basic mode.
+        
+        Prioritizes:
+        1. Main input assets (image, video, audio)
+        2. Text prompts
+        3. Core generation parameters (resolution, aspect_ratio, duration)
+        4. Other important fields
+        
+        Returns up to 5 field names.
+        """
+        candidates = []
+        remaining = []
+        
+        for field in spec.input_fields:
+            name_lower = field.name.lower()
+            
+            # Priority 1: Main input assets (not URLs, not lists)
+            if field.python_type in ("ImageRef", "VideoRef", "AudioRef"):
+                if name_lower in ("image", "video", "audio", "mask"):
+                    candidates.append((0, field.name))
+                else:
+                    candidates.append((1, field.name))
+            # Priority 2: Text prompts
+            elif field.python_type == "str" and any(k in name_lower for k in ("prompt", "text")):
+                candidates.append((2, field.name))
+            # Priority 3: Core generation parameters
+            elif field.python_type in ("Resolution", "AspectRatio") or any(
+                field.enum_ref and field.enum_ref.endswith(k) for k in ("Resolution", "AspectRatio", "Duration")
+            ):
+                if not name_lower.endswith("_url"):  # Skip URL variants
+                    candidates.append((3, field.name))
+            # Priority 4: Other important scalar fields
+            elif field.python_type in ("int", "float", "bool") and not name_lower.endswith(
+                ("_seed", "_id", "_key", "_secret", "_steps", "_batch")
+            ):
+                candidates.append((4, field.name))
+            else:
+                remaining.append(field.name)
+        
+        # Sort by priority and then by original order for same priority
+        candidates.sort(key=lambda x: (x[0], spec.input_fields.index(next(f for f in spec.input_fields if f.name == x[1]))))
+        
+        # Take up to 5 fields
+        result = [name for _, name in candidates[:5]]
+        
+        # Fill with remaining fields if needed
+        if len(result) < 5:
+            result.extend(remaining[:5 - len(result)])
+        
+        return result
