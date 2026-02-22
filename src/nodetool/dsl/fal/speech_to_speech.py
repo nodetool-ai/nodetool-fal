@@ -18,22 +18,35 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class ChatterboxSpeechToSpeech(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class ChatterboxSpeechToSpeech(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Whether you're working on memes, videos, games, or AI agents, Chatterbox brings your content to life. Use the first tts from resemble ai.
-        speech, voice, transformation, cloning
+    Whether you're working on memes, videos, games, or AI agents, Chatterbox brings your content to life. Use the first tts from resemble ai.
+    speech, voice, transformation, cloning
 
-        Use cases:
-        - Voice cloning and transformation
-        - Real-time voice conversion
-        - Voice style transfer
-        - Speech enhancement
-        - Accent conversion
+    Use cases:
+    - Voice cloning and transformation
+    - Real-time voice conversion
+    - Voice style transfer
+    - Speech enhancement
+    - Accent conversion
     """
 
-    source_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description=None)
-    target_voice_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.')
+    source_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description=None,
+    )
+    target_voice_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -50,24 +63,49 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.speech_to_speech
 from nodetool.workflows.base_node import BaseNode
 
-class ResembleAiChatterboxhdSpeechToSpeech(SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]):
+
+class ResembleAiChatterboxhdSpeechToSpeech(
+    SingleOutputGraphNode[types.AudioRef], GraphNode[types.AudioRef]
+):
     """
 
-        Transform voices using Resemble AI's Chatterbox. Convert audio to new voices or your own samples, with expressive results and built-in perceptual watermarking.
-        speech, voice, transformation, cloning
+    Transform voices using Resemble AI's Chatterbox. Convert audio to new voices or your own samples, with expressive results and built-in perceptual watermarking.
+    speech, voice, transformation, cloning
 
-        Use cases:
-        - Voice cloning and transformation
-        - Real-time voice conversion
-        - Voice style transfer
-        - Speech enhancement
-        - Accent conversion
+    Use cases:
+    - Voice cloning and transformation
+    - Real-time voice conversion
+    - Voice style transfer
+    - Speech enhancement
+    - Accent conversion
     """
 
-    high_quality_audio: bool | OutputHandle[bool] = connect_field(default=False, description='If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.')
-    target_voice_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL to the audio file which represents the voice of the output audio. If provided, this will override the target_voice setting. If neither target_voice nor target_voice_audio_url are provided, the default target voice will be used.')
-    source_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL to the source audio file to be voice-converted.')
-    target_voice: nodetool.nodes.fal.speech_to_speech.ResembleAiChatterboxhdSpeechToSpeech.TargetVoice | OutputHandle[nodetool.nodes.fal.speech_to_speech.ResembleAiChatterboxhdSpeechToSpeech.TargetVoice] | None = connect_field(default=None, description='The voice to use for the speech-to-speech request. If neither target_voice nor target_voice_audio_url are provided, a random target voice will be used.')
+    high_quality_audio: bool | OutputHandle[bool] = connect_field(
+        default=False,
+        description="If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.",
+    )
+    target_voice_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="URL to the audio file which represents the voice of the output audio. If provided, this will override the target_voice setting. If neither target_voice nor target_voice_audio_url are provided, the default target voice will be used.",
+    )
+    source_audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
+        default=types.AudioRef(
+            type="audio", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="URL to the source audio file to be voice-converted.",
+    )
+    target_voice: (
+        nodetool.nodes.fal.speech_to_speech.ResembleAiChatterboxhdSpeechToSpeech.TargetVoice
+        | OutputHandle[
+            nodetool.nodes.fal.speech_to_speech.ResembleAiChatterboxhdSpeechToSpeech.TargetVoice
+        ]
+        | None
+    ) = connect_field(
+        default=None,
+        description="The voice to use for the speech-to-speech request. If neither target_voice nor target_voice_audio_url are provided, a random target voice will be used.",
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -76,5 +114,3 @@ class ResembleAiChatterboxhdSpeechToSpeech(SingleOutputGraphNode[types.AudioRef]
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
-
-

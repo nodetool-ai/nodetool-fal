@@ -27,6 +27,8 @@ class FieldDef:
     field_type: str  # 'input' or 'output'
     required: bool = False
     enum_ref: Optional[str] = None  # Reference to enum class name if applicable
+    nested_asset_key: Optional[str] = None  # If set, wrap asset under this key (e.g., "video_url" -> {"video_url": asset})
+    parent_field: Optional[str] = None  # If set, this field belongs to a nested structure with this parent field name
 
 
 @dataclass
@@ -212,6 +214,47 @@ class SchemaParser:
         fields = []
         
         for name, prop in properties.items():
+            # Check if this is a nested asset structure (e.g., VideoConditioningInput)
+            nested_asset_key, extra_fields = self._get_nested_asset_info(prop)
+            
+            if nested_asset_key:
+                # Determine asset type based on the nested key
+                if "video" in nested_asset_key.lower():
+                    python_type = "VideoRef"
+                elif "image" in nested_asset_key.lower():
+                    python_type = "ImageRef"
+                elif "audio" in nested_asset_key.lower():
+                    python_type = "AudioRef"
+                else:
+                    python_type = "str"
+                
+                default_value = self._get_default_value({"type": "asset"}, python_type, name in required)
+                
+                fields.append(FieldDef(
+                    name=name,
+                    python_type=python_type,
+                    default_value=default_value,
+                    description=prop.get("description", ""),
+                    field_type=field_type,
+                    required=name in required,
+                    enum_ref=None,
+                    nested_asset_key=nested_asset_key
+                ))
+                
+                # Add extra fields from the nested schema (like start_frame_num)
+                for extra in extra_fields:
+                    fields.append(FieldDef(
+                        name=extra["name"],
+                        python_type=extra["python_type"],
+                        default_value=extra["default_value"],
+                        description=extra["description"],
+                        field_type=field_type,
+                        required=False,
+                        enum_ref=None,
+                        parent_field=name  # Link to the parent asset field
+                    ))
+                continue
+            
             # Check for enum
             enum_ref = None
             enum_name = None
@@ -310,6 +353,63 @@ class SchemaParser:
                 return None
         # Use the title from the resolved schema
         return current.get("title")
+
+    def _get_nested_asset_info(self, prop: dict[str, Any]) -> tuple[Optional[str], list[dict[str, Any]]]:
+        """Check if a property references a schema containing an asset URL field.
+        
+        Returns:
+            Tuple of (nested_asset_key, extra_fields) where:
+            - nested_asset_key: The key for the asset URL inside the nested object (e.g., "video_url")
+            - extra_fields: List of additional field definitions from the nested schema
+        """
+        # Resolve the property schema to get its full structure
+        resolved = self._resolve_ref(self._root_schema, prop)
+        
+        if not resolved or "properties" not in resolved:
+            return None, []
+        
+        properties = resolved.get("properties", {})
+        nested_asset_key = None
+        asset_type = None
+        extra_fields = []
+        
+        # Look for asset URL fields in the nested properties
+        for key, sub_prop in properties.items():
+            key_lower = key.lower()
+            if key_lower.endswith("_url"):
+                if "video" in key_lower:
+                    nested_asset_key = key
+                    asset_type = "VideoRef"
+                elif "image" in key_lower:
+                    nested_asset_key = key
+                    asset_type = "ImageRef"
+                elif "audio" in key_lower:
+                    nested_asset_key = key
+                    asset_type = "AudioRef"
+            else:
+                # Collect non-asset fields to add as separate node fields
+                sub_type = sub_prop.get("type", "string")
+                if sub_type == "integer":
+                    python_type = "int"
+                    default = "0"
+                elif sub_type == "number":
+                    python_type = "float"
+                    default = "0.0"
+                elif sub_type == "boolean":
+                    python_type = "bool"
+                    default = "False"
+                else:
+                    python_type = "str"
+                    default = '""'
+                
+                extra_fields.append({
+                    "name": key,
+                    "python_type": python_type,
+                    "default_value": default,
+                    "description": sub_prop.get("description", ""),
+                })
+        
+        return nested_asset_key, extra_fields
 
     def _get_default_value(self, prop: dict[str, Any], python_type: str, required: bool, enum_name: Optional[str] = None) -> str:
         """Get default value for a field."""

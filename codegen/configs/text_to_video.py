@@ -20,7 +20,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate creative video concepts",
             "Create animated scenes from stories"
         ],
-        "basic_fields": ["prompt"]
+        "basic_fields": ["prompt", "aspect_ratio", "resolution"]
     },
     
     "fal-ai/cogvideox-5b": {
@@ -160,7 +160,7 @@ CONFIGS: dict[str, dict[str, Any]] = {
             "Generate professional video clips",
             "Create cinematic video scenes"
         ],
-        "basic_fields": ["prompt"]
+        "basic_fields": ["prompt", "aspect_ratio", "resolution"]
     },
     
     "fal-ai/kling-video/v1/standard/text-to-video": {

@@ -7,6 +7,42 @@ from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 
+class PixverseV56ImageToVideoPixverseV56Resolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV56ImageToVideoPixverseV56Duration(str, Enum):
+    """
+    The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
+    """
+    FIVE_SECONDS = "5"
+    EIGHT_SECONDS = "8"
+    TEN_SECONDS = "10"
+
+class PixverseV56ImageToVideoPixverseV56Style(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV56ImageToVideoPixverseV56ThinkingType(str, Enum):
+    """
+    Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+    """
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
+
+
 class PixverseV56ImageToVideo(FALNode):
     """
     Generate high-quality videos from images with Pixverse v5.6.
@@ -20,55 +56,19 @@ class PixverseV56ImageToVideo(FALNode):
     - Transform static images with various visual styles
     """
 
-    class PixverseV56Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class PixverseV56Duration(Enum):
-        """
-        The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
-        """
-        FIVE_SECONDS = "5"
-        EIGHT_SECONDS = "8"
-        TEN_SECONDS = "10"
-
-    class PixverseV56Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class PixverseV56ThinkingType(Enum):
-        """
-        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
-        """
-        ENABLED = "enabled"
-        DISABLED = "disabled"
-        AUTO = "auto"
-
-
     prompt: str = Field(
         default="", description="Text prompt describing the desired video motion"
     )
-    resolution: PixverseV56Resolution = Field(
-        default=PixverseV56Resolution.VALUE_720P, description="The resolution quality of the output video"
+    resolution: PixverseV56ImageToVideoPixverseV56Resolution = Field(
+        default=PixverseV56ImageToVideoPixverseV56Resolution.VALUE_720P, description="The resolution quality of the output video"
     )
-    duration: PixverseV56Duration = Field(
-        default=PixverseV56Duration.FIVE_SECONDS, description="The duration of the generated video in seconds"
+    duration: PixverseV56ImageToVideoPixverseV56Duration = Field(
+        default=PixverseV56ImageToVideoPixverseV56Duration.FIVE_SECONDS, description="The duration of the generated video in seconds"
     )
-    style: PixverseV56Style | None = Field(
+    style: PixverseV56ImageToVideoPixverseV56Style | None = Field(
         default=None, description="Optional visual style for the video"
     )
-    thinking_type: PixverseV56ThinkingType | None = Field(
+    thinking_type: PixverseV56ImageToVideoPixverseV56ThinkingType | None = Field(
         default=None, description="Thinking mode for video generation"
     )
     image: ImageRef = Field(
@@ -104,6 +104,10 @@ class PixverseV56ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -116,6 +120,18 @@ class PixverseV56ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "resolution"]
+
+class LumaDreamMachineAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_21_9 = "21:9"
+    RATIO_9_21 = "9:21"
+
 
 class LumaDreamMachine(FALNode):
     """
@@ -130,23 +146,11 @@ class LumaDreamMachine(FALNode):
     - Produce video content
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_21_9 = "21:9"
-        RATIO_9_21 = "9:21"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: LumaDreamMachineAspectRatio = Field(
+        default=LumaDreamMachineAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     loop: bool = Field(
         default=False, description="Whether the video should loop (end of video is blended with the beginning)"
@@ -179,6 +183,10 @@ class LumaDreamMachine(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -224,6 +232,10 @@ class AMTFrameInterpolation(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -236,6 +248,22 @@ class AMTFrameInterpolation(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image"]
+
+class AIAvatarAIAvatarResolution(str, Enum):
+    """
+    Resolution of the video to generate. Must be either 480p or 720p.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class AIAvatarAcceleration(str, Enum):
+    """
+    The acceleration level to use for generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
 
 class AIAvatar(FALNode):
     """
@@ -250,30 +278,14 @@ class AIAvatar(FALNode):
     - Create personalized video messages
     """
 
-    class AIAvatarResolution(Enum):
-        """
-        Resolution of the video to generate. Must be either 480p or 720p.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    resolution: AIAvatarResolution = Field(
-        default=AIAvatarResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarAIAvatarResolution = Field(
+        default=AIAvatarAIAvatarResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for generation."
+    acceleration: AIAvatarAcceleration = Field(
+        default=AIAvatarAcceleration.REGULAR, description="The acceleration level to use for generation."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
@@ -306,6 +318,10 @@ class AIAvatar(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -318,6 +334,47 @@ class AIAvatar(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "audio"]
+
+class AIAvatarSingleTextAIAvatarSingleTextResolution(str, Enum):
+    """
+    Resolution of the video to generate. Must be either 480p or 720p.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class AIAvatarSingleTextAcceleration(str, Enum):
+    """
+    The acceleration level to use for generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class AIAvatarSingleTextVoice(str, Enum):
+    """
+    The voice to use for speech generation
+    """
+    ARIA = "Aria"
+    ROGER = "Roger"
+    SARAH = "Sarah"
+    LAURA = "Laura"
+    CHARLIE = "Charlie"
+    GEORGE = "George"
+    CALLUM = "Callum"
+    RIVER = "River"
+    LIAM = "Liam"
+    CHARLOTTE = "Charlotte"
+    ALICE = "Alice"
+    MATILDA = "Matilda"
+    WILL = "Will"
+    JESSICA = "Jessica"
+    ERIC = "Eric"
+    CHRIS = "Chris"
+    BRIAN = "Brian"
+    DANIEL = "Daniel"
+    LILY = "Lily"
+    BILL = "Bill"
+
 
 class AIAvatarSingleText(FALNode):
     """
@@ -332,55 +389,14 @@ class AIAvatarSingleText(FALNode):
     - Generate automated spokesperson videos
     """
 
-    class AIAvatarSingleTextResolution(Enum):
-        """
-        Resolution of the video to generate. Must be either 480p or 720p.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class Voice(Enum):
-        """
-        The voice to use for speech generation
-        """
-        ARIA = "Aria"
-        ROGER = "Roger"
-        SARAH = "Sarah"
-        LAURA = "Laura"
-        CHARLIE = "Charlie"
-        GEORGE = "George"
-        CALLUM = "Callum"
-        RIVER = "River"
-        LIAM = "Liam"
-        CHARLOTTE = "Charlotte"
-        ALICE = "Alice"
-        MATILDA = "Matilda"
-        WILL = "Will"
-        JESSICA = "Jessica"
-        ERIC = "Eric"
-        CHRIS = "Chris"
-        BRIAN = "Brian"
-        DANIEL = "Daniel"
-        LILY = "Lily"
-        BILL = "Bill"
-
-
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    resolution: AIAvatarSingleTextResolution = Field(
-        default=AIAvatarSingleTextResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarSingleTextAIAvatarSingleTextResolution = Field(
+        default=AIAvatarSingleTextAIAvatarSingleTextResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for generation."
+    acceleration: AIAvatarSingleTextAcceleration = Field(
+        default=AIAvatarSingleTextAcceleration.REGULAR, description="The acceleration level to use for generation."
     )
     text_input: str = Field(
         default="", description="The text input to guide video generation."
@@ -388,7 +404,7 @@ class AIAvatarSingleText(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    voice: Voice = Field(
+    voice: AIAvatarSingleTextVoice = Field(
         default="", description="The voice to use for speech generation"
     )
     seed: int = Field(
@@ -417,6 +433,10 @@ class AIAvatarSingleText(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -429,6 +449,72 @@ class AIAvatarSingleText(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "text"]
+
+class AIAvatarMultiTextAcceleration(str, Enum):
+    """
+    The acceleration level to use for generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class AIAvatarMultiTextAIAvatarMultiTextResolution(str, Enum):
+    """
+    Resolution of the video to generate. Must be either 480p or 720p.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class AIAvatarMultiTextVoice2(str, Enum):
+    """
+    The second person's voice to use for speech generation
+    """
+    ARIA = "Aria"
+    ROGER = "Roger"
+    SARAH = "Sarah"
+    LAURA = "Laura"
+    CHARLIE = "Charlie"
+    GEORGE = "George"
+    CALLUM = "Callum"
+    RIVER = "River"
+    LIAM = "Liam"
+    CHARLOTTE = "Charlotte"
+    ALICE = "Alice"
+    MATILDA = "Matilda"
+    WILL = "Will"
+    JESSICA = "Jessica"
+    ERIC = "Eric"
+    CHRIS = "Chris"
+    BRIAN = "Brian"
+    DANIEL = "Daniel"
+    LILY = "Lily"
+    BILL = "Bill"
+
+class AIAvatarMultiTextVoice1(str, Enum):
+    """
+    The first person's voice to use for speech generation
+    """
+    ARIA = "Aria"
+    ROGER = "Roger"
+    SARAH = "Sarah"
+    LAURA = "Laura"
+    CHARLIE = "Charlie"
+    GEORGE = "George"
+    CALLUM = "Callum"
+    RIVER = "River"
+    LIAM = "Liam"
+    CHARLOTTE = "Charlotte"
+    ALICE = "Alice"
+    MATILDA = "Matilda"
+    WILL = "Will"
+    JESSICA = "Jessica"
+    ERIC = "Eric"
+    CHRIS = "Chris"
+    BRIAN = "Brian"
+    DANIEL = "Daniel"
+    LILY = "Lily"
+    BILL = "Bill"
+
 
 class AIAvatarMultiText(FALNode):
     """
@@ -443,83 +529,17 @@ class AIAvatarMultiText(FALNode):
     - Generate multi-character scenes
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class AIAvatarMultiTextResolution(Enum):
-        """
-        Resolution of the video to generate. Must be either 480p or 720p.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class Voice2(Enum):
-        """
-        The second person's voice to use for speech generation
-        """
-        ARIA = "Aria"
-        ROGER = "Roger"
-        SARAH = "Sarah"
-        LAURA = "Laura"
-        CHARLIE = "Charlie"
-        GEORGE = "George"
-        CALLUM = "Callum"
-        RIVER = "River"
-        LIAM = "Liam"
-        CHARLOTTE = "Charlotte"
-        ALICE = "Alice"
-        MATILDA = "Matilda"
-        WILL = "Will"
-        JESSICA = "Jessica"
-        ERIC = "Eric"
-        CHRIS = "Chris"
-        BRIAN = "Brian"
-        DANIEL = "Daniel"
-        LILY = "Lily"
-        BILL = "Bill"
-
-    class Voice1(Enum):
-        """
-        The first person's voice to use for speech generation
-        """
-        ARIA = "Aria"
-        ROGER = "Roger"
-        SARAH = "Sarah"
-        LAURA = "Laura"
-        CHARLIE = "Charlie"
-        GEORGE = "George"
-        CALLUM = "Callum"
-        RIVER = "River"
-        LIAM = "Liam"
-        CHARLOTTE = "Charlotte"
-        ALICE = "Alice"
-        MATILDA = "Matilda"
-        WILL = "Will"
-        JESSICA = "Jessica"
-        ERIC = "Eric"
-        CHRIS = "Chris"
-        BRIAN = "Brian"
-        DANIEL = "Daniel"
-        LILY = "Lily"
-        BILL = "Bill"
-
-
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
     second_text_input: str = Field(
         default="", description="The text input to guide video generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for generation."
+    acceleration: AIAvatarMultiTextAcceleration = Field(
+        default=AIAvatarMultiTextAcceleration.REGULAR, description="The acceleration level to use for generation."
     )
-    resolution: AIAvatarMultiTextResolution = Field(
-        default=AIAvatarMultiTextResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarMultiTextAIAvatarMultiTextResolution = Field(
+        default=AIAvatarMultiTextAIAvatarMultiTextResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
     first_text_input: str = Field(
         default="", description="The text input to guide video generation."
@@ -527,11 +547,11 @@ class AIAvatarMultiText(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    voice2: Voice2 = Field(
-        default=Voice2.ROGER, description="The second person's voice to use for speech generation"
+    voice2: AIAvatarMultiTextVoice2 = Field(
+        default=AIAvatarMultiTextVoice2.ROGER, description="The second person's voice to use for speech generation"
     )
-    voice1: Voice1 = Field(
-        default=Voice1.SARAH, description="The first person's voice to use for speech generation"
+    voice1: AIAvatarMultiTextVoice1 = Field(
+        default=AIAvatarMultiTextVoice1.SARAH, description="The first person's voice to use for speech generation"
     )
     seed: int = Field(
         default=81, description="Random seed for reproducibility. If None, a random seed is chosen."
@@ -561,6 +581,10 @@ class AIAvatarMultiText(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -573,6 +597,22 @@ class AIAvatarMultiText(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["images", "texts"]
+
+class AIAvatarMultiAIAvatarMultiResolution(str, Enum):
+    """
+    Resolution of the video to generate. Must be either 480p or 720p.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class AIAvatarMultiAcceleration(str, Enum):
+    """
+    The acceleration level to use for generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
 
 class AIAvatarMulti(FALNode):
     """
@@ -587,30 +627,14 @@ class AIAvatarMulti(FALNode):
     - Generate multi-avatar content
     """
 
-    class AIAvatarMultiResolution(Enum):
-        """
-        Resolution of the video to generate. Must be either 480p or 720p.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    resolution: AIAvatarMultiResolution = Field(
-        default=AIAvatarMultiResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
+    resolution: AIAvatarMultiAIAvatarMultiResolution = Field(
+        default=AIAvatarMultiAIAvatarMultiResolution.VALUE_480P, description="Resolution of the video to generate. Must be either 480p or 720p."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for generation."
+    acceleration: AIAvatarMultiAcceleration = Field(
+        default=AIAvatarMultiAcceleration.REGULAR, description="The acceleration level to use for generation."
     )
     first_audio: AudioRef = Field(
         default=AudioRef(), description="The URL of the Person 1 audio file."
@@ -651,6 +675,10 @@ class AIAvatarMulti(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -663,6 +691,40 @@ class AIAvatarMulti(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["images", "audio"]
+
+class SeeDanceV15ProImageToVideoSeeDanceV15ProResolution(str, Enum):
+    """
+    Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class SeeDanceV15ProImageToVideoSeeDanceV15ProDuration(str, Enum):
+    """
+    Duration of the video in seconds
+    """
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+
+class SeeDanceV15ProImageToVideoSeeDanceV15ProAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
 
 class SeeDanceV15ProImageToVideo(FALNode):
     """
@@ -677,54 +739,20 @@ class SeeDanceV15ProImageToVideo(FALNode):
     - Create dance training materials
     """
 
-    class SeeDanceV15ProResolution(Enum):
-        """
-        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class SeeDanceV15ProDuration(Enum):
-        """
-        Duration of the video in seconds
-        """
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-
-    class SeeDanceV15ProAspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-
-
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: SeeDanceV15ProResolution = Field(
-        default=SeeDanceV15ProResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
+    resolution: SeeDanceV15ProImageToVideoSeeDanceV15ProResolution = Field(
+        default=SeeDanceV15ProImageToVideoSeeDanceV15ProResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
     )
-    duration: SeeDanceV15ProDuration = Field(
-        default=SeeDanceV15ProDuration.VALUE_5, description="Duration of the video in seconds"
+    duration: SeeDanceV15ProImageToVideoSeeDanceV15ProDuration = Field(
+        default=SeeDanceV15ProImageToVideoSeeDanceV15ProDuration.VALUE_5, description="Duration of the video in seconds"
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video"
     )
-    aspect_ratio: SeeDanceV15ProAspectRatio = Field(
-        default=SeeDanceV15ProAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: SeeDanceV15ProImageToVideoSeeDanceV15ProAspectRatio = Field(
+        default=SeeDanceV15ProImageToVideoSeeDanceV15ProAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
@@ -768,6 +796,10 @@ class SeeDanceV15ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -780,6 +812,43 @@ class SeeDanceV15ProImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastResolution(str, Enum):
+    """
+    Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastDuration(str, Enum):
+    """
+    Duration of the video in seconds
+    """
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+
+class SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    AUTO = "auto"
+
 
 class SeeDanceV1ProFastImageToVideo(FALNode):
     """
@@ -794,54 +863,17 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     - Efficient dance video generation
     """
 
-    class SeeDanceV1ProFastResolution(Enum):
-        """
-        Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class SeeDanceV1ProFastDuration(Enum):
-        """
-        Duration of the video in seconds
-        """
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-
-    class SeeDanceV1ProFastAspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        AUTO = "auto"
-
-
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: SeeDanceV1ProFastResolution = Field(
-        default=SeeDanceV1ProFastResolution.VALUE_1080P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
+    resolution: SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastResolution = Field(
+        default=SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastResolution.VALUE_1080P, description="Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality"
     )
-    duration: SeeDanceV1ProFastDuration = Field(
-        default=SeeDanceV1ProFastDuration.VALUE_5, description="Duration of the video in seconds"
+    duration: SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastDuration = Field(
+        default=SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastDuration.VALUE_5, description="Duration of the video in seconds"
     )
-    aspect_ratio: SeeDanceV1ProFastAspectRatio = Field(
-        default=SeeDanceV1ProFastAspectRatio.AUTO, description="The aspect ratio of the generated video"
+    aspect_ratio: SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastAspectRatio = Field(
+        default=SeeDanceV1ProFastImageToVideoSeeDanceV1ProFastAspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
@@ -875,6 +907,10 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -887,6 +923,42 @@ class SeeDanceV1ProFastImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteResolution(str, Enum):
+    """
+    Video resolution - 480p for faster generation, 720p for higher quality
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteDuration(str, Enum):
+    """
+    Duration of the video in seconds
+    """
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+
+class SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    AUTO = "auto"
+
 
 class SeeDanceV1LiteReferenceToVideo(FALNode):
     """
@@ -901,53 +973,17 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
     - Create optimized dance videos
     """
 
-    class SeeDanceV1LiteResolution(Enum):
-        """
-        Video resolution - 480p for faster generation, 720p for higher quality
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class SeeDanceV1LiteDuration(Enum):
-        """
-        Duration of the video in seconds
-        """
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-
-    class SeeDanceV1LiteAspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        AUTO = "auto"
-
-
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: SeeDanceV1LiteResolution = Field(
-        default=SeeDanceV1LiteResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
+    resolution: SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteResolution = Field(
+        default=SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
     )
-    duration: SeeDanceV1LiteDuration = Field(
-        default=SeeDanceV1LiteDuration.VALUE_5, description="Duration of the video in seconds"
+    duration: SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteDuration = Field(
+        default=SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteDuration.VALUE_5, description="Duration of the video in seconds"
     )
-    aspect_ratio: SeeDanceV1LiteAspectRatio = Field(
-        default=SeeDanceV1LiteAspectRatio.AUTO, description="The aspect ratio of the generated video"
+    aspect_ratio: SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteAspectRatio = Field(
+        default=SeeDanceV1LiteReferenceToVideoSeeDanceV1LiteAspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
     reference_images: list[str] = Field(
         default=[], description="Reference images to generate the video with."
@@ -976,6 +1012,10 @@ class SeeDanceV1LiteReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1022,6 +1062,10 @@ class ByteDanceVideoStylize(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1033,6 +1077,14 @@ class ByteDanceVideoStylize(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "style"]
+
+class OmniHumanV15OmniHumanV15Resolution(str, Enum):
+    """
+    The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class OmniHumanV15(FALNode):
     """
@@ -1047,19 +1099,11 @@ class OmniHumanV15(FALNode):
     - Create realistic human content
     """
 
-    class OmniHumanV15Resolution(Enum):
-        """
-        The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     turbo_mode: bool = Field(
         default=False, description="Generate a video at a faster rate with a slight quality trade-off."
     )
-    resolution: OmniHumanV15Resolution = Field(
-        default=OmniHumanV15Resolution.VALUE_1080P, description="The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio."
+    resolution: OmniHumanV15OmniHumanV15Resolution = Field(
+        default=OmniHumanV15OmniHumanV15Resolution.VALUE_1080P, description="The resolution of the generated video. Defaults to 1080p. 720p generation is faster and higher in quality. 1080p generation is limited to 30s audio and 720p generation is limited to 60s audio."
     )
     prompt: str = Field(
         default="", description="The text prompt used to guide the video generation."
@@ -1072,6 +1116,12 @@ class OmniHumanV15(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
@@ -1081,12 +1131,16 @@ class OmniHumanV15(FALNode):
             "turbo_mode": self.turbo_mode,
             "resolution": self.resolution.value,
             "prompt": self.prompt,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1165,6 +1219,10 @@ class CogVideoX5BImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1223,6 +1281,10 @@ class StableVideoImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1285,6 +1347,10 @@ class LTXImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1297,6 +1363,14 @@ class LTXImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV1StandardImageToVideoKlingVideoV1StandardDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
 
 class KlingVideoV1StandardImageToVideo(FALNode):
     """
@@ -1311,19 +1385,11 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     - Create moderate quality outputs
     """
 
-    class KlingVideoV1StandardDuration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default="", description="The prompt for the video"
     )
-    duration: KlingVideoV1StandardDuration = Field(
-        default=KlingVideoV1StandardDuration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV1StandardImageToVideoKlingVideoV1StandardDuration = Field(
+        default=KlingVideoV1StandardImageToVideoKlingVideoV1StandardDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     tail_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
@@ -1373,6 +1439,10 @@ class KlingVideoV1StandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1385,6 +1455,52 @@ class KlingVideoV1StandardImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV56TransitionAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+class PixverseV56TransitionStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV56TransitionThinkingType(str, Enum):
+    """
+    Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+    """
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
+
+class PixverseV56TransitionPixverseV56TransitionDuration(str, Enum):
+    """
+    The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+    VALUE_10 = "10"
+
+class PixverseV56TransitionPixverseV56TransitionResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PixverseV56Transition(FALNode):
     """
@@ -1399,72 +1515,26 @@ class PixverseV56Transition(FALNode):
     - Generate video connecting two scenes
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class ThinkingType(Enum):
-        """
-        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
-        """
-        ENABLED = "enabled"
-        DISABLED = "disabled"
-        AUTO = "auto"
-
-    class PixverseV56TransitionDuration(Enum):
-        """
-        The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-        VALUE_10 = "10"
-
-    class PixverseV56TransitionResolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: PixverseV56TransitionAspectRatio = Field(
+        default=PixverseV56TransitionAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     prompt: str = Field(
         default="", description="The prompt for the transition"
     )
-    style: Style | None = Field(
+    style: PixverseV56TransitionStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    thinking_type: ThinkingType | None = Field(
+    thinking_type: PixverseV56TransitionThinkingType | None = Field(
         default=None, description="Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision"
     )
-    duration: PixverseV56TransitionDuration = Field(
-        default=PixverseV56TransitionDuration.VALUE_5, description="The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds"
+    duration: PixverseV56TransitionPixverseV56TransitionDuration = Field(
+        default=PixverseV56TransitionPixverseV56TransitionDuration.VALUE_5, description="The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds"
     )
-    resolution: PixverseV56TransitionResolution = Field(
-        default=PixverseV56TransitionResolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV56TransitionPixverseV56TransitionResolution = Field(
+        default=PixverseV56TransitionPixverseV56TransitionResolution.VALUE_720P, description="The resolution of the generated video"
     )
     generate_audio_switch: bool = Field(
         default=False, description="Enable audio generation (BGM, SFX, dialogue)"
@@ -1506,6 +1576,10 @@ class PixverseV56Transition(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1518,6 +1592,24 @@ class PixverseV56Transition(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduQ2ReferenceToVideoProViduQ2ReferenceToVideoProResolution(str, Enum):
+    """
+    Output video resolution
+    """
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class ViduQ2ReferenceToVideoProMovementAmplitude(str, Enum):
+    """
+    The movement amplitude of objects in the frame
+    """
+    AUTO = "auto"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+
 
 class ViduQ2ReferenceToVideoPro(FALNode):
     """
@@ -1532,32 +1624,14 @@ class ViduQ2ReferenceToVideoPro(FALNode):
     - Create professional reference-based content
     """
 
-    class ViduQ2ReferenceToVideoProResolution(Enum):
-        """
-        Output video resolution
-        """
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class MovementAmplitude(Enum):
-        """
-        The movement amplitude of objects in the frame
-        """
-        AUTO = "auto"
-        SMALL = "small"
-        MEDIUM = "medium"
-        LARGE = "large"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 2000 characters"
     )
     aspect_ratio: str = Field(
         default="16:9", description="Aspect ratio of the output video (e.g., auto, 16:9, 9:16, 1:1, or any W:H)"
     )
-    resolution: ViduQ2ReferenceToVideoProResolution = Field(
-        default=ViduQ2ReferenceToVideoProResolution.VALUE_720P, description="Output video resolution"
+    resolution: ViduQ2ReferenceToVideoProViduQ2ReferenceToVideoProResolution = Field(
+        default=ViduQ2ReferenceToVideoProViduQ2ReferenceToVideoProResolution.VALUE_720P, description="Output video resolution"
     )
     duration: int = Field(
         default=4, description="Duration of the video in seconds (0 for automatic duration)"
@@ -1574,8 +1648,8 @@ class ViduQ2ReferenceToVideoPro(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    movement_amplitude: ViduQ2ReferenceToVideoProMovementAmplitude = Field(
+        default=ViduQ2ReferenceToVideoProMovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -1593,6 +1667,10 @@ class ViduQ2ReferenceToVideoPro(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1605,6 +1683,22 @@ class ViduQ2ReferenceToVideoPro(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class WanV26ImageToVideoFlashWanV26FlashDuration(str, Enum):
+    """
+    Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+    VALUE_15 = "15"
+
+class WanV26ImageToVideoFlashWanV26FlashResolution(str, Enum):
+    """
+    Video resolution. Valid values: 720p, 1080p
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class WanV26ImageToVideoFlash(FALNode):
     """
@@ -1619,30 +1713,14 @@ class WanV26ImageToVideoFlash(FALNode):
     - Create fast video animations
     """
 
-    class WanV26FlashDuration(Enum):
-        """
-        Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-        VALUE_15 = "15"
-
-    class WanV26FlashResolution(Enum):
-        """
-        Video resolution. Valid values: 720p, 1080p
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing the desired video motion. Max 800 characters."
     )
-    duration: WanV26FlashDuration = Field(
-        default=WanV26FlashDuration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
+    duration: WanV26ImageToVideoFlashWanV26FlashDuration = Field(
+        default=WanV26ImageToVideoFlashWanV26FlashDuration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
     )
-    resolution: WanV26FlashResolution = Field(
-        default=WanV26FlashResolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
+    resolution: WanV26ImageToVideoFlashWanV26FlashResolution = Field(
+        default=WanV26ImageToVideoFlashWanV26FlashResolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -1667,9 +1745,15 @@ class WanV26ImageToVideoFlash(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
             else None
         )
         arguments = {
@@ -1678,7 +1762,7 @@ class WanV26ImageToVideoFlash(FALNode):
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
             "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "seed": self.seed,
             "multi_shots": self.multi_shots,
             "negative_prompt": self.negative_prompt,
@@ -1687,6 +1771,10 @@ class WanV26ImageToVideoFlash(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1699,6 +1787,22 @@ class WanV26ImageToVideoFlash(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class WanV26ImageToVideoWanV26Duration(str, Enum):
+    """
+    Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+    VALUE_15 = "15"
+
+class WanV26ImageToVideoWanV26Resolution(str, Enum):
+    """
+    Video resolution. Valid values: 720p, 1080p
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class WanV26ImageToVideo(FALNode):
     """
@@ -1713,30 +1817,14 @@ class WanV26ImageToVideo(FALNode):
     - Create professional animations
     """
 
-    class WanV26Duration(Enum):
-        """
-        Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds.
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-        VALUE_15 = "15"
-
-    class WanV26Resolution(Enum):
-        """
-        Video resolution. Valid values: 720p, 1080p
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing the desired video motion. Max 800 characters."
     )
-    duration: WanV26Duration = Field(
-        default=WanV26Duration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
+    duration: WanV26ImageToVideoWanV26Duration = Field(
+        default=WanV26ImageToVideoWanV26Duration.VALUE_5, description="Duration of the generated video in seconds. Choose between 5, 10 or 15 seconds."
     )
-    resolution: WanV26Resolution = Field(
-        default=WanV26Resolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
+    resolution: WanV26ImageToVideoWanV26Resolution = Field(
+        default=WanV26ImageToVideoWanV26Resolution.VALUE_1080P, description="Video resolution. Valid values: 720p, 1080p"
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -1761,9 +1849,15 @@ class WanV26ImageToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
+            else None
+        )
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
             else None
         )
         arguments = {
@@ -1772,7 +1866,7 @@ class WanV26ImageToVideo(FALNode):
             "resolution": self.resolution.value,
             "enable_safety_checker": self.enable_safety_checker,
             "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "seed": self.seed,
             "multi_shots": self.multi_shots,
             "negative_prompt": self.negative_prompt,
@@ -1781,6 +1875,10 @@ class WanV26ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1793,6 +1891,62 @@ class WanV26ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Ltx219BImageToVideoAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BImageToVideoCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BImageToVideoVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BImageToVideoVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BImageToVideoVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+class Ltx219BImageToVideoInterpolationDirection(str, Enum):
+    """
+    The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+    """
+    FORWARD = "forward"
+    BACKWARD = "backward"
+
 
 class Ltx219BImageToVideo(FALNode):
     """
@@ -1807,70 +1961,14 @@ class Ltx219BImageToVideo(FALNode):
     - Create premium video animations
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-    class InterpolationDirection(Enum):
-        """
-        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
-        """
-        FORWARD = "forward"
-        BACKWARD = "backward"
-
-
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
     )
     prompt: str = Field(
         default="", description="The prompt used for the generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: Ltx219BImageToVideoAcceleration = Field(
+        default=Ltx219BImageToVideoAcceleration.REGULAR, description="The acceleration level to use."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -1878,8 +1976,8 @@ class Ltx219BImageToVideo(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BImageToVideoCameraLora = Field(
+        default=Ltx219BImageToVideoCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="auto", description="The size of the generated video."
@@ -1899,11 +1997,11 @@ class Ltx219BImageToVideo(FALNode):
     guidance_scale: float = Field(
         default=3, description="The guidance scale to use."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BImageToVideoVideoWriteMode = Field(
+        default=Ltx219BImageToVideoVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BImageToVideoVideoOutputType = Field(
+        default=Ltx219BImageToVideoVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -1914,8 +2012,8 @@ class Ltx219BImageToVideo(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate the video from."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BImageToVideoVideoQuality = Field(
+        default=Ltx219BImageToVideoVideoQuality.HIGH, description="The quality of the generated video."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -1929,8 +2027,8 @@ class Ltx219BImageToVideo(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    interpolation_direction: InterpolationDirection = Field(
-        default=InterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
+    interpolation_direction: Ltx219BImageToVideoInterpolationDirection = Field(
+        default=Ltx219BImageToVideoInterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
     )
     num_inference_steps: int = Field(
         default=40, description="The number of inference steps to use."
@@ -1976,6 +2074,10 @@ class Ltx219BImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1988,6 +2090,62 @@ class Ltx219BImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Ltx219BImageToVideoLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BImageToVideoLoraCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BImageToVideoLoraVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BImageToVideoLoraVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BImageToVideoLoraVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+class Ltx219BImageToVideoLoraInterpolationDirection(str, Enum):
+    """
+    The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+    """
+    FORWARD = "forward"
+    BACKWARD = "backward"
+
 
 class Ltx219BImageToVideoLora(FALNode):
     """
@@ -2002,70 +2160,14 @@ class Ltx219BImageToVideoLora(FALNode):
     - Create customized video animations
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-    class InterpolationDirection(Enum):
-        """
-        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
-        """
-        FORWARD = "forward"
-        BACKWARD = "backward"
-
-
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
     )
     prompt: str = Field(
         default="", description="The prompt used for the generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: Ltx219BImageToVideoLoraAcceleration = Field(
+        default=Ltx219BImageToVideoLoraAcceleration.REGULAR, description="The acceleration level to use."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -2076,8 +2178,8 @@ class Ltx219BImageToVideoLora(FALNode):
     loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BImageToVideoLoraCameraLora = Field(
+        default=Ltx219BImageToVideoLoraCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="auto", description="The size of the generated video."
@@ -2097,11 +2199,11 @@ class Ltx219BImageToVideoLora(FALNode):
     guidance_scale: float = Field(
         default=3, description="The guidance scale to use."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BImageToVideoLoraVideoWriteMode = Field(
+        default=Ltx219BImageToVideoLoraVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BImageToVideoLoraVideoOutputType = Field(
+        default=Ltx219BImageToVideoLoraVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
@@ -2112,8 +2214,8 @@ class Ltx219BImageToVideoLora(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate the video from."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BImageToVideoLoraVideoQuality = Field(
+        default=Ltx219BImageToVideoLoraVideoQuality.HIGH, description="The quality of the generated video."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -2127,8 +2229,8 @@ class Ltx219BImageToVideoLora(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    interpolation_direction: InterpolationDirection = Field(
-        default=InterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
+    interpolation_direction: Ltx219BImageToVideoLoraInterpolationDirection = Field(
+        default=Ltx219BImageToVideoLoraInterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
     )
     num_inference_steps: int = Field(
         default=40, description="The number of inference steps to use."
@@ -2175,6 +2277,10 @@ class Ltx219BImageToVideoLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2187,6 +2293,62 @@ class Ltx219BImageToVideoLora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Ltx219BDistilledImageToVideoAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BDistilledImageToVideoCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BDistilledImageToVideoVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BDistilledImageToVideoVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BDistilledImageToVideoVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+class Ltx219BDistilledImageToVideoInterpolationDirection(str, Enum):
+    """
+    The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+    """
+    FORWARD = "forward"
+    BACKWARD = "backward"
+
 
 class Ltx219BDistilledImageToVideo(FALNode):
     """
@@ -2201,70 +2363,14 @@ class Ltx219BDistilledImageToVideo(FALNode):
     - Create balanced quality-speed videos
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-    class InterpolationDirection(Enum):
-        """
-        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
-        """
-        FORWARD = "forward"
-        BACKWARD = "backward"
-
-
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
     )
     prompt: str = Field(
         default="", description="The prompt used for the generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The acceleration level to use."
+    acceleration: Ltx219BDistilledImageToVideoAcceleration = Field(
+        default=Ltx219BDistilledImageToVideoAcceleration.NONE, description="The acceleration level to use."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -2272,8 +2378,8 @@ class Ltx219BDistilledImageToVideo(FALNode):
     fps: float = Field(
         default=25, description="The frames per second of the generated video."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BDistilledImageToVideoCameraLora = Field(
+        default=Ltx219BDistilledImageToVideoCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="auto", description="The size of the generated video."
@@ -2293,11 +2399,11 @@ class Ltx219BDistilledImageToVideo(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BDistilledImageToVideoVideoWriteMode = Field(
+        default=Ltx219BDistilledImageToVideoVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BDistilledImageToVideoVideoOutputType = Field(
+        default=Ltx219BDistilledImageToVideoVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image_strength: float = Field(
         default=1, description="The strength of the image to use for the video generation."
@@ -2308,8 +2414,8 @@ class Ltx219BDistilledImageToVideo(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BDistilledImageToVideoVideoQuality = Field(
+        default=Ltx219BDistilledImageToVideoVideoQuality.HIGH, description="The quality of the generated video."
     )
     enable_prompt_expansion: bool = Field(
         default=True, description="Whether to enable prompt expansion."
@@ -2320,8 +2426,8 @@ class Ltx219BDistilledImageToVideo(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    interpolation_direction: InterpolationDirection = Field(
-        default=InterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
+    interpolation_direction: Ltx219BDistilledImageToVideoInterpolationDirection = Field(
+        default=Ltx219BDistilledImageToVideoInterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -2362,6 +2468,10 @@ class Ltx219BDistilledImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2374,6 +2484,62 @@ class Ltx219BDistilledImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Ltx219BDistilledImageToVideoLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+    FULL = "full"
+
+class Ltx219BDistilledImageToVideoLoraCameraLora(str, Enum):
+    """
+    The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
+    """
+    DOLLY_IN = "dolly_in"
+    DOLLY_OUT = "dolly_out"
+    DOLLY_LEFT = "dolly_left"
+    DOLLY_RIGHT = "dolly_right"
+    JIB_UP = "jib_up"
+    JIB_DOWN = "jib_down"
+    STATIC = "static"
+    NONE = "none"
+
+class Ltx219BDistilledImageToVideoLoraVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class Ltx219BDistilledImageToVideoLoraVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class Ltx219BDistilledImageToVideoLoraVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+class Ltx219BDistilledImageToVideoLoraInterpolationDirection(str, Enum):
+    """
+    The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
+    """
+    FORWARD = "forward"
+    BACKWARD = "backward"
+
 
 class Ltx219BDistilledImageToVideoLora(FALNode):
     """
@@ -2388,70 +2554,14 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     - Create quick customized animations
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-        FULL = "full"
-
-    class CameraLora(Enum):
-        """
-        The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
-        """
-        DOLLY_IN = "dolly_in"
-        DOLLY_OUT = "dolly_out"
-        DOLLY_LEFT = "dolly_left"
-        DOLLY_RIGHT = "dolly_right"
-        JIB_UP = "jib_up"
-        JIB_DOWN = "jib_down"
-        STATIC = "static"
-        NONE = "none"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-    class InterpolationDirection(Enum):
-        """
-        The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image.
-        """
-        FORWARD = "forward"
-        BACKWARD = "backward"
-
-
     use_multiscale: bool = Field(
         default=True, description="Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details."
     )
     prompt: str = Field(
         default="", description="The prompt used for the generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The acceleration level to use."
+    acceleration: Ltx219BDistilledImageToVideoLoraAcceleration = Field(
+        default=Ltx219BDistilledImageToVideoLoraAcceleration.NONE, description="The acceleration level to use."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -2462,8 +2572,8 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     loras: list[LoRAInput] = Field(
         default=[], description="The LoRAs to use for the generation."
     )
-    camera_lora: CameraLora = Field(
-        default=CameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
+    camera_lora: Ltx219BDistilledImageToVideoLoraCameraLora = Field(
+        default=Ltx219BDistilledImageToVideoLoraCameraLora.NONE, description="The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera."
     )
     video_size: str = Field(
         default="auto", description="The size of the generated video."
@@ -2483,11 +2593,11 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     num_frames: int = Field(
         default=121, description="The number of frames to generate."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: Ltx219BDistilledImageToVideoLoraVideoWriteMode = Field(
+        default=Ltx219BDistilledImageToVideoLoraVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: Ltx219BDistilledImageToVideoLoraVideoOutputType = Field(
+        default=Ltx219BDistilledImageToVideoLoraVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image_strength: float = Field(
         default=1, description="The strength of the image to use for the video generation."
@@ -2498,8 +2608,8 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: Ltx219BDistilledImageToVideoLoraVideoQuality = Field(
+        default=Ltx219BDistilledImageToVideoLoraVideoQuality.HIGH, description="The quality of the generated video."
     )
     enable_prompt_expansion: bool = Field(
         default=True, description="Whether to enable prompt expansion."
@@ -2510,8 +2620,8 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
     end_image_strength: float = Field(
         default=1, description="The strength of the end image to use for the video generation."
     )
-    interpolation_direction: InterpolationDirection = Field(
-        default=InterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
+    interpolation_direction: Ltx219BDistilledImageToVideoLoraInterpolationDirection = Field(
+        default=Ltx219BDistilledImageToVideoLoraInterpolationDirection.FORWARD, description="The direction to interpolate the image sequence in. 'Forward' goes from the start image to the end image, 'Backward' goes from the end image to the start image."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -2553,6 +2663,10 @@ class Ltx219BDistilledImageToVideoLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2619,6 +2733,10 @@ class WanMove(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2631,6 +2749,27 @@ class WanMove(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Kandinsky5ProImageToVideoKandinsky5ProResolution(str, Enum):
+    """
+    Video resolution: 512p or 1024p.
+    """
+    VALUE_512P = "512P"
+    VALUE_1024P = "1024P"
+
+class Kandinsky5ProImageToVideoAcceleration(str, Enum):
+    """
+    Acceleration level for faster generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class Kandinsky5ProImageToVideoKandinsky5ProDuration(str, Enum):
+    """
+    Video duration.
+    """
+    VALUE_5S = "5s"
+
 
 class Kandinsky5ProImageToVideo(FALNode):
     """
@@ -2645,38 +2784,17 @@ class Kandinsky5ProImageToVideo(FALNode):
     - Create professional artistic videos
     """
 
-    class Kandinsky5ProResolution(Enum):
-        """
-        Video resolution: 512p or 1024p.
-        """
-        VALUE_512P = "512P"
-        VALUE_1024P = "1024P"
-
-    class Acceleration(Enum):
-        """
-        Acceleration level for faster generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class Kandinsky5ProDuration(Enum):
-        """
-        Video duration.
-        """
-        VALUE_5S = "5s"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
     )
-    resolution: Kandinsky5ProResolution = Field(
-        default=Kandinsky5ProResolution.VALUE_512P, description="Video resolution: 512p or 1024p."
+    resolution: Kandinsky5ProImageToVideoKandinsky5ProResolution = Field(
+        default=Kandinsky5ProImageToVideoKandinsky5ProResolution.VALUE_512P, description="Video resolution: 512p or 1024p."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level for faster generation."
+    acceleration: Kandinsky5ProImageToVideoAcceleration = Field(
+        default=Kandinsky5ProImageToVideoAcceleration.REGULAR, description="Acceleration level for faster generation."
     )
-    duration: Kandinsky5ProDuration = Field(
-        default=Kandinsky5ProDuration.VALUE_5S, description="Video duration."
+    duration: Kandinsky5ProImageToVideoKandinsky5ProDuration = Field(
+        default=Kandinsky5ProImageToVideoKandinsky5ProDuration.VALUE_5S, description="Video duration."
     )
     num_inference_steps: int = Field(
         default=28
@@ -2702,6 +2820,10 @@ class Kandinsky5ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2714,6 +2836,16 @@ class Kandinsky5ProImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LiveAvatarAcceleration(str, Enum):
+    """
+    Acceleration level for faster video decoding
+    """
+    NONE = "none"
+    LIGHT = "light"
+    REGULAR = "regular"
+    HIGH = "high"
+
 
 class LiveAvatar(FALNode):
     """
@@ -2728,24 +2860,14 @@ class LiveAvatar(FALNode):
     - Create animated presenters
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for faster video decoding
-        """
-        NONE = "none"
-        LIGHT = "light"
-        REGULAR = "regular"
-        HIGH = "high"
-
-
     frames_per_clip: int = Field(
         default=48, description="Number of frames per clip. Must be a multiple of 4. Higher values = smoother but slower generation."
     )
     prompt: str = Field(
         default="", description="A text prompt describing the scene and character. Helps guide the video generation style and context."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="Acceleration level for faster video decoding"
+    acceleration: LiveAvatarAcceleration = Field(
+        default=LiveAvatarAcceleration.NONE, description="Acceleration level for faster video decoding"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the reference image for avatar generation. The character in this image will be animated."
@@ -2786,6 +2908,10 @@ class LiveAvatar(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2798,6 +2924,20 @@ class LiveAvatar(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class HunyuanVideoV15ImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class HunyuanVideoV15ImageToVideoHunyuanVideoV15Resolution(str, Enum):
+    """
+    The resolution of the video.
+    """
+    VALUE_480P = "480p"
+
 
 class HunyuanVideoV15ImageToVideo(FALNode):
     """
@@ -2812,28 +2952,14 @@ class HunyuanVideoV15ImageToVideo(FALNode):
     - Create cutting-edge video animations
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class HunyuanVideoV15Resolution(Enum):
-        """
-        The resolution of the video.
-        """
-        VALUE_480P = "480p"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video."
+    aspect_ratio: HunyuanVideoV15ImageToVideoAspectRatio = Field(
+        default=HunyuanVideoV15ImageToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the video."
     )
-    resolution: HunyuanVideoV15Resolution = Field(
-        default=HunyuanVideoV15Resolution.VALUE_480P, description="The resolution of the video."
+    resolution: HunyuanVideoV15ImageToVideoHunyuanVideoV15Resolution = Field(
+        default=HunyuanVideoV15ImageToVideoHunyuanVideoV15Resolution.VALUE_480P, description="The resolution of the video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the reference image for image-to-video generation."
@@ -2874,6 +3000,10 @@ class HunyuanVideoV15ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2886,6 +3016,20 @@ class HunyuanVideoV15ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoO1StandardImageToVideoKlingVideoO1StandardDuration(str, Enum):
+    """
+    Video duration in seconds.
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+
 
 class KlingVideoO1StandardImageToVideo(FALNode):
     """
@@ -2900,25 +3044,11 @@ class KlingVideoO1StandardImageToVideo(FALNode):
     - Create standard tier animations
     """
 
-    class KlingVideoO1StandardDuration(Enum):
-        """
-        Video duration in seconds.
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default="", description="Use @Image1 to reference the start frame, @Image2 to reference the end frame."
     )
-    duration: KlingVideoO1StandardDuration = Field(
-        default=KlingVideoO1StandardDuration.VALUE_5, description="Video duration in seconds."
+    duration: KlingVideoO1StandardImageToVideoKlingVideoO1StandardDuration = Field(
+        default=KlingVideoO1StandardImageToVideoKlingVideoO1StandardDuration.VALUE_5, description="Video duration in seconds."
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the first frame of the video. Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s"
@@ -2947,6 +3077,10 @@ class KlingVideoO1StandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2959,6 +3093,28 @@ class KlingVideoO1StandardImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoO1StandardReferenceToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoO1StandardReferenceToVideoKlingVideoO1StandardReferenceToVideoDuration(str, Enum):
+    """
+    Video duration in seconds.
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+
 
 class KlingVideoO1StandardReferenceToVideo(FALNode):
     """
@@ -2973,36 +3129,14 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     - Create standardized reference videos
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class KlingVideoO1StandardReferenceToVideoDuration(Enum):
-        """
-        Video duration in seconds.
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default="", description="Take @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
+    aspect_ratio: KlingVideoO1StandardReferenceToVideoAspectRatio = Field(
+        default=KlingVideoO1StandardReferenceToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
     )
-    duration: KlingVideoO1StandardReferenceToVideoDuration = Field(
-        default=KlingVideoO1StandardReferenceToVideoDuration.VALUE_5, description="Video duration in seconds."
+    duration: KlingVideoO1StandardReferenceToVideoKlingVideoO1StandardReferenceToVideoDuration = Field(
+        default=KlingVideoO1StandardReferenceToVideoKlingVideoO1StandardReferenceToVideoDuration.VALUE_5, description="Video duration in seconds."
     )
     elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image)."
@@ -3028,6 +3162,10 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3040,6 +3178,31 @@ class KlingVideoO1StandardReferenceToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoO3StandardImageToVideoDuration(str, Enum):
+    """
+    Video duration in seconds (3-15s).
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+    VALUE_13 = "13"
+    VALUE_14 = "14"
+    VALUE_15 = "15"
+
+class KlingVideoO3StandardImageToVideoShotType(str, Enum):
+    """
+    The type of multi-shot video generation.
+    """
+    CUSTOMIZE = "customize"
+
 
 class KlingVideoO3StandardImageToVideo(FALNode):
     """
@@ -3054,36 +3217,11 @@ class KlingVideoO3StandardImageToVideo(FALNode):
     - Create standard-tier visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        Video duration in seconds (3-15s).
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-        VALUE_13 = "13"
-        VALUE_14 = "14"
-        VALUE_15 = "15"
-
-    class ShotType(Enum):
-        """
-        The type of multi-shot video generation.
-        """
-        CUSTOMIZE = "customize"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    duration: KlingVideoO3StandardImageToVideoDuration = Field(
+        default=KlingVideoO3StandardImageToVideoDuration.VALUE_5, description="Video duration in seconds (3-15s)."
     )
     generate_audio: bool = Field(
         default=False, description="Whether to generate native audio for the video."
@@ -3091,8 +3229,8 @@ class KlingVideoO3StandardImageToVideo(FALNode):
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation."
     )
-    shot_type: ShotType = Field(
-        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    shot_type: KlingVideoO3StandardImageToVideoShotType = Field(
+        default=KlingVideoO3StandardImageToVideoShotType.CUSTOMIZE, description="The type of multi-shot video generation."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the start frame image."
@@ -3124,6 +3262,10 @@ class KlingVideoO3StandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3136,6 +3278,31 @@ class KlingVideoO3StandardImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "duration"]
+
+class KlingVideoO3ProImageToVideoDuration(str, Enum):
+    """
+    Video duration in seconds (3-15s).
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+    VALUE_13 = "13"
+    VALUE_14 = "14"
+    VALUE_15 = "15"
+
+class KlingVideoO3ProImageToVideoShotType(str, Enum):
+    """
+    The type of multi-shot video generation.
+    """
+    CUSTOMIZE = "customize"
+
 
 class KlingVideoO3ProImageToVideo(FALNode):
     """
@@ -3150,36 +3317,11 @@ class KlingVideoO3ProImageToVideo(FALNode):
     - Generate polished video sequences from images
     """
 
-    class Duration(Enum):
-        """
-        Video duration in seconds (3-15s).
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-        VALUE_13 = "13"
-        VALUE_14 = "14"
-        VALUE_15 = "15"
-
-    class ShotType(Enum):
-        """
-        The type of multi-shot video generation.
-        """
-        CUSTOMIZE = "customize"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    duration: KlingVideoO3ProImageToVideoDuration = Field(
+        default=KlingVideoO3ProImageToVideoDuration.VALUE_5, description="Video duration in seconds (3-15s)."
     )
     generate_audio: bool = Field(
         default=False, description="Whether to generate native audio for the video."
@@ -3187,8 +3329,8 @@ class KlingVideoO3ProImageToVideo(FALNode):
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation."
     )
-    shot_type: ShotType = Field(
-        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    shot_type: KlingVideoO3ProImageToVideoShotType = Field(
+        default=KlingVideoO3ProImageToVideoShotType.CUSTOMIZE, description="The type of multi-shot video generation."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the start frame image."
@@ -3220,6 +3362,10 @@ class KlingVideoO3ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3232,6 +3378,39 @@ class KlingVideoO3ProImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt", "duration"]
+
+class KlingVideoO3StandardReferenceToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoO3StandardReferenceToVideoDuration(str, Enum):
+    """
+    Video duration in seconds (3-15s).
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+    VALUE_13 = "13"
+    VALUE_14 = "14"
+    VALUE_15 = "15"
+
+class KlingVideoO3StandardReferenceToVideoShotType(str, Enum):
+    """
+    The type of multi-shot video generation.
+    """
+    CUSTOMIZE = "customize"
+
 
 class KlingVideoO3StandardReferenceToVideo(FALNode):
     """
@@ -3246,47 +3425,14 @@ class KlingVideoO3StandardReferenceToVideo(FALNode):
     - Create standardized reference videos
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Duration(Enum):
-        """
-        Video duration in seconds (3-15s).
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-        VALUE_13 = "13"
-        VALUE_14 = "14"
-        VALUE_15 = "15"
-
-    class ShotType(Enum):
-        """
-        The type of multi-shot video generation.
-        """
-        CUSTOMIZE = "customize"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
+    aspect_ratio: KlingVideoO3StandardReferenceToVideoAspectRatio = Field(
+        default=KlingVideoO3StandardReferenceToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    duration: KlingVideoO3StandardReferenceToVideoDuration = Field(
+        default=KlingVideoO3StandardReferenceToVideoDuration.VALUE_5, description="Video duration in seconds (3-15s)."
     )
     generate_audio: bool = Field(
         default=False, description="Whether to generate native audio for the video."
@@ -3294,8 +3440,8 @@ class KlingVideoO3StandardReferenceToVideo(FALNode):
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation."
     )
-    shot_type: ShotType = Field(
-        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    shot_type: KlingVideoO3StandardReferenceToVideoShotType = Field(
+        default=KlingVideoO3StandardReferenceToVideoShotType.CUSTOMIZE, description="The type of multi-shot video generation."
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the first frame of the video."
@@ -3342,6 +3488,10 @@ class KlingVideoO3StandardReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3354,6 +3504,39 @@ class KlingVideoO3StandardReferenceToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["start_image", "prompt", "duration"]
+
+class KlingVideoO3ProReferenceToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoO3ProReferenceToVideoDuration(str, Enum):
+    """
+    Video duration in seconds (3-15s).
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+    VALUE_13 = "13"
+    VALUE_14 = "14"
+    VALUE_15 = "15"
+
+class KlingVideoO3ProReferenceToVideoShotType(str, Enum):
+    """
+    The type of multi-shot video generation.
+    """
+    CUSTOMIZE = "customize"
+
 
 class KlingVideoO3ProReferenceToVideo(FALNode):
     """
@@ -3368,47 +3551,14 @@ class KlingVideoO3ProReferenceToVideo(FALNode):
     - Create polished reference-based video clips
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Duration(Enum):
-        """
-        Video duration in seconds (3-15s).
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-        VALUE_13 = "13"
-        VALUE_14 = "14"
-        VALUE_15 = "15"
-
-    class ShotType(Enum):
-        """
-        The type of multi-shot video generation.
-        """
-        CUSTOMIZE = "customize"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
+    aspect_ratio: KlingVideoO3ProReferenceToVideoAspectRatio = Field(
+        default=KlingVideoO3ProReferenceToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds (3-15s)."
+    duration: KlingVideoO3ProReferenceToVideoDuration = Field(
+        default=KlingVideoO3ProReferenceToVideoDuration.VALUE_5, description="Video duration in seconds (3-15s)."
     )
     generate_audio: bool = Field(
         default=False, description="Whether to generate native audio for the video."
@@ -3416,8 +3566,8 @@ class KlingVideoO3ProReferenceToVideo(FALNode):
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation."
     )
-    shot_type: ShotType = Field(
-        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation."
+    shot_type: KlingVideoO3ProReferenceToVideoShotType = Field(
+        default=KlingVideoO3ProReferenceToVideoShotType.CUSTOMIZE, description="The type of multi-shot video generation."
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the first frame of the video."
@@ -3464,6 +3614,10 @@ class KlingVideoO3ProReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3476,6 +3630,14 @@ class KlingVideoO3ProReferenceToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["start_image", "prompt", "duration"]
+
+class KlingVideoV26ProImageToVideoKlingVideoV26ProDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
 
 class KlingVideoV26ProImageToVideo(FALNode):
     """
@@ -3490,22 +3652,14 @@ class KlingVideoV26ProImageToVideo(FALNode):
     - Create pro-tier animations
     """
 
-    class KlingVideoV26ProDuration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default=""
     )
     voice_ids: list[str] = Field(
         default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
     )
-    duration: KlingVideoV26ProDuration = Field(
-        default=KlingVideoV26ProDuration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV26ProImageToVideoKlingVideoV26ProDuration = Field(
+        default=KlingVideoV26ProImageToVideoKlingVideoV26ProDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
@@ -3543,6 +3697,10 @@ class KlingVideoV26ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3593,6 +3751,10 @@ class KlingVideoAiAvatarV2Standard(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3643,6 +3805,10 @@ class KlingVideoAiAvatarV2Pro(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3655,6 +3821,14 @@ class KlingVideoAiAvatarV2Pro(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class CreatifyAuroraCreatifyAuroraResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
 
 class CreatifyAurora(FALNode):
     """
@@ -3669,19 +3843,11 @@ class CreatifyAurora(FALNode):
     - Create visually impressive videos
     """
 
-    class CreatifyAuroraResolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-
     prompt: str = Field(
         default="", description="A text prompt to guide the video generation process."
     )
-    resolution: CreatifyAuroraResolution = Field(
-        default=CreatifyAuroraResolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: CreatifyAuroraCreatifyAuroraResolution = Field(
+        default=CreatifyAuroraCreatifyAuroraResolution.VALUE_720P, description="The resolution of the generated video."
     )
     audio: VideoRef = Field(
         default=VideoRef(), description="The URL of the audio file to be used for video generation."
@@ -3697,6 +3863,12 @@ class CreatifyAurora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
@@ -3705,7 +3877,7 @@ class CreatifyAurora(FALNode):
         arguments = {
             "prompt": self.prompt,
             "resolution": self.resolution.value,
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "audio_guidance_scale": self.audio_guidance_scale,
             "guidance_scale": self.guidance_scale,
             "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
@@ -3713,6 +3885,10 @@ class CreatifyAurora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3725,6 +3901,133 @@ class CreatifyAurora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV55EffectsResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV55EffectsDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+    VALUE_10 = "10"
+
+class PixverseV55EffectsThinkingType(str, Enum):
+    """
+    Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+    """
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
+
+class PixverseV55EffectsEffect(str, Enum):
+    """
+    The effect to apply to the video
+    """
+    KISS_ME_AI = "Kiss Me AI"
+    KISS = "Kiss"
+    MUSCLE_SURGE = "Muscle Surge"
+    WARMTH_OF_JESUS = "Warmth of Jesus"
+    ANYTHING_ROBOT = "Anything, Robot"
+    THE_TIGER_TOUCH = "The Tiger Touch"
+    HUG = "Hug"
+    HOLY_WINGS = "Holy Wings"
+    MICROWAVE = "Microwave"
+    ZOMBIE_MODE = "Zombie Mode"
+    SQUID_GAME = "Squid Game"
+    BABY_FACE = "Baby Face"
+    BLACK_MYTH_WUKONG = "Black Myth: Wukong"
+    LONG_HAIR_MAGIC = "Long Hair Magic"
+    LEGGY_RUN = "Leggy Run"
+    FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
+    PUNCH_FACE = "Punch Face"
+    CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
+    THUNDER_GOD = "Thunder God"
+    EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
+    WHOS_ARRESTED = "Who's Arrested?"
+    BABY_ARRIVED = "Baby Arrived"
+    WEREWOLF_RAGE = "Werewolf Rage"
+    BALD_SWIPE = "Bald Swipe"
+    BOOM_DROP = "BOOM DROP"
+    HUGE_CUTIE = "Huge Cutie"
+    LIQUID_METAL = "Liquid Metal"
+    SHARKSNAP = "Sharksnap!"
+    DUST_ME_AWAY = "Dust Me Away"
+    FIGURINE_FACTOR_3D = "3D Figurine Factor"
+    BIKINI_UP = "Bikini Up"
+    MY_GIRLFRIENDS = "My Girlfriends"
+    MY_BOYFRIENDS = "My Boyfriends"
+    SUBJECT_3_FEVER = "Subject 3 Fever"
+    EARTH_ZOOM = "Earth Zoom"
+    POLE_DANCE = "Pole Dance"
+    VROOM_DANCE = "Vroom Dance"
+    GHOSTFACE_TERROR = "GhostFace Terror"
+    DRAGON_EVOKER = "Dragon Evoker"
+    SKELETAL_BAE = "Skeletal Bae"
+    SUMMONING_SUCCUBUS = "Summoning succubus"
+    HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
+    NAKED_EYE_AD_3D = "3D Naked-Eye AD"
+    PACKAGE_EXPLOSION = "Package Explosion"
+    DISHES_SERVED = "Dishes Served"
+    OCEAN_AD = "Ocean ad"
+    SUPERMARKET_AD = "Supermarket AD"
+    TREE_DOLL = "Tree doll"
+    COME_FEEL_MY_ABS = "Come Feel My Abs"
+    THE_BICEP_FLEX = "The Bicep Flex"
+    LONDON_ELITE_VIBE = "London Elite Vibe"
+    FLORA_NYMPH_GOWN = "Flora Nymph Gown"
+    CHRISTMAS_COSTUME = "Christmas Costume"
+    ITS_SNOWY = "It's Snowy"
+    REINDEER_CRUISER = "Reindeer Cruiser"
+    SNOW_GLOBE_MAKER = "Snow Globe Maker"
+    PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
+    ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
+    CAT_CHRISTMAS_BOX = "Cat Christmas Box"
+    STARLIGHT_GIFT_BOX = "Starlight Gift Box"
+    XMAS_POSTER = "Xmas Poster"
+    PET_CHRISTMAS_TREE = "Pet Christmas Tree"
+    CITY_SANTA_HAT = "City Santa Hat"
+    STOCKING_SWEETIE = "Stocking Sweetie"
+    CHRISTMAS_NIGHT = "Christmas Night"
+    XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
+    GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
+    GIANT_PRODUCT = "Giant Product"
+    TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
+    BEACH_AD = "Beach AD"
+    SHOAL_SURROUND = "Shoal Surround"
+    MECHANICAL_ASSEMBLY = "Mechanical Assembly"
+    LIGHTING_AD = "Lighting AD"
+    BILLBOARD_AD = "Billboard AD"
+    PRODUCT_CLOSE_UP = "Product close-up"
+    PARACHUTE_DELIVERY = "Parachute Delivery"
+    DREAMLIKE_CLOUD = "Dreamlike Cloud"
+    MACARON_MACHINE = "Macaron Machine"
+    POSTER_AD = "Poster AD"
+    TRUCK_AD = "Truck AD"
+    GRAFFITI_AD = "Graffiti AD"
+    FIGURINE_FACTORY_3D = "3D Figurine Factory"
+    THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
+    ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
+    I_QUIT = "I Quit"
+    HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
+    SMELL_THE_LENS = "Smell the Lens"
+    I_BELIEVE_I_CAN_FLY = "I believe I can fly"
+    STRIKOUT_DANCE = "Strikout Dance"
+    PIXEL_WORLD = "Pixel World"
+    MINT_IN_BOX = "Mint in Box"
+    HANDS_UP_HAND = "Hands up, Hand"
+    FLORA_NYMPH_GO = "Flora Nymph Go"
+    SOMBER_EMBRACE = "Somber Embrace"
+    BEAM_ME_UP = "Beam me up"
+    SUIT_SWAGGER = "Suit Swagger"
+
 
 class PixverseV55Effects(FALNode):
     """
@@ -3739,146 +4042,19 @@ class PixverseV55Effects(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-        VALUE_10 = "10"
-
-    class ThinkingType(Enum):
-        """
-        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
-        """
-        ENABLED = "enabled"
-        DISABLED = "disabled"
-        AUTO = "auto"
-
-    class Effect(Enum):
-        """
-        The effect to apply to the video
-        """
-        KISS_ME_AI = "Kiss Me AI"
-        KISS = "Kiss"
-        MUSCLE_SURGE = "Muscle Surge"
-        WARMTH_OF_JESUS = "Warmth of Jesus"
-        ANYTHING_ROBOT = "Anything, Robot"
-        THE_TIGER_TOUCH = "The Tiger Touch"
-        HUG = "Hug"
-        HOLY_WINGS = "Holy Wings"
-        MICROWAVE = "Microwave"
-        ZOMBIE_MODE = "Zombie Mode"
-        SQUID_GAME = "Squid Game"
-        BABY_FACE = "Baby Face"
-        BLACK_MYTH_WUKONG = "Black Myth: Wukong"
-        LONG_HAIR_MAGIC = "Long Hair Magic"
-        LEGGY_RUN = "Leggy Run"
-        FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
-        PUNCH_FACE = "Punch Face"
-        CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
-        THUNDER_GOD = "Thunder God"
-        EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
-        WHOS_ARRESTED = "Who's Arrested?"
-        BABY_ARRIVED = "Baby Arrived"
-        WEREWOLF_RAGE = "Werewolf Rage"
-        BALD_SWIPE = "Bald Swipe"
-        BOOM_DROP = "BOOM DROP"
-        HUGE_CUTIE = "Huge Cutie"
-        LIQUID_METAL = "Liquid Metal"
-        SHARKSNAP = "Sharksnap!"
-        DUST_ME_AWAY = "Dust Me Away"
-        FIGURINE_FACTOR_3D = "3D Figurine Factor"
-        BIKINI_UP = "Bikini Up"
-        MY_GIRLFRIENDS = "My Girlfriends"
-        MY_BOYFRIENDS = "My Boyfriends"
-        SUBJECT_3_FEVER = "Subject 3 Fever"
-        EARTH_ZOOM = "Earth Zoom"
-        POLE_DANCE = "Pole Dance"
-        VROOM_DANCE = "Vroom Dance"
-        GHOSTFACE_TERROR = "GhostFace Terror"
-        DRAGON_EVOKER = "Dragon Evoker"
-        SKELETAL_BAE = "Skeletal Bae"
-        SUMMONING_SUCCUBUS = "Summoning succubus"
-        HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
-        NAKED_EYE_AD_3D = "3D Naked-Eye AD"
-        PACKAGE_EXPLOSION = "Package Explosion"
-        DISHES_SERVED = "Dishes Served"
-        OCEAN_AD = "Ocean ad"
-        SUPERMARKET_AD = "Supermarket AD"
-        TREE_DOLL = "Tree doll"
-        COME_FEEL_MY_ABS = "Come Feel My Abs"
-        THE_BICEP_FLEX = "The Bicep Flex"
-        LONDON_ELITE_VIBE = "London Elite Vibe"
-        FLORA_NYMPH_GOWN = "Flora Nymph Gown"
-        CHRISTMAS_COSTUME = "Christmas Costume"
-        ITS_SNOWY = "It's Snowy"
-        REINDEER_CRUISER = "Reindeer Cruiser"
-        SNOW_GLOBE_MAKER = "Snow Globe Maker"
-        PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
-        ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
-        CAT_CHRISTMAS_BOX = "Cat Christmas Box"
-        STARLIGHT_GIFT_BOX = "Starlight Gift Box"
-        XMAS_POSTER = "Xmas Poster"
-        PET_CHRISTMAS_TREE = "Pet Christmas Tree"
-        CITY_SANTA_HAT = "City Santa Hat"
-        STOCKING_SWEETIE = "Stocking Sweetie"
-        CHRISTMAS_NIGHT = "Christmas Night"
-        XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
-        GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
-        GIANT_PRODUCT = "Giant Product"
-        TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
-        BEACH_AD = "Beach AD"
-        SHOAL_SURROUND = "Shoal Surround"
-        MECHANICAL_ASSEMBLY = "Mechanical Assembly"
-        LIGHTING_AD = "Lighting AD"
-        BILLBOARD_AD = "Billboard AD"
-        PRODUCT_CLOSE_UP = "Product close-up"
-        PARACHUTE_DELIVERY = "Parachute Delivery"
-        DREAMLIKE_CLOUD = "Dreamlike Cloud"
-        MACARON_MACHINE = "Macaron Machine"
-        POSTER_AD = "Poster AD"
-        TRUCK_AD = "Truck AD"
-        GRAFFITI_AD = "Graffiti AD"
-        FIGURINE_FACTORY_3D = "3D Figurine Factory"
-        THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
-        ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
-        I_QUIT = "I Quit"
-        HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
-        SMELL_THE_LENS = "Smell the Lens"
-        I_BELIEVE_I_CAN_FLY = "I believe I can fly"
-        STRIKOUT_DANCE = "Strikout Dance"
-        PIXEL_WORLD = "Pixel World"
-        MINT_IN_BOX = "Mint in Box"
-        HANDS_UP_HAND = "Hands up, Hand"
-        FLORA_NYMPH_GO = "Flora Nymph Go"
-        SOMBER_EMBRACE = "Somber Embrace"
-        BEAM_ME_UP = "Beam me up"
-        SUIT_SWAGGER = "Suit Swagger"
-
-
     negative_prompt: str = Field(
         default="", description="Negative prompt to be used for the generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: PixverseV55EffectsResolution = Field(
+        default=PixverseV55EffectsResolution.VALUE_720P, description="The resolution of the generated video."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV55EffectsDuration = Field(
+        default=PixverseV55EffectsDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    thinking_type: ThinkingType | None = Field(
+    thinking_type: PixverseV55EffectsThinkingType | None = Field(
         default=None, description="Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision"
     )
-    effect: Effect = Field(
+    effect: PixverseV55EffectsEffect = Field(
         default="", description="The effect to apply to the video"
     )
     image: ImageRef = Field(
@@ -3902,6 +4078,10 @@ class PixverseV55Effects(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3914,6 +4094,52 @@ class PixverseV55Effects(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV55TransitionAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+class PixverseV55TransitionStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV55TransitionThinkingType(str, Enum):
+    """
+    Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+    """
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
+
+class PixverseV55TransitionDuration(str, Enum):
+    """
+    The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+    VALUE_10 = "10"
+
+class PixverseV55TransitionResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PixverseV55Transition(FALNode):
     """
@@ -3928,72 +4154,26 @@ class PixverseV55Transition(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class ThinkingType(Enum):
-        """
-        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
-        """
-        ENABLED = "enabled"
-        DISABLED = "disabled"
-        AUTO = "auto"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-        VALUE_10 = "10"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: PixverseV55TransitionAspectRatio = Field(
+        default=PixverseV55TransitionAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     prompt: str = Field(
         default="", description="The prompt for the transition"
     )
-    style: Style | None = Field(
+    style: PixverseV55TransitionStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    thinking_type: ThinkingType | None = Field(
+    thinking_type: PixverseV55TransitionThinkingType | None = Field(
         default=None, description="Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds"
+    duration: PixverseV55TransitionDuration = Field(
+        default=PixverseV55TransitionDuration.VALUE_5, description="The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV55TransitionResolution = Field(
+        default=PixverseV55TransitionResolution.VALUE_720P, description="The resolution of the generated video"
     )
     generate_audio_switch: bool = Field(
         default=False, description="Enable audio generation (BGM, SFX, dialogue)"
@@ -4035,6 +4215,10 @@ class PixverseV55Transition(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4047,6 +4231,42 @@ class PixverseV55Transition(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV55ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV55ImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+    VALUE_10 = "10"
+
+class PixverseV55ImageToVideoStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV55ImageToVideoThinkingType(str, Enum):
+    """
+    Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
+    """
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+    AUTO = "auto"
+
 
 class PixverseV55ImageToVideo(FALNode):
     """
@@ -4061,55 +4281,19 @@ class PixverseV55ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-        VALUE_10 = "10"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class ThinkingType(Enum):
-        """
-        Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision
-        """
-        ENABLED = "enabled"
-        DISABLED = "disabled"
-        AUTO = "auto"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV55ImageToVideoResolution = Field(
+        default=PixverseV55ImageToVideoResolution.VALUE_720P, description="The resolution of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds"
+    duration: PixverseV55ImageToVideoDuration = Field(
+        default=PixverseV55ImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds"
     )
-    style: Style | None = Field(
+    style: PixverseV55ImageToVideoStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    thinking_type: ThinkingType | None = Field(
+    thinking_type: PixverseV55ImageToVideoThinkingType | None = Field(
         default=None, description="Prompt optimization mode: 'enabled' to optimize, 'disabled' to turn off, 'auto' for model decision"
     )
     generate_multi_clip_switch: bool = Field(
@@ -4149,6 +4333,10 @@ class PixverseV55ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4161,6 +4349,20 @@ class PixverseV55ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoO1ImageToVideoDuration(str, Enum):
+    """
+    Video duration in seconds.
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+
 
 class KlingVideoO1ImageToVideo(FALNode):
     """
@@ -4175,25 +4377,11 @@ class KlingVideoO1ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        Video duration in seconds.
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default="", description="Use @Image1 to reference the start frame, @Image2 to reference the end frame."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds."
+    duration: KlingVideoO1ImageToVideoDuration = Field(
+        default=KlingVideoO1ImageToVideoDuration.VALUE_5, description="Video duration in seconds."
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="Image to use as the first frame of the video. Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s"
@@ -4222,6 +4410,10 @@ class KlingVideoO1ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4234,6 +4426,28 @@ class KlingVideoO1ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoO1ReferenceToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoO1ReferenceToVideoDuration(str, Enum):
+    """
+    Video duration in seconds.
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+
 
 class KlingVideoO1ReferenceToVideo(FALNode):
     """
@@ -4248,36 +4462,14 @@ class KlingVideoO1ReferenceToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Duration(Enum):
-        """
-        Video duration in seconds.
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default="", description="Take @Element1, @Element2 to reference elements and @Image1, @Image2 to reference images in order."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
+    aspect_ratio: KlingVideoO1ReferenceToVideoAspectRatio = Field(
+        default=KlingVideoO1ReferenceToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Video duration in seconds."
+    duration: KlingVideoO1ReferenceToVideoDuration = Field(
+        default=KlingVideoO1ReferenceToVideoDuration.VALUE_5, description="Video duration in seconds."
     )
     elements: list[OmniVideoElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Reference in prompt as @Element1, @Element2, etc. Maximum 7 total (elements + reference images + start image)."
@@ -4303,6 +4495,10 @@ class KlingVideoO1ReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4315,6 +4511,23 @@ class KlingVideoO1ReferenceToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class BytedanceLynxResolution(str, Enum):
+    """
+    Resolution of the generated video (480p, 580p, or 720p)
+    """
+    VALUE_480P = "480p"
+    VALUE_580P = "580p"
+    VALUE_720P = "720p"
+
+class BytedanceLynxAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video (16:9, 9:16, or 1:1)
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
 
 class BytedanceLynx(FALNode):
     """
@@ -4329,31 +4542,14 @@ class BytedanceLynx(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p, 580p, or 720p)
-        """
-        VALUE_480P = "480p"
-        VALUE_580P = "580p"
-        VALUE_720P = "720p"
-
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video (16:9, 9:16, or 1:1)
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-
     prompt: str = Field(
         default="", description="Text prompt to guide video generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)"
+    resolution: BytedanceLynxResolution = Field(
+        default=BytedanceLynxResolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video (16:9, 9:16, or 1:1)"
+    aspect_ratio: BytedanceLynxAspectRatio = Field(
+        default=BytedanceLynxAspectRatio.RATIO_16_9, description="Aspect ratio of the generated video (16:9, 9:16, or 1:1)"
     )
     num_inference_steps: int = Field(
         default=50, description="Number of inference steps for sampling. Higher values give better quality but take longer."
@@ -4410,6 +4606,10 @@ class BytedanceLynx(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4422,6 +4622,23 @@ class BytedanceLynx(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseSwapResolution(str, Enum):
+    """
+    The output resolution (1080p not supported)
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+
+class PixverseSwapMode(str, Enum):
+    """
+    The swap mode to use
+    """
+    PERSON = "person"
+    OBJECT = "object"
+    BACKGROUND = "background"
+
 
 class PixverseSwap(FALNode):
     """
@@ -4436,28 +4653,11 @@ class PixverseSwap(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The output resolution (1080p not supported)
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-
-    class Mode(Enum):
-        """
-        The swap mode to use
-        """
-        PERSON = "person"
-        OBJECT = "object"
-        BACKGROUND = "background"
-
-
     video: VideoRef = Field(
         default=VideoRef(), description="URL of the external video to swap"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The output resolution (1080p not supported)"
+    resolution: PixverseSwapResolution = Field(
+        default=PixverseSwapResolution.VALUE_720P, description="The output resolution (1080p not supported)"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the target image for swapping"
@@ -4465,8 +4665,8 @@ class PixverseSwap(FALNode):
     original_sound_switch: bool = Field(
         default=True, description="Whether to keep the original audio"
     )
-    mode: Mode = Field(
-        default=Mode.PERSON, description="The swap mode to use"
+    mode: PixverseSwapMode = Field(
+        default=PixverseSwapMode.PERSON, description="The swap mode to use"
     )
     seed: int = Field(
         default=-1, description="Random seed for generation"
@@ -4476,13 +4676,19 @@ class PixverseSwap(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        video_url = (
+            await self._upload_asset_to_fal(client, self.video, context)
+            if not self.video.is_empty()
+            else None
+        )
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
             else None
         )
         arguments = {
-            "video_url": self.video,
+            "video_url": video_url,
             "resolution": self.resolution.value,
             "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "original_sound_switch": self.original_sound_switch,
@@ -4493,6 +4699,10 @@ class PixverseSwap(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4505,6 +4715,14 @@ class PixverseSwap(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PikaV22PikaframesResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PikaV22Pikaframes(FALNode):
     """
@@ -4519,19 +4737,11 @@ class PikaV22Pikaframes(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     prompt: str = Field(
         default="", description="Default prompt for all transitions. Individual transition prompts override this."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PikaV22PikaframesResolution = Field(
+        default=PikaV22PikaframesResolution.VALUE_720P, description="The resolution of the generated video"
     )
     transitions: list[KeyframeTransition] = Field(
         default=[], description="Configuration for each transition. Length must be len(image_urls) - 1. Total duration of all transitions must not exceed 25 seconds. If not provided, uses default 5-second transitions with the global prompt."
@@ -4564,6 +4774,10 @@ class PikaV22Pikaframes(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4576,6 +4790,40 @@ class PikaV22Pikaframes(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LongcatVideoImageToVideo720PAcceleration(str, Enum):
+    """
+    The acceleration level to use for the video generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class LongcatVideoImageToVideo720PVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class LongcatVideoImageToVideo720PVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class LongcatVideoImageToVideo720PVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class LongcatVideoImageToVideo720P(FALNode):
     """
@@ -4590,45 +4838,11 @@ class LongcatVideoImageToVideo720P(FALNode):
     - Visual storytelling
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for the video generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     prompt: str = Field(
         default="First-person view from the cockpit of a Formula 1 car. The driver's gloved hands firmly grip the intricate, carbon-fiber steering wheel adorned with numerous colorful buttons and a vibrant digital display showing race data. Beyond the windshield, a sun-drenched racetrack stretches ahead, lined with cheering spectators in the grandstands. Several rival cars are visible in the distance, creating a dynamic sense of competition. The sky above is a clear, brilliant blue, reflecting the exhilarating atmosphere of a high-speed race. high resolution 4k", description="The prompt to guide the video generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for the video generation."
+    acceleration: LongcatVideoImageToVideo720PAcceleration = Field(
+        default=LongcatVideoImageToVideo720PAcceleration.REGULAR, description="The acceleration level to use for the video generation."
     )
     fps: int = Field(
         default=30, description="The frame rate of the generated video."
@@ -4648,11 +4862,11 @@ class LongcatVideoImageToVideo720P(FALNode):
     negative_prompt: str = Field(
         default="Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards", description="The negative prompt to use for the video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: LongcatVideoImageToVideo720PVideoWriteMode = Field(
+        default=LongcatVideoImageToVideo720PVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: LongcatVideoImageToVideo720PVideoOutputType = Field(
+        default=LongcatVideoImageToVideo720PVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate a video from."
@@ -4660,8 +4874,8 @@ class LongcatVideoImageToVideo720P(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: LongcatVideoImageToVideo720PVideoQuality = Field(
+        default=LongcatVideoImageToVideo720PVideoQuality.HIGH, description="The quality of the generated video."
     )
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion."
@@ -4700,6 +4914,10 @@ class LongcatVideoImageToVideo720P(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4712,6 +4930,40 @@ class LongcatVideoImageToVideo720P(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LongcatVideoImageToVideo480PAcceleration(str, Enum):
+    """
+    The acceleration level to use for the video generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class LongcatVideoImageToVideo480PVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class LongcatVideoImageToVideo480PVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class LongcatVideoImageToVideo480PVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class LongcatVideoImageToVideo480P(FALNode):
     """
@@ -4726,45 +4978,11 @@ class LongcatVideoImageToVideo480P(FALNode):
     - Visual storytelling
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for the video generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     prompt: str = Field(
         default="First-person view from the cockpit of a Formula 1 car. The driver's gloved hands firmly grip the intricate, carbon-fiber steering wheel adorned with numerous colorful buttons and a vibrant digital display showing race data. Beyond the windshield, a sun-drenched racetrack stretches ahead, lined with cheering spectators in the grandstands. Several rival cars are visible in the distance, creating a dynamic sense of competition. The sky above is a clear, brilliant blue, reflecting the exhilarating atmosphere of a high-speed race. high resolution 4k", description="The prompt to guide the video generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for the video generation."
+    acceleration: LongcatVideoImageToVideo480PAcceleration = Field(
+        default=LongcatVideoImageToVideo480PAcceleration.REGULAR, description="The acceleration level to use for the video generation."
     )
     fps: int = Field(
         default=15, description="The frame rate of the generated video."
@@ -4781,11 +4999,11 @@ class LongcatVideoImageToVideo480P(FALNode):
     negative_prompt: str = Field(
         default="Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards", description="The negative prompt to use for the video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: LongcatVideoImageToVideo480PVideoWriteMode = Field(
+        default=LongcatVideoImageToVideo480PVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: LongcatVideoImageToVideo480PVideoOutputType = Field(
+        default=LongcatVideoImageToVideo480PVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate a video from."
@@ -4793,8 +5011,8 @@ class LongcatVideoImageToVideo480P(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: LongcatVideoImageToVideo480PVideoQuality = Field(
+        default=LongcatVideoImageToVideo480PVideoQuality.HIGH, description="The quality of the generated video."
     )
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion."
@@ -4832,6 +5050,10 @@ class LongcatVideoImageToVideo480P(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4844,6 +5066,33 @@ class LongcatVideoImageToVideo480P(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LongcatVideoDistilledImageToVideo720PVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class LongcatVideoDistilledImageToVideo720PVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class LongcatVideoDistilledImageToVideo720PVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class LongcatVideoDistilledImageToVideo720P(FALNode):
     """
@@ -4858,38 +5107,11 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
     - Visual storytelling
     """
 
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: LongcatVideoDistilledImageToVideo720PVideoWriteMode = Field(
+        default=LongcatVideoDistilledImageToVideo720PVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: LongcatVideoDistilledImageToVideo720PVideoOutputType = Field(
+        default=LongcatVideoDistilledImageToVideo720PVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion."
@@ -4921,8 +5143,8 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
     num_frames: int = Field(
         default=162, description="The number of frames to generate."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: LongcatVideoDistilledImageToVideo720PVideoQuality = Field(
+        default=LongcatVideoDistilledImageToVideo720PVideoQuality.HIGH, description="The quality of the generated video."
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -4949,6 +5171,10 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4961,6 +5187,33 @@ class LongcatVideoDistilledImageToVideo720P(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LongcatVideoDistilledImageToVideo480PVideoWriteMode(str, Enum):
+    """
+    The write mode of the generated video.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class LongcatVideoDistilledImageToVideo480PVideoOutputType(str, Enum):
+    """
+    The output type of the generated video.
+    """
+    X264_MP4 = "X264 (.mp4)"
+    VP9_WEBM = "VP9 (.webm)"
+    PRORES4444_MOV = "PRORES4444 (.mov)"
+    GIF_GIF = "GIF (.gif)"
+
+class LongcatVideoDistilledImageToVideo480PVideoQuality(str, Enum):
+    """
+    The quality of the generated video.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class LongcatVideoDistilledImageToVideo480P(FALNode):
     """
@@ -4975,38 +5228,11 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
     - Visual storytelling
     """
 
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the generated video.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class VideoOutputType(Enum):
-        """
-        The output type of the generated video.
-        """
-        X264_MP4 = "X264 (.mp4)"
-        VP9_WEBM = "VP9 (.webm)"
-        PRORES4444_MOV = "PRORES4444 (.mov)"
-        GIF_GIF = "GIF (.gif)"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the generated video.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the generated video."
+    video_write_mode: LongcatVideoDistilledImageToVideo480PVideoWriteMode = Field(
+        default=LongcatVideoDistilledImageToVideo480PVideoWriteMode.BALANCED, description="The write mode of the generated video."
     )
-    video_output_type: VideoOutputType = Field(
-        default=VideoOutputType.X264_MP4, description="The output type of the generated video."
+    video_output_type: LongcatVideoDistilledImageToVideo480PVideoOutputType = Field(
+        default=LongcatVideoDistilledImageToVideo480PVideoOutputType.X264_MP4, description="The output type of the generated video."
     )
     prompt: str = Field(
         default="First-person view from the cockpit of a Formula 1 car. The driver's gloved hands firmly grip the intricate, carbon-fiber steering wheel adorned with numerous colorful buttons and a vibrant digital display showing race data. Beyond the windshield, a sun-drenched racetrack stretches ahead, lined with cheering spectators in the grandstands. Several rival cars are visible in the distance, creating a dynamic sense of competition. The sky above is a clear, brilliant blue, reflecting the exhilarating atmosphere of a high-speed race. high resolution 4k", description="The prompt to guide the video generation."
@@ -5020,8 +5246,8 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to generate a video from."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the generated video."
+    video_quality: LongcatVideoDistilledImageToVideo480PVideoQuality = Field(
+        default=LongcatVideoDistilledImageToVideo480PVideoQuality.HIGH, description="The quality of the generated video."
     )
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable safety checker."
@@ -5062,6 +5288,10 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5074,6 +5304,14 @@ class LongcatVideoDistilledImageToVideo480P(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class MinimaxHailuo23FastStandardImageToVideoDuration(str, Enum):
+    """
+    The duration of the video in seconds.
+    """
+    VALUE_6 = "6"
+    VALUE_10 = "10"
+
 
 class MinimaxHailuo23FastStandardImageToVideo(FALNode):
     """
@@ -5088,19 +5326,11 @@ class MinimaxHailuo23FastStandardImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the video in seconds.
-        """
-        VALUE_6 = "6"
-        VALUE_10 = "10"
-
-
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_6, description="The duration of the video in seconds."
+    duration: MinimaxHailuo23FastStandardImageToVideoDuration = Field(
+        default=MinimaxHailuo23FastStandardImageToVideoDuration.VALUE_6, description="The duration of the video in seconds."
     )
     prompt: str = Field(
         default="", description="Text prompt for video generation"
@@ -5124,6 +5354,10 @@ class MinimaxHailuo23FastStandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5136,6 +5370,14 @@ class MinimaxHailuo23FastStandardImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class MinimaxHailuo23StandardImageToVideoDuration(str, Enum):
+    """
+    The duration of the video in seconds.
+    """
+    VALUE_6 = "6"
+    VALUE_10 = "10"
+
 
 class MinimaxHailuo23StandardImageToVideo(FALNode):
     """
@@ -5150,19 +5392,11 @@ class MinimaxHailuo23StandardImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the video in seconds.
-        """
-        VALUE_6 = "6"
-        VALUE_10 = "10"
-
-
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_6, description="The duration of the video in seconds."
+    duration: MinimaxHailuo23StandardImageToVideoDuration = Field(
+        default=MinimaxHailuo23StandardImageToVideoDuration.VALUE_6, description="The duration of the video in seconds."
     )
     prompt: str = Field(
         default="", description="Text prompt for video generation"
@@ -5186,6 +5420,10 @@ class MinimaxHailuo23StandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5236,6 +5474,10 @@ class MinimaxHailuo23FastProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5248,6 +5490,14 @@ class MinimaxHailuo23FastProImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV25TurboStandardImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
 
 class KlingVideoV25TurboStandardImageToVideo(FALNode):
     """
@@ -5262,19 +5512,11 @@ class KlingVideoV25TurboStandardImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default=""
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV25TurboStandardImageToVideoDuration = Field(
+        default=KlingVideoV25TurboStandardImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
@@ -5302,6 +5544,10 @@ class KlingVideoV25TurboStandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5314,6 +5560,31 @@ class KlingVideoV25TurboStandardImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Veo31FastFirstLastFrameToVideoDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_4S = "4s"
+    VALUE_6S = "6s"
+    VALUE_8S = "8s"
+
+class Veo31FastFirstLastFrameToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class Veo31FastFirstLastFrameToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+    VALUE_4K = "4k"
+
 
 class Veo31FastFirstLastFrameToVideo(FALNode):
     """
@@ -5328,39 +5599,14 @@ class Veo31FastFirstLastFrameToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_4S = "4s"
-        VALUE_6S = "6s"
-        VALUE_8S = "8s"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-        VALUE_4K = "4k"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_8S, description="The duration of the generated video."
+    duration: Veo31FastFirstLastFrameToVideoDuration = Field(
+        default=Veo31FastFirstLastFrameToVideoDuration.VALUE_8S, description="The duration of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video."
+    aspect_ratio: Veo31FastFirstLastFrameToVideoAspectRatio = Field(
+        default=Veo31FastFirstLastFrameToVideoAspectRatio.AUTO, description="The aspect ratio of the generated video."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -5368,8 +5614,8 @@ class Veo31FastFirstLastFrameToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: Veo31FastFirstLastFrameToVideoResolution = Field(
+        default=Veo31FastFirstLastFrameToVideoResolution.VALUE_720P, description="The resolution of the generated video."
     )
     first_frame: VideoRef = Field(
         default=VideoRef(), description="URL of the first frame of the video"
@@ -5385,6 +5631,17 @@ class Veo31FastFirstLastFrameToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        first_frame_url = (
+            await self._upload_asset_to_fal(client, self.first_frame, context)
+            if not self.first_frame.is_empty()
+            else None
+        )
+        last_frame_url = (
+            await self._upload_asset_to_fal(client, self.last_frame, context)
+            if not self.last_frame.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
@@ -5392,14 +5649,18 @@ class Veo31FastFirstLastFrameToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "resolution": self.resolution.value,
-            "first_frame_url": self.first_frame,
+            "first_frame_url": first_frame_url,
             "seed": self.seed,
-            "last_frame_url": self.last_frame,
+            "last_frame_url": last_frame_url,
             "negative_prompt": self.negative_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5412,6 +5673,31 @@ class Veo31FastFirstLastFrameToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Veo31FirstLastFrameToVideoDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_4S = "4s"
+    VALUE_6S = "6s"
+    VALUE_8S = "8s"
+
+class Veo31FirstLastFrameToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class Veo31FirstLastFrameToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+    VALUE_4K = "4k"
+
 
 class Veo31FirstLastFrameToVideo(FALNode):
     """
@@ -5426,39 +5712,14 @@ class Veo31FirstLastFrameToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_4S = "4s"
-        VALUE_6S = "6s"
-        VALUE_8S = "8s"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-        VALUE_4K = "4k"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_8S, description="The duration of the generated video."
+    duration: Veo31FirstLastFrameToVideoDuration = Field(
+        default=Veo31FirstLastFrameToVideoDuration.VALUE_8S, description="The duration of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video."
+    aspect_ratio: Veo31FirstLastFrameToVideoAspectRatio = Field(
+        default=Veo31FirstLastFrameToVideoAspectRatio.AUTO, description="The aspect ratio of the generated video."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -5466,8 +5727,8 @@ class Veo31FirstLastFrameToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: Veo31FirstLastFrameToVideoResolution = Field(
+        default=Veo31FirstLastFrameToVideoResolution.VALUE_720P, description="The resolution of the generated video."
     )
     first_frame: VideoRef = Field(
         default=VideoRef(), description="URL of the first frame of the video"
@@ -5483,6 +5744,17 @@ class Veo31FirstLastFrameToVideo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        first_frame_url = (
+            await self._upload_asset_to_fal(client, self.first_frame, context)
+            if not self.first_frame.is_empty()
+            else None
+        )
+        last_frame_url = (
+            await self._upload_asset_to_fal(client, self.last_frame, context)
+            if not self.last_frame.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "duration": self.duration.value,
@@ -5490,14 +5762,18 @@ class Veo31FirstLastFrameToVideo(FALNode):
             "generate_audio": self.generate_audio,
             "auto_fix": self.auto_fix,
             "resolution": self.resolution.value,
-            "first_frame_url": self.first_frame,
+            "first_frame_url": first_frame_url,
             "seed": self.seed,
-            "last_frame_url": self.last_frame,
+            "last_frame_url": last_frame_url,
             "negative_prompt": self.negative_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5510,6 +5786,28 @@ class Veo31FirstLastFrameToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Veo31ReferenceToVideoDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_8S = "8s"
+
+class Veo31ReferenceToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class Veo31ReferenceToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+    VALUE_4K = "4k"
+
 
 class Veo31ReferenceToVideo(FALNode):
     """
@@ -5524,42 +5822,20 @@ class Veo31ReferenceToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_8S = "8s"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-        VALUE_4K = "4k"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_8S, description="The duration of the generated video."
+    duration: Veo31ReferenceToVideoDuration = Field(
+        default=Veo31ReferenceToVideoDuration.VALUE_8S, description="The duration of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video."
+    aspect_ratio: Veo31ReferenceToVideoAspectRatio = Field(
+        default=Veo31ReferenceToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: Veo31ReferenceToVideoResolution = Field(
+        default=Veo31ReferenceToVideoResolution.VALUE_720P, description="The resolution of the generated video."
     )
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
@@ -5587,6 +5863,10 @@ class Veo31ReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5599,6 +5879,31 @@ class Veo31ReferenceToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Veo31FastImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_4S = "4s"
+    VALUE_6S = "6s"
+    VALUE_8S = "8s"
+
+class Veo31FastImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video. Only 16:9 and 9:16 are supported.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class Veo31FastImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+    VALUE_4K = "4k"
+
 
 class Veo31FastImageToVideo(FALNode):
     """
@@ -5613,39 +5918,14 @@ class Veo31FastImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_4S = "4s"
-        VALUE_6S = "6s"
-        VALUE_8S = "8s"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video. Only 16:9 and 9:16 are supported.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-        VALUE_4K = "4k"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_8S, description="The duration of the generated video."
+    duration: Veo31FastImageToVideoDuration = Field(
+        default=Veo31FastImageToVideoDuration.VALUE_8S, description="The duration of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video. Only 16:9 and 9:16 are supported."
+    aspect_ratio: Veo31FastImageToVideoAspectRatio = Field(
+        default=Veo31FastImageToVideoAspectRatio.AUTO, description="The aspect ratio of the generated video. Only 16:9 and 9:16 are supported."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -5653,8 +5933,8 @@ class Veo31FastImageToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: Veo31FastImageToVideoResolution = Field(
+        default=Veo31FastImageToVideoResolution.VALUE_720P, description="The resolution of the generated video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
@@ -5686,6 +5966,10 @@ class Veo31FastImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5698,6 +5982,31 @@ class Veo31FastImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Veo31ImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_4S = "4s"
+    VALUE_6S = "6s"
+    VALUE_8S = "8s"
+
+class Veo31ImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video. Only 16:9 and 9:16 are supported.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class Veo31ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+    VALUE_4K = "4k"
+
 
 class Veo31ImageToVideo(FALNode):
     """
@@ -5712,39 +6021,14 @@ class Veo31ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_4S = "4s"
-        VALUE_6S = "6s"
-        VALUE_8S = "8s"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video. Only 16:9 and 9:16 are supported.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-        VALUE_4K = "4k"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing the video you want to generate"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_8S, description="The duration of the generated video."
+    duration: Veo31ImageToVideoDuration = Field(
+        default=Veo31ImageToVideoDuration.VALUE_8S, description="The duration of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video. Only 16:9 and 9:16 are supported."
+    aspect_ratio: Veo31ImageToVideoAspectRatio = Field(
+        default=Veo31ImageToVideoAspectRatio.AUTO, description="The aspect ratio of the generated video. Only 16:9 and 9:16 are supported."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -5752,8 +6036,8 @@ class Veo31ImageToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: Veo31ImageToVideoResolution = Field(
+        default=Veo31ImageToVideoResolution.VALUE_720P, description="The resolution of the generated video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
@@ -5785,6 +6069,10 @@ class Veo31ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5847,6 +6135,10 @@ class OviImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5859,6 +6151,14 @@ class OviImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class VeedFabric10FastResolution(str, Enum):
+    """
+    Resolution
+    """
+    VALUE_720P = "720p"
+    VALUE_480P = "480p"
+
 
 class VeedFabric10Fast(FALNode):
     """
@@ -5873,15 +6173,7 @@ class VeedFabric10Fast(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        Resolution
-        """
-        VALUE_720P = "720p"
-        VALUE_480P = "480p"
-
-
-    resolution: Resolution = Field(
+    resolution: VeedFabric10FastResolution = Field(
         default="", description="Resolution"
     )
     audio: AudioRef = Field(
@@ -5905,6 +6197,10 @@ class VeedFabric10Fast(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5917,6 +6213,14 @@ class VeedFabric10Fast(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class VeedFabric10Resolution(str, Enum):
+    """
+    Resolution
+    """
+    VALUE_720P = "720p"
+    VALUE_480P = "480p"
+
 
 class VeedFabric10(FALNode):
     """
@@ -5931,15 +6235,7 @@ class VeedFabric10(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        Resolution
-        """
-        VALUE_720P = "720p"
-        VALUE_480P = "480p"
-
-
-    resolution: Resolution = Field(
+    resolution: VeedFabric10Resolution = Field(
         default="", description="Resolution"
     )
     audio: AudioRef = Field(
@@ -5963,6 +6259,10 @@ class VeedFabric10(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6013,6 +6313,10 @@ class KlingVideoV1StandardAiAvatar(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6063,6 +6367,10 @@ class KlingVideoV1ProAiAvatar(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6075,6 +6383,20 @@ class KlingVideoV1ProAiAvatar(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class DecartLucy14BImageToVideoAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video.
+    """
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+
+class DecartLucy14BImageToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video
+    """
+    VALUE_720P = "720p"
+
 
 class DecartLucy14BImageToVideo(FALNode):
     """
@@ -6089,31 +6411,17 @@ class DecartLucy14BImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video.
-        """
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video
-        """
-        VALUE_720P = "720p"
-
-
     sync_mode: bool = Field(
         default=True, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video."
+    aspect_ratio: DecartLucy14BImageToVideoAspectRatio = Field(
+        default=DecartLucy14BImageToVideoAspectRatio.RATIO_16_9, description="Aspect ratio of the generated video."
     )
     prompt: str = Field(
         default="", description="Text description of the desired video content"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video"
+    resolution: DecartLucy14BImageToVideoResolution = Field(
+        default=DecartLucy14BImageToVideoResolution.VALUE_720P, description="Resolution of the generated video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -6135,6 +6443,10 @@ class DecartLucy14BImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6147,6 +6459,15 @@ class DecartLucy14BImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class WanAtiResolution(str, Enum):
+    """
+    Resolution of the generated video (480p, 580p, 720p).
+    """
+    VALUE_480P = "480p"
+    VALUE_580P = "580p"
+    VALUE_720P = "720p"
+
 
 class WanAti(FALNode):
     """
@@ -6161,20 +6482,11 @@ class WanAti(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p, 580p, 720p).
-        """
-        VALUE_480P = "480p"
-        VALUE_580P = "580p"
-        VALUE_720P = "720p"
-
-
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="Resolution of the generated video (480p, 580p, 720p)."
+    resolution: WanAtiResolution = Field(
+        default=WanAtiResolution.VALUE_480P, description="Resolution of the generated video (480p, 580p, 720p)."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image."
@@ -6210,6 +6522,10 @@ class WanAti(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6222,6 +6538,20 @@ class WanAti(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class DecartLucy5bImageToVideoAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video.
+    """
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+
+class DecartLucy5bImageToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video
+    """
+    VALUE_720P = "720p"
+
 
 class DecartLucy5bImageToVideo(FALNode):
     """
@@ -6236,31 +6566,17 @@ class DecartLucy5bImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video.
-        """
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video
-        """
-        VALUE_720P = "720p"
-
-
     prompt: str = Field(
         default="", description="Text description of the desired video content"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the generated video."
+    aspect_ratio: DecartLucy5bImageToVideoAspectRatio = Field(
+        default=DecartLucy5bImageToVideoAspectRatio.RATIO_16_9, description="Aspect ratio of the generated video."
     )
     sync_mode: bool = Field(
         default=True, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video"
+    resolution: DecartLucy5bImageToVideoResolution = Field(
+        default=DecartLucy5bImageToVideoResolution.VALUE_720P, description="Resolution of the generated video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -6282,6 +6598,10 @@ class DecartLucy5bImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6294,6 +6614,43 @@ class DecartLucy5bImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV5TransitionAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+class PixverseV5TransitionStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV5TransitionDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV5TransitionResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PixverseV5Transition(FALNode):
     """
@@ -6308,60 +6665,23 @@ class PixverseV5Transition(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: PixverseV5TransitionAspectRatio = Field(
+        default=PixverseV5TransitionAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     prompt: str = Field(
         default="", description="The prompt for the transition"
     )
-    style: Style | None = Field(
+    style: PixverseV5TransitionStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV5TransitionDuration = Field(
+        default=PixverseV5TransitionDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV5TransitionResolution = Field(
+        default=PixverseV5TransitionResolution.VALUE_720P, description="The resolution of the generated video"
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
@@ -6398,6 +6718,10 @@ class PixverseV5Transition(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6410,6 +6734,124 @@ class PixverseV5Transition(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV5EffectsResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV5EffectsDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV5EffectsEffect(str, Enum):
+    """
+    The effect to apply to the video
+    """
+    KISS_ME_AI = "Kiss Me AI"
+    KISS = "Kiss"
+    MUSCLE_SURGE = "Muscle Surge"
+    WARMTH_OF_JESUS = "Warmth of Jesus"
+    ANYTHING_ROBOT = "Anything, Robot"
+    THE_TIGER_TOUCH = "The Tiger Touch"
+    HUG = "Hug"
+    HOLY_WINGS = "Holy Wings"
+    MICROWAVE = "Microwave"
+    ZOMBIE_MODE = "Zombie Mode"
+    SQUID_GAME = "Squid Game"
+    BABY_FACE = "Baby Face"
+    BLACK_MYTH_WUKONG = "Black Myth: Wukong"
+    LONG_HAIR_MAGIC = "Long Hair Magic"
+    LEGGY_RUN = "Leggy Run"
+    FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
+    PUNCH_FACE = "Punch Face"
+    CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
+    THUNDER_GOD = "Thunder God"
+    EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
+    WHOS_ARRESTED = "Who's Arrested?"
+    BABY_ARRIVED = "Baby Arrived"
+    WEREWOLF_RAGE = "Werewolf Rage"
+    BALD_SWIPE = "Bald Swipe"
+    BOOM_DROP = "BOOM DROP"
+    HUGE_CUTIE = "Huge Cutie"
+    LIQUID_METAL = "Liquid Metal"
+    SHARKSNAP = "Sharksnap!"
+    DUST_ME_AWAY = "Dust Me Away"
+    FIGURINE_FACTOR_3D = "3D Figurine Factor"
+    BIKINI_UP = "Bikini Up"
+    MY_GIRLFRIENDS = "My Girlfriends"
+    MY_BOYFRIENDS = "My Boyfriends"
+    SUBJECT_3_FEVER = "Subject 3 Fever"
+    EARTH_ZOOM = "Earth Zoom"
+    POLE_DANCE = "Pole Dance"
+    VROOM_DANCE = "Vroom Dance"
+    GHOSTFACE_TERROR = "GhostFace Terror"
+    DRAGON_EVOKER = "Dragon Evoker"
+    SKELETAL_BAE = "Skeletal Bae"
+    SUMMONING_SUCCUBUS = "Summoning succubus"
+    HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
+    NAKED_EYE_AD_3D = "3D Naked-Eye AD"
+    PACKAGE_EXPLOSION = "Package Explosion"
+    DISHES_SERVED = "Dishes Served"
+    OCEAN_AD = "Ocean ad"
+    SUPERMARKET_AD = "Supermarket AD"
+    TREE_DOLL = "Tree doll"
+    COME_FEEL_MY_ABS = "Come Feel My Abs"
+    THE_BICEP_FLEX = "The Bicep Flex"
+    LONDON_ELITE_VIBE = "London Elite Vibe"
+    FLORA_NYMPH_GOWN = "Flora Nymph Gown"
+    CHRISTMAS_COSTUME = "Christmas Costume"
+    ITS_SNOWY = "It's Snowy"
+    REINDEER_CRUISER = "Reindeer Cruiser"
+    SNOW_GLOBE_MAKER = "Snow Globe Maker"
+    PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
+    ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
+    CAT_CHRISTMAS_BOX = "Cat Christmas Box"
+    STARLIGHT_GIFT_BOX = "Starlight Gift Box"
+    XMAS_POSTER = "Xmas Poster"
+    PET_CHRISTMAS_TREE = "Pet Christmas Tree"
+    CITY_SANTA_HAT = "City Santa Hat"
+    STOCKING_SWEETIE = "Stocking Sweetie"
+    CHRISTMAS_NIGHT = "Christmas Night"
+    XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
+    GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
+    GIANT_PRODUCT = "Giant Product"
+    TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
+    BEACH_AD = "Beach AD"
+    SHOAL_SURROUND = "Shoal Surround"
+    MECHANICAL_ASSEMBLY = "Mechanical Assembly"
+    LIGHTING_AD = "Lighting AD"
+    BILLBOARD_AD = "Billboard AD"
+    PRODUCT_CLOSE_UP = "Product close-up"
+    PARACHUTE_DELIVERY = "Parachute Delivery"
+    DREAMLIKE_CLOUD = "Dreamlike Cloud"
+    MACARON_MACHINE = "Macaron Machine"
+    POSTER_AD = "Poster AD"
+    TRUCK_AD = "Truck AD"
+    GRAFFITI_AD = "Graffiti AD"
+    FIGURINE_FACTORY_3D = "3D Figurine Factory"
+    THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
+    ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
+    I_QUIT = "I Quit"
+    HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
+    SMELL_THE_LENS = "Smell the Lens"
+    I_BELIEVE_I_CAN_FLY = "I believe I can fly"
+    STRIKOUT_DANCE = "Strikout Dance"
+    PIXEL_WORLD = "Pixel World"
+    MINT_IN_BOX = "Mint in Box"
+    HANDS_UP_HAND = "Hands up, Hand"
+    FLORA_NYMPH_GO = "Flora Nymph Go"
+    SOMBER_EMBRACE = "Somber Embrace"
+    BEAM_ME_UP = "Beam me up"
+    SUIT_SWAGGER = "Suit Swagger"
+
 
 class PixverseV5Effects(FALNode):
     """
@@ -6424,134 +6866,16 @@ class PixverseV5Effects(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Effect(Enum):
-        """
-        The effect to apply to the video
-        """
-        KISS_ME_AI = "Kiss Me AI"
-        KISS = "Kiss"
-        MUSCLE_SURGE = "Muscle Surge"
-        WARMTH_OF_JESUS = "Warmth of Jesus"
-        ANYTHING_ROBOT = "Anything, Robot"
-        THE_TIGER_TOUCH = "The Tiger Touch"
-        HUG = "Hug"
-        HOLY_WINGS = "Holy Wings"
-        MICROWAVE = "Microwave"
-        ZOMBIE_MODE = "Zombie Mode"
-        SQUID_GAME = "Squid Game"
-        BABY_FACE = "Baby Face"
-        BLACK_MYTH_WUKONG = "Black Myth: Wukong"
-        LONG_HAIR_MAGIC = "Long Hair Magic"
-        LEGGY_RUN = "Leggy Run"
-        FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
-        PUNCH_FACE = "Punch Face"
-        CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
-        THUNDER_GOD = "Thunder God"
-        EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
-        WHOS_ARRESTED = "Who's Arrested?"
-        BABY_ARRIVED = "Baby Arrived"
-        WEREWOLF_RAGE = "Werewolf Rage"
-        BALD_SWIPE = "Bald Swipe"
-        BOOM_DROP = "BOOM DROP"
-        HUGE_CUTIE = "Huge Cutie"
-        LIQUID_METAL = "Liquid Metal"
-        SHARKSNAP = "Sharksnap!"
-        DUST_ME_AWAY = "Dust Me Away"
-        FIGURINE_FACTOR_3D = "3D Figurine Factor"
-        BIKINI_UP = "Bikini Up"
-        MY_GIRLFRIENDS = "My Girlfriends"
-        MY_BOYFRIENDS = "My Boyfriends"
-        SUBJECT_3_FEVER = "Subject 3 Fever"
-        EARTH_ZOOM = "Earth Zoom"
-        POLE_DANCE = "Pole Dance"
-        VROOM_DANCE = "Vroom Dance"
-        GHOSTFACE_TERROR = "GhostFace Terror"
-        DRAGON_EVOKER = "Dragon Evoker"
-        SKELETAL_BAE = "Skeletal Bae"
-        SUMMONING_SUCCUBUS = "Summoning succubus"
-        HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
-        NAKED_EYE_AD_3D = "3D Naked-Eye AD"
-        PACKAGE_EXPLOSION = "Package Explosion"
-        DISHES_SERVED = "Dishes Served"
-        OCEAN_AD = "Ocean ad"
-        SUPERMARKET_AD = "Supermarket AD"
-        TREE_DOLL = "Tree doll"
-        COME_FEEL_MY_ABS = "Come Feel My Abs"
-        THE_BICEP_FLEX = "The Bicep Flex"
-        LONDON_ELITE_VIBE = "London Elite Vibe"
-        FLORA_NYMPH_GOWN = "Flora Nymph Gown"
-        CHRISTMAS_COSTUME = "Christmas Costume"
-        ITS_SNOWY = "It's Snowy"
-        REINDEER_CRUISER = "Reindeer Cruiser"
-        SNOW_GLOBE_MAKER = "Snow Globe Maker"
-        PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
-        ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
-        CAT_CHRISTMAS_BOX = "Cat Christmas Box"
-        STARLIGHT_GIFT_BOX = "Starlight Gift Box"
-        XMAS_POSTER = "Xmas Poster"
-        PET_CHRISTMAS_TREE = "Pet Christmas Tree"
-        CITY_SANTA_HAT = "City Santa Hat"
-        STOCKING_SWEETIE = "Stocking Sweetie"
-        CHRISTMAS_NIGHT = "Christmas Night"
-        XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
-        GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
-        GIANT_PRODUCT = "Giant Product"
-        TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
-        BEACH_AD = "Beach AD"
-        SHOAL_SURROUND = "Shoal Surround"
-        MECHANICAL_ASSEMBLY = "Mechanical Assembly"
-        LIGHTING_AD = "Lighting AD"
-        BILLBOARD_AD = "Billboard AD"
-        PRODUCT_CLOSE_UP = "Product close-up"
-        PARACHUTE_DELIVERY = "Parachute Delivery"
-        DREAMLIKE_CLOUD = "Dreamlike Cloud"
-        MACARON_MACHINE = "Macaron Machine"
-        POSTER_AD = "Poster AD"
-        TRUCK_AD = "Truck AD"
-        GRAFFITI_AD = "Graffiti AD"
-        FIGURINE_FACTORY_3D = "3D Figurine Factory"
-        THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
-        ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
-        I_QUIT = "I Quit"
-        HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
-        SMELL_THE_LENS = "Smell the Lens"
-        I_BELIEVE_I_CAN_FLY = "I believe I can fly"
-        STRIKOUT_DANCE = "Strikout Dance"
-        PIXEL_WORLD = "Pixel World"
-        MINT_IN_BOX = "Mint in Box"
-        HANDS_UP_HAND = "Hands up, Hand"
-        FLORA_NYMPH_GO = "Flora Nymph Go"
-        SOMBER_EMBRACE = "Somber Embrace"
-        BEAM_ME_UP = "Beam me up"
-        SUIT_SWAGGER = "Suit Swagger"
-
-
     negative_prompt: str = Field(
         default="", description="Negative prompt to be used for the generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: PixverseV5EffectsResolution = Field(
+        default=PixverseV5EffectsResolution.VALUE_720P, description="The resolution of the generated video."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV5EffectsDuration = Field(
+        default=PixverseV5EffectsDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    effect: Effect = Field(
+    effect: PixverseV5EffectsEffect = Field(
         default="", description="The effect to apply to the video"
     )
     image: ImageRef = Field(
@@ -6574,6 +6898,10 @@ class PixverseV5Effects(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6586,6 +6914,33 @@ class PixverseV5Effects(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV5ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV5ImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV5ImageToVideoStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
 
 class PixverseV5ImageToVideo(FALNode):
     """
@@ -6600,43 +6955,16 @@ class PixverseV5ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV5ImageToVideoResolution = Field(
+        default=PixverseV5ImageToVideoResolution.VALUE_720P, description="The resolution of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds"
+    duration: PixverseV5ImageToVideoDuration = Field(
+        default=PixverseV5ImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds"
     )
-    style: Style | None = Field(
+    style: PixverseV5ImageToVideoStyle | None = Field(
         default=None, description="The style of the generated video"
     )
     image: ImageRef = Field(
@@ -6667,6 +6995,10 @@ class PixverseV5ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6679,6 +7011,24 @@ class PixverseV5ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class MoonvalleyMareyI2vDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_5S = "5s"
+    VALUE_10S = "10s"
+
+class MoonvalleyMareyI2vDimensions(str, Enum):
+    """
+    The dimensions of the generated video in width x height format.
+    """
+    VALUE_1920X1080 = "1920x1080"
+    VALUE_1080X1920 = "1080x1920"
+    VALUE_1152X1152 = "1152x1152"
+    VALUE_1536X1152 = "1536x1152"
+    VALUE_1152X1536 = "1152x1536"
+
 
 class MoonvalleyMareyI2v(FALNode):
     """
@@ -6693,35 +7043,17 @@ class MoonvalleyMareyI2v(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_5S = "5s"
-        VALUE_10S = "10s"
-
-    class Dimensions(Enum):
-        """
-        The dimensions of the generated video in width x height format.
-        """
-        VALUE_1920X1080 = "1920x1080"
-        VALUE_1080X1920 = "1080x1920"
-        VALUE_1152X1152 = "1152x1152"
-        VALUE_1536X1152 = "1536x1152"
-        VALUE_1152X1536 = "1152x1536"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate a video from"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5S, description="The duration of the generated video."
+    duration: MoonvalleyMareyI2vDuration = Field(
+        default=MoonvalleyMareyI2vDuration.VALUE_5S, description="The duration of the generated video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image to use as the first frame of the video."
     )
-    dimensions: Dimensions = Field(
-        default=Dimensions.VALUE_1920X1080, description="The dimensions of the generated video in width x height format."
+    dimensions: MoonvalleyMareyI2vDimensions = Field(
+        default=MoonvalleyMareyI2vDimensions.VALUE_1920X1080, description="The dimensions of the generated video in width x height format."
     )
     guidance_scale: str = Field(
         default="", description="Controls how strongly the generation is guided by the prompt (0-20). Higher values follow the prompt more closely."
@@ -6751,6 +7083,10 @@ class MoonvalleyMareyI2v(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6763,6 +7099,56 @@ class MoonvalleyMareyI2v(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class WanV22A14bImageToVideoLoraAcceleration(str, Enum):
+    """
+    Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class WanV22A14bImageToVideoLoraVideoWriteMode(str, Enum):
+    """
+    The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class WanV22A14bImageToVideoLoraAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class WanV22A14bImageToVideoLoraResolution(str, Enum):
+    """
+    Resolution of the generated video (480p, 580p, or 720p).
+    """
+    VALUE_480P = "480p"
+    VALUE_580P = "580p"
+    VALUE_720P = "720p"
+
+class WanV22A14bImageToVideoLoraVideoQuality(str, Enum):
+    """
+    The quality of the output video. Higher quality means better visual quality but larger file size.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+class WanV22A14bImageToVideoLoraInterpolatorModel(str, Enum):
+    """
+    The model to use for frame interpolation. If None, no interpolation is applied.
+    """
+    NONE = "none"
+    FILM = "film"
+    RIFE = "rife"
+
 
 class WanV22A14bImageToVideoLora(FALNode):
     """
@@ -6777,56 +7163,6 @@ class WanV22A14bImageToVideoLora(FALNode):
     - Visual storytelling
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p, 580p, or 720p).
-        """
-        VALUE_480P = "480p"
-        VALUE_580P = "580p"
-        VALUE_720P = "720p"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the output video. Higher quality means better visual quality but larger file size.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-    class InterpolatorModel(Enum):
-        """
-        The model to use for frame interpolation. If None, no interpolation is applied.
-        """
-        NONE = "none"
-        FILM = "film"
-        RIFE = "rife"
-
-
     shift: float = Field(
         default=5, description="Shift value for the video. Must be between 1.0 and 10.0."
     )
@@ -6836,8 +7172,8 @@ class WanV22A14bImageToVideoLora(FALNode):
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    acceleration: WanV22A14bImageToVideoLoraAcceleration = Field(
+        default=WanV22A14bImageToVideoLoraAcceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
     )
     num_interpolated_frames: int = Field(
         default=1, description="Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4."
@@ -6863,14 +7199,14 @@ class WanV22A14bImageToVideoLora(FALNode):
     guidance_scale: float = Field(
         default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    video_write_mode: WanV22A14bImageToVideoLoraVideoWriteMode = Field(
+        default=WanV22A14bImageToVideoLoraVideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
+    aspect_ratio: WanV22A14bImageToVideoLoraAspectRatio = Field(
+        default=WanV22A14bImageToVideoLoraAspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)."
+    resolution: WanV22A14bImageToVideoLoraResolution = Field(
+        default=WanV22A14bImageToVideoLoraResolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)."
     )
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
@@ -6878,8 +7214,8 @@ class WanV22A14bImageToVideoLora(FALNode):
     guidance_scale_2: float = Field(
         default=4, description="Guidance scale for the second stage of the model. This is used to control the adherence to the prompt in the second stage of the model."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    video_quality: WanV22A14bImageToVideoLoraVideoQuality = Field(
+        default=WanV22A14bImageToVideoLoraVideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
@@ -6890,8 +7226,8 @@ class WanV22A14bImageToVideoLora(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. If None, a random seed is chosen."
     )
-    interpolator_model: InterpolatorModel = Field(
-        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. If None, no interpolation is applied."
+    interpolator_model: WanV22A14bImageToVideoLoraInterpolatorModel = Field(
+        default=WanV22A14bImageToVideoLoraInterpolatorModel.FILM, description="The model to use for frame interpolation. If None, no interpolation is applied."
     )
     num_inference_steps: int = Field(
         default=27, description="Number of inference steps for sampling. Higher values give better quality but take longer."
@@ -6940,6 +7276,10 @@ class WanV22A14bImageToVideoLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6952,6 +7292,14 @@ class WanV22A14bImageToVideoLora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class MinimaxHailuo02FastImageToVideoDuration(str, Enum):
+    """
+    The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.
+    """
+    VALUE_6 = "6"
+    VALUE_10 = "10"
+
 
 class MinimaxHailuo02FastImageToVideo(FALNode):
     """
@@ -6966,19 +7314,11 @@ class MinimaxHailuo02FastImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.
-        """
-        VALUE_6 = "6"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default=""
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_6, description="The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution."
+    duration: MinimaxHailuo02FastImageToVideoDuration = Field(
+        default=MinimaxHailuo02FastImageToVideoDuration.VALUE_6, description="The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution."
     )
     prompt_optimizer: bool = Field(
         default=True, description="Whether to use the model's prompt optimizer"
@@ -7002,6 +7342,10 @@ class MinimaxHailuo02FastImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7014,6 +7358,30 @@ class MinimaxHailuo02FastImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Veo3ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class Veo3ImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class Veo3ImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_4S = "4s"
+    VALUE_6S = "6s"
+    VALUE_8S = "8s"
+
 
 class Veo3ImageToVideo(FALNode):
     """
@@ -7028,38 +7396,14 @@ class Veo3ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_4S = "4s"
-        VALUE_6S = "6s"
-        VALUE_8S = "8s"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing how the image should be animated"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: Veo3ImageToVideoResolution = Field(
+        default=Veo3ImageToVideoResolution.VALUE_720P, description="The resolution of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video."
+    aspect_ratio: Veo3ImageToVideoAspectRatio = Field(
+        default=Veo3ImageToVideoAspectRatio.AUTO, description="The aspect ratio of the generated video."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -7067,8 +7411,8 @@ class Veo3ImageToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_8S, description="The duration of the generated video."
+    duration: Veo3ImageToVideoDuration = Field(
+        default=Veo3ImageToVideoDuration.VALUE_8S, description="The duration of the generated video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
@@ -7092,6 +7436,10 @@ class Veo3ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7104,6 +7452,48 @@ class Veo3ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class WanV22A14bImageToVideoTurboAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class WanV22A14bImageToVideoTurboAcceleration(str, Enum):
+    """
+    Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class WanV22A14bImageToVideoTurboVideoWriteMode(str, Enum):
+    """
+    The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class WanV22A14bImageToVideoTurboResolution(str, Enum):
+    """
+    Resolution of the generated video (480p, 580p, or 720p).
+    """
+    VALUE_480P = "480p"
+    VALUE_580P = "580p"
+    VALUE_720P = "720p"
+
+class WanV22A14bImageToVideoTurboVideoQuality(str, Enum):
+    """
+    The quality of the output video. Higher quality means better visual quality but larger file size.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
 
 class WanV22A14bImageToVideoTurbo(FALNode):
     """
@@ -7118,62 +7508,20 @@ class WanV22A14bImageToVideoTurbo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Acceleration(Enum):
-        """
-        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p, 580p, or 720p).
-        """
-        VALUE_480P = "480p"
-        VALUE_580P = "580p"
-        VALUE_720P = "720p"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the output video. Higher quality means better visual quality but larger file size.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
+    aspect_ratio: WanV22A14bImageToVideoTurboAspectRatio = Field(
+        default=WanV22A14bImageToVideoTurboAspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    acceleration: WanV22A14bImageToVideoTurboAcceleration = Field(
+        default=WanV22A14bImageToVideoTurboAcceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    video_write_mode: WanV22A14bImageToVideoTurboVideoWriteMode = Field(
+        default=WanV22A14bImageToVideoTurboVideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)."
+    resolution: WanV22A14bImageToVideoTurboResolution = Field(
+        default=WanV22A14bImageToVideoTurboResolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)."
     )
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
@@ -7181,8 +7529,8 @@ class WanV22A14bImageToVideoTurbo(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    video_quality: WanV22A14bImageToVideoTurboVideoQuality = Field(
+        default=WanV22A14bImageToVideoTurboVideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, input data will be checked for safety before processing."
@@ -7225,6 +7573,10 @@ class WanV22A14bImageToVideoTurbo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7238,6 +7590,48 @@ class WanV22A14bImageToVideoTurbo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
+class WanV225bImageToVideoVideoWriteMode(str, Enum):
+    """
+    The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class WanV225bImageToVideoAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class WanV225bImageToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (580p or 720p).
+    """
+    VALUE_580P = "580p"
+    VALUE_720P = "720p"
+
+class WanV225bImageToVideoVideoQuality(str, Enum):
+    """
+    The quality of the output video. Higher quality means better visual quality but larger file size.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+class WanV225bImageToVideoInterpolatorModel(str, Enum):
+    """
+    The model to use for frame interpolation. If None, no interpolation is applied.
+    """
+    NONE = "none"
+    FILM = "film"
+    RIFE = "rife"
+
+
 class WanV225bImageToVideo(FALNode):
     """
     Wan 2.2's 5B model produces up to 5 seconds of video 720p at 24FPS with fluid motion and powerful prompt understanding
@@ -7250,48 +7644,6 @@ class WanV225bImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (580p or 720p).
-        """
-        VALUE_580P = "580p"
-        VALUE_720P = "720p"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the output video. Higher quality means better visual quality but larger file size.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-    class InterpolatorModel(Enum):
-        """
-        The model to use for frame interpolation. If None, no interpolation is applied.
-        """
-        NONE = "none"
-        FILM = "film"
-        RIFE = "rife"
-
 
     shift: float = Field(
         default=5, description="Shift value for the video. Must be between 1.0 and 10.0."
@@ -7317,14 +7669,14 @@ class WanV225bImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="", description="Negative prompt for video generation."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    video_write_mode: WanV225bImageToVideoVideoWriteMode = Field(
+        default=WanV225bImageToVideoVideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
+    aspect_ratio: WanV225bImageToVideoAspectRatio = Field(
+        default=WanV225bImageToVideoAspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (580p or 720p)."
+    resolution: WanV225bImageToVideoResolution = Field(
+        default=WanV225bImageToVideoResolution.VALUE_720P, description="Resolution of the generated video (580p or 720p)."
     )
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
@@ -7332,8 +7684,8 @@ class WanV225bImageToVideo(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    video_quality: WanV225bImageToVideoVideoQuality = Field(
+        default=WanV225bImageToVideoVideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
     adjust_fps_for_interpolation: bool = Field(
         default=True, description="If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is."
@@ -7341,8 +7693,8 @@ class WanV225bImageToVideo(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. If None, a random seed is chosen."
     )
-    interpolator_model: InterpolatorModel = Field(
-        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. If None, no interpolation is applied."
+    interpolator_model: WanV225bImageToVideoInterpolatorModel = Field(
+        default=WanV225bImageToVideoInterpolatorModel.FILM, description="The model to use for frame interpolation. If None, no interpolation is applied."
     )
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
@@ -7381,6 +7733,10 @@ class WanV225bImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7393,6 +7749,56 @@ class WanV225bImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class WanV22A14bImageToVideoAcceleration(str, Enum):
+    """
+    Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class WanV22A14bImageToVideoVideoWriteMode(str, Enum):
+    """
+    The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+    """
+    FAST = "fast"
+    BALANCED = "balanced"
+    SMALL = "small"
+
+class WanV22A14bImageToVideoAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class WanV22A14bImageToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (480p, 580p, or 720p).
+    """
+    VALUE_480P = "480p"
+    VALUE_580P = "580p"
+    VALUE_720P = "720p"
+
+class WanV22A14bImageToVideoVideoQuality(str, Enum):
+    """
+    The quality of the output video. Higher quality means better visual quality but larger file size.
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
+
+class WanV22A14bImageToVideoInterpolatorModel(str, Enum):
+    """
+    The model to use for frame interpolation. If None, no interpolation is applied.
+    """
+    NONE = "none"
+    FILM = "film"
+    RIFE = "rife"
+
 
 class WanV22A14bImageToVideo(FALNode):
     """
@@ -7407,64 +7813,14 @@ class WanV22A14bImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class VideoWriteMode(Enum):
-        """
-        The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
-        """
-        FAST = "fast"
-        BALANCED = "balanced"
-        SMALL = "small"
-
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p, 580p, or 720p).
-        """
-        VALUE_480P = "480p"
-        VALUE_580P = "580p"
-        VALUE_720P = "720p"
-
-    class VideoQuality(Enum):
-        """
-        The quality of the output video. Higher quality means better visual quality but larger file size.
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-        MAXIMUM = "maximum"
-
-    class InterpolatorModel(Enum):
-        """
-        The model to use for frame interpolation. If None, no interpolation is applied.
-        """
-        NONE = "none"
-        FILM = "film"
-        RIFE = "rife"
-
-
     shift: float = Field(
         default=5, description="Shift value for the video. Must be between 1.0 and 10.0."
     )
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    acceleration: WanV22A14bImageToVideoAcceleration = Field(
+        default=WanV22A14bImageToVideoAcceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
     )
     num_interpolated_frames: int = Field(
         default=1, description="Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4."
@@ -7487,14 +7843,14 @@ class WanV22A14bImageToVideo(FALNode):
     guidance_scale: float = Field(
         default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
     )
-    video_write_mode: VideoWriteMode = Field(
-        default=VideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
+    video_write_mode: WanV22A14bImageToVideoVideoWriteMode = Field(
+        default=WanV22A14bImageToVideoVideoWriteMode.BALANCED, description="The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
+    aspect_ratio: WanV22A14bImageToVideoAspectRatio = Field(
+        default=WanV22A14bImageToVideoAspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)."
+    resolution: WanV22A14bImageToVideoResolution = Field(
+        default=WanV22A14bImageToVideoResolution.VALUE_720P, description="Resolution of the generated video (480p, 580p, or 720p)."
     )
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
@@ -7502,8 +7858,8 @@ class WanV22A14bImageToVideo(FALNode):
     guidance_scale_2: float = Field(
         default=3.5, description="Guidance scale for the second stage of the model. This is used to control the adherence to the prompt in the second stage of the model."
     )
-    video_quality: VideoQuality = Field(
-        default=VideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
+    video_quality: WanV22A14bImageToVideoVideoQuality = Field(
+        default=WanV22A14bImageToVideoVideoQuality.HIGH, description="The quality of the output video. Higher quality means better visual quality but larger file size."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
@@ -7514,8 +7870,8 @@ class WanV22A14bImageToVideo(FALNode):
     seed: str = Field(
         default="", description="Random seed for reproducibility. If None, a random seed is chosen."
     )
-    interpolator_model: InterpolatorModel = Field(
-        default=InterpolatorModel.FILM, description="The model to use for frame interpolation. If None, no interpolation is applied."
+    interpolator_model: WanV22A14bImageToVideoInterpolatorModel = Field(
+        default=WanV22A14bImageToVideoInterpolatorModel.FILM, description="The model to use for frame interpolation. If None, no interpolation is applied."
     )
     num_inference_steps: int = Field(
         default=27, description="Number of inference steps for sampling. Higher values give better quality but take longer."
@@ -7562,6 +7918,10 @@ class WanV22A14bImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7596,18 +7956,28 @@ class BytedanceOmnihuman(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        audio_url = (
+            await self._upload_asset_to_fal(client, self.audio, context)
+            if not self.audio.is_empty()
+            else None
+        )
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
             else None
         )
         arguments = {
-            "audio_url": self.audio,
+            "audio_url": audio_url,
             "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7621,6 +7991,23 @@ class BytedanceOmnihuman(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
+class Ltxv13b098DistilledImageToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class Ltxv13b098DistilledImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video.
+    """
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    AUTO = "auto"
+
+
 class Ltxv13b098DistilledImageToVideo(FALNode):
     """
     Generate long videos from prompts and images using LTX Video-0.9.8 13B Distilled and custom LoRA
@@ -7633,23 +8020,6 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video.
-        """
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        AUTO = "auto"
-
 
     second_pass_skip_initial_steps: int = Field(
         default=5, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
@@ -7690,11 +8060,11 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
     enable_detail_pass: bool = Field(
         default=False, description="Whether to use a detail pass. If True, the model will perform a second pass to refine the video and enhance details. This incurs a 2.0x cost multiplier on the base price."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video."
+    resolution: Ltxv13b098DistilledImageToVideoResolution = Field(
+        default=Ltxv13b098DistilledImageToVideoResolution.VALUE_720P, description="Resolution of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    aspect_ratio: Ltxv13b098DistilledImageToVideoAspectRatio = Field(
+        default=Ltxv13b098DistilledImageToVideoAspectRatio.AUTO, description="The aspect ratio of the video."
     )
     tone_map_compression_ratio: float = Field(
         default=0, description="The compression ratio for tone mapping. This is used to compress the dynamic range of the video to improve visual quality. A value of 0.0 means no compression, while a value of 1.0 means maximum compression."
@@ -7739,6 +8109,10 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7751,6 +8125,30 @@ class Ltxv13b098DistilledImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class Veo3FastImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class Veo3FastImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class Veo3FastImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video.
+    """
+    VALUE_4S = "4s"
+    VALUE_6S = "6s"
+    VALUE_8S = "8s"
+
 
 class Veo3FastImageToVideo(FALNode):
     """
@@ -7765,38 +8163,14 @@ class Veo3FastImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video.
-        """
-        VALUE_4S = "4s"
-        VALUE_6S = "6s"
-        VALUE_8S = "8s"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing how the image should be animated"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: Veo3FastImageToVideoResolution = Field(
+        default=Veo3FastImageToVideoResolution.VALUE_720P, description="The resolution of the generated video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video."
+    aspect_ratio: Veo3FastImageToVideoAspectRatio = Field(
+        default=Veo3FastImageToVideoAspectRatio.AUTO, description="The aspect ratio of the generated video."
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate audio for the video."
@@ -7804,8 +8178,8 @@ class Veo3FastImageToVideo(FALNode):
     auto_fix: bool = Field(
         default=False, description="Whether to automatically attempt to fix prompts that fail content policy or other validation checks by rewriting them."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_8S, description="The duration of the generated video."
+    duration: Veo3FastImageToVideoDuration = Field(
+        default=Veo3FastImageToVideoDuration.VALUE_8S, description="The duration of the generated video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit."
@@ -7829,6 +8203,10 @@ class Veo3FastImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7841,6 +8219,24 @@ class Veo3FastImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduQ1ReferenceToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the output video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class ViduQ1ReferenceToVideoMovementAmplitude(str, Enum):
+    """
+    The movement amplitude of objects in the frame
+    """
+    AUTO = "auto"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+
 
 class ViduQ1ReferenceToVideo(FALNode):
     """
@@ -7855,29 +8251,11 @@ class ViduQ1ReferenceToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the output video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class MovementAmplitude(Enum):
-        """
-        The movement amplitude of objects in the frame
-        """
-        AUTO = "auto"
-        SMALL = "small"
-        MEDIUM = "medium"
-        LARGE = "large"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
+    aspect_ratio: ViduQ1ReferenceToVideoAspectRatio = Field(
+        default=ViduQ1ReferenceToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
     )
     bgm: bool = Field(
         default=False, description="Whether to add background music to the generated video"
@@ -7888,8 +8266,8 @@ class ViduQ1ReferenceToVideo(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for generation"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    movement_amplitude: ViduQ1ReferenceToVideoMovementAmplitude = Field(
+        default=ViduQ1ReferenceToVideoMovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -7904,6 +8282,10 @@ class ViduQ1ReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7963,6 +8345,10 @@ class MinimaxHailuo02ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7975,6 +8361,43 @@ class MinimaxHailuo02ProImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class BytedanceSeedanceV1LiteImageToVideoResolution(str, Enum):
+    """
+    Video resolution - 480p for faster generation, 720p for higher quality
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class BytedanceSeedanceV1LiteImageToVideoDuration(str, Enum):
+    """
+    Duration of the video in seconds
+    """
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+
+class BytedanceSeedanceV1LiteImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    AUTO = "auto"
+
 
 class BytedanceSeedanceV1LiteImageToVideo(FALNode):
     """
@@ -7989,54 +8412,17 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        Video resolution - 480p for faster generation, 720p for higher quality
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        Duration of the video in seconds
-        """
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        AUTO = "auto"
-
-
     prompt: str = Field(
         default="", description="The text prompt used to generate the video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
+    resolution: BytedanceSeedanceV1LiteImageToVideoResolution = Field(
+        default=BytedanceSeedanceV1LiteImageToVideoResolution.VALUE_720P, description="Video resolution - 480p for faster generation, 720p for higher quality"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="Duration of the video in seconds"
+    duration: BytedanceSeedanceV1LiteImageToVideoDuration = Field(
+        default=BytedanceSeedanceV1LiteImageToVideoDuration.VALUE_5, description="Duration of the video in seconds"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the generated video"
+    aspect_ratio: BytedanceSeedanceV1LiteImageToVideoAspectRatio = Field(
+        default=BytedanceSeedanceV1LiteImageToVideoAspectRatio.AUTO, description="The aspect ratio of the generated video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The URL of the image used to generate video"
@@ -8079,6 +8465,10 @@ class BytedanceSeedanceV1LiteImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8145,6 +8535,10 @@ class HunyuanAvatar(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8157,6 +8551,14 @@ class HunyuanAvatar(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV21ProImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
 
 class KlingVideoV21ProImageToVideo(FALNode):
     """
@@ -8171,19 +8573,11 @@ class KlingVideoV21ProImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default=""
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV21ProImageToVideoDuration = Field(
+        default=KlingVideoV21ProImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     tail_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
@@ -8220,6 +8614,10 @@ class KlingVideoV21ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8260,13 +8658,19 @@ class HunyuanPortrait(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        video_url = (
+            await self._upload_asset_to_fal(client, self.video, context)
+            if not self.video.is_empty()
+            else None
+        )
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
             else None
         )
         arguments = {
-            "video_url": self.video,
+            "video_url": video_url,
             "seed": self.seed,
             "use_arcface": self.use_arcface,
             "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
@@ -8274,6 +8678,10 @@ class HunyuanPortrait(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8286,6 +8694,22 @@ class HunyuanPortrait(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV16StandardElementsAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoV16StandardElementsDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
 
 class KlingVideoV16StandardElements(FALNode):
     """
@@ -8300,30 +8724,14 @@ class KlingVideoV16StandardElements(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    aspect_ratio: KlingVideoV16StandardElementsAspectRatio = Field(
+        default=KlingVideoV16StandardElementsAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV16StandardElementsDuration = Field(
+        default=KlingVideoV16StandardElementsDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     input_images: list[str] = Field(
         default=[], description="List of image URLs to use for video generation. Supports up to 4 images."
@@ -8343,6 +8751,10 @@ class KlingVideoV16StandardElements(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8355,6 +8767,22 @@ class KlingVideoV16StandardElements(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV16ProElementsAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoV16ProElementsDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
 
 class KlingVideoV16ProElements(FALNode):
     """
@@ -8369,30 +8797,14 @@ class KlingVideoV16ProElements(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    aspect_ratio: KlingVideoV16ProElementsAspectRatio = Field(
+        default=KlingVideoV16ProElementsAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV16ProElementsDuration = Field(
+        default=KlingVideoV16ProElementsDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     input_images: list[str] = Field(
         default=[], description="List of image URLs to use for video generation. Supports up to 4 images."
@@ -8412,6 +8824,10 @@ class KlingVideoV16ProElements(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8425,6 +8841,23 @@ class KlingVideoV16ProElements(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
+class LtxVideo13bDistilledImageToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (480p or 720p).
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class LtxVideo13bDistilledImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video.
+    """
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    AUTO = "auto"
+
+
 class LtxVideo13bDistilledImageToVideo(FALNode):
     """
     Generate videos from prompts and images using LTX Video-0.9.7 13B Distilled and custom LoRA
@@ -8437,23 +8870,6 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p or 720p).
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video.
-        """
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        AUTO = "auto"
-
 
     second_pass_skip_initial_steps: int = Field(
         default=5, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
@@ -8488,11 +8904,11 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    resolution: LtxVideo13bDistilledImageToVideoResolution = Field(
+        default=LtxVideo13bDistilledImageToVideoResolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    aspect_ratio: LtxVideo13bDistilledImageToVideoAspectRatio = Field(
+        default=LtxVideo13bDistilledImageToVideoAspectRatio.AUTO, description="The aspect ratio of the video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="Image URL for Image-to-Video task"
@@ -8535,6 +8951,10 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8548,6 +8968,23 @@ class LtxVideo13bDistilledImageToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
+class LtxVideo13bDevImageToVideoResolution(str, Enum):
+    """
+    Resolution of the generated video (480p or 720p).
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class LtxVideo13bDevImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video.
+    """
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    AUTO = "auto"
+
+
 class LtxVideo13bDevImageToVideo(FALNode):
     """
     Generate videos from prompts and images using LTX Video-0.9.7 13B and custom LoRA
@@ -8560,23 +8997,6 @@ class LtxVideo13bDevImageToVideo(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p or 720p).
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video.
-        """
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        AUTO = "auto"
-
 
     second_pass_skip_initial_steps: int = Field(
         default=17, description="The number of inference steps to skip in the initial steps of the second pass. By skipping some steps at the beginning, the second pass can focus on smaller details instead of larger changes."
@@ -8611,11 +9031,11 @@ class LtxVideo13bDevImageToVideo(FALNode):
     negative_prompt: str = Field(
         default="worst quality, inconsistent motion, blurry, jittery, distorted", description="Negative prompt for generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
+    resolution: LtxVideo13bDevImageToVideoResolution = Field(
+        default=LtxVideo13bDevImageToVideoResolution.VALUE_720P, description="Resolution of the generated video (480p or 720p)."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    aspect_ratio: LtxVideo13bDevImageToVideoAspectRatio = Field(
+        default=LtxVideo13bDevImageToVideoAspectRatio.AUTO, description="The aspect ratio of the video."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="Image URL for Image-to-Video task"
@@ -8658,6 +9078,10 @@ class LtxVideo13bDevImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8670,6 +9094,23 @@ class LtxVideo13bDevImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LtxVideoLoraImageToVideoResolution(str, Enum):
+    """
+    The resolution of the video.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class LtxVideoLoraImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_1_1 = "1:1"
+    RATIO_9_16 = "9:16"
+    AUTO = "auto"
+
 
 class LtxVideoLoraImageToVideo(FALNode):
     """
@@ -8684,34 +9125,17 @@ class LtxVideoLoraImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the video.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_1_1 = "1:1"
-        RATIO_9_16 = "9:16"
-        AUTO = "auto"
-
-
     number_of_steps: int = Field(
         default=30, description="The number of inference steps to use."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the video."
+    resolution: LtxVideoLoraImageToVideoResolution = Field(
+        default=LtxVideoLoraImageToVideoResolution.VALUE_720P, description="The resolution of the video."
     )
     reverse_video: bool = Field(
         default=False, description="Whether to reverse the video."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="The aspect ratio of the video."
+    aspect_ratio: LtxVideoLoraImageToVideoAspectRatio = Field(
+        default=LtxVideoLoraImageToVideoAspectRatio.AUTO, description="The aspect ratio of the video."
     )
     frame_rate: int = Field(
         default=25, description="The frame rate of the video."
@@ -8765,6 +9189,10 @@ class LtxVideoLoraImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8777,6 +9205,43 @@ class LtxVideoLoraImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV45TransitionAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+class PixverseV45TransitionStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV45TransitionDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV45TransitionResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PixverseV45Transition(FALNode):
     """
@@ -8791,60 +9256,23 @@ class PixverseV45Transition(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: PixverseV45TransitionAspectRatio = Field(
+        default=PixverseV45TransitionAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     prompt: str = Field(
         default="", description="The prompt for the transition"
     )
-    style: Style | None = Field(
+    style: PixverseV45TransitionStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV45TransitionDuration = Field(
+        default=PixverseV45TransitionDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV45TransitionResolution = Field(
+        default=PixverseV45TransitionResolution.VALUE_720P, description="The resolution of the generated video"
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
@@ -8881,6 +9309,10 @@ class PixverseV45Transition(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8893,6 +9325,50 @@ class PixverseV45Transition(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV45ImageToVideoFastResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+
+class PixverseV45ImageToVideoFastStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV45ImageToVideoFastCameraMovement(str, Enum):
+    """
+    The type of camera movement to apply to the video
+    """
+    HORIZONTAL_LEFT = "horizontal_left"
+    HORIZONTAL_RIGHT = "horizontal_right"
+    VERTICAL_UP = "vertical_up"
+    VERTICAL_DOWN = "vertical_down"
+    ZOOM_IN = "zoom_in"
+    ZOOM_OUT = "zoom_out"
+    CRANE_UP = "crane_up"
+    QUICKLY_ZOOM_IN = "quickly_zoom_in"
+    QUICKLY_ZOOM_OUT = "quickly_zoom_out"
+    SMOOTH_ZOOM_IN = "smooth_zoom_in"
+    CAMERA_ROTATION = "camera_rotation"
+    ROBO_ARM = "robo_arm"
+    SUPER_DOLLY_OUT = "super_dolly_out"
+    WHIP_PAN = "whip_pan"
+    HITCHCOCK = "hitchcock"
+    LEFT_FOLLOW = "left_follow"
+    RIGHT_FOLLOW = "right_follow"
+    PAN_LEFT = "pan_left"
+    PAN_RIGHT = "pan_right"
+    FIX_BG = "fix_bg"
+
 
 class PixverseV45ImageToVideoFast(FALNode):
     """
@@ -8907,60 +9383,16 @@ class PixverseV45ImageToVideoFast(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class CameraMovement(Enum):
-        """
-        The type of camera movement to apply to the video
-        """
-        HORIZONTAL_LEFT = "horizontal_left"
-        HORIZONTAL_RIGHT = "horizontal_right"
-        VERTICAL_UP = "vertical_up"
-        VERTICAL_DOWN = "vertical_down"
-        ZOOM_IN = "zoom_in"
-        ZOOM_OUT = "zoom_out"
-        CRANE_UP = "crane_up"
-        QUICKLY_ZOOM_IN = "quickly_zoom_in"
-        QUICKLY_ZOOM_OUT = "quickly_zoom_out"
-        SMOOTH_ZOOM_IN = "smooth_zoom_in"
-        CAMERA_ROTATION = "camera_rotation"
-        ROBO_ARM = "robo_arm"
-        SUPER_DOLLY_OUT = "super_dolly_out"
-        WHIP_PAN = "whip_pan"
-        HITCHCOCK = "hitchcock"
-        LEFT_FOLLOW = "left_follow"
-        RIGHT_FOLLOW = "right_follow"
-        PAN_LEFT = "pan_left"
-        PAN_RIGHT = "pan_right"
-        FIX_BG = "fix_bg"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV45ImageToVideoFastResolution = Field(
+        default=PixverseV45ImageToVideoFastResolution.VALUE_720P, description="The resolution of the generated video"
     )
-    style: Style | None = Field(
+    style: PixverseV45ImageToVideoFastStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    camera_movement: CameraMovement | None = Field(
+    camera_movement: PixverseV45ImageToVideoFastCameraMovement | None = Field(
         default=None, description="The type of camera movement to apply to the video"
     )
     image: ImageRef = Field(
@@ -8991,6 +9423,10 @@ class PixverseV45ImageToVideoFast(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9003,6 +9439,124 @@ class PixverseV45ImageToVideoFast(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV45EffectsResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV45EffectsDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV45EffectsEffect(str, Enum):
+    """
+    The effect to apply to the video
+    """
+    KISS_ME_AI = "Kiss Me AI"
+    KISS = "Kiss"
+    MUSCLE_SURGE = "Muscle Surge"
+    WARMTH_OF_JESUS = "Warmth of Jesus"
+    ANYTHING_ROBOT = "Anything, Robot"
+    THE_TIGER_TOUCH = "The Tiger Touch"
+    HUG = "Hug"
+    HOLY_WINGS = "Holy Wings"
+    MICROWAVE = "Microwave"
+    ZOMBIE_MODE = "Zombie Mode"
+    SQUID_GAME = "Squid Game"
+    BABY_FACE = "Baby Face"
+    BLACK_MYTH_WUKONG = "Black Myth: Wukong"
+    LONG_HAIR_MAGIC = "Long Hair Magic"
+    LEGGY_RUN = "Leggy Run"
+    FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
+    PUNCH_FACE = "Punch Face"
+    CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
+    THUNDER_GOD = "Thunder God"
+    EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
+    WHOS_ARRESTED = "Who's Arrested?"
+    BABY_ARRIVED = "Baby Arrived"
+    WEREWOLF_RAGE = "Werewolf Rage"
+    BALD_SWIPE = "Bald Swipe"
+    BOOM_DROP = "BOOM DROP"
+    HUGE_CUTIE = "Huge Cutie"
+    LIQUID_METAL = "Liquid Metal"
+    SHARKSNAP = "Sharksnap!"
+    DUST_ME_AWAY = "Dust Me Away"
+    FIGURINE_FACTOR_3D = "3D Figurine Factor"
+    BIKINI_UP = "Bikini Up"
+    MY_GIRLFRIENDS = "My Girlfriends"
+    MY_BOYFRIENDS = "My Boyfriends"
+    SUBJECT_3_FEVER = "Subject 3 Fever"
+    EARTH_ZOOM = "Earth Zoom"
+    POLE_DANCE = "Pole Dance"
+    VROOM_DANCE = "Vroom Dance"
+    GHOSTFACE_TERROR = "GhostFace Terror"
+    DRAGON_EVOKER = "Dragon Evoker"
+    SKELETAL_BAE = "Skeletal Bae"
+    SUMMONING_SUCCUBUS = "Summoning succubus"
+    HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
+    NAKED_EYE_AD_3D = "3D Naked-Eye AD"
+    PACKAGE_EXPLOSION = "Package Explosion"
+    DISHES_SERVED = "Dishes Served"
+    OCEAN_AD = "Ocean ad"
+    SUPERMARKET_AD = "Supermarket AD"
+    TREE_DOLL = "Tree doll"
+    COME_FEEL_MY_ABS = "Come Feel My Abs"
+    THE_BICEP_FLEX = "The Bicep Flex"
+    LONDON_ELITE_VIBE = "London Elite Vibe"
+    FLORA_NYMPH_GOWN = "Flora Nymph Gown"
+    CHRISTMAS_COSTUME = "Christmas Costume"
+    ITS_SNOWY = "It's Snowy"
+    REINDEER_CRUISER = "Reindeer Cruiser"
+    SNOW_GLOBE_MAKER = "Snow Globe Maker"
+    PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
+    ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
+    CAT_CHRISTMAS_BOX = "Cat Christmas Box"
+    STARLIGHT_GIFT_BOX = "Starlight Gift Box"
+    XMAS_POSTER = "Xmas Poster"
+    PET_CHRISTMAS_TREE = "Pet Christmas Tree"
+    CITY_SANTA_HAT = "City Santa Hat"
+    STOCKING_SWEETIE = "Stocking Sweetie"
+    CHRISTMAS_NIGHT = "Christmas Night"
+    XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
+    GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
+    GIANT_PRODUCT = "Giant Product"
+    TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
+    BEACH_AD = "Beach AD"
+    SHOAL_SURROUND = "Shoal Surround"
+    MECHANICAL_ASSEMBLY = "Mechanical Assembly"
+    LIGHTING_AD = "Lighting AD"
+    BILLBOARD_AD = "Billboard AD"
+    PRODUCT_CLOSE_UP = "Product close-up"
+    PARACHUTE_DELIVERY = "Parachute Delivery"
+    DREAMLIKE_CLOUD = "Dreamlike Cloud"
+    MACARON_MACHINE = "Macaron Machine"
+    POSTER_AD = "Poster AD"
+    TRUCK_AD = "Truck AD"
+    GRAFFITI_AD = "Graffiti AD"
+    FIGURINE_FACTORY_3D = "3D Figurine Factory"
+    THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
+    ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
+    I_QUIT = "I Quit"
+    HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
+    SMELL_THE_LENS = "Smell the Lens"
+    I_BELIEVE_I_CAN_FLY = "I believe I can fly"
+    STRIKOUT_DANCE = "Strikout Dance"
+    PIXEL_WORLD = "Pixel World"
+    MINT_IN_BOX = "Mint in Box"
+    HANDS_UP_HAND = "Hands up, Hand"
+    FLORA_NYMPH_GO = "Flora Nymph Go"
+    SOMBER_EMBRACE = "Somber Embrace"
+    BEAM_ME_UP = "Beam me up"
+    SUIT_SWAGGER = "Suit Swagger"
+
 
 class PixverseV45Effects(FALNode):
     """
@@ -9017,134 +9571,16 @@ class PixverseV45Effects(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Effect(Enum):
-        """
-        The effect to apply to the video
-        """
-        KISS_ME_AI = "Kiss Me AI"
-        KISS = "Kiss"
-        MUSCLE_SURGE = "Muscle Surge"
-        WARMTH_OF_JESUS = "Warmth of Jesus"
-        ANYTHING_ROBOT = "Anything, Robot"
-        THE_TIGER_TOUCH = "The Tiger Touch"
-        HUG = "Hug"
-        HOLY_WINGS = "Holy Wings"
-        MICROWAVE = "Microwave"
-        ZOMBIE_MODE = "Zombie Mode"
-        SQUID_GAME = "Squid Game"
-        BABY_FACE = "Baby Face"
-        BLACK_MYTH_WUKONG = "Black Myth: Wukong"
-        LONG_HAIR_MAGIC = "Long Hair Magic"
-        LEGGY_RUN = "Leggy Run"
-        FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
-        PUNCH_FACE = "Punch Face"
-        CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
-        THUNDER_GOD = "Thunder God"
-        EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
-        WHOS_ARRESTED = "Who's Arrested?"
-        BABY_ARRIVED = "Baby Arrived"
-        WEREWOLF_RAGE = "Werewolf Rage"
-        BALD_SWIPE = "Bald Swipe"
-        BOOM_DROP = "BOOM DROP"
-        HUGE_CUTIE = "Huge Cutie"
-        LIQUID_METAL = "Liquid Metal"
-        SHARKSNAP = "Sharksnap!"
-        DUST_ME_AWAY = "Dust Me Away"
-        FIGURINE_FACTOR_3D = "3D Figurine Factor"
-        BIKINI_UP = "Bikini Up"
-        MY_GIRLFRIENDS = "My Girlfriends"
-        MY_BOYFRIENDS = "My Boyfriends"
-        SUBJECT_3_FEVER = "Subject 3 Fever"
-        EARTH_ZOOM = "Earth Zoom"
-        POLE_DANCE = "Pole Dance"
-        VROOM_DANCE = "Vroom Dance"
-        GHOSTFACE_TERROR = "GhostFace Terror"
-        DRAGON_EVOKER = "Dragon Evoker"
-        SKELETAL_BAE = "Skeletal Bae"
-        SUMMONING_SUCCUBUS = "Summoning succubus"
-        HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
-        NAKED_EYE_AD_3D = "3D Naked-Eye AD"
-        PACKAGE_EXPLOSION = "Package Explosion"
-        DISHES_SERVED = "Dishes Served"
-        OCEAN_AD = "Ocean ad"
-        SUPERMARKET_AD = "Supermarket AD"
-        TREE_DOLL = "Tree doll"
-        COME_FEEL_MY_ABS = "Come Feel My Abs"
-        THE_BICEP_FLEX = "The Bicep Flex"
-        LONDON_ELITE_VIBE = "London Elite Vibe"
-        FLORA_NYMPH_GOWN = "Flora Nymph Gown"
-        CHRISTMAS_COSTUME = "Christmas Costume"
-        ITS_SNOWY = "It's Snowy"
-        REINDEER_CRUISER = "Reindeer Cruiser"
-        SNOW_GLOBE_MAKER = "Snow Globe Maker"
-        PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
-        ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
-        CAT_CHRISTMAS_BOX = "Cat Christmas Box"
-        STARLIGHT_GIFT_BOX = "Starlight Gift Box"
-        XMAS_POSTER = "Xmas Poster"
-        PET_CHRISTMAS_TREE = "Pet Christmas Tree"
-        CITY_SANTA_HAT = "City Santa Hat"
-        STOCKING_SWEETIE = "Stocking Sweetie"
-        CHRISTMAS_NIGHT = "Christmas Night"
-        XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
-        GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
-        GIANT_PRODUCT = "Giant Product"
-        TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
-        BEACH_AD = "Beach AD"
-        SHOAL_SURROUND = "Shoal Surround"
-        MECHANICAL_ASSEMBLY = "Mechanical Assembly"
-        LIGHTING_AD = "Lighting AD"
-        BILLBOARD_AD = "Billboard AD"
-        PRODUCT_CLOSE_UP = "Product close-up"
-        PARACHUTE_DELIVERY = "Parachute Delivery"
-        DREAMLIKE_CLOUD = "Dreamlike Cloud"
-        MACARON_MACHINE = "Macaron Machine"
-        POSTER_AD = "Poster AD"
-        TRUCK_AD = "Truck AD"
-        GRAFFITI_AD = "Graffiti AD"
-        FIGURINE_FACTORY_3D = "3D Figurine Factory"
-        THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
-        ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
-        I_QUIT = "I Quit"
-        HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
-        SMELL_THE_LENS = "Smell the Lens"
-        I_BELIEVE_I_CAN_FLY = "I believe I can fly"
-        STRIKOUT_DANCE = "Strikout Dance"
-        PIXEL_WORLD = "Pixel World"
-        MINT_IN_BOX = "Mint in Box"
-        HANDS_UP_HAND = "Hands up, Hand"
-        FLORA_NYMPH_GO = "Flora Nymph Go"
-        SOMBER_EMBRACE = "Somber Embrace"
-        BEAM_ME_UP = "Beam me up"
-        SUIT_SWAGGER = "Suit Swagger"
-
-
     negative_prompt: str = Field(
         default="", description="Negative prompt to be used for the generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: PixverseV45EffectsResolution = Field(
+        default=PixverseV45EffectsResolution.VALUE_720P, description="The resolution of the generated video."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV45EffectsDuration = Field(
+        default=PixverseV45EffectsDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    effect: Effect = Field(
+    effect: PixverseV45EffectsEffect = Field(
         default="", description="The effect to apply to the video"
     )
     image: ImageRef = Field(
@@ -9167,6 +9603,10 @@ class PixverseV45Effects(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9179,6 +9619,21 @@ class PixverseV45Effects(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class HunyuanCustomAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video to generate.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class HunyuanCustomResolution(str, Enum):
+    """
+    The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
+    """
+    VALUE_512P = "512p"
+    VALUE_720P = "720p"
+
 
 class HunyuanCustom(FALNode):
     """
@@ -9193,29 +9648,14 @@ class HunyuanCustom(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video to generate.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
-        """
-        VALUE_512P = "512p"
-        VALUE_720P = "720p"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation (max 500 characters)."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
+    aspect_ratio: HunyuanCustomAspectRatio = Field(
+        default=HunyuanCustomAspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_512P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
+    resolution: HunyuanCustomResolution = Field(
+        default=HunyuanCustomResolution.VALUE_512P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -9268,6 +9708,10 @@ class HunyuanCustom(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9280,6 +9724,21 @@ class HunyuanCustom(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class FramepackF1AspectRatio(str, Enum):
+    """
+    The aspect ratio of the video to generate.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class FramepackF1Resolution(str, Enum):
+    """
+    The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
+    """
+    VALUE_720P = "720p"
+    VALUE_480P = "480p"
+
 
 class FramepackF1(FALNode):
     """
@@ -9294,29 +9753,14 @@ class FramepackF1(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video to generate.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
-        """
-        VALUE_720P = "720p"
-        VALUE_480P = "480p"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation (max 500 characters)."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
+    aspect_ratio: FramepackF1AspectRatio = Field(
+        default=FramepackF1AspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
+    resolution: FramepackF1Resolution = Field(
+        default=FramepackF1Resolution.VALUE_480P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
     )
     num_frames: int = Field(
         default=180, description="The number of frames to generate."
@@ -9361,6 +9805,10 @@ class FramepackF1(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9373,6 +9821,16 @@ class FramepackF1(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduQ1StartEndToVideoMovementAmplitude(str, Enum):
+    """
+    The movement amplitude of objects in the frame
+    """
+    AUTO = "auto"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+
 
 class ViduQ1StartEndToVideo(FALNode):
     """
@@ -9387,16 +9845,6 @@ class ViduQ1StartEndToVideo(FALNode):
     - Visual storytelling
     """
 
-    class MovementAmplitude(Enum):
-        """
-        The movement amplitude of objects in the frame
-        """
-        AUTO = "auto"
-        SMALL = "small"
-        MEDIUM = "medium"
-        LARGE = "large"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
@@ -9406,8 +9854,8 @@ class ViduQ1StartEndToVideo(FALNode):
     end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the last frame"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    movement_amplitude: ViduQ1StartEndToVideoMovementAmplitude = Field(
+        default=ViduQ1StartEndToVideoMovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -9434,6 +9882,10 @@ class ViduQ1StartEndToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9446,6 +9898,16 @@ class ViduQ1StartEndToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduQ1ImageToVideoMovementAmplitude(str, Enum):
+    """
+    The movement amplitude of objects in the frame
+    """
+    AUTO = "auto"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+
 
 class ViduQ1ImageToVideo(FALNode):
     """
@@ -9460,24 +9922,14 @@ class ViduQ1ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class MovementAmplitude(Enum):
-        """
-        The movement amplitude of objects in the frame
-        """
-        AUTO = "auto"
-        SMALL = "small"
-        MEDIUM = "medium"
-        LARGE = "large"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
     seed: int = Field(
         default=-1, description="Seed for the random number generator"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    movement_amplitude: ViduQ1ImageToVideoMovementAmplitude = Field(
+        default=ViduQ1ImageToVideoMovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -9498,6 +9950,10 @@ class ViduQ1ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9510,6 +9966,124 @@ class ViduQ1ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV4EffectsResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV4EffectsDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV4EffectsEffect(str, Enum):
+    """
+    The effect to apply to the video
+    """
+    KISS_ME_AI = "Kiss Me AI"
+    KISS = "Kiss"
+    MUSCLE_SURGE = "Muscle Surge"
+    WARMTH_OF_JESUS = "Warmth of Jesus"
+    ANYTHING_ROBOT = "Anything, Robot"
+    THE_TIGER_TOUCH = "The Tiger Touch"
+    HUG = "Hug"
+    HOLY_WINGS = "Holy Wings"
+    MICROWAVE = "Microwave"
+    ZOMBIE_MODE = "Zombie Mode"
+    SQUID_GAME = "Squid Game"
+    BABY_FACE = "Baby Face"
+    BLACK_MYTH_WUKONG = "Black Myth: Wukong"
+    LONG_HAIR_MAGIC = "Long Hair Magic"
+    LEGGY_RUN = "Leggy Run"
+    FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
+    PUNCH_FACE = "Punch Face"
+    CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
+    THUNDER_GOD = "Thunder God"
+    EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
+    WHOS_ARRESTED = "Who's Arrested?"
+    BABY_ARRIVED = "Baby Arrived"
+    WEREWOLF_RAGE = "Werewolf Rage"
+    BALD_SWIPE = "Bald Swipe"
+    BOOM_DROP = "BOOM DROP"
+    HUGE_CUTIE = "Huge Cutie"
+    LIQUID_METAL = "Liquid Metal"
+    SHARKSNAP = "Sharksnap!"
+    DUST_ME_AWAY = "Dust Me Away"
+    FIGURINE_FACTOR_3D = "3D Figurine Factor"
+    BIKINI_UP = "Bikini Up"
+    MY_GIRLFRIENDS = "My Girlfriends"
+    MY_BOYFRIENDS = "My Boyfriends"
+    SUBJECT_3_FEVER = "Subject 3 Fever"
+    EARTH_ZOOM = "Earth Zoom"
+    POLE_DANCE = "Pole Dance"
+    VROOM_DANCE = "Vroom Dance"
+    GHOSTFACE_TERROR = "GhostFace Terror"
+    DRAGON_EVOKER = "Dragon Evoker"
+    SKELETAL_BAE = "Skeletal Bae"
+    SUMMONING_SUCCUBUS = "Summoning succubus"
+    HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
+    NAKED_EYE_AD_3D = "3D Naked-Eye AD"
+    PACKAGE_EXPLOSION = "Package Explosion"
+    DISHES_SERVED = "Dishes Served"
+    OCEAN_AD = "Ocean ad"
+    SUPERMARKET_AD = "Supermarket AD"
+    TREE_DOLL = "Tree doll"
+    COME_FEEL_MY_ABS = "Come Feel My Abs"
+    THE_BICEP_FLEX = "The Bicep Flex"
+    LONDON_ELITE_VIBE = "London Elite Vibe"
+    FLORA_NYMPH_GOWN = "Flora Nymph Gown"
+    CHRISTMAS_COSTUME = "Christmas Costume"
+    ITS_SNOWY = "It's Snowy"
+    REINDEER_CRUISER = "Reindeer Cruiser"
+    SNOW_GLOBE_MAKER = "Snow Globe Maker"
+    PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
+    ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
+    CAT_CHRISTMAS_BOX = "Cat Christmas Box"
+    STARLIGHT_GIFT_BOX = "Starlight Gift Box"
+    XMAS_POSTER = "Xmas Poster"
+    PET_CHRISTMAS_TREE = "Pet Christmas Tree"
+    CITY_SANTA_HAT = "City Santa Hat"
+    STOCKING_SWEETIE = "Stocking Sweetie"
+    CHRISTMAS_NIGHT = "Christmas Night"
+    XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
+    GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
+    GIANT_PRODUCT = "Giant Product"
+    TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
+    BEACH_AD = "Beach AD"
+    SHOAL_SURROUND = "Shoal Surround"
+    MECHANICAL_ASSEMBLY = "Mechanical Assembly"
+    LIGHTING_AD = "Lighting AD"
+    BILLBOARD_AD = "Billboard AD"
+    PRODUCT_CLOSE_UP = "Product close-up"
+    PARACHUTE_DELIVERY = "Parachute Delivery"
+    DREAMLIKE_CLOUD = "Dreamlike Cloud"
+    MACARON_MACHINE = "Macaron Machine"
+    POSTER_AD = "Poster AD"
+    TRUCK_AD = "Truck AD"
+    GRAFFITI_AD = "Graffiti AD"
+    FIGURINE_FACTORY_3D = "3D Figurine Factory"
+    THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
+    ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
+    I_QUIT = "I Quit"
+    HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
+    SMELL_THE_LENS = "Smell the Lens"
+    I_BELIEVE_I_CAN_FLY = "I believe I can fly"
+    STRIKOUT_DANCE = "Strikout Dance"
+    PIXEL_WORLD = "Pixel World"
+    MINT_IN_BOX = "Mint in Box"
+    HANDS_UP_HAND = "Hands up, Hand"
+    FLORA_NYMPH_GO = "Flora Nymph Go"
+    SOMBER_EMBRACE = "Somber Embrace"
+    BEAM_ME_UP = "Beam me up"
+    SUIT_SWAGGER = "Suit Swagger"
+
 
 class PixverseV4Effects(FALNode):
     """
@@ -9524,134 +10098,16 @@ class PixverseV4Effects(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Effect(Enum):
-        """
-        The effect to apply to the video
-        """
-        KISS_ME_AI = "Kiss Me AI"
-        KISS = "Kiss"
-        MUSCLE_SURGE = "Muscle Surge"
-        WARMTH_OF_JESUS = "Warmth of Jesus"
-        ANYTHING_ROBOT = "Anything, Robot"
-        THE_TIGER_TOUCH = "The Tiger Touch"
-        HUG = "Hug"
-        HOLY_WINGS = "Holy Wings"
-        MICROWAVE = "Microwave"
-        ZOMBIE_MODE = "Zombie Mode"
-        SQUID_GAME = "Squid Game"
-        BABY_FACE = "Baby Face"
-        BLACK_MYTH_WUKONG = "Black Myth: Wukong"
-        LONG_HAIR_MAGIC = "Long Hair Magic"
-        LEGGY_RUN = "Leggy Run"
-        FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
-        PUNCH_FACE = "Punch Face"
-        CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
-        THUNDER_GOD = "Thunder God"
-        EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
-        WHOS_ARRESTED = "Who's Arrested?"
-        BABY_ARRIVED = "Baby Arrived"
-        WEREWOLF_RAGE = "Werewolf Rage"
-        BALD_SWIPE = "Bald Swipe"
-        BOOM_DROP = "BOOM DROP"
-        HUGE_CUTIE = "Huge Cutie"
-        LIQUID_METAL = "Liquid Metal"
-        SHARKSNAP = "Sharksnap!"
-        DUST_ME_AWAY = "Dust Me Away"
-        FIGURINE_FACTOR_3D = "3D Figurine Factor"
-        BIKINI_UP = "Bikini Up"
-        MY_GIRLFRIENDS = "My Girlfriends"
-        MY_BOYFRIENDS = "My Boyfriends"
-        SUBJECT_3_FEVER = "Subject 3 Fever"
-        EARTH_ZOOM = "Earth Zoom"
-        POLE_DANCE = "Pole Dance"
-        VROOM_DANCE = "Vroom Dance"
-        GHOSTFACE_TERROR = "GhostFace Terror"
-        DRAGON_EVOKER = "Dragon Evoker"
-        SKELETAL_BAE = "Skeletal Bae"
-        SUMMONING_SUCCUBUS = "Summoning succubus"
-        HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
-        NAKED_EYE_AD_3D = "3D Naked-Eye AD"
-        PACKAGE_EXPLOSION = "Package Explosion"
-        DISHES_SERVED = "Dishes Served"
-        OCEAN_AD = "Ocean ad"
-        SUPERMARKET_AD = "Supermarket AD"
-        TREE_DOLL = "Tree doll"
-        COME_FEEL_MY_ABS = "Come Feel My Abs"
-        THE_BICEP_FLEX = "The Bicep Flex"
-        LONDON_ELITE_VIBE = "London Elite Vibe"
-        FLORA_NYMPH_GOWN = "Flora Nymph Gown"
-        CHRISTMAS_COSTUME = "Christmas Costume"
-        ITS_SNOWY = "It's Snowy"
-        REINDEER_CRUISER = "Reindeer Cruiser"
-        SNOW_GLOBE_MAKER = "Snow Globe Maker"
-        PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
-        ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
-        CAT_CHRISTMAS_BOX = "Cat Christmas Box"
-        STARLIGHT_GIFT_BOX = "Starlight Gift Box"
-        XMAS_POSTER = "Xmas Poster"
-        PET_CHRISTMAS_TREE = "Pet Christmas Tree"
-        CITY_SANTA_HAT = "City Santa Hat"
-        STOCKING_SWEETIE = "Stocking Sweetie"
-        CHRISTMAS_NIGHT = "Christmas Night"
-        XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
-        GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
-        GIANT_PRODUCT = "Giant Product"
-        TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
-        BEACH_AD = "Beach AD"
-        SHOAL_SURROUND = "Shoal Surround"
-        MECHANICAL_ASSEMBLY = "Mechanical Assembly"
-        LIGHTING_AD = "Lighting AD"
-        BILLBOARD_AD = "Billboard AD"
-        PRODUCT_CLOSE_UP = "Product close-up"
-        PARACHUTE_DELIVERY = "Parachute Delivery"
-        DREAMLIKE_CLOUD = "Dreamlike Cloud"
-        MACARON_MACHINE = "Macaron Machine"
-        POSTER_AD = "Poster AD"
-        TRUCK_AD = "Truck AD"
-        GRAFFITI_AD = "Graffiti AD"
-        FIGURINE_FACTORY_3D = "3D Figurine Factory"
-        THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
-        ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
-        I_QUIT = "I Quit"
-        HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
-        SMELL_THE_LENS = "Smell the Lens"
-        I_BELIEVE_I_CAN_FLY = "I believe I can fly"
-        STRIKOUT_DANCE = "Strikout Dance"
-        PIXEL_WORLD = "Pixel World"
-        MINT_IN_BOX = "Mint in Box"
-        HANDS_UP_HAND = "Hands up, Hand"
-        FLORA_NYMPH_GO = "Flora Nymph Go"
-        SOMBER_EMBRACE = "Somber Embrace"
-        BEAM_ME_UP = "Beam me up"
-        SUIT_SWAGGER = "Suit Swagger"
-
-
     negative_prompt: str = Field(
         default="", description="Negative prompt to be used for the generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: PixverseV4EffectsResolution = Field(
+        default=PixverseV4EffectsResolution.VALUE_720P, description="The resolution of the generated video."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV4EffectsDuration = Field(
+        default=PixverseV4EffectsDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    effect: Effect = Field(
+    effect: PixverseV4EffectsEffect = Field(
         default="", description="The effect to apply to the video"
     )
     image: ImageRef = Field(
@@ -9674,6 +10130,10 @@ class PixverseV4Effects(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9686,6 +10146,21 @@ class PixverseV4Effects(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class FramepackFlf2vAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video to generate.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class FramepackFlf2vResolution(str, Enum):
+    """
+    The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
+    """
+    VALUE_720P = "720p"
+    VALUE_480P = "480p"
+
 
 class FramepackFlf2v(FALNode):
     """
@@ -9700,29 +10175,14 @@ class FramepackFlf2v(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video to generate.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
-        """
-        VALUE_720P = "720p"
-        VALUE_480P = "480p"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation (max 500 characters)."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
+    aspect_ratio: FramepackFlf2vAspectRatio = Field(
+        default=FramepackFlf2vAspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
+    resolution: FramepackFlf2vResolution = Field(
+        default=FramepackFlf2vResolution.VALUE_480P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
     )
     num_frames: int = Field(
         default=240, description="The number of frames to generate."
@@ -9780,6 +10240,10 @@ class FramepackFlf2v(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9792,6 +10256,30 @@ class FramepackFlf2v(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class WanFlf2vAcceleration(str, Enum):
+    """
+    Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class WanFlf2vResolution(str, Enum):
+    """
+    Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class WanFlf2vAspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
 
 class WanFlf2v(FALNode):
     """
@@ -9806,38 +10294,14 @@ class WanFlf2v(FALNode):
     - Visual storytelling
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
     )
     shift: float = Field(
         default=5, description="Shift parameter for video generation."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    acceleration: WanFlf2vAcceleration = Field(
+        default=WanFlf2vAcceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
     )
     frames_per_second: int = Field(
         default=16, description="Frames per second of the generated video. Must be between 5 to 24."
@@ -9857,11 +10321,11 @@ class WanFlf2v(FALNode):
     num_frames: int = Field(
         default=81, description="Number of frames to generate. Must be between 81 to 100 (inclusive). If the number of frames is greater than 81, the video will be generated with 1.25x more billing units."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit."
+    resolution: WanFlf2vResolution = Field(
+        default=WanFlf2vResolution.VALUE_720P, description="Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
+    aspect_ratio: WanFlf2vAspectRatio = Field(
+        default=WanFlf2vAspectRatio.AUTO, description="Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image."
     )
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion."
@@ -9907,6 +10371,10 @@ class WanFlf2v(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9919,6 +10387,21 @@ class WanFlf2v(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class FramepackAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video to generate.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class FramepackResolution(str, Enum):
+    """
+    The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
+    """
+    VALUE_720P = "720p"
+    VALUE_480P = "480p"
+
 
 class Framepack(FALNode):
     """
@@ -9933,29 +10416,14 @@ class Framepack(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video to generate.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations.
-        """
-        VALUE_720P = "720p"
-        VALUE_480P = "480p"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation (max 500 characters)."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
+    aspect_ratio: FramepackAspectRatio = Field(
+        default=FramepackAspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_480P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
+    resolution: FramepackResolution = Field(
+        default=FramepackResolution.VALUE_480P, description="The resolution of the video to generate. 720p generations cost 1.5x more than 480p generations."
     )
     num_frames: int = Field(
         default=180, description="The number of frames to generate."
@@ -10000,6 +10468,10 @@ class Framepack(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10012,6 +10484,50 @@ class Framepack(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV4ImageToVideoFastResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+
+class PixverseV4ImageToVideoFastStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV4ImageToVideoFastCameraMovement(str, Enum):
+    """
+    The type of camera movement to apply to the video
+    """
+    HORIZONTAL_LEFT = "horizontal_left"
+    HORIZONTAL_RIGHT = "horizontal_right"
+    VERTICAL_UP = "vertical_up"
+    VERTICAL_DOWN = "vertical_down"
+    ZOOM_IN = "zoom_in"
+    ZOOM_OUT = "zoom_out"
+    CRANE_UP = "crane_up"
+    QUICKLY_ZOOM_IN = "quickly_zoom_in"
+    QUICKLY_ZOOM_OUT = "quickly_zoom_out"
+    SMOOTH_ZOOM_IN = "smooth_zoom_in"
+    CAMERA_ROTATION = "camera_rotation"
+    ROBO_ARM = "robo_arm"
+    SUPER_DOLLY_OUT = "super_dolly_out"
+    WHIP_PAN = "whip_pan"
+    HITCHCOCK = "hitchcock"
+    LEFT_FOLLOW = "left_follow"
+    RIGHT_FOLLOW = "right_follow"
+    PAN_LEFT = "pan_left"
+    PAN_RIGHT = "pan_right"
+    FIX_BG = "fix_bg"
+
 
 class PixverseV4ImageToVideoFast(FALNode):
     """
@@ -10026,60 +10542,16 @@ class PixverseV4ImageToVideoFast(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class CameraMovement(Enum):
-        """
-        The type of camera movement to apply to the video
-        """
-        HORIZONTAL_LEFT = "horizontal_left"
-        HORIZONTAL_RIGHT = "horizontal_right"
-        VERTICAL_UP = "vertical_up"
-        VERTICAL_DOWN = "vertical_down"
-        ZOOM_IN = "zoom_in"
-        ZOOM_OUT = "zoom_out"
-        CRANE_UP = "crane_up"
-        QUICKLY_ZOOM_IN = "quickly_zoom_in"
-        QUICKLY_ZOOM_OUT = "quickly_zoom_out"
-        SMOOTH_ZOOM_IN = "smooth_zoom_in"
-        CAMERA_ROTATION = "camera_rotation"
-        ROBO_ARM = "robo_arm"
-        SUPER_DOLLY_OUT = "super_dolly_out"
-        WHIP_PAN = "whip_pan"
-        HITCHCOCK = "hitchcock"
-        LEFT_FOLLOW = "left_follow"
-        RIGHT_FOLLOW = "right_follow"
-        PAN_LEFT = "pan_left"
-        PAN_RIGHT = "pan_right"
-        FIX_BG = "fix_bg"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV4ImageToVideoFastResolution = Field(
+        default=PixverseV4ImageToVideoFastResolution.VALUE_720P, description="The resolution of the generated video"
     )
-    style: Style | None = Field(
+    style: PixverseV4ImageToVideoFastStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    camera_movement: CameraMovement | None = Field(
+    camera_movement: PixverseV4ImageToVideoFastCameraMovement | None = Field(
         default=None, description="The type of camera movement to apply to the video"
     )
     image: ImageRef = Field(
@@ -10110,6 +10582,10 @@ class PixverseV4ImageToVideoFast(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10122,6 +10598,58 @@ class PixverseV4ImageToVideoFast(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV4ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV4ImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV4ImageToVideoStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV4ImageToVideoCameraMovement(str, Enum):
+    """
+    The type of camera movement to apply to the video
+    """
+    HORIZONTAL_LEFT = "horizontal_left"
+    HORIZONTAL_RIGHT = "horizontal_right"
+    VERTICAL_UP = "vertical_up"
+    VERTICAL_DOWN = "vertical_down"
+    ZOOM_IN = "zoom_in"
+    ZOOM_OUT = "zoom_out"
+    CRANE_UP = "crane_up"
+    QUICKLY_ZOOM_IN = "quickly_zoom_in"
+    QUICKLY_ZOOM_OUT = "quickly_zoom_out"
+    SMOOTH_ZOOM_IN = "smooth_zoom_in"
+    CAMERA_ROTATION = "camera_rotation"
+    ROBO_ARM = "robo_arm"
+    SUPER_DOLLY_OUT = "super_dolly_out"
+    WHIP_PAN = "whip_pan"
+    HITCHCOCK = "hitchcock"
+    LEFT_FOLLOW = "left_follow"
+    RIGHT_FOLLOW = "right_follow"
+    PAN_LEFT = "pan_left"
+    PAN_RIGHT = "pan_right"
+    FIX_BG = "fix_bg"
+
 
 class PixverseV4ImageToVideo(FALNode):
     """
@@ -10136,71 +10664,19 @@ class PixverseV4ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class CameraMovement(Enum):
-        """
-        The type of camera movement to apply to the video
-        """
-        HORIZONTAL_LEFT = "horizontal_left"
-        HORIZONTAL_RIGHT = "horizontal_right"
-        VERTICAL_UP = "vertical_up"
-        VERTICAL_DOWN = "vertical_down"
-        ZOOM_IN = "zoom_in"
-        ZOOM_OUT = "zoom_out"
-        CRANE_UP = "crane_up"
-        QUICKLY_ZOOM_IN = "quickly_zoom_in"
-        QUICKLY_ZOOM_OUT = "quickly_zoom_out"
-        SMOOTH_ZOOM_IN = "smooth_zoom_in"
-        CAMERA_ROTATION = "camera_rotation"
-        ROBO_ARM = "robo_arm"
-        SUPER_DOLLY_OUT = "super_dolly_out"
-        WHIP_PAN = "whip_pan"
-        HITCHCOCK = "hitchcock"
-        LEFT_FOLLOW = "left_follow"
-        RIGHT_FOLLOW = "right_follow"
-        PAN_LEFT = "pan_left"
-        PAN_RIGHT = "pan_right"
-        FIX_BG = "fix_bg"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV4ImageToVideoResolution = Field(
+        default=PixverseV4ImageToVideoResolution.VALUE_720P, description="The resolution of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds"
+    duration: PixverseV4ImageToVideoDuration = Field(
+        default=PixverseV4ImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds"
     )
-    style: Style | None = Field(
+    style: PixverseV4ImageToVideoStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    camera_movement: CameraMovement | None = Field(
+    camera_movement: PixverseV4ImageToVideoCameraMovement | None = Field(
         default=None, description="The type of camera movement to apply to the video"
     )
     image: ImageRef = Field(
@@ -10232,6 +10708,10 @@ class PixverseV4ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10244,6 +10724,124 @@ class PixverseV4ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV35EffectsResolution(str, Enum):
+    """
+    The resolution of the generated video.
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV35EffectsDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV35EffectsEffect(str, Enum):
+    """
+    The effect to apply to the video
+    """
+    KISS_ME_AI = "Kiss Me AI"
+    KISS = "Kiss"
+    MUSCLE_SURGE = "Muscle Surge"
+    WARMTH_OF_JESUS = "Warmth of Jesus"
+    ANYTHING_ROBOT = "Anything, Robot"
+    THE_TIGER_TOUCH = "The Tiger Touch"
+    HUG = "Hug"
+    HOLY_WINGS = "Holy Wings"
+    MICROWAVE = "Microwave"
+    ZOMBIE_MODE = "Zombie Mode"
+    SQUID_GAME = "Squid Game"
+    BABY_FACE = "Baby Face"
+    BLACK_MYTH_WUKONG = "Black Myth: Wukong"
+    LONG_HAIR_MAGIC = "Long Hair Magic"
+    LEGGY_RUN = "Leggy Run"
+    FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
+    PUNCH_FACE = "Punch Face"
+    CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
+    THUNDER_GOD = "Thunder God"
+    EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
+    WHOS_ARRESTED = "Who's Arrested?"
+    BABY_ARRIVED = "Baby Arrived"
+    WEREWOLF_RAGE = "Werewolf Rage"
+    BALD_SWIPE = "Bald Swipe"
+    BOOM_DROP = "BOOM DROP"
+    HUGE_CUTIE = "Huge Cutie"
+    LIQUID_METAL = "Liquid Metal"
+    SHARKSNAP = "Sharksnap!"
+    DUST_ME_AWAY = "Dust Me Away"
+    FIGURINE_FACTOR_3D = "3D Figurine Factor"
+    BIKINI_UP = "Bikini Up"
+    MY_GIRLFRIENDS = "My Girlfriends"
+    MY_BOYFRIENDS = "My Boyfriends"
+    SUBJECT_3_FEVER = "Subject 3 Fever"
+    EARTH_ZOOM = "Earth Zoom"
+    POLE_DANCE = "Pole Dance"
+    VROOM_DANCE = "Vroom Dance"
+    GHOSTFACE_TERROR = "GhostFace Terror"
+    DRAGON_EVOKER = "Dragon Evoker"
+    SKELETAL_BAE = "Skeletal Bae"
+    SUMMONING_SUCCUBUS = "Summoning succubus"
+    HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
+    NAKED_EYE_AD_3D = "3D Naked-Eye AD"
+    PACKAGE_EXPLOSION = "Package Explosion"
+    DISHES_SERVED = "Dishes Served"
+    OCEAN_AD = "Ocean ad"
+    SUPERMARKET_AD = "Supermarket AD"
+    TREE_DOLL = "Tree doll"
+    COME_FEEL_MY_ABS = "Come Feel My Abs"
+    THE_BICEP_FLEX = "The Bicep Flex"
+    LONDON_ELITE_VIBE = "London Elite Vibe"
+    FLORA_NYMPH_GOWN = "Flora Nymph Gown"
+    CHRISTMAS_COSTUME = "Christmas Costume"
+    ITS_SNOWY = "It's Snowy"
+    REINDEER_CRUISER = "Reindeer Cruiser"
+    SNOW_GLOBE_MAKER = "Snow Globe Maker"
+    PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
+    ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
+    CAT_CHRISTMAS_BOX = "Cat Christmas Box"
+    STARLIGHT_GIFT_BOX = "Starlight Gift Box"
+    XMAS_POSTER = "Xmas Poster"
+    PET_CHRISTMAS_TREE = "Pet Christmas Tree"
+    CITY_SANTA_HAT = "City Santa Hat"
+    STOCKING_SWEETIE = "Stocking Sweetie"
+    CHRISTMAS_NIGHT = "Christmas Night"
+    XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
+    GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
+    GIANT_PRODUCT = "Giant Product"
+    TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
+    BEACH_AD = "Beach AD"
+    SHOAL_SURROUND = "Shoal Surround"
+    MECHANICAL_ASSEMBLY = "Mechanical Assembly"
+    LIGHTING_AD = "Lighting AD"
+    BILLBOARD_AD = "Billboard AD"
+    PRODUCT_CLOSE_UP = "Product close-up"
+    PARACHUTE_DELIVERY = "Parachute Delivery"
+    DREAMLIKE_CLOUD = "Dreamlike Cloud"
+    MACARON_MACHINE = "Macaron Machine"
+    POSTER_AD = "Poster AD"
+    TRUCK_AD = "Truck AD"
+    GRAFFITI_AD = "Graffiti AD"
+    FIGURINE_FACTORY_3D = "3D Figurine Factory"
+    THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
+    ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
+    I_QUIT = "I Quit"
+    HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
+    SMELL_THE_LENS = "Smell the Lens"
+    I_BELIEVE_I_CAN_FLY = "I believe I can fly"
+    STRIKOUT_DANCE = "Strikout Dance"
+    PIXEL_WORLD = "Pixel World"
+    MINT_IN_BOX = "Mint in Box"
+    HANDS_UP_HAND = "Hands up, Hand"
+    FLORA_NYMPH_GO = "Flora Nymph Go"
+    SOMBER_EMBRACE = "Somber Embrace"
+    BEAM_ME_UP = "Beam me up"
+    SUIT_SWAGGER = "Suit Swagger"
+
 
 class PixverseV35Effects(FALNode):
     """
@@ -10258,134 +10856,16 @@ class PixverseV35Effects(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video.
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Effect(Enum):
-        """
-        The effect to apply to the video
-        """
-        KISS_ME_AI = "Kiss Me AI"
-        KISS = "Kiss"
-        MUSCLE_SURGE = "Muscle Surge"
-        WARMTH_OF_JESUS = "Warmth of Jesus"
-        ANYTHING_ROBOT = "Anything, Robot"
-        THE_TIGER_TOUCH = "The Tiger Touch"
-        HUG = "Hug"
-        HOLY_WINGS = "Holy Wings"
-        MICROWAVE = "Microwave"
-        ZOMBIE_MODE = "Zombie Mode"
-        SQUID_GAME = "Squid Game"
-        BABY_FACE = "Baby Face"
-        BLACK_MYTH_WUKONG = "Black Myth: Wukong"
-        LONG_HAIR_MAGIC = "Long Hair Magic"
-        LEGGY_RUN = "Leggy Run"
-        FIN_TASTIC_MERMAID = "Fin-tastic Mermaid"
-        PUNCH_FACE = "Punch Face"
-        CREEPY_DEVIL_SMILE = "Creepy Devil Smile"
-        THUNDER_GOD = "Thunder God"
-        EYE_ZOOM_CHALLENGE = "Eye Zoom Challenge"
-        WHOS_ARRESTED = "Who's Arrested?"
-        BABY_ARRIVED = "Baby Arrived"
-        WEREWOLF_RAGE = "Werewolf Rage"
-        BALD_SWIPE = "Bald Swipe"
-        BOOM_DROP = "BOOM DROP"
-        HUGE_CUTIE = "Huge Cutie"
-        LIQUID_METAL = "Liquid Metal"
-        SHARKSNAP = "Sharksnap!"
-        DUST_ME_AWAY = "Dust Me Away"
-        FIGURINE_FACTOR_3D = "3D Figurine Factor"
-        BIKINI_UP = "Bikini Up"
-        MY_GIRLFRIENDS = "My Girlfriends"
-        MY_BOYFRIENDS = "My Boyfriends"
-        SUBJECT_3_FEVER = "Subject 3 Fever"
-        EARTH_ZOOM = "Earth Zoom"
-        POLE_DANCE = "Pole Dance"
-        VROOM_DANCE = "Vroom Dance"
-        GHOSTFACE_TERROR = "GhostFace Terror"
-        DRAGON_EVOKER = "Dragon Evoker"
-        SKELETAL_BAE = "Skeletal Bae"
-        SUMMONING_SUCCUBUS = "Summoning succubus"
-        HALLOWEEN_VOODOO_DOLL = "Halloween Voodoo Doll"
-        NAKED_EYE_AD_3D = "3D Naked-Eye AD"
-        PACKAGE_EXPLOSION = "Package Explosion"
-        DISHES_SERVED = "Dishes Served"
-        OCEAN_AD = "Ocean ad"
-        SUPERMARKET_AD = "Supermarket AD"
-        TREE_DOLL = "Tree doll"
-        COME_FEEL_MY_ABS = "Come Feel My Abs"
-        THE_BICEP_FLEX = "The Bicep Flex"
-        LONDON_ELITE_VIBE = "London Elite Vibe"
-        FLORA_NYMPH_GOWN = "Flora Nymph Gown"
-        CHRISTMAS_COSTUME = "Christmas Costume"
-        ITS_SNOWY = "It's Snowy"
-        REINDEER_CRUISER = "Reindeer Cruiser"
-        SNOW_GLOBE_MAKER = "Snow Globe Maker"
-        PET_CHRISTMAS_OUTFIT = "Pet Christmas Outfit"
-        ADOPT_A_POLAR_PAL = "Adopt a Polar Pal"
-        CAT_CHRISTMAS_BOX = "Cat Christmas Box"
-        STARLIGHT_GIFT_BOX = "Starlight Gift Box"
-        XMAS_POSTER = "Xmas Poster"
-        PET_CHRISTMAS_TREE = "Pet Christmas Tree"
-        CITY_SANTA_HAT = "City Santa Hat"
-        STOCKING_SWEETIE = "Stocking Sweetie"
-        CHRISTMAS_NIGHT = "Christmas Night"
-        XMAS_FRONT_PAGE_KARMA = "Xmas Front Page Karma"
-        GRINCHS_XMAS_HIJACK = "Grinch's Xmas Hijack"
-        GIANT_PRODUCT = "Giant Product"
-        TRUCK_FASHION_SHOOT = "Truck Fashion Shoot"
-        BEACH_AD = "Beach AD"
-        SHOAL_SURROUND = "Shoal Surround"
-        MECHANICAL_ASSEMBLY = "Mechanical Assembly"
-        LIGHTING_AD = "Lighting AD"
-        BILLBOARD_AD = "Billboard AD"
-        PRODUCT_CLOSE_UP = "Product close-up"
-        PARACHUTE_DELIVERY = "Parachute Delivery"
-        DREAMLIKE_CLOUD = "Dreamlike Cloud"
-        MACARON_MACHINE = "Macaron Machine"
-        POSTER_AD = "Poster AD"
-        TRUCK_AD = "Truck AD"
-        GRAFFITI_AD = "Graffiti AD"
-        FIGURINE_FACTORY_3D = "3D Figurine Factory"
-        THE_EXCLUSIVE_FIRST_CLASS = "The Exclusive First Class"
-        ART_ZOOM_CHALLENGE = "Art Zoom Challenge"
-        I_QUIT = "I Quit"
-        HITCHCOCK_DOLLY_ZOOM = "Hitchcock Dolly Zoom"
-        SMELL_THE_LENS = "Smell the Lens"
-        I_BELIEVE_I_CAN_FLY = "I believe I can fly"
-        STRIKOUT_DANCE = "Strikout Dance"
-        PIXEL_WORLD = "Pixel World"
-        MINT_IN_BOX = "Mint in Box"
-        HANDS_UP_HAND = "Hands up, Hand"
-        FLORA_NYMPH_GO = "Flora Nymph Go"
-        SOMBER_EMBRACE = "Somber Embrace"
-        BEAM_ME_UP = "Beam me up"
-        SUIT_SWAGGER = "Suit Swagger"
-
-
     negative_prompt: str = Field(
         default="", description="Negative prompt to be used for the generation"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video."
+    resolution: PixverseV35EffectsResolution = Field(
+        default=PixverseV35EffectsResolution.VALUE_720P, description="The resolution of the generated video."
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV35EffectsDuration = Field(
+        default=PixverseV35EffectsDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    effect: Effect = Field(
+    effect: PixverseV35EffectsEffect = Field(
         default="", description="The effect to apply to the video"
     )
     image: ImageRef = Field(
@@ -10408,6 +10888,10 @@ class PixverseV35Effects(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10420,6 +10904,43 @@ class PixverseV35Effects(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV35TransitionAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_1_1 = "1:1"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+
+class PixverseV35TransitionStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
+class PixverseV35TransitionDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV35TransitionResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PixverseV35Transition(FALNode):
     """
@@ -10434,60 +10955,23 @@ class PixverseV35Transition(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_1_1 = "1:1"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     first_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: PixverseV35TransitionAspectRatio = Field(
+        default=PixverseV35TransitionAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
     prompt: str = Field(
         default="", description="The prompt for the transition"
     )
-    style: Style | None = Field(
+    style: PixverseV35TransitionStyle | None = Field(
         default=None, description="The style of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: PixverseV35TransitionDuration = Field(
+        default=PixverseV35TransitionDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV35TransitionResolution = Field(
+        default=PixverseV35TransitionResolution.VALUE_720P, description="The resolution of the generated video"
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same video every time."
@@ -10524,6 +11008,10 @@ class PixverseV35Transition(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10536,6 +11024,33 @@ class PixverseV35Transition(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LumaDreamMachineRay2FlashImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_21_9 = "21:9"
+    RATIO_9_21 = "9:21"
+
+class LumaDreamMachineRay2FlashImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)
+    """
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class LumaDreamMachineRay2FlashImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video
+    """
+    VALUE_5S = "5s"
+    VALUE_9S = "9s"
+
 
 class LumaDreamMachineRay2FlashImageToVideo(FALNode):
     """
@@ -10550,47 +11065,20 @@ class LumaDreamMachineRay2FlashImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_21_9 = "21:9"
-        RATIO_9_21 = "9:21"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)
-        """
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video
-        """
-        VALUE_5S = "5s"
-        VALUE_9S = "9s"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: LumaDreamMachineRay2FlashImageToVideoAspectRatio = Field(
+        default=LumaDreamMachineRay2FlashImageToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_540P, description="The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)"
+    resolution: LumaDreamMachineRay2FlashImageToVideoResolution = Field(
+        default=LumaDreamMachineRay2FlashImageToVideoResolution.VALUE_540P, description="The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)"
     )
     loop: bool = Field(
         default=False, description="Whether the video should loop (end of video is blended with the beginning)"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5S, description="The duration of the generated video"
+    duration: LumaDreamMachineRay2FlashImageToVideoDuration = Field(
+        default=LumaDreamMachineRay2FlashImageToVideoDuration.VALUE_5S, description="The duration of the generated video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="Initial image to start the video from. Can be used together with end_image_url."
@@ -10622,6 +11110,10 @@ class LumaDreamMachineRay2FlashImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10634,6 +11126,28 @@ class LumaDreamMachineRay2FlashImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PikaV15PikaffectsPikaffect(str, Enum):
+    """
+    The Pikaffect to apply
+    """
+    CAKE_IFY = "Cake-ify"
+    CRUMBLE = "Crumble"
+    CRUSH = "Crush"
+    DECAPITATE = "Decapitate"
+    DEFLATE = "Deflate"
+    DISSOLVE = "Dissolve"
+    EXPLODE = "Explode"
+    EYE_POP = "Eye-pop"
+    INFLATE = "Inflate"
+    LEVITATE = "Levitate"
+    MELT = "Melt"
+    PEEL = "Peel"
+    POKE = "Poke"
+    SQUISH = "Squish"
+    TA_DA = "Ta-da"
+    TEAR = "Tear"
+
 
 class PikaV15Pikaffects(FALNode):
     """
@@ -10648,29 +11162,7 @@ class PikaV15Pikaffects(FALNode):
     - Visual storytelling
     """
 
-    class Pikaffect(Enum):
-        """
-        The Pikaffect to apply
-        """
-        CAKE_IFY = "Cake-ify"
-        CRUMBLE = "Crumble"
-        CRUSH = "Crush"
-        DECAPITATE = "Decapitate"
-        DEFLATE = "Deflate"
-        DISSOLVE = "Dissolve"
-        EXPLODE = "Explode"
-        EYE_POP = "Eye-pop"
-        INFLATE = "Inflate"
-        LEVITATE = "Levitate"
-        MELT = "Melt"
-        PEEL = "Peel"
-        POKE = "Poke"
-        SQUISH = "Squish"
-        TA_DA = "Ta-da"
-        TEAR = "Tear"
-
-
-    pikaffect: Pikaffect = Field(
+    pikaffect: PikaV15PikaffectsPikaffect = Field(
         default="", description="The Pikaffect to apply"
     )
     prompt: str = Field(
@@ -10702,6 +11194,10 @@ class PikaV15Pikaffects(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10714,6 +11210,14 @@ class PikaV15Pikaffects(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PikaV21ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PikaV21ImageToVideo(FALNode):
     """
@@ -10728,19 +11232,11 @@ class PikaV21ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PikaV21ImageToVideoResolution = Field(
+        default=PikaV21ImageToVideoResolution.VALUE_720P, description="The resolution of the generated video"
     )
     duration: int = Field(
         default=5, description="The duration of the generated video in seconds"
@@ -10772,6 +11268,10 @@ class PikaV21ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10784,6 +11284,14 @@ class PikaV21ImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PikaV2TurboImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
 
 class PikaV2TurboImageToVideo(FALNode):
     """
@@ -10798,19 +11306,11 @@ class PikaV2TurboImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PikaV2TurboImageToVideoResolution = Field(
+        default=PikaV2TurboImageToVideoResolution.VALUE_720P, description="The resolution of the generated video"
     )
     duration: int = Field(
         default=5, description="The duration of the generated video in seconds"
@@ -10842,6 +11342,10 @@ class PikaV2TurboImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10854,6 +11358,16 @@ class PikaV2TurboImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduImageToVideoMovementAmplitude(str, Enum):
+    """
+    The movement amplitude of objects in the frame
+    """
+    AUTO = "auto"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+
 
 class ViduImageToVideo(FALNode):
     """
@@ -10868,24 +11382,14 @@ class ViduImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class MovementAmplitude(Enum):
-        """
-        The movement amplitude of objects in the frame
-        """
-        AUTO = "auto"
-        SMALL = "small"
-        MEDIUM = "medium"
-        LARGE = "large"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
     seed: int = Field(
         default=-1, description="Random seed for generation"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    movement_amplitude: ViduImageToVideoMovementAmplitude = Field(
+        default=ViduImageToVideoMovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -10906,6 +11410,10 @@ class ViduImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10918,6 +11426,24 @@ class ViduImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduReferenceToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the output video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class ViduReferenceToVideoMovementAmplitude(str, Enum):
+    """
+    The movement amplitude of objects in the frame
+    """
+    AUTO = "auto"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+
 
 class ViduReferenceToVideo(FALNode):
     """
@@ -10932,29 +11458,11 @@ class ViduReferenceToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the output video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class MovementAmplitude(Enum):
-        """
-        The movement amplitude of objects in the frame
-        """
-        AUTO = "auto"
-        SMALL = "small"
-        MEDIUM = "medium"
-        LARGE = "large"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
+    aspect_ratio: ViduReferenceToVideoAspectRatio = Field(
+        default=ViduReferenceToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
     )
     reference_images: list[str] = Field(
         default=[], description="URLs of the reference images to use for consistent subject appearance"
@@ -10962,8 +11470,8 @@ class ViduReferenceToVideo(FALNode):
     seed: int = Field(
         default=-1, description="Random seed for generation"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    movement_amplitude: ViduReferenceToVideoMovementAmplitude = Field(
+        default=ViduReferenceToVideoMovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -10977,6 +11485,10 @@ class ViduReferenceToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10989,6 +11501,16 @@ class ViduReferenceToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduStartEndToVideoMovementAmplitude(str, Enum):
+    """
+    The movement amplitude of objects in the frame
+    """
+    AUTO = "auto"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+
 
 class ViduStartEndToVideo(FALNode):
     """
@@ -11003,16 +11525,6 @@ class ViduStartEndToVideo(FALNode):
     - Visual storytelling
     """
 
-    class MovementAmplitude(Enum):
-        """
-        The movement amplitude of objects in the frame
-        """
-        AUTO = "auto"
-        SMALL = "small"
-        MEDIUM = "medium"
-        LARGE = "large"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
@@ -11022,8 +11534,8 @@ class ViduStartEndToVideo(FALNode):
     end_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the last frame"
     )
-    movement_amplitude: MovementAmplitude = Field(
-        default=MovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
+    movement_amplitude: ViduStartEndToVideoMovementAmplitude = Field(
+        default=ViduStartEndToVideoMovementAmplitude.AUTO, description="The movement amplitude of objects in the frame"
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to use as the first frame"
@@ -11050,6 +11562,10 @@ class ViduStartEndToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11062,6 +11578,200 @@ class ViduStartEndToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class ViduTemplateToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the output video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class ViduTemplateToVideoTemplate(str, Enum):
+    """
+    AI video template to use. Pricing varies by template: Standard templates (hug, kiss, love_pose, etc.) cost 4 credits ($0.20), Premium templates (lunar_newyear, dynasty_dress, dreamy_wedding, etc.) cost 6 credits ($0.30), and Advanced templates (live_photo) cost 10 credits ($0.50).
+    """
+    DREAMY_WEDDING = "dreamy_wedding"
+    ROMANTIC_LIFT = "romantic_lift"
+    SWEET_PROPOSAL = "sweet_proposal"
+    COUPLE_ARRIVAL = "couple_arrival"
+    CUPID_ARROW = "cupid_arrow"
+    PET_LOVERS = "pet_lovers"
+    LUNAR_NEWYEAR = "lunar_newyear"
+    HUG = "hug"
+    KISS = "kiss"
+    DYNASTY_DRESS = "dynasty_dress"
+    WISH_SENDER = "wish_sender"
+    LOVE_POSE = "love_pose"
+    HAIR_SWAP = "hair_swap"
+    YOUTH_REWIND = "youth_rewind"
+    MORPHLAB = "morphlab"
+    LIVE_PHOTO = "live_photo"
+    EMOTIONLAB = "emotionlab"
+    LIVE_MEMORY = "live_memory"
+    INTERACTION = "interaction"
+    CHRISTMAS = "christmas"
+    PET_FINGER = "pet_finger"
+    EAT_MUSHROOMS = "eat_mushrooms"
+    BEAST_CHASE_LIBRARY = "beast_chase_library"
+    BEAST_CHASE_SUPERMARKET = "beast_chase_supermarket"
+    PETAL_SCATTERED = "petal_scattered"
+    EMOJI_FIGURE = "emoji_figure"
+    HAIR_COLOR_CHANGE = "hair_color_change"
+    MULTIPLE_PEOPLE_KISSING = "multiple_people_kissing"
+    BEAST_CHASE_AMAZON = "beast_chase_amazon"
+    BEAST_CHASE_MOUNTAIN = "beast_chase_mountain"
+    BALLOONMAN_EXPLODES_PRO = "balloonman_explodes_pro"
+    GET_THINNER = "get_thinner"
+    JUMP2POOL = "jump2pool"
+    BODYSHAKE = "bodyshake"
+    JIGGLE_UP = "jiggle_up"
+    SHAKE_IT_DANCE = "shake_it_dance"
+    SUBJECT_3 = "subject_3"
+    PUBG_WINNER_HIT = "pubg_winner_hit"
+    SHAKE_IT_DOWN = "shake_it_down"
+    BLUEPRINT_SUPREME = "blueprint_supreme"
+    HIP_TWIST = "hip_twist"
+    MOTOR_DANCE = "motor_dance"
+    RAT_DANCE = "rat_dance"
+    KWOK_DANCE = "kwok_dance"
+    LEG_SWEEP_DANCE = "leg_sweep_dance"
+    HEESEUNG_MARCH = "heeseung_march"
+    SHAKE_TO_MAX = "shake_to_max"
+    DAME_UN_GRRR = "dame_un_grrr"
+    I_KNOW = "i_know"
+    LIT_BOUNCE = "lit_bounce"
+    WAVE_DANCE = "wave_dance"
+    CHILL_DANCE = "chill_dance"
+    HIP_FLICKING = "hip_flicking"
+    SAKURA_SEASON = "sakura_season"
+    ZONGZI_WRAP = "zongzi_wrap"
+    ZONGZI_DROP = "zongzi_drop"
+    DRAGONBOAT_SHOT = "dragonboat_shot"
+    RAIN_KISS = "rain_kiss"
+    CHILD_MEMORY = "child_memory"
+    COUPLE_DROP = "couple_drop"
+    COUPLE_WALK = "couple_walk"
+    FLOWER_RECEIVE = "flower_receive"
+    LOVE_DROP = "love_drop"
+    CHEEK_KISS = "cheek_kiss"
+    CARRY_ME = "carry_me"
+    BLOW_KISS = "blow_kiss"
+    LOVE_FALL = "love_fall"
+    FRENCH_KISS_8S = "french_kiss_8s"
+    WORKDAY_FEELS = "workday_feels"
+    LOVE_STORY = "love_story"
+    BLOOM_MAGIC = "bloom_magic"
+    GHIBLI = "ghibli"
+    MINECRAFT = "minecraft"
+    BOX_ME = "box_me"
+    CLAW_ME = "claw_me"
+    CLAYSHOT = "clayshot"
+    MANGA_MEME = "manga_meme"
+    QUAD_MEME = "quad_meme"
+    PIXEL_ME = "pixel_me"
+    CLAYSHOT_DUO = "clayshot_duo"
+    IRASUTOYA = "irasutoya"
+    AMERICAN_COMIC = "american_comic"
+    SIMPSONS_COMIC = "simpsons_comic"
+    YAYOI_KUSAMA_STYLE = "yayoi_kusama_style"
+    POP_ART = "pop_art"
+    JOJO_STYLE = "jojo_style"
+    SLICE_THERAPY = "slice_therapy"
+    BALLOON_FLYAWAY = "balloon_flyaway"
+    FLYING = "flying"
+    PAPERMAN = "paperman"
+    PINCH = "pinch"
+    BLOOM_DOOROBEAR = "bloom_doorobear"
+    GENDER_SWAP = "gender_swap"
+    NAP_ME = "nap_me"
+    SEXY_ME = "sexy_me"
+    SPIN360 = "spin360"
+    SMOOTH_SHIFT = "smooth_shift"
+    PAPER_FALL = "paper_fall"
+    JUMP_TO_CLOUD = "jump_to_cloud"
+    PILOT = "pilot"
+    SWEET_DREAMS = "sweet_dreams"
+    SOUL_DEPART = "soul_depart"
+    PUNCH_HIT = "punch_hit"
+    WATERMELON_HIT = "watermelon_hit"
+    SPLIT_STANCE_PET = "split_stance_pet"
+    MAKE_FACE = "make_face"
+    BREAK_GLASS = "break_glass"
+    SPLIT_STANCE_HUMAN = "split_stance_human"
+    COVERED_LIQUID_METAL = "covered_liquid_metal"
+    FLUFFY_PLUNGE = "fluffy_plunge"
+    PET_BELLY_DANCE = "pet_belly_dance"
+    WATER_FLOAT = "water_float"
+    RELAX_CUT = "relax_cut"
+    HEAD_TO_BALLOON = "head_to_balloon"
+    CLONING = "cloning"
+    ACROSS_THE_UNIVERSE_JUNGLE = "across_the_universe_jungle"
+    CLOTHES_SPINNING_REMNANT = "clothes_spinning_remnant"
+    ACROSS_THE_UNIVERSE_JURASSIC = "across_the_universe_jurassic"
+    ACROSS_THE_UNIVERSE_MOON = "across_the_universe_moon"
+    FISHEYE_PET = "fisheye_pet"
+    HITCHCOCK_ZOOM = "hitchcock_zoom"
+    CUTE_BANGS = "cute_bangs"
+    EARTH_ZOOM_OUT = "earth_zoom_out"
+    FISHEYE_HUMAN = "fisheye_human"
+    DRIVE_YACHT = "drive_yacht"
+    VIRTUAL_SINGER = "virtual_singer"
+    EARTH_ZOOM_IN = "earth_zoom_in"
+    ALIENS_COMING = "aliens_coming"
+    DRIVE_FERRARI = "drive_ferrari"
+    BJD_STYLE = "bjd_style"
+    VIRTUAL_FITTING = "virtual_fitting"
+    ORBIT = "orbit"
+    ZOOM_IN = "zoom_in"
+    AI_OUTFIT = "ai_outfit"
+    SPIN180 = "spin180"
+    ORBIT_DOLLY = "orbit_dolly"
+    ORBIT_DOLLY_FAST = "orbit_dolly_fast"
+    AUTO_SPIN = "auto_spin"
+    WALK_FORWARD = "walk_forward"
+    OUTFIT_SHOW = "outfit_show"
+    ZOOM_IN_FAST = "zoom_in_fast"
+    ZOOM_OUT_IMAGE = "zoom_out_image"
+    ZOOM_OUT_STARTEND = "zoom_out_startend"
+    MUSCLING = "muscling"
+    CAPTAIN_AMERICA = "captain_america"
+    HULK = "hulk"
+    CAP_WALK = "cap_walk"
+    HULK_DIVE = "hulk_dive"
+    EXOTIC_PRINCESS = "exotic_princess"
+    BEAST_COMPANION = "beast_companion"
+    CARTOON_DOLL = "cartoon_doll"
+    GOLDEN_EPOCH = "golden_epoch"
+    OSCAR_GALA = "oscar_gala"
+    FASHION_STRIDE = "fashion_stride"
+    STAR_CARPET = "star_carpet"
+    FLAME_CARPET = "flame_carpet"
+    FROST_CARPET = "frost_carpet"
+    MECHA_X = "mecha_x"
+    STYLE_ME = "style_me"
+    TAP_ME = "tap_me"
+    SABER_WARRIOR = "saber_warrior"
+    PET2HUMAN = "pet2human"
+    GRADUATION = "graduation"
+    FISHERMEN = "fishermen"
+    HAPPY_BIRTHDAY = "happy_birthday"
+    FAIRY_ME = "fairy_me"
+    LADUDU_ME = "ladudu_me"
+    LADUDU_ME_RANDOM = "ladudu_me_random"
+    SQUID_GAME = "squid_game"
+    SUPERMAN = "superman"
+    GROW_WINGS = "grow_wings"
+    CLEVAGE = "clevage"
+    FLY_WITH_DORAEMON = "fly_with_doraemon"
+    CREATICE_PRODUCT_DOWN = "creatice_product_down"
+    POLE_DANCE = "pole_dance"
+    HUG_FROM_BEHIND = "hug_from_behind"
+    CREATICE_PRODUCT_UP_CYBERCITY = "creatice_product_up_cybercity"
+    CREATICE_PRODUCT_UP_BLUECIRCUIT = "creatice_product_up_bluecircuit"
+    CREATICE_PRODUCT_UP = "creatice_product_up"
+    RUN_FAST = "run_fast"
+    BACKGROUND_EXPLOSION = "background_explosion"
+
 
 class ViduTemplateToVideo(FALNode):
     """
@@ -11076,205 +11786,11 @@ class ViduTemplateToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the output video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Template(Enum):
-        """
-        AI video template to use. Pricing varies by template: Standard templates (hug, kiss, love_pose, etc.) cost 4 credits ($0.20), Premium templates (lunar_newyear, dynasty_dress, dreamy_wedding, etc.) cost 6 credits ($0.30), and Advanced templates (live_photo) cost 10 credits ($0.50).
-        """
-        DREAMY_WEDDING = "dreamy_wedding"
-        ROMANTIC_LIFT = "romantic_lift"
-        SWEET_PROPOSAL = "sweet_proposal"
-        COUPLE_ARRIVAL = "couple_arrival"
-        CUPID_ARROW = "cupid_arrow"
-        PET_LOVERS = "pet_lovers"
-        LUNAR_NEWYEAR = "lunar_newyear"
-        HUG = "hug"
-        KISS = "kiss"
-        DYNASTY_DRESS = "dynasty_dress"
-        WISH_SENDER = "wish_sender"
-        LOVE_POSE = "love_pose"
-        HAIR_SWAP = "hair_swap"
-        YOUTH_REWIND = "youth_rewind"
-        MORPHLAB = "morphlab"
-        LIVE_PHOTO = "live_photo"
-        EMOTIONLAB = "emotionlab"
-        LIVE_MEMORY = "live_memory"
-        INTERACTION = "interaction"
-        CHRISTMAS = "christmas"
-        PET_FINGER = "pet_finger"
-        EAT_MUSHROOMS = "eat_mushrooms"
-        BEAST_CHASE_LIBRARY = "beast_chase_library"
-        BEAST_CHASE_SUPERMARKET = "beast_chase_supermarket"
-        PETAL_SCATTERED = "petal_scattered"
-        EMOJI_FIGURE = "emoji_figure"
-        HAIR_COLOR_CHANGE = "hair_color_change"
-        MULTIPLE_PEOPLE_KISSING = "multiple_people_kissing"
-        BEAST_CHASE_AMAZON = "beast_chase_amazon"
-        BEAST_CHASE_MOUNTAIN = "beast_chase_mountain"
-        BALLOONMAN_EXPLODES_PRO = "balloonman_explodes_pro"
-        GET_THINNER = "get_thinner"
-        JUMP2POOL = "jump2pool"
-        BODYSHAKE = "bodyshake"
-        JIGGLE_UP = "jiggle_up"
-        SHAKE_IT_DANCE = "shake_it_dance"
-        SUBJECT_3 = "subject_3"
-        PUBG_WINNER_HIT = "pubg_winner_hit"
-        SHAKE_IT_DOWN = "shake_it_down"
-        BLUEPRINT_SUPREME = "blueprint_supreme"
-        HIP_TWIST = "hip_twist"
-        MOTOR_DANCE = "motor_dance"
-        RAT_DANCE = "rat_dance"
-        KWOK_DANCE = "kwok_dance"
-        LEG_SWEEP_DANCE = "leg_sweep_dance"
-        HEESEUNG_MARCH = "heeseung_march"
-        SHAKE_TO_MAX = "shake_to_max"
-        DAME_UN_GRRR = "dame_un_grrr"
-        I_KNOW = "i_know"
-        LIT_BOUNCE = "lit_bounce"
-        WAVE_DANCE = "wave_dance"
-        CHILL_DANCE = "chill_dance"
-        HIP_FLICKING = "hip_flicking"
-        SAKURA_SEASON = "sakura_season"
-        ZONGZI_WRAP = "zongzi_wrap"
-        ZONGZI_DROP = "zongzi_drop"
-        DRAGONBOAT_SHOT = "dragonboat_shot"
-        RAIN_KISS = "rain_kiss"
-        CHILD_MEMORY = "child_memory"
-        COUPLE_DROP = "couple_drop"
-        COUPLE_WALK = "couple_walk"
-        FLOWER_RECEIVE = "flower_receive"
-        LOVE_DROP = "love_drop"
-        CHEEK_KISS = "cheek_kiss"
-        CARRY_ME = "carry_me"
-        BLOW_KISS = "blow_kiss"
-        LOVE_FALL = "love_fall"
-        FRENCH_KISS_8S = "french_kiss_8s"
-        WORKDAY_FEELS = "workday_feels"
-        LOVE_STORY = "love_story"
-        BLOOM_MAGIC = "bloom_magic"
-        GHIBLI = "ghibli"
-        MINECRAFT = "minecraft"
-        BOX_ME = "box_me"
-        CLAW_ME = "claw_me"
-        CLAYSHOT = "clayshot"
-        MANGA_MEME = "manga_meme"
-        QUAD_MEME = "quad_meme"
-        PIXEL_ME = "pixel_me"
-        CLAYSHOT_DUO = "clayshot_duo"
-        IRASUTOYA = "irasutoya"
-        AMERICAN_COMIC = "american_comic"
-        SIMPSONS_COMIC = "simpsons_comic"
-        YAYOI_KUSAMA_STYLE = "yayoi_kusama_style"
-        POP_ART = "pop_art"
-        JOJO_STYLE = "jojo_style"
-        SLICE_THERAPY = "slice_therapy"
-        BALLOON_FLYAWAY = "balloon_flyaway"
-        FLYING = "flying"
-        PAPERMAN = "paperman"
-        PINCH = "pinch"
-        BLOOM_DOOROBEAR = "bloom_doorobear"
-        GENDER_SWAP = "gender_swap"
-        NAP_ME = "nap_me"
-        SEXY_ME = "sexy_me"
-        SPIN360 = "spin360"
-        SMOOTH_SHIFT = "smooth_shift"
-        PAPER_FALL = "paper_fall"
-        JUMP_TO_CLOUD = "jump_to_cloud"
-        PILOT = "pilot"
-        SWEET_DREAMS = "sweet_dreams"
-        SOUL_DEPART = "soul_depart"
-        PUNCH_HIT = "punch_hit"
-        WATERMELON_HIT = "watermelon_hit"
-        SPLIT_STANCE_PET = "split_stance_pet"
-        MAKE_FACE = "make_face"
-        BREAK_GLASS = "break_glass"
-        SPLIT_STANCE_HUMAN = "split_stance_human"
-        COVERED_LIQUID_METAL = "covered_liquid_metal"
-        FLUFFY_PLUNGE = "fluffy_plunge"
-        PET_BELLY_DANCE = "pet_belly_dance"
-        WATER_FLOAT = "water_float"
-        RELAX_CUT = "relax_cut"
-        HEAD_TO_BALLOON = "head_to_balloon"
-        CLONING = "cloning"
-        ACROSS_THE_UNIVERSE_JUNGLE = "across_the_universe_jungle"
-        CLOTHES_SPINNING_REMNANT = "clothes_spinning_remnant"
-        ACROSS_THE_UNIVERSE_JURASSIC = "across_the_universe_jurassic"
-        ACROSS_THE_UNIVERSE_MOON = "across_the_universe_moon"
-        FISHEYE_PET = "fisheye_pet"
-        HITCHCOCK_ZOOM = "hitchcock_zoom"
-        CUTE_BANGS = "cute_bangs"
-        EARTH_ZOOM_OUT = "earth_zoom_out"
-        FISHEYE_HUMAN = "fisheye_human"
-        DRIVE_YACHT = "drive_yacht"
-        VIRTUAL_SINGER = "virtual_singer"
-        EARTH_ZOOM_IN = "earth_zoom_in"
-        ALIENS_COMING = "aliens_coming"
-        DRIVE_FERRARI = "drive_ferrari"
-        BJD_STYLE = "bjd_style"
-        VIRTUAL_FITTING = "virtual_fitting"
-        ORBIT = "orbit"
-        ZOOM_IN = "zoom_in"
-        AI_OUTFIT = "ai_outfit"
-        SPIN180 = "spin180"
-        ORBIT_DOLLY = "orbit_dolly"
-        ORBIT_DOLLY_FAST = "orbit_dolly_fast"
-        AUTO_SPIN = "auto_spin"
-        WALK_FORWARD = "walk_forward"
-        OUTFIT_SHOW = "outfit_show"
-        ZOOM_IN_FAST = "zoom_in_fast"
-        ZOOM_OUT_IMAGE = "zoom_out_image"
-        ZOOM_OUT_STARTEND = "zoom_out_startend"
-        MUSCLING = "muscling"
-        CAPTAIN_AMERICA = "captain_america"
-        HULK = "hulk"
-        CAP_WALK = "cap_walk"
-        HULK_DIVE = "hulk_dive"
-        EXOTIC_PRINCESS = "exotic_princess"
-        BEAST_COMPANION = "beast_companion"
-        CARTOON_DOLL = "cartoon_doll"
-        GOLDEN_EPOCH = "golden_epoch"
-        OSCAR_GALA = "oscar_gala"
-        FASHION_STRIDE = "fashion_stride"
-        STAR_CARPET = "star_carpet"
-        FLAME_CARPET = "flame_carpet"
-        FROST_CARPET = "frost_carpet"
-        MECHA_X = "mecha_x"
-        STYLE_ME = "style_me"
-        TAP_ME = "tap_me"
-        SABER_WARRIOR = "saber_warrior"
-        PET2HUMAN = "pet2human"
-        GRADUATION = "graduation"
-        FISHERMEN = "fishermen"
-        HAPPY_BIRTHDAY = "happy_birthday"
-        FAIRY_ME = "fairy_me"
-        LADUDU_ME = "ladudu_me"
-        LADUDU_ME_RANDOM = "ladudu_me_random"
-        SQUID_GAME = "squid_game"
-        SUPERMAN = "superman"
-        GROW_WINGS = "grow_wings"
-        CLEVAGE = "clevage"
-        FLY_WITH_DORAEMON = "fly_with_doraemon"
-        CREATICE_PRODUCT_DOWN = "creatice_product_down"
-        POLE_DANCE = "pole_dance"
-        HUG_FROM_BEHIND = "hug_from_behind"
-        CREATICE_PRODUCT_UP_CYBERCITY = "creatice_product_up_cybercity"
-        CREATICE_PRODUCT_UP_BLUECIRCUIT = "creatice_product_up_bluecircuit"
-        CREATICE_PRODUCT_UP = "creatice_product_up"
-        RUN_FAST = "run_fast"
-        BACKGROUND_EXPLOSION = "background_explosion"
-
-
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
+    aspect_ratio: ViduTemplateToVideoAspectRatio = Field(
+        default=ViduTemplateToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
     )
-    template: Template = Field(
-        default=Template.HUG, description="AI video template to use. Pricing varies by template: Standard templates (hug, kiss, love_pose, etc.) cost 4 credits ($0.20), Premium templates (lunar_newyear, dynasty_dress, dreamy_wedding, etc.) cost 6 credits ($0.30), and Advanced templates (live_photo) cost 10 credits ($0.50)."
+    template: ViduTemplateToVideoTemplate = Field(
+        default=ViduTemplateToVideoTemplate.HUG, description="AI video template to use. Pricing varies by template: Standard templates (hug, kiss, love_pose, etc.) cost 4 credits ($0.20), Premium templates (lunar_newyear, dynasty_dress, dreamy_wedding, etc.) cost 6 credits ($0.30), and Advanced templates (live_photo) cost 10 credits ($0.50)."
     )
     seed: int = Field(
         default=-1, description="Random seed for generation"
@@ -11293,6 +11809,10 @@ class ViduTemplateToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11306,6 +11826,23 @@ class ViduTemplateToVideo(FALNode):
     def get_basic_fields(cls):
         return ["image", "prompt"]
 
+class WanI2vLoraAspectRatio(str, Enum):
+    """
+    Aspect ratio of the output video.
+    """
+    AUTO = "auto"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class WanI2vLoraResolution(str, Enum):
+    """
+    Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+
 class WanI2vLora(FALNode):
     """
     Add custom LoRAs to Wan-2.1 is a image-to-video model that generates high-quality videos with high visual quality and motion diversity from images
@@ -11318,23 +11855,6 @@ class WanI2vLora(FALNode):
     - Marketing and promotional videos
     - Visual storytelling
     """
-
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the output video.
-        """
-        AUTO = "auto"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class Resolution(Enum):
-        """
-        Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
 
     prompt: str = Field(
         default="", description="The text prompt to guide video generation."
@@ -11363,11 +11883,11 @@ class WanI2vLora(FALNode):
     negative_prompt: str = Field(
         default="bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the output video."
+    aspect_ratio: WanI2vLoraAspectRatio = Field(
+        default=WanI2vLoraAspectRatio.RATIO_16_9, description="Aspect ratio of the output video."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit."
+    resolution: WanI2vLoraResolution = Field(
+        default=WanI2vLoraResolution.VALUE_720P, description="Resolution of the generated video (480p or 720p). 480p is 0.5 billing units, and 720p is 1 billing unit."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped."
@@ -11412,6 +11932,10 @@ class WanI2vLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11424,6 +11948,26 @@ class WanI2vLora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class HunyuanVideoImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the video to generate.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
+class HunyuanVideoImageToVideoResolution(str, Enum):
+    """
+    The resolution of the video to generate.
+    """
+    VALUE_720P = "720p"
+
+class HunyuanVideoImageToVideoNumFrames(str, Enum):
+    """
+    The number of frames to generate.
+    """
+    VALUE_129 = "129"
+
 
 class HunyuanVideoImageToVideo(FALNode):
     """
@@ -11438,34 +11982,14 @@ class HunyuanVideoImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the video to generate.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-    class Resolution(Enum):
-        """
-        The resolution of the video to generate.
-        """
-        VALUE_720P = "720p"
-
-    class NumFrames(Enum):
-        """
-        The number of frames to generate.
-        """
-        VALUE_129 = "129"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
+    aspect_ratio: HunyuanVideoImageToVideoAspectRatio = Field(
+        default=HunyuanVideoImageToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the video to generate."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the video to generate."
+    resolution: HunyuanVideoImageToVideoResolution = Field(
+        default=HunyuanVideoImageToVideoResolution.VALUE_720P, description="The resolution of the video to generate."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
@@ -11473,7 +11997,7 @@ class HunyuanVideoImageToVideo(FALNode):
     seed: int = Field(
         default=-1, description="The seed to use for generating the video."
     )
-    num_frames: NumFrames = Field(
+    num_frames: HunyuanVideoImageToVideoNumFrames = Field(
         default=129, description="The number of frames to generate."
     )
     i2v_stability: bool = Field(
@@ -11498,6 +12022,10 @@ class HunyuanVideoImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11548,6 +12076,10 @@ class MinimaxVideo01DirectorImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11560,6 +12092,14 @@ class MinimaxVideo01DirectorImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class SkyreelsI2vAspectRatio(str, Enum):
+    """
+    Aspect ratio of the output video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+
 
 class SkyreelsI2v(FALNode):
     """
@@ -11574,19 +12114,11 @@ class SkyreelsI2v(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the output video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate the video from."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="Aspect ratio of the output video"
+    aspect_ratio: SkyreelsI2vAspectRatio = Field(
+        default=SkyreelsI2vAspectRatio.RATIO_16_9, description="Aspect ratio of the output video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of the image input."
@@ -11622,6 +12154,10 @@ class SkyreelsI2v(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11634,6 +12170,33 @@ class SkyreelsI2v(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class LumaDreamMachineRay2ImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_21_9 = "21:9"
+    RATIO_9_21 = "9:21"
+
+class LumaDreamMachineRay2ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)
+    """
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class LumaDreamMachineRay2ImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video
+    """
+    VALUE_5S = "5s"
+    VALUE_9S = "9s"
+
 
 class LumaDreamMachineRay2ImageToVideo(FALNode):
     """
@@ -11648,47 +12211,20 @@ class LumaDreamMachineRay2ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_21_9 = "21:9"
-        RATIO_9_21 = "9:21"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)
-        """
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video
-        """
-        VALUE_5S = "5s"
-        VALUE_9S = "9s"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
+    aspect_ratio: LumaDreamMachineRay2ImageToVideoAspectRatio = Field(
+        default=LumaDreamMachineRay2ImageToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video"
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_540P, description="The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)"
+    resolution: LumaDreamMachineRay2ImageToVideoResolution = Field(
+        default=LumaDreamMachineRay2ImageToVideoResolution.VALUE_540P, description="The resolution of the generated video (720p costs 2x more, 1080p costs 4x more)"
     )
     loop: bool = Field(
         default=False, description="Whether the video should loop (end of video is blended with the beginning)"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5S, description="The duration of the generated video"
+    duration: LumaDreamMachineRay2ImageToVideoDuration = Field(
+        default=LumaDreamMachineRay2ImageToVideoDuration.VALUE_5S, description="The duration of the generated video"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="Initial image to start the video from. Can be used together with end_image_url."
@@ -11720,6 +12256,10 @@ class LumaDreamMachineRay2ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11770,6 +12310,10 @@ class HunyuanVideoImg2vidLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11782,6 +12326,25 @@ class HunyuanVideoImg2vidLora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV35ImageToVideoFastResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+
+class PixverseV35ImageToVideoFastStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
 
 class PixverseV35ImageToVideoFast(FALNode):
     """
@@ -11796,32 +12359,13 @@ class PixverseV35ImageToVideoFast(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV35ImageToVideoFastResolution = Field(
+        default=PixverseV35ImageToVideoFastResolution.VALUE_720P, description="The resolution of the generated video"
     )
-    style: Style | None = Field(
+    style: PixverseV35ImageToVideoFastStyle | None = Field(
         default=None, description="The style of the generated video"
     )
     seed: int = Field(
@@ -11851,6 +12395,10 @@ class PixverseV35ImageToVideoFast(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11863,6 +12411,33 @@ class PixverseV35ImageToVideoFast(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class PixverseV35ImageToVideoResolution(str, Enum):
+    """
+    The resolution of the generated video
+    """
+    VALUE_360P = "360p"
+    VALUE_540P = "540p"
+    VALUE_720P = "720p"
+    VALUE_1080P = "1080p"
+
+class PixverseV35ImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds
+    """
+    VALUE_5 = "5"
+    VALUE_8 = "8"
+
+class PixverseV35ImageToVideoStyle(str, Enum):
+    """
+    The style of the generated video
+    """
+    ANIME = "anime"
+    ANIMATION_3D = "3d_animation"
+    CLAY = "clay"
+    COMIC = "comic"
+    CYBERPUNK = "cyberpunk"
+
 
 class PixverseV35ImageToVideo(FALNode):
     """
@@ -11877,43 +12452,16 @@ class PixverseV35ImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the generated video
-        """
-        VALUE_360P = "360p"
-        VALUE_540P = "540p"
-        VALUE_720P = "720p"
-        VALUE_1080P = "1080p"
-
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds
-        """
-        VALUE_5 = "5"
-        VALUE_8 = "8"
-
-    class Style(Enum):
-        """
-        The style of the generated video
-        """
-        ANIME = "anime"
-        ANIMATION_3D = "3d_animation"
-        CLAY = "clay"
-        COMIC = "comic"
-        CYBERPUNK = "cyberpunk"
-
-
     prompt: str = Field(
         default=""
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the generated video"
+    resolution: PixverseV35ImageToVideoResolution = Field(
+        default=PixverseV35ImageToVideoResolution.VALUE_720P, description="The resolution of the generated video"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds"
+    duration: PixverseV35ImageToVideoDuration = Field(
+        default=PixverseV35ImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds"
     )
-    style: Style | None = Field(
+    style: PixverseV35ImageToVideoStyle | None = Field(
         default=None, description="The style of the generated video"
     )
     image: ImageRef = Field(
@@ -11944,6 +12492,10 @@ class PixverseV35ImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11994,6 +12546,10 @@ class MinimaxVideo01SubjectReference(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12006,6 +12562,14 @@ class MinimaxVideo01SubjectReference(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV16StandardImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
 
 class KlingVideoV16StandardImageToVideo(FALNode):
     """
@@ -12020,19 +12584,11 @@ class KlingVideoV16StandardImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-
     prompt: str = Field(
         default=""
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV16StandardImageToVideoDuration = Field(
+        default=KlingVideoV16StandardImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     image: ImageRef = Field(
         default=ImageRef()
@@ -12060,6 +12616,10 @@ class KlingVideoV16StandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12072,6 +12632,30 @@ class KlingVideoV16StandardImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class SadtalkerReferenceFaceEnhancer(str, Enum):
+    """
+    The type of face enhancer to use
+    """
+    GFPGAN = "gfpgan"
+
+class SadtalkerReferenceFaceModelResolution(str, Enum):
+    """
+    The resolution of the face model
+    """
+    VALUE_256 = "256"
+    VALUE_512 = "512"
+
+class SadtalkerReferencePreprocess(str, Enum):
+    """
+    The type of preprocessing to use
+    """
+    CROP = "crop"
+    EXTCROP = "extcrop"
+    RESIZE = "resize"
+    FULL = "full"
+    EXTFULL = "extfull"
+
 
 class SadtalkerReference(FALNode):
     """
@@ -12086,30 +12670,6 @@ class SadtalkerReference(FALNode):
     - Visual storytelling
     """
 
-    class FaceEnhancer(Enum):
-        """
-        The type of face enhancer to use
-        """
-        GFPGAN = "gfpgan"
-
-    class FaceModelResolution(Enum):
-        """
-        The resolution of the face model
-        """
-        VALUE_256 = "256"
-        VALUE_512 = "512"
-
-    class Preprocess(Enum):
-        """
-        The type of preprocessing to use
-        """
-        CROP = "crop"
-        EXTCROP = "extcrop"
-        RESIZE = "resize"
-        FULL = "full"
-        EXTFULL = "extfull"
-
-
     pose_style: int = Field(
         default=0, description="The style of the pose"
     )
@@ -12122,32 +12682,38 @@ class SadtalkerReference(FALNode):
     driven_audio: AudioRef = Field(
         default=AudioRef(), description="URL of the driven audio"
     )
-    face_enhancer: FaceEnhancer | None = Field(
+    face_enhancer: SadtalkerReferenceFaceEnhancer | None = Field(
         default=None, description="The type of face enhancer to use"
     )
     expression_scale: float = Field(
         default=1, description="The scale of the expression"
     )
-    face_model_resolution: FaceModelResolution = Field(
-        default=FaceModelResolution.VALUE_256, description="The resolution of the face model"
+    face_model_resolution: SadtalkerReferenceFaceModelResolution = Field(
+        default=SadtalkerReferenceFaceModelResolution.VALUE_256, description="The resolution of the face model"
     )
     still_mode: bool = Field(
         default=False, description="Whether to use still mode. Fewer head motion, works with preprocess `full`."
     )
-    preprocess: Preprocess = Field(
-        default=Preprocess.CROP, description="The type of preprocessing to use"
+    preprocess: SadtalkerReferencePreprocess = Field(
+        default=SadtalkerReferencePreprocess.CROP, description="The type of preprocessing to use"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
         source_image_base64 = (
             await context.image_to_base64(self.source_image)
             if not self.source_image.is_empty()
             else None
         )
+        reference_pose_video_url = (
+            await self._upload_asset_to_fal(client, self.reference_pose_video, context)
+            if not self.reference_pose_video.is_empty()
+            else None
+        )
         arguments = {
             "pose_style": self.pose_style,
             "source_image_url": f"data:image/png;base64,{source_image_base64}" if source_image_base64 else None,
-            "reference_pose_video_url": self.reference_pose_video,
+            "reference_pose_video_url": reference_pose_video_url,
             "driven_audio_url": self.driven_audio,
             "face_enhancer": self.face_enhancer.value if self.face_enhancer else None,
             "expression_scale": self.expression_scale,
@@ -12158,6 +12724,10 @@ class SadtalkerReference(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12208,6 +12778,10 @@ class MinimaxVideo01LiveImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12220,6 +12794,22 @@ class MinimaxVideo01LiveImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV15ProImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_5 = "5"
+    VALUE_10 = "10"
+
+class KlingVideoV15ProImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
 
 class KlingVideoV15ProImageToVideo(FALNode):
     """
@@ -12234,30 +12824,14 @@ class KlingVideoV15ProImageToVideo(FALNode):
     - Visual storytelling
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_5 = "5"
-        VALUE_10 = "10"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-
     prompt: str = Field(
         default=""
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV15ProImageToVideoDuration = Field(
+        default=KlingVideoV15ProImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    aspect_ratio: KlingVideoV15ProImageToVideoAspectRatio = Field(
+        default=KlingVideoV15ProImageToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     tail_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the end of the video"
@@ -12308,6 +12882,10 @@ class KlingVideoV15ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12420,6 +12998,12 @@ class LivePortrait(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        video_url = (
+            await self._upload_asset_to_fal(client, self.video, context)
+            if not self.video.is_empty()
+            else None
+        )
         image_base64 = (
             await context.image_to_base64(self.image)
             if not self.image.is_empty()
@@ -12427,7 +13011,7 @@ class LivePortrait(FALNode):
         )
         arguments = {
             "smile": self.smile,
-            "video_url": self.video,
+            "video_url": video_url,
             "flag_stitching": self.flag_stitching,
             "eyebrow": self.eyebrow,
             "wink": self.wink,
@@ -12458,6 +13042,10 @@ class LivePortrait(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12492,13 +13080,23 @@ class Musetalk(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
+        client = await self.get_client(context)
+        source_video_url = (
+            await self._upload_asset_to_fal(client, self.source_video, context)
+            if not self.source_video.is_empty()
+            else None
+        )
         arguments = {
-            "source_video_url": self.source_video,
+            "source_video_url": source_video_url,
             "audio_url": self.audio,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12511,6 +13109,30 @@ class Musetalk(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class SadtalkerFaceEnhancer(str, Enum):
+    """
+    The type of face enhancer to use
+    """
+    GFPGAN = "gfpgan"
+
+class SadtalkerFaceModelResolution(str, Enum):
+    """
+    The resolution of the face model
+    """
+    VALUE_256 = "256"
+    VALUE_512 = "512"
+
+class SadtalkerPreprocess(str, Enum):
+    """
+    The type of preprocessing to use
+    """
+    CROP = "crop"
+    EXTCROP = "extcrop"
+    RESIZE = "resize"
+    FULL = "full"
+    EXTFULL = "extfull"
+
 
 class Sadtalker(FALNode):
     """
@@ -12525,30 +13147,6 @@ class Sadtalker(FALNode):
     - Visual storytelling
     """
 
-    class FaceEnhancer(Enum):
-        """
-        The type of face enhancer to use
-        """
-        GFPGAN = "gfpgan"
-
-    class FaceModelResolution(Enum):
-        """
-        The resolution of the face model
-        """
-        VALUE_256 = "256"
-        VALUE_512 = "512"
-
-    class Preprocess(Enum):
-        """
-        The type of preprocessing to use
-        """
-        CROP = "crop"
-        EXTCROP = "extcrop"
-        RESIZE = "resize"
-        FULL = "full"
-        EXTFULL = "extfull"
-
-
     pose_style: int = Field(
         default=0, description="The style of the pose"
     )
@@ -12558,20 +13156,20 @@ class Sadtalker(FALNode):
     driven_audio: AudioRef = Field(
         default=AudioRef(), description="URL of the driven audio"
     )
-    face_enhancer: FaceEnhancer | None = Field(
+    face_enhancer: SadtalkerFaceEnhancer | None = Field(
         default=None, description="The type of face enhancer to use"
     )
     expression_scale: float = Field(
         default=1, description="The scale of the expression"
     )
-    face_model_resolution: FaceModelResolution = Field(
-        default=FaceModelResolution.VALUE_256, description="The resolution of the face model"
+    face_model_resolution: SadtalkerFaceModelResolution = Field(
+        default=SadtalkerFaceModelResolution.VALUE_256, description="The resolution of the face model"
     )
     still_mode: bool = Field(
         default=False, description="Whether to use still mode. Fewer head motion, works with preprocess `full`."
     )
-    preprocess: Preprocess = Field(
-        default=Preprocess.CROP, description="The type of preprocessing to use"
+    preprocess: SadtalkerPreprocess = Field(
+        default=SadtalkerPreprocess.CROP, description="The type of preprocessing to use"
     )
 
     async def process(self, context: ProcessingContext) -> VideoRef:
@@ -12593,6 +13191,10 @@ class Sadtalker(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12655,6 +13257,10 @@ class FastSvdLcm(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12667,6 +13273,39 @@ class FastSvdLcm(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["image", "prompt"]
+
+class KlingVideoV3StandardImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+    VALUE_13 = "13"
+    VALUE_14 = "14"
+    VALUE_15 = "15"
+
+class KlingVideoV3StandardImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoV3StandardImageToVideoShotType(str, Enum):
+    """
+    The type of multi-shot video generation. Required when multi_prompt is provided.
+    """
+    CUSTOMIZE = "customize"
+
 
 class KlingVideoV3StandardImageToVideo(FALNode):
     """
@@ -12681,53 +13320,20 @@ class KlingVideoV3StandardImageToVideo(FALNode):
     - Transform images into cinematic animations
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-        VALUE_13 = "13"
-        VALUE_14 = "14"
-        VALUE_15 = "15"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class ShotType(Enum):
-        """
-        The type of multi-shot video generation. Required when multi_prompt is provided.
-        """
-        CUSTOMIZE = "customize"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
     voice_ids: list[str] = Field(
         default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV3StandardImageToVideoDuration = Field(
+        default=KlingVideoV3StandardImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    aspect_ratio: KlingVideoV3StandardImageToVideoAspectRatio = Field(
+        default=KlingVideoV3StandardImageToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
@@ -12735,8 +13341,8 @@ class KlingVideoV3StandardImageToVideo(FALNode):
     elements: list[KlingV3ComboElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc."
     )
-    shot_type: ShotType = Field(
-        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
+    shot_type: KlingVideoV3StandardImageToVideoShotType = Field(
+        default=KlingVideoV3StandardImageToVideoShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
@@ -12779,6 +13385,10 @@ class KlingVideoV3StandardImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12791,6 +13401,39 @@ class KlingVideoV3StandardImageToVideo(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["start_image_url", "prompt", "duration"]
+
+class KlingVideoV3ProImageToVideoDuration(str, Enum):
+    """
+    The duration of the generated video in seconds
+    """
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+    VALUE_7 = "7"
+    VALUE_8 = "8"
+    VALUE_9 = "9"
+    VALUE_10 = "10"
+    VALUE_11 = "11"
+    VALUE_12 = "12"
+    VALUE_13 = "13"
+    VALUE_14 = "14"
+    VALUE_15 = "15"
+
+class KlingVideoV3ProImageToVideoAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video frame
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+class KlingVideoV3ProImageToVideoShotType(str, Enum):
+    """
+    The type of multi-shot video generation. Required when multi_prompt is provided.
+    """
+    CUSTOMIZE = "customize"
+
 
 class KlingVideoV3ProImageToVideo(FALNode):
     """
@@ -12805,53 +13448,20 @@ class KlingVideoV3ProImageToVideo(FALNode):
     - Create premium video content for advertising
     """
 
-    class Duration(Enum):
-        """
-        The duration of the generated video in seconds
-        """
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-        VALUE_7 = "7"
-        VALUE_8 = "8"
-        VALUE_9 = "9"
-        VALUE_10 = "10"
-        VALUE_11 = "11"
-        VALUE_12 = "12"
-        VALUE_13 = "13"
-        VALUE_14 = "14"
-        VALUE_15 = "15"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video frame
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-    class ShotType(Enum):
-        """
-        The type of multi-shot video generation. Required when multi_prompt is provided.
-        """
-        CUSTOMIZE = "customize"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both."
     )
     voice_ids: list[str] = Field(
         default=[], description="Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice"
     )
-    duration: Duration = Field(
-        default=Duration.VALUE_5, description="The duration of the generated video in seconds"
+    duration: KlingVideoV3ProImageToVideoDuration = Field(
+        default=KlingVideoV3ProImageToVideoDuration.VALUE_5, description="The duration of the generated video in seconds"
     )
     generate_audio: bool = Field(
         default=True, description="Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
+    aspect_ratio: KlingVideoV3ProImageToVideoAspectRatio = Field(
+        default=KlingVideoV3ProImageToVideoAspectRatio.RATIO_16_9, description="The aspect ratio of the generated video frame"
     )
     multi_prompt: list[KlingV3MultiPromptElement] = Field(
         default=[], description="List of prompts for multi-shot video generation. If provided, divides the video into multiple shots."
@@ -12859,8 +13469,8 @@ class KlingVideoV3ProImageToVideo(FALNode):
     elements: list[KlingV3ComboElementInput] = Field(
         default=[], description="Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc."
     )
-    shot_type: ShotType = Field(
-        default=ShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
+    shot_type: KlingVideoV3ProImageToVideoShotType = Field(
+        default=KlingVideoV3ProImageToVideoShotType.CUSTOMIZE, description="The type of multi-shot video generation. Required when multi_prompt is provided."
     )
     start_image: ImageRef = Field(
         default=ImageRef(), description="URL of the image to be used for the video"
@@ -12903,6 +13513,10 @@ class KlingVideoV3ProImageToVideo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,

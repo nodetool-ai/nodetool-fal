@@ -18,23 +18,33 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
+
 class Era3D(GraphNode[nodetool.nodes.fal.model3d.Era3D.OutputType]):
     """
 
-        Era3D creates multi-view consistent 3D models from images.
-        3d, generation, image-to-3d, era3d, multi-view
+    Era3D creates multi-view consistent 3D models from images.
+    3d, generation, image-to-3d, era3d, multi-view
 
-        Use cases:
-        - Generate multi-view 3D models
-        - Create consistent 3D assets
-        - Produce 3D content with multiple views
-        - Generate detailed 3D models
-        - Create multi-view 3D for games
+    Use cases:
+    - Generate multi-view 3D models
+    - Create consistent 3D assets
+    - Produce 3D content with multiple views
+    - Generate detailed 3D models
+    - Create multi-view 3D for games
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to convert to 3D')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=40, description='Number of inference steps')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to convert to 3D",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=40, description="Number of inference steps"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
 
     @property
     def out(self) -> "Era3DOutputs":
@@ -48,14 +58,15 @@ class Era3D(GraphNode[nodetool.nodes.fal.model3d.Era3D.OutputType]):
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
 
+
 class Era3DOutputs(OutputsProxy):
     @property
     def mv_images(self) -> OutputHandle[list]:
-        return typing.cast(OutputHandle[list], self['mv_images'])
+        return typing.cast(OutputHandle[list], self["mv_images"])
 
     @property
     def model(self) -> OutputHandle[types.Model3DRef]:
-        return typing.cast(OutputHandle[types.Model3DRef], self['model'])
+        return typing.cast(OutputHandle[types.Model3DRef], self["model"])
 
 
 import typing
@@ -64,25 +75,39 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
+
 class Hunyuan3DV2(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRef]):
     """
 
-        Hunyuan3D V2 generates high-quality 3D models from images.
-        3d, generation, image-to-3d, hunyuan
+    Hunyuan3D V2 generates high-quality 3D models from images.
+    3d, generation, image-to-3d, hunyuan
 
-        Use cases:
-        - Generate detailed 3D models
-        - Create 3D assets from photos
-        - Produce high-quality 3D content
-        - Create 3D visualizations
-        - Generate 3D for productions
+    Use cases:
+    - Generate detailed 3D models
+    - Create 3D assets from photos
+    - Produce high-quality 3D content
+    - Create 3D visualizations
+    - Generate 3D for productions
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to convert to 3D')
-    num_inference_steps: int | OutputHandle[int] = connect_field(default=50, description='Number of inference steps')
-    guidance_scale: float | OutputHandle[float] = connect_field(default=2.0, description='Guidance scale for generation')
-    octree_resolution: int | OutputHandle[int] = connect_field(default=256, description='Octree resolution for 3D structure')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to convert to 3D",
+    )
+    num_inference_steps: int | OutputHandle[int] = connect_field(
+        default=50, description="Number of inference steps"
+    )
+    guidance_scale: float | OutputHandle[float] = connect_field(
+        default=2.0, description="Guidance scale for generation"
+    )
+    octree_resolution: int | OutputHandle[int] = connect_field(
+        default=256, description="Octree resolution for 3D structure"
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -99,30 +124,51 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
+
 class Trellis(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRef]):
     """
 
-        Trellis generates 3D models from single images.
-        3d, generation, image-to-3d, trellis
+    Trellis generates 3D models from single images.
+    3d, generation, image-to-3d, trellis
 
-        Use cases:
-        - Generate 3D models from images
-        - Create 3D assets from photos
-        - Produce 3D content for games
-        - Create 3D visualizations
-        - Generate 3D for AR/VR
+    Use cases:
+    - Generate 3D models from images
+    - Create 3D assets from photos
+    - Produce 3D content for games
+    - Create 3D visualizations
+    - Generate 3D for AR/VR
     """
 
     TextureSizeEnum: typing.ClassVar[type] = nodetool.nodes.fal.model3d.TextureSizeEnum
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to convert to 3D')
-    ss_guidance_strength: float | OutputHandle[float] = connect_field(default=7.5, description='Guidance strength for sparse structure')
-    ss_sampling_steps: int | OutputHandle[int] = connect_field(default=12, description='Sampling steps for sparse structure')
-    slat_guidance_strength: float | OutputHandle[float] = connect_field(default=3.0, description='Guidance strength for structured latent')
-    slat_sampling_steps: int | OutputHandle[int] = connect_field(default=12, description='Sampling steps for structured latent')
-    mesh_simplify: float | OutputHandle[float] = connect_field(default=0.95, description='Mesh simplification ratio')
-    texture_size: nodetool.nodes.fal.model3d.TextureSizeEnum = Field(default=nodetool.nodes.fal.model3d.TextureSizeEnum.SIZE_1024, description='Texture resolution')
-    seed: int | OutputHandle[int] = connect_field(default=-1, description='Seed for reproducible generation')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The image to convert to 3D",
+    )
+    ss_guidance_strength: float | OutputHandle[float] = connect_field(
+        default=7.5, description="Guidance strength for sparse structure"
+    )
+    ss_sampling_steps: int | OutputHandle[int] = connect_field(
+        default=12, description="Sampling steps for sparse structure"
+    )
+    slat_guidance_strength: float | OutputHandle[float] = connect_field(
+        default=3.0, description="Guidance strength for structured latent"
+    )
+    slat_sampling_steps: int | OutputHandle[int] = connect_field(
+        default=12, description="Sampling steps for structured latent"
+    )
+    mesh_simplify: float | OutputHandle[float] = connect_field(
+        default=0.95, description="Mesh simplification ratio"
+    )
+    texture_size: nodetool.nodes.fal.model3d.TextureSizeEnum = Field(
+        default=nodetool.nodes.fal.model3d.TextureSizeEnum.SIZE_1024,
+        description="Texture resolution",
+    )
+    seed: int | OutputHandle[int] = connect_field(
+        default=-1, description="Seed for reproducible generation"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -139,22 +185,30 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.model3d
 from nodetool.workflows.base_node import BaseNode
 
+
 class TripoSR(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRef]):
     """
 
-        TripoSR generates 3D models from images with fast processing.
-        3d, generation, image-to-3d, triposr, fast
+    TripoSR generates 3D models from images with fast processing.
+    3d, generation, image-to-3d, triposr, fast
 
-        Use cases:
-        - Quick 3D model generation
-        - Rapid prototyping
-        - Create 3D assets from photos
-        - Generate 3D content quickly
-        - Fast 3D for AR/VR
+    Use cases:
+    - Quick 3D model generation
+    - Rapid prototyping
+    - Create 3D assets from photos
+    - Generate 3D content quickly
+    - Fast 3D for AR/VR
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The input image to convert to 3D')
-    foreground_ratio: float | OutputHandle[float] = connect_field(default=0.85, description='Foreground ratio for cropping')
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
+        default=types.ImageRef(
+            type="image", uri="", asset_id=None, data=None, metadata=None
+        ),
+        description="The input image to convert to 3D",
+    )
+    foreground_ratio: float | OutputHandle[float] = connect_field(
+        default=0.85, description="Foreground ratio for cropping"
+    )
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -163,5 +217,3 @@ class TripoSR(SingleOutputGraphNode[types.Model3DRef], GraphNode[types.Model3DRe
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
-
-
