@@ -18,27 +18,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.segmentation
 from nodetool.workflows.base_node import BaseNode
 
-
 class DWPose(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     """
 
-    DWPose detects human poses and keypoints in images.
-    pose, detection, keypoints, human
+        DWPose detects human poses and keypoints in images.
+        pose, detection, keypoints, human
 
-    Use cases:
-    - Detect human poses
-    - Extract body keypoints
-    - Enable pose-guided generation
-    - Analyze body positions
-    - Create pose references
+        Use cases:
+        - Detect human poses
+        - Extract body keypoints
+        - Enable pose-guided generation
+        - Analyze body positions
+        - Create pose references
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to analyze",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to analyze')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -55,29 +49,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.segmentation
 from nodetool.workflows.base_node import BaseNode
 
-
-class ImagePreprocessorDepthAnythingV2(
-    SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]
-):
+class ImagePreprocessorDepthAnythingV2(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Depth Anything V2 generates high-quality depth maps from images.
-    depth, preprocessor, depth-map, estimation
+        Depth Anything V2 generates high-quality depth maps from images.
+        depth, preprocessor, depth-map, estimation
 
-    Use cases:
-    - Generate accurate depth maps
-    - Enable depth-aware effects
-    - Create 3D visualizations
-    - Prepare ControlNet inputs
-    - Analyze image depth
+        Use cases:
+        - Generate accurate depth maps
+        - Enable depth-aware effects
+        - Create 3D visualizations
+        - Prepare ControlNet inputs
+        - Analyze image depth
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to process",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to process')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -94,27 +80,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.segmentation
 from nodetool.workflows.base_node import BaseNode
 
-
 class MarigoldDepth(SingleOutputGraphNode[types.ImageRef], GraphNode[types.ImageRef]):
     """
 
-    Marigold Depth generates high-quality monocular depth maps.
-    depth, marigold, depth-map, estimation
+        Marigold Depth generates high-quality monocular depth maps.
+        depth, marigold, depth-map, estimation
 
-    Use cases:
-    - Generate precise depth maps
-    - Create depth visualizations
-    - Enable depth-based effects
-    - Prepare 3D conversions
-    - Analyze scene depth
+        Use cases:
+        - Generate precise depth maps
+        - Create depth visualizations
+        - Enable depth-based effects
+        - Prepare 3D conversions
+        - Analyze scene depth
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to process",
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to process')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -131,33 +111,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.segmentation
 from nodetool.workflows.base_node import BaseNode
 
-
 class SAM2Image(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     """
 
-    SAM 2 Image segments objects in images with high accuracy.
-    segmentation, sam, image, masks
+        SAM 2 Image segments objects in images with high accuracy.
+        segmentation, sam, image, masks
 
-    Use cases:
-    - Segment objects in images
-    - Create object masks
-    - Enable object selection
-    - Generate cutouts
-    - Create selection masks
+        Use cases:
+        - Segment objects in images
+        - Create object masks
+        - Enable object selection
+        - Generate cutouts
+        - Create selection masks
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to segment",
-    )
-    point_coords: list[list[float]] | OutputHandle[list[list[float]]] = connect_field(
-        default=[], description="Point coordinates for prompts [[x, y], ...]"
-    )
-    point_labels: list[int] | OutputHandle[list[int]] = connect_field(
-        default=[], description="Labels for points (1=foreground, 0=background)"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to segment')
+    point_coords: list[list[float]] | OutputHandle[list[list[float]]] = connect_field(default=[], description='Point coordinates for prompts [[x, y], ...]')
+    point_labels: list[int] | OutputHandle[list[int]] = connect_field(default=[], description='Labels for points (1=foreground, 0=background)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -174,39 +144,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.segmentation
 from nodetool.workflows.base_node import BaseNode
 
-
 class SAM2Video(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     """
 
-    SAM 2 Video segments and tracks objects across video frames.
-    segmentation, sam, video, tracking
+        SAM 2 Video segments and tracks objects across video frames.
+        segmentation, sam, video, tracking
 
-    Use cases:
-    - Track objects in videos
-    - Create video masks
-    - Segment moving objects
-    - Generate video cutouts
-    - Enable video object selection
+        Use cases:
+        - Track objects in videos
+        - Create video masks
+        - Segment moving objects
+        - Generate video cutouts
+        - Enable video object selection
     """
 
-    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(
-        default=types.VideoRef(
-            type="video",
-            uri="",
-            asset_id=None,
-            data=None,
-            metadata=None,
-            duration=None,
-            format=None,
-        ),
-        description="The video to segment",
-    )
-    point_coords: list[list[float]] | OutputHandle[list[list[float]]] = connect_field(
-        default=[], description="Point coordinates for prompts [[x, y], ...]"
-    )
-    point_labels: list[int] | OutputHandle[list[int]] = connect_field(
-        default=[], description="Labels for points (1=foreground, 0=background)"
-    )
+    video: types.VideoRef | OutputHandle[types.VideoRef] = connect_field(default=types.VideoRef(type='video', uri='', asset_id=None, data=None, metadata=None, duration=None, format=None), description='The video to segment')
+    point_coords: list[list[float]] | OutputHandle[list[list[float]]] = connect_field(default=[], description='Point coordinates for prompts [[x, y], ...]')
+    point_labels: list[int] | OutputHandle[list[int]] = connect_field(default=[], description='Labels for points (1=foreground, 0=background)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -223,33 +177,23 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.segmentation
 from nodetool.workflows.base_node import BaseNode
 
-
 class SAM3Image(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     """
 
-    SAM 3 Image provides advanced segmentation with improved accuracy.
-    segmentation, sam3, image, masks, advanced
+        SAM 3 Image provides advanced segmentation with improved accuracy.
+        segmentation, sam3, image, masks, advanced
 
-    Use cases:
-    - High-accuracy object segmentation
-    - Complex scene segmentation
-    - Precise mask generation
-    - Advanced object selection
-    - Detailed cutout creation
+        Use cases:
+        - High-accuracy object segmentation
+        - Complex scene segmentation
+        - Precise mask generation
+        - Advanced object selection
+        - Detailed cutout creation
     """
 
-    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(
-        default=types.ImageRef(
-            type="image", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="The image to segment",
-    )
-    point_coords: list[list[float]] | OutputHandle[list[list[float]]] = connect_field(
-        default=[], description="Point coordinates for prompts [[x, y], ...]"
-    )
-    point_labels: list[int] | OutputHandle[list[int]] = connect_field(
-        default=[], description="Labels for points (1=foreground, 0=background)"
-    )
+    image: types.ImageRef | OutputHandle[types.ImageRef] = connect_field(default=types.ImageRef(type='image', uri='', asset_id=None, data=None, metadata=None), description='The image to segment')
+    point_coords: list[list[float]] | OutputHandle[list[list[float]]] = connect_field(default=[], description='Point coordinates for prompts [[x, y], ...]')
+    point_labels: list[int] | OutputHandle[list[int]] = connect_field(default=[], description='Labels for points (1=foreground, 0=background)')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -258,3 +202,5 @@ class SAM3Image(SingleOutputGraphNode[typing.Any], GraphNode[typing.Any]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

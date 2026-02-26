@@ -13389,3 +13389,127 @@ class Lora(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt"]
+
+
+class NanoBanana2(FALNode):
+    """
+    Nano Banana 2 is a fast text-to-image model with web search grounding and configurable safety controls.
+    generation, text-to-image, txt2img, ai-art, nano-banana-2
+
+    Use cases:
+    - Generate high-quality images from text descriptions
+    - Create images with real-world context using web search grounding
+    - Produce marketing and advertising visuals
+    - Rapid concept art and ideation
+    - Social media content creation
+    """
+
+    class Resolution(Enum):
+        """
+        The resolution of the image to generate.
+        """
+        VALUE_1K = "1K"
+        VALUE_2K = "2K"
+        VALUE_4K = "4K"
+
+    class AspectRatio(Enum):
+        """
+        The aspect ratio of the generated image. Use "auto" to let the model decide based on the prompt.
+        """
+        AUTO = "auto"
+        RATIO_21_9 = "21:9"
+        RATIO_16_9 = "16:9"
+        RATIO_3_2 = "3:2"
+        RATIO_4_3 = "4:3"
+        RATIO_5_4 = "5:4"
+        RATIO_1_1 = "1:1"
+        RATIO_4_5 = "4:5"
+        RATIO_3_4 = "3:4"
+        RATIO_2_3 = "2:3"
+        RATIO_9_16 = "9:16"
+
+    class OutputFormat(Enum):
+        """
+        The format of the generated image.
+        """
+        JPEG = "jpeg"
+        PNG = "png"
+        WEBP = "webp"
+
+    class SafetyTolerance(Enum):
+        """
+        The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+        """
+        VALUE_1 = "1"
+        VALUE_2 = "2"
+        VALUE_3 = "3"
+        VALUE_4 = "4"
+        VALUE_5 = "5"
+        VALUE_6 = "6"
+
+    prompt: str = Field(
+        default="", description="The text prompt to generate an image from."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    resolution: Resolution = Field(
+        default=Resolution.VALUE_1K, description="The resolution of the image to generate."
+    )
+    aspect_ratio: AspectRatio = Field(
+        default=AspectRatio.RATIO_1_1, description='The aspect ratio of the generated image. Use "auto" to let the model decide based on the prompt.'
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.PNG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: SafetyTolerance = Field(
+        default=SafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    )
+    seed: int = Field(
+        default=-1, description="The seed for the random number generator."
+    )
+    enable_web_search: bool = Field(
+        default=False, description="Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image."
+    )
+    enable_google_search: bool = Field(
+        default=False, description="Enable Google search grounding for the image generation task."
+    )
+    limit_generations: bool = Field(
+        default=True, description="Experimental parameter to limit the number of generations from each round of prompting to 1."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "num_images": self.num_images,
+            "resolution": self.resolution.value,
+            "aspect_ratio": self.aspect_ratio.value,
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "enable_web_search": self.enable_web_search,
+            "enable_google_search": self.enable_google_search,
+            "limit_generations": self.limit_generations,
+        }
+
+        if self.seed != -1:
+            arguments["seed"] = self.seed
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/nano-banana-2",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "resolution", "aspect_ratio"]
