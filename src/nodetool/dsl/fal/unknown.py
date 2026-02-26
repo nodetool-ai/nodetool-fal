@@ -18,51 +18,27 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.unknown
 from nodetool.workflows.base_node import BaseNode
 
-
-class OpenrouterRouterAudio(
-    SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]
-):
+class OpenrouterRouterAudio(SingleOutputGraphNode[dict[str, Any]], GraphNode[dict[str, Any]]):
     """
 
-    Run any ALM (Audio Language Model) with fal, powered by OpenRouter.
-    utility, processing, general
+        Run any ALM (Audio Language Model) with fal, powered by OpenRouter.
+        utility, processing, general
 
-    Use cases:
-    - General media processing
-    - Utility operations
-    - Content manipulation
-    - Automated workflows
-    - Data processing
+        Use cases:
+        - General media processing
+        - Utility operations
+        - Content manipulation
+        - Automated workflows
+        - Data processing
     """
 
-    prompt: str | OutputHandle[str] = connect_field(
-        default="", description="Prompt to be used for the audio processing"
-    )
-    system_prompt: str | OutputHandle[str] = connect_field(
-        default="",
-        description="System prompt to provide context or instructions to the model",
-    )
-    reasoning: bool | OutputHandle[bool] = connect_field(
-        default=False, description="Should reasoning be the part of the final answer."
-    )
-    model: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Name of the model to use. Charged based on actual token usage.",
-    )
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.",
-    )
-    temperature: float | OutputHandle[float] = connect_field(
-        default=1,
-        description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    )
-    max_tokens: int | OutputHandle[int] = connect_field(
-        default=0,
-        description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.",
-    )
+    prompt: str | OutputHandle[str] = connect_field(default='', description='Prompt to be used for the audio processing')
+    system_prompt: str | OutputHandle[str] = connect_field(default='', description='System prompt to provide context or instructions to the model')
+    reasoning: bool | OutputHandle[bool] = connect_field(default=False, description='Should reasoning be the part of the final answer.')
+    model: str | OutputHandle[str] = connect_field(default='', description='Name of the model to use. Charged based on actual token usage.')
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.')
+    temperature: float | OutputHandle[float] = connect_field(default=1, description="This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.")
+    max_tokens: int | OutputHandle[int] = connect_field(default=0, description="This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.")
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -79,31 +55,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.unknown
 from nodetool.workflows.base_node import BaseNode
 
-
 class Qwen3TtsCloneVoice06b(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Clone your voices using Qwen3-TTS Clone-Voice model with zero shot cloning capabilities and use it on text-to-speech models to create speeches of yours!
-    utility, processing, general
+        Clone your voices using Qwen3-TTS Clone-Voice model with zero shot cloning capabilities and use it on text-to-speech models to create speeches of yours!
+        utility, processing, general
 
-    Use cases:
-    - General media processing
-    - Utility operations
-    - Content manipulation
-    - Automated workflows
-    - Data processing
+        Use cases:
+        - General media processing
+        - Utility operations
+        - Content manipulation
+        - Automated workflows
+        - Data processing
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL to the reference audio file used for voice cloning.",
-    )
-    reference_text: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL to the reference audio file used for voice cloning.')
+    reference_text: str | OutputHandle[str] = connect_field(default='', description='Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -120,31 +87,22 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.unknown
 from nodetool.workflows.base_node import BaseNode
 
-
 class Qwen3TtsCloneVoice17b(SingleOutputGraphNode[Any], GraphNode[Any]):
     """
 
-    Clone your voices using Qwen3-TTS Clone-Voice model with zero shot cloning capabilities and use it on text-to-speech models to create speeches of yours!
-    utility, processing, general
+        Clone your voices using Qwen3-TTS Clone-Voice model with zero shot cloning capabilities and use it on text-to-speech models to create speeches of yours!
+        utility, processing, general
 
-    Use cases:
-    - General media processing
-    - Utility operations
-    - Content manipulation
-    - Automated workflows
-    - Data processing
+        Use cases:
+        - General media processing
+        - Utility operations
+        - Content manipulation
+        - Automated workflows
+        - Data processing
     """
 
-    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(
-        default=types.AudioRef(
-            type="audio", uri="", asset_id=None, data=None, metadata=None
-        ),
-        description="URL to the reference audio file used for voice cloning.",
-    )
-    reference_text: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.",
-    )
+    audio: types.AudioRef | OutputHandle[types.AudioRef] = connect_field(default=types.AudioRef(type='audio', uri='', asset_id=None, data=None, metadata=None), description='URL to the reference audio file used for voice cloning.')
+    reference_text: str | OutputHandle[str] = connect_field(default='', description='Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -161,26 +119,21 @@ from nodetool.dsl.handles import OutputHandle, OutputsProxy, connect_field
 import nodetool.nodes.fal.unknown
 from nodetool.workflows.base_node import BaseNode
 
-
-class WorkflowUtilitiesInterleaveVideo(
-    SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]
-):
+class WorkflowUtilitiesInterleaveVideo(SingleOutputGraphNode[types.VideoRef], GraphNode[types.VideoRef]):
     """
 
-    ffmpeg utility to interleave videos
-    utility, processing, general
+        ffmpeg utility to interleave videos
+        utility, processing, general
 
-    Use cases:
-    - General media processing
-    - Utility operations
-    - Content manipulation
-    - Automated workflows
-    - Data processing
+        Use cases:
+        - General media processing
+        - Utility operations
+        - Content manipulation
+        - Automated workflows
+        - Data processing
     """
 
-    videos: list[str] | OutputHandle[list[str]] = connect_field(
-        default=[], description="List of video URLs to interleave in order"
-    )
+    videos: list[str] | OutputHandle[list[str]] = connect_field(default=[], description='List of video URLs to interleave in order')
 
     @classmethod
     def get_node_class(cls) -> type[BaseNode]:
@@ -189,3 +142,5 @@ class WorkflowUtilitiesInterleaveVideo(
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

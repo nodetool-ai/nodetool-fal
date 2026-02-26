@@ -2375,6 +2375,19 @@ CONFIGS: dict[str, dict[str, Any]] = {
 
         ],
     },
+    "fal-ai/nano-banana-2/edit": {
+        "class_name": "NanoBanana2Edit",
+        "docstring": "Nano Banana 2 Edit is a fast image editing model that uses prompts and reference images to generate modified images with web search grounding.",
+        "tags": ["editing", "transformation", "image-to-image", "img2img", "nano-banana"],
+        "use_cases": [
+            "Edit images with natural language prompts",
+            "Transform images using reference photos",
+            "Apply creative modifications to existing images",
+            "Generate image variations with prompt guidance",
+            "Batch image editing with safety controls",
+        ],
+        "basic_fields": ["images", "prompt", "resolution"],
+    },
     "fal-ai/nextstep-1": {
         "class_name": "Nextstep1",
         "docstring": "Nextstep 1",

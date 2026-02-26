@@ -1184,6 +1184,19 @@ CONFIGS: dict[str, dict[str, Any]] = {
 
         ],
     },
+    "fal-ai/nano-banana-2": {
+        "class_name": "NanoBanana2",
+        "docstring": "Nano Banana 2 is a fast text-to-image model with web search grounding, multiple resolutions, and flexible aspect ratios.",
+        "tags": ["generation", "text-to-image", "txt2img", "ai-art", "nano-banana"],
+        "use_cases": [
+            "Generate images from detailed text prompts",
+            "Create images with web search grounded context",
+            "Produce high-resolution images up to 4K",
+            "Generate images with flexible aspect ratios",
+            "Rapid image generation with safety controls",
+        ],
+        "basic_fields": ["prompt", "resolution", "aspect_ratio"],
+    },
     "fal-ai/bytedance/dreamina/v3.1/text-to-image": {
         "class_name": "BytedanceDreaminaV31TextToImage",
         "docstring": "Bytedance",
