@@ -14,15 +14,9 @@ from nodetool.dsl.graph import GraphNode, SingleOutputGraphNode
 
 import typing
 from pydantic import Field
-from nodetool.dsl.handles import (
-    OutputHandle,
-    OutputsProxy,
-    DynamicOutputsProxy,
-    connect_field,
-)
+from nodetool.dsl.handles import OutputHandle, OutputsProxy, DynamicOutputsProxy, connect_field
 import nodetool.nodes.fal.dynamic_schema
 from nodetool.workflows.base_node import BaseNode
-
 
 class FalAI(GraphNode[dict[str, Any]]):
     """
@@ -44,17 +38,9 @@ class FalAI(GraphNode[dict[str, Any]]):
         node = FalAI(prop1=value1, prop2=value2)
     """
 
-    model_info: str | OutputHandle[str] = connect_field(
-        default="",
-        description="Paste the full llms.txt from the fal.ai model page (e.g. fal.ai/models/... → copy all).",
-    )
+    model_info: str | OutputHandle[str] = connect_field(default='', description='Paste the full llms.txt from the fal.ai model page (e.g. fal.ai/models/... → copy all).')
 
-    def __init__(
-        self,
-        *,
-        dynamic_outputs: dict[str, typing.Any] | None = None,
-        **kwargs: typing.Any,
-    ) -> None:
+    def __init__(self, *, dynamic_outputs: dict[str, typing.Any] | None = None, **kwargs: typing.Any) -> None:
         """
         Initialize a FalAI node.
 
@@ -85,3 +71,5 @@ class FalAI(GraphNode[dict[str, Any]]):
     @classmethod
     def get_node_type(cls):
         return cls.get_node_class().get_node_type()
+
+

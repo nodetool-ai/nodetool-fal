@@ -17,6 +17,22 @@ class ImageSizePreset(str, Enum):
     LANDSCAPE_16_9 = "landscape_16_9"
 
 
+class FluxDevAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class FluxDevOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class FluxDev(FALNode):
     """
     FLUX.1 [dev] is a powerful open-weight text-to-image model with 12 billion parameters. Optimized for prompt following and visual quality.
@@ -30,36 +46,20 @@ class FluxDev(FALNode):
     - Create safe-for-work content with built-in safety checker
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: FluxDevAcceleration = Field(
+        default=FluxDevAcceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3, description="Size preset for the generated image"
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxDevOutputFormat = Field(
+        default=FluxDevOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -67,32 +67,36 @@ class FluxDev(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="Enable safety checker to filter unsafe content"
     )
-    seed: int = Field(
-        default=-1, description="Seed for reproducible results. Use -1 for random"
+    num_inference_steps: int = Field(
+        default=28, description="Number of denoising steps. More steps typically improve quality"
     )
     guidance_scale: float = Field(
         default=3.5, description="How strictly to follow the prompt. Higher values are more literal"
     )
-    num_inference_steps: int = Field(
-        default=28, description="Number of denoising steps. More steps typically improve quality"
+    seed: int = Field(
+        default=-1, description="Seed for reproducible results. Use -1 for random"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size.value,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -107,6 +111,22 @@ class FluxDev(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_inference_steps"]
 
+class FluxSchnellAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class FluxSchnellOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class FluxSchnell(FALNode):
     """
     FLUX.1 [schnell] is a fast distilled version of FLUX.1 optimized for speed. Can generate high-quality images in 1-4 steps.
@@ -120,36 +140,20 @@ class FluxSchnell(FALNode):
     - Real-time image generation applications
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: FluxSchnellAcceleration = Field(
+        default=FluxSchnellAcceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3, description="Size preset for the generated image"
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxSchnellOutputFormat = Field(
+        default=FluxSchnellOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -157,32 +161,36 @@ class FluxSchnell(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="Enable safety checker to filter unsafe content"
     )
-    seed: int = Field(
-        default=-1, description="Seed for reproducible results. Use -1 for random"
+    num_inference_steps: int = Field(
+        default=4, description="Number of denoising steps (1-4 recommended for schnell)"
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_inference_steps: int = Field(
-        default=4, description="Number of denoising steps (1-4 recommended for schnell)"
+    seed: int = Field(
+        default=-1, description="Seed for reproducible results. Use -1 for random"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size.value,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -197,6 +205,25 @@ class FluxSchnell(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_inference_steps"]
 
+class FluxV1ProOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FluxV1ProSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
 class FluxV1Pro(FALNode):
     """
     FLUX.1 Pro is a state-of-the-art image generation model with superior prompt following and image quality.
@@ -210,25 +237,6 @@ class FluxV1Pro(FALNode):
     - Create custom visual content with precise control
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
@@ -238,20 +246,17 @@ class FluxV1Pro(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="Size preset for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="Output image format (jpeg or png)"
+    output_format: FluxV1ProOutputFormat = Field(
+        default=FluxV1ProOutputFormat.JPEG, description="Output image format (jpeg or png)"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="Safety checker tolerance level (1-6). Higher is more permissive"
+    safety_tolerance: FluxV1ProSafetyTolerance = Field(
+        default=FluxV1ProSafetyTolerance.VALUE_2, description="Safety checker tolerance level (1-6). Higher is more permissive"
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="Enable safety checker to filter unsafe content"
-    )
-    seed: int = Field(
-        default=-1, description="Seed for reproducible results. Use -1 for random"
+    seed: str = Field(
+        default="", description="Seed for reproducible results. Use -1 for random"
     )
     enhance_prompt: bool = Field(
         default=False, description="Whether to enhance the prompt for better results."
@@ -265,13 +270,16 @@ class FluxV1Pro(FALNode):
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
-            "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
             "enhance_prompt": self.enhance_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -286,6 +294,25 @@ class FluxV1Pro(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "guidance_scale"]
 
+class FluxV1ProUltraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FluxV1ProUltraSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
 class FluxV1ProUltra(FALNode):
     """
     FLUX.1 Pro Ultra delivers the highest quality image generation with enhanced detail and realism.
@@ -299,39 +326,20 @@ class FluxV1ProUltra(FALNode):
     - Create artistic masterpieces with fine details
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
-    )
-    aspect_ratio: str = Field(
-        default="16:9", description="Aspect ratio for the generated image"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    aspect_ratio: str = Field(
+        default="16:9", description="Aspect ratio for the generated image"
+    )
     raw: bool = Field(
         default=False, description="Generate less processed, more natural results"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxV1ProUltraOutputFormat = Field(
+        default=FluxV1ProUltraOutputFormat.JPEG, description="The format of the generated image."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from."
@@ -339,41 +347,45 @@ class FluxV1ProUltra(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
-    )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
-    )
-    seed: int = Field(
-        default=-1, description="Seed for reproducible results. Use -1 for random"
+    safety_tolerance: FluxV1ProUltraSafetyTolerance = Field(
+        default=FluxV1ProUltraSafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
     image_prompt_strength: float = Field(
         default=0.1, description="Strength of image prompt influence (0-1)"
+    )
+    seed: str = Field(
+        default="", description="Seed for reproducible results. Use -1 for random"
     )
     enhance_prompt: bool = Field(
         default=False, description="Whether to enhance the prompt for better results."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio,
             "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio,
             "raw": self.raw,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
-            "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
             "image_prompt_strength": self.image_prompt_strength,
+            "seed": self.seed,
             "enhance_prompt": self.enhance_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -388,6 +400,21 @@ class FluxV1ProUltra(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "aspect_ratio"]
 
+class FluxLoraAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class FluxLoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class FluxLora(FALNode):
     """
     FLUX with LoRA support enables fine-tuned image generation using custom LoRA models for specific styles or subjects.
@@ -401,35 +428,20 @@ class FluxLora(FALNode):
     - Combine multiple LoRA models for unique results
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
     num_images: int = Field(
         default=1, description="The number of images to generate. This is always set to 1 for streaming output."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    acceleration: FluxLoraAcceleration = Field(
+        default=FluxLoraAcceleration.NONE, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     image_size: str = Field(
         default="landscape_4_3", description="Size preset for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxLoraOutputFormat = Field(
+        default=FluxLoraOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -467,6 +479,10 @@ class FluxLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -481,6 +497,34 @@ class FluxLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "loras", "image_size"]
 
+class IdeogramV2AspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image
+    """
+    RATIO_10_16 = "10:16"
+    RATIO_16_10 = "16:10"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+    RATIO_1_3 = "1:3"
+    RATIO_3_1 = "3:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+
+class IdeogramV2Style(str, Enum):
+    """
+    The style of the generated image
+    """
+    AUTO = "auto"
+    GENERAL = "general"
+    REALISTIC = "realistic"
+    DESIGN = "design"
+    RENDER_3D = "render_3D"
+    ANIME = "anime"
+
+
 class IdeogramV2(FALNode):
     """
     Ideogram V2 is a state-of-the-art image generation model optimized for commercial and creative use, featuring exceptional typography handling and realistic outputs.
@@ -494,42 +538,14 @@ class IdeogramV2(FALNode):
     - Create brand assets and logos
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image
-        """
-        RATIO_10_16 = "10:16"
-        RATIO_16_10 = "16:10"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_1_1 = "1:1"
-        RATIO_1_3 = "1:3"
-        RATIO_3_1 = "3:1"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-
-    class Style(Enum):
-        """
-        The style of the generated image
-        """
-        AUTO = "auto"
-        GENERAL = "general"
-        REALISTIC = "realistic"
-        DESIGN = "design"
-        RENDER_3D = "render_3D"
-        ANIME = "anime"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    aspect_ratio: IdeogramV2AspectRatio = Field(
+        default=IdeogramV2AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
     )
-    style: Style = Field(
-        default=Style.AUTO, description="The style of the generated image"
+    style: IdeogramV2Style = Field(
+        default=IdeogramV2Style.AUTO, description="The style of the generated image"
     )
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality"
@@ -557,6 +573,10 @@ class IdeogramV2(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -571,6 +591,34 @@ class IdeogramV2(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "aspect_ratio", "style"]
 
+class IdeogramV2TurboAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image
+    """
+    RATIO_10_16 = "10:16"
+    RATIO_16_10 = "16:10"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+    RATIO_1_3 = "1:3"
+    RATIO_3_1 = "3:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+
+class IdeogramV2TurboStyle(str, Enum):
+    """
+    The style of the generated image
+    """
+    AUTO = "auto"
+    GENERAL = "general"
+    REALISTIC = "realistic"
+    DESIGN = "design"
+    RENDER_3D = "render_3D"
+    ANIME = "anime"
+
+
 class IdeogramV2Turbo(FALNode):
     """
     Ideogram V2 Turbo offers faster image generation with the same exceptional quality and typography handling as V2.
@@ -584,42 +632,14 @@ class IdeogramV2Turbo(FALNode):
     - Efficient batch generation of branded content
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image
-        """
-        RATIO_10_16 = "10:16"
-        RATIO_16_10 = "16:10"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_1_1 = "1:1"
-        RATIO_1_3 = "1:3"
-        RATIO_3_1 = "3:1"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-
-    class Style(Enum):
-        """
-        The style of the generated image
-        """
-        AUTO = "auto"
-        GENERAL = "general"
-        REALISTIC = "realistic"
-        DESIGN = "design"
-        RENDER_3D = "render_3D"
-        ANIME = "anime"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    aspect_ratio: IdeogramV2TurboAspectRatio = Field(
+        default=IdeogramV2TurboAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
     )
-    style: Style = Field(
-        default=Style.AUTO, description="The style of the generated image"
+    style: IdeogramV2TurboStyle = Field(
+        default=IdeogramV2TurboStyle.AUTO, description="The style of the generated image"
     )
     expand_prompt: bool = Field(
         default=True, description="Whether to expand the prompt with MagicPrompt functionality"
@@ -647,6 +667,10 @@ class IdeogramV2Turbo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -661,6 +685,97 @@ class IdeogramV2Turbo(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "aspect_ratio", "style"]
 
+class RecraftV3RecraftV3Style(str, Enum):
+    """
+    The style of the generated images. Vector images cost 2X as much.
+    """
+    ANY = "any"
+    REALISTIC_IMAGE = "realistic_image"
+    DIGITAL_ILLUSTRATION = "digital_illustration"
+    VECTOR_ILLUSTRATION = "vector_illustration"
+    REALISTIC_IMAGE_B_AND_W = "realistic_image/b_and_w"
+    REALISTIC_IMAGE_HARD_FLASH = "realistic_image/hard_flash"
+    REALISTIC_IMAGE_HDR = "realistic_image/hdr"
+    REALISTIC_IMAGE_NATURAL_LIGHT = "realistic_image/natural_light"
+    REALISTIC_IMAGE_STUDIO_PORTRAIT = "realistic_image/studio_portrait"
+    REALISTIC_IMAGE_ENTERPRISE = "realistic_image/enterprise"
+    REALISTIC_IMAGE_MOTION_BLUR = "realistic_image/motion_blur"
+    REALISTIC_IMAGE_EVENING_LIGHT = "realistic_image/evening_light"
+    REALISTIC_IMAGE_FADED_NOSTALGIA = "realistic_image/faded_nostalgia"
+    REALISTIC_IMAGE_FOREST_LIFE = "realistic_image/forest_life"
+    REALISTIC_IMAGE_MYSTIC_NATURALISM = "realistic_image/mystic_naturalism"
+    REALISTIC_IMAGE_NATURAL_TONES = "realistic_image/natural_tones"
+    REALISTIC_IMAGE_ORGANIC_CALM = "realistic_image/organic_calm"
+    REALISTIC_IMAGE_REAL_LIFE_GLOW = "realistic_image/real_life_glow"
+    REALISTIC_IMAGE_RETRO_REALISM = "realistic_image/retro_realism"
+    REALISTIC_IMAGE_RETRO_SNAPSHOT = "realistic_image/retro_snapshot"
+    REALISTIC_IMAGE_URBAN_DRAMA = "realistic_image/urban_drama"
+    REALISTIC_IMAGE_VILLAGE_REALISM = "realistic_image/village_realism"
+    REALISTIC_IMAGE_WARM_FOLK = "realistic_image/warm_folk"
+    DIGITAL_ILLUSTRATION_PIXEL_ART = "digital_illustration/pixel_art"
+    DIGITAL_ILLUSTRATION_HAND_DRAWN = "digital_illustration/hand_drawn"
+    DIGITAL_ILLUSTRATION_GRAIN = "digital_illustration/grain"
+    DIGITAL_ILLUSTRATION_INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
+    DIGITAL_ILLUSTRATION_2D_ART_POSTER = "digital_illustration/2d_art_poster"
+    DIGITAL_ILLUSTRATION_HANDMADE_3D = "digital_illustration/handmade_3d"
+    DIGITAL_ILLUSTRATION_HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
+    DIGITAL_ILLUSTRATION_ENGRAVING_COLOR = "digital_illustration/engraving_color"
+    DIGITAL_ILLUSTRATION_2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
+    DIGITAL_ILLUSTRATION_ANTIQUARIAN = "digital_illustration/antiquarian"
+    DIGITAL_ILLUSTRATION_BOLD_FANTASY = "digital_illustration/bold_fantasy"
+    DIGITAL_ILLUSTRATION_CHILD_BOOK = "digital_illustration/child_book"
+    DIGITAL_ILLUSTRATION_CHILD_BOOKS = "digital_illustration/child_books"
+    DIGITAL_ILLUSTRATION_COVER = "digital_illustration/cover"
+    DIGITAL_ILLUSTRATION_CROSSHATCH = "digital_illustration/crosshatch"
+    DIGITAL_ILLUSTRATION_DIGITAL_ENGRAVING = "digital_illustration/digital_engraving"
+    DIGITAL_ILLUSTRATION_EXPRESSIONISM = "digital_illustration/expressionism"
+    DIGITAL_ILLUSTRATION_FREEHAND_DETAILS = "digital_illustration/freehand_details"
+    DIGITAL_ILLUSTRATION_GRAIN_20 = "digital_illustration/grain_20"
+    DIGITAL_ILLUSTRATION_GRAPHIC_INTENSITY = "digital_illustration/graphic_intensity"
+    DIGITAL_ILLUSTRATION_HARD_COMICS = "digital_illustration/hard_comics"
+    DIGITAL_ILLUSTRATION_LONG_SHADOW = "digital_illustration/long_shadow"
+    DIGITAL_ILLUSTRATION_MODERN_FOLK = "digital_illustration/modern_folk"
+    DIGITAL_ILLUSTRATION_MULTICOLOR = "digital_illustration/multicolor"
+    DIGITAL_ILLUSTRATION_NEON_CALM = "digital_illustration/neon_calm"
+    DIGITAL_ILLUSTRATION_NOIR = "digital_illustration/noir"
+    DIGITAL_ILLUSTRATION_NOSTALGIC_PASTEL = "digital_illustration/nostalgic_pastel"
+    DIGITAL_ILLUSTRATION_OUTLINE_DETAILS = "digital_illustration/outline_details"
+    DIGITAL_ILLUSTRATION_PASTEL_GRADIENT = "digital_illustration/pastel_gradient"
+    DIGITAL_ILLUSTRATION_PASTEL_SKETCH = "digital_illustration/pastel_sketch"
+    DIGITAL_ILLUSTRATION_POP_ART = "digital_illustration/pop_art"
+    DIGITAL_ILLUSTRATION_POP_RENAISSANCE = "digital_illustration/pop_renaissance"
+    DIGITAL_ILLUSTRATION_STREET_ART = "digital_illustration/street_art"
+    DIGITAL_ILLUSTRATION_TABLET_SKETCH = "digital_illustration/tablet_sketch"
+    DIGITAL_ILLUSTRATION_URBAN_GLOW = "digital_illustration/urban_glow"
+    DIGITAL_ILLUSTRATION_URBAN_SKETCHING = "digital_illustration/urban_sketching"
+    DIGITAL_ILLUSTRATION_VANILLA_DREAMS = "digital_illustration/vanilla_dreams"
+    DIGITAL_ILLUSTRATION_YOUNG_ADULT_BOOK = "digital_illustration/young_adult_book"
+    DIGITAL_ILLUSTRATION_YOUNG_ADULT_BOOK_2 = "digital_illustration/young_adult_book_2"
+    VECTOR_ILLUSTRATION_BOLD_STROKE = "vector_illustration/bold_stroke"
+    VECTOR_ILLUSTRATION_CHEMISTRY = "vector_illustration/chemistry"
+    VECTOR_ILLUSTRATION_COLORED_STENCIL = "vector_illustration/colored_stencil"
+    VECTOR_ILLUSTRATION_CONTOUR_POP_ART = "vector_illustration/contour_pop_art"
+    VECTOR_ILLUSTRATION_COSMICS = "vector_illustration/cosmics"
+    VECTOR_ILLUSTRATION_CUTOUT = "vector_illustration/cutout"
+    VECTOR_ILLUSTRATION_DEPRESSIVE = "vector_illustration/depressive"
+    VECTOR_ILLUSTRATION_EDITORIAL = "vector_illustration/editorial"
+    VECTOR_ILLUSTRATION_EMOTIONAL_FLAT = "vector_illustration/emotional_flat"
+    VECTOR_ILLUSTRATION_INFOGRAPHICAL = "vector_illustration/infographical"
+    VECTOR_ILLUSTRATION_MARKER_OUTLINE = "vector_illustration/marker_outline"
+    VECTOR_ILLUSTRATION_MOSAIC = "vector_illustration/mosaic"
+    VECTOR_ILLUSTRATION_NAIVECTOR = "vector_illustration/naivector"
+    VECTOR_ILLUSTRATION_ROUNDISH_FLAT = "vector_illustration/roundish_flat"
+    VECTOR_ILLUSTRATION_SEGMENTED_COLORS = "vector_illustration/segmented_colors"
+    VECTOR_ILLUSTRATION_SHARP_CONTRAST = "vector_illustration/sharp_contrast"
+    VECTOR_ILLUSTRATION_THIN = "vector_illustration/thin"
+    VECTOR_ILLUSTRATION_VECTOR_PHOTO = "vector_illustration/vector_photo"
+    VECTOR_ILLUSTRATION_VIVID_SHAPES = "vector_illustration/vivid_shapes"
+    VECTOR_ILLUSTRATION_ENGRAVING = "vector_illustration/engraving"
+    VECTOR_ILLUSTRATION_LINE_ART = "vector_illustration/line_art"
+    VECTOR_ILLUSTRATION_LINE_CIRCUIT = "vector_illustration/line_circuit"
+    VECTOR_ILLUSTRATION_LINOCUT = "vector_illustration/linocut"
+
+
 class RecraftV3(FALNode):
     """
     Recraft V3 is a powerful image generation model with exceptional control over style and colors, ideal for brand consistency and design work.
@@ -674,111 +789,20 @@ class RecraftV3(FALNode):
     - Create cohesive visual content series
     """
 
-    class RecraftV3Style(Enum):
-        """
-        The style of the generated images. Vector images cost 2X as much.
-        """
-        ANY = "any"
-        REALISTIC_IMAGE = "realistic_image"
-        DIGITAL_ILLUSTRATION = "digital_illustration"
-        VECTOR_ILLUSTRATION = "vector_illustration"
-        REALISTIC_IMAGE_B_AND_W = "realistic_image/b_and_w"
-        REALISTIC_IMAGE_HARD_FLASH = "realistic_image/hard_flash"
-        REALISTIC_IMAGE_HDR = "realistic_image/hdr"
-        REALISTIC_IMAGE_NATURAL_LIGHT = "realistic_image/natural_light"
-        REALISTIC_IMAGE_STUDIO_PORTRAIT = "realistic_image/studio_portrait"
-        REALISTIC_IMAGE_ENTERPRISE = "realistic_image/enterprise"
-        REALISTIC_IMAGE_MOTION_BLUR = "realistic_image/motion_blur"
-        REALISTIC_IMAGE_EVENING_LIGHT = "realistic_image/evening_light"
-        REALISTIC_IMAGE_FADED_NOSTALGIA = "realistic_image/faded_nostalgia"
-        REALISTIC_IMAGE_FOREST_LIFE = "realistic_image/forest_life"
-        REALISTIC_IMAGE_MYSTIC_NATURALISM = "realistic_image/mystic_naturalism"
-        REALISTIC_IMAGE_NATURAL_TONES = "realistic_image/natural_tones"
-        REALISTIC_IMAGE_ORGANIC_CALM = "realistic_image/organic_calm"
-        REALISTIC_IMAGE_REAL_LIFE_GLOW = "realistic_image/real_life_glow"
-        REALISTIC_IMAGE_RETRO_REALISM = "realistic_image/retro_realism"
-        REALISTIC_IMAGE_RETRO_SNAPSHOT = "realistic_image/retro_snapshot"
-        REALISTIC_IMAGE_URBAN_DRAMA = "realistic_image/urban_drama"
-        REALISTIC_IMAGE_VILLAGE_REALISM = "realistic_image/village_realism"
-        REALISTIC_IMAGE_WARM_FOLK = "realistic_image/warm_folk"
-        DIGITAL_ILLUSTRATION_PIXEL_ART = "digital_illustration/pixel_art"
-        DIGITAL_ILLUSTRATION_HAND_DRAWN = "digital_illustration/hand_drawn"
-        DIGITAL_ILLUSTRATION_GRAIN = "digital_illustration/grain"
-        DIGITAL_ILLUSTRATION_INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
-        DIGITAL_ILLUSTRATION_2D_ART_POSTER = "digital_illustration/2d_art_poster"
-        DIGITAL_ILLUSTRATION_HANDMADE_3D = "digital_illustration/handmade_3d"
-        DIGITAL_ILLUSTRATION_HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
-        DIGITAL_ILLUSTRATION_ENGRAVING_COLOR = "digital_illustration/engraving_color"
-        DIGITAL_ILLUSTRATION_2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
-        DIGITAL_ILLUSTRATION_ANTIQUARIAN = "digital_illustration/antiquarian"
-        DIGITAL_ILLUSTRATION_BOLD_FANTASY = "digital_illustration/bold_fantasy"
-        DIGITAL_ILLUSTRATION_CHILD_BOOK = "digital_illustration/child_book"
-        DIGITAL_ILLUSTRATION_CHILD_BOOKS = "digital_illustration/child_books"
-        DIGITAL_ILLUSTRATION_COVER = "digital_illustration/cover"
-        DIGITAL_ILLUSTRATION_CROSSHATCH = "digital_illustration/crosshatch"
-        DIGITAL_ILLUSTRATION_DIGITAL_ENGRAVING = "digital_illustration/digital_engraving"
-        DIGITAL_ILLUSTRATION_EXPRESSIONISM = "digital_illustration/expressionism"
-        DIGITAL_ILLUSTRATION_FREEHAND_DETAILS = "digital_illustration/freehand_details"
-        DIGITAL_ILLUSTRATION_GRAIN_20 = "digital_illustration/grain_20"
-        DIGITAL_ILLUSTRATION_GRAPHIC_INTENSITY = "digital_illustration/graphic_intensity"
-        DIGITAL_ILLUSTRATION_HARD_COMICS = "digital_illustration/hard_comics"
-        DIGITAL_ILLUSTRATION_LONG_SHADOW = "digital_illustration/long_shadow"
-        DIGITAL_ILLUSTRATION_MODERN_FOLK = "digital_illustration/modern_folk"
-        DIGITAL_ILLUSTRATION_MULTICOLOR = "digital_illustration/multicolor"
-        DIGITAL_ILLUSTRATION_NEON_CALM = "digital_illustration/neon_calm"
-        DIGITAL_ILLUSTRATION_NOIR = "digital_illustration/noir"
-        DIGITAL_ILLUSTRATION_NOSTALGIC_PASTEL = "digital_illustration/nostalgic_pastel"
-        DIGITAL_ILLUSTRATION_OUTLINE_DETAILS = "digital_illustration/outline_details"
-        DIGITAL_ILLUSTRATION_PASTEL_GRADIENT = "digital_illustration/pastel_gradient"
-        DIGITAL_ILLUSTRATION_PASTEL_SKETCH = "digital_illustration/pastel_sketch"
-        DIGITAL_ILLUSTRATION_POP_ART = "digital_illustration/pop_art"
-        DIGITAL_ILLUSTRATION_POP_RENAISSANCE = "digital_illustration/pop_renaissance"
-        DIGITAL_ILLUSTRATION_STREET_ART = "digital_illustration/street_art"
-        DIGITAL_ILLUSTRATION_TABLET_SKETCH = "digital_illustration/tablet_sketch"
-        DIGITAL_ILLUSTRATION_URBAN_GLOW = "digital_illustration/urban_glow"
-        DIGITAL_ILLUSTRATION_URBAN_SKETCHING = "digital_illustration/urban_sketching"
-        DIGITAL_ILLUSTRATION_VANILLA_DREAMS = "digital_illustration/vanilla_dreams"
-        DIGITAL_ILLUSTRATION_YOUNG_ADULT_BOOK = "digital_illustration/young_adult_book"
-        DIGITAL_ILLUSTRATION_YOUNG_ADULT_BOOK_2 = "digital_illustration/young_adult_book_2"
-        VECTOR_ILLUSTRATION_BOLD_STROKE = "vector_illustration/bold_stroke"
-        VECTOR_ILLUSTRATION_CHEMISTRY = "vector_illustration/chemistry"
-        VECTOR_ILLUSTRATION_COLORED_STENCIL = "vector_illustration/colored_stencil"
-        VECTOR_ILLUSTRATION_CONTOUR_POP_ART = "vector_illustration/contour_pop_art"
-        VECTOR_ILLUSTRATION_COSMICS = "vector_illustration/cosmics"
-        VECTOR_ILLUSTRATION_CUTOUT = "vector_illustration/cutout"
-        VECTOR_ILLUSTRATION_DEPRESSIVE = "vector_illustration/depressive"
-        VECTOR_ILLUSTRATION_EDITORIAL = "vector_illustration/editorial"
-        VECTOR_ILLUSTRATION_EMOTIONAL_FLAT = "vector_illustration/emotional_flat"
-        VECTOR_ILLUSTRATION_INFOGRAPHICAL = "vector_illustration/infographical"
-        VECTOR_ILLUSTRATION_MARKER_OUTLINE = "vector_illustration/marker_outline"
-        VECTOR_ILLUSTRATION_MOSAIC = "vector_illustration/mosaic"
-        VECTOR_ILLUSTRATION_NAIVECTOR = "vector_illustration/naivector"
-        VECTOR_ILLUSTRATION_ROUNDISH_FLAT = "vector_illustration/roundish_flat"
-        VECTOR_ILLUSTRATION_SEGMENTED_COLORS = "vector_illustration/segmented_colors"
-        VECTOR_ILLUSTRATION_SHARP_CONTRAST = "vector_illustration/sharp_contrast"
-        VECTOR_ILLUSTRATION_THIN = "vector_illustration/thin"
-        VECTOR_ILLUSTRATION_VECTOR_PHOTO = "vector_illustration/vector_photo"
-        VECTOR_ILLUSTRATION_VIVID_SHAPES = "vector_illustration/vivid_shapes"
-        VECTOR_ILLUSTRATION_ENGRAVING = "vector_illustration/engraving"
-        VECTOR_ILLUSTRATION_LINE_ART = "vector_illustration/line_art"
-        VECTOR_ILLUSTRATION_LINE_CIRCUIT = "vector_illustration/line_circuit"
-        VECTOR_ILLUSTRATION_LINOCUT = "vector_illustration/linocut"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
     image_size: str = Field(
         default="square_hd", description="Size preset for the generated image"
     )
-    style: RecraftV3Style = Field(
-        default=RecraftV3Style.REALISTIC_IMAGE, description="Visual style preset for the generated image"
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
     )
     colors: list[RGBColor] = Field(
         default=[], description="Specific color palette to use in the generation"
     )
-    enable_safety_checker: bool = Field(
-        default=False, description="If set to true, the safety checker will be enabled."
+    style: RecraftV3RecraftV3Style = Field(
+        default=RecraftV3RecraftV3Style.REALISTIC_IMAGE, description="Visual style preset for the generated image"
     )
     style_id: str = Field(
         default="", description="Custom style ID for brand-specific styles"
@@ -788,14 +812,18 @@ class RecraftV3(FALNode):
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
-            "style": self.style.value,
-            "colors": [item.model_dump(exclude={"type"}) for item in self.colors],
             "enable_safety_checker": self.enable_safety_checker,
+            "colors": [item.model_dump(exclude={"type"}) for item in self.colors],
+            "style": self.style.value,
             "style_id": self.style_id,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -810,6 +838,14 @@ class RecraftV3(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "style", "colors"]
 
+class StableDiffusionV35LargeOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class StableDiffusionV35Large(FALNode):
     """
     Stable Diffusion 3.5 Large is a powerful open-weight model with excellent prompt adherence and diverse output capabilities.
@@ -823,14 +859,6 @@ class StableDiffusionV35Large(FALNode):
     - Create custom visual content
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
@@ -840,26 +868,38 @@ class StableDiffusionV35Large(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image. Defaults to landscape_4_3 if no controlnet has been passed, otherwise defaults to the size of the controlnet conditioning image."
     )
-    controlnet: str = Field(
-        default="", description="ControlNet for inference."
+    controlnet: ImageRef = Field(
+        default=ImageRef(), description="ControlNet for inference."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    conditioning_scale: float = Field(
+        default=0.0, description="The scale of the control net weight. This is used to scale the control net weight before merging it with the base model."
+    )
+    path: str = Field(
+        default="", description="URL or the path to the control net weights."
+    )
+    start_percentage: float = Field(
+        default=0.0, description="The percentage of the image to start applying the controlnet in terms of the total timesteps."
+    )
+    end_percentage: float = Field(
+        default=0.0, description="The percentage of the image to end applying the controlnet in terms of the total timesteps."
+    )
+    output_format: StableDiffusionV35LargeOutputFormat = Field(
+        default=StableDiffusionV35LargeOutputFormat.JPEG, description="The format of the generated image."
     )
     ip_adapter: str = Field(
         default="", description="IP-Adapter to use during inference."
     )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
-    )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
@@ -867,29 +907,44 @@ class StableDiffusionV35Large(FALNode):
     negative_prompt: str = Field(
         default="", description="Elements to avoid in the generated image"
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
+        controlnet_base64 = (
+            await context.image_to_base64(self.controlnet)
+            if not self.controlnet.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "controlnet": self.controlnet,
+            "controlnet": {
+                "control_image_url": f"data:image/png;base64,{controlnet_base64}" if controlnet_base64 else None,
+                "conditioning_scale": self.conditioning_scale,
+                "path": self.path,
+                "start_percentage": self.start_percentage,
+                "end_percentage": self.end_percentage,
+            },
             "output_format": self.output_format.value,
             "ip_adapter": self.ip_adapter,
-            "sync_mode": self.sync_mode,
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
+            "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
-            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -904,6 +959,25 @@ class StableDiffusionV35Large(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "negative_prompt", "aspect_ratio"]
 
+class FluxProNewOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FluxProNewSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
 class FluxProNew(FALNode):
     """
     FLUX.1 Pro New is the latest version of the professional FLUX model with enhanced capabilities and improved output quality.
@@ -917,25 +991,6 @@ class FluxProNew(FALNode):
     - Generate photorealistic commercial imagery
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
@@ -945,14 +1000,14 @@ class FluxProNew(FALNode):
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3, description="Size preset for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxProNewOutputFormat = Field(
+        default=FluxProNewOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    safety_tolerance: FluxProNewSafetyTolerance = Field(
+        default=FluxProNewSafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
@@ -983,6 +1038,10 @@ class FluxProNew(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -997,6 +1056,15 @@ class FluxProNew(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size"]
 
+class Flux2TurboOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Turbo(FALNode):
     """
     FLUX.2 Turbo is a blazing-fast image generation model optimized for speed without sacrificing quality, ideal for real-time applications.
@@ -1010,15 +1078,6 @@ class Flux2Turbo(FALNode):
     - High-throughput batch image processing
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
@@ -1028,20 +1087,20 @@ class Flux2Turbo(FALNode):
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3, description="Size preset for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2TurboOutputFormat = Field(
+        default=Flux2TurboOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    enable_prompt_expansion: bool = Field(
-        default=False, description="If set to true, the prompt will be expanded for better results."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    enable_prompt_expansion: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded for better results."
     )
     guidance_scale: float = Field(
         default=2.5, description="Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
@@ -1054,14 +1113,18 @@ class Flux2Turbo(FALNode):
             "image_size": self.image_size.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
-            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
             "guidance_scale": self.guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1076,6 +1139,15 @@ class Flux2Turbo(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "num_images"]
 
+class Flux2FlashOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Flash(FALNode):
     """
     FLUX.2 Flash is an ultra-fast variant of FLUX.2 designed for instant image generation with minimal latency.
@@ -1089,15 +1161,6 @@ class Flux2Flash(FALNode):
     - Interactive gaming and entertainment applications
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
@@ -1107,20 +1170,20 @@ class Flux2Flash(FALNode):
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3, description="Size preset for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2FlashOutputFormat = Field(
+        default=Flux2FlashOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    enable_prompt_expansion: bool = Field(
-        default=False, description="If set to true, the prompt will be expanded for better results."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    enable_prompt_expansion: bool = Field(
+        default=False, description="If set to true, the prompt will be expanded for better results."
     )
     guidance_scale: float = Field(
         default=2.5, description="Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
@@ -1133,14 +1196,18 @@ class Flux2Flash(FALNode):
             "image_size": self.image_size.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
-            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
             "guidance_scale": self.guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1155,6 +1222,15 @@ class Flux2Flash(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size"]
 
+class IdeogramV3RenderingSpeed(str, Enum):
+    """
+    The rendering speed to use.
+    """
+    TURBO = "TURBO"
+    BALANCED = "BALANCED"
+    QUALITY = "QUALITY"
+
+
 class IdeogramV3(FALNode):
     """
     Ideogram V3 is the latest generation with enhanced text rendering, superior image quality, and expanded creative controls.
@@ -1167,15 +1243,6 @@ class IdeogramV3(FALNode):
     - Produce marketing materials with text overlays
     - Create educational content with clear text
     """
-
-    class RenderingSpeed(Enum):
-        """
-        The rendering speed to use.
-        """
-        TURBO = "TURBO"
-        BALANCED = "BALANCED"
-        QUALITY = "QUALITY"
-
 
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
@@ -1195,8 +1262,8 @@ class IdeogramV3(FALNode):
     expand_prompt: bool = Field(
         default=True, description="Automatically enhance the prompt for better results"
     )
-    rendering_speed: RenderingSpeed = Field(
-        default=RenderingSpeed.BALANCED, description="The rendering speed to use."
+    rendering_speed: IdeogramV3RenderingSpeed = Field(
+        default=IdeogramV3RenderingSpeed.BALANCED, description="The rendering speed to use."
     )
     style_codes: str = Field(
         default="", description="A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style"
@@ -1220,6 +1287,8 @@ class IdeogramV3(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         images_data_urls = []
         for image in self.images or []:
+            if image.is_empty():
+                continue
             image_base64 = await context.image_to_base64(image)
             images_data_urls.append(f"data:image/png;base64,{image_base64}")
         arguments = {
@@ -1240,6 +1309,10 @@ class IdeogramV3(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1254,6 +1327,14 @@ class IdeogramV3(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "aspect_ratio", "style"]
 
+class OmniGenV1OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class OmniGenV1(FALNode):
     """
     OmniGen V1 is a versatile unified model for multi-modal image generation and editing with text, supporting complex compositional tasks.
@@ -1267,14 +1348,6 @@ class OmniGenV1(FALNode):
     - Perform advanced image manipulations
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate or edit an image"
     )
@@ -1287,14 +1360,14 @@ class OmniGenV1(FALNode):
     img_guidance_scale: float = Field(
         default=1.6, description="The Image Guidance scale is a measure of how close you want the model to stick to your input image when looking for a related image to show you."
     )
+    output_format: OmniGenV1OutputFormat = Field(
+        default=OmniGenV1OutputFormat.JPEG, description="The format of the generated image."
+    )
     input_images: list[str] = Field(
         default=[], description="URL of images to use while generating the image, Use <img><|image_1|></img> for the first image and so on."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
-    )
     sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     guidance_scale: float = Field(
         default=3, description="How strictly to follow the prompt and inputs"
@@ -1302,11 +1375,11 @@ class OmniGenV1(FALNode):
     num_inference_steps: int = Field(
         default=50, description="Number of denoising steps for generation quality"
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
-    )
     seed: int = Field(
         default=-1, description="Seed for reproducible results. Use -1 for random"
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -1315,17 +1388,21 @@ class OmniGenV1(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "img_guidance_scale": self.img_guidance_scale,
-            "input_image_urls": self.input_images,
             "output_format": self.output_format.value,
+            "input_image_urls": self.input_images,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1340,6 +1417,29 @@ class OmniGenV1(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "guidance_scale", "num_inference_steps"]
 
+class SanaOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class SanaStyleName(str, Enum):
+    """
+    The style to generate the image in.
+    """
+    NO_STYLE = "(No style)"
+    CINEMATIC = "Cinematic"
+    PHOTOGRAPHIC = "Photographic"
+    ANIME = "Anime"
+    MANGA = "Manga"
+    DIGITAL_ART = "Digital Art"
+    PIXEL_ART = "Pixel art"
+    FANTASY_ART = "Fantasy art"
+    NEONPUNK = "Neonpunk"
+    MODEL_3D = "3D Model"
+
+
 class Sana(FALNode):
     """
     Sana is an efficient high-resolution image generation model that balances quality and speed for practical applications.
@@ -1353,29 +1453,6 @@ class Sana(FALNode):
     - Balanced quality-speed image production
     """
 
-    class StyleName(Enum):
-        """
-        The style to generate the image in.
-        """
-        NO_STYLE = "(No style)"
-        CINEMATIC = "Cinematic"
-        PHOTOGRAPHIC = "Photographic"
-        ANIME = "Anime"
-        MANGA = "Manga"
-        DIGITAL_ART = "Digital Art"
-        PIXEL_ART = "Pixel art"
-        FANTASY_ART = "Fantasy art"
-        NEONPUNK = "Neonpunk"
-        MODEL_3D = "3D Model"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from"
     )
@@ -1385,29 +1462,29 @@ class Sana(FALNode):
     image_size: ImageSizePreset = Field(
         default=ImageSizePreset.LANDSCAPE_4_3, description="Size preset for the generated image"
     )
-    style_name: StyleName = Field(
-        default=StyleName.NO_STYLE, description="The style to generate the image in."
+    guidance_scale: float = Field(
+        default=5, description="How strictly to follow the prompt"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: SanaOutputFormat = Field(
+        default=SanaOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=5, description="How strictly to follow the prompt"
+    style_name: SanaStyleName = Field(
+        default=SanaStyleName.NO_STYLE, description="The style to generate the image in."
     )
     num_inference_steps: int = Field(
         default=18, description="Number of denoising steps"
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str = Field(
         default="", description="Elements to avoid in the generated image"
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -1415,18 +1492,22 @@ class Sana(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size.value,
-            "style_name": self.style_name.value,
+            "guidance_scale": self.guidance_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
+            "style_name": self.style_name.value,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1441,6 +1522,14 @@ class Sana(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "image_size", "guidance_scale"]
 
+class HunyuanImageV3InstructTextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class HunyuanImageV3InstructTextToImage(FALNode):
     """
     Hunyuan Image v3 Instruct generates high-quality images from text with advanced instruction understanding.
@@ -1454,14 +1543,6 @@ class HunyuanImageV3InstructTextToImage(FALNode):
     - Create professional visuals from text
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
     )
@@ -1471,8 +1552,8 @@ class HunyuanImageV3InstructTextToImage(FALNode):
     image_size: str = Field(
         default="auto", description="The desired size of the generated image. If auto, image size will be determined by the model."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: HunyuanImageV3InstructTextToImageOutputFormat = Field(
+        default=HunyuanImageV3InstructTextToImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -1501,6 +1582,10 @@ class HunyuanImageV3InstructTextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1515,6 +1600,15 @@ class HunyuanImageV3InstructTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class QwenImageMaxTextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class QwenImageMaxTextToImage(FALNode):
     """
     Qwen Image Max generates premium quality images from text with superior detail and accuracy.
@@ -1528,15 +1622,6 @@ class QwenImageMaxTextToImage(FALNode):
     - Create superior quality visuals
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="Text prompt describing the desired image. Supports Chinese and English. Max 800 characters."
     )
@@ -1546,20 +1631,20 @@ class QwenImageMaxTextToImage(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: QwenImageMaxTextToImageOutputFormat = Field(
+        default=QwenImageMaxTextToImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    enable_prompt_expansion: bool = Field(
-        default=True, description="Enable LLM prompt optimization for better results."
-    )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility (0-2147483647)."
-    )
     enable_safety_checker: bool = Field(
         default=True, description="Enable content moderation for input and output."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility (0-2147483647)."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=True, description="Enable LLM prompt optimization for better results."
     )
     negative_prompt: str = Field(
         default="", description="Content to avoid in the generated image. Max 500 characters."
@@ -1572,14 +1657,18 @@ class QwenImageMaxTextToImage(FALNode):
             "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
-            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
             "negative_prompt": self.negative_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1594,6 +1683,23 @@ class QwenImageMaxTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class QwenImage2512Acceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class QwenImage2512OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class QwenImage2512(FALNode):
     """
     Qwen Image 2512 generates high-resolution images from text with excellent quality and detail.
@@ -1607,37 +1713,20 @@ class QwenImage2512(FALNode):
     - Create high-quality visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
-    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    acceleration: QwenImage2512Acceleration = Field(
+        default=QwenImage2512Acceleration.REGULAR, description="The acceleration level to use."
+    )
+    output_format: QwenImage2512OutputFormat = Field(
+        default=QwenImage2512OutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -1645,8 +1734,8 @@ class QwenImage2512(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     guidance_scale: float = Field(
         default=4, description="The guidance scale to use for the image generation."
@@ -1654,27 +1743,31 @@ class QwenImage2512(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to generate an image from."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "acceleration": self.acceleration.value,
             "image_size": self.image_size,
+            "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
-            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1689,6 +1782,23 @@ class QwenImage2512(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class QwenImage2512LoraAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class QwenImage2512LoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class QwenImage2512Lora(FALNode):
     """
     Qwen Image 2512 with LoRA support enables custom-trained models for specialized image generation.
@@ -1702,37 +1812,20 @@ class QwenImage2512Lora(FALNode):
     - Create customized visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
-    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    acceleration: QwenImage2512LoraAcceleration = Field(
+        default=QwenImage2512LoraAcceleration.REGULAR, description="The acceleration level to use."
+    )
+    output_format: QwenImage2512LoraOutputFormat = Field(
+        default=QwenImage2512LoraOutputFormat.PNG, description="The format of the generated image."
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
@@ -1743,8 +1836,8 @@ class QwenImage2512Lora(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     guidance_scale: float = Field(
         default=4, description="The guidance scale to use for the image generation."
@@ -1752,28 +1845,32 @@ class QwenImage2512Lora(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to generate an image from."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "acceleration": self.acceleration.value,
             "image_size": self.image_size,
+            "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
-            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1788,6 +1885,23 @@ class QwenImage2512Lora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ZImageBaseAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class ZImageBaseOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class ZImageBase(FALNode):
     """
     Z-Image Base generates quality images from text with efficient processing and good results.
@@ -1801,23 +1915,6 @@ class ZImageBase(FALNode):
     - Create efficient visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -1827,11 +1924,11 @@ class ZImageBase(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: ZImageBaseAcceleration = Field(
+        default=ZImageBaseAcceleration.REGULAR, description="The acceleration level to use."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: ZImageBaseOutputFormat = Field(
+        default=ZImageBaseOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -1869,6 +1966,10 @@ class ZImageBase(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1883,6 +1984,23 @@ class ZImageBase(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ZImageBaseLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class ZImageBaseLoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class ZImageBaseLora(FALNode):
     """
     Z-Image Base with LoRA enables efficient custom-trained models for specialized generation tasks.
@@ -1896,23 +2014,6 @@ class ZImageBaseLora(FALNode):
     - Create efficient custom visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -1922,11 +2023,11 @@ class ZImageBaseLora(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: ZImageBaseLoraAcceleration = Field(
+        default=ZImageBaseLoraAcceleration.REGULAR, description="The acceleration level to use."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: ZImageBaseLoraOutputFormat = Field(
+        default=ZImageBaseLoraOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -1968,6 +2069,10 @@ class ZImageBaseLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -1982,6 +2087,23 @@ class ZImageBaseLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ZImageTurboAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class ZImageTurboOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class ZImageTurbo(FALNode):
     """
     Z-Image Turbo generates images from text with maximum speed for rapid iteration and prototyping.
@@ -1995,23 +2117,6 @@ class ZImageTurbo(FALNode):
     - Create instant visual content
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2021,11 +2126,11 @@ class ZImageTurbo(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: ZImageTurboAcceleration = Field(
+        default=ZImageTurboAcceleration.REGULAR, description="The acceleration level to use."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: ZImageTurboOutputFormat = Field(
+        default=ZImageTurboOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -2059,6 +2164,10 @@ class ZImageTurbo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2073,6 +2182,23 @@ class ZImageTurbo(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ZImageTurboLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class ZImageTurboLoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class ZImageTurboLora(FALNode):
     """
     Z-Image Turbo with LoRA combines maximum speed with custom models for fast specialized generation.
@@ -2086,23 +2212,6 @@ class ZImageTurboLora(FALNode):
     - Create instant custom visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2112,11 +2221,11 @@ class ZImageTurboLora(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: ZImageTurboLoraAcceleration = Field(
+        default=ZImageTurboLoraAcceleration.REGULAR, description="The acceleration level to use."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: ZImageTurboLoraOutputFormat = Field(
+        default=ZImageTurboLoraOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -2154,6 +2263,10 @@ class ZImageTurboLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2168,6 +2281,15 @@ class ZImageTurboLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2Klein4BOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Klein4B(FALNode):
     """
     FLUX-2 Klein 4B generates images with the efficient 4-billion parameter model for balanced quality and speed.
@@ -2181,15 +2303,6 @@ class Flux2Klein4B(FALNode):
     - Create optimized visuals
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2199,8 +2312,8 @@ class Flux2Klein4B(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the image to generate."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2Klein4BOutputFormat = Field(
+        default=Flux2Klein4BOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
@@ -2229,6 +2342,10 @@ class Flux2Klein4B(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2243,6 +2360,23 @@ class Flux2Klein4B(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2Klein4BBaseAcceleration(str, Enum):
+    """
+    The acceleration level to use for image generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux2Klein4BBaseOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Klein4BBase(FALNode):
     """
     FLUX-2 Klein 4B Base provides foundation model generation with 4-billion parameters.
@@ -2256,23 +2390,6 @@ class Flux2Klein4BBase(FALNode):
     - Create baseline visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for image generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2282,11 +2399,11 @@ class Flux2Klein4BBase(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the image to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for image generation."
+    acceleration: Flux2Klein4BBaseAcceleration = Field(
+        default=Flux2Klein4BBaseAcceleration.REGULAR, description="The acceleration level to use for image generation."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2Klein4BBaseOutputFormat = Field(
+        default=Flux2Klein4BBaseOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
@@ -2324,6 +2441,10 @@ class Flux2Klein4BBase(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2338,6 +2459,23 @@ class Flux2Klein4BBase(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2Klein4BBaseLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use for image generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux2Klein4BBaseLoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Klein4BBaseLora(FALNode):
     """
     FLUX-2 Klein 4B Base with LoRA enables custom-trained 4B models for specialized generation.
@@ -2351,23 +2489,6 @@ class Flux2Klein4BBaseLora(FALNode):
     - Create customized baseline visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for image generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2377,11 +2498,11 @@ class Flux2Klein4BBaseLora(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the image to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for image generation."
+    acceleration: Flux2Klein4BBaseLoraAcceleration = Field(
+        default=Flux2Klein4BBaseLoraAcceleration.REGULAR, description="The acceleration level to use for image generation."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2Klein4BBaseLoraOutputFormat = Field(
+        default=Flux2Klein4BBaseLoraOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
@@ -2423,6 +2544,10 @@ class Flux2Klein4BBaseLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2437,6 +2562,15 @@ class Flux2Klein4BBaseLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2Klein9BOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Klein9B(FALNode):
     """
     FLUX-2 Klein 9B generates high-quality images with the powerful 9-billion parameter model.
@@ -2450,15 +2584,6 @@ class Flux2Klein9B(FALNode):
     - Create premium quality visuals
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2468,8 +2593,8 @@ class Flux2Klein9B(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the image to generate."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2Klein9BOutputFormat = Field(
+        default=Flux2Klein9BOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
@@ -2498,6 +2623,10 @@ class Flux2Klein9B(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2512,6 +2641,23 @@ class Flux2Klein9B(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2Klein9BBaseAcceleration(str, Enum):
+    """
+    The acceleration level to use for image generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux2Klein9BBaseOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Klein9BBase(FALNode):
     """
     FLUX-2 Klein 9B Base provides foundation generation with the full 9-billion parameter model.
@@ -2525,23 +2671,6 @@ class Flux2Klein9BBase(FALNode):
     - Create premium baseline visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for image generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2551,11 +2680,11 @@ class Flux2Klein9BBase(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the image to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for image generation."
+    acceleration: Flux2Klein9BBaseAcceleration = Field(
+        default=Flux2Klein9BBaseAcceleration.REGULAR, description="The acceleration level to use for image generation."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2Klein9BBaseOutputFormat = Field(
+        default=Flux2Klein9BBaseOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
@@ -2593,6 +2722,10 @@ class Flux2Klein9BBase(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2607,6 +2740,23 @@ class Flux2Klein9BBase(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2Klein9BBaseLoraAcceleration(str, Enum):
+    """
+    The acceleration level to use for image generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux2Klein9BBaseLoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Flux2Klein9BBaseLora(FALNode):
     """
     FLUX-2 Klein 9B Base with LoRA combines powerful generation with custom-trained models.
@@ -2620,23 +2770,6 @@ class Flux2Klein9BBaseLora(FALNode):
     - Create advanced customized visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use for image generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -2646,11 +2779,11 @@ class Flux2Klein9BBaseLora(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the image to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use for image generation."
+    acceleration: Flux2Klein9BBaseLoraAcceleration = Field(
+        default=Flux2Klein9BBaseLoraAcceleration.REGULAR, description="The acceleration level to use for image generation."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Flux2Klein9BBaseLoraOutputFormat = Field(
+        default=Flux2Klein9BBaseLoraOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI. Output is not stored when this is True."
@@ -2692,6 +2825,10 @@ class Flux2Klein9BBaseLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2706,6 +2843,24 @@ class Flux2Klein9BBaseLora(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2MaxOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class Flux2MaxSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+
+
 class Flux2Max(FALNode):
     """
     FLUX-2 Max generates maximum quality images with the most advanced FLUX-2 model for premium results.
@@ -2719,38 +2874,20 @@ class Flux2Max(FALNode):
     - Create superior quality visuals
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Flux2MaxOutputFormat = Field(
+        default=Flux2MaxOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    safety_tolerance: Flux2MaxSafetyTolerance = Field(
+        default=Flux2MaxSafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
     enable_safety_checker: bool = Field(
         default=True, description="Whether to enable the safety checker."
@@ -2772,6 +2909,10 @@ class Flux2Max(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2786,6 +2927,14 @@ class Flux2Max(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class GlmImageOutputFormat(str, Enum):
+    """
+    Output image format.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class GlmImage(FALNode):
     """
     GLM Image generates images from text with advanced AI understanding and quality output.
@@ -2799,14 +2948,6 @@ class GlmImage(FALNode):
     - Create smart visuals from text
     """
 
-    class OutputFormat(Enum):
-        """
-        Output image format.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="Text prompt for image generation."
     )
@@ -2816,8 +2957,8 @@ class GlmImage(FALNode):
     image_size: str = Field(
         default="square_hd", description="Output image size."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="Output image format."
+    output_format: GlmImageOutputFormat = Field(
+        default=GlmImageOutputFormat.JPEG, description="Output image format."
     )
     sync_mode: bool = Field(
         default=False, description="If True, the image will be returned as a base64 data URI instead of a URL."
@@ -2854,6 +2995,10 @@ class GlmImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2868,6 +3013,39 @@ class GlmImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class GptImage15Background(str, Enum):
+    """
+    Background for the generated image
+    """
+    AUTO = "auto"
+    TRANSPARENT = "transparent"
+    OPAQUE = "opaque"
+
+class GptImage15ImageSize(str, Enum):
+    """
+    Aspect ratio for the generated image
+    """
+    VALUE_1024X1024 = "1024x1024"
+    VALUE_1536X1024 = "1536x1024"
+    VALUE_1024X1536 = "1024x1536"
+
+class GptImage15Quality(str, Enum):
+    """
+    Quality for the generated image
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+class GptImage15OutputFormat(str, Enum):
+    """
+    Output format for the images
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class GptImage15(FALNode):
     """
     GPT Image 1.5 generates images from text with GPT-powered language understanding and visual creation.
@@ -2881,56 +3059,23 @@ class GptImage15(FALNode):
     - Create GPT-powered visuals
     """
 
-    class ImageSize(Enum):
-        """
-        Aspect ratio for the generated image
-        """
-        VALUE_1024X1024 = "1024x1024"
-        VALUE_1536X1024 = "1536x1024"
-        VALUE_1024X1536 = "1024x1536"
-
-    class Background(Enum):
-        """
-        Background for the generated image
-        """
-        AUTO = "auto"
-        TRANSPARENT = "transparent"
-        OPAQUE = "opaque"
-
-    class Quality(Enum):
-        """
-        Quality for the generated image
-        """
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        Output format for the images
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
-    prompt: str = Field(
-        default="", description="The prompt for image generation"
+    background: GptImage15Background = Field(
+        default=GptImage15Background.AUTO, description="Background for the generated image"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
-    image_size: ImageSize = Field(
-        default=ImageSize.VALUE_1024X1024, description="Aspect ratio for the generated image"
+    image_size: GptImage15ImageSize = Field(
+        default=GptImage15ImageSize.VALUE_1024X1024, description="Aspect ratio for the generated image"
     )
-    background: Background = Field(
-        default=Background.AUTO, description="Background for the generated image"
+    prompt: str = Field(
+        default="", description="The prompt for image generation"
     )
-    quality: Quality = Field(
-        default=Quality.HIGH, description="Quality for the generated image"
+    quality: GptImage15Quality = Field(
+        default=GptImage15Quality.HIGH, description="Quality for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="Output format for the images"
+    output_format: GptImage15OutputFormat = Field(
+        default=GptImage15OutputFormat.PNG, description="Output format for the images"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -2938,10 +3083,10 @@ class GptImage15(FALNode):
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
-            "prompt": self.prompt,
+            "background": self.background.value,
             "num_images": self.num_images,
             "image_size": self.image_size.value,
-            "background": self.background.value,
+            "prompt": self.prompt,
             "quality": self.quality.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
@@ -2949,6 +3094,10 @@ class GptImage15(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -2999,12 +3148,16 @@ class WanV26TextToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "max_images": self.max_images,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
@@ -3012,6 +3165,10 @@ class WanV26TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3026,6 +3183,23 @@ class WanV26TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class LongcatImageAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class LongcatImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class LongcatImage(FALNode):
     """
     Longcat Image generates creative and unique images from text with distinctive AI characteristics.
@@ -3039,37 +3213,20 @@ class LongcatImage(FALNode):
     - Create artistic visuals
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
+    acceleration: LongcatImageAcceleration = Field(
+        default=LongcatImageAcceleration.REGULAR, description="The acceleration level to use."
     )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: LongcatImageOutputFormat = Field(
+        default=LongcatImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -3103,6 +3260,10 @@ class LongcatImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3148,8 +3309,8 @@ class BytedanceSeedreamV45TextToImage(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="Random seed to control the stochasticity of image generation."
+    seed: str = Field(
+        default="", description="Random seed to control the stochasticity of image generation."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -3165,6 +3326,10 @@ class BytedanceSeedreamV45TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3179,6 +3344,15 @@ class BytedanceSeedreamV45TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ViduQ2TextToImageAspectRatio(str, Enum):
+    """
+    The aspect ratio of the output video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+
+
 class ViduQ2TextToImage(FALNode):
     """
     Vidu Q2 generates quality images from text with optimized performance and consistent results.
@@ -3192,23 +3366,14 @@ class ViduQ2TextToImage(FALNode):
     - Create reliable visuals
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the output video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-
-
     prompt: str = Field(
         default="", description="Text prompt for video generation, max 1500 characters"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
+    aspect_ratio: ViduQ2TextToImageAspectRatio = Field(
+        default=ViduQ2TextToImageAspectRatio.RATIO_16_9, description="The aspect ratio of the output video"
     )
-    seed: int = Field(
-        default=-1, description="Random seed for generation"
+    seed: str = Field(
+        default="", description="Random seed for generation"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -3220,6 +3385,10 @@ class ViduQ2TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3234,6 +3403,21 @@ class ViduQ2TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ImagineartImagineart15ProPreviewTextToImageAspectRatio(str, Enum):
+    """
+    Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_3_1 = "3:1"
+    RATIO_1_3 = "1:3"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+
+
 class ImagineartImagineart15ProPreviewTextToImage(FALNode):
     """
     ImagineArt 1.5 Pro Preview
@@ -3247,26 +3431,11 @@ class ImagineartImagineart15ProPreviewTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_3_1 = "3:1"
-        RATIO_1_3 = "1:3"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-
-
     prompt: str = Field(
         default="", description="Text prompt describing the desired image"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3"
+    aspect_ratio: ImagineartImagineart15ProPreviewTextToImageAspectRatio = Field(
+        default=ImagineartImagineart15ProPreviewTextToImageAspectRatio.RATIO_1_1, description="Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3"
     )
     seed: int = Field(
         default=-1, description="Seed for the image generation"
@@ -3281,6 +3450,10 @@ class ImagineartImagineart15ProPreviewTextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3295,6 +3468,21 @@ class ImagineartImagineart15ProPreviewTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class BriaFiboLiteGenerateAspectRatio(str, Enum):
+    """
+    Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_2 = "3:2"
+    RATIO_3_4 = "3:4"
+    RATIO_4_3 = "4:3"
+    RATIO_4_5 = "4:5"
+    RATIO_5_4 = "5:4"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+
+
 class BriaFiboLiteGenerate(FALNode):
     """
     Fibo Lite
@@ -3308,57 +3496,54 @@ class BriaFiboLiteGenerate(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_2 = "3:2"
-        RATIO_3_4 = "3:4"
-        RATIO_4_3 = "4:3"
-        RATIO_4_5 = "4:5"
-        RATIO_5_4 = "5:4"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-
-
     prompt: str = Field(
-        default="", description="Prompt for image generation."
+        default="", description="The prompt to generate."
     )
     steps_num: int = Field(
-        default=8, description="Number of inference steps for Fibo Lite."
+        default=8, description="Number of inference steps."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9"
+    aspect_ratio: BriaFiboLiteGenerateAspectRatio = Field(
+        default=BriaFiboLiteGenerateAspectRatio.RATIO_1_1, description="Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9"
     )
     image: ImageRef = Field(
-        default=ImageRef(), description="Reference image (file or URL)."
+        default=ImageRef(), description="Input image URL"
     )
     sync_mode: bool = Field(
         default=False, description="If true, returns the image directly in the response (increases latency)."
     )
     seed: int = Field(
-        default=5555, description="Random seed for reproducibility."
+        default=7, description="Seed for the random number generator."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt for image generation."
     )
     structured_prompt: str = Field(
-        default="", description="The structured prompt to generate an image from."
+        default="", description="The structured prompt to generate."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "steps_num": self.steps_num,
             "aspect_ratio": self.aspect_ratio.value,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "sync_mode": self.sync_mode,
             "seed": self.seed,
+            "negative_prompt": self.negative_prompt,
             "structured_prompt": self.structured_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3373,6 +3558,23 @@ class BriaFiboLiteGenerate(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class OvisImageAcceleration(str, Enum):
+    """
+    The acceleration level to use.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class OvisImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class OvisImage(FALNode):
     """
     Ovis Image
@@ -3386,74 +3588,61 @@ class OvisImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The acceleration level to use.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The acceleration level to use."
-    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    acceleration: OvisImageAcceleration = Field(
+        default=OvisImageAcceleration.REGULAR, description="The acceleration level to use."
+    )
+    output_format: OvisImageOutputFormat = Field(
+        default=OvisImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    guidance_scale: float = Field(
+        default=5, description="The guidance scale to use for the image generation."
     )
     seed: int = Field(
         default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    guidance_scale: float = Field(
-        default=5, description="The guidance scale to use for the image generation."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to generate an image from."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "acceleration": self.acceleration.value,
             "image_size": self.image_size,
+            "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
             "guidance_scale": self.guidance_scale,
-            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
+            "negative_prompt": self.negative_prompt,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3468,6 +3657,22 @@ class OvisImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2LoraGallerySepiaVintageAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class Flux2LoraGallerySepiaVintageOutputFormat(str, Enum):
+    """
+    The format of the output image
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+
 class Flux2LoraGallerySepiaVintage(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3481,39 +3686,23 @@ class Flux2LoraGallerySepiaVintage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the output image
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate a sepia vintage photography style image."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: Flux2LoraGallerySepiaVintageAcceleration = Field(
+        default=Flux2LoraGallerySepiaVintageAcceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     lora_scale: float = Field(
         default=1, description="The strength of the sepia vintage photography effect."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the output image"
+    output_format: Flux2LoraGallerySepiaVintageOutputFormat = Field(
+        default=Flux2LoraGallerySepiaVintageOutputFormat.PNG, description="The format of the output image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history."
@@ -3535,8 +3724,8 @@ class Flux2LoraGallerySepiaVintage(FALNode):
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
@@ -3548,6 +3737,10 @@ class Flux2LoraGallerySepiaVintage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3562,6 +3755,22 @@ class Flux2LoraGallerySepiaVintage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2LoraGallerySatelliteViewStyleAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class Flux2LoraGallerySatelliteViewStyleOutputFormat(str, Enum):
+    """
+    The format of the output image
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+
 class Flux2LoraGallerySatelliteViewStyle(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3575,39 +3784,23 @@ class Flux2LoraGallerySatelliteViewStyle(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the output image
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate a satellite/aerial view style image."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: Flux2LoraGallerySatelliteViewStyleAcceleration = Field(
+        default=Flux2LoraGallerySatelliteViewStyleAcceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     lora_scale: float = Field(
         default=1, description="The strength of the satellite view style effect."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the output image"
+    output_format: Flux2LoraGallerySatelliteViewStyleOutputFormat = Field(
+        default=Flux2LoraGallerySatelliteViewStyleOutputFormat.PNG, description="The format of the output image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history."
@@ -3629,8 +3822,8 @@ class Flux2LoraGallerySatelliteViewStyle(FALNode):
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
@@ -3642,6 +3835,10 @@ class Flux2LoraGallerySatelliteViewStyle(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3656,6 +3853,22 @@ class Flux2LoraGallerySatelliteViewStyle(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2LoraGalleryRealismAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class Flux2LoraGalleryRealismOutputFormat(str, Enum):
+    """
+    The format of the output image
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+
 class Flux2LoraGalleryRealism(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3669,39 +3882,23 @@ class Flux2LoraGalleryRealism(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the output image
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate a realistic image with natural lighting and authentic details."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: Flux2LoraGalleryRealismAcceleration = Field(
+        default=Flux2LoraGalleryRealismAcceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     lora_scale: float = Field(
         default=1, description="The strength of the realism effect."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the output image"
+    output_format: Flux2LoraGalleryRealismOutputFormat = Field(
+        default=Flux2LoraGalleryRealismOutputFormat.PNG, description="The format of the output image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history."
@@ -3723,8 +3920,8 @@ class Flux2LoraGalleryRealism(FALNode):
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
@@ -3736,6 +3933,10 @@ class Flux2LoraGalleryRealism(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3750,6 +3951,22 @@ class Flux2LoraGalleryRealism(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2LoraGalleryHdrStyleAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class Flux2LoraGalleryHdrStyleOutputFormat(str, Enum):
+    """
+    The format of the output image
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+
 class Flux2LoraGalleryHdrStyle(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3763,39 +3980,23 @@ class Flux2LoraGalleryHdrStyle(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the output image
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an HDR style image. The trigger word 'Hyp3rRe4list1c' will be automatically prepended."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: Flux2LoraGalleryHdrStyleAcceleration = Field(
+        default=Flux2LoraGalleryHdrStyleAcceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     lora_scale: float = Field(
         default=1, description="The strength of the HDR style effect."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the output image"
+    output_format: Flux2LoraGalleryHdrStyleOutputFormat = Field(
+        default=Flux2LoraGalleryHdrStyleOutputFormat.PNG, description="The format of the output image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history."
@@ -3817,8 +4018,8 @@ class Flux2LoraGalleryHdrStyle(FALNode):
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
@@ -3830,6 +4031,10 @@ class Flux2LoraGalleryHdrStyle(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3844,6 +4049,22 @@ class Flux2LoraGalleryHdrStyle(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2LoraGalleryDigitalComicArtAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class Flux2LoraGalleryDigitalComicArtOutputFormat(str, Enum):
+    """
+    The format of the output image
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+
 class Flux2LoraGalleryDigitalComicArt(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3857,39 +4078,23 @@ class Flux2LoraGalleryDigitalComicArt(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the output image
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate a digital comic art style image. Use 'd1g1t4l' trigger word for best results."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: Flux2LoraGalleryDigitalComicArtAcceleration = Field(
+        default=Flux2LoraGalleryDigitalComicArtAcceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     lora_scale: float = Field(
         default=1, description="The strength of the digital comic art effect."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the output image"
+    output_format: Flux2LoraGalleryDigitalComicArtOutputFormat = Field(
+        default=Flux2LoraGalleryDigitalComicArtOutputFormat.PNG, description="The format of the output image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history."
@@ -3911,8 +4116,8 @@ class Flux2LoraGalleryDigitalComicArt(FALNode):
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
@@ -3924,6 +4129,10 @@ class Flux2LoraGalleryDigitalComicArt(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -3938,6 +4147,22 @@ class Flux2LoraGalleryDigitalComicArt(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2LoraGalleryBallpointPenSketchAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class Flux2LoraGalleryBallpointPenSketchOutputFormat(str, Enum):
+    """
+    The format of the output image
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+
 class Flux2LoraGalleryBallpointPenSketch(FALNode):
     """
     Flux 2 Lora Gallery
@@ -3951,39 +4176,23 @@ class Flux2LoraGalleryBallpointPenSketch(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the output image
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate a ballpoint pen sketch style image. Use 'b4llp01nt' trigger word for best results."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
+    acceleration: Flux2LoraGalleryBallpointPenSketchAcceleration = Field(
+        default=Flux2LoraGalleryBallpointPenSketchAcceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     lora_scale: float = Field(
         default=1, description="The strength of the ballpoint pen sketch effect."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the output image"
+    output_format: Flux2LoraGalleryBallpointPenSketchOutputFormat = Field(
+        default=Flux2LoraGalleryBallpointPenSketchOutputFormat.PNG, description="The format of the output image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and won't be saved in history."
@@ -4005,8 +4214,8 @@ class Flux2LoraGalleryBallpointPenSketch(FALNode):
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "lora_scale": self.lora_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
@@ -4018,6 +4227,10 @@ class Flux2LoraGalleryBallpointPenSketch(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4032,6 +4245,24 @@ class Flux2LoraGalleryBallpointPenSketch(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux2FlexOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class Flux2FlexSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+
+
 class Flux2Flex(FALNode):
     """
     Flux 2 Flex
@@ -4045,38 +4276,20 @@ class Flux2Flex(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Flux2FlexOutputFormat = Field(
+        default=Flux2FlexOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    safety_tolerance: Flux2FlexSafetyTolerance = Field(
+        default=Flux2FlexSafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
     enable_prompt_expansion: bool = Field(
         default=True, description="Whether to expand the prompt using the model's own knowledge."
@@ -4110,6 +4323,10 @@ class Flux2Flex(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4124,6 +4341,34 @@ class Flux2Flex(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Gemini3ProImagePreviewResolution(str, Enum):
+    """
+    The resolution of the image to generate.
+    """
+    VALUE_1K = "1K"
+    VALUE_2K = "2K"
+    VALUE_4K = "4K"
+
+class Gemini3ProImagePreviewOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+class Gemini3ProImagePreviewSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
 class Gemini3ProImagePreview(FALNode):
     """
     Gemini 3 Pro Image Preview
@@ -4137,57 +4382,32 @@ class Gemini3ProImagePreview(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the image to generate.
-        """
-        VALUE_1K = "1K"
-        VALUE_2K = "2K"
-        VALUE_4K = "4K"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
-    )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1K, description="The resolution of the image to generate."
-    )
-    enable_web_search: bool = Field(
-        default=False, description="Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    enable_web_search: bool = Field(
+        default=False, description="Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image."
+    )
+    resolution: Gemini3ProImagePreviewResolution = Field(
+        default=Gemini3ProImagePreviewResolution.VALUE_1K, description="The resolution of the image to generate."
+    )
     aspect_ratio: str = Field(
         default="1:1", description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: Gemini3ProImagePreviewOutputFormat = Field(
+        default=Gemini3ProImagePreviewOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    safety_tolerance: Gemini3ProImagePreviewSafetyTolerance = Field(
+        default=Gemini3ProImagePreviewSafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    )
+    enable_google_search: bool = Field(
+        default=False, description="Enable Google search grounding for the image editing task."
     )
     seed: str = Field(
         default="", description="The seed for the random number generator."
@@ -4199,19 +4419,24 @@ class Gemini3ProImagePreview(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "resolution": self.resolution.value,
-            "enable_web_search": self.enable_web_search,
             "num_images": self.num_images,
+            "enable_web_search": self.enable_web_search,
+            "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
+            "enable_google_search": self.enable_google_search,
             "seed": self.seed,
             "limit_generations": self.limit_generations,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4226,6 +4451,34 @@ class Gemini3ProImagePreview(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class NanoBananaProResolution(str, Enum):
+    """
+    The resolution of the image to generate.
+    """
+    VALUE_1K = "1K"
+    VALUE_2K = "2K"
+    VALUE_4K = "4K"
+
+class NanoBananaProOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+class NanoBananaProSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
 class NanoBananaPro(FALNode):
     """
     Nano Banana Pro
@@ -4239,50 +4492,6 @@ class NanoBananaPro(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the image to generate.
-        """
-        VALUE_1K = "1K"
-        VALUE_2K = "2K"
-        VALUE_4K = "4K"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image. Use "auto" to let the model decide based on the prompt.
-        """
-        AUTO = "auto"
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_3_2 = "3:2"
-        RATIO_4_3 = "4:3"
-        RATIO_5_4 = "5:4"
-        RATIO_1_1 = "1:1"
-        RATIO_4_5 = "4:5"
-        RATIO_3_4 = "3:4"
-        RATIO_2_3 = "2:3"
-        RATIO_9_16 = "9:16"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
     )
@@ -4292,23 +4501,26 @@ class NanoBananaPro(FALNode):
     enable_web_search: bool = Field(
         default=False, description="Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1K, description="The resolution of the image to generate."
+    resolution: NanoBananaProResolution = Field(
+        default=NanoBananaProResolution.VALUE_1K, description="The resolution of the image to generate."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
+    aspect_ratio: str = Field(
+        default="1:1", description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: NanoBananaProOutputFormat = Field(
+        default=NanoBananaProOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    safety_tolerance: NanoBananaProSafetyTolerance = Field(
+        default=NanoBananaProSafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
     )
-    seed: int = Field(
-        default=-1, description="The seed for the random number generator."
+    enable_google_search: bool = Field(
+        default=False, description="Enable Google search grounding for the image editing task."
+    )
+    seed: str = Field(
+        default="", description="The seed for the random number generator."
     )
     limit_generations: bool = Field(
         default=False, description="Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate."
@@ -4320,16 +4532,21 @@ class NanoBananaPro(FALNode):
             "num_images": self.num_images,
             "enable_web_search": self.enable_web_search,
             "resolution": self.resolution.value,
-            "aspect_ratio": self.aspect_ratio.value,
+            "aspect_ratio": self.aspect_ratio,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
+            "enable_google_search": self.enable_google_search,
             "seed": self.seed,
             "limit_generations": self.limit_generations,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4344,6 +4561,21 @@ class NanoBananaPro(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ImagineartImagineart15PreviewTextToImageAspectRatio(str, Enum):
+    """
+    Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_3_1 = "3:1"
+    RATIO_1_3 = "1:3"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+
+
 class ImagineartImagineart15PreviewTextToImage(FALNode):
     """
     Imagineart 1.5 Preview
@@ -4357,26 +4589,11 @@ class ImagineartImagineart15PreviewTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_3_1 = "3:1"
-        RATIO_1_3 = "1:3"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-
-
     prompt: str = Field(
         default="", description="Text prompt describing the desired image"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3"
+    aspect_ratio: ImagineartImagineart15PreviewTextToImageAspectRatio = Field(
+        default=ImagineartImagineart15PreviewTextToImageAspectRatio.RATIO_1_1, description="Image aspect ratio: 1:1, 3:1, 1:3, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3"
     )
     seed: int = Field(
         default=-1, description="Seed for the image generation"
@@ -4391,6 +4608,10 @@ class ImagineartImagineart15PreviewTextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4405,6 +4626,36 @@ class ImagineartImagineart15PreviewTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Emu35ImageTextToImageResolution(str, Enum):
+    """
+    The resolution of the output image.
+    """
+    VALUE_480P = "480p"
+    VALUE_720P = "720p"
+
+class Emu35ImageTextToImageAspectRatio(str, Enum):
+    """
+    The aspect ratio of the output image.
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_2 = "3:2"
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    RATIO_9_21 = "9:21"
+
+class Emu35ImageTextToImageOutputFormat(str, Enum):
+    """
+    The format of the output image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class Emu35ImageTextToImage(FALNode):
     """
     Emu 3.5 Image
@@ -4418,47 +4669,17 @@ class Emu35ImageTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Resolution(Enum):
-        """
-        The resolution of the output image.
-        """
-        VALUE_480P = "480p"
-        VALUE_720P = "720p"
-
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the output image.
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_2 = "3:2"
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        RATIO_9_21 = "9:21"
-
-    class OutputFormat(Enum):
-        """
-        The format of the output image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt to create the image."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_720P, description="The resolution of the output image."
+    resolution: Emu35ImageTextToImageResolution = Field(
+        default=Emu35ImageTextToImageResolution.VALUE_720P, description="The resolution of the output image."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the output image."
+    aspect_ratio: Emu35ImageTextToImageAspectRatio = Field(
+        default=Emu35ImageTextToImageAspectRatio.RATIO_1_1, description="The aspect ratio of the output image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the output image."
+    output_format: Emu35ImageTextToImageOutputFormat = Field(
+        default=Emu35ImageTextToImageOutputFormat.PNG, description="The format of the output image."
     )
     sync_mode: bool = Field(
         default=False, description="Whether to return the image in sync mode."
@@ -4483,6 +4704,10 @@ class Emu35ImageTextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4497,6 +4722,28 @@ class Emu35ImageTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class BriaFiboGenerateResolution(str, Enum):
+    """
+    Output image resolution
+    """
+    VALUE_1MP = "1MP"
+    VALUE_4MP = "4MP"
+
+class BriaFiboGenerateAspectRatio(str, Enum):
+    """
+    Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_2 = "3:2"
+    RATIO_3_4 = "3:4"
+    RATIO_4_3 = "4:3"
+    RATIO_4_5 = "4:5"
+    RATIO_5_4 = "5:4"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+
+
 class BriaFiboGenerate(FALNode):
     """
     Fibo
@@ -4510,26 +4757,14 @@ class BriaFiboGenerate(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_2 = "3:2"
-        RATIO_3_4 = "3:4"
-        RATIO_4_3 = "4:3"
-        RATIO_4_5 = "4:5"
-        RATIO_5_4 = "5:4"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-
-
     prompt: str = Field(
         default="", description="Prompt for image generation."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9"
+    resolution: BriaFiboGenerateResolution = Field(
+        default=BriaFiboGenerateResolution.VALUE_1MP, description="Output image resolution"
+    )
+    aspect_ratio: BriaFiboGenerateAspectRatio = Field(
+        default=BriaFiboGenerateAspectRatio.RATIO_1_1, description="Aspect ratio. Options: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9"
     )
     steps_num: int = Field(
         default=50, description="Number of inference steps."
@@ -4539,9 +4774,6 @@ class BriaFiboGenerate(FALNode):
     )
     sync_mode: bool = Field(
         default=False, description="If true, returns the image directly in the response (increases latency)."
-    )
-    guidance_scale: int = Field(
-        default=5, description="Guidance scale for text."
     )
     seed: int = Field(
         default=5555, description="Random seed for reproducibility."
@@ -4554,14 +4786,18 @@ class BriaFiboGenerate(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
+            "resolution": self.resolution.value,
             "aspect_ratio": self.aspect_ratio.value,
             "steps_num": self.steps_num,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
             "seed": self.seed,
             "negative_prompt": self.negative_prompt,
             "structured_prompt": self.structured_prompt,
@@ -4569,6 +4805,10 @@ class BriaFiboGenerate(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4583,6 +4823,14 @@ class BriaFiboGenerate(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class PiflowOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class Piflow(FALNode):
     """
     Piflow
@@ -4596,14 +4844,6 @@ class Piflow(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -4613,8 +4853,8 @@ class Piflow(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image. You can choose between some presets or custom height and width that **must be multiples of 8**."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: PiflowOutputFormat = Field(
+        default=PiflowOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -4643,6 +4883,10 @@ class Piflow(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4657,6 +4901,41 @@ class Piflow(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class GptImage1MiniBackground(str, Enum):
+    """
+    Background for the generated image
+    """
+    AUTO = "auto"
+    TRANSPARENT = "transparent"
+    OPAQUE = "opaque"
+
+class GptImage1MiniImageSize(str, Enum):
+    """
+    Aspect ratio for the generated image
+    """
+    AUTO = "auto"
+    VALUE_1024X1024 = "1024x1024"
+    VALUE_1536X1024 = "1536x1024"
+    VALUE_1024X1536 = "1024x1536"
+
+class GptImage1MiniQuality(str, Enum):
+    """
+    Quality for the generated image
+    """
+    AUTO = "auto"
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+class GptImage1MiniOutputFormat(str, Enum):
+    """
+    Output format for the images
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+
 class GptImage1Mini(FALNode):
     """
     GPT Image 1 Mini
@@ -4670,58 +4949,23 @@ class GptImage1Mini(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Background(Enum):
-        """
-        Background for the generated image
-        """
-        AUTO = "auto"
-        TRANSPARENT = "transparent"
-        OPAQUE = "opaque"
-
-    class ImageSize(Enum):
-        """
-        Aspect ratio for the generated image
-        """
-        AUTO = "auto"
-        VALUE_1024X1024 = "1024x1024"
-        VALUE_1536X1024 = "1536x1024"
-        VALUE_1024X1536 = "1024x1536"
-
-    class Quality(Enum):
-        """
-        Quality for the generated image
-        """
-        AUTO = "auto"
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        Output format for the images
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
-    background: Background = Field(
-        default=Background.AUTO, description="Background for the generated image"
+    background: GptImage1MiniBackground = Field(
+        default=GptImage1MiniBackground.AUTO, description="Background for the generated image"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
-    image_size: ImageSize = Field(
-        default=ImageSize.AUTO, description="Aspect ratio for the generated image"
+    image_size: GptImage1MiniImageSize = Field(
+        default=GptImage1MiniImageSize.AUTO, description="Aspect ratio for the generated image"
     )
     prompt: str = Field(
         default="", description="The prompt for image generation"
     )
-    quality: Quality = Field(
-        default=Quality.AUTO, description="Quality for the generated image"
+    quality: GptImage1MiniQuality = Field(
+        default=GptImage1MiniQuality.AUTO, description="Quality for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="Output format for the images"
+    output_format: GptImage1MiniOutputFormat = Field(
+        default=GptImage1MiniOutputFormat.PNG, description="Output format for the images"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -4740,6 +4984,10 @@ class GptImage1Mini(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4754,6 +5002,27 @@ class GptImage1Mini(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class ReveTextToImageAspectRatio(str, Enum):
+    """
+    The desired aspect ratio of the generated image.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+
+class ReveTextToImageOutputFormat(str, Enum):
+    """
+    Output format for the generated image.
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+
 class ReveTextToImage(FALNode):
     """
     Reve
@@ -4767,54 +5036,37 @@ class ReveTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The desired aspect ratio of the generated image.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_1_1 = "1:1"
-
-    class OutputFormat(Enum):
-        """
-        Output format for the generated image.
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The text description of the desired image."
+    )
+    aspect_ratio: ReveTextToImageAspectRatio = Field(
+        default=ReveTextToImageAspectRatio.RATIO_3_2, description="The desired aspect ratio of the generated image."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_3_2, description="The desired aspect ratio of the generated image."
-    )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="Output format for the generated image."
+    output_format: ReveTextToImageOutputFormat = Field(
+        default=ReveTextToImageOutputFormat.PNG, description="Output format for the generated image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio.value,
+            "num_images": self.num_images,
             "sync_mode": self.sync_mode,
             "output_format": self.output_format.value,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4829,6 +5081,14 @@ class ReveTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class HunyuanImageV3TextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class HunyuanImageV3TextToImage(FALNode):
     """
     Hunyuan Image
@@ -4842,14 +5102,6 @@ class HunyuanImageV3TextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The text prompt for image-to-image."
     )
@@ -4859,11 +5111,11 @@ class HunyuanImageV3TextToImage(FALNode):
     image_size: str = Field(
         default="square_hd", description="The desired size of the generated image."
     )
-    enable_prompt_expansion: bool = Field(
-        default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
+    num_inference_steps: int = Field(
+        default=28, description="Number of denoising steps."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: HunyuanImageV3TextToImageOutputFormat = Field(
+        default=HunyuanImageV3TextToImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -4871,17 +5123,17 @@ class HunyuanImageV3TextToImage(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="Controls how much the model adheres to the prompt. Higher values mean stricter adherence."
     )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducible results. If None, a random seed is used."
+    seed: str = Field(
+        default="", description="Random seed for reproducible results. If None, a random seed is used."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to guide the image generation away from certain concepts."
     )
-    num_inference_steps: int = Field(
-        default=28, description="Number of denoising steps."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -4889,18 +5141,22 @@ class HunyuanImageV3TextToImage(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
+            "num_inference_steps": self.num_inference_steps,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "enable_safety_checker": self.enable_safety_checker,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
             "negative_prompt": self.negative_prompt,
-            "num_inference_steps": self.num_inference_steps,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4937,14 +5193,14 @@ class Wan25PreviewTextToImage(FALNode):
     image_size: str = Field(
         default="square", description="The size of the generated image. Can use preset names like 'square', 'landscape_16_9', etc., or specific dimensions. Total pixels must be between 768×768 and 1440×1440, with aspect ratio between [1:4, 4:1]."
     )
-    enable_prompt_expansion: bool = Field(
-        default=True, description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time."
-    )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
-    )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    enable_prompt_expansion: bool = Field(
+        default=True, description="Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time."
     )
     negative_prompt: str = Field(
         default="", description="Negative prompt to describe content to avoid. Max 500 characters."
@@ -4955,14 +5211,18 @@ class Wan25PreviewTextToImage(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "enable_prompt_expansion": self.enable_prompt_expansion,
-            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
+            "seed": self.seed,
+            "enable_prompt_expansion": self.enable_prompt_expansion,
             "negative_prompt": self.negative_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -4977,6 +5237,22 @@ class Wan25PreviewTextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class FluxSrpoAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class FluxSrpoOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class FluxSrpo(FALNode):
     """
     FLUX.1 SRPO [dev]
@@ -4990,36 +5266,20 @@ class FluxSrpo(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    acceleration: FluxSrpoAcceleration = Field(
+        default=FluxSrpoAcceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxSrpoOutputFormat = Field(
+        default=FluxSrpoOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -5027,32 +5287,36 @@ class FluxSrpo(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: str = Field(
-        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     guidance_scale: float = Field(
         default=4.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5067,6 +5331,22 @@ class FluxSrpo(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Flux1SrpoAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux1SrpoOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class Flux1Srpo(FALNode):
     """
     FLUX.1 SRPO [dev]
@@ -5080,39 +5360,29 @@ class Flux1Srpo(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    acceleration: Flux1SrpoAcceleration = Field(
+        default=Flux1SrpoAcceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Flux1SrpoOutputFormat = Field(
+        default=Flux1SrpoOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=4.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -5120,29 +5390,27 @@ class Flux1Srpo(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: str = Field(
-        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
-    )
-    guidance_scale: float = Field(
-        default=4.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5157,6 +5425,14 @@ class Flux1Srpo(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class HunyuanImageV21TextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+
 class HunyuanImageV21TextToImage(FALNode):
     """
     Hunyuan Image
@@ -5169,14 +5445,6 @@ class HunyuanImageV21TextToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
 
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
@@ -5193,26 +5461,26 @@ class HunyuanImageV21TextToImage(FALNode):
     use_refiner: bool = Field(
         default=False, description="Enable the refiner model for improved image quality."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: HunyuanImageV21TextToImageOutputFormat = Field(
+        default=HunyuanImageV21TextToImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=3.5, description="Controls how much the model adheres to the prompt. Higher values mean stricter adherence."
-    )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducible results. If None, a random seed is used."
-    )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
+    )
+    num_inference_steps: int = Field(
+        default=28, description="Number of denoising steps."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="Controls how much the model adheres to the prompt. Higher values mean stricter adherence."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to guide the image generation away from certain concepts."
     )
-    num_inference_steps: int = Field(
-        default=28, description="Number of denoising steps."
+    seed: str = Field(
+        default="", description="Random seed for reproducible results. If None, a random seed is used."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -5224,15 +5492,19 @@ class HunyuanImageV21TextToImage(FALNode):
             "use_refiner": self.use_refiner,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
-            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
-            "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5247,6 +5519,14 @@ class HunyuanImageV21TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class BytedanceSeedreamV4TextToImageEnhancePromptMode(str, Enum):
+    """
+    The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate.
+    """
+    STANDARD = "standard"
+    FAST = "fast"
+
+
 class BytedanceSeedreamV4TextToImage(FALNode):
     """
     Bytedance Seedream v4
@@ -5260,14 +5540,6 @@ class BytedanceSeedreamV4TextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class EnhancePromptMode(Enum):
-        """
-        The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate.
-        """
-        STANDARD = "standard"
-        FAST = "fast"
-
-
     prompt: str = Field(
         default="", description="The text prompt used to generate the image"
     )
@@ -5280,8 +5552,8 @@ class BytedanceSeedreamV4TextToImage(FALNode):
     max_images: int = Field(
         default=1, description="If set to a number greater than one, enables multi-image generation. The model will potentially return up to `max_images` images every generation, and in total, `num_images` generations will be carried out. In total, the number of images generated will be between `num_images` and `max_images*num_images`."
     )
-    enhance_prompt_mode: EnhancePromptMode = Field(
-        default=EnhancePromptMode.STANDARD, description="The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate."
+    enhance_prompt_mode: BytedanceSeedreamV4TextToImageEnhancePromptMode = Field(
+        default=BytedanceSeedreamV4TextToImageEnhancePromptMode.STANDARD, description="The mode to use for enhancing prompt enhancement. Standard mode provides higher quality results but takes longer to generate. Fast mode provides average quality results but takes less time to generate."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -5289,8 +5561,8 @@ class BytedanceSeedreamV4TextToImage(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="Random seed to control the stochasticity of image generation."
+    seed: str = Field(
+        default="", description="Random seed to control the stochasticity of image generation."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -5307,6 +5579,10 @@ class BytedanceSeedreamV4TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5321,6 +5597,41 @@ class BytedanceSeedreamV4TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class Gemini25FlashImageAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image.
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_3_2 = "3:2"
+    RATIO_4_3 = "4:3"
+    RATIO_5_4 = "5:4"
+    RATIO_1_1 = "1:1"
+    RATIO_4_5 = "4:5"
+    RATIO_3_4 = "3:4"
+    RATIO_2_3 = "2:3"
+    RATIO_9_16 = "9:16"
+
+class Gemini25FlashImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+class Gemini25FlashImageSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
 class Gemini25FlashImage(FALNode):
     """
     Gemini 2.5 Flash Image
@@ -5334,44 +5645,26 @@ class Gemini25FlashImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image.
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_3_2 = "3:2"
-        RATIO_4_3 = "4:3"
-        RATIO_5_4 = "5:4"
-        RATIO_1_1 = "1:1"
-        RATIO_4_5 = "4:5"
-        RATIO_3_4 = "3:4"
-        RATIO_2_3 = "2:3"
-        RATIO_9_16 = "9:16"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
-    )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
-    )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    aspect_ratio: Gemini25FlashImageAspectRatio = Field(
+        default=Gemini25FlashImageAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    )
+    output_format: Gemini25FlashImageOutputFormat = Field(
+        default=Gemini25FlashImageOutputFormat.PNG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    safety_tolerance: Gemini25FlashImageSafetyTolerance = Field(
+        default=Gemini25FlashImageSafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    )
+    seed: str = Field(
+        default="", description="The seed for the random number generator."
     )
     limit_generations: bool = Field(
         default=False, description="Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate."
@@ -5380,15 +5673,21 @@ class Gemini25FlashImage(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
-            "sync_mode": self.sync_mode,
             "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "seed": self.seed,
             "limit_generations": self.limit_generations,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5403,6 +5702,41 @@ class Gemini25FlashImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt"]
 
+class NanoBananaAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image.
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_3_2 = "3:2"
+    RATIO_4_3 = "4:3"
+    RATIO_5_4 = "5:4"
+    RATIO_1_1 = "1:1"
+    RATIO_4_5 = "4:5"
+    RATIO_3_4 = "3:4"
+    RATIO_2_3 = "2:3"
+    RATIO_9_16 = "9:16"
+
+class NanoBananaOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+class NanoBananaSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
 class NanoBanana(FALNode):
     """
     Nano Banana
@@ -5416,44 +5750,26 @@ class NanoBanana(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image.
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_3_2 = "3:2"
-        RATIO_4_3 = "4:3"
-        RATIO_5_4 = "5:4"
-        RATIO_1_1 = "1:1"
-        RATIO_4_5 = "4:5"
-        RATIO_3_4 = "3:4"
-        RATIO_2_3 = "2:3"
-        RATIO_9_16 = "9:16"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
-    )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    aspect_ratio: NanoBananaAspectRatio = Field(
+        default=NanoBananaAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    )
+    output_format: NanoBananaOutputFormat = Field(
+        default=NanoBananaOutputFormat.PNG, description="The format of the generated image."
+    )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    safety_tolerance: NanoBananaSafetyTolerance = Field(
+        default=NanoBananaSafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    )
+    seed: str = Field(
+        default="", description="The seed for the random number generator."
     )
     limit_generations: bool = Field(
         default=False, description="Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate."
@@ -5462,15 +5778,21 @@ class NanoBanana(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "num_images": self.num_images,
-            "sync_mode": self.sync_mode,
+            "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "seed": self.seed,
             "limit_generations": self.limit_generations,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5484,6 +5806,116 @@ class NanoBanana(FALNode):
     @classmethod
     def get_basic_fields(cls):
         return ["prompt"]
+
+class NanoBanana2Resolution(str, Enum):
+    """
+    The resolution of the image to generate.
+    """
+    VALUE_1K = "1K"
+    VALUE_2K = "2K"
+    VALUE_4K = "4K"
+
+class NanoBanana2OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+class NanoBanana2SafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
+
+class NanoBanana2(FALNode):
+    """
+    Nano Banana 2 is a fast text-to-image model with web search grounding, multiple resolutions, and flexible aspect ratios.
+    generation, text-to-image, txt2img, ai-art, nano-banana
+
+    Use cases:
+    - Generate images from detailed text prompts
+    - Create images with web search grounded context
+    - Produce high-resolution images up to 4K
+    - Generate images with flexible aspect ratios
+    - Rapid image generation with safety controls
+    """
+
+    prompt: str = Field(
+        default="", description="The text prompt to generate an image from."
+    )
+    resolution: NanoBanana2Resolution = Field(
+        default=NanoBanana2Resolution.VALUE_1K, description="The resolution of the image to generate."
+    )
+    enable_web_search: bool = Field(
+        default=False, description="Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image."
+    )
+    num_images: int = Field(
+        default=1, description="The number of images to generate."
+    )
+    aspect_ratio: str = Field(
+        default="1:1", description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
+    )
+    output_format: NanoBanana2OutputFormat = Field(
+        default=NanoBanana2OutputFormat.PNG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_google_search: bool = Field(
+        default=False, description="Enable Google search grounding for the image editing task."
+    )
+    safety_tolerance: NanoBanana2SafetyTolerance = Field(
+        default=NanoBanana2SafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    )
+    seed: str = Field(
+        default="", description="The seed for the random number generator."
+    )
+    limit_generations: bool = Field(
+        default=True, description="Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate."
+    )
+
+    async def process(self, context: ProcessingContext) -> ImageRef:
+        arguments = {
+            "prompt": self.prompt,
+            "resolution": self.resolution.value,
+            "enable_web_search": self.enable_web_search,
+            "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio,
+            "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "enable_google_search": self.enable_google_search,
+            "safety_tolerance": self.safety_tolerance.value,
+            "seed": self.seed,
+            "limit_generations": self.limit_generations,
+        }
+
+        # Remove None values
+        arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
+
+        res = await self.submit_request(
+            context=context,
+            application="fal-ai/nano-banana-2",
+            arguments=arguments,
+        )
+        assert "images" in res
+        assert len(res["images"]) > 0
+        return ImageRef(uri=res["images"][0]["url"])
+
+    @classmethod
+    def get_basic_fields(cls):
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class BytedanceDreaminaV31TextToImage(FALNode):
     """
@@ -5510,8 +5942,8 @@ class BytedanceDreaminaV31TextToImage(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    seed: int = Field(
-        default=-1, description="Random seed to control the stochasticity of image generation."
+    seed: str = Field(
+        default="", description="Random seed to control the stochasticity of image generation."
     )
     enhance_prompt: bool = Field(
         default=False, description="Whether to use an LLM to enhance the prompt"
@@ -5529,6 +5961,10 @@ class BytedanceDreaminaV31TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5541,7 +5977,22 @@ class BytedanceDreaminaV31TextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class WanV22A14BTextToImageLoraAcceleration(str, Enum):
+    """
+    Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class WanV22A14BTextToImageLoraImageFormat(str, Enum):
+    """
+    The format of the output image.
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+
 
 class WanV22A14BTextToImageLora(FALNode):
     """
@@ -5556,50 +6007,35 @@ class WanV22A14BTextToImageLora(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class ImageFormat(Enum):
-        """
-        The format of the output image.
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-
-
-    shift: float = Field(
-        default=2, description="Shift value for the image. Must be between 1.0 and 10.0."
-    )
     prompt: str = Field(
         default="", description="The text prompt to guide image generation."
     )
-    image_size: str = Field(
-        default="square_hd", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    shift: float = Field(
+        default=2, description="Shift value for the image. Must be between 1.0 and 10.0."
     )
     reverse_video: bool = Field(
         default=False, description="If true, the video will be reversed."
     )
+    acceleration: WanV22A14BTextToImageLoraAcceleration = Field(
+        default=WanV22A14BTextToImageLoraAcceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    )
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
     loras: list[LoRAWeight] = Field(
         default=[], description="LoRA weights to be used in the inference."
-    )
-    guidance_scale: float = Field(
-        default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
     )
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, input data will be checked for safety before processing."
     )
+    guidance_scale: float = Field(
+        default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
+    )
     negative_prompt: str = Field(
         default="", description="Negative prompt for video generation."
     )
-    image_format: ImageFormat = Field(
-        default=ImageFormat.JPEG, description="The format of the output image."
+    image_format: WanV22A14BTextToImageLoraImageFormat = Field(
+        default=WanV22A14BTextToImageLoraImageFormat.JPEG, description="The format of the output image."
     )
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
@@ -5610,8 +6046,8 @@ class WanV22A14BTextToImageLora(FALNode):
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
     )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
     )
     num_inference_steps: int = Field(
         default=27, description="Number of inference steps for sampling. Higher values give better quality but take longer."
@@ -5619,14 +6055,14 @@ class WanV22A14BTextToImageLora(FALNode):
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "shift": self.shift,
             "prompt": self.prompt,
-            "image_size": self.image_size,
-            "acceleration": self.acceleration.value,
+            "shift": self.shift,
             "reverse_video": self.reverse_video,
+            "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
-            "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
+            "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
             "image_format": self.image_format.value,
             "enable_output_safety_checker": self.enable_output_safety_checker,
@@ -5638,6 +6074,10 @@ class WanV22A14BTextToImageLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5648,7 +6088,15 @@ class WanV22A14BTextToImageLora(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class WanV225BTextToImageImageFormat(str, Enum):
+    """
+    The format of the output image.
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+
 
 class WanV225BTextToImage(FALNode):
     """
@@ -5663,65 +6111,61 @@ class WanV225BTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class ImageFormat(Enum):
-        """
-        The format of the output image.
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-
-
-    prompt: str = Field(
-        default="", description="The text prompt to guide image generation."
-    )
-    image_format: ImageFormat = Field(
-        default=ImageFormat.JPEG, description="The format of the output image."
-    )
-    image_size: str = Field(
-        default="square_hd", description="The size of the generated image."
-    )
     shift: float = Field(
         default=2, description="Shift value for the image. Must be between 1.0 and 10.0."
-    )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
-    )
-    enable_output_safety_checker: bool = Field(
-        default=False, description="If set to true, output video will be checked for safety after generation."
-    )
-    guidance_scale: float = Field(
-        default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
-    )
-    num_inference_steps: int = Field(
-        default=40, description="Number of inference steps for sampling. Higher values give better quality but take longer."
     )
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, input data will be checked for safety before processing."
     )
-    negative_prompt: str = Field(
-        default="", description="Negative prompt for video generation."
+    image_size: str = Field(
+        default="square_hd", description="The size of the generated image."
+    )
+    prompt: str = Field(
+        default="", description="The text prompt to guide image generation."
+    )
+    num_inference_steps: int = Field(
+        default=40, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    enable_output_safety_checker: bool = Field(
+        default=False, description="If set to true, output video will be checked for safety after generation."
     )
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
     )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
+    )
+    negative_prompt: str = Field(
+        default="", description="Negative prompt for video generation."
+    )
+    image_format: WanV225BTextToImageImageFormat = Field(
+        default=WanV225BTextToImageImageFormat.JPEG, description="The format of the output image."
+    )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "prompt": self.prompt,
-            "image_format": self.image_format.value,
-            "image_size": self.image_size,
             "shift": self.shift,
-            "seed": self.seed,
-            "enable_output_safety_checker": self.enable_output_safety_checker,
-            "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "enable_safety_checker": self.enable_safety_checker,
-            "negative_prompt": self.negative_prompt,
+            "image_size": self.image_size,
+            "prompt": self.prompt,
+            "num_inference_steps": self.num_inference_steps,
+            "enable_output_safety_checker": self.enable_output_safety_checker,
             "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "image_format": self.image_format.value,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5732,7 +6176,15 @@ class WanV225BTextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class WanV22A14BTextToImageAcceleration(str, Enum):
+    """
+    Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
 
 class WanV22A14BTextToImage(FALNode):
     """
@@ -5747,28 +6199,20 @@ class WanV22A14BTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-
-    prompt: str = Field(
-        default="", description="The text prompt to guide image generation."
-    )
     shift: float = Field(
         default=2, description="Shift value for the image. Must be between 1.0 and 10.0."
     )
+    num_inference_steps: int = Field(
+        default=27, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    )
+    acceleration: WanV22A14BTextToImageAcceleration = Field(
+        default=WanV22A14BTextToImageAcceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
+    )
+    prompt: str = Field(
+        default="", description="The text prompt to guide image generation."
+    )
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
-    )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'."
-    )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
     )
     enable_output_safety_checker: bool = Field(
         default=False, description="If set to true, output video will be checked for safety after generation."
@@ -5776,40 +6220,44 @@ class WanV22A14BTextToImage(FALNode):
     guidance_scale_2: float = Field(
         default=4, description="Guidance scale for the second stage of the model. This is used to control the adherence to the prompt in the second stage of the model."
     )
+    enable_prompt_expansion: bool = Field(
+        default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
+    )
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
+    )
     guidance_scale: float = Field(
         default=3.5, description="Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality."
-    )
-    num_inference_steps: int = Field(
-        default=27, description="Number of inference steps for sampling. Higher values give better quality but take longer."
-    )
-    enable_safety_checker: bool = Field(
-        default=False, description="If set to true, input data will be checked for safety before processing."
     )
     negative_prompt: str = Field(
         default="", description="Negative prompt for video generation."
     )
-    enable_prompt_expansion: bool = Field(
-        default=False, description="Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning."
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, input data will be checked for safety before processing."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         arguments = {
-            "prompt": self.prompt,
             "shift": self.shift,
-            "image_size": self.image_size,
+            "num_inference_steps": self.num_inference_steps,
             "acceleration": self.acceleration.value,
-            "seed": self.seed,
+            "prompt": self.prompt,
+            "image_size": self.image_size,
             "enable_output_safety_checker": self.enable_output_safety_checker,
             "guidance_scale_2": self.guidance_scale_2,
-            "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
-            "enable_safety_checker": self.enable_safety_checker,
-            "negative_prompt": self.negative_prompt,
             "enable_prompt_expansion": self.enable_prompt_expansion,
+            "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+            "negative_prompt": self.negative_prompt,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5820,7 +6268,23 @@ class WanV22A14BTextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class QwenImageAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. Options: 'none', 'regular', 'high'. Higher acceleration increases speed. 'regular' balances speed and quality. 'high' is recommended for images without text.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class QwenImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class QwenImage(FALNode):
     """
@@ -5835,51 +6299,35 @@ class QwenImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. Options: 'none', 'regular', 'high'. Higher acceleration increases speed. 'regular' balances speed and quality. 'high' is recommended for images without text.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate the image with"
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="Acceleration level for image generation. Options: 'none', 'regular', 'high'. Higher acceleration increases speed. 'regular' balances speed and quality. 'high' is recommended for images without text."
-    )
-    num_inference_steps: int = Field(
-        default=30, description="The number of inference steps to perform."
+    acceleration: QwenImageAcceleration = Field(
+        default=QwenImageAcceleration.NONE, description="Acceleration level for image generation. Options: 'none', 'regular', 'high'. Higher acceleration increases speed. 'regular' balances speed and quality. 'high' is recommended for images without text."
     )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
-    sync_mode: bool = Field(
-        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    output_format: QwenImageOutputFormat = Field(
+        default=QwenImageOutputFormat.PNG, description="The format of the generated image."
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 3 LoRAs and they will be merged together to generate the final image."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    guidance_scale: float = Field(
+        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    num_inference_steps: int = Field(
+        default=30, description="The number of inference steps to perform."
     )
     use_turbo: bool = Field(
         default=False, description="Enable turbo mode for faster generation with high quality. When enabled, uses optimized settings (10 steps, CFG=1.2)."
@@ -5887,8 +6335,8 @@ class QwenImage(FALNode):
     negative_prompt: str = Field(
         default=" ", description="The negative prompt for the generation"
     )
-    guidance_scale: float = Field(
-        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -5896,20 +6344,24 @@ class QwenImage(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "acceleration": self.acceleration.value,
-            "num_inference_steps": self.num_inference_steps,
             "image_size": self.image_size,
-            "output_format": self.output_format.value,
-            "sync_mode": self.sync_mode,
-            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
-            "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
+            "output_format": self.output_format.value,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
+            "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
             "use_turbo": self.use_turbo,
             "negative_prompt": self.negative_prompt,
-            "guidance_scale": self.guidance_scale,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -5922,7 +6374,15 @@ class QwenImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxKreaLoraStreamOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxKreaLoraStream(FALNode):
     """
@@ -5937,14 +6397,6 @@ class FluxKreaLoraStream(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -5954,8 +6406,8 @@ class FluxKreaLoraStream(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxKreaLoraStreamOutputFormat = Field(
+        default=FluxKreaLoraStreamOutputFormat.JPEG, description="The format of the generated image."
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
@@ -5992,6 +6444,10 @@ class FluxKreaLoraStream(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6004,7 +6460,15 @@ class FluxKreaLoraStream(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxKreaLoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxKreaLora(FALNode):
     """
@@ -6019,14 +6483,6 @@ class FluxKreaLora(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -6036,8 +6492,8 @@ class FluxKreaLora(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxKreaLoraOutputFormat = Field(
+        default=FluxKreaLoraOutputFormat.JPEG, description="The format of the generated image."
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
@@ -6074,6 +6530,10 @@ class FluxKreaLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6086,7 +6546,23 @@ class FluxKreaLora(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxKreaAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class FluxKreaOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxKrea(FALNode):
     """
@@ -6101,36 +6577,20 @@ class FluxKrea(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    acceleration: FluxKreaAcceleration = Field(
+        default=FluxKreaAcceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxKreaOutputFormat = Field(
+        default=FluxKreaOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -6138,32 +6598,36 @@ class FluxKrea(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: str = Field(
-        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
     guidance_scale: float = Field(
         default=4.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6176,7 +6640,23 @@ class FluxKrea(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Flux1KreaAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux1KreaOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class Flux1Krea(FALNode):
     """
@@ -6191,39 +6671,29 @@ class Flux1Krea(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    acceleration: Flux1KreaAcceleration = Field(
+        default=Flux1KreaAcceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Flux1KreaOutputFormat = Field(
+        default=Flux1KreaOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=4.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -6231,29 +6701,27 @@ class Flux1Krea(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: str = Field(
-        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
-    )
-    guidance_scale: float = Field(
-        default=4.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6266,7 +6734,7 @@ class Flux1Krea(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class SkyRaccoon(FALNode):
     """
@@ -6288,13 +6756,16 @@ class SkyRaccoon(FALNode):
         default="", description="The size of the generated image."
     )
     turbo_mode: bool = Field(
-        default=False, description="If true, the video will be generated faster with no noticeable degradation in the visual quality."
+        default=True, description="If true, the image will be generated faster with no noticeable degradation in the visual quality."
+    )
+    loras: list[LoraWeight] = Field(
+        default=[], description="LoRA weights to be used in the inference."
     )
     enable_prompt_expansion: bool = Field(
         default=False, description="Whether to enable prompt expansion."
     )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducibility. If None, a random seed is chosen."
+    num_inference_steps: int = Field(
+        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
     )
     enable_safety_checker: bool = Field(
         default=False, description="If set to true, the safety checker will be enabled."
@@ -6302,8 +6773,8 @@ class SkyRaccoon(FALNode):
     negative_prompt: str = Field(
         default="bright colors, overexposed, static, blurred details, subtitles, style, artwork, painting, picture, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, malformed limbs, fused fingers, still picture, cluttered background, three legs, many people in the background, walking backwards", description="Negative prompt for video generation."
     )
-    num_inference_steps: int = Field(
-        default=30, description="Number of inference steps for sampling. Higher values give better quality but take longer."
+    seed: str = Field(
+        default="", description="Random seed for reproducibility. If None, a random seed is chosen."
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
@@ -6311,15 +6782,20 @@ class SkyRaccoon(FALNode):
             "prompt": self.prompt,
             "image_size": self.image_size,
             "turbo_mode": self.turbo_mode,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_prompt_expansion": self.enable_prompt_expansion,
-            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
-            "num_inference_steps": self.num_inference_steps,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6330,7 +6806,23 @@ class SkyRaccoon(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxKontextLoraTextToImageAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class FluxKontextLoraTextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxKontextLoraTextToImage(FALNode):
     """
@@ -6345,22 +6837,6 @@ class FluxKontextLoraTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate the image with"
     )
@@ -6370,29 +6846,29 @@ class FluxKontextLoraTextToImage(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
+    acceleration: FluxKontextLoraTextToImageAcceleration = Field(
+        default=FluxKontextLoraTextToImageAcceleration.NONE, description="The speed of the generation. The higher the speed, the faster the generation."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
-    )
-    loras: list[LoraWeight] = Field(
-        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
+    output_format: FluxKontextLoraTextToImageOutputFormat = Field(
+        default=FluxKontextLoraTextToImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
-    num_inference_steps: int = Field(
-        default=30, description="The number of inference steps to perform."
+    loras: list[LoraWeight] = Field(
+        default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    num_inference_steps: int = Field(
+        default=30, description="The number of inference steps to perform."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    guidance_scale: float = Field(
+        default=2.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -6402,16 +6878,20 @@ class FluxKontextLoraTextToImage(FALNode):
             "image_size": self.image_size,
             "acceleration": self.acceleration.value,
             "output_format": self.output_format.value,
-            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "enable_safety_checker": self.enable_safety_checker,
+            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6424,7 +6904,22 @@ class FluxKontextLoraTextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class OmnigenV2Scheduler(str, Enum):
+    """
+    The scheduler to use for the diffusion process.
+    """
+    EULER = "euler"
+    DPMSOLVER = "dpmsolver"
+
+class OmnigenV2OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class OmnigenV2(FALNode):
     """
@@ -6439,29 +6934,14 @@ class OmnigenV2(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Scheduler(Enum):
-        """
-        The scheduler to use for the diffusion process.
-        """
-        EULER = "euler"
-        DPMSOLVER = "dpmsolver"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate or edit an image. Use specific language like 'Add the bird from image 1 to the desk in image 2' for better results."
     )
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    scheduler: Scheduler = Field(
-        default=Scheduler.EULER, description="The scheduler to use for the diffusion process."
+    scheduler: OmnigenV2Scheduler = Field(
+        default=OmnigenV2Scheduler.EULER, description="The scheduler to use for the diffusion process."
     )
     cfg_range_end: float = Field(
         default=1, description="CFG range end value."
@@ -6484,8 +6964,8 @@ class OmnigenV2(FALNode):
     input_images: list[str] = Field(
         default=[], description="URLs of input images to use for image editing or multi-image generation. Support up to 3 images."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: OmnigenV2OutputFormat = Field(
+        default=OmnigenV2OutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -6493,11 +6973,11 @@ class OmnigenV2(FALNode):
     cfg_range_start: float = Field(
         default=0, description="CFG range start value."
     )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
     num_inference_steps: int = Field(
         default=50, description="The number of inference steps to perform."
-    )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -6515,12 +6995,16 @@ class OmnigenV2(FALNode):
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "cfg_range_start": self.cfg_range_start,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6533,7 +7017,7 @@ class OmnigenV2(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class BytedanceSeedreamV3TextToImage(FALNode):
     """
@@ -6563,8 +7047,8 @@ class BytedanceSeedreamV3TextToImage(FALNode):
     guidance_scale: float = Field(
         default=2.5, description="Controls how closely the output image aligns with the input prompt. Higher values mean stronger prompt correlation."
     )
-    seed: int = Field(
-        default=-1, description="Random seed to control the stochasticity of image generation."
+    seed: str = Field(
+        default="", description="Random seed to control the stochasticity of image generation."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -6583,6 +7067,10 @@ class BytedanceSeedreamV3TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6595,7 +7083,23 @@ class BytedanceSeedreamV3TextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Flux1SchnellAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux1SchnellOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class Flux1Schnell(FALNode):
     """
@@ -6610,39 +7114,29 @@ class Flux1Schnell(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    acceleration: Flux1SchnellAcceleration = Field(
+        default=Flux1SchnellAcceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Flux1SchnellOutputFormat = Field(
+        default=Flux1SchnellOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -6650,29 +7144,27 @@ class Flux1Schnell(FALNode):
     num_inference_steps: int = Field(
         default=4, description="The number of inference steps to perform."
     )
-    seed: str = Field(
-        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
-    )
-    guidance_scale: float = Field(
-        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6685,7 +7177,23 @@ class Flux1Schnell(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Flux1DevAcceleration(str, Enum):
+    """
+    The speed of the generation. The higher the speed, the faster the generation.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+    HIGH = "high"
+
+class Flux1DevOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class Flux1Dev(FALNode):
     """
@@ -6700,39 +7208,29 @@ class Flux1Dev(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        The speed of the generation. The higher the speed, the faster the generation.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
+    acceleration: Flux1DevAcceleration = Field(
+        default=Flux1DevAcceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
+    )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.REGULAR, description="The speed of the generation. The higher the speed, the faster the generation."
-    )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Flux1DevOutputFormat = Field(
+        default=Flux1DevOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
@@ -6740,29 +7238,27 @@ class Flux1Dev(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: str = Field(
-        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
-    )
-    guidance_scale: float = Field(
-        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "image_size": self.image_size,
             "acceleration": self.acceleration.value,
+            "image_size": self.image_size,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
+            "guidance_scale": self.guidance_scale,
+            "seed": self.seed,
             "enable_safety_checker": self.enable_safety_checker,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "guidance_scale": self.guidance_scale,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6775,7 +7271,40 @@ class Flux1Dev(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxProKontextMaxTextToImageAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image.
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_2 = "3:2"
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    RATIO_9_21 = "9:21"
+
+class FluxProKontextMaxTextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FluxProKontextMaxTextToImageSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
 
 class FluxProKontextMaxTextToImage(FALNode):
     """
@@ -6790,62 +7319,29 @@ class FluxProKontextMaxTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image.
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_2 = "3:2"
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        RATIO_9_21 = "9:21"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
-    )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    aspect_ratio: FluxProKontextMaxTextToImageAspectRatio = Field(
+        default=FluxProKontextMaxTextToImageAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    )
+    output_format: FluxProKontextMaxTextToImageOutputFormat = Field(
+        default=FluxProKontextMaxTextToImageOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    safety_tolerance: FluxProKontextMaxTextToImageSafetyTolerance = Field(
+        default=FluxProKontextMaxTextToImageSafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     enhance_prompt: bool = Field(
         default=False, description="Whether to enhance the prompt for better results."
@@ -6854,8 +7350,8 @@ class FluxProKontextMaxTextToImage(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
@@ -6866,6 +7362,10 @@ class FluxProKontextMaxTextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6878,7 +7378,40 @@ class FluxProKontextMaxTextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxProKontextTextToImageAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image.
+    """
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_2 = "3:2"
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    RATIO_9_21 = "9:21"
+
+class FluxProKontextTextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FluxProKontextTextToImageSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
 
 class FluxProKontextTextToImage(FALNode):
     """
@@ -6893,62 +7426,29 @@ class FluxProKontextTextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image.
-        """
-        RATIO_21_9 = "21:9"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_2 = "3:2"
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        RATIO_9_21 = "9:21"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
-    )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    aspect_ratio: FluxProKontextTextToImageAspectRatio = Field(
+        default=FluxProKontextTextToImageAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    )
+    output_format: FluxProKontextTextToImageOutputFormat = Field(
+        default=FluxProKontextTextToImageOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
+    safety_tolerance: FluxProKontextTextToImageSafetyTolerance = Field(
+        default=FluxProKontextTextToImageSafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     enhance_prompt: bool = Field(
         default=False, description="Whether to enhance the prompt for better results."
@@ -6957,8 +7457,8 @@ class FluxProKontextTextToImage(FALNode):
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
-            "aspect_ratio": self.aspect_ratio.value,
             "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "safety_tolerance": self.safety_tolerance.value,
@@ -6969,6 +7469,10 @@ class FluxProKontextTextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -6981,7 +7485,7 @@ class FluxProKontextTextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class Bagel(FALNode):
     """
@@ -7002,23 +7506,27 @@ class Bagel(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    seed: int = Field(
-        default=-1, description="The seed to use for the generation."
-    )
     use_thought: bool = Field(
         default=False, description="Whether to use thought tokens for generation. If set to true, the model will \"think\" to potentially improve generation quality. Increases generation time and increases the cost by 20%."
+    )
+    seed: int = Field(
+        default=-1, description="The seed to use for the generation."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "enable_safety_checker": self.enable_safety_checker,
-            "seed": self.seed,
             "use_thought": self.use_thought,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7031,7 +7539,44 @@ class Bagel(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Imagen4PreviewUltraResolution(str, Enum):
+    """
+    The resolution of the generated image.
+    """
+    VALUE_1K = "1K"
+    VALUE_2K = "2K"
+
+class Imagen4PreviewUltraAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image.
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+
+class Imagen4PreviewUltraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
+class Imagen4PreviewUltraSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
 
 class Imagen4PreviewUltra(FALNode):
     """
@@ -7046,63 +7591,49 @@ class Imagen4PreviewUltra(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image.
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-
-    class Resolution(Enum):
-        """
-        The resolution of the generated image.
-        """
-        VALUE_1K = "1K"
-        VALUE_2K = "2K"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The text prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    resolution: Imagen4PreviewUltraResolution = Field(
+        default=Imagen4PreviewUltraResolution.VALUE_1K, description="The resolution of the generated image."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1K, description="The resolution of the generated image."
+    aspect_ratio: Imagen4PreviewUltraAspectRatio = Field(
+        default=Imagen4PreviewUltraAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image."
+    )
+    output_format: Imagen4PreviewUltraOutputFormat = Field(
+        default=Imagen4PreviewUltraOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    safety_tolerance: Imagen4PreviewUltraSafetyTolerance = Field(
+        default=Imagen4PreviewUltraSafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
+    )
+    seed: str = Field(
+        default="", description="The seed for the random number generator."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
-            "aspect_ratio": self.aspect_ratio.value,
             "resolution": self.resolution.value,
-            "sync_mode": self.sync_mode,
+            "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7115,7 +7646,24 @@ class Imagen4PreviewUltra(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class DreamoSecondReferenceTask(str, Enum):
+    """
+    Task for second reference image (ip/id/style).
+    """
+    IP = "ip"
+    ID = "id"
+    STYLE = "style"
+
+class DreamoFirstReferenceTask(str, Enum):
+    """
+    Task for first reference image (ip/id/style).
+    """
+    IP = "ip"
+    ID = "id"
+    STYLE = "style"
+
 
 class Dreamo(FALNode):
     """
@@ -7130,23 +7678,6 @@ class Dreamo(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class SecondReferenceTask(Enum):
-        """
-        Task for second reference image (ip/id/style).
-        """
-        IP = "ip"
-        ID = "id"
-        STYLE = "style"
-
-    class FirstReferenceTask(Enum):
-        """
-        Task for first reference image (ip/id/style).
-        """
-        IP = "ip"
-        ID = "id"
-        STYLE = "style"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -7159,8 +7690,8 @@ class Dreamo(FALNode):
     second_image: ImageRef = Field(
         default=ImageRef(), description="URL of second reference image to use for generation."
     )
-    second_reference_task: SecondReferenceTask = Field(
-        default=SecondReferenceTask.IP, description="Task for second reference image (ip/id/style)."
+    second_reference_task: DreamoSecondReferenceTask = Field(
+        default=DreamoSecondReferenceTask.IP, description="Task for second reference image (ip/id/style)."
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
@@ -7168,8 +7699,8 @@ class Dreamo(FALNode):
     enable_safety_checker: bool = Field(
         default=True, description="If set to true, the safety checker will be enabled."
     )
-    first_reference_task: FirstReferenceTask = Field(
-        default=FirstReferenceTask.IP, description="Task for first reference image (ip/id/style)."
+    first_reference_task: DreamoFirstReferenceTask = Field(
+        default=DreamoFirstReferenceTask.IP, description="Task for first reference image (ip/id/style)."
     )
     negative_prompt: str = Field(
         default="", description="The prompt to generate an image from."
@@ -7191,13 +7722,21 @@ class Dreamo(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        first_image_base64 = await context.image_to_base64(self.first_image)
-        second_image_base64 = await context.image_to_base64(self.second_image)
+        first_image_base64 = (
+            await context.image_to_base64(self.first_image)
+            if not self.first_image.is_empty()
+            else None
+        )
+        second_image_base64 = (
+            await context.image_to_base64(self.second_image)
+            if not self.second_image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
-            "first_image_url": f"data:image/png;base64,{first_image_base64}",
+            "first_image_url": f"data:image/png;base64,{first_image_base64}" if first_image_base64 else None,
             "image_size": self.image_size,
-            "second_image_url": f"data:image/png;base64,{second_image_base64}",
+            "second_image_url": f"data:image/png;base64,{second_image_base64}" if second_image_base64 else None,
             "second_reference_task": self.second_reference_task.value,
             "guidance_scale": self.guidance_scale,
             "enable_safety_checker": self.enable_safety_checker,
@@ -7212,6 +7751,10 @@ class Dreamo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7224,7 +7767,22 @@ class Dreamo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxLoraStreamAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class FluxLoraStreamOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxLoraStream(FALNode):
     """
@@ -7239,35 +7797,20 @@ class FluxLoraStream(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate. This is always set to 1 for streaming output."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    acceleration: FluxLoraStreamAcceleration = Field(
+        default=FluxLoraStreamAcceleration.NONE, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxLoraStreamOutputFormat = Field(
+        default=FluxLoraStreamOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -7305,6 +7848,10 @@ class FluxLoraStream(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7317,7 +7864,21 @@ class FluxLoraStream(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class MinimaxImage01AspectRatio(str, Enum):
+    """
+    Aspect ratio of the generated image
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+    RATIO_3_4 = "3:4"
+    RATIO_9_16 = "9:16"
+    RATIO_21_9 = "21:9"
+
 
 class MinimaxImage01(FALNode):
     """
@@ -7332,43 +7893,33 @@ class MinimaxImage01(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of the generated image
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-        RATIO_3_4 = "3:4"
-        RATIO_9_16 = "9:16"
-        RATIO_21_9 = "21:9"
-
-
-    prompt: str = Field(
-        default="", description="Text prompt for image generation (max 1500 characters)"
+    prompt_optimizer: bool = Field(
+        default=False, description="Whether to enable automatic prompt optimization"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate (1-9)"
     )
-    prompt_optimizer: bool = Field(
-        default=False, description="Whether to enable automatic prompt optimization"
+    prompt: str = Field(
+        default="", description="Text prompt for image generation (max 1500 characters)"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="Aspect ratio of the generated image"
+    aspect_ratio: MinimaxImage01AspectRatio = Field(
+        default=MinimaxImage01AspectRatio.RATIO_1_1, description="Aspect ratio of the generated image"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
-            "prompt": self.prompt,
-            "num_images": self.num_images,
             "prompt_optimizer": self.prompt_optimizer,
+            "num_images": self.num_images,
+            "prompt": self.prompt,
             "aspect_ratio": self.aspect_ratio.value,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7381,7 +7932,24 @@ class MinimaxImage01(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class PonyV7OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class PonyV7NoiseSource(str, Enum):
+    """
+    The source of the noise to use for generating images.
+    If set to 'gpu', the noise will be generated on the GPU.
+    If set to 'cpu', the noise will be generated on the CPU.
+    """
+    GPU = "gpu"
+    CPU = "cpu"
+
 
 class PonyV7(FALNode):
     """
@@ -7396,23 +7964,6 @@ class PonyV7(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class NoiseSource(Enum):
-        """
-        The source of the noise to use for generating images.
-        If set to 'gpu', the noise will be generated on the GPU.
-        If set to 'cpu', the noise will be generated on the CPU.
-        """
-        GPU = "gpu"
-        CPU = "cpu"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate images from"
     )
@@ -7422,26 +7973,26 @@ class PonyV7(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: PonyV7OutputFormat = Field(
+        default=PonyV7OutputFormat.JPEG, description="The format of the generated image."
     )
-    noise_source: NoiseSource = Field(
-        default=NoiseSource.GPU, description="The source of the noise to use for generating images. If set to 'gpu', the noise will be generated on the GPU. If set to 'cpu', the noise will be generated on the CPU."
+    noise_source: PonyV7NoiseSource = Field(
+        default=PonyV7NoiseSource.GPU, description="The source of the noise to use for generating images. If set to 'gpu', the noise will be generated on the GPU. If set to 'cpu', the noise will be generated on the CPU."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
+    )
+    enable_safety_checker: bool = Field(
+        default=False, description="If set to true, the safety checker will be enabled."
+    )
+    seed: str = Field(
+        default="", description="The seed to use for generating images"
     )
     guidance_scale: float = Field(
         default=3.5, description="Classifier free guidance scale"
     )
     num_inference_steps: int = Field(
         default=40, description="The number of inference steps to take"
-    )
-    enable_safety_checker: bool = Field(
-        default=False, description="If set to true, the safety checker will be enabled."
-    )
-    seed: int = Field(
-        default=-1, description="The seed to use for generating images"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -7452,14 +8003,18 @@ class PonyV7(FALNode):
             "output_format": self.output_format.value,
             "noise_source": self.noise_source.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "enable_safety_checker": self.enable_safety_checker,
             "seed": self.seed,
+            "guidance_scale": self.guidance_scale,
+            "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7472,7 +8027,7 @@ class PonyV7(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class FLiteStandard(FALNode):
     """
@@ -7530,6 +8085,10 @@ class FLiteStandard(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7542,7 +8101,7 @@ class FLiteStandard(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class FLiteTexture(FALNode):
     """
@@ -7600,6 +8159,10 @@ class FLiteTexture(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7612,7 +8175,42 @@ class FLiteTexture(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class GptImage1TextToImageImageSize(str, Enum):
+    """
+    Aspect ratio for the generated image
+    """
+    AUTO = "auto"
+    VALUE_1024X1024 = "1024x1024"
+    VALUE_1536X1024 = "1536x1024"
+    VALUE_1024X1536 = "1024x1536"
+
+class GptImage1TextToImageBackground(str, Enum):
+    """
+    Background for the generated image
+    """
+    AUTO = "auto"
+    TRANSPARENT = "transparent"
+    OPAQUE = "opaque"
+
+class GptImage1TextToImageQuality(str, Enum):
+    """
+    Quality for the generated image
+    """
+    AUTO = "auto"
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+class GptImage1TextToImageOutputFormat(str, Enum):
+    """
+    Output format for the images
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
 
 class GptImage1TextToImage(FALNode):
     """
@@ -7627,58 +8225,23 @@ class GptImage1TextToImage(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class ImageSize(Enum):
-        """
-        Aspect ratio for the generated image
-        """
-        AUTO = "auto"
-        VALUE_1024X1024 = "1024x1024"
-        VALUE_1536X1024 = "1536x1024"
-        VALUE_1024X1536 = "1024x1536"
-
-    class Background(Enum):
-        """
-        Background for the generated image
-        """
-        AUTO = "auto"
-        TRANSPARENT = "transparent"
-        OPAQUE = "opaque"
-
-    class Quality(Enum):
-        """
-        Quality for the generated image
-        """
-        AUTO = "auto"
-        LOW = "low"
-        MEDIUM = "medium"
-        HIGH = "high"
-
-    class OutputFormat(Enum):
-        """
-        Output format for the images
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="The prompt for image generation"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate"
     )
-    image_size: ImageSize = Field(
-        default=ImageSize.AUTO, description="Aspect ratio for the generated image"
+    image_size: GptImage1TextToImageImageSize = Field(
+        default=GptImage1TextToImageImageSize.AUTO, description="Aspect ratio for the generated image"
     )
-    background: Background = Field(
-        default=Background.AUTO, description="Background for the generated image"
+    background: GptImage1TextToImageBackground = Field(
+        default=GptImage1TextToImageBackground.AUTO, description="Background for the generated image"
     )
-    quality: Quality = Field(
-        default=Quality.AUTO, description="Quality for the generated image"
+    quality: GptImage1TextToImageQuality = Field(
+        default=GptImage1TextToImageQuality.AUTO, description="Quality for the generated image"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="Output format for the images"
+    output_format: GptImage1TextToImageOutputFormat = Field(
+        default=GptImage1TextToImageOutputFormat.PNG, description="Output format for the images"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -7697,6 +8260,10 @@ class GptImage1TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7709,7 +8276,30 @@ class GptImage1TextToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class SanaV1516bOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class SanaV1516bStyleName(str, Enum):
+    """
+    The style to generate the image in.
+    """
+    NO_STYLE = "(No style)"
+    CINEMATIC = "Cinematic"
+    PHOTOGRAPHIC = "Photographic"
+    ANIME = "Anime"
+    MANGA = "Manga"
+    DIGITAL_ART = "Digital Art"
+    PIXEL_ART = "Pixel art"
+    FANTASY_ART = "Fantasy art"
+    NEONPUNK = "Neonpunk"
+    MODEL_3D = "3D Model"
+
 
 class SanaV1516b(FALNode):
     """
@@ -7724,29 +8314,6 @@ class SanaV1516b(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class StyleName(Enum):
-        """
-        The style to generate the image in.
-        """
-        NO_STYLE = "(No style)"
-        CINEMATIC = "Cinematic"
-        PHOTOGRAPHIC = "Photographic"
-        ANIME = "Anime"
-        MANGA = "Manga"
-        DIGITAL_ART = "Digital Art"
-        PIXEL_ART = "Pixel art"
-        FANTASY_ART = "Fantasy art"
-        NEONPUNK = "Neonpunk"
-        MODEL_3D = "3D Model"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -7756,29 +8323,29 @@ class SanaV1516b(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    style_name: StyleName = Field(
-        default=StyleName.NO_STYLE, description="The style to generate the image in."
+    guidance_scale: float = Field(
+        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: SanaV1516bOutputFormat = Field(
+        default=SanaV1516bOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    style_name: SanaV1516bStyleName = Field(
+        default=SanaV1516bStyleName.NO_STYLE, description="The style to generate the image in."
     )
     num_inference_steps: int = Field(
         default=18, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -7786,18 +8353,22 @@ class SanaV1516b(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "style_name": self.style_name.value,
+            "guidance_scale": self.guidance_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
+            "style_name": self.style_name.value,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7810,7 +8381,30 @@ class SanaV1516b(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class SanaV1548bOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class SanaV1548bStyleName(str, Enum):
+    """
+    The style to generate the image in.
+    """
+    NO_STYLE = "(No style)"
+    CINEMATIC = "Cinematic"
+    PHOTOGRAPHIC = "Photographic"
+    ANIME = "Anime"
+    MANGA = "Manga"
+    DIGITAL_ART = "Digital Art"
+    PIXEL_ART = "Pixel art"
+    FANTASY_ART = "Fantasy art"
+    NEONPUNK = "Neonpunk"
+    MODEL_3D = "3D Model"
+
 
 class SanaV1548b(FALNode):
     """
@@ -7825,29 +8419,6 @@ class SanaV1548b(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class StyleName(Enum):
-        """
-        The style to generate the image in.
-        """
-        NO_STYLE = "(No style)"
-        CINEMATIC = "Cinematic"
-        PHOTOGRAPHIC = "Photographic"
-        ANIME = "Anime"
-        MANGA = "Manga"
-        DIGITAL_ART = "Digital Art"
-        PIXEL_ART = "Pixel art"
-        FANTASY_ART = "Fantasy art"
-        NEONPUNK = "Neonpunk"
-        MODEL_3D = "3D Model"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -7857,29 +8428,29 @@ class SanaV1548b(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    style_name: StyleName = Field(
-        default=StyleName.NO_STYLE, description="The style to generate the image in."
+    guidance_scale: float = Field(
+        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: SanaV1548bOutputFormat = Field(
+        default=SanaV1548bOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    style_name: SanaV1548bStyleName = Field(
+        default=SanaV1548bStyleName.NO_STYLE, description="The style to generate the image in."
     )
     num_inference_steps: int = Field(
         default=18, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -7887,18 +8458,22 @@ class SanaV1548b(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "style_name": self.style_name.value,
+            "guidance_scale": self.guidance_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
+            "style_name": self.style_name.value,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -7911,7 +8486,30 @@ class SanaV1548b(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class SanaSprintOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class SanaSprintStyleName(str, Enum):
+    """
+    The style to generate the image in.
+    """
+    NO_STYLE = "(No style)"
+    CINEMATIC = "Cinematic"
+    PHOTOGRAPHIC = "Photographic"
+    ANIME = "Anime"
+    MANGA = "Manga"
+    DIGITAL_ART = "Digital Art"
+    PIXEL_ART = "Pixel art"
+    FANTASY_ART = "Fantasy art"
+    NEONPUNK = "Neonpunk"
+    MODEL_3D = "3D Model"
+
 
 class SanaSprint(FALNode):
     """
@@ -7926,29 +8524,6 @@ class SanaSprint(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class StyleName(Enum):
-        """
-        The style to generate the image in.
-        """
-        NO_STYLE = "(No style)"
-        CINEMATIC = "Cinematic"
-        PHOTOGRAPHIC = "Photographic"
-        ANIME = "Anime"
-        MANGA = "Manga"
-        DIGITAL_ART = "Digital Art"
-        PIXEL_ART = "Pixel art"
-        FANTASY_ART = "Fantasy art"
-        NEONPUNK = "Neonpunk"
-        MODEL_3D = "3D Model"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -7958,29 +8533,29 @@ class SanaSprint(FALNode):
     image_size: str = Field(
         default="", description="The size of the generated image."
     )
-    style_name: StyleName = Field(
-        default=StyleName.NO_STYLE, description="The style to generate the image in."
+    guidance_scale: float = Field(
+        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: SanaSprintOutputFormat = Field(
+        default=SanaSprintOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_scale: float = Field(
-        default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    style_name: SanaSprintStyleName = Field(
+        default=SanaSprintStyleName.NO_STYLE, description="The style to generate the image in."
     )
     num_inference_steps: int = Field(
         default=2, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -7988,18 +8563,22 @@ class SanaSprint(FALNode):
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "style_name": self.style_name.value,
+            "guidance_scale": self.guidance_scale,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
-            "guidance_scale": self.guidance_scale,
+            "style_name": self.style_name.value,
             "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8012,7 +8591,15 @@ class SanaSprint(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class RundiffusionFalJuggernautFluxLoraOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class RundiffusionFalJuggernautFluxLora(FALNode):
     """
@@ -8027,14 +8614,6 @@ class RundiffusionFalJuggernautFluxLora(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -8044,8 +8623,8 @@ class RundiffusionFalJuggernautFluxLora(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: RundiffusionFalJuggernautFluxLoraOutputFormat = Field(
+        default=RundiffusionFalJuggernautFluxLoraOutputFormat.JPEG, description="The format of the generated image."
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
@@ -8082,6 +8661,10 @@ class RundiffusionFalJuggernautFluxLora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8094,7 +8677,15 @@ class RundiffusionFalJuggernautFluxLora(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class RundiffusionFalJuggernautFluxBaseOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class RundiffusionFalJuggernautFluxBase(FALNode):
     """
@@ -8109,14 +8700,6 @@ class RundiffusionFalJuggernautFluxBase(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -8126,8 +8709,8 @@ class RundiffusionFalJuggernautFluxBase(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: RundiffusionFalJuggernautFluxBaseOutputFormat = Field(
+        default=RundiffusionFalJuggernautFluxBaseOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -8160,6 +8743,10 @@ class RundiffusionFalJuggernautFluxBase(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8172,7 +8759,15 @@ class RundiffusionFalJuggernautFluxBase(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class RundiffusionFalJuggernautFluxLightningOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class RundiffusionFalJuggernautFluxLightning(FALNode):
     """
@@ -8187,14 +8782,6 @@ class RundiffusionFalJuggernautFluxLightning(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -8204,8 +8791,8 @@ class RundiffusionFalJuggernautFluxLightning(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: RundiffusionFalJuggernautFluxLightningOutputFormat = Field(
+        default=RundiffusionFalJuggernautFluxLightningOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -8234,6 +8821,10 @@ class RundiffusionFalJuggernautFluxLightning(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8246,7 +8837,15 @@ class RundiffusionFalJuggernautFluxLightning(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class RundiffusionFalJuggernautFluxProOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class RundiffusionFalJuggernautFluxPro(FALNode):
     """
@@ -8261,14 +8860,6 @@ class RundiffusionFalJuggernautFluxPro(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -8278,8 +8869,8 @@ class RundiffusionFalJuggernautFluxPro(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: RundiffusionFalJuggernautFluxProOutputFormat = Field(
+        default=RundiffusionFalJuggernautFluxProOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -8312,6 +8903,10 @@ class RundiffusionFalJuggernautFluxPro(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8324,7 +8919,15 @@ class RundiffusionFalJuggernautFluxPro(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class RundiffusionFalRundiffusionPhotoFluxOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class RundiffusionFalRundiffusionPhotoFlux(FALNode):
     """
@@ -8339,14 +8942,6 @@ class RundiffusionFalRundiffusionPhotoFlux(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -8356,8 +8951,8 @@ class RundiffusionFalRundiffusionPhotoFlux(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: RundiffusionFalRundiffusionPhotoFluxOutputFormat = Field(
+        default=RundiffusionFalRundiffusionPhotoFluxOutputFormat.JPEG, description="The format of the generated image."
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
@@ -8398,6 +8993,10 @@ class RundiffusionFalRundiffusionPhotoFlux(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8410,7 +9009,15 @@ class RundiffusionFalRundiffusionPhotoFlux(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Cogview4OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class Cogview4(FALNode):
     """
@@ -8425,14 +9032,6 @@ class Cogview4(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -8442,26 +9041,26 @@ class Cogview4(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Cogview4OutputFormat = Field(
+        default=Cogview4OutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
-    )
     num_inference_steps: int = Field(
         default=50, description="The number of inference steps to perform."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -8472,14 +9071,18 @@ class Cogview4(FALNode):
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
-            "seed": self.seed,
             "num_inference_steps": self.num_inference_steps,
-            "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8492,7 +9095,35 @@ class Cogview4(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class IdeogramV2aAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image
+    """
+    RATIO_10_16 = "10:16"
+    RATIO_16_10 = "16:10"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+    RATIO_1_3 = "1:3"
+    RATIO_3_1 = "3:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+
+class IdeogramV2aStyle(str, Enum):
+    """
+    The style of the generated image
+    """
+    AUTO = "auto"
+    GENERAL = "general"
+    REALISTIC = "realistic"
+    DESIGN = "design"
+    RENDER_3D = "render_3D"
+    ANIME = "anime"
+
 
 class IdeogramV2a(FALNode):
     """
@@ -8507,45 +9138,17 @@ class IdeogramV2a(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image
-        """
-        RATIO_10_16 = "10:16"
-        RATIO_16_10 = "16:10"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_1_1 = "1:1"
-        RATIO_1_3 = "1:3"
-        RATIO_3_1 = "3:1"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-
-    class Style(Enum):
-        """
-        The style of the generated image
-        """
-        AUTO = "auto"
-        GENERAL = "general"
-        REALISTIC = "realistic"
-        DESIGN = "design"
-        RENDER_3D = "render_3D"
-        ANIME = "anime"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    aspect_ratio: IdeogramV2aAspectRatio = Field(
+        default=IdeogramV2aAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    style: Style = Field(
-        default=Style.AUTO, description="The style of the generated image"
+    style: IdeogramV2aStyle = Field(
+        default=IdeogramV2aStyle.AUTO, description="The style of the generated image"
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
@@ -8566,6 +9169,10 @@ class IdeogramV2a(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8578,7 +9185,35 @@ class IdeogramV2a(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class IdeogramV2aTurboAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image
+    """
+    RATIO_10_16 = "10:16"
+    RATIO_16_10 = "16:10"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_1_1 = "1:1"
+    RATIO_1_3 = "1:3"
+    RATIO_3_1 = "3:1"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+
+class IdeogramV2aTurboStyle(str, Enum):
+    """
+    The style of the generated image
+    """
+    AUTO = "auto"
+    GENERAL = "general"
+    REALISTIC = "realistic"
+    DESIGN = "design"
+    RENDER_3D = "render_3D"
+    ANIME = "anime"
+
 
 class IdeogramV2aTurbo(FALNode):
     """
@@ -8593,45 +9228,17 @@ class IdeogramV2aTurbo(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image
-        """
-        RATIO_10_16 = "10:16"
-        RATIO_16_10 = "16:10"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_1_1 = "1:1"
-        RATIO_1_3 = "1:3"
-        RATIO_3_1 = "3:1"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-
-    class Style(Enum):
-        """
-        The style of the generated image
-        """
-        AUTO = "auto"
-        GENERAL = "general"
-        REALISTIC = "realistic"
-        DESIGN = "design"
-        RENDER_3D = "render_3D"
-        ANIME = "anime"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    aspect_ratio: IdeogramV2aTurboAspectRatio = Field(
+        default=IdeogramV2aTurboAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    style: Style = Field(
-        default=Style.AUTO, description="The style of the generated image"
+    style: IdeogramV2aTurboStyle = Field(
+        default=IdeogramV2aTurboStyle.AUTO, description="The style of the generated image"
     )
     seed: str = Field(
         default="", description="Seed for the random number generator"
@@ -8652,6 +9259,10 @@ class IdeogramV2aTurbo(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8664,7 +9275,15 @@ class IdeogramV2aTurbo(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxControlLoraCannyOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxControlLoraCanny(FALNode):
     """
@@ -8679,14 +9298,6 @@ class FluxControlLoraCanny(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     control_lora_strength: float = Field(
         default=1, description="The strength of the control lora."
     )
@@ -8699,14 +9310,17 @@ class FluxControlLoraCanny(FALNode):
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    preprocess_depth: bool = Field(
+        default=True, description="If set to true, the input image will be preprocessed to extract depth information. This is useful for generating depth maps from images."
+    )
+    output_format: FluxControlLoraCannyOutputFormat = Field(
+        default=FluxControlLoraCannyOutputFormat.JPEG, description="The format of the generated image."
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
-    )
-    sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
     guidance_scale: float = Field(
         default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
@@ -8714,35 +9328,44 @@ class FluxControlLoraCanny(FALNode):
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     control_lora_image: ImageRef = Field(
         default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_lora_image_base64 = await context.image_to_base64(self.control_lora_image)
+        control_lora_image_base64 = (
+            await context.image_to_base64(self.control_lora_image)
+            if not self.control_lora_image.is_empty()
+            else None
+        )
         arguments = {
             "control_lora_strength": self.control_lora_strength,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "prompt": self.prompt,
+            "preprocess_depth": self.preprocess_depth,
             "output_format": self.output_format.value,
-            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "sync_mode": self.sync_mode,
+            "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "enable_safety_checker": self.enable_safety_checker,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}",
             "seed": self.seed,
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}" if control_lora_image_base64 else None,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8755,7 +9378,15 @@ class FluxControlLoraCanny(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxControlLoraDepthOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxControlLoraDepth(FALNode):
     """
@@ -8770,14 +9401,6 @@ class FluxControlLoraDepth(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -8790,11 +9413,11 @@ class FluxControlLoraDepth(FALNode):
     control_lora_strength: float = Field(
         default=1, description="The strength of the control lora."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
-    )
     preprocess_depth: bool = Field(
         default=True, description="If set to true, the input image will be preprocessed to extract depth information. This is useful for generating depth maps from images."
+    )
+    output_format: FluxControlLoraDepthOutputFormat = Field(
+        default=FluxControlLoraDepthOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -8802,42 +9425,50 @@ class FluxControlLoraDepth(FALNode):
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    guidance_scale: float = Field(
+        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     num_inference_steps: int = Field(
         default=28, description="The number of inference steps to perform."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
-    )
-    guidance_scale: float = Field(
-        default=3.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
     control_lora_image: ImageRef = Field(
         default=ImageRef(), description="The image to use for control lora. This is used to control the style of the generated image."
     )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_lora_image_base64 = await context.image_to_base64(self.control_lora_image)
+        control_lora_image_base64 = (
+            await context.image_to_base64(self.control_lora_image)
+            if not self.control_lora_image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "control_lora_strength": self.control_lora_strength,
-            "output_format": self.output_format.value,
             "preprocess_depth": self.preprocess_depth,
+            "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
-            "enable_safety_checker": self.enable_safety_checker,
-            "num_inference_steps": self.num_inference_steps,
-            "seed": self.seed,
             "guidance_scale": self.guidance_scale,
-            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}",
+            "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
+            "control_lora_image_url": f"data:image/png;base64,{control_lora_image_base64}" if control_lora_image_base64 else None,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8850,7 +9481,18 @@ class FluxControlLoraDepth(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Imagen3FastAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_3_4 = "3:4"
+    RATIO_4_3 = "4:3"
+
 
 class Imagen3Fast(FALNode):
     """
@@ -8865,28 +9507,17 @@ class Imagen3Fast(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_3_4 = "3:4"
-        RATIO_4_3 = "4:3"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing what you want to see"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    aspect_ratio: Imagen3FastAspectRatio = Field(
+        default=Imagen3FastAspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate (1-4)"
     )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducible generation"
+    seed: str = Field(
+        default="", description="Random seed for reproducible generation"
     )
     negative_prompt: str = Field(
         default="", description="A description of what to discourage in the generated images"
@@ -8903,6 +9534,10 @@ class Imagen3Fast(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8915,7 +9550,18 @@ class Imagen3Fast(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Imagen3AspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_3_4 = "3:4"
+    RATIO_4_3 = "4:3"
+
 
 class Imagen3(FALNode):
     """
@@ -8930,28 +9576,17 @@ class Imagen3(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated image
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_3_4 = "3:4"
-        RATIO_4_3 = "4:3"
-
-
     prompt: str = Field(
         default="", description="The text prompt describing what you want to see"
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
+    aspect_ratio: Imagen3AspectRatio = Field(
+        default=Imagen3AspectRatio.RATIO_1_1, description="The aspect ratio of the generated image"
     )
     num_images: int = Field(
         default=1, description="Number of images to generate (1-4)"
     )
-    seed: int = Field(
-        default=-1, description="Random seed for reproducible generation"
+    seed: str = Field(
+        default="", description="Random seed for reproducible generation"
     )
     negative_prompt: str = Field(
         default="", description="A description of what to discourage in the generated images"
@@ -8968,6 +9603,10 @@ class Imagen3(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -8980,7 +9619,15 @@ class Imagen3(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class LuminaImageV2OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class LuminaImageV2(FALNode):
     """
@@ -8995,14 +9642,6 @@ class LuminaImageV2(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -9015,11 +9654,11 @@ class LuminaImageV2(FALNode):
     cfg_trunc_ratio: float = Field(
         default=1, description="The ratio of the timestep interval to apply normalization-based guidance scale."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: LuminaImageV2OutputFormat = Field(
+        default=LuminaImageV2OutputFormat.JPEG, description="The format of the generated image."
     )
     system_prompt: str = Field(
         default="You are an assistant designed to generate superior images with the superior degree of image-text alignment based on textual prompts or user prompts.", description="The system prompt to use."
@@ -9033,14 +9672,14 @@ class LuminaImageV2(FALNode):
     num_inference_steps: int = Field(
         default=30, description="The number of inference steps to perform."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
-    )
-    negative_prompt: str = Field(
-        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
     cfg_normalization: bool = Field(
         default=True, description="Whether to apply normalization-based guidance scale."
+    )
+    negative_prompt: str = Field(
+        default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -9049,19 +9688,23 @@ class LuminaImageV2(FALNode):
             "num_images": self.num_images,
             "image_size": self.image_size,
             "cfg_trunc_ratio": self.cfg_trunc_ratio,
-            "seed": self.seed,
+            "enable_safety_checker": self.enable_safety_checker,
             "output_format": self.output_format.value,
             "system_prompt": self.system_prompt,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
-            "enable_safety_checker": self.enable_safety_checker,
-            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
             "cfg_normalization": self.cfg_normalization,
+            "negative_prompt": self.negative_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9074,7 +9717,7 @@ class LuminaImageV2(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class Janus(FALNode):
     """
@@ -9124,6 +9767,10 @@ class Janus(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9136,7 +9783,26 @@ class Janus(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxProV11UltraFinetunedOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FluxProV11UltraFinetunedSafetyTolerance(str, Enum):
+    """
+    The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_3 = "3"
+    VALUE_4 = "4"
+    VALUE_5 = "5"
+    VALUE_6 = "6"
+
 
 class FluxProV11UltraFinetuned(FALNode):
     """
@@ -9151,54 +9817,26 @@ class FluxProV11UltraFinetuned(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class SafetyTolerance(Enum):
-        """
-        The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_3 = "3"
-        VALUE_4 = "4"
-        VALUE_5 = "5"
-        VALUE_6 = "6"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
-    )
-    finetune_id: str = Field(
-        default="", description="References your specific model"
-    )
-    safety_tolerance: SafetyTolerance = Field(
-        default=SafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
-    )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
-    )
-    image_prompt_strength: float = Field(
-        default=0.1, description="The strength of the image prompt, between 0 and 1."
-    )
-    raw: bool = Field(
-        default=False, description="Generate less processed, more natural-looking images."
-    )
-    enhance_prompt: bool = Field(
-        default=False, description="Whether to enhance the prompt for better results."
-    )
-    aspect_ratio: str = Field(
-        default="16:9", description="The aspect ratio of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    aspect_ratio: str = Field(
+        default="16:9", description="The aspect ratio of the generated image."
+    )
+    raw: bool = Field(
+        default=False, description="Generate less processed, more natural-looking images."
+    )
+    finetune_strength: float = Field(
+        default=0.0, description="Controls finetune influence. Increase this value if your target concept isn't showing up strongly enough. The optimal setting depends on your finetune and prompt"
+    )
+    output_format: FluxProV11UltraFinetunedOutputFormat = Field(
+        default=FluxProV11UltraFinetunedOutputFormat.JPEG, description="The format of the generated image."
+    )
+    finetune_id: str = Field(
+        default="", description="References your specific model"
     )
     image: ImageRef = Field(
         default=ImageRef(), description="The image URL to generate an image from."
@@ -9206,34 +9844,47 @@ class FluxProV11UltraFinetuned(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    safety_tolerance: FluxProV11UltraFinetunedSafetyTolerance = Field(
+        default=FluxProV11UltraFinetunedSafetyTolerance.VALUE_2, description="The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive."
     )
-    finetune_strength: float = Field(
-        default=0.0, description="Controls finetune influence. Increase this value if your target concept isn't showing up strongly enough. The optimal setting depends on your finetune and prompt"
+    image_prompt_strength: float = Field(
+        default=0.1, description="The strength of the image prompt, between 0 and 1."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    )
+    enhance_prompt: bool = Field(
+        default=False, description="Whether to enhance the prompt for better results."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
-            "finetune_id": self.finetune_id,
-            "safety_tolerance": self.safety_tolerance.value,
-            "enable_safety_checker": self.enable_safety_checker,
-            "image_prompt_strength": self.image_prompt_strength,
-            "raw": self.raw,
-            "enhance_prompt": self.enhance_prompt,
-            "aspect_ratio": self.aspect_ratio,
             "num_images": self.num_images,
-            "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_base64}",
-            "sync_mode": self.sync_mode,
-            "seed": self.seed,
+            "aspect_ratio": self.aspect_ratio,
+            "raw": self.raw,
             "finetune_strength": self.finetune_strength,
+            "output_format": self.output_format.value,
+            "finetune_id": self.finetune_id,
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
+            "sync_mode": self.sync_mode,
+            "safety_tolerance": self.safety_tolerance.value,
+            "image_prompt_strength": self.image_prompt_strength,
+            "seed": self.seed,
+            "enhance_prompt": self.enhance_prompt,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9246,7 +9897,15 @@ class FluxProV11UltraFinetuned(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class SwittiOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class Switti(FALNode):
     """
@@ -9261,14 +9920,6 @@ class Switti(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -9293,8 +9944,8 @@ class Switti(FALNode):
     last_scale_temp: float = Field(
         default=0.1, description="Temperature after disabling CFG"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: SwittiOutputFormat = Field(
+        default=SwittiOutputFormat.JPEG, description="The format of the generated image."
     )
     more_diverse: bool = Field(
         default=False, description="More diverse sampling"
@@ -9332,6 +9983,10 @@ class Switti(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9344,7 +9999,15 @@ class Switti(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Switti512OutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class Switti512(FALNode):
     """
@@ -9359,14 +10022,6 @@ class Switti512(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -9391,8 +10046,8 @@ class Switti512(FALNode):
     last_scale_temp: float = Field(
         default=0.1, description="Temperature after disabling CFG"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: Switti512OutputFormat = Field(
+        default=Switti512OutputFormat.JPEG, description="The format of the generated image."
     )
     more_diverse: bool = Field(
         default=False, description="More diverse sampling"
@@ -9430,6 +10085,10 @@ class Switti512(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9442,7 +10101,29 @@ class Switti512(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class BriaTextToImageBaseAspectRatio(str, Enum):
+    """
+    The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored.
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_2 = "3:2"
+    RATIO_3_4 = "3:4"
+    RATIO_4_3 = "4:3"
+    RATIO_4_5 = "4:5"
+    RATIO_5_4 = "5:4"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+
+class BriaTextToImageBaseMedium(str, Enum):
+    """
+    Which medium should be included in your generated images. This parameter is optional.
+    """
+    PHOTOGRAPHY = "photography"
+    ART = "art"
+
 
 class BriaTextToImageBase(FALNode):
     """
@@ -9457,28 +10138,6 @@ class BriaTextToImageBase(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored.
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_2 = "3:2"
-        RATIO_3_4 = "3:4"
-        RATIO_4_3 = "4:3"
-        RATIO_4_5 = "4:5"
-        RATIO_5_4 = "5:4"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-
-    class Medium(Enum):
-        """
-        Which medium should be included in your generated images. This parameter is optional.
-        """
-        PHOTOGRAPHY = "photography"
-        ART = "art"
-
-
     prompt: str = Field(
         default="", description="The prompt you would like to use to generate images."
     )
@@ -9491,8 +10150,8 @@ class BriaTextToImageBase(FALNode):
     guidance: list[GuidanceInput] = Field(
         default=[], description="Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored."
+    aspect_ratio: BriaTextToImageBaseAspectRatio = Field(
+        default=BriaTextToImageBaseAspectRatio.RATIO_1_1, description="The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -9500,17 +10159,17 @@ class BriaTextToImageBase(FALNode):
     guidance_scale: float = Field(
         default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    medium: Medium | None = Field(
-        default=None, description="Which medium should be included in your generated images. This parameter is optional."
+    num_inference_steps: int = Field(
+        default=30, description="The number of iterations the model goes through to refine the generated image. This parameter is optional."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    medium: BriaTextToImageBaseMedium | None = Field(
+        default=None, description="Which medium should be included in your generated images. This parameter is optional."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt you would like to use to generate images."
     )
-    num_inference_steps: int = Field(
-        default=30, description="The number of iterations the model goes through to refine the generated image. This parameter is optional."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -9522,14 +10181,18 @@ class BriaTextToImageBase(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
-            "medium": self.medium.value if self.medium else None,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
+            "medium": self.medium.value if self.medium else None,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9542,7 +10205,29 @@ class BriaTextToImageBase(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class BriaTextToImageFastAspectRatio(str, Enum):
+    """
+    The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored.
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_2 = "3:2"
+    RATIO_3_4 = "3:4"
+    RATIO_4_3 = "4:3"
+    RATIO_4_5 = "4:5"
+    RATIO_5_4 = "5:4"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+
+class BriaTextToImageFastMedium(str, Enum):
+    """
+    Which medium should be included in your generated images. This parameter is optional.
+    """
+    PHOTOGRAPHY = "photography"
+    ART = "art"
+
 
 class BriaTextToImageFast(FALNode):
     """
@@ -9557,28 +10242,6 @@ class BriaTextToImageFast(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored.
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_2 = "3:2"
-        RATIO_3_4 = "3:4"
-        RATIO_4_3 = "4:3"
-        RATIO_4_5 = "4:5"
-        RATIO_5_4 = "5:4"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-
-    class Medium(Enum):
-        """
-        Which medium should be included in your generated images. This parameter is optional.
-        """
-        PHOTOGRAPHY = "photography"
-        ART = "art"
-
-
     prompt: str = Field(
         default="", description="The prompt you would like to use to generate images."
     )
@@ -9591,8 +10254,8 @@ class BriaTextToImageFast(FALNode):
     guidance: list[GuidanceInput] = Field(
         default=[], description="Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored."
+    aspect_ratio: BriaTextToImageFastAspectRatio = Field(
+        default=BriaTextToImageFastAspectRatio.RATIO_1_1, description="The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -9600,17 +10263,17 @@ class BriaTextToImageFast(FALNode):
     guidance_scale: float = Field(
         default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    medium: Medium | None = Field(
-        default=None, description="Which medium should be included in your generated images. This parameter is optional."
+    num_inference_steps: int = Field(
+        default=8, description="The number of iterations the model goes through to refine the generated image. This parameter is optional."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    medium: BriaTextToImageFastMedium | None = Field(
+        default=None, description="Which medium should be included in your generated images. This parameter is optional."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt you would like to use to generate images."
     )
-    num_inference_steps: int = Field(
-        default=8, description="The number of iterations the model goes through to refine the generated image. This parameter is optional."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -9622,14 +10285,18 @@ class BriaTextToImageFast(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
-            "medium": self.medium.value if self.medium else None,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
+            "medium": self.medium.value if self.medium else None,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9642,7 +10309,29 @@ class BriaTextToImageFast(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class BriaTextToImageHdAspectRatio(str, Enum):
+    """
+    The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored.
+    """
+    RATIO_1_1 = "1:1"
+    RATIO_2_3 = "2:3"
+    RATIO_3_2 = "3:2"
+    RATIO_3_4 = "3:4"
+    RATIO_4_3 = "4:3"
+    RATIO_4_5 = "4:5"
+    RATIO_5_4 = "5:4"
+    RATIO_9_16 = "9:16"
+    RATIO_16_9 = "16:9"
+
+class BriaTextToImageHdMedium(str, Enum):
+    """
+    Which medium should be included in your generated images. This parameter is optional.
+    """
+    PHOTOGRAPHY = "photography"
+    ART = "art"
+
 
 class BriaTextToImageHd(FALNode):
     """
@@ -9657,28 +10346,6 @@ class BriaTextToImageHd(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored.
-        """
-        RATIO_1_1 = "1:1"
-        RATIO_2_3 = "2:3"
-        RATIO_3_2 = "3:2"
-        RATIO_3_4 = "3:4"
-        RATIO_4_3 = "4:3"
-        RATIO_4_5 = "4:5"
-        RATIO_5_4 = "5:4"
-        RATIO_9_16 = "9:16"
-        RATIO_16_9 = "16:9"
-
-    class Medium(Enum):
-        """
-        Which medium should be included in your generated images. This parameter is optional.
-        """
-        PHOTOGRAPHY = "photography"
-        ART = "art"
-
-
     prompt: str = Field(
         default="", description="The prompt you would like to use to generate images."
     )
@@ -9691,8 +10358,8 @@ class BriaTextToImageHd(FALNode):
     guidance: list[GuidanceInput] = Field(
         default=[], description="Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored."
+    aspect_ratio: BriaTextToImageHdAspectRatio = Field(
+        default=BriaTextToImageHdAspectRatio.RATIO_1_1, description="The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -9700,17 +10367,17 @@ class BriaTextToImageHd(FALNode):
     guidance_scale: float = Field(
         default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    medium: Medium | None = Field(
-        default=None, description="Which medium should be included in your generated images. This parameter is optional."
+    num_inference_steps: int = Field(
+        default=30, description="The number of iterations the model goes through to refine the generated image. This parameter is optional."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of the model will output the same image every time."
+    medium: BriaTextToImageHdMedium | None = Field(
+        default=None, description="Which medium should be included in your generated images. This parameter is optional."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt you would like to use to generate images."
     )
-    num_inference_steps: int = Field(
-        default=30, description="The number of iterations the model goes through to refine the generated image. This parameter is optional."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of the model will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -9722,14 +10389,18 @@ class BriaTextToImageHd(FALNode):
             "aspect_ratio": self.aspect_ratio.value,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
-            "medium": self.medium.value if self.medium else None,
-            "seed": self.seed,
-            "negative_prompt": self.negative_prompt,
             "num_inference_steps": self.num_inference_steps,
+            "medium": self.medium.value if self.medium else None,
+            "negative_prompt": self.negative_prompt,
+            "seed": self.seed,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9742,7 +10413,50 @@ class BriaTextToImageHd(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class Recraft20bStyle(str, Enum):
+    """
+    The style of the generated images. Vector images cost 2X as much.
+    """
+    ANY = "any"
+    REALISTIC_IMAGE = "realistic_image"
+    DIGITAL_ILLUSTRATION = "digital_illustration"
+    VECTOR_ILLUSTRATION = "vector_illustration"
+    REALISTIC_IMAGE_B_AND_W = "realistic_image/b_and_w"
+    REALISTIC_IMAGE_ENTERPRISE = "realistic_image/enterprise"
+    REALISTIC_IMAGE_HARD_FLASH = "realistic_image/hard_flash"
+    REALISTIC_IMAGE_HDR = "realistic_image/hdr"
+    REALISTIC_IMAGE_MOTION_BLUR = "realistic_image/motion_blur"
+    REALISTIC_IMAGE_NATURAL_LIGHT = "realistic_image/natural_light"
+    REALISTIC_IMAGE_STUDIO_PORTRAIT = "realistic_image/studio_portrait"
+    DIGITAL_ILLUSTRATION_2D_ART_POSTER = "digital_illustration/2d_art_poster"
+    DIGITAL_ILLUSTRATION_2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
+    DIGITAL_ILLUSTRATION_3D = "digital_illustration/3d"
+    DIGITAL_ILLUSTRATION_80S = "digital_illustration/80s"
+    DIGITAL_ILLUSTRATION_ENGRAVING_COLOR = "digital_illustration/engraving_color"
+    DIGITAL_ILLUSTRATION_GLOW = "digital_illustration/glow"
+    DIGITAL_ILLUSTRATION_GRAIN = "digital_illustration/grain"
+    DIGITAL_ILLUSTRATION_HAND_DRAWN = "digital_illustration/hand_drawn"
+    DIGITAL_ILLUSTRATION_HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
+    DIGITAL_ILLUSTRATION_HANDMADE_3D = "digital_illustration/handmade_3d"
+    DIGITAL_ILLUSTRATION_INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
+    DIGITAL_ILLUSTRATION_KAWAII = "digital_illustration/kawaii"
+    DIGITAL_ILLUSTRATION_PIXEL_ART = "digital_illustration/pixel_art"
+    DIGITAL_ILLUSTRATION_PSYCHEDELIC = "digital_illustration/psychedelic"
+    DIGITAL_ILLUSTRATION_SEAMLESS = "digital_illustration/seamless"
+    DIGITAL_ILLUSTRATION_VOXEL = "digital_illustration/voxel"
+    DIGITAL_ILLUSTRATION_WATERCOLOR = "digital_illustration/watercolor"
+    VECTOR_ILLUSTRATION_CARTOON = "vector_illustration/cartoon"
+    VECTOR_ILLUSTRATION_DOODLE_LINE_ART = "vector_illustration/doodle_line_art"
+    VECTOR_ILLUSTRATION_ENGRAVING = "vector_illustration/engraving"
+    VECTOR_ILLUSTRATION_FLAT_2 = "vector_illustration/flat_2"
+    VECTOR_ILLUSTRATION_KAWAII = "vector_illustration/kawaii"
+    VECTOR_ILLUSTRATION_LINE_ART = "vector_illustration/line_art"
+    VECTOR_ILLUSTRATION_LINE_CIRCUIT = "vector_illustration/line_circuit"
+    VECTOR_ILLUSTRATION_LINOCUT = "vector_illustration/linocut"
+    VECTOR_ILLUSTRATION_SEAMLESS = "vector_illustration/seamless"
+
 
 class Recraft20b(FALNode):
     """
@@ -9757,49 +10471,6 @@ class Recraft20b(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Style(Enum):
-        """
-        The style of the generated images. Vector images cost 2X as much.
-        """
-        ANY = "any"
-        REALISTIC_IMAGE = "realistic_image"
-        DIGITAL_ILLUSTRATION = "digital_illustration"
-        VECTOR_ILLUSTRATION = "vector_illustration"
-        REALISTIC_IMAGE_B_AND_W = "realistic_image/b_and_w"
-        REALISTIC_IMAGE_ENTERPRISE = "realistic_image/enterprise"
-        REALISTIC_IMAGE_HARD_FLASH = "realistic_image/hard_flash"
-        REALISTIC_IMAGE_HDR = "realistic_image/hdr"
-        REALISTIC_IMAGE_MOTION_BLUR = "realistic_image/motion_blur"
-        REALISTIC_IMAGE_NATURAL_LIGHT = "realistic_image/natural_light"
-        REALISTIC_IMAGE_STUDIO_PORTRAIT = "realistic_image/studio_portrait"
-        DIGITAL_ILLUSTRATION_2D_ART_POSTER = "digital_illustration/2d_art_poster"
-        DIGITAL_ILLUSTRATION_2D_ART_POSTER_2 = "digital_illustration/2d_art_poster_2"
-        DIGITAL_ILLUSTRATION_3D = "digital_illustration/3d"
-        DIGITAL_ILLUSTRATION_80S = "digital_illustration/80s"
-        DIGITAL_ILLUSTRATION_ENGRAVING_COLOR = "digital_illustration/engraving_color"
-        DIGITAL_ILLUSTRATION_GLOW = "digital_illustration/glow"
-        DIGITAL_ILLUSTRATION_GRAIN = "digital_illustration/grain"
-        DIGITAL_ILLUSTRATION_HAND_DRAWN = "digital_illustration/hand_drawn"
-        DIGITAL_ILLUSTRATION_HAND_DRAWN_OUTLINE = "digital_illustration/hand_drawn_outline"
-        DIGITAL_ILLUSTRATION_HANDMADE_3D = "digital_illustration/handmade_3d"
-        DIGITAL_ILLUSTRATION_INFANTILE_SKETCH = "digital_illustration/infantile_sketch"
-        DIGITAL_ILLUSTRATION_KAWAII = "digital_illustration/kawaii"
-        DIGITAL_ILLUSTRATION_PIXEL_ART = "digital_illustration/pixel_art"
-        DIGITAL_ILLUSTRATION_PSYCHEDELIC = "digital_illustration/psychedelic"
-        DIGITAL_ILLUSTRATION_SEAMLESS = "digital_illustration/seamless"
-        DIGITAL_ILLUSTRATION_VOXEL = "digital_illustration/voxel"
-        DIGITAL_ILLUSTRATION_WATERCOLOR = "digital_illustration/watercolor"
-        VECTOR_ILLUSTRATION_CARTOON = "vector_illustration/cartoon"
-        VECTOR_ILLUSTRATION_DOODLE_LINE_ART = "vector_illustration/doodle_line_art"
-        VECTOR_ILLUSTRATION_ENGRAVING = "vector_illustration/engraving"
-        VECTOR_ILLUSTRATION_FLAT_2 = "vector_illustration/flat_2"
-        VECTOR_ILLUSTRATION_KAWAII = "vector_illustration/kawaii"
-        VECTOR_ILLUSTRATION_LINE_ART = "vector_illustration/line_art"
-        VECTOR_ILLUSTRATION_LINE_CIRCUIT = "vector_illustration/line_circuit"
-        VECTOR_ILLUSTRATION_LINOCUT = "vector_illustration/linocut"
-        VECTOR_ILLUSTRATION_SEAMLESS = "vector_illustration/seamless"
-
-
     prompt: str = Field(
         default=""
     )
@@ -9812,8 +10483,8 @@ class Recraft20b(FALNode):
     colors: list[RGBColor] = Field(
         default=[], description="An array of preferable colors"
     )
-    style: Style = Field(
-        default=Style.REALISTIC_IMAGE, description="The style of the generated images. Vector images cost 2X as much."
+    style: Recraft20bStyle = Field(
+        default=Recraft20bStyle.REALISTIC_IMAGE, description="The style of the generated images. Vector images cost 2X as much."
     )
     style_id: str = Field(
         default="", description="The ID of the custom style reference (optional)"
@@ -9831,6 +10502,10 @@ class Recraft20b(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9843,7 +10518,20 @@ class Recraft20b(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class LumaPhotonFlashAspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated video
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_21_9 = "21:9"
+    RATIO_9_21 = "9:21"
+
 
 class LumaPhotonFlash(FALNode):
     """
@@ -9858,24 +10546,11 @@ class LumaPhotonFlash(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class AspectRatio(Enum):
-        """
-        The aspect ratio of the generated video
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_21_9 = "21:9"
-        RATIO_9_21 = "9:21"
-
-
     prompt: str = Field(
         default=""
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_1_1, description="The aspect ratio of the generated video"
+    aspect_ratio: LumaPhotonFlashAspectRatio = Field(
+        default=LumaPhotonFlashAspectRatio.RATIO_1_1, description="The aspect ratio of the generated video"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -9886,6 +10561,10 @@ class LumaPhotonFlash(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9898,7 +10577,7 @@ class LumaPhotonFlash(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class AuraFlow(FALNode):
     """
@@ -9923,16 +10602,16 @@ class AuraFlow(FALNode):
         default=True, description="Whether to perform prompt expansion (recommended)"
     )
     sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     guidance_scale: float = Field(
         default=3.5, description="Classifier free guidance scale"
     )
+    seed: str = Field(
+        default="", description="The seed to use for generating images"
+    )
     num_inference_steps: int = Field(
         default=50, description="The number of inference steps to take"
-    )
-    seed: int = Field(
-        default=-1, description="The seed to use for generating images"
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -9942,12 +10621,16 @@ class AuraFlow(FALNode):
             "expand_prompt": self.expand_prompt,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -9960,7 +10643,15 @@ class AuraFlow(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class StableDiffusionV35MediumOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class StableDiffusionV35Medium(FALNode):
     """
@@ -9975,14 +10666,6 @@ class StableDiffusionV35Medium(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -9992,8 +10675,8 @@ class StableDiffusionV35Medium(FALNode):
     image_size: str = Field(
         default="landscape_4_3", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: StableDiffusionV35MediumOutputFormat = Field(
+        default=StableDiffusionV35MediumOutputFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
@@ -10030,6 +10713,10 @@ class StableDiffusionV35Medium(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10042,7 +10729,22 @@ class StableDiffusionV35Medium(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxLoraInpaintingAcceleration(str, Enum):
+    """
+    Acceleration level for image generation. 'regular' balances speed and quality.
+    """
+    NONE = "none"
+    REGULAR = "regular"
+
+class FluxLoraInpaintingOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxLoraInpainting(FALNode):
     """
@@ -10057,26 +10759,11 @@ class FluxLoraInpainting(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Acceleration(Enum):
-        """
-        Acceleration level for image generation. 'regular' balances speed and quality.
-        """
-        NONE = "none"
-        REGULAR = "regular"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
-    acceleration: Acceleration = Field(
-        default=Acceleration.NONE, description="Acceleration level for image generation. 'regular' balances speed and quality."
+    acceleration: FluxLoraInpaintingAcceleration = Field(
+        default=FluxLoraInpaintingAcceleration.NONE, description="Acceleration level for image generation. 'regular' balances speed and quality."
     )
     image_size: str = Field(
         default="", description="The size of the generated image."
@@ -10093,8 +10780,8 @@ class FluxLoraInpainting(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate. This is always set to 1 for streaming output."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FluxLoraInpaintingOutputFormat = Field(
+        default=FluxLoraInpaintingOutputFormat.JPEG, description="The format of the generated image."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of image to use for inpainting. or img2img"
@@ -10116,7 +10803,11 @@ class FluxLoraInpainting(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "acceleration": self.acceleration.value,
@@ -10126,7 +10817,7 @@ class FluxLoraInpainting(FALNode):
             "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "sync_mode": self.sync_mode,
             "strength": self.strength,
             "num_inference_steps": self.num_inference_steps,
@@ -10136,6 +10827,10 @@ class FluxLoraInpainting(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10148,7 +10843,7 @@ class FluxLoraInpainting(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class StableDiffusionV3Medium(FALNode):
     """
@@ -10181,17 +10876,17 @@ class StableDiffusionV3Medium(FALNode):
     guidance_scale: float = Field(
         default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
-    num_inference_steps: int = Field(
-        default=28, description="The number of inference steps to perform."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to generate an image from."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
+    num_inference_steps: int = Field(
+        default=28, description="The number of inference steps to perform."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -10203,13 +10898,17 @@ class StableDiffusionV3Medium(FALNode):
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "seed": self.seed,
-            "num_inference_steps": self.num_inference_steps,
-            "negative_prompt": self.negative_prompt,
             "enable_safety_checker": self.enable_safety_checker,
+            "negative_prompt": self.negative_prompt,
+            "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10222,7 +10921,43 @@ class StableDiffusionV3Medium(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FooocusUpscaleOrVaryPerformance(str, Enum):
+    """
+    You can choose Speed or Quality
+    """
+    SPEED = "Speed"
+    QUALITY = "Quality"
+    EXTREME_SPEED = "Extreme Speed"
+    LIGHTNING = "Lightning"
+
+class FooocusUpscaleOrVaryOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+class FooocusUpscaleOrVaryRefinerModel(str, Enum):
+    """
+    Refiner (SDXL or SD 1.5)
+    """
+    NONE = "None"
+    REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
+
+class FooocusUpscaleOrVaryUovMethod(str, Enum):
+    """
+    The method to use for upscaling or varying.
+    """
+    DISABLED = "Disabled"
+    VARY_SUBTLE = "Vary (Subtle)"
+    VARY_STRONG = "Vary (Strong)"
+    UPSCALE_1_5X = "Upscale (1.5x)"
+    UPSCALE_2X = "Upscale (2x)"
+    UPSCALE_FAST_2X = "Upscale (Fast 2x)"
+
 
 class FooocusUpscaleOrVary(FALNode):
     """
@@ -10237,131 +10972,175 @@ class FooocusUpscaleOrVary(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Performance(Enum):
-        """
-        You can choose Speed or Quality
-        """
-        SPEED = "Speed"
-        QUALITY = "Quality"
-        EXTREME_SPEED = "Extreme Speed"
-        LIGHTNING = "Lightning"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-    class RefinerModel(Enum):
-        """
-        Refiner (SDXL or SD 1.5)
-        """
-        NONE = "None"
-        REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
-
-    class UovMethod(Enum):
-        """
-        The method to use for upscaling or varying.
-        """
-        DISABLED = "Disabled"
-        VARY_SUBTLE = "Vary (Subtle)"
-        VARY_STRONG = "Vary (Strong)"
-        UPSCALE_1_5X = "Upscale (1.5x)"
-        UPSCALE_2X = "Upscale (2x)"
-        UPSCALE_FAST_2X = "Upscale (Fast 2x)"
-
-
     styles: list[str] = Field(
         default=[], description="The style to use."
     )
-    uov_image: ImageRef = Field(
-        default=ImageRef(), description="The image to upscale or vary."
-    )
-    performance: Performance = Field(
-        default=Performance.EXTREME_SPEED, description="You can choose Speed or Quality"
-    )
-    mixing_image_prompt_and_vary_upscale: bool = Field(
-        default=False, description="Mixing Image Prompt and Vary/Upscale"
-    )
-    image_prompt_3: str = Field(
-        default=""
+    performance: FooocusUpscaleOrVaryPerformance = Field(
+        default=FooocusUpscaleOrVaryPerformance.EXTREME_SPEED, description="You can choose Speed or Quality"
     )
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
+    mixing_image_prompt_and_vary_upscale: bool = Field(
+        default=False, description="Mixing Image Prompt and Vary/Upscale"
+    )
+    uov_image: ImageRef = Field(
+        default=ImageRef(), description="The image to upscale or vary."
+    )
+    image_prompt_3: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
+        default=""
+    )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
-    image_prompt_4: str = Field(
+    image_prompt_4: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
         default=""
     )
-    image_prompt_1: str = Field(
+    image_prompt_1: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
         default=""
-    )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to false, the safety checker will be disabled."
-    )
-    sharpness: float = Field(
-        default=2, description="The sharpness of the generated image. Use it to control how sharp the generated image should be. Higher value means image and texture are sharper."
     )
     guidance_scale: float = Field(
         default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
+    sharpness: float = Field(
+        default=2, description="The sharpness of the generated image. Use it to control how sharp the generated image should be. Higher value means image and texture are sharper."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to false, the safety checker will be disabled."
+    )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
-    )
-    aspect_ratio: str = Field(
-        default="1024x1024", description="The size of the generated image. You can choose between some presets or custom height and width that **must be multiples of 8**."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate in one request"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    aspect_ratio: str = Field(
+        default="1024x1024", description="The size of the generated image. You can choose between some presets or custom height and width that **must be multiples of 8**."
     )
-    refiner_model: RefinerModel = Field(
-        default=RefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
+    output_format: FooocusUpscaleOrVaryOutputFormat = Field(
+        default=FooocusUpscaleOrVaryOutputFormat.JPEG, description="The format of the generated image."
     )
-    image_prompt_2: str = Field(
-        default=""
+    refiner_model: FooocusUpscaleOrVaryRefinerModel = Field(
+        default=FooocusUpscaleOrVaryRefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
     )
     sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    uov_method: UovMethod = Field(
-        default=UovMethod.VARY_STRONG, description="The method to use for upscaling or varying."
+    image_prompt_2: ImageRef = Field(
+        default=ImageRef()
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
+        default=""
+    )
+    uov_method: FooocusUpscaleOrVaryUovMethod = Field(
+        default=FooocusUpscaleOrVaryUovMethod.VARY_STRONG, description="The method to use for upscaling or varying."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
     refiner_switch: float = Field(
         default=0.8, description="Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models 0.8 for XL-refiners; or any value for switching two SDXL models."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        uov_image_base64 = await context.image_to_base64(self.uov_image)
+        uov_image_base64 = (
+            await context.image_to_base64(self.uov_image)
+            if not self.uov_image.is_empty()
+            else None
+        )
+        image_prompt_3_base64 = (
+            await context.image_to_base64(self.image_prompt_3)
+            if not self.image_prompt_3.is_empty()
+            else None
+        )
+        image_prompt_4_base64 = (
+            await context.image_to_base64(self.image_prompt_4)
+            if not self.image_prompt_4.is_empty()
+            else None
+        )
+        image_prompt_1_base64 = (
+            await context.image_to_base64(self.image_prompt_1)
+            if not self.image_prompt_1.is_empty()
+            else None
+        )
+        image_prompt_2_base64 = (
+            await context.image_to_base64(self.image_prompt_2)
+            if not self.image_prompt_2.is_empty()
+            else None
+        )
         arguments = {
             "styles": self.styles,
-            "uov_image_url": f"data:image/png;base64,{uov_image_base64}",
             "performance": self.performance.value,
-            "mixing_image_prompt_and_vary_upscale": self.mixing_image_prompt_and_vary_upscale,
-            "image_prompt_3": self.image_prompt_3,
             "prompt": self.prompt,
+            "mixing_image_prompt_and_vary_upscale": self.mixing_image_prompt_and_vary_upscale,
+            "uov_image_url": f"data:image/png;base64,{uov_image_base64}" if uov_image_base64 else None,
+            "image_prompt_3": {
+                "image_url": f"data:image/png;base64,{image_prompt_3_base64}" if image_prompt_3_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
-            "image_prompt_4": self.image_prompt_4,
-            "image_prompt_1": self.image_prompt_1,
-            "enable_safety_checker": self.enable_safety_checker,
-            "sharpness": self.sharpness,
+            "image_prompt_4": {
+                "image_url": f"data:image/png;base64,{image_prompt_4_base64}" if image_prompt_4_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
+            "image_prompt_1": {
+                "image_url": f"data:image/png;base64,{image_prompt_1_base64}" if image_prompt_1_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "guidance_scale": self.guidance_scale,
+            "sharpness": self.sharpness,
+            "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
-            "aspect_ratio": self.aspect_ratio,
             "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio,
             "output_format": self.output_format.value,
             "refiner_model": self.refiner_model.value,
-            "image_prompt_2": self.image_prompt_2,
             "sync_mode": self.sync_mode,
+            "image_prompt_2": {
+                "image_url": f"data:image/png;base64,{image_prompt_2_base64}" if image_prompt_2_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "uov_method": self.uov_method.value,
             "seed": self.seed,
             "refiner_switch": self.refiner_switch,
@@ -10369,6 +11148,10 @@ class FooocusUpscaleOrVary(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10381,7 +11164,30 @@ class FooocusUpscaleOrVary(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class PixartSigmaStyle(str, Enum):
+    """
+    The style to apply to the image.
+    """
+    NO_STYLE = "(No style)"
+    CINEMATIC = "Cinematic"
+    PHOTOGRAPHIC = "Photographic"
+    ANIME = "Anime"
+    MANGA = "Manga"
+    DIGITAL_ART = "Digital Art"
+    PIXEL_ART = "Pixel art"
+    FANTASY_ART = "Fantasy art"
+    NEONPUNK = "Neonpunk"
+    MODEL_3D = "3D Model"
+
+class PixartSigmaScheduler(str, Enum):
+    """
+    The scheduler to use for the model.
+    """
+    DPM_SOLVER = "DPM-SOLVER"
+    SA_SOLVER = "SA-SOLVER"
+
 
 class PixartSigma(FALNode):
     """
@@ -10396,29 +11202,6 @@ class PixartSigma(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Style(Enum):
-        """
-        The style to apply to the image.
-        """
-        NO_STYLE = "(No style)"
-        CINEMATIC = "Cinematic"
-        PHOTOGRAPHIC = "Photographic"
-        ANIME = "Anime"
-        MANGA = "Manga"
-        DIGITAL_ART = "Digital Art"
-        PIXEL_ART = "Pixel art"
-        FANTASY_ART = "Fantasy art"
-        NEONPUNK = "Neonpunk"
-        MODEL_3D = "3D Model"
-
-    class Scheduler(Enum):
-        """
-        The scheduler to use for the model.
-        """
-        DPM_SOLVER = "DPM-SOLVER"
-        SA_SOLVER = "SA-SOLVER"
-
-
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
@@ -10428,11 +11211,11 @@ class PixartSigma(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    style: Style = Field(
-        default=Style.NO_STYLE, description="The style to apply to the image."
+    style: PixartSigmaStyle = Field(
+        default=PixartSigmaStyle.NO_STYLE, description="The style to apply to the image."
     )
-    scheduler: Scheduler = Field(
-        default=Scheduler.DPM_SOLVER, description="The scheduler to use for the model."
+    scheduler: PixartSigmaScheduler = Field(
+        default=PixartSigmaScheduler.DPM_SOLVER, description="The scheduler to use for the model."
     )
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
@@ -10470,6 +11253,10 @@ class PixartSigma(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10482,7 +11269,15 @@ class PixartSigma(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FluxSubjectOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class FluxSubject(FALNode):
     """
@@ -10497,14 +11292,6 @@ class FluxSubject(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-
     prompt: str = Field(
         default="", description="The prompt to generate an image from."
     )
@@ -10514,8 +11301,8 @@ class FluxSubject(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: FluxSubjectOutputFormat = Field(
+        default=FluxSubjectOutputFormat.PNG, description="The format of the generated image."
     )
     image: ImageRef = Field(
         default=ImageRef(), description="URL of image of the subject"
@@ -10537,13 +11324,17 @@ class FluxSubject(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "num_images": self.num_images,
             "image_size": self.image_size,
             "output_format": self.output_format.value,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "sync_mode": self.sync_mode,
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
@@ -10553,6 +11344,10 @@ class FluxSubject(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10565,7 +11360,22 @@ class FluxSubject(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class SdxlControlnetUnionFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class SdxlControlnetUnionSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class SdxlControlnetUnion(FALNode):
     """
@@ -10579,21 +11389,6 @@ class SdxlControlnetUnion(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -10625,8 +11420,8 @@ class SdxlControlnetUnion(FALNode):
     segmentation_preprocess: bool = Field(
         default=True, description="Whether to preprocess the segmentation image."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: SdxlControlnetUnionFormat = Field(
+        default=SdxlControlnetUnionFormat.JPEG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
@@ -10670,8 +11465,8 @@ class SdxlControlnetUnion(FALNode):
     controlnet_conditioning_scale: float = Field(
         default=0.5, description="The scale of the controlnet conditioning."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: SdxlControlnetUnionSafetyCheckerVersion = Field(
+        default=SdxlControlnetUnionSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     openpose_preprocess: bool = Field(
         default=True, description="Whether to preprocess the openpose image."
@@ -10681,32 +11476,56 @@ class SdxlControlnetUnion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        normal_image_base64 = await context.image_to_base64(self.normal_image)
-        teed_image_base64 = await context.image_to_base64(self.teed_image)
-        canny_image_base64 = await context.image_to_base64(self.canny_image)
-        segmentation_image_base64 = await context.image_to_base64(self.segmentation_image)
-        openpose_image_base64 = await context.image_to_base64(self.openpose_image)
-        depth_image_base64 = await context.image_to_base64(self.depth_image)
+        normal_image_base64 = (
+            await context.image_to_base64(self.normal_image)
+            if not self.normal_image.is_empty()
+            else None
+        )
+        teed_image_base64 = (
+            await context.image_to_base64(self.teed_image)
+            if not self.teed_image.is_empty()
+            else None
+        )
+        canny_image_base64 = (
+            await context.image_to_base64(self.canny_image)
+            if not self.canny_image.is_empty()
+            else None
+        )
+        segmentation_image_base64 = (
+            await context.image_to_base64(self.segmentation_image)
+            if not self.segmentation_image.is_empty()
+            else None
+        )
+        openpose_image_base64 = (
+            await context.image_to_base64(self.openpose_image)
+            if not self.openpose_image.is_empty()
+            else None
+        )
+        depth_image_base64 = (
+            await context.image_to_base64(self.depth_image)
+            if not self.depth_image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "depth_preprocess": self.depth_preprocess,
             "image_size": self.image_size,
-            "normal_image_url": f"data:image/png;base64,{normal_image_base64}",
+            "normal_image_url": f"data:image/png;base64,{normal_image_base64}" if normal_image_base64 else None,
             "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
-            "teed_image_url": f"data:image/png;base64,{teed_image_base64}",
+            "teed_image_url": f"data:image/png;base64,{teed_image_base64}" if teed_image_base64 else None,
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
             "guidance_scale": self.guidance_scale,
-            "canny_image_url": f"data:image/png;base64,{canny_image_base64}",
+            "canny_image_url": f"data:image/png;base64,{canny_image_base64}" if canny_image_base64 else None,
             "segmentation_preprocess": self.segmentation_preprocess,
             "format": self.format.value,
             "sync_mode": self.sync_mode,
             "request_id": self.request_id,
             "seed": self.seed,
-            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_base64}",
-            "openpose_image_url": f"data:image/png;base64,{openpose_image_base64}",
+            "segmentation_image_url": f"data:image/png;base64,{segmentation_image_base64}" if segmentation_image_base64 else None,
+            "openpose_image_url": f"data:image/png;base64,{openpose_image_base64}" if openpose_image_base64 else None,
             "canny_preprocess": self.canny_preprocess,
             "expand_prompt": self.expand_prompt,
-            "depth_image_url": f"data:image/png;base64,{depth_image_base64}",
+            "depth_image_url": f"data:image/png;base64,{depth_image_base64}" if depth_image_base64 else None,
             "normal_preprocess": self.normal_preprocess,
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
@@ -10720,6 +11539,10 @@ class SdxlControlnetUnion(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10732,7 +11555,26 @@ class SdxlControlnetUnion(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class KolorsOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class KolorsScheduler(str, Enum):
+    """
+    The scheduler to use for the model.
+    """
+    EULERDISCRETESCHEDULER = "EulerDiscreteScheduler"
+    EULERANCESTRALDISCRETESCHEDULER = "EulerAncestralDiscreteScheduler"
+    DPMSOLVERMULTISTEPSCHEDULER = "DPMSolverMultistepScheduler"
+    DPMSOLVERMULTISTEPSCHEDULER_SDE_KARRAS = "DPMSolverMultistepScheduler_SDE_karras"
+    UNIPCMULTISTEPSCHEDULER = "UniPCMultistepScheduler"
+    DEISMULTISTEPSCHEDULER = "DEISMultistepScheduler"
+
 
 class Kolors(FALNode):
     """
@@ -10747,25 +11589,6 @@ class Kolors(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class Scheduler(Enum):
-        """
-        The scheduler to use for the model.
-        """
-        EULERDISCRETESCHEDULER = "EulerDiscreteScheduler"
-        EULERANCESTRALDISCRETESCHEDULER = "EulerAncestralDiscreteScheduler"
-        DPMSOLVERMULTISTEPSCHEDULER = "DPMSolverMultistepScheduler"
-        DPMSOLVERMULTISTEPSCHEDULER_SDE_KARRAS = "DPMSolverMultistepScheduler_SDE_karras"
-        UNIPCMULTISTEPSCHEDULER = "UniPCMultistepScheduler"
-        DEISMULTISTEPSCHEDULER = "DEISMultistepScheduler"
-
-
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
@@ -10775,14 +11598,14 @@ class Kolors(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: KolorsOutputFormat = Field(
+        default=KolorsOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    scheduler: Scheduler = Field(
-        default=Scheduler.EULERDISCRETESCHEDULER, description="The scheduler to use for the model."
+    scheduler: KolorsScheduler = Field(
+        default=KolorsScheduler.EULERDISCRETESCHEDULER, description="The scheduler to use for the model."
     )
     guidance_scale: float = Field(
         default=5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
@@ -10817,6 +11640,10 @@ class Kolors(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10829,7 +11656,7 @@ class Kolors(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class StableCascade(FALNode):
     """
@@ -10895,6 +11722,10 @@ class StableCascade(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -10907,7 +11738,22 @@ class StableCascade(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FastSdxlFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FastSdxlSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class FastSdxl(FALNode):
     """
@@ -10921,21 +11767,6 @@ class FastSdxl(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -10961,8 +11792,8 @@ class FastSdxl(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: FastSdxlFormat = Field(
+        default=FastSdxlFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
@@ -10970,17 +11801,17 @@ class FastSdxl(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: FastSdxlSafetyCheckerVersion = Field(
+        default=FastSdxlSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     request_id: str = Field(
         default="", description="An id bound to a request, can be used with response to identify the request itself."
     )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
     num_inference_steps: int = Field(
         default=25, description="The number of inference steps to perform."
-    )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
@@ -10998,12 +11829,16 @@ class FastSdxl(FALNode):
             "sync_mode": self.sync_mode,
             "safety_checker_version": self.safety_checker_version.value,
             "request_id": self.request_id,
-            "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
+            "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11016,7 +11851,7 @@ class FastSdxl(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class StableCascadeSoteDiffusion(FALNode):
     """
@@ -11082,6 +11917,10 @@ class StableCascadeSoteDiffusion(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11094,7 +11933,40 @@ class StableCascadeSoteDiffusion(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class LightningModelsScheduler(str, Enum):
+    """
+    Scheduler / sampler to use for the image denoising process.
+    """
+    DPM_PLUS_PLUS_2M = "DPM++ 2M"
+    DPM_PLUS_PLUS_2M_KARRAS = "DPM++ 2M Karras"
+    DPM_PLUS_PLUS_2M_SDE = "DPM++ 2M SDE"
+    DPM_PLUS_PLUS_2M_SDE_KARRAS = "DPM++ 2M SDE Karras"
+    DPM_PLUS_PLUS_SDE = "DPM++ SDE"
+    DPM_PLUS_PLUS_SDE_KARRAS = "DPM++ SDE Karras"
+    KDPM_2A = "KDPM 2A"
+    EULER = "Euler"
+    EULER_TRAILING_TIMESTEPS = "Euler (trailing timesteps)"
+    EULER_A = "Euler A"
+    LCM = "LCM"
+    EDMDPMSOLVERMULTISTEPSCHEDULER = "EDMDPMSolverMultistepScheduler"
+    TCDSCHEDULER = "TCDScheduler"
+
+class LightningModelsFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class LightningModelsSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class LightningModels(FALNode):
     """
@@ -11108,39 +11980,6 @@ class LightningModels(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Scheduler(Enum):
-        """
-        Scheduler / sampler to use for the image denoising process.
-        """
-        DPM_PLUS_PLUS_2M = "DPM++ 2M"
-        DPM_PLUS_PLUS_2M_KARRAS = "DPM++ 2M Karras"
-        DPM_PLUS_PLUS_2M_SDE = "DPM++ 2M SDE"
-        DPM_PLUS_PLUS_2M_SDE_KARRAS = "DPM++ 2M SDE Karras"
-        DPM_PLUS_PLUS_SDE = "DPM++ SDE"
-        DPM_PLUS_PLUS_SDE_KARRAS = "DPM++ SDE Karras"
-        KDPM_2A = "KDPM 2A"
-        EULER = "Euler"
-        EULER_TRAILING_TIMESTEPS = "Euler (trailing timesteps)"
-        EULER_A = "Euler A"
-        LCM = "LCM"
-        EDMDPMSOLVERMULTISTEPSCHEDULER = "EDMDPMSolverMultistepScheduler"
-        TCDSCHEDULER = "TCDScheduler"
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -11157,7 +11996,7 @@ class LightningModels(FALNode):
     loras: list[LoraWeight] = Field(
         default=[], description="The list of LoRA weights to use."
     )
-    scheduler: Scheduler | None = Field(
+    scheduler: LightningModelsScheduler | None = Field(
         default=None, description="Scheduler / sampler to use for the image denoising process."
     )
     guidance_scale: float = Field(
@@ -11169,8 +12008,8 @@ class LightningModels(FALNode):
     negative_prompt: str = Field(
         default="(worst quality, low quality, normal quality, lowres, low details, oversaturated, undersaturated, overexposed, underexposed, grayscale, bw, bad photo, bad photography, bad art:1.4), (watermark, signature, text font, username, error, logo, words, letters, digits, autograph, trademark, name:1.2), (blur, blurry, grainy), morbid, ugly, asymmetrical, mutated malformed, mutilated, poorly lit, bad shadow, draft, cropped, out of frame, cut off, censored, jpeg artifacts, out of focus, glitch, duplicate, (airbrushed, cartoon, anime, semi-realistic, cgi, render, blender, digital art, manga, amateur:1.3), (3D ,3D Game, 3D Game Scene, 3D Character:1.1), (bad hands, bad anatomy, bad body, bad face, bad teeth, bad arms, bad legs, deformities:1.3)", description="The negative prompt to use. Use it to address details that you don't want in the image."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: LightningModelsFormat = Field(
+        default=LightningModelsFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
@@ -11181,8 +12020,8 @@ class LightningModels(FALNode):
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: LightningModelsSafetyCheckerVersion = Field(
+        default=LightningModelsSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     num_inference_steps: int = Field(
         default=5, description="The number of inference steps to perform."
@@ -11213,6 +12052,10 @@ class LightningModels(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11225,7 +12068,22 @@ class LightningModels(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class PlaygroundV25Format(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class PlaygroundV25SafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class PlaygroundV25(FALNode):
     """
@@ -11239,21 +12097,6 @@ class PlaygroundV25(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -11279,14 +12122,14 @@ class PlaygroundV25(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: PlaygroundV25Format = Field(
+        default=PlaygroundV25Format.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: PlaygroundV25SafetyCheckerVersion = Field(
+        default=PlaygroundV25SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     request_id: str = Field(
         default="", description="An id bound to a request, can be used with response to identify the request itself."
@@ -11318,6 +12161,10 @@ class PlaygroundV25(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11330,7 +12177,22 @@ class PlaygroundV25(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class RealisticVisionFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class RealisticVisionSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class RealisticVision(FALNode):
     """
@@ -11344,21 +12206,6 @@ class RealisticVision(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -11387,8 +12234,8 @@ class RealisticVision(FALNode):
     negative_prompt: str = Field(
         default="(worst quality, low quality, normal quality, lowres, low details, oversaturated, undersaturated, overexposed, underexposed, grayscale, bw, bad photo, bad photography, bad art:1.4), (watermark, signature, text font, username, error, logo, words, letters, digits, autograph, trademark, name:1.2), (blur, blurry, grainy), morbid, ugly, asymmetrical, mutated malformed, mutilated, poorly lit, bad shadow, draft, cropped, out of frame, cut off, censored, jpeg artifacts, out of focus, glitch, duplicate, (airbrushed, cartoon, anime, semi-realistic, cgi, render, blender, digital art, manga, amateur:1.3), (3D ,3D Game, 3D Game Scene, 3D Character:1.1), (bad hands, bad anatomy, bad body, bad face, bad teeth, bad arms, bad legs, deformities:1.3)", description="The negative prompt to use. Use it to address details that you don't want in the image."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: RealisticVisionFormat = Field(
+        default=RealisticVisionFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
@@ -11399,8 +12246,8 @@ class RealisticVision(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: RealisticVisionSafetyCheckerVersion = Field(
+        default=RealisticVisionSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     request_id: str = Field(
         default="", description="An id bound to a request, can be used with response to identify the request itself."
@@ -11435,6 +12282,10 @@ class RealisticVision(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11447,7 +12298,30 @@ class RealisticVision(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class DreamshaperFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class DreamshaperModelName(str, Enum):
+    """
+    The Dreamshaper model to use.
+    """
+    LYKON_DREAMSHAPER_XL_1_0 = "Lykon/dreamshaper-xl-1-0"
+    LYKON_DREAMSHAPER_XL_V2_TURBO = "Lykon/dreamshaper-xl-v2-turbo"
+    LYKON_DREAMSHAPER_8 = "Lykon/dreamshaper-8"
+
+class DreamshaperSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class Dreamshaper(FALNode):
     """
@@ -11461,29 +12335,6 @@ class Dreamshaper(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class ModelName(Enum):
-        """
-        The Dreamshaper model to use.
-        """
-        LYKON_DREAMSHAPER_XL_1_0 = "Lykon/dreamshaper-xl-1-0"
-        LYKON_DREAMSHAPER_XL_V2_TURBO = "Lykon/dreamshaper-xl-v2-turbo"
-        LYKON_DREAMSHAPER_8 = "Lykon/dreamshaper-8"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -11509,20 +12360,20 @@ class Dreamshaper(FALNode):
     negative_prompt: str = Field(
         default="(worst quality, low quality, normal quality, lowres, low details, oversaturated, undersaturated, overexposed, underexposed, grayscale, bw, bad photo, bad photography, bad art:1.4), (watermark, signature, text font, username, error, logo, words, letters, digits, autograph, trademark, name:1.2), (blur, blurry, grainy), morbid, ugly, asymmetrical, mutated malformed, mutilated, poorly lit, bad shadow, draft, cropped, out of frame, cut off, censored, jpeg artifacts, out of focus, glitch, duplicate, (airbrushed, cartoon, anime, semi-realistic, cgi, render, blender, digital art, manga, amateur:1.3), (3D ,3D Game, 3D Game Scene, 3D Character:1.1), (bad hands, bad anatomy, bad body, bad face, bad teeth, bad arms, bad legs, deformities:1.3)", description="The negative prompt to use. Use it to address details that you don't want in the image."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: DreamshaperFormat = Field(
+        default=DreamshaperFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    model_name: ModelName | None = Field(
+    model_name: DreamshaperModelName | None = Field(
         default=None, description="The Dreamshaper model to use."
     )
     sync_mode: bool = Field(
         default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: DreamshaperSafetyCheckerVersion = Field(
+        default=DreamshaperSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     num_inference_steps: int = Field(
         default=35, description="The number of inference steps to perform."
@@ -11552,6 +12403,10 @@ class Dreamshaper(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11564,7 +12419,22 @@ class Dreamshaper(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class StableDiffusionV15Format(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class StableDiffusionV15SafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class StableDiffusionV15(FALNode):
     """
@@ -11578,21 +12448,6 @@ class StableDiffusionV15(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -11618,8 +12473,8 @@ class StableDiffusionV15(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: StableDiffusionV15Format = Field(
+        default=StableDiffusionV15Format.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
@@ -11627,8 +12482,8 @@ class StableDiffusionV15(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: StableDiffusionV15SafetyCheckerVersion = Field(
+        default=StableDiffusionV15SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     request_id: str = Field(
         default="", description="An id bound to a request, can be used with response to identify the request itself."
@@ -11661,6 +12516,10 @@ class StableDiffusionV15(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11673,7 +12532,7 @@ class StableDiffusionV15(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class LayerDiffusion(FALNode):
     """
@@ -11719,6 +12578,10 @@ class LayerDiffusion(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11729,7 +12592,31 @@ class LayerDiffusion(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FastLightningSdxlFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FastLightningSdxlSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
+class FastLightningSdxlNumInferenceSteps(str, Enum):
+    """
+    The number of inference steps to perform.
+    """
+    VALUE_1 = "1"
+    VALUE_2 = "2"
+    VALUE_4 = "4"
+    VALUE_8 = "8"
+
 
 class FastLightningSdxl(FALNode):
     """
@@ -11744,32 +12631,8 @@ class FastLightningSdxl(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
-    class NumInferenceSteps(Enum):
-        """
-        The number of inference steps to perform.
-        """
-        VALUE_1 = "1"
-        VALUE_2 = "2"
-        VALUE_4 = "4"
-        VALUE_8 = "8"
-
-
-    prompt: str = Field(
-        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    format: FastLightningSdxlFormat = Field(
+        default=FastLightningSdxlFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
@@ -11777,8 +12640,8 @@ class FastLightningSdxl(FALNode):
     image_size: str = Field(
         default="square_hd", description="The size of the generated image."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
     embeddings: list[Embedding] = Field(
         default=[], description="The list of embeddings to use."
@@ -11789,44 +12652,44 @@ class FastLightningSdxl(FALNode):
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    guidance_rescale: float = Field(
-        default=0, description="The rescale factor for the CFG."
-    )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
-    )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to true, the safety checker will be enabled."
-    )
-    num_inference_steps: NumInferenceSteps = Field(
-        default=4, description="The number of inference steps to perform."
-    )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    safety_checker_version: FastLightningSdxlSafetyCheckerVersion = Field(
+        default=FastLightningSdxlSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     request_id: str = Field(
         default="", description="An id bound to a request, can be used with response to identify the request itself."
     )
+    num_inference_steps: FastLightningSdxlNumInferenceSteps = Field(
+        default=4, description="The number of inference steps to perform."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    )
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to true, the safety checker will be enabled."
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
         arguments = {
-            "prompt": self.prompt,
+            "format": self.format.value,
             "num_images": self.num_images,
             "image_size": self.image_size,
-            "format": self.format.value,
+            "prompt": self.prompt,
             "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
             "expand_prompt": self.expand_prompt,
             "sync_mode": self.sync_mode,
-            "guidance_rescale": self.guidance_rescale,
             "safety_checker_version": self.safety_checker_version.value,
-            "enable_safety_checker": self.enable_safety_checker,
+            "request_id": self.request_id,
             "num_inference_steps": self.num_inference_steps.value,
             "seed": self.seed,
-            "request_id": self.request_id,
+            "enable_safety_checker": self.enable_safety_checker,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11839,7 +12702,22 @@ class FastLightningSdxl(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FastFooocusSdxlImageToImageFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FastFooocusSdxlImageToImageSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class FastFooocusSdxlImageToImage(FALNode):
     """
@@ -11853,21 +12731,6 @@ class FastFooocusSdxlImageToImage(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -11896,8 +12759,8 @@ class FastFooocusSdxlImageToImage(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: FastFooocusSdxlImageToImageFormat = Field(
+        default=FastFooocusSdxlImageToImageFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
@@ -11908,8 +12771,8 @@ class FastFooocusSdxlImageToImage(FALNode):
     strength: float = Field(
         default=0.95, description="determines how much the generated image resembles the initial image"
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: FastFooocusSdxlImageToImageSafetyCheckerVersion = Field(
+        default=FastFooocusSdxlImageToImageSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     num_inference_steps: int = Field(
         default=8, description="The number of inference steps to perform."
@@ -11919,7 +12782,11 @@ class FastFooocusSdxlImageToImage(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "enable_refiner": self.enable_refiner,
@@ -11932,7 +12799,7 @@ class FastFooocusSdxlImageToImage(FALNode):
             "negative_prompt": self.negative_prompt,
             "format": self.format.value,
             "num_images": self.num_images,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "strength": self.strength,
             "safety_checker_version": self.safety_checker_version.value,
             "num_inference_steps": self.num_inference_steps,
@@ -11941,6 +12808,10 @@ class FastFooocusSdxlImageToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -11953,7 +12824,7 @@ class FastFooocusSdxlImageToImage(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class FastSdxlControlnetCanny(FALNode):
     """
@@ -12012,7 +12883,11 @@ class FastSdxlControlnetCanny(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        control_image_base64 = await context.image_to_base64(self.control_image)
+        control_image_base64 = (
+            await context.image_to_base64(self.control_image)
+            if not self.control_image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
@@ -12024,7 +12899,7 @@ class FastSdxlControlnetCanny(FALNode):
             "num_images": self.num_images,
             "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
             "sync_mode": self.sync_mode,
-            "control_image_url": f"data:image/png;base64,{control_image_base64}",
+            "control_image_url": f"data:image/png;base64,{control_image_base64}" if control_image_base64 else None,
             "num_inference_steps": self.num_inference_steps,
             "seed": self.seed,
             "enable_deep_cache": self.enable_deep_cache,
@@ -12032,6 +12907,10 @@ class FastSdxlControlnetCanny(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12044,7 +12923,29 @@ class FastSdxlControlnetCanny(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FastLcmDiffusionFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FastLcmDiffusionModelName(str, Enum):
+    """
+    The name of the model to use.
+    """
+    STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0 = "stabilityai/stable-diffusion-xl-base-1.0"
+    RUNWAYML_STABLE_DIFFUSION_V1_5 = "runwayml/stable-diffusion-v1-5"
+
+class FastLcmDiffusionSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class FastLcmDiffusion(FALNode):
     """
@@ -12058,28 +12959,6 @@ class FastLcmDiffusion(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class ModelName(Enum):
-        """
-        The name of the model to use.
-        """
-        STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0 = "stabilityai/stable-diffusion-xl-base-1.0"
-        RUNWAYML_STABLE_DIFFUSION_V1_5 = "runwayml/stable-diffusion-v1-5"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -12102,20 +12981,20 @@ class FastLcmDiffusion(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: FastLcmDiffusionFormat = Field(
+        default=FastLcmDiffusionFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    model_name: ModelName = Field(
-        default=ModelName.STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0, description="The name of the model to use."
+    model_name: FastLcmDiffusionModelName = Field(
+        default=FastLcmDiffusionModelName.STABILITYAI_STABLE_DIFFUSION_XL_BASE_1_0, description="The name of the model to use."
     )
     sync_mode: bool = Field(
         default=True, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: FastLcmDiffusionSafetyCheckerVersion = Field(
+        default=FastLcmDiffusionSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     request_id: str = Field(
         default="", description="An id bound to a request, can be used with response to identify the request itself."
@@ -12148,6 +13027,10 @@ class FastLcmDiffusion(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12160,7 +13043,22 @@ class FastLcmDiffusion(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FastFooocusSdxlFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
+class FastFooocusSdxlSafetyCheckerVersion(str, Enum):
+    """
+    The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
+    """
+    V1 = "v1"
+    V2 = "v2"
+
 
 class FastFooocusSdxl(FALNode):
     """
@@ -12174,21 +13072,6 @@ class FastFooocusSdxl(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Format(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
-    class SafetyCheckerVersion(Enum):
-        """
-        The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model.
-        """
-        V1 = "v1"
-        V2 = "v2"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -12217,14 +13100,14 @@ class FastFooocusSdxl(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    format: Format = Field(
-        default=Format.JPEG, description="The format of the generated image."
+    format: FastFooocusSdxlFormat = Field(
+        default=FastFooocusSdxlFormat.JPEG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    safety_checker_version: SafetyCheckerVersion = Field(
-        default=SafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
+    safety_checker_version: FastFooocusSdxlSafetyCheckerVersion = Field(
+        default=FastFooocusSdxlSafetyCheckerVersion.V1, description="The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model."
     )
     num_inference_steps: int = Field(
         default=8, description="The number of inference steps to perform."
@@ -12253,6 +13136,10 @@ class FastFooocusSdxl(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12265,7 +13152,15 @@ class FastFooocusSdxl(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class IllusionDiffusionScheduler(str, Enum):
+    """
+    Scheduler / sampler to use for the image denoising process.
+    """
+    DPM_PLUS_PLUS_KARRAS_SDE = "DPM++ Karras SDE"
+    EULER = "Euler"
+
 
 class IllusionDiffusion(FALNode):
     """
@@ -12280,14 +13175,6 @@ class IllusionDiffusion(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Scheduler(Enum):
-        """
-        Scheduler / sampler to use for the image denoising process.
-        """
-        DPM_PLUS_PLUS_KARRAS_SDE = "DPM++ Karras SDE"
-        EULER = "Euler"
-
-
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
@@ -12300,8 +13187,8 @@ class IllusionDiffusion(FALNode):
     image: ImageRef = Field(
         default=ImageRef(), description="Input image url."
     )
-    scheduler: Scheduler = Field(
-        default=Scheduler.EULER, description="Scheduler / sampler to use for the image denoising process."
+    scheduler: IllusionDiffusionScheduler = Field(
+        default=IllusionDiffusionScheduler.EULER, description="Scheduler / sampler to use for the image denoising process."
     )
     control_guidance_start: float = Field(
         default=0
@@ -12309,8 +13196,8 @@ class IllusionDiffusion(FALNode):
     guidance_scale: float = Field(
         default=7.5, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
-    seed: int = Field(
-        default=-1, description="Seed of the generated Image. It will be the same value of the one passed in the input or the randomly generated that was used in case none was passed."
+    seed: str = Field(
+        default="", description="Seed of the generated Image. It will be the same value of the one passed in the input or the randomly generated that was used in case none was passed."
     )
     control_guidance_end: float = Field(
         default=1
@@ -12323,12 +13210,16 @@ class IllusionDiffusion(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "controlnet_conditioning_scale": self.controlnet_conditioning_scale,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "scheduler": self.scheduler.value,
             "control_guidance_start": self.control_guidance_start,
             "guidance_scale": self.guidance_scale,
@@ -12340,6 +13231,10 @@ class IllusionDiffusion(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12350,7 +13245,51 @@ class IllusionDiffusion(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FooocusImagePromptPerformance(str, Enum):
+    """
+    You can choose Speed or Quality
+    """
+    SPEED = "Speed"
+    QUALITY = "Quality"
+    EXTREME_SPEED = "Extreme Speed"
+    LIGHTNING = "Lightning"
+
+class FooocusImagePromptOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+class FooocusImagePromptRefinerModel(str, Enum):
+    """
+    Refiner (SDXL or SD 1.5)
+    """
+    NONE = "None"
+    REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
+
+class FooocusImagePromptUovMethod(str, Enum):
+    """
+    The method to use for upscaling or varying.
+    """
+    DISABLED = "Disabled"
+    VARY_SUBTLE = "Vary (Subtle)"
+    VARY_STRONG = "Vary (Strong)"
+    UPSCALE_1_5X = "Upscale (1.5x)"
+    UPSCALE_2X = "Upscale (2x)"
+    UPSCALE_FAST_2X = "Upscale (Fast 2x)"
+
+class FooocusImagePromptInpaintMode(str, Enum):
+    """
+    The mode to use for inpainting.
+    """
+    INPAINT_OR_OUTPAINT_DEFAULT = "Inpaint or Outpaint (default)"
+    IMPROVE_DETAIL_FACE_HAND_EYES_ETC = "Improve Detail (face, hand, eyes, etc.)"
+    MODIFY_CONTENT_ADD_OBJECTS_CHANGE_BACKGROUND_ETC = "Modify Content (add objects, change background, etc.)"
+
 
 class FooocusImagePrompt(FALNode):
     """
@@ -12365,106 +13304,89 @@ class FooocusImagePrompt(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Performance(Enum):
-        """
-        You can choose Speed or Quality
-        """
-        SPEED = "Speed"
-        QUALITY = "Quality"
-        EXTREME_SPEED = "Extreme Speed"
-        LIGHTNING = "Lightning"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-    class RefinerModel(Enum):
-        """
-        Refiner (SDXL or SD 1.5)
-        """
-        NONE = "None"
-        REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
-
-    class InpaintMode(Enum):
-        """
-        The mode to use for inpainting.
-        """
-        INPAINT_OR_OUTPAINT_DEFAULT = "Inpaint or Outpaint (default)"
-        IMPROVE_DETAIL_FACE_HAND_EYES_ETC = "Improve Detail (face, hand, eyes, etc.)"
-        MODIFY_CONTENT_ADD_OBJECTS_CHANGE_BACKGROUND_ETC = "Modify Content (add objects, change background, etc.)"
-
-    class UovMethod(Enum):
-        """
-        The method to use for upscaling or varying.
-        """
-        DISABLED = "Disabled"
-        VARY_SUBTLE = "Vary (Subtle)"
-        VARY_STRONG = "Vary (Strong)"
-        UPSCALE_1_5X = "Upscale (1.5x)"
-        UPSCALE_2X = "Upscale (2x)"
-        UPSCALE_FAST_2X = "Upscale (Fast 2x)"
-
-
+    styles: list[str] = Field(
+        default=[], description="The style to use."
+    )
+    performance: FooocusImagePromptPerformance = Field(
+        default=FooocusImagePromptPerformance.EXTREME_SPEED, description="You can choose Speed or Quality"
+    )
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    image_prompt_3: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
+        default=""
     )
     uov_image: ImageRef = Field(
         default=ImageRef(), description="The image to upscale or vary."
     )
-    performance: Performance = Field(
-        default=Performance.EXTREME_SPEED, description="You can choose Speed or Quality"
-    )
-    image_prompt_3: str = Field(
-        default=""
-    )
-    styles: list[str] = Field(
-        default=[], description="The style to use."
-    )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
-    image_prompt_4: str = Field(
+    image_prompt_4: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
         default=""
-    )
-    guidance_scale: float = Field(
-        default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
-    )
-    sharpness: float = Field(
-        default=2, description="The sharpness of the generated image. Use it to control how sharp the generated image should be. Higher value means image and texture are sharper."
     )
     mixing_image_prompt_and_inpaint: bool = Field(
         default=False, description="Mixing Image Prompt and Inpaint"
     )
-    outpaint_selections: list[str] = Field(
-        default=[], description="The directions to outpaint."
+    sharpness: float = Field(
+        default=2, description="The sharpness of the generated image. Use it to control how sharp the generated image should be. Higher value means image and texture are sharper."
+    )
+    guidance_scale: float = Field(
+        default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
     inpaint_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a reference for inpainting."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    outpaint_selections: list[str] = Field(
+        default=[], description="The directions to outpaint."
     )
-    refiner_model: RefinerModel = Field(
-        default=RefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
+    output_format: FooocusImagePromptOutputFormat = Field(
+        default=FooocusImagePromptOutputFormat.JPEG, description="The format of the generated image."
     )
-    image_prompt_2: str = Field(
-        default=""
+    refiner_model: FooocusImagePromptRefinerModel = Field(
+        default=FooocusImagePromptRefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
     )
     sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    inpaint_mode: InpaintMode = Field(
-        default=InpaintMode.INPAINT_OR_OUTPAINT_DEFAULT, description="The mode to use for inpainting."
+    image_prompt_2: ImageRef = Field(
+        default=ImageRef()
     )
-    uov_method: UovMethod = Field(
-        default=UovMethod.DISABLED, description="The method to use for upscaling or varying."
+    weight: float = Field(
+        default=0.0
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
+        default=""
+    )
+    uov_method: FooocusImagePromptUovMethod = Field(
+        default=FooocusImagePromptUovMethod.DISABLED, description="The method to use for upscaling or varying."
+    )
+    inpaint_mode: FooocusImagePromptInpaintMode = Field(
+        default=FooocusImagePromptInpaintMode.INPAINT_OR_OUTPAINT_DEFAULT, description="The mode to use for inpainting."
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
     refiner_switch: float = Field(
         default=0.8, description="Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models 0.8 for XL-refiners; or any value for switching two SDXL models."
@@ -12475,7 +13397,16 @@ class FooocusImagePrompt(FALNode):
     mask_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a mask for the generated image."
     )
-    image_prompt_1: str = Field(
+    image_prompt_1: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
         default=""
     )
     enable_safety_checker: bool = Field(
@@ -12495,33 +13426,85 @@ class FooocusImagePrompt(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        uov_image_base64 = await context.image_to_base64(self.uov_image)
-        inpaint_image_base64 = await context.image_to_base64(self.inpaint_image)
-        mask_image_base64 = await context.image_to_base64(self.mask_image)
+        image_prompt_3_base64 = (
+            await context.image_to_base64(self.image_prompt_3)
+            if not self.image_prompt_3.is_empty()
+            else None
+        )
+        uov_image_base64 = (
+            await context.image_to_base64(self.uov_image)
+            if not self.uov_image.is_empty()
+            else None
+        )
+        image_prompt_4_base64 = (
+            await context.image_to_base64(self.image_prompt_4)
+            if not self.image_prompt_4.is_empty()
+            else None
+        )
+        inpaint_image_base64 = (
+            await context.image_to_base64(self.inpaint_image)
+            if not self.inpaint_image.is_empty()
+            else None
+        )
+        image_prompt_2_base64 = (
+            await context.image_to_base64(self.image_prompt_2)
+            if not self.image_prompt_2.is_empty()
+            else None
+        )
+        mask_image_base64 = (
+            await context.image_to_base64(self.mask_image)
+            if not self.mask_image.is_empty()
+            else None
+        )
+        image_prompt_1_base64 = (
+            await context.image_to_base64(self.image_prompt_1)
+            if not self.image_prompt_1.is_empty()
+            else None
+        )
         arguments = {
-            "prompt": self.prompt,
-            "uov_image_url": f"data:image/png;base64,{uov_image_base64}",
-            "performance": self.performance.value,
-            "image_prompt_3": self.image_prompt_3,
             "styles": self.styles,
+            "performance": self.performance.value,
+            "prompt": self.prompt,
+            "image_prompt_3": {
+                "image_url": f"data:image/png;base64,{image_prompt_3_base64}" if image_prompt_3_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
+            "uov_image_url": f"data:image/png;base64,{uov_image_base64}" if uov_image_base64 else None,
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
-            "image_prompt_4": self.image_prompt_4,
-            "guidance_scale": self.guidance_scale,
-            "sharpness": self.sharpness,
+            "image_prompt_4": {
+                "image_url": f"data:image/png;base64,{image_prompt_4_base64}" if image_prompt_4_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "mixing_image_prompt_and_inpaint": self.mixing_image_prompt_and_inpaint,
+            "sharpness": self.sharpness,
+            "guidance_scale": self.guidance_scale,
+            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}" if inpaint_image_base64 else None,
             "outpaint_selections": self.outpaint_selections,
-            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}",
             "output_format": self.output_format.value,
             "refiner_model": self.refiner_model.value,
-            "image_prompt_2": self.image_prompt_2,
             "sync_mode": self.sync_mode,
-            "inpaint_mode": self.inpaint_mode.value,
+            "image_prompt_2": {
+                "image_url": f"data:image/png;base64,{image_prompt_2_base64}" if image_prompt_2_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "uov_method": self.uov_method.value,
+            "inpaint_mode": self.inpaint_mode.value,
             "seed": self.seed,
             "refiner_switch": self.refiner_switch,
             "mixing_image_prompt_and_vary_upscale": self.mixing_image_prompt_and_vary_upscale,
-            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
-            "image_prompt_1": self.image_prompt_1,
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}" if mask_image_base64 else None,
+            "image_prompt_1": {
+                "image_url": f"data:image/png;base64,{image_prompt_1_base64}" if image_prompt_1_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
             "num_images": self.num_images,
@@ -12531,6 +13514,10 @@ class FooocusImagePrompt(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12543,7 +13530,49 @@ class FooocusImagePrompt(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class FooocusInpaintPerformance(str, Enum):
+    """
+    You can choose Speed or Quality
+    """
+    SPEED = "Speed"
+    QUALITY = "Quality"
+    EXTREME_SPEED = "Extreme Speed"
+    LIGHTNING = "Lightning"
+
+class FooocusInpaintOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+class FooocusInpaintRefinerModel(str, Enum):
+    """
+    Refiner (SDXL or SD 1.5)
+    """
+    NONE = "None"
+    REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
+
+class FooocusInpaintInpaintMode(str, Enum):
+    """
+    The mode to use for inpainting.
+    """
+    INPAINT_OR_OUTPAINT_DEFAULT = "Inpaint or Outpaint (default)"
+    IMPROVE_DETAIL_FACE_HAND_EYES_ETC = "Improve Detail (face, hand, eyes, etc.)"
+    MODIFY_CONTENT_ADD_OBJECTS_CHANGE_BACKGROUND_ETC = "Modify Content (add objects, change background, etc.)"
+
+class FooocusInpaintInpaintEngine(str, Enum):
+    """
+    Version of Fooocus inpaint model
+    """
+    NONE = "None"
+    V1 = "v1"
+    V2_5 = "v2.5"
+    V2_6 = "v2.6"
+
 
 class FooocusInpaint(FALNode):
     """
@@ -12558,64 +13587,40 @@ class FooocusInpaint(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Performance(Enum):
-        """
-        You can choose Speed or Quality
-        """
-        SPEED = "Speed"
-        QUALITY = "Quality"
-        EXTREME_SPEED = "Extreme Speed"
-        LIGHTNING = "Lightning"
-
-    class RefinerModel(Enum):
-        """
-        Refiner (SDXL or SD 1.5)
-        """
-        NONE = "None"
-        REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-    class InpaintMode(Enum):
-        """
-        The mode to use for inpainting.
-        """
-        INPAINT_OR_OUTPAINT_DEFAULT = "Inpaint or Outpaint (default)"
-        IMPROVE_DETAIL_FACE_HAND_EYES_ETC = "Improve Detail (face, hand, eyes, etc.)"
-        MODIFY_CONTENT_ADD_OBJECTS_CHANGE_BACKGROUND_ETC = "Modify Content (add objects, change background, etc.)"
-
-    class InpaintEngine(Enum):
-        """
-        Version of Fooocus inpaint model
-        """
-        NONE = "None"
-        V1 = "v1"
-        V2_5 = "v2.5"
-        V2_6 = "v2.6"
-
-
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
-    performance: Performance = Field(
-        default=Performance.EXTREME_SPEED, description="You can choose Speed or Quality"
+    performance: FooocusInpaintPerformance = Field(
+        default=FooocusInpaintPerformance.EXTREME_SPEED, description="You can choose Speed or Quality"
     )
     styles: list[str] = Field(
         default=[], description="The style to use."
     )
-    image_prompt_3: str = Field(
+    image_prompt_3: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
         default=""
     )
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
-    image_prompt_4: str = Field(
+    image_prompt_4: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
         default=""
     )
     guidance_scale: float = Field(
@@ -12627,32 +13632,41 @@ class FooocusInpaint(FALNode):
     mixing_image_prompt_and_inpaint: bool = Field(
         default=False, description="Mixing Image Prompt and Inpaint"
     )
-    outpaint_selections: list[str] = Field(
-        default=[], description="The directions to outpaint."
-    )
     inpaint_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a reference for inpainting."
     )
-    refiner_model: RefinerModel = Field(
-        default=RefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
+    outpaint_selections: list[str] = Field(
+        default=[], description="The directions to outpaint."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    output_format: FooocusInpaintOutputFormat = Field(
+        default=FooocusInpaintOutputFormat.JPEG, description="The format of the generated image."
     )
-    image_prompt_2: str = Field(
-        default=""
+    refiner_model: FooocusInpaintRefinerModel = Field(
+        default=FooocusInpaintRefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
+    )
+    sync_mode: bool = Field(
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
     inpaint_respective_field: float = Field(
         default=0.618, description="The area to inpaint. Value 0 is same as \"Only Masked\" in A1111. Value 1 is same as \"Whole Image\" in A1111. Only used in inpaint, not used in outpaint. (Outpaint always use 1.0)"
     )
-    inpaint_mode: InpaintMode = Field(
-        default=InpaintMode.INPAINT_OR_OUTPAINT_DEFAULT, description="The mode to use for inpainting."
+    inpaint_mode: FooocusInpaintInpaintMode = Field(
+        default=FooocusInpaintInpaintMode.INPAINT_OR_OUTPAINT_DEFAULT, description="The mode to use for inpainting."
     )
-    sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+    image_prompt_2: ImageRef = Field(
+        default=ImageRef()
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
+        default=""
+    )
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
     refiner_switch: float = Field(
         default=0.8, description="Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models 0.8 for XL-refiners; or any value for switching two SDXL models."
@@ -12666,7 +13680,16 @@ class FooocusInpaint(FALNode):
     invert_mask: bool = Field(
         default=False, description="If set to true, the mask will be inverted."
     )
-    image_prompt_1: str = Field(
+    image_prompt_1: ImageRef = Field(
+        default=ImageRef()
+    )
+    weight: float = Field(
+        default=0.0
+    )
+    stop_at: float = Field(
+        default=0.0
+    )
+    type: str = Field(
         default=""
     )
     enable_safety_checker: bool = Field(
@@ -12675,11 +13698,11 @@ class FooocusInpaint(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    num_images: int = Field(
-        default=1, description="Number of images to generate in one request"
-    )
     aspect_ratio: str = Field(
         default="1024x1024", description="The size of the generated image. You can choose between some presets or custom height and width that **must be multiples of 8**."
+    )
+    num_images: int = Field(
+        default=1, description="Number of images to generate in one request"
     )
     inpaint_additional_prompt: str = Field(
         default="", description="Describe what you want to inpaint."
@@ -12690,53 +13713,105 @@ class FooocusInpaint(FALNode):
     override_inpaint_options: bool = Field(
         default=False, description="If set to true, the advanced inpaint options ('inpaint_disable_initial_latent', 'inpaint_engine', 'inpaint_strength', 'inpaint_respective_field', 'inpaint_erode_or_dilate') will be overridden. Otherwise, the default values will be used."
     )
-    inpaint_engine: InpaintEngine = Field(
-        default=InpaintEngine.V2_6, description="Version of Fooocus inpaint model"
-    )
     inpaint_erode_or_dilate: float = Field(
         default=0, description="Positive value will make white area in the mask larger, negative value will make white area smaller. (default is 0, always process before any mask invert)"
     )
+    inpaint_engine: FooocusInpaintInpaintEngine = Field(
+        default=FooocusInpaintInpaintEngine.V2_6, description="Version of Fooocus inpaint model"
+    )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        inpaint_image_base64 = await context.image_to_base64(self.inpaint_image)
-        mask_image_base64 = await context.image_to_base64(self.mask_image)
+        image_prompt_3_base64 = (
+            await context.image_to_base64(self.image_prompt_3)
+            if not self.image_prompt_3.is_empty()
+            else None
+        )
+        image_prompt_4_base64 = (
+            await context.image_to_base64(self.image_prompt_4)
+            if not self.image_prompt_4.is_empty()
+            else None
+        )
+        inpaint_image_base64 = (
+            await context.image_to_base64(self.inpaint_image)
+            if not self.inpaint_image.is_empty()
+            else None
+        )
+        image_prompt_2_base64 = (
+            await context.image_to_base64(self.image_prompt_2)
+            if not self.image_prompt_2.is_empty()
+            else None
+        )
+        mask_image_base64 = (
+            await context.image_to_base64(self.mask_image)
+            if not self.mask_image.is_empty()
+            else None
+        )
+        image_prompt_1_base64 = (
+            await context.image_to_base64(self.image_prompt_1)
+            if not self.image_prompt_1.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "performance": self.performance.value,
             "styles": self.styles,
-            "image_prompt_3": self.image_prompt_3,
+            "image_prompt_3": {
+                "image_url": f"data:image/png;base64,{image_prompt_3_base64}" if image_prompt_3_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
-            "image_prompt_4": self.image_prompt_4,
+            "image_prompt_4": {
+                "image_url": f"data:image/png;base64,{image_prompt_4_base64}" if image_prompt_4_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "guidance_scale": self.guidance_scale,
             "sharpness": self.sharpness,
             "mixing_image_prompt_and_inpaint": self.mixing_image_prompt_and_inpaint,
+            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}" if inpaint_image_base64 else None,
             "outpaint_selections": self.outpaint_selections,
-            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}",
-            "refiner_model": self.refiner_model.value,
             "output_format": self.output_format.value,
-            "image_prompt_2": self.image_prompt_2,
+            "refiner_model": self.refiner_model.value,
+            "sync_mode": self.sync_mode,
             "inpaint_respective_field": self.inpaint_respective_field,
             "inpaint_mode": self.inpaint_mode.value,
-            "sync_mode": self.sync_mode,
+            "image_prompt_2": {
+                "image_url": f"data:image/png;base64,{image_prompt_2_base64}" if image_prompt_2_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "seed": self.seed,
             "refiner_switch": self.refiner_switch,
             "inpaint_disable_initial_latent": self.inpaint_disable_initial_latent,
-            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}" if mask_image_base64 else None,
             "invert_mask": self.invert_mask,
-            "image_prompt_1": self.image_prompt_1,
+            "image_prompt_1": {
+                "image_url": f"data:image/png;base64,{image_prompt_1_base64}" if image_prompt_1_base64 else None,
+                "weight": self.weight,
+                "stop_at": self.stop_at,
+                "type": self.type,
+            },
             "enable_safety_checker": self.enable_safety_checker,
             "negative_prompt": self.negative_prompt,
-            "num_images": self.num_images,
             "aspect_ratio": self.aspect_ratio,
+            "num_images": self.num_images,
             "inpaint_additional_prompt": self.inpaint_additional_prompt,
             "inpaint_strength": self.inpaint_strength,
             "override_inpaint_options": self.override_inpaint_options,
-            "inpaint_engine": self.inpaint_engine.value,
             "inpaint_erode_or_dilate": self.inpaint_erode_or_dilate,
+            "inpaint_engine": self.inpaint_engine.value,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12749,7 +13824,15 @@ class FooocusInpaint(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class LcmModel(str, Enum):
+    """
+    The model to use for generating the image.
+    """
+    SDXL = "sdxl"
+    SDV1_5 = "sdv1-5"
+
 
 class Lcm(FALNode):
     """
@@ -12764,14 +13847,6 @@ class Lcm(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Model(Enum):
-        """
-        The model to use for generating the image.
-        """
-        SDXL = "sdxl"
-        SDV1_5 = "sdv1-5"
-
-
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
     )
@@ -12784,8 +13859,8 @@ class Lcm(FALNode):
     enable_safety_checks: bool = Field(
         default=True, description="If set to true, the resulting image will be checked whether it includes any potentially unsafe content. If it does, it will be replaced with a black image."
     )
-    model: Model = Field(
-        default=Model.SDV1_5, description="The model to use for generating the image."
+    model: LcmModel = Field(
+        default=LcmModel.SDV1_5, description="The model to use for generating the image."
     )
     lora: ImageRef = Field(
         default=ImageRef(), description="The url of the lora server to use for image generation."
@@ -12828,32 +13903,48 @@ class Lcm(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        lora_base64 = await context.image_to_base64(self.lora)
-        image_base64 = await context.image_to_base64(self.image)
-        mask_base64 = await context.image_to_base64(self.mask)
+        lora_base64 = (
+            await context.image_to_base64(self.lora)
+            if not self.lora.is_empty()
+            else None
+        )
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
+        mask_base64 = (
+            await context.image_to_base64(self.mask)
+            if not self.mask.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "controlnet_inpaint": self.controlnet_inpaint,
             "image_size": self.image_size,
             "enable_safety_checks": self.enable_safety_checks,
             "model": self.model.value,
-            "lora_url": f"data:image/png;base64,{lora_base64}",
+            "lora_url": f"data:image/png;base64,{lora_base64}" if lora_base64 else None,
             "guidance_scale": self.guidance_scale,
             "negative_prompt": self.negative_prompt,
             "inpaint_mask_only": self.inpaint_mask_only,
             "num_images": self.num_images,
             "lora_scale": self.lora_scale,
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
             "strength": self.strength,
             "sync_mode": self.sync_mode,
             "request_id": self.request_id,
             "seed": self.seed,
-            "mask_url": f"data:image/png;base64,{mask_base64}",
+            "mask_url": f"data:image/png;base64,{mask_base64}" if mask_base64 else None,
             "num_inference_steps": self.num_inference_steps,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12866,7 +13957,7 @@ class Lcm(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
 
 class DiffusionEdge(FALNode):
     """
@@ -12886,13 +13977,21 @@ class DiffusionEdge(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        image_base64 = await context.image_to_base64(self.image)
+        image_base64 = (
+            await context.image_to_base64(self.image)
+            if not self.image.is_empty()
+            else None
+        )
         arguments = {
-            "image_url": f"data:image/png;base64,{image_base64}",
+            "image_url": f"data:image/png;base64,{image_base64}" if image_base64 else None,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -12905,7 +14004,44 @@ class DiffusionEdge(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class KlingImageO3TextToImageAspectRatio(str, Enum):
+    """
+    Aspect ratio of generated images.
+    """
+    RATIO_16_9 = "16:9"
+    RATIO_9_16 = "9:16"
+    RATIO_1_1 = "1:1"
+    RATIO_4_3 = "4:3"
+    RATIO_3_4 = "3:4"
+    RATIO_3_2 = "3:2"
+    RATIO_2_3 = "2:3"
+    RATIO_21_9 = "21:9"
+
+class KlingImageO3TextToImageResolution(str, Enum):
+    """
+    Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res.
+    """
+    VALUE_1K = "1K"
+    VALUE_2K = "2K"
+    VALUE_4K = "4K"
+
+class KlingImageO3TextToImageResultType(str, Enum):
+    """
+    Result type. 'single' for one image, 'series' for a series of related images.
+    """
+    SINGLE = "single"
+    SERIES = "series"
+
+class KlingImageO3TextToImageOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+    WEBP = "webp"
+
 
 class KlingImageO3TextToImage(FALNode):
     """
@@ -12920,51 +14056,14 @@ class KlingImageO3TextToImage(FALNode):
     - Create polished images for presentations
     """
 
-    class AspectRatio(Enum):
-        """
-        Aspect ratio of generated images.
-        """
-        RATIO_16_9 = "16:9"
-        RATIO_9_16 = "9:16"
-        RATIO_1_1 = "1:1"
-        RATIO_4_3 = "4:3"
-        RATIO_3_4 = "3:4"
-        RATIO_3_2 = "3:2"
-        RATIO_2_3 = "2:3"
-        RATIO_21_9 = "21:9"
-
-    class Resolution(Enum):
-        """
-        Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res.
-        """
-        VALUE_1K = "1K"
-        VALUE_2K = "2K"
-        VALUE_4K = "4K"
-
-    class ResultType(Enum):
-        """
-        Result type. 'single' for one image, 'series' for a series of related images.
-        """
-        SINGLE = "single"
-        SERIES = "series"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-        WEBP = "webp"
-
-
     prompt: str = Field(
         default="", description="Text prompt for image generation. Max 2500 characters."
     )
-    aspect_ratio: AspectRatio = Field(
-        default=AspectRatio.RATIO_16_9, description="Aspect ratio of generated images."
+    aspect_ratio: KlingImageO3TextToImageAspectRatio = Field(
+        default=KlingImageO3TextToImageAspectRatio.RATIO_16_9, description="Aspect ratio of generated images."
     )
-    resolution: Resolution = Field(
-        default=Resolution.VALUE_1K, description="Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res."
+    resolution: KlingImageO3TextToImageResolution = Field(
+        default=KlingImageO3TextToImageResolution.VALUE_1K, description="Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate (1-9). Only used when result_type is 'single'."
@@ -12972,11 +14071,11 @@ class KlingImageO3TextToImage(FALNode):
     series_amount: int = Field(
         default=0, description="Number of images in series (2-9). Only used when result_type is 'series'."
     )
-    result_type: ResultType = Field(
-        default=ResultType.SINGLE, description="Result type. 'single' for one image, 'series' for a series of related images."
+    result_type: KlingImageO3TextToImageResultType = Field(
+        default=KlingImageO3TextToImageResultType.SINGLE, description="Result type. 'single' for one image, 'series' for a series of related images."
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.PNG, description="The format of the generated image."
+    output_format: KlingImageO3TextToImageOutputFormat = Field(
+        default=KlingImageO3TextToImageOutputFormat.PNG, description="The format of the generated image."
     )
     sync_mode: bool = Field(
         default=False, description="If `True`, the media will be returned as a data URI."
@@ -13000,6 +14099,10 @@ class KlingImageO3TextToImage(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -13014,6 +14117,40 @@ class KlingImageO3TextToImage(FALNode):
     def get_basic_fields(cls):
         return ["prompt", "resolution", "aspect_ratio"]
 
+class FooocusPerformance(str, Enum):
+    """
+    You can choose Speed or Quality
+    """
+    SPEED = "Speed"
+    QUALITY = "Quality"
+    EXTREME_SPEED = "Extreme Speed"
+    LIGHTNING = "Lightning"
+
+class FooocusControlType(str, Enum):
+    """
+    The type of image control
+    """
+    IMAGEPROMPT = "ImagePrompt"
+    PYRACANNY = "PyraCanny"
+    CPDS = "CPDS"
+    FACESWAP = "FaceSwap"
+
+class FooocusOutputFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    PNG = "png"
+    JPEG = "jpeg"
+    WEBP = "webp"
+
+class FooocusRefinerModel(str, Enum):
+    """
+    Refiner (SDXL or SD 1.5)
+    """
+    NONE = "None"
+    REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
+
+
 class Fooocus(FALNode):
     """
     Default parameters with automated optimizations and quality improvements.
@@ -13027,51 +14164,17 @@ class Fooocus(FALNode):
     - Rapid prototyping and mockups
     """
 
-    class Performance(Enum):
-        """
-        You can choose Speed or Quality
-        """
-        SPEED = "Speed"
-        QUALITY = "Quality"
-        EXTREME_SPEED = "Extreme Speed"
-        LIGHTNING = "Lightning"
-
-    class ControlType(Enum):
-        """
-        The type of image control
-        """
-        IMAGEPROMPT = "ImagePrompt"
-        PYRACANNY = "PyraCanny"
-        CPDS = "CPDS"
-        FACESWAP = "FaceSwap"
-
-    class OutputFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        PNG = "png"
-        JPEG = "jpeg"
-        WEBP = "webp"
-
-    class RefinerModel(Enum):
-        """
-        Refiner (SDXL or SD 1.5)
-        """
-        NONE = "None"
-        REALISTICVISIONV60B1_V51VAE_SAFETENSORS = "realisticVisionV60B1_v51VAE.safetensors"
-
-
-    prompt: str = Field(
-        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
-    )
-    performance: Performance = Field(
-        default=Performance.EXTREME_SPEED, description="You can choose Speed or Quality"
-    )
     styles: list[str] = Field(
         default=[], description="The style to use."
     )
-    control_type: ControlType = Field(
-        default=ControlType.PYRACANNY, description="The type of image control"
+    performance: FooocusPerformance = Field(
+        default=FooocusPerformance.EXTREME_SPEED, description="You can choose Speed or Quality"
+    )
+    prompt: str = Field(
+        default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
+    )
+    control_type: FooocusControlType = Field(
+        default=FooocusControlType.PYRACANNY, description="The type of image control"
     )
     mask_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a mask for the generated image."
@@ -13079,14 +14182,14 @@ class Fooocus(FALNode):
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use up to 5 LoRAs and they will be merged together to generate the final image."
     )
-    enable_safety_checker: bool = Field(
-        default=True, description="If set to false, the safety checker will be disabled."
+    guidance_scale: float = Field(
+        default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
     )
     sharpness: float = Field(
         default=2, description="The sharpness of the generated image. Use it to control how sharp the generated image should be. Higher value means image and texture are sharper."
     )
-    guidance_scale: float = Field(
-        default=4, description="The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you."
+    mixing_image_prompt_and_inpaint: bool = Field(
+        default=False
     )
     negative_prompt: str = Field(
         default="", description="The negative prompt to use. Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
@@ -13094,29 +14197,29 @@ class Fooocus(FALNode):
     inpaint_image: ImageRef = Field(
         default=ImageRef(), description="The image to use as a reference for inpainting."
     )
-    mixing_image_prompt_and_inpaint: bool = Field(
-        default=False
-    )
-    aspect_ratio: str = Field(
-        default="1024x1024", description="The size of the generated image. You can choose between some presets or custom height and width that **must be multiples of 8**."
+    enable_safety_checker: bool = Field(
+        default=True, description="If set to false, the safety checker will be disabled."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate in one request"
     )
-    output_format: OutputFormat = Field(
-        default=OutputFormat.JPEG, description="The format of the generated image."
+    aspect_ratio: str = Field(
+        default="1024x1024", description="The size of the generated image. You can choose between some presets or custom height and width that **must be multiples of 8**."
     )
-    refiner_model: RefinerModel = Field(
-        default=RefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
+    output_format: FooocusOutputFormat = Field(
+        default=FooocusOutputFormat.JPEG, description="The format of the generated image."
+    )
+    refiner_model: FooocusRefinerModel = Field(
+        default=FooocusRefinerModel.NONE, description="Refiner (SDXL or SD 1.5)"
     )
     sync_mode: bool = Field(
-        default=False, description="If set to true, the function will wait for the image to be generated and uploaded before returning the response. This will increase the latency of the function but it allows you to get the image directly in the response without going through the CDN."
+        default=False, description="If `True`, the media will be returned as a data URI and the output data won't be available in the request history."
     )
-    control_image: ImageRef = Field(
-        default=ImageRef(), description="The image to use as a reference for the generated image."
+    control_image_stop_at: float = Field(
+        default=1, description="The stop at value of the control image. Use it to control how much the generated image should look like the control image."
     )
-    seed: int = Field(
-        default=-1, description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
+    seed: str = Field(
+        default="", description="The same seed and the same prompt given to the same version of Stable Diffusion will output the same image every time."
     )
     refiner_switch: float = Field(
         default=0.8, description="Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models 0.8 for XL-refiners; or any value for switching two SDXL models."
@@ -13124,41 +14227,57 @@ class Fooocus(FALNode):
     control_image_weight: float = Field(
         default=1, description="The strength of the control image. Use it to control how much the generated image should look like the control image."
     )
-    control_image_stop_at: float = Field(
-        default=1, description="The stop at value of the control image. Use it to control how much the generated image should look like the control image."
+    control_image: ImageRef = Field(
+        default=ImageRef(), description="The image to use as a reference for the generated image."
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        mask_image_base64 = await context.image_to_base64(self.mask_image)
-        inpaint_image_base64 = await context.image_to_base64(self.inpaint_image)
-        control_image_base64 = await context.image_to_base64(self.control_image)
+        mask_image_base64 = (
+            await context.image_to_base64(self.mask_image)
+            if not self.mask_image.is_empty()
+            else None
+        )
+        inpaint_image_base64 = (
+            await context.image_to_base64(self.inpaint_image)
+            if not self.inpaint_image.is_empty()
+            else None
+        )
+        control_image_base64 = (
+            await context.image_to_base64(self.control_image)
+            if not self.control_image.is_empty()
+            else None
+        )
         arguments = {
-            "prompt": self.prompt,
-            "performance": self.performance.value,
             "styles": self.styles,
+            "performance": self.performance.value,
+            "prompt": self.prompt,
             "control_type": self.control_type.value,
-            "mask_image_url": f"data:image/png;base64,{mask_image_base64}",
+            "mask_image_url": f"data:image/png;base64,{mask_image_base64}" if mask_image_base64 else None,
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
-            "enable_safety_checker": self.enable_safety_checker,
-            "sharpness": self.sharpness,
             "guidance_scale": self.guidance_scale,
-            "negative_prompt": self.negative_prompt,
-            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}",
+            "sharpness": self.sharpness,
             "mixing_image_prompt_and_inpaint": self.mixing_image_prompt_and_inpaint,
-            "aspect_ratio": self.aspect_ratio,
+            "negative_prompt": self.negative_prompt,
+            "inpaint_image_url": f"data:image/png;base64,{inpaint_image_base64}" if inpaint_image_base64 else None,
+            "enable_safety_checker": self.enable_safety_checker,
             "num_images": self.num_images,
+            "aspect_ratio": self.aspect_ratio,
             "output_format": self.output_format.value,
             "refiner_model": self.refiner_model.value,
             "sync_mode": self.sync_mode,
-            "control_image_url": f"data:image/png;base64,{control_image_base64}",
+            "control_image_stop_at": self.control_image_stop_at,
             "seed": self.seed,
             "refiner_switch": self.refiner_switch,
             "control_image_weight": self.control_image_weight,
-            "control_image_stop_at": self.control_image_stop_at,
+            "control_image_url": f"data:image/png;base64,{control_image_base64}" if control_image_base64 else None,
         }
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -13171,7 +14290,39 @@ class Fooocus(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
+
+class LoraScheduler(str, Enum):
+    """
+    Scheduler / sampler to use for the image denoising process.
+    """
+    DPM_PLUS_PLUS_2M = "DPM++ 2M"
+    DPM_PLUS_PLUS_2M_KARRAS = "DPM++ 2M Karras"
+    DPM_PLUS_PLUS_2M_SDE = "DPM++ 2M SDE"
+    DPM_PLUS_PLUS_2M_SDE_KARRAS = "DPM++ 2M SDE Karras"
+    EULER = "Euler"
+    EULER_A = "Euler A"
+    EULER_TRAILING_TIMESTEPS = "Euler (trailing timesteps)"
+    LCM = "LCM"
+    LCM_TRAILING_TIMESTEPS = "LCM (trailing timesteps)"
+    DDIM = "DDIM"
+    TCD = "TCD"
+
+class LoraPredictionType(str, Enum):
+    """
+    The type of prediction to use for the image generation.
+    The `epsilon` is the default.
+    """
+    V_PREDICTION = "v_prediction"
+    EPSILON = "epsilon"
+
+class LoraImageFormat(str, Enum):
+    """
+    The format of the generated image.
+    """
+    JPEG = "jpeg"
+    PNG = "png"
+
 
 class Lora(FALNode):
     """
@@ -13185,38 +14336,6 @@ class Lora(FALNode):
     - Social media content creation
     - Rapid prototyping and mockups
     """
-
-    class Scheduler(Enum):
-        """
-        Scheduler / sampler to use for the image denoising process.
-        """
-        DPM_PLUS_PLUS_2M = "DPM++ 2M"
-        DPM_PLUS_PLUS_2M_KARRAS = "DPM++ 2M Karras"
-        DPM_PLUS_PLUS_2M_SDE = "DPM++ 2M SDE"
-        DPM_PLUS_PLUS_2M_SDE_KARRAS = "DPM++ 2M SDE Karras"
-        EULER = "Euler"
-        EULER_A = "Euler A"
-        EULER_TRAILING_TIMESTEPS = "Euler (trailing timesteps)"
-        LCM = "LCM"
-        LCM_TRAILING_TIMESTEPS = "LCM (trailing timesteps)"
-        DDIM = "DDIM"
-        TCD = "TCD"
-
-    class PredictionType(Enum):
-        """
-        The type of prediction to use for the image generation.
-        The `epsilon` is the default.
-        """
-        V_PREDICTION = "v_prediction"
-        EPSILON = "epsilon"
-
-    class ImageFormat(Enum):
-        """
-        The format of the generated image.
-        """
-        JPEG = "jpeg"
-        PNG = "png"
-
 
     prompt: str = Field(
         default="", description="The prompt to use for generating the image. Be as descriptive as possible for best results."
@@ -13242,7 +14361,7 @@ class Lora(FALNode):
     loras: list[LoraWeight] = Field(
         default=[], description="The LoRAs to use for the image generation. You can use any number of LoRAs and they will be merged together to generate the final image."
     )
-    scheduler: Scheduler | None = Field(
+    scheduler: LoraScheduler | None = Field(
         default=None, description="Scheduler / sampler to use for the image denoising process."
     )
     sigmas: str = Field(
@@ -13287,8 +14406,8 @@ class Lora(FALNode):
     tile_width: int = Field(
         default=4096, description="The size of the tiles to be used for the image generation."
     )
-    prediction_type: PredictionType = Field(
-        default=PredictionType.EPSILON, description="The type of prediction to use for the image generation. The `epsilon` is the default."
+    prediction_type: LoraPredictionType = Field(
+        default=LoraPredictionType.EPSILON, description="The type of prediction to use for the image generation. The `epsilon` is the default."
     )
     eta: float = Field(
         default=0, description="The eta value to be used for the image generation."
@@ -13302,8 +14421,8 @@ class Lora(FALNode):
     negative_prompt: str = Field(
         default="", description="The negative prompt to use.Use it to address details that you don't want in the image. This could be colors, objects, scenery and even the small details (e.g. moustache, blurry, low resolution)."
     )
-    image_format: ImageFormat = Field(
-        default=ImageFormat.PNG, description="The format of the generated image."
+    image_format: LoraImageFormat = Field(
+        default=LoraImageFormat.PNG, description="The format of the generated image."
     )
     num_images: int = Field(
         default=1, description="Number of images to generate in one request. Note that the higher the batch size, the longer it will take to generate the images."
@@ -13331,15 +14450,27 @@ class Lora(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> ImageRef:
-        ic_light_model_base64 = await context.image_to_base64(self.ic_light_model)
-        ic_light_model_background_image_base64 = await context.image_to_base64(self.ic_light_model_background_image)
-        ic_light_image_base64 = await context.image_to_base64(self.ic_light_image)
+        ic_light_model_base64 = (
+            await context.image_to_base64(self.ic_light_model)
+            if not self.ic_light_model.is_empty()
+            else None
+        )
+        ic_light_model_background_image_base64 = (
+            await context.image_to_base64(self.ic_light_model_background_image)
+            if not self.ic_light_model_background_image.is_empty()
+            else None
+        )
+        ic_light_image_base64 = (
+            await context.image_to_base64(self.ic_light_image)
+            if not self.ic_light_image.is_empty()
+            else None
+        )
         arguments = {
             "prompt": self.prompt,
             "image_size": self.image_size,
             "tile_height": self.tile_height,
             "embeddings": [item.model_dump(exclude={"type"}) for item in self.embeddings],
-            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_base64}",
+            "ic_light_model_url": f"data:image/png;base64,{ic_light_model_base64}" if ic_light_model_base64 else None,
             "image_encoder_weight_name": self.image_encoder_weight_name,
             "ip_adapter": [item.model_dump(exclude={"type"}) for item in self.ip_adapter],
             "loras": [item.model_dump(exclude={"type"}) for item in self.loras],
@@ -13355,7 +14486,7 @@ class Lora(FALNode):
             "model_name": self.model_name,
             "controlnet_guess_mode": self.controlnet_guess_mode,
             "seed": self.seed,
-            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_base64}",
+            "ic_light_model_background_image_url": f"data:image/png;base64,{ic_light_model_background_image_base64}" if ic_light_model_background_image_base64 else None,
             "rescale_betas_snr_zero": self.rescale_betas_snr_zero,
             "tile_width": self.tile_width,
             "prediction_type": self.prediction_type.value,
@@ -13366,7 +14497,7 @@ class Lora(FALNode):
             "image_format": self.image_format.value,
             "num_images": self.num_images,
             "debug_latents": self.debug_latents,
-            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_base64}",
+            "ic_light_image_url": f"data:image/png;base64,{ic_light_image_base64}" if ic_light_image_base64 else None,
             "unet_name": self.unet_name,
             "clip_skip": self.clip_skip,
             "tile_stride_height": self.tile_stride_height,
@@ -13376,6 +14507,10 @@ class Lora(FALNode):
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
+        # Also filter nested dicts
+        for key in arguments:
+            if isinstance(arguments[key], dict):
+                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}
 
         res = await self.submit_request(
             context=context,
@@ -13388,4 +14523,4 @@ class Lora(FALNode):
 
     @classmethod
     def get_basic_fields(cls):
-        return ["prompt"]
+        return ["prompt", "resolution", "aspect_ratio"]
