@@ -235,6 +235,10 @@ class FalAI(FALNode):
                 if name in required_props:
                     raise ValueError(f"Missing required input: {name}")
                 continue
+            # For fal.ai endpoints, omitted seed usually means random seed.
+            # Treat optional seed sentinels as "unset" so users keep randomness.
+            if name == "seed" and value in (0, -1) and name not in required_props:
+                continue
             is_url_array = _is_url_or_image_array(openapi, name, prop_schema)
             if value == [] and is_url_array:
                 if name in required_props:
@@ -561,38 +565,83 @@ def _resolve_schema_ref(
     if not isinstance(schema, dict):
         return {}
     if "$ref" in schema:
-        return _resolve_ref(openapi, schema["$ref"])
+        resolved = _resolve_ref(openapi, schema["$ref"])
+        return _apply_schema_overrides(resolved, schema)
     if "oneOf" in schema:
         options = schema.get("oneOf") or []
         if options:
-            return _resolve_schema_ref(openapi, options[0])
+            resolved = _resolve_schema_ref(openapi, options[0])
+            return _apply_schema_overrides(resolved, schema)
     if "anyOf" in schema:
         options = schema.get("anyOf") or []
         if options:
-            return _resolve_schema_ref(openapi, options[0])
+            resolved = _resolve_schema_ref(openapi, options[0])
+            return _apply_schema_overrides(resolved, schema)
     if "allOf" in schema:
-        return _merge_all_of(openapi, schema["allOf"])
+        merged = _merge_all_of(openapi, schema["allOf"])
+        return _apply_schema_overrides(merged, schema)
     return schema
+
+
+def _apply_schema_overrides(
+    resolved: dict[str, Any], wrapper_schema: dict[str, Any]
+) -> dict[str, Any]:
+    """Apply wrapper-level schema keys over a resolved ref/combinator schema."""
+    merged = dict(resolved)
+    for key, value in wrapper_schema.items():
+        if key in {"$ref", "oneOf", "anyOf", "allOf"}:
+            continue
+        if key == "properties" and isinstance(value, dict):
+            current_props = merged.get("properties", {})
+            if isinstance(current_props, dict):
+                merged["properties"] = {**current_props, **value}
+            else:
+                merged["properties"] = value
+            continue
+        if key == "required" and isinstance(value, list):
+            current_required = merged.get("required", [])
+            if isinstance(current_required, list):
+                merged["required"] = sorted(set([*current_required, *value]))
+            else:
+                merged["required"] = value
+            continue
+        merged[key] = value
+    return merged
 
 
 def _merge_all_of(
     openapi: dict[str, Any], schemas: list[dict[str, Any]]
 ) -> dict[str, Any]:
-    merged: dict[str, Any] = {"type": "object", "properties": {}}
+    merged: dict[str, Any] = {}
     required: list[str] = []
     for entry in schemas:
         resolved = _resolve_schema_ref(openapi, entry)
         if not resolved:
             continue
         if "properties" in resolved:
+            merged.setdefault("properties", {})
             merged["properties"].update(resolved.get("properties") or {})
         if "required" in resolved:
             required.extend(resolved.get("required") or [])
-        for key in ("title", "description", "type", "items"):
-            if key in resolved and key not in merged:
-                merged[key] = resolved[key]
+
+        # Preserve scalar schema metadata (type/default/enum/format/min/max/etc.)
+        # so allOf wrappers around primitive fields still behave correctly.
+        for key, value in resolved.items():
+            if key in ("properties", "required"):
+                continue
+            if key == "enum":
+                existing = merged.get("enum")
+                if isinstance(existing, list) and isinstance(value, list):
+                    merged["enum"] = list(dict.fromkeys([*existing, *value]))
+                elif "enum" not in merged:
+                    merged["enum"] = value
+                continue
+            if key not in merged:
+                merged[key] = value
     if required:
         merged["required"] = sorted(set(required))
+    if "properties" in merged and "type" not in merged:
+        merged["type"] = "object"
     return merged
 
 
@@ -703,6 +752,8 @@ def _map_output_values(
     properties = output_schema.get("properties") or {}
     output: dict[str, Any] = {}
     for name, schema in properties.items():
+        if not _should_expose_output(name):
+            continue
         if name not in response:
             continue
         output[name] = _map_output_value(openapi, name, schema, response.get(name))
@@ -808,6 +859,9 @@ def _default_value_for_input_property(
     if "default" in resolved:
         return resolved["default"]
     kind = resolved.get("type")
+    if prop_name == "seed" and kind in ("integer", "number") and not required:
+        # Sentinel meaning "random seed" for UI; omitted from request arguments.
+        return -1
     if kind == "string":
         return "" if required else None
     if kind == "integer" or kind == "number":
@@ -833,8 +887,16 @@ def _build_output_types(
     properties = output_schema.get("properties") or {}
     output_types: dict[str, TypeMetadata] = {}
     for name, schema in properties.items():
+        if not _should_expose_output(name):
+            continue
         output_types[name] = _infer_output_type(openapi, name, schema)
     return output_types
+
+
+def _should_expose_output(name: str) -> bool:
+    # Fal APIs often include a generic "description" string that is not useful
+    # as a workflow output handle.
+    return name.lower() != "description"
 
 
 def _infer_input_type(
@@ -1015,13 +1077,16 @@ def _schema_bundle_to_resolve_result(bundle: FalSchemaBundle) -> dict[str, Any]:
         entry: dict[str, Any] = _type_metadata_to_dict(meta)
         if desc is not None:
             entry["description"] = desc
+
+        # Always expose an effective default for UI reset behavior, even when
+        # the OpenAPI field has no explicit "default" (e.g. required prompt).
+        if name in dynamic_properties:
+            entry["default"] = dynamic_properties[name]
         
         # Include metadata if available
         prop_schema = schema_props.get(name)
         if prop_schema is not None:
             resolved_prop = _resolve_schema_ref(bundle.openapi, prop_schema)
-            if "default" in resolved_prop:
-                entry["default"] = resolved_prop["default"]
             
             if "enum" in resolved_prop:
                 entry["values"] = resolved_prop["enum"]
