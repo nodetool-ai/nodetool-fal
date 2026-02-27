@@ -5,6 +5,7 @@ from fal_client import AsyncClient
 from nodetool.metadata.types import AssetRef
 from nodetool.workflows.base_node import ApiKeyMissingError, BaseNode
 from nodetool.workflows.processing_context import ProcessingContext
+from nodetool.providers.cost_calculator import UsageInfo
 
 logger = logging.getLogger(__name__)
 
@@ -135,6 +136,9 @@ class FALNode(BaseNode):
             arguments=converted_arguments,
         )
 
+        # Track inference time from events
+        inference_time = 0.0
+
         # Process events - only log useful ones
         async for event in handler.iter_events(with_logs=True):
             event_str = str(event)
@@ -143,6 +147,58 @@ class FALNode(BaseNode):
             else:
                 logger.info(event)
 
+            # Extract metrics from completed events
+            if hasattr(event, "metrics") and event.metrics:
+                if "inference_time" in event.metrics:
+                    inference_time = event.metrics["inference_time"]
+
         # Get the final result
         result = await handler.get()
+
+        # Track cost in context
+        self._track_cost(context, application, result, inference_time)
+
         return result
+
+    def _track_cost(
+        self,
+        context: ProcessingContext,
+        application: str,
+        result: dict[str, Any],
+        inference_time: float,
+    ) -> None:
+        """
+        Track the cost of a FAL API operation.
+
+        Args:
+            context: The processing context
+            application: The FAL model path
+            result: The result from the FAL API
+            inference_time: The inference time in seconds
+        """
+        # Count output images
+        image_count = 0
+        if "images" in result and isinstance(result["images"], list):
+            image_count = len(result["images"])
+        elif "image" in result:
+            image_count = 1
+
+        # Video duration is not available in FAL API responses
+        # This could be estimated from model parameters in the future
+        video_seconds = 0.0
+
+        # Create usage info
+        usage_info = UsageInfo(
+            duration_seconds=inference_time,
+            image_count=image_count,
+            video_seconds=video_seconds,
+        )
+
+        # Track the operation cost
+        context.track_operation_cost(
+            model=application,
+            provider="fal",
+            usage_info=usage_info,
+            node_id=self.id,
+            operation_type="prediction",
+        )
