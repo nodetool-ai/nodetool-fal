@@ -286,6 +286,7 @@ class SchemaParser:
                 python_type,
                 name in required,
                 enum_name,
+                field_name=name,
                 nullable=is_nullable,
             )
             
@@ -464,6 +465,7 @@ class SchemaParser:
         python_type: str,
         required: bool,
         enum_name: Optional[str] = None,
+        field_name: str = "",
         nullable: bool = False,
     ) -> str:
         """Get default value for a field."""
@@ -504,7 +506,9 @@ class SchemaParser:
         if base_python_type == "str":
             return '""'
         elif base_python_type == "int":
-            return "-1" if "seed" in prop.get("description", "").lower() else "0"
+            if field_name.lower() == "seed" or "seed" in prop.get("description", "").lower():
+                return "-1"
+            return "0"
         elif base_python_type == "float":
             return "0.0"
         elif base_python_type == "bool":

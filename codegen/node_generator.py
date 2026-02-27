@@ -423,6 +423,11 @@ class NodeGenerator:
             # Replace newlines and extra whitespace with single space
             desc = " ".join(desc.split())
             params.append(f'description="{desc}"')
+
+        # Seed should support -1 as random sentinel in generated nodes.
+        is_numeric = field.python_type in ("int", "int | None", "float", "float | None")
+        if field.name == "seed" and is_numeric:
+            params.append("ge=-1")
         
         field_params = ", ".join(params)
         
@@ -594,6 +599,9 @@ class NodeGenerator:
         lines.append("        for key in arguments:")
         lines.append("            if isinstance(arguments[key], dict):")
         lines.append("                arguments[key] = {k: v for k, v in arguments[key].items() if v is not None}")
+        lines.append("        # Keep seed random behavior consistent with dynamic FalAI nodes.")
+        lines.append('        if arguments.get("seed") in (-1, 0):')
+        lines.append('            arguments.pop("seed", None)')
         lines.append("")
         
         # Submit request
