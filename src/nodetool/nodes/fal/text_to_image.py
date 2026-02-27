@@ -5835,6 +5835,23 @@ class NanoBanana2SafetyTolerance(str, Enum):
     VALUE_6 = "6"
 
 
+class NanoBanana2AspectRatio(str, Enum):
+    """
+    The aspect ratio of the generated image. Use "auto" to let the model decide based on the prompt.
+    """
+    AUTO = "auto"
+    RATIO_21_9 = "21:9"
+    RATIO_16_9 = "16:9"
+    RATIO_3_2 = "3:2"
+    RATIO_4_3 = "4:3"
+    RATIO_5_4 = "5:4"
+    RATIO_1_1 = "1:1"
+    RATIO_4_5 = "4:5"
+    RATIO_3_4 = "3:4"
+    RATIO_2_3 = "2:3"
+    RATIO_9_16 = "9:16"
+
+
 class NanoBanana2(FALNode):
     """
     Nano Banana 2 is a fast text-to-image model with web search grounding, multiple resolutions, and flexible aspect ratios.
@@ -5860,8 +5877,8 @@ class NanoBanana2(FALNode):
     num_images: int = Field(
         default=1, description="The number of images to generate."
     )
-    aspect_ratio: str = Field(
-        default="1:1", description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
+    aspect_ratio: NanoBanana2AspectRatio = Field(
+        default=NanoBanana2AspectRatio.AUTO, description="The aspect ratio of the generated image. Use \"auto\" to let the model decide based on the prompt."
     )
     output_format: NanoBanana2OutputFormat = Field(
         default=NanoBanana2OutputFormat.PNG, description="The format of the generated image."
@@ -5875,8 +5892,8 @@ class NanoBanana2(FALNode):
     safety_tolerance: NanoBanana2SafetyTolerance = Field(
         default=NanoBanana2SafetyTolerance.VALUE_4, description="The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict."
     )
-    seed: str = Field(
-        default="", description="The seed for the random number generator."
+    seed: int | None = Field(
+        default=None, description="The seed for the random number generator."
     )
     limit_generations: bool = Field(
         default=True, description="Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate."
@@ -5888,14 +5905,19 @@ class NanoBanana2(FALNode):
             "resolution": self.resolution.value,
             "enable_web_search": self.enable_web_search,
             "num_images": self.num_images,
-            "aspect_ratio": self.aspect_ratio,
+            "aspect_ratio": self.aspect_ratio.value,
             "output_format": self.output_format.value,
             "sync_mode": self.sync_mode,
             "enable_google_search": self.enable_google_search,
             "safety_tolerance": self.safety_tolerance.value,
-            "seed": self.seed,
             "limit_generations": self.limit_generations,
         }
+        seed_value: int | None = self.seed
+        if isinstance(seed_value, str):
+            raw_seed = seed_value.strip()
+            seed_value = int(raw_seed) if raw_seed else None
+        if seed_value is not None:
+            arguments["seed"] = seed_value
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
