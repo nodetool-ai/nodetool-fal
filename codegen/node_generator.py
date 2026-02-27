@@ -573,7 +573,16 @@ class NodeGenerator:
                 # Serialize BaseType list items, excluding the internal 'type' field
                 lines.append(f'            "{api_param_name}": [item.model_dump(exclude={{"type"}}) for item in self.{field.name}],')
             else:
-                lines.append(f'            "{api_param_name}": self.{field.name},')
+                if field.python_type == "int | None":
+                    lines.append(
+                        f'            "{api_param_name}": (int(self.{field.name}.strip()) if isinstance(self.{field.name}, str) and self.{field.name}.strip() else self.{field.name}) if self.{field.name} is not None else None,'
+                    )
+                elif field.python_type == "float | None":
+                    lines.append(
+                        f'            "{api_param_name}": (float(self.{field.name}.strip()) if isinstance(self.{field.name}, str) and self.{field.name}.strip() else self.{field.name}) if self.{field.name} is not None else None,'
+                    )
+                else:
+                    lines.append(f'            "{api_param_name}": self.{field.name},')
         
         lines.append("        }")
         lines.append("")

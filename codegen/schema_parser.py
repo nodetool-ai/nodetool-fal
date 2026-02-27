@@ -214,8 +214,10 @@ class SchemaParser:
         fields = []
         
         for name, prop in properties.items():
+            normalized_prop, is_nullable = self._normalize_property_schema(prop)
+
             # Check if this is a nested asset structure (e.g., VideoConditioningInput)
-            nested_asset_key, extra_fields = self._get_nested_asset_info(prop)
+            nested_asset_key, extra_fields = self._get_nested_asset_info(normalized_prop)
             
             if nested_asset_key:
                 # Determine asset type based on the nested key
@@ -228,7 +230,12 @@ class SchemaParser:
                 else:
                     python_type = "str"
                 
-                default_value = self._get_default_value({"type": "asset"}, python_type, name in required)
+                default_value = self._get_default_value(
+                    {"type": "asset"},
+                    python_type,
+                    name in required,
+                    nullable=is_nullable,
+                )
                 
                 fields.append(FieldDef(
                     name=name,
@@ -258,33 +265,73 @@ class SchemaParser:
             # Check for enum
             enum_ref = None
             enum_name = None
-            if "enum" in prop:
+            if "enum" in normalized_prop:
                 enum_name = self._generate_enum_name(name)
                 enum_def = EnumDef(
                     name=enum_name,
-                    values=[(self._to_enum_value(v), v) for v in prop["enum"]],
-                    description=prop.get("description", "")
+                    values=[(self._to_enum_value(v), v) for v in normalized_prop["enum"]],
+                    description=normalized_prop.get("description", "")
                 )
                 enums.append(enum_def)
                 enum_ref = enum_name
             
             # Determine Python type (pass field name for better detection)
-            python_type = self._json_type_to_python(prop, enum_ref, name)
+            python_type = self._json_type_to_python(normalized_prop, enum_ref, name)
+            if is_nullable and "| None" not in python_type:
+                python_type = f"{python_type} | None"
             
             # Determine default value (pass enum_name for proper default generation)
-            default_value = self._get_default_value(prop, python_type, name in required, enum_name)
+            default_value = self._get_default_value(
+                normalized_prop,
+                python_type,
+                name in required,
+                enum_name,
+                nullable=is_nullable,
+            )
             
             fields.append(FieldDef(
                 name=name,
                 python_type=python_type,
                 default_value=default_value,
-                description=prop.get("description", ""),
+                description=normalized_prop.get("description", ""),
                 field_type=field_type,
                 required=name in required,
                 enum_ref=enum_ref
             ))
         
         return fields
+
+    def _normalize_property_schema(self, prop: dict[str, Any]) -> tuple[dict[str, Any], bool]:
+        """Normalize nullable unions (anyOf/oneOf) to a primary schema + nullable flag."""
+        resolved = self._resolve_ref(self._root_schema, prop)
+        if not isinstance(resolved, dict):
+            return {}, False
+
+        union_key = "anyOf" if "anyOf" in resolved else "oneOf" if "oneOf" in resolved else None
+        is_nullable = bool(resolved.get("nullable", False))
+
+        if union_key:
+            variants = resolved.get(union_key, [])
+            primary: dict[str, Any] | None = None
+            for variant in variants:
+                variant_resolved = self._resolve_ref(self._root_schema, variant)
+                if not isinstance(variant_resolved, dict):
+                    continue
+                if variant_resolved.get("type") == "null":
+                    is_nullable = True
+                    continue
+                if primary is None:
+                    primary = variant_resolved
+            normalized = dict(primary or {})
+        else:
+            normalized = dict(resolved)
+
+        # Preserve wrapper-level metadata such as description/default/title.
+        for key in ("title", "description", "default", "examples"):
+            if key in resolved:
+                normalized[key] = resolved[key]
+
+        return normalized, is_nullable
 
     def _json_type_to_python(self, prop: dict[str, Any], enum_ref: Optional[str], prop_name: str = "") -> str:
         """Convert JSON schema type to Python type."""
@@ -411,44 +458,58 @@ class SchemaParser:
         
         return nested_asset_key, extra_fields
 
-    def _get_default_value(self, prop: dict[str, Any], python_type: str, required: bool, enum_name: Optional[str] = None) -> str:
+    def _get_default_value(
+        self,
+        prop: dict[str, Any],
+        python_type: str,
+        required: bool,
+        enum_name: Optional[str] = None,
+        nullable: bool = False,
+    ) -> str:
         """Get default value for a field."""
+        base_python_type = python_type.split(" | ")[0].strip()
+
         # Asset refs should always default to empty refs in nodetool nodes.
-        if "ImageRef" in python_type:
+        if "ImageRef" in base_python_type:
             return "ImageRef()"
-        if "VideoRef" in python_type:
+        if "VideoRef" in base_python_type:
             return "VideoRef()"
-        if "AudioRef" in python_type:
+        if "AudioRef" in base_python_type:
             return "AudioRef()"
 
         if "default" in prop:
             default = prop["default"]
+            if default is None:
+                return "None"
             if isinstance(default, str):
                 # For enum types, use the enum value
                 if enum_name:
                     # Use enum name with correct value
                     enum_value = self._to_enum_value(default)
                     return f'{enum_name}.{enum_value}'
-                elif python_type not in ["str", "ImageRef", "VideoRef", "AudioRef"]:
+                elif base_python_type not in ["str", "ImageRef", "VideoRef", "AudioRef"]:
                     # This is likely an enum, find the matching enum value
                     enum_value = self._to_enum_value(default)
-                    return f'{python_type}.{enum_value}'
+                    return f'{base_python_type}.{enum_value}'
                 return f'"{default}"'
             elif isinstance(default, bool):
                 return str(default)
             elif isinstance(default, (int, float)):
                 return str(default)
         
+        if nullable:
+            return "None"
+        
         # Generate sensible defaults based on type
-        if python_type == "str":
+        if base_python_type == "str":
             return '""'
-        elif python_type == "int":
+        elif base_python_type == "int":
             return "-1" if "seed" in prop.get("description", "").lower() else "0"
-        elif python_type == "float":
+        elif base_python_type == "float":
             return "0.0"
-        elif python_type == "bool":
+        elif base_python_type == "bool":
             return "False"
-        elif python_type.startswith("list"):
+        elif base_python_type.startswith("list"):
             return "[]"
         elif required:
             return '""'
