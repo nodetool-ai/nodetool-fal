@@ -817,8 +817,36 @@ def _map_file_output(name: str, value: Any) -> Any:
     if asset_type == "document":
         return DocumentRef(uri=url)
     if asset_type == "model_3d":
-        return Model3DRef(uri=url)
+        fmt = _detect_3d_format(url, value)
+        return Model3DRef(uri=url, format=fmt)
     return AssetRef(uri=url)
+
+
+_CONTENT_TYPE_TO_3D_FORMAT: dict[str, str] = {
+    "model/gltf-binary": "glb",
+    "model/gltf+json": "gltf",
+    "model/obj": "obj",
+    "model/stl": "stl",
+    "model/vnd.usdz+zip": "usdz",
+    "application/x-ply": "ply",
+    "application/octet-stream+fbx": "fbx",
+}
+
+_3D_EXTENSIONS = ("glb", "gltf", "obj", "stl", "ply", "fbx", "usdz")
+
+
+def _detect_3d_format(url: str, value: dict[str, Any]) -> str | None:
+    """Detect the 3D model format from response content_type or URL extension."""
+    content_type = value.get("content_type", "")
+    if content_type in _CONTENT_TYPE_TO_3D_FORMAT:
+        return _CONTENT_TYPE_TO_3D_FORMAT[content_type]
+
+    parsed = urlparse(url)
+    path = parsed.path.lower()
+    for ext in _3D_EXTENSIONS:
+        if path.endswith(f".{ext}"):
+            return ext
+    return None
 
 
 def _infer_asset_type(name: str) -> str:
