@@ -827,11 +827,28 @@ def _infer_asset_type(name: str) -> str:
         return "video"
     if "audio" in lowered or "voice" in lowered or "sound" in lowered:
         return "audio"
-    if "image" in lowered or "mask" in lowered or "frame" in lowered:
+    if (
+        "image" in lowered
+        or "mask" in lowered
+        or "frame" in lowered
+        or "texture" in lowered
+        or "thumbnail" in lowered
+        or "preview" in lowered
+    ):
         return "image"
-    if "document" in lowered or "pdf" in lowered or "doc" in lowered:
+    if "document" in lowered or "pdf" in lowered:
         return "document"
-    if "3d" in lowered or "mesh" in lowered or "gltf" in lowered or "glb" in lowered:
+    if (
+        "3d" in lowered
+        or "mesh" in lowered
+        or "gltf" in lowered
+        or "glb" in lowered
+        or "obj" in lowered
+        or "mtl" in lowered
+        or "fbx" in lowered
+        or "usdz" in lowered
+        or "stl" in lowered
+    ):
         return "model_3d"
     return "asset"
 
