@@ -44,7 +44,7 @@ class FalSchemaBundle:
     llm_info: str | None
 
 
-class FalAI(FALNode):
+class DynamicFal(FALNode):
     """
     Dynamic FAL node for running any fal.ai endpoint.
     fal, schema, dynamic, openapi, inference, runtime, model
@@ -71,6 +71,14 @@ class FalAI(FALNode):
         super().__init__(**data)
         self._dynamic_input_types = {}
         self._prime_schema_outputs()
+
+    @classmethod
+    def get_node_type(cls) -> str:
+        return "fal.DynamicFal"
+
+    @classmethod
+    def get_namespace(cls) -> str:
+        return "fal"
 
     @classmethod
     def get_basic_fields(cls):
@@ -667,7 +675,7 @@ async def _coerce_input_value(
     schema: dict[str, Any],
     value: Any,
     context: ProcessingContext,
-    node: FalAI,
+    node: DynamicFal,
 ) -> Any:
     resolved = _resolve_schema_ref(openapi, schema)
 
@@ -719,7 +727,7 @@ def _coerce_asset_ref(value: Any) -> AssetRef | None:
 async def _serialize_asset_ref(
     asset_ref: AssetRef,
     context: ProcessingContext,
-    node: FalAI,
+    node: DynamicFal,
 ) -> str:
     if asset_ref.uri and asset_ref.uri.startswith(("http://", "https://", "data:")):
         return asset_ref.uri
@@ -1120,7 +1128,7 @@ async def resolve_dynamic_schema(model_info: str) -> dict[str, Any]:
     """
     Resolve the OpenAPI schema for a given model_info (pasted OpenAPI JSON, llms.txt,
     URL, or endpoint id) and return a payload the UI can use to populate the
-    FalAI node without running it.
+    DynamicFal node without running it.
 
     Call this when the user pastes a URL or changes model_info so the node can show all
     inputs and outputs immediately.     Returns dict with:
@@ -1151,7 +1159,7 @@ async def resolve_dynamic_schema(model_info: str) -> dict[str, Any]:
             "model_info must be pasted OpenAPI JSON, llms.txt, fal.ai URL, or endpoint id"
         )
 
-    cache_dir = FalAI._cache_dir()
+    cache_dir = DynamicFal._cache_dir()
     cache_key = _cache_key_for_model_info(
         model_info_text, model_info_url, endpoint_hint
     )
