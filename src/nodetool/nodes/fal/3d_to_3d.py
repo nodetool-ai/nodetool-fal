@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import Field
 from typing import Any
-from nodetool.metadata.types import ImageRef
+from nodetool.metadata.types import ImageRef, Model3DRef
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
 
@@ -38,7 +38,7 @@ class Ultrashape(FALNode):
         default=ImageRef(), description="URL of the reference image for mesh refinement."
     )
 
-    async def process(self, context: ProcessingContext) -> Any:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "octree_resolution": self.octree_resolution,
@@ -57,7 +57,7 @@ class Ultrashape(FALNode):
             application="fal-ai/ultrashape",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -94,14 +94,15 @@ class Sam33DAlign(FALNode):
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
         image_base64 = await context.image_to_base64(self.image)
-        body_mask_base64 = await context.image_to_base64(self.body_mask)
         arguments = {
             "image_url": f"data:image/png;base64,{image_base64}",
             "body_mesh_url": self.body_mesh_url,
             "object_mesh_url": self.object_mesh_url,
             "focal_length": self.focal_length,
-            "body_mask_url": f"data:image/png;base64,{body_mask_base64}",
         }
+        if self.body_mask and self.body_mask.uri:
+            body_mask_base64 = await context.image_to_base64(self.body_mask)
+            arguments["body_mask_url"] = f"data:image/png;base64,{body_mask_base64}"
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -149,16 +150,17 @@ class MeshyV5Retexture(FALNode):
         default=ImageRef(), description="2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        image_style_base64 = await context.image_to_base64(self.image_style)
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "enable_pbr": self.enable_pbr,
             "text_style_prompt": self.text_style_prompt,
             "enable_safety_checker": self.enable_safety_checker,
             "enable_original_uv": self.enable_original_uv,
             "model_url": self.model_url,
-            "image_style_url": f"data:image/png;base64,{image_style_base64}",
         }
+        if self.image_style and self.image_style.uri:
+            image_style_base64 = await context.image_to_base64(self.image_style)
+            arguments["image_style_url"] = f"data:image/png;base64,{image_style_base64}"
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -168,7 +170,7 @@ class MeshyV5Retexture(FALNode):
             application="fal-ai/meshy/v5/retexture",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -221,7 +223,7 @@ class MeshyV5Remesh(FALNode):
         default=[], description="List of target formats for the remeshed model."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "resize_height": self.resize_height,
             "topology": self.topology.value,
@@ -239,7 +241,7 @@ class MeshyV5Remesh(FALNode):
             application="fal-ai/meshy/v5/remesh",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -283,7 +285,7 @@ class HunyuanPart(FALNode):
         default=-1, description="The same seed and input will produce the same segmentation results."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "point_prompt_x": self.point_prompt_x,
             "point_prompt_z": self.point_prompt_z,
@@ -303,7 +305,7 @@ class HunyuanPart(FALNode):
             application="fal-ai/hunyuan-part",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):

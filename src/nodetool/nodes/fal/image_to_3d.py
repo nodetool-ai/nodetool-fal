@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import Field
 from typing import Any
-from nodetool.metadata.types import ImageRef
+from nodetool.metadata.types import ImageRef, Model3DRef
 from nodetool.nodes.fal.types import BoxPromptBase, PointPromptBase
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
@@ -33,7 +33,7 @@ class Hunyuan3DV3SketchTo3D(FALNode):
         default=False, description="Whether to enable PBR material generation."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
@@ -50,7 +50,7 @@ class Hunyuan3DV3SketchTo3D(FALNode):
             application="fal-ai/hunyuan3d-v3/sketch-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -110,31 +110,31 @@ class Hunyuan3DV3ImageTo3D(FALNode):
         default=ImageRef(), description="Optional left view image URL for better 3D reconstruction."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
-        right_image_base64 = await context.image_to_base64(self.right_image)
-        back_image_base64 = await context.image_to_base64(self.back_image)
-        left_image_base64 = await context.image_to_base64(self.left_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
             "polygon_type": self.polygon_type.value,
             "face_count": self.face_count,
-            "right_image_url": f"data:image/png;base64,{right_image_base64}",
-            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "enable_pbr": self.enable_pbr,
             "generate_type": self.generate_type.value,
-            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
-
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        if self.right_image and self.right_image.uri:
+            right_image_base64 = await context.image_to_base64(self.right_image)
+            arguments["right_image_url"] = f"data:image/png;base64,{right_image_base64}"
+        if self.back_image and self.back_image.uri:
+            back_image_base64 = await context.image_to_base64(self.back_image)
+            arguments["back_image_url"] = f"data:image/png;base64,{back_image_base64}"
+        if self.left_image and self.left_image.uri:
+            left_image_base64 = await context.image_to_base64(self.left_image)
+            arguments["left_image_url"] = f"data:image/png;base64,{left_image_base64}"
 
         res = await self.submit_request(
             context=context,
             application="fal-ai/hunyuan3d-v3/image-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -167,14 +167,15 @@ class Sam33DBody(FALNode):
     )
 
     async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        mask_base64 = await context.image_to_base64(self.mask)
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "export_meshes": self.export_meshes,
             "include_3d_keypoints": self.include_3d_keypoints,
-            "mask_url": f"data:image/png;base64,{mask_base64}",
             "image_url": f"data:image/png;base64,{image_base64}",
         }
+        if self.mask and self.mask.uri:
+            mask_base64 = await context.image_to_base64(self.mask)
+            arguments["mask_url"] = f"data:image/png;base64,{mask_base64}"
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -288,7 +289,7 @@ class Omnipart(FALNode):
         default=7.5, description="Guidance scale for the model."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
@@ -306,7 +307,7 @@ class Omnipart(FALNode):
             application="fal-ai/omnipart",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -329,21 +330,18 @@ class BytedanceSeed3DImageTo3D(FALNode):
         default=ImageRef(), description="URL of the image for the 3D asset generation."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "image_url": f"data:image/png;base64,{image_base64}",
         }
-
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
 
         res = await self.submit_request(
             context=context,
             application="fal-ai/bytedance/seed3d/image-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -412,8 +410,7 @@ class MeshyV5MultiImageTo3D(FALNode):
         default=True, description="Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        texture_image_base64 = await context.image_to_base64(self.texture_image)
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         images_data_urls = []
         for image in self.images or []:
             image_base64 = await context.image_to_base64(image)
@@ -423,7 +420,6 @@ class MeshyV5MultiImageTo3D(FALNode):
             "should_texture": self.should_texture,
             "target_polycount": self.target_polycount,
             "is_a_t_pose": self.is_a_t_pose,
-            "texture_image_url": f"data:image/png;base64,{texture_image_base64}",
             "topology": self.topology.value,
             "enable_safety_checker": self.enable_safety_checker,
             "symmetry_mode": self.symmetry_mode.value,
@@ -431,16 +427,16 @@ class MeshyV5MultiImageTo3D(FALNode):
             "texture_prompt": self.texture_prompt,
             "should_remesh": self.should_remesh,
         }
-
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        if self.texture_image and self.texture_image.uri:
+            texture_image_base64 = await context.image_to_base64(self.texture_image)
+            arguments["texture_image_url"] = f"data:image/png;base64,{texture_image_base64}"
 
         res = await self.submit_request(
             context=context,
             application="fal-ai/meshy/v5/multi-image-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -509,15 +505,13 @@ class MeshyV6PreviewImageTo3D(FALNode):
         default=True, description="Whether to enable the remesh phase"
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        texture_image_base64 = await context.image_to_base64(self.texture_image)
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "enable_pbr": self.enable_pbr,
             "is_a_t_pose": self.is_a_t_pose,
             "target_polycount": self.target_polycount,
             "should_texture": self.should_texture,
-            "texture_image_url": f"data:image/png;base64,{texture_image_base64}",
             "topology": self.topology.value,
             "image_url": f"data:image/png;base64,{image_base64}",
             "enable_safety_checker": self.enable_safety_checker,
@@ -525,16 +519,16 @@ class MeshyV6PreviewImageTo3D(FALNode):
             "texture_prompt": self.texture_prompt,
             "should_remesh": self.should_remesh,
         }
-
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        if self.texture_image and self.texture_image.uri:
+            texture_image_base64 = await context.image_to_base64(self.texture_image)
+            arguments["texture_image_url"] = f"data:image/png;base64,{texture_image_base64}"
 
         res = await self.submit_request(
             context=context,
             application="fal-ai/meshy/v6-preview/image-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -625,7 +619,7 @@ class Hyper3DRodinV2(FALNode):
         default=Material.ALL, description="Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "quality_mesh_option": self.quality_mesh_option.value,
             "prompt": self.prompt,
@@ -648,7 +642,7 @@ class Hyper3DRodinV2(FALNode):
             application="fal-ai/hyper3d/rodin/v2",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -677,7 +671,7 @@ class Pshuman(FALNode):
         default=ImageRef(), description="A direct URL to the input image of a person."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "guidance_scale": self.guidance_scale,
@@ -693,7 +687,7 @@ class Pshuman(FALNode):
             application="fal-ai/pshuman",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_obj"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -728,7 +722,7 @@ class Hunyuan_WorldImageToWorld(FALNode):
         default=ImageRef(), description="The URL of the image to convert to a world."
     )
 
-    async def process(self, context: ProcessingContext) -> Any:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "classes": self.classes,
@@ -746,7 +740,7 @@ class Hunyuan_WorldImageToWorld(FALNode):
             application="fal-ai/hunyuan_world/image-to-world",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["world_file"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -844,27 +838,31 @@ class Tripo3dTripoV25MultiviewTo3d(FALNode):
         default=ImageRef(), description="Left view image of the object."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        right_image_base64 = await context.image_to_base64(self.right_image)
-        front_image_base64 = await context.image_to_base64(self.front_image)
-        back_image_base64 = await context.image_to_base64(self.back_image)
-        left_image_base64 = await context.image_to_base64(self.left_image)
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "face_limit": self.face_limit,
-            "right_image_url": f"data:image/png;base64,{right_image_base64}",
             "style": self.style.value if self.style else None,
             "quad": self.quad,
-            "front_image_url": f"data:image/png;base64,{front_image_base64}",
             "texture_seed": self.texture_seed,
-            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "pbr": self.pbr,
             "texture_alignment": self.texture_alignment.value,
             "texture": self.texture.value,
             "auto_size": self.auto_size,
             "seed": self.seed,
             "orientation": self.orientation.value,
-            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
+        if self.front_image and self.front_image.uri:
+            front_image_base64 = await context.image_to_base64(self.front_image)
+            arguments["front_image_url"] = f"data:image/png;base64,{front_image_base64}"
+        if self.right_image and self.right_image.uri:
+            right_image_base64 = await context.image_to_base64(self.right_image)
+            arguments["right_image_url"] = f"data:image/png;base64,{right_image_base64}"
+        if self.back_image and self.back_image.uri:
+            back_image_base64 = await context.image_to_base64(self.back_image)
+            arguments["back_image_url"] = f"data:image/png;base64,{back_image_base64}"
+        if self.left_image and self.left_image.uri:
+            left_image_base64 = await context.image_to_base64(self.left_image)
+            arguments["left_image_url"] = f"data:image/png;base64,{left_image_base64}"
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -874,7 +872,7 @@ class Tripo3dTripoV25MultiviewTo3d(FALNode):
             application="tripo3d/tripo/v2.5/multiview-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -912,7 +910,7 @@ class Hunyuan3dV21(FALNode):
         default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
@@ -931,7 +929,7 @@ class Hunyuan3dV21(FALNode):
             application="fal-ai/hunyuan3d-v21",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1020,7 +1018,7 @@ class Tripo3dTripoV25ImageTo3d(FALNode):
         default=-1, description="This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "face_limit": self.face_limit,
@@ -1044,7 +1042,7 @@ class Tripo3dTripoV25ImageTo3d(FALNode):
             application="tripo3d/tripo/v2.5/image-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1088,20 +1086,23 @@ class Hunyuan3dV2MultiView(FALNode):
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        front_image_base64 = await context.image_to_base64(self.front_image)
-        back_image_base64 = await context.image_to_base64(self.back_image)
-        left_image_base64 = await context.image_to_base64(self.left_image)
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
-            "front_image_url": f"data:image/png;base64,{front_image_base64}",
             "octree_resolution": self.octree_resolution,
-            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "textured_mesh": self.textured_mesh,
             "seed": self.seed,
-            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
+        if self.front_image and self.front_image.uri:
+            front_image_base64 = await context.image_to_base64(self.front_image)
+            arguments["front_image_url"] = f"data:image/png;base64,{front_image_base64}"
+        if self.back_image and self.back_image.uri:
+            back_image_base64 = await context.image_to_base64(self.back_image)
+            arguments["back_image_url"] = f"data:image/png;base64,{back_image_base64}"
+        if self.left_image and self.left_image.uri:
+            left_image_base64 = await context.image_to_base64(self.left_image)
+            arguments["left_image_url"] = f"data:image/png;base64,{left_image_base64}"
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -1111,7 +1112,7 @@ class Hunyuan3dV2MultiView(FALNode):
             application="fal-ai/hunyuan3d/v2/multi-view",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1149,7 +1150,7 @@ class Hunyuan3dV2Mini(FALNode):
         default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
@@ -1168,7 +1169,7 @@ class Hunyuan3dV2Mini(FALNode):
             application="fal-ai/hunyuan3d/v2/mini",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1206,7 +1207,7 @@ class Hunyuan3dV2Turbo(FALNode):
         default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
@@ -1225,7 +1226,7 @@ class Hunyuan3dV2Turbo(FALNode):
             application="fal-ai/hunyuan3d/v2/turbo",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1263,7 +1264,7 @@ class Hunyuan3dV2MiniTurbo(FALNode):
         default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
@@ -1282,7 +1283,7 @@ class Hunyuan3dV2MiniTurbo(FALNode):
             application="fal-ai/hunyuan3d/v2/mini/turbo",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1320,7 +1321,7 @@ class Hunyuan3dV2(FALNode):
         default=False, description="If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         input_image_base64 = await context.image_to_base64(self.input_image)
         arguments = {
             "input_image_url": f"data:image/png;base64,{input_image_base64}",
@@ -1339,7 +1340,7 @@ class Hunyuan3dV2(FALNode):
             application="fal-ai/hunyuan3d/v2",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1383,20 +1384,23 @@ class Hunyuan3dV2MultiViewTurbo(FALNode):
         default=ImageRef(), description="URL of image to use while generating the 3D model."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        front_image_base64 = await context.image_to_base64(self.front_image)
-        back_image_base64 = await context.image_to_base64(self.back_image)
-        left_image_base64 = await context.image_to_base64(self.left_image)
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
-            "front_image_url": f"data:image/png;base64,{front_image_base64}",
             "octree_resolution": self.octree_resolution,
-            "back_image_url": f"data:image/png;base64,{back_image_base64}",
             "guidance_scale": self.guidance_scale,
             "num_inference_steps": self.num_inference_steps,
             "textured_mesh": self.textured_mesh,
             "seed": self.seed,
-            "left_image_url": f"data:image/png;base64,{left_image_base64}",
         }
+        if self.front_image and self.front_image.uri:
+            front_image_base64 = await context.image_to_base64(self.front_image)
+            arguments["front_image_url"] = f"data:image/png;base64,{front_image_base64}"
+        if self.back_image and self.back_image.uri:
+            back_image_base64 = await context.image_to_base64(self.back_image)
+            arguments["back_image_url"] = f"data:image/png;base64,{back_image_base64}"
+        if self.left_image and self.left_image.uri:
+            left_image_base64 = await context.image_to_base64(self.left_image)
+            arguments["left_image_url"] = f"data:image/png;base64,{left_image_base64}"
 
         # Remove None values
         arguments = {k: v for k, v in arguments.items() if v is not None}
@@ -1406,7 +1410,7 @@ class Hunyuan3dV2MultiViewTurbo(FALNode):
             application="fal-ai/hunyuan3d/v2/multi-view/turbo",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1509,7 +1513,7 @@ class Hyper3dRodin(FALNode):
         default=Material.PBR, description="Material type. Possible values: PBR, Shaded. Default is PBR."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "prompt": self.prompt,
             "condition_mode": self.condition_mode.value,
@@ -1533,7 +1537,7 @@ class Hyper3dRodin(FALNode):
             application="fal-ai/hyper3d/rodin",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_mesh"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -1576,7 +1580,7 @@ class Triposr(FALNode):
         default=ImageRef(), description="Path for the image file to be processed."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         image_base64 = await context.image_to_base64(self.image)
         arguments = {
             "mc_resolution": self.mc_resolution,
@@ -1594,7 +1598,7 @@ class Triposr(FALNode):
             application="fal-ai/triposr",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res.get("model_mesh", res.get("model", {})).get("url", ""))
 
     @classmethod
     def get_basic_fields(cls):

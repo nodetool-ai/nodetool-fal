@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import Field
 from typing import Any
-from nodetool.metadata.types import ImageRef
+from nodetool.metadata.types import ImageRef, Model3DRef
 from nodetool.nodes.fal.types import Turn
 from nodetool.nodes.fal.fal_node import FALNode
 from nodetool.workflows.processing_context import ProcessingContext
@@ -172,7 +172,7 @@ class Hunyuan3dV3TextTo3d(FALNode):
         default=GenerateType.NORMAL, description="Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture."
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "enable_pbr": self.enable_pbr,
             "polygon_type": self.polygon_type.value,
@@ -189,7 +189,7 @@ class Hunyuan3dV3TextTo3d(FALNode):
             application="fal-ai/hunyuan3d-v3/text-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
@@ -281,8 +281,7 @@ class MeshyV6PreviewTextTo3d(FALNode):
         default="", description="Additional text prompt to guide the texturing process (only used in 'full' mode)"
     )
 
-    async def process(self, context: ProcessingContext) -> dict[str, Any]:
-        texture_image_base64 = await context.image_to_base64(self.texture_image)
+    async def process(self, context: ProcessingContext) -> Model3DRef:
         arguments = {
             "prompt": self.prompt,
             "enable_pbr": self.enable_pbr,
@@ -292,23 +291,22 @@ class MeshyV6PreviewTextTo3d(FALNode):
             "mode": self.mode.value,
             "symmetry_mode": self.symmetry_mode.value,
             "should_remesh": self.should_remesh,
-            "texture_image_url": f"data:image/png;base64,{texture_image_base64}",
             "topology": self.topology.value,
             "enable_prompt_expansion": self.enable_prompt_expansion,
             "seed": self.seed,
             "is_a_t_pose": self.is_a_t_pose,
             "texture_prompt": self.texture_prompt,
         }
-
-        # Remove None values
-        arguments = {k: v for k, v in arguments.items() if v is not None}
+        if self.texture_image and self.texture_image.uri:
+            texture_image_base64 = await context.image_to_base64(self.texture_image)
+            arguments["texture_image_url"] = f"data:image/png;base64,{texture_image_base64}"
 
         res = await self.submit_request(
             context=context,
             application="fal-ai/meshy/v6-preview/text-to-3d",
             arguments=arguments,
         )
-        return res
+        return Model3DRef(uri=res["model_glb"]["url"])
 
     @classmethod
     def get_basic_fields(cls):
