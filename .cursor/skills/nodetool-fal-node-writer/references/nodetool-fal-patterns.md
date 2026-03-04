@@ -21,7 +21,7 @@ All modules under:
 - Image output: `ImageRef(uri=res["images"][0]["url"])` or `ImageRef(uri=res["image"]["url"])`
 - Video output: `VideoRef(uri=res["video"]["url"])`
 - Audio output: `AudioRef(uri=res["audio"]["url"])` or endpoint-specific key
-- 3D output: `Model3DRef(uri=res.get("model", {}).get("url", ""))` style
+- 3D output: `Model3DRef(uri=res["model_glb"]["url"])` — field varies by API: `model_glb`, `model_mesh`, `model_obj`, `model`, `world_file`
 - Multi-output endpoints use `TypedDict` + dict return.
 
 ## Input Conversion Patterns

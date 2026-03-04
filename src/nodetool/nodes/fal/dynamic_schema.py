@@ -303,8 +303,8 @@ def _validate_fal_url(url: str) -> None:
 def _sanitize_endpoint_id(value: str) -> str:
     """Strip trailing punctuation and strictly validate endpoint ID format to prevent traversal."""
     clean = value.strip().rstrip(")\\]}>.,;:").strip()
-    # Permit alphanumeric, hyphens, underscores, and forward slashes (for 'fal-ai/model-name')
-    if not re.match(r"^[a-zA-Z0-9\-_/]+$", clean):
+    # Permit alphanumeric, hyphens, underscores, dots, and forward slashes (for 'fal-ai/model-name/v3.1')
+    if not re.match(r"^[a-zA-Z0-9\-_./]+$", clean):
         raise ValueError(f"Invalid characters in endpoint ID: {clean}")
     return clean
 

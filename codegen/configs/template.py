@@ -28,6 +28,8 @@ CONFIGS: dict[str, dict[str, Any]] = {
     #             "description": "Custom description"  # Override description
     #         }
     #     },
+    #     "output_type": "Model3DRef",  # Override auto-detected output type
+    #     "output_3d_field": "model_glb",  # Response field for 3D model URL
     #     "custom_imports": [
     #         "from custom.module import CustomClass"
     #     ],

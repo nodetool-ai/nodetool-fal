@@ -43,6 +43,7 @@ class NodeSpec:
     output_type: str
     output_fields: list[FieldDef]  # For complex outputs
     enums: list[EnumDef]
+    output_3d_field: Optional[str] = None  # Response field containing 3D model URL (e.g. "model_glb")
 
 
 class SchemaParser:
@@ -103,7 +104,8 @@ class SchemaParser:
             input_fields=input_fields,
             output_type=output_type,
             output_fields=output_fields,
-            enums=enums
+            enums=enums,
+            output_3d_field=getattr(self, "_detected_3d_field", None),
         )
 
     def _extract_endpoint_id(self, schema: dict[str, Any]) -> str:
@@ -520,8 +522,23 @@ class SchemaParser:
         
         return "None"
 
+    # Response property names that indicate a 3D model output, in priority order.
+    _MODEL_3D_FIELDS = [
+        "model_glb",
+        "model_mesh",
+        "model_obj",
+        "model",
+        "world_file",
+        "full_model_mesh",
+    ]
+
     def _determine_output_type(self, output_schema: dict[str, Any], output_fields: list[FieldDef]) -> str:
-        """Determine the output type for the node."""
+        """Determine the output type for the node.
+        
+        Returns the output type string and sets self._detected_3d_field when a
+        3D model output is detected.
+        """
+        self._detected_3d_field: Optional[str] = None
         properties = output_schema.get("properties", {})
         
         # Single output patterns
@@ -545,6 +562,12 @@ class SchemaParser:
         # Check if audio is present
         if "audio" in properties:
             return "AudioRef"
+        
+        # Check for 3D model output fields
+        for field_name in self._MODEL_3D_FIELDS:
+            if field_name in properties:
+                self._detected_3d_field = field_name
+                return "Model3DRef"
         
         # Multiple outputs or dict
         if len(properties) > 1:

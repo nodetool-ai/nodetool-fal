@@ -282,8 +282,9 @@ def pick_return_type(output_name: str, output_type: str) -> tuple[str, str]:
         return "ImageRef", 'return ImageRef(uri=res["images"][0]["url"])'
     if "image" in probe:
         return "ImageRef", 'return ImageRef(uri=res["image"]["url"])'
-    if "mesh" in probe or "model" in probe or "3d" in probe:
-        return "Model3DRef", 'return Model3DRef(uri=res.get("model", {}).get("url", ""))'
+    if "mesh" in probe or "model" in probe or "3d" in probe or "world" in probe:
+        field = output_name
+        return "Model3DRef", f'return Model3DRef(uri=res["{field}"]["url"])'
     return "dict[str, Any]", "return res"
 
 
@@ -323,7 +324,7 @@ def render_class(spec: ModelSpec, source_url: str) -> str:
             if optional:
                 post_rows.extend(
                     [
-                        f"        if self.{p.field_name} is not None:",
+                        f"        if self.{p.field_name} is not None and not self.{p.field_name}.is_empty():",
                         f"            {p.field_name}_base64 = await context.image_to_base64(self.{p.field_name})",
                         f"            arguments[{p.original_name!r}] = f\"data:image/png;base64,{{{p.field_name}_base64}}\"",
                     ]

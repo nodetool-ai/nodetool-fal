@@ -132,6 +132,10 @@ class NodeGenerator:
             spec.class_name = config["class_name"]
         if "basic_fields" in config:
             self._config_basic_fields = config["basic_fields"]
+        if "output_type" in config:
+            spec.output_type = config["output_type"]
+        if "output_3d_field" in config:
+            spec.output_3d_field = config["output_3d_field"]
         
         # Track field renames for API parameter mapping
         self._field_renames = {}
@@ -313,6 +317,8 @@ class NodeGenerator:
             asset_types.add("VideoRef")
         elif "AudioRef" in spec.output_type:
             asset_types.add("AudioRef")
+        elif "Model3DRef" in spec.output_type:
+            asset_types.add("Model3DRef")
         
         # Build nodetool.metadata.types import
         metadata_types = sorted(asset_types)
@@ -622,6 +628,10 @@ class NodeGenerator:
         elif spec.output_type == "AudioRef":
             lines.append('        assert "audio" in res')
             lines.append('        return AudioRef(uri=res["audio"]["url"])')
+        elif spec.output_type == "Model3DRef":
+            field = spec.output_3d_field or "model_glb"
+            lines.append(f'        assert "{field}" in res')
+            lines.append(f'        return Model3DRef(uri=res["{field}"]["url"])')
         else:
             lines.append("        return res")
         
