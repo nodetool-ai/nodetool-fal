@@ -7,10 +7,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from nodetool.metadata.types import VideoRef
 from nodetool.nodes.fal.dynamic_schema import (
-    FalAI,
+    DynamicFal,
     _build_output_types,
     _default_value_for_input_property,
+    _infer_input_type,
     _map_output_values,
+    _normalize_asset_field_name,
     _normalize_model_info,
     _parse_openapi_schema,
     _parse_model_info_text,
@@ -370,11 +372,12 @@ def test_description_output_is_omitted_for_dynamic_fal():
 @pytest.mark.asyncio
 async def test_build_arguments_skips_none():
     bundle = _parse_openapi_schema(SCHEMA_EXAMPLE, llm_info=None)
-    node = FalAI()
+    node = DynamicFal()
+    # UI uses normalized name "image" (from "image_url")
     arguments = await node._build_arguments(
         bundle.openapi,
         bundle.input_schema,
-        {"image_url": "https://example.com/start.png", "prompt": None, "extra": "skip"},
+        {"image": "https://example.com/start.png", "prompt": None, "extra": "skip"},
         context=None,
     )
     assert arguments == {"image_url": "https://example.com/start.png"}
@@ -432,7 +435,7 @@ async def test_build_arguments_omits_optional_seed_zero():
         },
     }
     bundle = _parse_openapi_schema(schema, llm_info=None)
-    node = FalAI()
+    node = DynamicFal()
     arguments = await node._build_arguments(
         bundle.openapi,
         bundle.input_schema,
@@ -494,7 +497,7 @@ async def test_build_arguments_omits_optional_seed_minus_one():
         },
     }
     bundle = _parse_openapi_schema(schema, llm_info=None)
-    node = FalAI()
+    node = DynamicFal()
     arguments = await node._build_arguments(
         bundle.openapi,
         bundle.input_schema,
@@ -553,3 +556,46 @@ def test_resolve_result_includes_effective_defaults_for_dynamic_inputs():
 
     assert dynamic_inputs["prompt"]["default"] == ""
     assert dynamic_inputs["seed"]["default"] == -1
+
+
+def test_normalize_asset_field_name():
+    assert _normalize_asset_field_name("image_url") == "image"
+    assert _normalize_asset_field_name("end_image_url") == "end_image"
+    assert _normalize_asset_field_name("video_url") == "video"
+    assert _normalize_asset_field_name("audio_url") == "audio"
+    assert _normalize_asset_field_name("mask_url") == "mask"
+    assert _normalize_asset_field_name("image_urls") == "images"
+    assert _normalize_asset_field_name("prompt") == "prompt"
+    assert _normalize_asset_field_name("seed") == "seed"
+    assert _normalize_asset_field_name("url") == "url"
+
+
+def test_infer_input_type_uses_name_for_image_url():
+    schema = {"type": "string"}
+    meta = _infer_input_type({}, schema, name="image_url")
+    assert meta.type == "image"
+
+    meta = _infer_input_type({}, schema, name="end_image_url")
+    assert meta.type == "image"
+
+    meta = _infer_input_type({}, schema, name="video_url")
+    assert meta.type == "video"
+
+    meta = _infer_input_type({}, schema, name="audio_url")
+    assert meta.type == "audio"
+
+    meta = _infer_input_type({}, schema, name="prompt")
+    assert meta.type == "str"
+
+
+def test_resolve_result_normalizes_image_url_to_image():
+    bundle = _parse_openapi_schema(SCHEMA_EXAMPLE, llm_info=None)
+    resolved = _schema_bundle_to_resolve_result(bundle)
+
+    assert "image" in resolved["dynamic_inputs"]
+    assert "image_url" not in resolved["dynamic_inputs"]
+    assert resolved["dynamic_inputs"]["image"]["type"] == "image"
+    assert resolved["dynamic_properties"]["image"] is None
+
+    assert "prompt" in resolved["dynamic_inputs"]
+    assert resolved["dynamic_inputs"]["prompt"]["type"] == "str"

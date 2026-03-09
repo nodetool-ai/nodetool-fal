@@ -206,22 +206,32 @@ class DynamicFal(FALNode):
         """Populate dynamic input slots from the OpenAPI input schema so the UI shows them without manual add. Preserves existing values."""
         schema_props = bundle.input_schema.get("properties", {})
         required = set(bundle.input_schema.get("required", []))
-        
-        # Reset dynamic input types
+
         self._dynamic_input_types = {}
-        
-        for name, prop_schema in schema_props.items():
-            # Infer and register strict input type
-            input_type = _infer_input_type(bundle.openapi, prop_schema)
-            self._dynamic_input_types[name] = input_type
-            
-            if name not in self._dynamic_properties:
-                self._dynamic_properties[name] = _default_value_for_input_property(
-                    bundle.openapi,
-                    prop_schema,
-                    required=(name in required),
-                    prop_name=name,
-                )
+
+        for api_name, prop_schema in schema_props.items():
+            ui_name = _normalize_asset_field_name(api_name)
+            input_type = _infer_input_type(
+                bundle.openapi, prop_schema, name=api_name
+            )
+            self._dynamic_input_types[ui_name] = input_type
+
+            if ui_name not in self._dynamic_properties:
+                # Migrate value stored under the old API name (e.g. image_url → image)
+                if api_name != ui_name and api_name in self._dynamic_properties:
+                    self._dynamic_properties[ui_name] = self._dynamic_properties.pop(
+                        api_name
+                    )
+                else:
+                    self._dynamic_properties[ui_name] = (
+                        _default_value_for_input_property(
+                            bundle.openapi,
+                            prop_schema,
+                            required=(api_name in required),
+                            prop_name=api_name,
+                            inferred_type=input_type,
+                        )
+                    )
 
     async def _build_arguments(
         self,
@@ -237,24 +247,29 @@ class DynamicFal(FALNode):
         required_props = set(input_schema.get("required", []))
 
         arguments: dict[str, Any] = {}
-        for name, prop_schema in schema_props.items():
-            value = input_values.get(name)
+        for api_name, prop_schema in schema_props.items():
+            ui_name = _normalize_asset_field_name(api_name)
+            value = input_values.get(ui_name)
+            if value is None and ui_name != api_name:
+                value = input_values.get(api_name)
             if value is None:
-                if name in required_props:
-                    raise ValueError(f"Missing required input: {name}")
+                if api_name in required_props:
+                    raise ValueError(f"Missing required input: {api_name}")
                 continue
-            # For fal.ai endpoints, omitted seed usually means random seed.
-            # Treat optional seed sentinels as "unset" so users keep randomness.
-            if name == "seed" and value in (0, -1) and name not in required_props:
+            if (
+                api_name == "seed"
+                and value in (0, -1)
+                and api_name not in required_props
+            ):
                 continue
-            is_url_array = _is_url_or_image_array(openapi, name, prop_schema)
+            is_url_array = _is_url_or_image_array(openapi, api_name, prop_schema)
             if value == [] and is_url_array:
-                if name in required_props:
-                    raise ValueError(f"Missing required input: {name}")
+                if api_name in required_props:
+                    raise ValueError(f"Missing required input: {api_name}")
                 continue
-            arguments[name] = await _coerce_input_value(
+            arguments[api_name] = await _coerce_input_value(
                 openapi,
-                name,
+                api_name,
                 prop_schema,
                 value,
                 context,
@@ -881,6 +896,36 @@ def _infer_asset_type(name: str) -> str:
     return "asset"
 
 
+_ASSET_TYPES = frozenset({"image", "video", "audio", "document", "model_3d"})
+
+
+def _infer_asset_type_from_name(name: str) -> str | None:
+    """If the property name suggests a URL referencing an asset, return the type."""
+    lower = name.lower()
+    if not (lower.endswith("_url") or lower.endswith("_urls")):
+        return None
+    asset_type = _infer_asset_type(name)
+    if asset_type in _ASSET_TYPES:
+        return asset_type
+    return None
+
+
+def _normalize_asset_field_name(name: str) -> str:
+    """Strip ``_url`` / ``_urls`` suffix from asset field names for UI display.
+
+    ``image_url`` → ``image``, ``end_image_url`` → ``end_image``,
+    ``image_urls`` → ``images``, ``prompt`` → ``prompt`` (unchanged).
+    """
+    if _infer_asset_type_from_name(name) is None:
+        return name
+    lower = name.lower()
+    if lower.endswith("_urls"):
+        return name[: -len("_urls")] + "s"
+    if lower.endswith("_url"):
+        return name[: -len("_url")]
+    return name
+
+
 def _is_url_or_image_array(
     openapi: dict[str, Any], name: str, prop_schema: dict[str, Any]
 ) -> bool:
@@ -906,8 +951,12 @@ def _default_value_for_input_property(
     *,
     required: bool = False,
     prop_name: str | None = None,
+    inferred_type: TypeMetadata | None = None,
 ) -> Any:
     """Return a default value for an input property from its JSON schema (for UI slots)."""
+    if inferred_type and inferred_type.type in _ASSET_TYPES:
+        return None
+
     resolved = _resolve_schema_ref(openapi, prop_schema)
     if "default" in resolved:
         return resolved["default"]
@@ -953,58 +1002,64 @@ def _should_expose_output(name: str) -> bool:
 
 
 def _infer_input_type(
-    openapi: dict[str, Any], prop_schema: dict[str, Any]
+    openapi: dict[str, Any],
+    prop_schema: dict[str, Any],
+    *,
+    name: str | None = None,
 ) -> TypeMetadata:
     """Infer the strict Nodetool type for a dynamic input."""
     resolved = _resolve_schema_ref(openapi, prop_schema)
     kind = resolved.get("type")
 
-    # Detect Enum
     if "enum" in resolved:
         return TypeMetadata(type="enum", values=resolved["enum"])
 
-    # Detect ImageSize
     if kind == "object" and _is_image_size_schema(resolved):
         return TypeMetadata(type="image_size")
 
-    # Detect List[ImageRef], List[VideoRef], etc.
+    # Name-based asset inference (e.g. image_url, video_url, mask_url)
+    if name:
+        asset_type = _infer_asset_type_from_name(name)
+        if asset_type:
+            if kind == "array":
+                return TypeMetadata(
+                    type="list", type_args=[TypeMetadata(type=asset_type)]
+                )
+            return TypeMetadata(type=asset_type)
+
     if kind == "array":
         item_schema = resolved.get("items")
         if item_schema:
             resolved_item = _resolve_schema_ref(openapi, item_schema)
-            if _is_file_schema(resolved_item) or resolved_item.get("format") in ("uri", "url"):
-                 # It's a list of files/URLs. Assume ImageRef by default for strict typing if ambiguous, 
-                 # or analyze name? For now, we use a generic AssetRef or ImageRef if name implies it.
-                 # Actually, let's look at the property name or format.
-                 # If name contains "image", return list[ImageRef].
-                 # But we don't have the prop name here easily unless we pass it. 
-                 # Let's rely on _is_url_or_image_array logic if we can, but we need name.
-                 # Let's just return List[Any] if we can't be sure, OR default to List[ImageRef] 
-                 # if it looks like a URI list, because ImageRef is the most common use case 
-                 # and user can cast if needed? 
-                 # BETTER: Pass the name to this function. But I didn't in the call site...
-                 # Let's inspect the SCHEMA for keywords.
-                 if _schema_suggests_image(resolved):
-                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="image")])
-                 if _schema_suggests_video(resolved):
-                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="video")])
-                 if _schema_suggests_audio(resolved):
-                     return TypeMetadata(type="list", type_args=[TypeMetadata(type="audio")])
-                 
-                 # Default to generic asset list if it's a list of URIs
-                 return TypeMetadata(type="list", type_args=[TypeMetadata(type="asset")])
+            if _is_file_schema(resolved_item) or resolved_item.get("format") in (
+                "uri",
+                "url",
+            ):
+                if _schema_suggests_image(resolved):
+                    return TypeMetadata(
+                        type="list", type_args=[TypeMetadata(type="image")]
+                    )
+                if _schema_suggests_video(resolved):
+                    return TypeMetadata(
+                        type="list", type_args=[TypeMetadata(type="video")]
+                    )
+                if _schema_suggests_audio(resolved):
+                    return TypeMetadata(
+                        type="list", type_args=[TypeMetadata(type="audio")]
+                    )
+                return TypeMetadata(
+                    type="list", type_args=[TypeMetadata(type="asset")]
+                )
 
-    # Detect ImageRef / VideoRef / AudioRef
     if kind == "string" and resolved.get("format") in ("uri", "url"):
-         if _schema_suggests_image(resolved):
-             return TypeMetadata(type="image")
-         if _schema_suggests_video(resolved):
-             return TypeMetadata(type="video")
-         if _schema_suggests_audio(resolved):
-             return TypeMetadata(type="audio")
-         return TypeMetadata(type="asset")
+        if _schema_suggests_image(resolved):
+            return TypeMetadata(type="image")
+        if _schema_suggests_video(resolved):
+            return TypeMetadata(type="video")
+        if _schema_suggests_audio(resolved):
+            return TypeMetadata(type="audio")
+        return TypeMetadata(type="asset")
 
-    # Standard types
     if kind == "string":
         return TypeMetadata(type="str")
     if kind == "integer":
@@ -1013,7 +1068,7 @@ def _infer_input_type(
         return TypeMetadata(type="float")
     if kind == "boolean":
         return TypeMetadata(type="bool")
-    
+
     return TypeMetadata(type="any")
 
 
@@ -1101,11 +1156,12 @@ def _build_input_types(
     """Build (TypeMetadata, description) for each input from JSON schema."""
     properties = input_schema.get("properties", {})
     out: dict[str, tuple[TypeMetadata, str | None]] = {}
-    for name, prop_schema in properties.items():
+    for api_name, prop_schema in properties.items():
         resolved = _resolve_schema_ref(openapi, prop_schema)
-        meta = _infer_input_type(openapi, prop_schema)
+        meta = _infer_input_type(openapi, prop_schema, name=api_name)
         desc = resolved.get("description")
-        out[name] = (meta, desc)
+        ui_name = _normalize_asset_field_name(api_name)
+        out[ui_name] = (meta, desc)
     return out
 
 
@@ -1113,43 +1169,54 @@ def _schema_bundle_to_resolve_result(bundle: FalSchemaBundle) -> dict[str, Any]:
     """Build the resolve_dynamic_schema return dict from a parsed bundle."""
     schema_props = bundle.input_schema.get("properties", {})
     required = set(bundle.input_schema.get("required", []))
-    dynamic_properties = {
-        name: _default_value_for_input_property(
+
+    dynamic_properties: dict[str, Any] = {}
+    for api_name, prop_schema in schema_props.items():
+        ui_name = _normalize_asset_field_name(api_name)
+        inferred = _infer_input_type(bundle.openapi, prop_schema, name=api_name)
+        dynamic_properties[ui_name] = _default_value_for_input_property(
             bundle.openapi,
             prop_schema,
-            required=(name in required),
-            prop_name=name,
+            required=(api_name in required),
+            prop_name=api_name,
+            inferred_type=inferred,
         )
-        for name, prop_schema in schema_props.items()
-    }
+
     input_type_tuples = _build_input_types(
         bundle.openapi, bundle.input_schema
     )
     dynamic_inputs = {}
-    for name, (meta, desc) in input_type_tuples.items():
+    for ui_name, (meta, desc) in input_type_tuples.items():
         entry: dict[str, Any] = _type_metadata_to_dict(meta)
         if desc is not None:
             entry["description"] = desc
 
-        # Always expose an effective default for UI reset behavior, even when
-        # the OpenAPI field has no explicit "default" (e.g. required prompt).
-        if name in dynamic_properties:
-            entry["default"] = dynamic_properties[name]
-        
-        # Include metadata if available
-        prop_schema = schema_props.get(name)
+        if ui_name in dynamic_properties:
+            entry["default"] = dynamic_properties[ui_name]
+
+        # Look up the original API name for schema metadata
+        prop_schema = schema_props.get(ui_name) or schema_props.get(
+            next(
+                (
+                    k
+                    for k in schema_props
+                    if _normalize_asset_field_name(k) == ui_name
+                ),
+                "",
+            )
+        )
         if prop_schema is not None:
             resolved_prop = _resolve_schema_ref(bundle.openapi, prop_schema)
-            
+
             if "enum" in resolved_prop:
                 entry["values"] = resolved_prop["enum"]
-            
+
             if meta.type in ("int", "float"):
                 if "minimum" in resolved_prop:
                     entry["min"] = resolved_prop["minimum"]
                 if "maximum" in resolved_prop:
                     entry["max"] = resolved_prop["maximum"]
-        dynamic_inputs[name] = entry
+        dynamic_inputs[ui_name] = entry
     output_types = _build_output_types(
         bundle.openapi, bundle.output_schema
     )
