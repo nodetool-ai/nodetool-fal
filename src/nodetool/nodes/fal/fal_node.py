@@ -1,4 +1,5 @@
 import logging
+import re
 from enum import Enum
 from typing import Any, ClassVar
 from fal_client import AsyncClient
@@ -7,6 +8,8 @@ from nodetool.workflows.base_node import ApiKeyMissingError, BaseNode
 from nodetool.workflows.processing_context import ProcessingContext
 
 logger = logging.getLogger(__name__)
+DATA_URI_PATTERN = re.compile(r"data:([^;,]+)?;base64,[A-Za-z0-9+/=\r\n]+", re.IGNORECASE)
+MAX_LOG_TEXT_LENGTH = 2000
 
 
 class FALNode(BaseNode):
@@ -28,6 +31,37 @@ class FALNode(BaseNode):
             raise ApiKeyMissingError("FAL_API_KEY is not set in the environment")
 
         return AsyncClient(key=key)
+
+    def _sanitize_display_text(
+        self, text: str, max_length: int = MAX_LOG_TEXT_LENGTH
+    ) -> str:
+        def _replace(match: re.Match[str]) -> str:
+            mime = match.group(1) or "data"
+            return f"[{mime} base64 omitted, {len(match.group(0))} chars]"
+
+        sanitized = DATA_URI_PATTERN.sub(_replace, text)
+        if len(sanitized) <= max_length:
+            return sanitized
+
+        truncated_chars = len(sanitized) - max_length
+        return (
+            f"{sanitized[:max_length]}... "
+            f"(truncated {truncated_chars} chars)"
+        )
+
+    def _sanitize_log_value(self, value: Any) -> Any:
+        if isinstance(value, str):
+            return self._sanitize_display_text(value)
+        if isinstance(value, list):
+            return [self._sanitize_log_value(item) for item in value]
+        if isinstance(value, tuple):
+            return tuple(self._sanitize_log_value(item) for item in value)
+        if isinstance(value, dict):
+            return {
+                key: self._sanitize_log_value(item)
+                for key, item in value.items()
+            }
+        return value
 
     async def _upload_asset_to_fal(
         self,
@@ -128,21 +162,24 @@ class FALNode(BaseNode):
         
         # Log the outgoing request parameters
         logger.info(f"FAL Request: {application}")
-        logger.info(f"FAL Arguments: {converted_arguments}")
-        
-        handler = await client.submit(
-            application,
-            arguments=converted_arguments,
-        )
+        logger.info(f"FAL Arguments: {self._sanitize_log_value(converted_arguments)}")
 
-        # Process events - only log useful ones
-        async for event in handler.iter_events(with_logs=True):
-            event_str = str(event)
-            if "Queued" in event_str:
-                logger.debug(event)
-            else:
-                logger.info(event)
+        try:
+            handler = await client.submit(
+                application,
+                arguments=converted_arguments,
+            )
 
-        # Get the final result
-        result = await handler.get()
-        return result
+            # Process events - only log useful ones
+            async for event in handler.iter_events(with_logs=True):
+                event_str = str(event)
+                if "Queued" in event_str:
+                    logger.debug(event)
+                else:
+                    logger.info(event)
+
+            # Get the final result
+            result = await handler.get()
+            return result
+        except Exception as exc:
+            raise RuntimeError(self._sanitize_display_text(str(exc))) from exc
